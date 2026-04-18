@@ -1,0 +1,11 @@
+# Python Virtual Env & Cache
+venv/
+__pycache__/
+*.pyc
+
+# Database Volumes (CRITICAL)
+data/neo4j_data/
+data/qdrant_data/
+
+# OS Configs
+.DS_Store
