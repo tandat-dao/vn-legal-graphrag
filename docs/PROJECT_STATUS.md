@@ -1,5 +1,18 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.2 | Cập nhật 2026-04-19**
+**Phiên bản 0.3 | Cập nhật 2026-04-19**
+
+> **v0.3 — Cập nhật 2026-04-19:**
+> TASK-03 (Mapping Table): xác nhận chain [:IMPLEMENTS]
+> cho lĩnh vực Hộ tịch / khai sinh.
+> data/raw/mapping_table.md Section 1 — cột Implements
+> đã điền đầy đủ cho 6 văn bản.
+> Chain: luat-ho-tich-2014 ← nghi-dinh-123-2015-nd-cp
+> ← nghi-dinh-07-2025-nd-cp, nghi-dinh-18-2026-nd-cp;
+> luat-ho-tich-2014 ← nghi-dinh-87-2020-nd-cp
+> ← thong-tu-01-2022-tt-btp.
+> Sections 2–6 vẫn là placeholder — chờ project owner
+> bổ sung văn bản các lĩnh vực còn lại.
+> 0 unit tests passing.
 
 > **v0.2 — Cập nhật sau audit 2026-04-19:**
 > Cập nhật trạng thái TASK-00, TASK-01, TASK-02 từ
