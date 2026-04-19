@@ -15,6 +15,12 @@ import os
 import sys
 from pathlib import Path
 
+# Đảm bảo output UTF-8 trên Windows (tránh lỗi cp1252 với emoji)
+if sys.stdout.encoding != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+if sys.stderr.encoding != "utf-8":
+    sys.stderr.reconfigure(encoding="utf-8")
+
 from dotenv import load_dotenv
 
 # Tìm .env từ root project
@@ -160,13 +166,13 @@ def test_qdrant() -> bool:
         print("  → Upsert vector: OK")
 
         # Bước 3: Search vector
-        search_results = client.search(
+        search_response = client.query_points(
             collection_name=collection_name,
-            query_vector=[0.1, 0.2, 0.3, 0.4],
+            query=[0.1, 0.2, 0.3, 0.4],
             limit=1,
         )
-        if len(search_results) != 1:
-            print(f"  ❌ Qdrant: FAIL — Search trả về {len(search_results)} kết quả, mong đợi 1")
+        if len(search_response.points) != 1:
+            print(f"  ❌ Qdrant: FAIL — Search trả về {len(search_response.points)} kết quả, mong đợi 1")
             return False
         print("  → Search vector: OK")
 

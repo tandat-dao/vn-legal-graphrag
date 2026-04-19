@@ -7,7 +7,6 @@ services:
       - "7687:7687"   # Bolt
     volumes:
       - ./data/neo4j:/data
-    env_file: .env
     environment:
       - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
       - NEO4J_PLUGINS=["apoc"]
