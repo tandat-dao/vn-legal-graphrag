@@ -1,0 +1,92 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker compose up*)",
+      "Bash(docker compose down*)",
+      "Bash(docker compose ps*)",
+      "Bash(docker compose logs*)",
+      "Bash(docker compose restart*)",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git push*)",
+      "Bash(git pull*)",
+      "Bash(git checkout*)",
+      "Bash(git branch*)",
+      "Bash(pytest*)",
+      "Bash(python src/*)",
+      "Bash(python -m pytest*)",
+      "Bash(pip install*)",
+      "Bash(pip freeze*)",
+      "Bash(pip list*)",
+      "Bash(cat data/raw/*)",
+      "Bash(cat src/*)",
+      "Bash(cat tests/*)",
+      "Bash(ls *)",
+      "Bash(find * -name *.py*)",
+      "Bash(find * -name *.md*)",
+      "Bash(grep -r * src/)",
+      "Bash(grep -r * tests/)",
+      "Bash(wc -l *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(tesseract --list-langs)",
+      "Bash(jupyter nbconvert*)"
+    ],
+    "deny": [
+      "Bash(curl * localhost:7474*)",
+      "Bash(curl * localhost:7687*)",
+      "Bash(curl * localhost:6333*)",
+      "Bash(curl * localhost:6334*)",
+      "Bash(rm * data/sources/*)",
+      "Bash(rm -rf *)",
+      "Bash(neo4j-admin *)",
+      "Bash(cypher-shell *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks.sh pre_bash"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks.sh pre_write"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks.sh post_write"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks.sh on_stop"
+          }
+        ]
+      }
+    ]
+  }
+}

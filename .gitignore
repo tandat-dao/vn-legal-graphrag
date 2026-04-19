@@ -1,11 +1,35 @@
-# Python Virtual Env & Cache
+# Environment
+.env
+.venv/
 venv/
+env/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
 
-# Database Volumes (CRITICAL)
-data/neo4j_data/
-data/qdrant_data/
+# Docker volumes (data persisted locally, not in git)
+data/neo4j/
+data/qdrant/
 
-# OS Configs
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test / Coverage
+.pytest_cache/
+htmlcov/
+.coverage

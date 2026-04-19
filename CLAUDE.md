@@ -1,0 +1,454 @@
+# CLAUDE.md — Ontology-Driven GraphRAG cho Pháp luật Việt Nam
+
+> **ĐỌC FILE NÀY TRƯỚC KHI LÀM BẤT CỨ ĐIỀU GÌ.**
+> Sau đó đọc `PROJECT_STATUS.md` để biết task hiện tại và `PROJECT_CONTEXT.md` để nắm kiến trúc.
+> Không viết bất kỳ dòng code nào trước khi đọc xong cả ba file.
+
+---
+
+## NHẬN DẠNG DỰ ÁN
+
+**Tên:** Ontology-Driven GraphRAG cho Pháp luật Việt Nam
+**Loại:** Khóa luận tốt nghiệp — 2 thành viên [A] và [B]
+**Mục tiêu kỹ thuật:** Xây dựng hệ thống trả lời câu hỏi pháp lý có trích dẫn, kết hợp Knowledge Graph (Neo4j) và Vector Search (Qdrant), giải quyết 3 gap: đa lĩnh vực, đa địa phương, đa tầng văn bản.
+**Ngôn ngữ user-facing:** Tiếng Việt. Mọi string, log, comment trong code đều bằng tiếng Việt trừ khi là tên kỹ thuật chuẩn (class name, function name, config key).
+
+---
+
+## TRẠNG THÁI HIỆN TẠI
+
+Phase 0 (Môi trường) và Phase 1 (Dữ liệu) — xem `PROJECT_STATUS.md` để biết task nào đang active.
+
+**Trước khi bắt đầu bất kỳ task nào:**
+1. Đọc `PROJECT_STATUS.md` — xác định TASK-ID cần làm, đọc kỹ phần Inputs / Outputs / DoD
+2. Đọc `PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
+3. Đọc toàn bộ file code có liên quan được liệt kê trong phần Inputs của task card
+
+---
+
+## CẤU TRÚC THƯ MỤC
+
+```
+graphrag-vn-law/
+├── CLAUDE.md                    ← file này
+├── PROJECT_STATUS.md            ← trạng thái task (đọc mỗi session)
+├── PROJECT_CONTEXT.md           ← kiến trúc & quyết định thiết kế
+├── docker-compose.yml
+├── requirements.txt
+├── .env.example                 ← template (KHÔNG commit .env thật)
+├── .gitignore
+├── .claude/
+│   ├── settings.json
+│   └── hooks.sh
+├── data/
+│   ├── sources/                 ← PDF/DOCX gốc từ vbpl.vn (KHÔNG sửa)
+│   │   └── manifest.md
+│   ├── raw/                     ← Phase 1 output: *.md đã chuẩn hóa
+│   │   ├── mapping_table.md
+│   │   ├── specified_in_map.md
+│   │   ├── crossref_decisions.md
+│   │   ├── review_log.md
+│   │   └── *.md                 ← văn bản pháp luật đã chuẩn hóa
+│   ├── processed/               ← Phase 2 intermediate
+│   └── evaluation/              ← Phase 4: test set, kết quả, phân tích
+├── src/
+│   ├── ingestion/               ← Phase 2
+│   │   ├── docling_pipeline.py  ← TASK-05
+│   │   ├── run_pipeline.py      ← CLI runner cho Docling
+│   │   ├── parser.py            ← TASK-08
+│   │   ├── graph_builder.py     ← TASK-09
+│   │   └── vectorizer.py        ← TASK-10
+│   ├── retrieval/               ← Phase 3
+│   │   ├── query_planner.py     ← TASK-12
+│   │   ├── subgraph_extractor.py← TASK-13
+│   │   ├── semantic_filter.py   ← TASK-14
+│   │   ├── context_assembler.py ← TASK-15
+│   │   └── answer_generator.py  ← TASK-15
+│   ├── baseline/                ← Phase 4
+│   │   └── naive_rag.py         ← TASK-18
+│   ├── evaluation/              ← Phase 4
+│   │   └── metrics.py           ← TASK-19
+│   └── utils/
+│       ├── connection_check.py  ← TASK-02
+│       └── validate_metadata.py ← TASK-06
+├── tests/
+│   ├── test_docling_pipeline.py
+│   ├── test_parser.py
+│   └── test_query_planner.py
+└── notebooks/
+    ├── phase2_verification.ipynb
+    └── phase3_e2e_test.ipynb
+```
+
+---
+
+## QUY TẮC TUYỆT ĐỐI — KHÔNG ĐƯỢC VI PHẠM
+
+### 1. Không thao tác database trực tiếp
+
+```
+# ❌ TUYỆT ĐỐI CẤM
+curl -X POST http://localhost:7474/db/neo4j/tx/commit -d '{"statements":[...]}'
+curl -X PUT http://localhost:6333/collections/legal_texts/points -d '{...}'
+
+# ✅ ĐÚNG — luôn đi qua Python scripts
+python src/ingestion/graph_builder.py
+python src/ingestion/vectorizer.py
+```
+
+Lý do: mọi thay đổi database phải traceable qua code, không có thay đổi thủ công nào được commit.
+
+### 2. Không xóa hoặc sửa data/sources/
+
+```
+# ❌ TUYỆT ĐỐI CẤM
+rm data/sources/luat-dat-dai-2024.pdf
+# Bất kỳ thao tác write nào vào data/sources/
+```
+
+`data/sources/` là raw data gốc — không bao giờ sửa. Nếu cần sửa nội dung, sửa ở `data/raw/*.md`.
+
+### 3. Idempotency là bắt buộc
+
+Mọi script write vào Neo4j phải dùng `MERGE`, không dùng `CREATE`.
+Mọi write vào Qdrant phải dùng `upsert`, không dùng `insert`.
+Chạy pipeline 2 lần phải cho kết quả giống nhau.
+
+### 4. Deterministic ID — không dùng UUID
+
+```python
+# ❌ SAI
+import uuid
+node_id = str(uuid.uuid4())
+
+# ✅ ĐÚNG
+import hashlib
+node_id = hashlib.sha256(">".join(context_path).encode()).hexdigest()[:16]
+```
+
+### 5. Credentials từ .env — không hardcode
+
+```python
+# ❌ TUYỆT ĐỐI CẤM
+driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "password"))
+
+# ✅ ĐÚNG
+from dotenv import load_dotenv
+load_dotenv()
+driver = GraphDatabase.driver(
+    os.getenv("NEO4J_URI"),
+    auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD"))
+)
+```
+
+### 6. Không commit .env thật
+
+`.env` phải nằm trong `.gitignore`. Chỉ commit `.env.example`.
+
+### 7. Cập nhật PROJECT_STATUS.md sau mỗi task
+
+Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `PROJECT_STATUS.md`:
+- Thêm changelog entry ở đầu (reverse-chronological)
+- Tick `[x]` toàn bộ DoD items
+- Điền ngày vào `Completed:`
+- Cập nhật `§1.1 Đã hoàn thành`
+
+---
+
+## SCHEMA ONTOLOGY — QUICK REFERENCE
+
+### 7 loại Node
+
+| Node | Mô tả | Key properties |
+|---|---|---|
+| `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi |
+| `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from` |
+| `Component` | Điều/Khoản/Điểm (xuyên thời gian) | `id`, `label` |
+| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status` |
+| `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic), `text` |
+| `Jurisdiction` | Địa phương | `name`: toan-quoc \| tp-hcm \| dong-nai |
+| `Procedure` | Thủ tục hành chính | `name` (slug), `display_name` |
+
+### 8 loại Edge
+
+| Edge | Từ → Đến | Ý nghĩa |
+|---|---|---|
+| `[:INCLUDES]` | Theme → Norm | Văn bản thuộc lĩnh vực |
+| `[:IMPLEMENTS]` | Norm → Norm | NĐ implements Luật (Gap 3) |
+| `[:HAS_COMPONENT]` | Norm → Component | Phân rã cấu trúc |
+| `[:HAS_CTV]` | Component → CTV | Quản lý phiên bản |
+| `[:HAS_TEXT_UNIT]` | CTV → TextUnit | Nội dung vật lý |
+| `[:APPLIES_TO]` | Norm → Jurisdiction | Hard-filter địa phương (Gap 2) |
+| `[:SPECIFIED_IN]` | Procedure → Component | Thủ tục → Điều luật |
+| `[:BELONGS_TO]` | Component → Theme | **Không implement trong scope này** |
+
+### Tier mapping (CỨNG — không thay đổi)
+
+```
+tier 1 = Luật / Bộ luật
+tier 2 = Nghị định / Pháp lệnh
+tier 3 = Thông tư / Thông tư liên tịch
+tier 4 = Quyết định UBND tỉnh
+```
+
+---
+
+## CONVENTIONS
+
+### Format `id` văn bản
+
+```
+[loai-van-ban]-[slug-ten-van-ban]-[nam]
+
+Ví dụ:
+  luat-dat-dai-2024
+  nghi-dinh-102-2024-nd-cp
+  thong-tu-10-2024-btnmt
+  quyet-dinh-bang-gia-dat-tp-hcm-2025
+```
+
+Quy tắc slug: lowercase, dấu gạch ngang, không dấu tiếng Việt, không ký tự đặc biệt.
+
+### Format heading trong data/raw/*.md
+
+```markdown
+---
+id: "luat-dat-dai-2024"
+title: "Luật Đất đai 2024 (Luật số 31/2024/QH15)"
+tier: 1
+theme: "dat-dai"
+jurisdiction: "toan-quoc"
+implements: null
+valid_from: "2025-01-01"
+valid_to: null
+source_url: "https://vbpl.vn/..."
+---
+
+## Điều X. [Tên điều]
+
+### Khoản 1.
+
+#### Điểm a.
+```
+
+**Không được dùng:** `# Điều`, `## Khoản`, hay bất kỳ cấp heading nào khác.
+
+### Tên file data/raw/
+
+```
+[id-van-ban].md
+Ví dụ: luat-dat-dai-2024.md
+```
+
+### Tên file data/sources/
+
+```
+[tier]-[slug-ten-van-ban]-[nam].[pdf|docx]
+Ví dụ: luat-dat-dai-2024.pdf
+```
+
+### Python naming conventions
+
+- Module: `snake_case.py`
+- Class: `PascalCase`
+- Function: `snake_case`
+- Constant: `UPPER_SNAKE_CASE`
+- TypedDict: `PascalCase` với suffix mô tả (VD: `TextUnit`, `QueryPlan`)
+
+### Git commit format
+
+```
+[TASK-XX] type: mô tả ngắn bằng tiếng Việt
+
+Ví dụ:
+  [TASK-05] feat: thêm hàm clean_pdf_text cho boilerplate removal
+  [TASK-08] fix: sửa lỗi Stack pop khi gặp Điều không có Khoản
+  [TASK-09] test: thêm unit test cho idempotency của graph_builder
+```
+
+---
+
+## CÁC GIÁ TRỊ HỢP LỆ — DANH SÁCH ĐÓNG
+
+Các trường sau **chỉ nhận giá trị trong danh sách này**, không có ngoại lệ:
+
+```python
+VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi"]
+
+VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
+
+VALID_TIERS = [1, 2, 3, 4]
+
+VALID_PROCEDURES = [
+    "chuyen-muc-dich-su-dung-dat",
+    "cap-so-do-lan-dau",
+    "dang-ky-khai-sinh",
+    "cap-ban-sao-trich-luc-ho-tich",
+    "dang-ky-nuoi-con-nuoi",
+    "dang-ky-lai-nuoi-con-nuoi"
+]
+
+QDRANT_COLLECTION_NAME = "legal_texts"
+QDRANT_VECTOR_DIM = 1024          # BGE-M3
+CONTEXT_MAX_TOKENS = 3000
+DEFAULT_TOP_K = 10
+```
+
+---
+
+## DEPENDENCIES — CÁC MODULE LIÊN KẾT
+
+```
+parser.py          ← đọc data/raw/*.md
+                   → trả về List[TextUnit] với Deterministic ID
+
+graph_builder.py   ← nhận TextUnit list từ parser.py
+                   ← nhận metadata từ YAML frontmatter
+                   ← nhận specified_in_map.md cho [:SPECIFIED_IN]
+                   → write vào Neo4j (MERGE, idempotent)
+
+vectorizer.py      ← đọc TextUnit nodes từ Neo4j
+                   ← dùng BGE-M3 để encode
+                   → upsert vào Qdrant collection "legal_texts"
+                   → ID vector = ID TextUnit trong Neo4j (BẮT BUỘC)
+
+query_planner.py   ← nhận câu hỏi string
+                   → trả về QueryPlan TypedDict
+
+subgraph_extractor.py ← nhận QueryPlan
+                      ← query Neo4j
+                      → trả về LCCIDs (List[str])
+
+semantic_filter.py ← nhận LCCIDs + câu hỏi gốc
+                   ← query Qdrant với payload filter
+                   → trả về Top-k List[TextUnit]
+
+context_assembler.py ← nhận List[TextUnit]
+                     → trả về sorted, capped context string
+
+answer_generator.py  ← nhận context + câu hỏi gốc
+                     → trả về {answer: str, citations: List[dict]}
+```
+
+---
+
+## DOCLING PIPELINE — QUICK REFERENCE
+
+```
+PDF/DOCX gốc
+  ↓ run_docling(file_path)           # Docling parsing + layout analysis
+  ↓ clean_pdf_text(doc)              # Xóa boilerplate VN
+  ↓ article_boundary_split(doc)      # Regex r"^Điều\s+\d+" trên headings
+  ↓ hierarchy_prefix_attach(doc)     # Sinh context path từ DoclingDocument
+  → *-draft.md                       # TRUNG GIAN — chưa có metadata
+  ↓ Điền metadata thủ công           # tier, jurisdiction, implements, etc.
+  → data/raw/*.md                    # INPUT cho Phase 2
+```
+
+**Lưu ý OCR:** Nếu file là PDF scan → Docling dùng Tesseract với `lang='vie'`.
+Thiếu `vie` language pack → kết quả OCR sai hoàn toàn. Kiểm tra trước khi chạy:
+```bash
+tesseract --list-langs | grep vie
+```
+
+---
+
+## GATE TASKS — KHÔNG ĐƯỢC BỎ QUA
+
+Bốn task sau là "cổng" bắt buộc. Phase sau **không được bắt đầu** nếu gate task chưa pass toàn bộ DoD:
+
+| Gate | Cho phép bắt đầu | Verify bằng |
+|---|---|---|
+| TASK-02 (Integration Verification) | Phase 1 | Script `connection_check.py` chạy "✅ PASS" cả Neo4j và Qdrant |
+| TASK-07 (Cross-check Phase 1) | Phase 2 | `review_log.md` có sign-off của cả 2 thành viên; `validate_metadata.py` không báo lỗi |
+| TASK-11 (Phase 2 Verification) | Phase 3 | `phase2_report.md` có đủ count checks và sign-off |
+| TASK-16 (Integration E2E) | Phase 4 | Notebook `phase3_e2e_test.ipynb` chạy được 12+ câu hỏi |
+
+---
+
+## MÔI TRƯỜNG PHÁT TRIỂN
+
+```bash
+# Khởi động databases
+docker compose up -d
+
+# Kiểm tra databases đang chạy
+docker compose ps
+
+# Chạy tests
+pytest tests/ -v
+
+# Validate metadata files Phase 1
+python src/utils/validate_metadata.py data/raw/
+
+# Kiểm tra kết nối
+python src/utils/connection_check.py
+
+# Chạy Docling pipeline (Phase 1)
+python src/ingestion/run_pipeline.py --input data/sources/ --output data/raw/
+
+# Chạy ingestion (Phase 2) — chỉ sau khi Phase 1 done
+python src/ingestion/graph_builder.py
+python src/ingestion/vectorizer.py
+```
+
+**Biến môi trường cần có trong `.env`:**
+
+```env
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USER=neo4j
+NEO4J_PASSWORD=<password>
+QDRANT_HOST=localhost
+QDRANT_PORT=6333
+EMBEDDING_MODEL=BAAI/bge-m3
+LLM_PROVIDER=<openai|anthropic|local>
+LLM_MODEL=<model-name>
+LLM_API_KEY=<key>
+```
+
+---
+
+## KHI GẶP LỖI THƯỜNG GẶP
+
+**Neo4j không kết nối được:**
+```bash
+docker compose logs neo4j | tail -20
+# Nếu thấy "authentication failure" → kiểm tra NEO4J_PASSWORD trong .env
+```
+
+**Qdrant collection không tìm thấy:**
+```bash
+# Qdrant collection "legal_texts" chưa được tạo
+# Chạy vectorizer.py sẽ tự tạo nếu chưa có
+```
+
+**Parser lỗi "invalid heading format":**
+```
+# File .md có heading sai level (# Điều thay vì ## Điều)
+# Mở file đó, tìm heading bắt đầu bằng #, sửa thành ##
+```
+
+**Docling OCR kết quả sai hoàn toàn:**
+```bash
+# Thiếu Vietnamese language pack cho Tesseract
+sudo apt-get install tesseract-ocr-vie  # Ubuntu/Debian
+brew install tesseract-lang             # macOS
+```
+
+**Deterministic ID bị duplicate giữa hai file khác nhau:**
+```
+# Hai TextUnit có cùng context_path → một trong hai file có id metadata trùng
+# Kiểm tra: python src/utils/validate_metadata.py data/raw/ --check-duplicates
+```
+
+---
+
+## NHỮNG GÌ KHÔNG LÀM
+
+- **Không** tự quyết định cross-reference ngoài scope — hỏi project owner, xem `data/raw/crossref_decisions.md`
+- **Không** tự quyết định `[:SPECIFIED_IN]` mapping nếu không chắc — để trống, ghi "cần xác nhận GVHD"
+- **Không** implement `[:BELONGS_TO]` — đây là enhancement ngoài scope hiện tại
+- **Không** dùng UUID làm ID bất kỳ đâu trong codebase
+- **Không** sửa file trong `data/sources/` — đây là raw data bất biến
+- **Không** để code chạy mà không có error handling — mọi lỗi kết nối database phải được catch và log rõ ràng
+- **Không** hardcode bất kỳ giá trị nào trong danh sách đóng (themes, jurisdictions, tiers) — luôn import từ constants
