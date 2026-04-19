@@ -1,7 +1,7 @@
 # CLAUDE.md — Ontology-Driven GraphRAG cho Pháp luật Việt Nam
 
 > **ĐỌC FILE NÀY TRƯỚC KHI LÀM BẤT CỨ ĐIỀU GÌ.**
-> Sau đó đọc `PROJECT_STATUS.md` để biết task hiện tại và `PROJECT_CONTEXT.md` để nắm kiến trúc.
+> Sau đó đọc `docs/PROJECT_STATUS.md` để biết task hiện tại và `docs/PROJECT_CONTEXT.md` để nắm kiến trúc.
 > Không viết bất kỳ dòng code nào trước khi đọc xong cả ba file.
 
 ---
@@ -17,11 +17,11 @@
 
 ## TRẠNG THÁI HIỆN TẠI
 
-Phase 0 (Môi trường) và Phase 1 (Dữ liệu) — xem `PROJECT_STATUS.md` để biết task nào đang active.
+Phase 0 (Môi trường) và Phase 1 (Dữ liệu) — xem `docs/PROJECT_STATUS.md` để biết task nào đang active.
 
 **Trước khi bắt đầu bất kỳ task nào:**
-1. Đọc `PROJECT_STATUS.md` — xác định TASK-ID cần làm, đọc kỹ phần Inputs / Outputs / DoD
-2. Đọc `PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
+1. Đọc `docs/PROJECT_STATUS.md` — xác định TASK-ID cần làm, đọc kỹ phần Inputs / Outputs / DoD
+2. Đọc `docs/PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
 3. Đọc toàn bộ file code có liên quan được liệt kê trong phần Inputs của task card
 
 ---
@@ -31,8 +31,9 @@ Phase 0 (Môi trường) và Phase 1 (Dữ liệu) — xem `PROJECT_STATUS.md` �
 ```
 graphrag-vn-law/
 ├── CLAUDE.md                    ← file này
-├── PROJECT_STATUS.md            ← trạng thái task (đọc mỗi session)
-├── PROJECT_CONTEXT.md           ← kiến trúc & quyết định thiết kế
+├── docs/
+│   ├── PROJECT_STATUS.md        ← trạng thái task (đọc mỗi session)
+│   └── PROJECT_CONTEXT.md       ← kiến trúc & quyết định thiết kế
 ├── docker-compose.yml
 ├── requirements.txt
 ├── .env.example                 ← template (KHÔNG commit .env thật)
@@ -145,9 +146,9 @@ driver = GraphDatabase.driver(
 
 `.env` phải nằm trong `.gitignore`. Chỉ commit `.env.example`.
 
-### 7. Cập nhật PROJECT_STATUS.md sau mỗi task
+### 7. Cập nhật docs/PROJECT_STATUS.md sau mỗi task
 
-Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `PROJECT_STATUS.md`:
+Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `docs/PROJECT_STATUS.md`:
 - Thêm changelog entry ở đầu (reverse-chronological)
 - Tick `[x]` toàn bộ DoD items
 - Điền ngày vào `Completed:`

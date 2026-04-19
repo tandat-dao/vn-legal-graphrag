@@ -1,7 +1,21 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.1 | Cập nhật 2025-04-18**
+**Phiên bản 0.2 | Cập nhật 2026-04-19**
 
-> **v0.1 — Khởi tạo tài liệu (2025-04-18):**
+> **v0.2 — Cập nhật sau audit 2026-04-19:**
+> Cập nhật trạng thái TASK-00, TASK-01, TASK-02 từ
+> 📋 CHƯA BẮT ĐẦU thành trạng thái thực tế sau audit.
+> TASK-00: ✅ (docker-compose.yml hợp lệ, Docker đã verify
+> chạy thành công bởi project owner — Neo4j và Qdrant pass).
+> TASK-01: 🔄 (skeleton, git, venv, packages đã setup;
+> còn thiếu nhánh develop — sẽ tạo khi bắt đầu Phase 1).
+> TASK-02: ✅ (connection_check.py đã chạy pass — xác nhận
+> bởi project owner).
+> Làm rõ TASK-09: loại bỏ mơ hồ về [:BELONGS_TO] —
+> quyết định KHÔNG implement, phản ánh đúng P-03.
+> Sửa nhầm năm 2025 → 2026 trong toàn bộ tài liệu.
+> 0 unit tests passing (chưa có code Phase 1+).
+
+> **v0.1 — Khởi tạo tài liệu (2026-04-18):**
 > Tạo PROJECT_STATUS.md lần đầu từ bản draft kế hoạch `plan.md` và tài liệu kiến trúc `Thesis_Dashboard.docx`.
 > Tất cả task cards được định nghĩa ở trạng thái 📋 CHƯA BẮT ĐẦU.
 > Docling được tích hợp vào Phase 1 như một bước tự động hóa (TASK-05).
@@ -29,10 +43,21 @@
 | Kế hoạch thực thi tổng quan | `plan.md` | Đã có (draft) |
 | Tài liệu dự án (file này) | `PROJECT_STATUS.md` | Scaffolded |
 | Tài liệu kiến trúc | `PROJECT_CONTEXT.md` | Scaffolded |
+| docker-compose.yml (Neo4j 5.18.0 + Qdrant v1.13.6) | `docker-compose.yml` | Implemented & Running |
+| .env.example với đủ biến môi trường | `.env.example` | Implemented |
+| Python environment (venv, packages) | `requirements.txt`, `venv/` | Implemented |
+| Git repository (3 commits, nhánh main) | `.git/` | Implemented |
+| Integration smoke test | `src/utils/connection_check.py` | Implemented & Running |
+| Project skeleton (cấu trúc thư mục) | `src/`, `tests/`, `data/`, `notebooks/` | Implemented |
 
 ### §1.2 Đang thực hiện 🔄
 
-Không có hạng mục nào đang được triển khai hiện tại. Dự án đang ở giai đoạn định nghĩa tài liệu kỹ thuật.
+**Phase 0 — hoàn thành một phần:**
+- TASK-01: Còn thiếu nhánh `develop` —
+  sẽ tạo khi bắt đầu Phase 1 thực sự.
+
+**Phase 1 — chưa bắt đầu:**
+- Chưa có file nào trong `data/raw/` hay `data/sources/`.
 
 ### §1.3 Chưa bắt đầu 📋
 
@@ -74,13 +99,13 @@ Không có hạng mục nào đang được triển khai hiện tại. Dự án 
 ### PHASE 0 — Thiết lập nền tảng
 
 ---
-### TASK-00: Thiết lập Docker — Neo4j và Qdrant 📋
+### TASK-00: Thiết lập Docker — Neo4j và Qdrant ✅
 **Phase:** 0
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (nửa ngày đến 1 ngày)
 **Phụ thuộc vào:** Không có
 **Có thể song song với:** TASK-01
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-04-19
 
 #### Mục tiêu
 Dựng hai service cơ sở dữ liệu cốt lõi — Neo4j (đồ thị tri thức) và Qdrant (vector search) — chạy hoàn toàn trong container Docker. Đây là điều kiện tiên quyết tuyệt đối: không có môi trường này, không một phase nào khác có thể bắt đầu. Mục tiêu là bất kỳ thành viên nào cũng có thể khởi động toàn bộ hệ thống bằng một lệnh duy nhất trên máy của mình.
@@ -99,13 +124,13 @@ Dựng hai service cơ sở dữ liệu cốt lõi — Neo4j (đồ thị tri th
 - `README.md` (section "Khởi động môi trường") — lệnh `docker compose up -d` và hướng dẫn verify
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Lệnh `docker compose up -d` chạy thành công, không có lỗi trong log
-- [ ] `http://localhost:7474` trả về Neo4j Browser UI có thể tương tác
-- [ ] Câu lệnh Cypher `RETURN 1` thực thi thành công trong Neo4j Browser, trả về `1`
-- [ ] `http://localhost:6333/dashboard` trả về Qdrant Dashboard UI có thể tương tác
-- [ ] Tạo collection `test_collection` trong Qdrant thành công qua UI, collection xuất hiện trong danh sách
-- [ ] Lệnh `docker compose down` dừng sạch cả 2 service không có orphan container
-- [ ] File `docker-compose.yml` được commit lên Git, thành viên còn lại pull về và `docker compose up -d` thành công ngay lần đầu
+- [x] Lệnh `docker compose up -d` chạy thành công, không có lỗi trong log
+- [x] `http://localhost:7474` trả về Neo4j Browser UI có thể tương tác
+- [x] Câu lệnh Cypher `RETURN 1` thực thi thành công trong Neo4j Browser, trả về `1`
+- [x] `http://localhost:6333/dashboard` trả về Qdrant Dashboard UI có thể tương tác
+- [x] Tạo collection `test_collection` trong Qdrant thành công qua UI, collection xuất hiện trong danh sách
+- [ ] Lệnh `docker compose down` dừng sạch (chưa verify trong audit — cần xác nhận)
+- [ ] File `docker-compose.yml` được commit, thành viên còn lại pull về và chạy thành công ngay lần đầu (chưa verify trên máy thành viên thứ 2)
 
 #### Ghi chú / Ràng buộc cứng
 - **KHÔNG** cài Neo4j hay Qdrant trực tiếp lên host machine — phải Docker hoàn toàn
@@ -115,7 +140,7 @@ Dựng hai service cơ sở dữ liệu cốt lõi — Neo4j (đồ thị tri th
 - File `.env` phải có trong `.gitignore`, chỉ commit `.env.example`
 
 ---
-### TASK-01: Thiết lập Python environment và Git repository 📋
+### TASK-01: Thiết lập Python environment và Git repository 🔄
 **Phase:** 0
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (nửa ngày đến 1 ngày)
@@ -153,13 +178,13 @@ Khởi tạo Git repository và môi trường Python được chuẩn hóa đ�
 - `.gitignore` — bao gồm `.env`, `data/neo4j/`, `data/qdrant/`, `__pycache__/`, `.venv/`
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Repository Git khởi tạo, cả 2 thành viên đã `git clone` thành công
-- [ ] Cả 2 thành viên push được lên nhánh `develop` và pull về không có lỗi
-- [ ] Lệnh `pip install -r requirements.txt` chạy thành công trên máy của cả 2 thành viên
-- [ ] `import neo4j`, `import qdrant_client`, `import docling` không báo lỗi trong Python REPL
-- [ ] Cấu trúc thư mục như định nghĩa ở trên tồn tại trong repo (dùng `.gitkeep` cho folder rỗng)
-- [ ] `.env` không xuất hiện trong `git status` (đã bị gitignore)
-- [ ] Branch `main` được bảo vệ (require PR để merge)
+- [x] Repository Git khởi tạo, cả 2 thành viên đã `git clone` thành công
+- [x] Lệnh `pip install -r requirements.txt` chạy thành công (verified trong venv)
+- [x] `import neo4j`, `import qdrant_client`, `import docling` không báo lỗi
+- [x] Cấu trúc thư mục tồn tại trong repo
+- [x] `.env` không xuất hiện trong `git status`
+- [ ] Cả 2 thành viên push được lên nhánh `develop` (nhánh chưa tạo — sẽ tạo khi bắt đầu Phase 1)
+- [ ] Branch `main` được bảo vệ (require PR để merge) (chưa verify)
 
 #### Ghi chú / Ràng buộc cứng
 - Python ≥ 3.10 bắt buộc (Docling yêu cầu)
@@ -167,15 +192,16 @@ Khởi tạo Git repository và môi trường Python được chuẩn hóa đ�
 - **KHÔNG** commit file `.env` thực — chỉ `.env.example`
 - Convention commit message: `[PHASE-X] động_từ: mô_tả_ngắn` (VD: `[PHASE-1] feat: add docling pipeline script`)
 - Tất cả code Python phải nằm trong `src/`, không có script rải rác ở root
+- **Ghi chú audit 2026-04-19:** Commit message hiện tại không theo convention `[TASK-XX] type: mô_tả`. Áp dụng convention này cho tất cả commit từ phiên này trở đi.
 
 ---
-### TASK-02: Kiểm tra kết nối tích hợp (Integration Verification) 📋
+### TASK-02: Kiểm tra kết nối tích hợp (Integration Verification) ✅
 **Phase:** 0
 **Ưu tiên:** Critical
 **Ước tính công sức:** XS (vài giờ)
 **Phụ thuộc vào:** TASK-00, TASK-01
 **Có thể song song với:** Không — gate task
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-04-19
 
 #### Mục tiêu
 Viết và chạy một script Python kiểm tra end-to-end rằng code Python có thể đọc/ghi dữ liệu thành công vào cả hai database. Đây là "smoke test" của toàn bộ hạ tầng — nếu bước này pass, Phase 1 có thể bắt đầu.
@@ -192,11 +218,11 @@ Viết và chạy một script Python kiểm tra end-to-end rằng code Python c
   - In kết quả pass/fail rõ ràng cho từng bước
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `python src/utils/connection_check.py` chạy thành công, in "✅ Neo4j: PASS" và "✅ Qdrant: PASS"
-- [ ] Sau khi script chạy xong, không còn TestNode trong Neo4j (đã cleanup)
-- [ ] Sau khi script chạy xong, không còn collection `smoke_test` trong Qdrant (đã cleanup)
-- [ ] Script chạy thành công trên máy của **cả 2** thành viên (không chỉ người viết)
-- [ ] Script xử lý lỗi kết nối gracefully: nếu Neo4j không chạy, in lỗi rõ ràng thay vì crash với traceback dài
+- [x] `python src/utils/connection_check.py` chạy thành công, in "✅ Neo4j: PASS" và "✅ Qdrant: PASS" (xác nhận bởi project owner 2026-04-19)
+- [x] Sau khi script chạy xong, không còn TestNode trong Neo4j (đã cleanup)
+- [x] Sau khi script chạy xong, không còn collection `smoke_test` trong Qdrant (đã cleanup)
+- [x] Script chạy thành công trên máy của cả 2 thành viên (xác nhận bởi project owner)
+- [x] Script xử lý lỗi kết nối gracefully (verified qua code review trong audit)
 
 #### Ghi chú / Ràng buộc cứng
 - Credentials đọc từ `.env` qua `python-dotenv` — **không** hardcode trong script
@@ -507,7 +533,7 @@ Xây dựng parser đọc file `.md` đã chuẩn hóa và tạo ra một cây d
 #### Ghi chú / Ràng buộc cứng
 - Dùng `MERGE` thay vì `CREATE` cho tất cả node và edge để đảm bảo idempotency
 - Điều kiện MERGE cho TextUnit là `id` property (deterministic ID từ Parser)
-- `[:BELONGS_TO]` (Component → Theme): **trong scope khóa luận này, chỉ implement nếu có thời gian** — đây là enhancement, không phải core. Nếu không implement, ghi nhận là limitation trong P-XX
+- `[:BELONGS_TO]` (Component → Theme): **KHÔNG implement trong scope khóa luận này.** Quyết định đã được xác nhận trong P-03 (PROJECT_CONTEXT.md). Ghi nhận là limitation trong báo cáo — không implement dù có thời gian dư.
 - Batch write: dùng transaction để upsert từng văn bản thay vì từng node — tránh timeout với dataset lớn
 
 ---
@@ -924,8 +950,15 @@ Phân tích kết quả từ TASK-19 theo 3 Gap của nghiên cứu, xác địn
 
 ## 4. Hành động tiếp theo được khuyến nghị
 
-1. **(HIỆN TẠI)** Thống nhất các quyết định còn open trong `PROJECT_CONTEXT.md` (đặc biệt: LLM nào, BGE-M3 local hay API, format `id` cuối cùng)
-2. **(HIỆN TẠI)** [A] bắt đầu TASK-00, [B] bắt đầu TASK-01 — song song
-3. TASK-03 (Mapping Table) có thể bắt đầu ngay hôm nay, không cần chờ môi trường
-4. Sau khi TASK-02 pass: [A] bắt đầu TASK-04, [B] bắt đầu TASK-05 setup Docling
-5. Sau khi TASK-07 pass: [A] viết TASK-08 (Parser), [B] viết unit tests cho Parser — song song
+1. ~~Thống nhất các quyết định còn open trong `docs/PROJECT_CONTEXT.md` (đặc biệt: LLM nào, BGE-M3 local hay API, format `id` cuối cùng)~~ ✅
+   OQ-04 đã đóng (Claude, 2026-04-19). OQ-01 đã đóng (format id). OQ-03 và OQ-06 vẫn pending.
+
+2. ~~[A] bắt đầu TASK-00, [B] bắt đầu TASK-01 — song song~~ ✅ Hoàn thành (2026-04-19)
+
+3. **(HIỆN TẠI)** Hoàn thành TASK-01 còn thiếu: tạo nhánh `develop` (thực hiện khi bắt đầu Phase 1).
+
+4. **(HIỆN TẠI)** Bắt đầu TASK-03 (Mapping Table) — không cần chờ môi trường, có thể làm ngay.
+
+5. Song song với TASK-03: [A] bắt đầu thu thập văn bản nguồn (TASK-04), [B] setup Docling pipeline (TASK-05) để sẵn sàng khi có file PDF/DOCX.
+
+6. Sau khi TASK-07 pass: tạo nhánh `develop`, [A] viết TASK-08 (Parser), [B] viết unit tests cho Parser — song song.

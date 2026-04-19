@@ -3,9 +3,19 @@
 > Để theo dõi tiến độ task, DoD checklist, và hành động tiếp theo, xem `PROJECT_STATUS.md`.
 
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Kiến trúc & Ngữ cảnh Hệ thống
-**Phiên bản 0.1 | Cập nhật 2025-04-18**
+**Phiên bản 0.2 | Cập nhật 2026-04-19**
 
-> **v0.1 — Khởi tạo tài liệu (2025-04-18):**
+> **v0.2 — Cập nhật sau audit 2026-04-19:**
+> Đóng OQ-04: xác nhận dùng Claude (Anthropic) làm LLM
+> provider cho cả Query Planner và Answer Generator.
+> Query Planner dùng claude-haiku-4-5-20251001 để tối ưu
+> token; Answer Generator dùng claude-sonnet-4-6 cho output
+> chất lượng cao. Cập nhật Tech Stack Section 3 tương ứng.
+> Làm rõ INCONSISTENCY-02: [:BELONGS_TO] KHÔNG implement
+> trong scope khóa luận — TASK-09 được cập nhật để phản
+> ánh quyết định dứt khoát này (xem PROJECT_STATUS.md v0.2).
+
+> **v0.1 — Khởi tạo tài liệu (2026-04-18):**
 > Tạo PROJECT_CONTEXT.md lần đầu từ `Thesis_Dashboard.docx` và `plan.md`.
 > Định nghĩa kiến trúc tổng thể, schema Ontology, tech stack dự kiến.
 > Docling được bổ sung vào kiến trúc Phase 1 (quyết định trong buổi thảo luận 2025-04-18).
@@ -338,8 +348,8 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | **Embedding model** | BGE-M3 (BAAI/bge-m3) | dim=1024 | ⚙️ Cần quyết định: local vs API |
 | **Sparse retrieval** | BM25 (via Qdrant sparse) | — | ✅ Đã xác nhận |
 | **Rank fusion** | Reciprocal Rank Fusion (RRF) | custom impl hoặc thư viện | ✅ Đã xác nhận |
-| **LLM — Query Planner** | Chưa quyết định | — | 🔄 Đang đánh giá (xem OQ-04) |
-| **LLM — Answer Generator** | Chưa quyết định | — | 🔄 Đang đánh giá (xem OQ-04) |
+| **LLM — Query Planner** | Claude (Anthropic) | claude-haiku-4-5-20251001 | ✅ Đã xác nhận |
+| **LLM — Answer Generator** | Claude (Anthropic) | claude-sonnet-4-6 | ✅ Đã xác nhận |
 | **Testing** | pytest | latest | ✅ Đã xác nhận |
 | **Notebook** | Jupyter | — | ✅ Đã xác nhận |
 | **Version control** | Git | — | ✅ Đã xác nhận |
@@ -426,7 +436,7 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | OQ-01 | Format `id` cuối cùng: `luat-dat-dai-2024` hay `LDD-2024` hay hash? | TASK-06, TASK-09, toàn bộ Phase 2 | **Đã quyết định trong tài liệu này:** format `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`. Xem §2.4. |
 | OQ-02 | Cross-reference ngoài scope: lấy thêm Điều hay ghi limitation? | TASK-03, TASK-06 | Cần project owner quyết định từng trường hợp trong TASK-03. Output: `crossref_decisions.md`. |
 | OQ-03 | BGE-M3: chạy local hay dùng API? | TASK-10, TASK-14 | Ngưỡng quyết định: nếu encode toàn bộ dataset > 2 giờ trên máy 8GB RAM → chuyển sang API. Xem P-02. |
-| OQ-04 | LLM nào cho Query Planner và Answer Generator? | TASK-12, TASK-15, TASK-18, TASK-19 | Chưa quyết định. Candidates: GPT-4o-mini (API), Gemini Flash (API), hoặc Qwen2.5-7B (local). Cần thử nghiệm. |
+| OQ-04 | LLM nào cho Query Planner và Answer Generator? | TASK-12, TASK-15, TASK-18, TASK-19 | Đã quyết định 2026-04-19: dùng Claude (Anthropic). Query Planner: claude-haiku-4-5-20251001. Answer Generator: claude-sonnet-4-6. Tối ưu token bằng cách dùng model nhẹ hơn cho bước phân loại, model mạnh hơn cho bước sinh câu trả lời. |
 | OQ-05 | `[:BELONGS_TO]` có implement trong scope khóa luận không? | TASK-09 | Xem P-03. Khuyến nghị: **không implement trong scope này** — ghi nhận là limitation. |
 | OQ-06 | Top-k mặc định cho Semantic Filtering là bao nhiêu? | TASK-14, TASK-17, TASK-19 | Chưa quyết định. Cần thử nghiệm trong TASK-16. Ảnh hưởng trực tiếp đến Precision@k và Recall@k. |
 
@@ -463,6 +473,8 @@ Edge `[:BELONGS_TO]` (Component → Theme) cho phép gán nhãn chuyên ngành c
 **Quyết định:** Không implement `[:BELONGS_TO]` trong scope khóa luận. Toàn bộ Component được gán Theme thông qua Norm cha (qua `[:INCLUDES]` chain). Chấp nhận limitation: Component trong văn bản đa-theme (như Bộ luật Dân sự có điều khoản liên quan đất đai) sẽ không được định tuyến đúng nếu Norm không thuộc Theme "dat-dai".
 
 **Điều kiện nâng cấp:** Khi evaluation (Phase 4) cho thấy ≥ 3 failure case có nguyên nhân trực tiếp là thiếu `[:BELONGS_TO]` routing → xem xét implement và đo lại metrics.
+
+TASK-09 trong PROJECT_STATUS.md đã được cập nhật để phản ánh quyết định này — không còn để ngỏ khả năng implement `[:BELONGS_TO]`.
 
 ---
 
