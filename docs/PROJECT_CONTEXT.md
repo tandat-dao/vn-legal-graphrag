@@ -3,7 +3,17 @@
 > Để theo dõi tiến độ task, DoD checklist, và hành động tiếp theo, xem `PROJECT_STATUS.md`.
 
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Kiến trúc & Ngữ cảnh Hệ thống
-**Phiên bản 0.2 | Cập nhật 2026-04-19**
+**Phiên bản 0.3 | Cập nhật 2026-04-27**
+
+> **v0.3 — Cập nhật 2026-04-27:**
+> Thay đổi chiến lược thu thập dữ liệu Phase 1: bỏ Docling/OCR pipeline,
+> chuyển sang thu thập thủ công từ VBHN/vbpl.vn theo Chương/Mục.
+> Cập nhật Tier mapping: tier 1 bổ sung NQ Quốc hội, tier 4 bổ sung NQ HĐND tỉnh.
+> Bổ sung thuộc tính CTV: amended_by, added_by.
+> Bổ sung metadata fields: source_vbhn, amended_by.
+> Cập nhật Tech Stack, Lộ trình tính năng Phase 1, và §2.3 Data Flow.
+> Xóa P-04 (Docling OCR accuracy) — không còn liên quan.
+> Ghi nhận 6 quyết định thiết kế D-01 đến D-06 (xem CLAUDE.md Decision Log).
 
 > **v0.2 — Cập nhật sau audit 2026-04-19:**
 > Đóng OQ-04: xác nhận dùng Claude (Anthropic) làm LLM
@@ -60,7 +70,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 - Văn bản đã được số hóa và làm sạch (pre-processed)
 
 **Ngoài scope:**
-- OCR / Data Extraction từ ảnh hoặc PDF scan (chỉ xử lý văn bản đã có text layer, hoặc dùng Docling OCR cho trường hợp scan giới hạn)
+- OCR / Data Extraction từ ảnh hoặc PDF scan — dữ liệu được lấy từ VBHN/vbpl.vn dạng text, không xử lý tài liệu scan
 - Đánh giá trên toàn bộ hệ thống pháp luật Việt Nam (không mở rộng ngoài 6 thủ tục)
 - Suy luận pháp lý nội hàm (legal reasoning) — hệ thống tìm và trình bày thông tin, không giải quyết tranh chấp pháp lý
 - Giao diện người dùng đồ họa (UI) — scope khóa luận dừng ở pipeline và đánh giá
@@ -75,15 +85,12 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 ┌─────────────────────────────────────────────────────────────────┐
 │                    OFFLINE PIPELINE (Data Ingestion)             │
 │                                                                   │
-│  PDF/DOCX gốc                                                    │
+│  Thu thập thủ công từ VBHN / vbpl.vn                             │
+│  (dichvucong.gov.vn → danh sách văn bản → VBHN → copy nội dung) │
 │      │                                                            │
 │      ▼                                                            │
-│  [Docling Parser]──►[clean_pdf_text()]──►[article_boundary_split]│
-│      │                                        │                   │
-│      │                              [hierarchy_prefix_attach]     │
-│      │                                        │                   │
-│      ▼                                        ▼                   │
-│  [*-draft.md]              [Metadata điền tay + Review]          │
+│  [Chuẩn hóa heading + Điền metadata YAML frontmatter]           │
+│  (tier, jurisdiction, implements, source_vbhn, amended_by, ...)  │
 │                                        │                          │
 │                                        ▼                          │
 │                               [data/raw/*.md]                    │
@@ -187,45 +194,39 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 | `[:SPECIFIED_IN]` | Procedure | Component | Gom điều khoản phân tán vào 1 thủ tục |
 | `[:BELONGS_TO]` | Component | Theme | Gán nhãn chuyên ngành cho điều khoản đặc thù (xem P-03) |
 
-### §2.3 Data Flow — Phase 1 với Docling
+### §2.3 Data Flow — Phase 1 Thu thập thủ công
 
 ```
-Input: PDF/DOCX từ vbpl.vn, cổng dịch vụ công tỉnh
+[Bước 1] Xác định thủ tục trên dichvucong.gov.vn
+  → Lấy danh sách văn bản liên quan cho từng thủ tục
   │
   ▼
-[Bước 1] run_docling(file_path)
-  → DoclingDocument: heading hierarchy, text blocks, tables
-  → Xử lý OCR tự động nếu là PDF scan (Tesseract, lang='vie')
+[Bước 2] Tìm Văn bản hợp nhất (VBHN) trên vbpl.vn
+  → Nếu có VBHN: dùng làm nguồn nội dung (giải quyết chồng chéo NĐ sửa đổi)
+  → Nếu không có VBHN: lấy trực tiếp từ văn bản gốc
   │
   ▼
-[Bước 2] clean_pdf_text(doc)
-  → Xóa: "Cộng hòa XHCN Việt Nam", "Nơi nhận:", "TM. ỦY BAN NHÂN DÂN"
-  → Xóa: số trang, running header/footer
-  → GIỮ NGUYÊN: toàn bộ nội dung pháp lý
+[Bước 3] Xác định phạm vi lấy theo Chương/Mục
+  → Chương không có Mục: có ≥1 điều liên quan → lấy cả Chương
+  → Chương có Mục: có ≥1 điều liên quan → lấy cả Mục chứa điều đó
   │
   ▼
-[Bước 3] article_boundary_split(doc)
-  → Regex: r"^Điều\s+\d+" trên heading nodes của DoclingDocument
-  → Output: list[{article_id, heading_text, content}]
+[Bước 4] Copy nội dung + chuẩn hóa heading format
+  → ## Điều X. [Tên điều]
+  → ### Khoản 1.
+  → #### Điểm a.
   │
   ▼
-[Bước 4] hierarchy_prefix_attach(doc, article)
-  → Từ DoclingDocument heading hierarchy
-  → Sinh: "Luật Đất đai 2024 > Điều 116"
-  │
-  ▼
-[Output Trung gian] data/raw/*-draft.md
-  → Có structure cơ bản, CHƯA có metadata block
-  │
-  ▼
-[Thủ công] Điền metadata YAML frontmatter
+[Bước 5] Điền metadata YAML frontmatter
   → id, tier, theme, jurisdiction, implements, valid_from, valid_to
-  → Kiểm tra và sửa heading format nếu cần
+  → source_vbhn (nếu dùng VBHN), amended_by (nếu có NĐ sửa đổi)
   → Lập specified_in_map.md ([:SPECIFIED_IN] mapping)
   │
   ▼
-[Output Cuối] data/raw/*.md ← Input cho Phase 2
+[Output] data/raw/*.md ← Input cho Phase 2
 ```
+
+**Lưu ý VBHN:** `source_vbhn` chỉ ghi nhận nguồn lấy nội dung. Metadata `id`, `tier`, `implements` vẫn theo văn bản QPPL chính thức (Luật, NĐ, TT gốc), không phải số hiệu VBHN.
 
 ### §2.4 Schema File `.md` chuẩn (Phase 1 Output)
 
@@ -240,6 +241,8 @@ implements: null
 valid_from: "2025-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/..."
+source_vbhn: null        # số hiệu VBHN nếu nội dung lấy từ văn bản hợp nhất, VD: "44/VBHN-VPQH"
+amended_by: null         # id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: "nghi-dinh-07-2025-nd-cp"
 ---
 
 ## Điều 116. [Tên điều]
@@ -257,12 +260,14 @@ Nội dung điểm a.
 | Trường | Type | Ràng buộc |
 |---|---|---|
 | `id` | string | Unique trên toàn bộ tập file. Format: `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`, `nghi-dinh-102-2024-nd-cp`, `quyet-dinh-bang-gia-dat-tp-hcm-2025` |
-| `tier` | int | Chỉ nhận 1 trong 4 giá trị: 1=Luật/Bộ luật, 2=Nghị định/Pháp lệnh, 3=Thông tư, 4=Quyết định UBND tỉnh |
+| `tier` | int | Chỉ nhận 1 trong 4 giá trị: 1=Luật/Bộ luật/NQ Quốc hội, 2=Nghị định/Pháp lệnh, 3=Thông tư/Thông tư liên tịch, 4=Quyết định UBND tỉnh/NQ HĐND tỉnh |
 | `theme` | string | Chỉ nhận: `dat-dai`, `ho-tich`, `nuoi-con-nuoi` |
 | `jurisdiction` | string | Chỉ nhận: `toan-quoc`, `tp-hcm`, `dong-nai` |
 | `implements` | string\|null | Phải trỏ đúng `id` tồn tại trong tập file. null nếu là Luật gốc |
 | `valid_from` | string | Format `YYYY-MM-DD` bắt buộc |
 | `valid_to` | string\|null | Format `YYYY-MM-DD` hoặc `null` nếu vẫn còn hiệu lực |
+| `source_vbhn` | string\|null | **Optional.** Số hiệu VBHN dùng làm nguồn nội dung, VD: `"44/VBHN-VPQH"`. null nếu lấy từ văn bản gốc |
+| `amended_by` | string\|null | **Optional.** `id` của văn bản sửa đổi nếu file chứa điều khoản đã bị sửa. null nếu không |
 
 ### §2.5 Data Flow — Dual Indexing (Phase 2)
 
@@ -343,8 +348,6 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | **Ngôn ngữ lập trình** | Python | ≥ 3.10 | ✅ Đã xác nhận |
 | **Neo4j driver** | neo4j (Python official) | 5.x | ✅ Đã xác nhận |
 | **Qdrant client** | qdrant-client | latest | ✅ Đã xác nhận |
-| **PDF/DOCX parsing** | Docling (IBM) | pin version | ✅ Đã xác nhận (quyết định 2025-04-18) |
-| **OCR engine** | Tesseract (via Docling) | lang='vie' bắt buộc | ✅ Đã xác nhận |
 | **Embedding model** | BGE-M3 (BAAI/bge-m3) | dim=1024 | ⚙️ Cần quyết định: local vs API |
 | **Sparse retrieval** | BM25 (via Qdrant sparse) | — | ✅ Đã xác nhận |
 | **Rank fusion** | Reciprocal Rank Fusion (RRF) | custom impl hoặc thư viện | ✅ Đã xác nhận |
@@ -373,12 +376,8 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | Tính năng | Phase | Loại |
 |---|---|---|
 | Bảng ánh xạ văn bản (mapping table) | 1 | Core |
-| Thu thập văn bản gốc từ nguồn chính thức | 1 | Core |
-| Docling pipeline: PDF → draft .md | 1 | Core |
-| Boilerplate removal (`clean_pdf_text`) | 1 | Core |
-| Article-boundary chunking (ranh giới Điều) | 1 | Core |
-| Hierarchy prefix từ DoclingDocument | 1 | Core |
-| YAML metadata block chuẩn hóa | 1 | Core |
+| Thu thập thủ công từ VBHN/vbpl.vn theo Chương/Mục | 1 | Core |
+| YAML metadata block chuẩn hóa (kể cả source_vbhn, amended_by) | 1 | Core |
 | `specified_in_map.md` ([:SPECIFIED_IN] manual mapping) | 1 | Core |
 | Script validate metadata | 1 | Core |
 | Cross-check chéo giữa 2 thành viên | 1 | Core |
@@ -475,16 +474,6 @@ Edge `[:BELONGS_TO]` (Component → Theme) cho phép gán nhãn chuyên ngành c
 **Điều kiện nâng cấp:** Khi evaluation (Phase 4) cho thấy ≥ 3 failure case có nguyên nhân trực tiếp là thiếu `[:BELONGS_TO]` routing → xem xét implement và đo lại metrics.
 
 TASK-09 trong PROJECT_STATUS.md đã được cập nhật để phản ánh quyết định này — không còn để ngỏ khả năng implement `[:BELONGS_TO]`.
-
----
-
-### P-04 — Docling không bảo đảm 100% accuracy cho PDF scan
-
-Docling + Tesseract OCR cho kết quả không chắc chắn trên PDF scan chất lượng thấp (đặc biệt là quyết định UBND cấp tỉnh đã cũ). Tỷ lệ lỗi OCR có thể ảnh hưởng đến chất lượng TextUnit và vector embedding tương ứng.
-
-**Quyết định:** Với mỗi file PDF scan được xử lý qua OCR: thành viên phụ trách phải review kết quả OCR trong file `*-draft.md` trước khi chuyển sang TASK-06. Nếu lỗi OCR quá nhiều (> 20% nội dung bị sai): đánh máy thủ công hoặc ghi nhận là limitation. Mọi file đi qua OCR phải được đánh dấu trong `manifest.md` với ghi chú chất lượng.
-
-**Điều kiện nâng cấp:** Nếu có bản DOCX chính thức của văn bản đó → ưu tiên dùng DOCX thay vì OCR PDF.
 
 ---
 
