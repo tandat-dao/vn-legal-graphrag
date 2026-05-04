@@ -54,8 +54,6 @@ graphrag-vn-law/
 │   └── evaluation/              ← Phase 4: test set, kết quả, phân tích
 ├── src/
 │   ├── ingestion/               ← Phase 2
-│   │   ├── docling_pipeline.py  ← TASK-05
-│   │   ├── run_pipeline.py      ← CLI runner cho Docling
 │   │   ├── parser.py            ← TASK-08
 │   │   ├── graph_builder.py     ← TASK-09
 │   │   └── vectorizer.py        ← TASK-10
@@ -73,7 +71,6 @@ graphrag-vn-law/
 │       ├── connection_check.py  ← TASK-02
 │       └── validate_metadata.py ← TASK-06
 ├── tests/
-│   ├── test_docling_pipeline.py
 │   ├── test_parser.py
 │   └── test_query_planner.py
 └── notebooks/
@@ -156,6 +153,19 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 
 ---
 
+## QUYẾT ĐỊNH THIẾT KẾ — DECISION LOG
+
+| # | Quyết định | Lý do | Ngày |
+|---|---|---|---|
+| D-01 | Thu thập theo Chương/Mục thay vì từng Điều | Tiết kiệm thời gian Phase 1; dữ liệu thừa dùng làm noise test cho evaluation | 2026-04-27 |
+| D-02 | Dùng VBHN làm nguồn nội dung chính | Giải quyết vấn đề nghị định chồng chéo sửa đổi lẫn nhau, không cần tự tra từng NĐ | 2026-04-27 |
+| D-03 | CTV chỉ tạo bản hiện hành trước | Ưu tiên chạy pipeline end-to-end; bổ sung temporal versioning sau nếu kịp | 2026-04-27 |
+| D-04 | Tier 1 bao gồm NQ Quốc hội; Tier 4 bao gồm NQ HĐND | NQ QH có giá trị tương đương Luật; NQ HĐND tỉnh có giá trị tương đương QĐ UBND | 2026-04-27 |
+| D-05 | Scope CMĐSDĐ: cá nhân, đất NN trừ lâm nghiệp, sang đất ở | Hạn chế liên đới tới luật lâm nghiệp, luật đầu tư; giảm số văn bản cần thu thập | 2026-04-27 |
+| D-06 | Điều mới hoàn toàn (VD: Điều 44a) thuộc Norm gốc, CTV ghi added_by | Giữ nhất quán cấu trúc bố cục văn bản; truy vết nguồn gốc qua CTV | 2026-04-27 |
+
+---
+
 ## SCHEMA ONTOLOGY — QUICK REFERENCE
 
 ### 7 loại Node
@@ -165,7 +175,7 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi |
 | `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from` |
 | `Component` | Điều/Khoản/Điểm (xuyên thời gian) | `id`, `label` |
-| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status` |
+| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status`, `amended_by` (optional), `added_by` (optional) |
 | `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic), `text` |
 | `Jurisdiction` | Địa phương | `name`: toan-quoc \| tp-hcm \| dong-nai |
 | `Procedure` | Thủ tục hành chính | `name` (slug), `display_name` |
@@ -186,10 +196,10 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 ### Tier mapping (CỨNG — không thay đổi)
 
 ```
-tier 1 = Luật / Bộ luật
+tier 1 = Luật / Bộ luật / Nghị quyết Quốc hội
 tier 2 = Nghị định / Pháp lệnh
 tier 3 = Thông tư / Thông tư liên tịch
-tier 4 = Quyết định UBND tỉnh
+tier 4 = Quyết định UBND tỉnh / Nghị quyết HĐND tỉnh
 ```
 
 ---
@@ -223,6 +233,8 @@ implements: null
 valid_from: "2025-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/..."
+source_vbhn: null        # số hiệu VBHN nếu nội dung lấy từ văn bản hợp nhất, VD: "44/VBHN-VPQH"
+amended_by: null         # id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: "nghi-dinh-07-2025-nd-cp"
 ---
 
 ## Điều X. [Tên điều]
@@ -281,7 +293,7 @@ VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 VALID_TIERS = [1, 2, 3, 4]
 
 VALID_PROCEDURES = [
-    "chuyen-muc-dich-su-dung-dat",
+    "chuyen-muc-dich-su-dung-dat",  # Scope: cá nhân, từ đất nông nghiệp (trừ đất lâm nghiệp) sang đất ở (nông thôn + đô thị)
     "cap-so-do-lan-dau",
     "dang-ky-khai-sinh",
     "cap-ban-sao-trich-luc-ho-tich",
@@ -333,24 +345,26 @@ answer_generator.py  ← nhận context + câu hỏi gốc
 
 ---
 
-## DOCLING PIPELINE — QUICK REFERENCE
+## PIPELINE THU THẬP DỮ LIỆU — QUICK REFERENCE
 
-```
-PDF/DOCX gốc
-  ↓ run_docling(file_path)           # Docling parsing + layout analysis
-  ↓ clean_pdf_text(doc)              # Xóa boilerplate VN
-  ↓ article_boundary_split(doc)      # Regex r"^Điều\s+\d+" trên headings
-  ↓ hierarchy_prefix_attach(doc)     # Sinh context path từ DoclingDocument
-  → *-draft.md                       # TRUNG GIAN — chưa có metadata
-  ↓ Điền metadata thủ công           # tier, jurisdiction, implements, etc.
-  → data/raw/*.md                    # INPUT cho Phase 2
-```
+Dữ liệu được thu thập **thủ công** từ các nguồn pháp luật chính thức, không dùng Docling/OCR pipeline.
 
-**Lưu ý OCR:** Nếu file là PDF scan → Docling dùng Tesseract với `lang='vie'`.
-Thiếu `vie` language pack → kết quả OCR sai hoàn toàn. Kiểm tra trước khi chạy:
-```bash
-tesseract --list-langs | grep vie
-```
+**Workflow:**
+1. Xác định thủ tục trên dichvucong.gov.vn → lấy danh sách văn bản liên quan
+2. Tìm Văn bản hợp nhất (VBHN) trên vbpl.vn nếu có → dùng làm nguồn nội dung
+3. Nếu không có VBHN → lấy trực tiếp từ văn bản gốc
+4. Copy nội dung các Chương/Mục liên quan → chuẩn hóa thành file `data/raw/*.md`
+
+**Quy tắc thu thập:**
+- Nếu chương **không** có mục: có ít nhất 1 điều liên quan → lấy **cả chương**
+- Nếu chương **có** mục: có ít nhất 1 điều liên quan → lấy **cả mục** chứa điều đó
+- VBHN chỉ là nguồn lấy nội dung; metadata vẫn ghi theo văn bản QPPL chính thức
+- Điều mới hoàn toàn (được thêm bởi nghị định sửa đổi): Component thuộc Norm gốc, CTV ghi `added_by`
+
+**Chiến lược CTV:**
+- Phase 1: chỉ tạo CTV bản hiện hành (`status: active`) từ VBHN
+- Sau Phase 3 nếu kịp: bổ sung 2-3 CTV phiên bản cũ bằng cách truy ngược từ VBHN để demo temporal evolution
+- Không bắt buộc tạo CTV cũ cho tất cả điều khoản
 
 ---
 
@@ -384,9 +398,6 @@ python src/utils/validate_metadata.py data/raw/
 
 # Kiểm tra kết nối
 python src/utils/connection_check.py
-
-# Chạy Docling pipeline (Phase 1)
-python src/ingestion/run_pipeline.py --input data/sources/ --output data/raw/
 
 # Chạy ingestion (Phase 2) — chỉ sau khi Phase 1 done
 python src/ingestion/graph_builder.py
@@ -427,13 +438,6 @@ docker compose logs neo4j | tail -20
 ```
 # File .md có heading sai level (# Điều thay vì ## Điều)
 # Mở file đó, tìm heading bắt đầu bằng #, sửa thành ##
-```
-
-**Docling OCR kết quả sai hoàn toàn:**
-```bash
-# Thiếu Vietnamese language pack cho Tesseract
-sudo apt-get install tesseract-ocr-vie  # Ubuntu/Debian
-brew install tesseract-lang             # macOS
 ```
 
 **Deterministic ID bị duplicate giữa hai file khác nhau:**
