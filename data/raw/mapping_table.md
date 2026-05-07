@@ -53,15 +53,32 @@ không có văn bản địa phương khác biệt nội dung)
 
 ---
 
-## 3. Lĩnh vực Đất đai — Thủ tục: Chuyển mục đích sử dụng đất
+## 3. Lĩnh vực Đất đai — Thủ tục: Chuyển mục đích sử dụng đất đối với cá nhân từ đất nông nghiệp (trừ đất lâm nghiệp) sang đất ở, gồm đất ở tại nông thôn, đất ở tại đô thị 
 
 **Jurisdiction:** toan-quoc + tp-hcm + dong-nai
 
+Chỉ xử lý các trường hợp chuyển mục đích sử dụng đất nông nghiệp (trừ đất lâm nghiệp) sang đất ở, gồm đất ở tại nông thôn, đất ở tại đô thị. Không xét các trường hợp chuyển mục đích khác (ví dụ: đất lâm nghiệp sang đất ở để tránh liên đới tới các văn bản luật chuyên ngành khác). 
+
+Các câu hỏi benchmark cũng chỉ xoay quanh trường hợp chuyển mục đích sử dụng đất nông nghiệp (trừ đất lâm nghiệp) sang đất ở, gồm đất ở tại nông thôn, đất ở tại đô thị.
+
 | Thủ tục | Văn bản | id | Tier | Implements | Jurisdiction | Điều/Khoản cần lấy | Ghi chú |
 |---|---|---|---|---|---|---|---|
-| chuyen-muc-dich-su-dung-dat | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | toan-quoc | [CẦN ĐIỀN] | [CẦN ĐIỀN] |
-| chuyen-muc-dich-su-dung-dat | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | tp-hcm | [CẦN ĐIỀN] | Văn bản địa phương TP.HCM |
-| chuyen-muc-dich-su-dung-dat | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | dong-nai | [CẦN ĐIỀN] | Văn bản địa phương Đồng Nai |
+| chuyen-muc-dich-su-dung-dat | Luật Đất đai 2024 (31/2024/QH15) | luat-dat-dai-2024 | 1 | null | toan-quoc | Chương I; Mục 1 Ch.II; Mục 1 Ch.III; Mục 3 Ch.III; Ch.V; Ch.IX; Mục 2 Ch.X; Mục 3 Ch.X; Mục 1 Ch.XI; Mục 2 Ch.XI; Mục 1 Ch.XIII; Mục 2 Ch.XIII; Ch.XIV | Chain root. Nguồn nội dung: VBHN 44/VBHN-VPQH (16/03/2026) |
+| chuyen-muc-dich-su-dung-dat | Nghị quyết 254/2025/QH15 | nghi-quyet-254-2025-qh15 | 1 | null | toan-quoc | Chương II | NQ Quốc hội — quy định chuyển tiếp/bổ sung cho Luật Đất đai. Hiệu lực: 01/01/2026 |
+| chuyen-muc-dich-su-dung-dat | Nghị định 102/2024/NĐ-CP | nghi-dinh-102-2024-nd-cp | 2 | luat-dat-dai-2024 | toan-quoc | Chương I; Mục 1 Ch.VI; Ch.IX | Quy định chi tiết thi hành Luật Đất đai. Nguồn nội dung: VBHN 46/VBHN-BNNMT (03/04/2026) |
+| chuyen-muc-dich-su-dung-dat | Nghị định 151/2025/NĐ-CP | nghi-dinh-151-2025-nd-cp | 2 | null | toan-quoc | Chương I; Mục 1 Ch.II; Mục 3 Ch.II; Mục 4 Ch.II; Phụ lục I: Mục I Phần III, Mục VI Nội dung C Phần V, Mục VII Nội dung C Phần V | Nguồn nội dung: VBHN 41/VBHN-BNNMT (02/04/2026) |
+| chuyen-muc-dich-su-dung-dat | Nghị định 49/2026/NĐ-CP | nghi-dinh-49-2026-nd-cp | 2 | nghi-quyet-254-2025-qh15 | toan-quoc | Chương III; Chương IV; Chương V | Hiệu lực: 31/01/2026 |
+| chuyen-muc-dich-su-dung-dat | Nghị định 50/2026/NĐ-CP | nghi-dinh-50-2026-nd-cp | 2 | nghi-quyet-254-2025-qh15 | toan-quoc | Chương II | Hiệu lực: 31/01/2026 |
+| chuyen-muc-dich-su-dung-dat | Nghị định 112/2024/NĐ-CP | nghi-dinh-112-2024-nd-cp | 2 | null | toan-quoc | Chương I; Chương II | ⚠️ Hết hiệu lực một phần (sửa đổi bởi NĐ 226/2025). Hiệu lực: 11/09/2024 |
+| chuyen-muc-dich-su-dung-dat | Nghị định 226/2025/NĐ-CP | nghi-dinh-226-2025-nd-cp | 2 | null | toan-quoc | Khoản 2 Điều 5 | Sửa đổi, bổ sung NĐ 112/2024. Hiệu lực: 15/08/2025 |
+| chuyen-muc-dich-su-dung-dat | Quyết định 69/2024/QĐ-UBND TP.HCM | quyet-dinh-69-2024-qd-ubnd-tp-hcm | 4 | null | tp-hcm | Toàn bộ văn bản | Hạn mức giao đất ở cho cá nhân. ⚠️ Chỉ áp dụng cho TP.HCM cũ (chưa có QĐ mới cho TP.HCM mở rộng). Hiệu lực: 30/09/2024 |
+| chuyen-muc-dich-su-dung-dat | Nghị quyết 87/2025/NQ-HĐND TP.HCM | nghi-quyet-87-2025-nq-hdnd-tp-hcm | 4 | null | tp-hcm | Toàn bộ văn bản | Bảng giá đất TP.HCM. Hiệu lực: 01/01/2026 |
+| chuyen-muc-dich-su-dung-dat | Nghị quyết 02/2023/NQ-HĐND TP.HCM | nghi-quyet-02-2023-nq-hdnd-tp-hcm | 4 | null | tp-hcm | Toàn bộ văn bản | Phí thẩm định hồ sơ TP.HCM. Hiệu lực: 01/06/2023 |
+| chuyen-muc-dich-su-dung-dat | Quyết định 52/2016/QĐ-UBND TP.HCM | quyet-dinh-52-2016-qd-ubnd-tp-hcm | 4 | null | tp-hcm | Phụ lục 16 | Mức thu phí và lệ phí. ⚠️ Hết hiệu lực một phần (phần cần lấy vẫn còn hiệu lực). Hiệu lực: 01/01/2017 |
+| chuyen-muc-dich-su-dung-dat | Quyết định 92/2025/QĐ-UBND Đồng Nai | quyet-dinh-92-2025-qd-ubnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Hạn mức giao đất ở cho cá nhân. Hiệu lực: 11/01/2026 |
+| chuyen-muc-dich-su-dung-dat | Nghị quyết 28/2025/NQ-HĐND Đồng Nai | nghi-quyet-28-2025-nq-hdnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Bảng giá đất Đồng Nai. Hiệu lực: 01/01/2026 |
+| chuyen-muc-dich-su-dung-dat | Nghị quyết 22/2024/NQ-HĐND Đồng Nai | nghi-quyet-22-2024-nq-hdnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Phí thẩm định hồ sơ Đồng Nai. Hiệu lực: 09/12/2024 |
+| chuyen-muc-dich-su-dung-dat | Nghị quyết 21/2024/NQ-HĐND Đồng Nai | nghi-quyet-21-2024-nq-hdnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Lệ phí cấp GCN quyền sử dụng đất Đồng Nai. Hiệu lực: 09/12/2024 |
 
 ---
 
@@ -73,9 +90,20 @@ tờ theo Điều 137 Luật Đất đai 2024.
 
 | Thủ tục | Văn bản | id | Tier | Implements | Jurisdiction | Điều/Khoản cần lấy | Ghi chú |
 |---|---|---|---|---|---|---|---|
-| cap-so-do-lan-dau | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | toan-quoc | [CẦN ĐIỀN] | [CẦN ĐIỀN] |
-| cap-so-do-lan-dau | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | tp-hcm | [CẦN ĐIỀN] | Văn bản địa phương TP.HCM |
-| cap-so-do-lan-dau | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | [CẦN ĐIỀN] | dong-nai | [CẦN ĐIỀN] | Văn bản địa phương Đồng Nai |
+| cap-so-do-lan-dau | Luật Đất đai 2024 (31/2024/QH15) | luat-dat-dai-2024 | 1 | null | toan-quoc | Chương I; Mục 1 Ch.II; Mục 2 Ch.II; Mục 3 Ch.II; Mục 1 Ch.III; Mục 3 Ch.III; Mục 1 Ch.IV; Mục 1 Ch.X; Mục 2 Ch.X; Mục 3 Ch.X; Mục 1 Ch.XI; Mục 2 Ch.XI; Ch.XIV; Mục 1 Ch.XV; Mục 2 Ch.XV | Chain root. Nguồn nội dung: VBHN 44/VBHN-VPQH (16/03/2026) |
+| cap-so-do-lan-dau | Nghị quyết 254/2025/QH15 | nghi-quyet-254-2025-qh15 | 1 | null | toan-quoc | Chương II | NQ Quốc hội — quy định chuyển tiếp/bổ sung cho Luật Đất đai. Hiệu lực: 01/01/2026 |
+| cap-so-do-lan-dau | Nghị định 102/2024/NĐ-CP | nghi-dinh-102-2024-nd-cp | 2 | luat-dat-dai-2024 | toan-quoc | Chương I; Chương II; Mục 4 Ch.VII; Ch.IX; Ch.X | Nguồn nội dung: VBHN 46/VBHN-BNNMT (03/04/2026) |
+| cap-so-do-lan-dau | Nghị định 101/2024/NĐ-CP | nghi-dinh-101-2024-nd-cp | 2 | null | toan-quoc | Chương I; Mục 1 Ch.II; Mục 1 Ch.III; Mục 2 Ch.III; Mục 5 Ch.III; Ch.IV; Ch.V | Nguồn nội dung: VBHN 51/VBHN-BNNMT (29/04/2026) |
+| cap-so-do-lan-dau | Nghị định 151/2025/NĐ-CP | nghi-dinh-151-2025-nd-cp | 2 | null | toan-quoc | Chương I; Mục 3 Ch.II; Mục 4 Ch.II; Ch.III; Phụ lục I: Mục II Nội dung C Phần V | Nguồn nội dung: VBHN 41/VBHN-BNNMT (02/04/2026) |
+| cap-so-do-lan-dau | Nghị định 50/2026/NĐ-CP | nghi-dinh-50-2026-nd-cp | 2 | nghi-quyet-254-2025-qh15 | toan-quoc | Chương II | Hiệu lực: 31/01/2026 |
+| cap-so-do-lan-dau | Quyết định 69/2024/QĐ-UBND TP.HCM | quyet-dinh-69-2024-qd-ubnd-tp-hcm | 4 | null | tp-hcm | Toàn bộ văn bản | Hạn mức giao đất ở cho cá nhân. ⚠️ Chỉ áp dụng cho TP.HCM cũ. Hiệu lực: 30/09/2024 |
+| cap-so-do-lan-dau | Nghị quyết 87/2025/NQ-HĐND TP.HCM | nghi-quyet-87-2025-nq-hdnd-tp-hcm | 4 | null | tp-hcm | Toàn bộ văn bản | Bảng giá đất TP.HCM. Hiệu lực: 01/01/2026 |
+| cap-so-do-lan-dau | Nghị quyết 02/2023/NQ-HĐND TP.HCM | nghi-quyet-02-2023-nq-hdnd-tp-hcm | 4 | null | tp-hcm | Toàn bộ văn bản | Phí thẩm định hồ sơ TP.HCM. Hiệu lực: 01/06/2023 |
+| cap-so-do-lan-dau | Quyết định 52/2016/QĐ-UBND TP.HCM | quyet-dinh-52-2016-qd-ubnd-tp-hcm | 4 | null | tp-hcm | Phụ lục 16 | Mức thu phí và lệ phí. ⚠️ Hết hiệu lực một phần (phần cần lấy vẫn còn hiệu lực). Hiệu lực: 01/01/2017 |
+| cap-so-do-lan-dau | Quyết định 92/2025/QĐ-UBND Đồng Nai | quyet-dinh-92-2025-qd-ubnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Hạn mức giao đất ở cho cá nhân. Hiệu lực: 11/01/2026 |
+| cap-so-do-lan-dau | Nghị quyết 28/2025/NQ-HĐND Đồng Nai | nghi-quyet-28-2025-nq-hdnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Bảng giá đất Đồng Nai. Hiệu lực: 01/01/2026 |
+| cap-so-do-lan-dau | Nghị quyết 22/2024/NQ-HĐND Đồng Nai | nghi-quyet-22-2024-nq-hdnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Phí thẩm định hồ sơ Đồng Nai. Hiệu lực: 09/12/2024 |
+| cap-so-do-lan-dau | Nghị quyết 21/2024/NQ-HĐND Đồng Nai | nghi-quyet-21-2024-nq-hdnd-dong-nai | 4 | null | dong-nai | Toàn bộ văn bản | Lệ phí cấp GCN quyền sử dụng đất Đồng Nai. Hiệu lực: 09/12/2024 |
 
 ---
 
