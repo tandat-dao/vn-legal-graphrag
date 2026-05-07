@@ -22,7 +22,7 @@
 > token; Answer Generator dùng claude-sonnet-4-6 cho output
 > chất lượng cao. Cập nhật Tech Stack Section 3 tương ứng.
 > Làm rõ INCONSISTENCY-02: [:BELONGS_TO] KHÔNG implement
-> trong scope khóa luận — TASK-09 được cập nhật để phản
+> trong scope khóa luận — TASK-07 được cập nhật để phản
 > ánh quyết định dứt khoát này (xem PROJECT_STATUS.md v0.2).
 
 > **v0.1 — Khởi tạo tài liệu (2026-04-18):**
@@ -432,12 +432,12 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 
 | # | Câu hỏi / Blocker | Chặn task nào | Giải quyết |
 |---|---|---|---|
-| OQ-01 | Format `id` cuối cùng: `luat-dat-dai-2024` hay `LDD-2024` hay hash? | TASK-06, TASK-09, toàn bộ Phase 2 | **Đã quyết định trong tài liệu này:** format `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`. Xem §2.4. |
+| OQ-01 | Format `id` cuối cùng: `luat-dat-dai-2024` hay `LDD-2024` hay hash? | TASK-06, TASK-07, toàn bộ Phase 2 | **Đã quyết định trong tài liệu này:** format `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`. Xem §2.4. |
 | OQ-02 | Cross-reference ngoài scope: lấy thêm Điều hay ghi limitation? | TASK-03, TASK-06 | Cần project owner quyết định từng trường hợp trong TASK-03. Output: `crossref_decisions.md`. |
-| OQ-03 | BGE-M3: chạy local hay dùng API? | TASK-10, TASK-14 | Ngưỡng quyết định: nếu encode toàn bộ dataset > 2 giờ trên máy 8GB RAM → chuyển sang API. Xem P-02. |
-| OQ-04 | LLM nào cho Query Planner và Answer Generator? | TASK-12, TASK-15, TASK-18, TASK-19 | Đã quyết định 2026-04-19: dùng Claude (Anthropic). Query Planner: claude-haiku-4-5-20251001. Answer Generator: claude-sonnet-4-6. Tối ưu token bằng cách dùng model nhẹ hơn cho bước phân loại, model mạnh hơn cho bước sinh câu trả lời. |
-| OQ-05 | `[:BELONGS_TO]` có implement trong scope khóa luận không? | TASK-09 | Xem P-03. Khuyến nghị: **không implement trong scope này** — ghi nhận là limitation. |
-| OQ-06 | Top-k mặc định cho Semantic Filtering là bao nhiêu? | TASK-14, TASK-17, TASK-19 | Chưa quyết định. Cần thử nghiệm trong TASK-16. Ảnh hưởng trực tiếp đến Precision@k và Recall@k. |
+| OQ-03 | BGE-M3: chạy local hay dùng API? | TASK-08, TASK-12 | Ngưỡng quyết định: nếu encode toàn bộ dataset > 2 giờ trên máy 8GB RAM → chuyển sang API. Xem P-02. |
+| OQ-04 | LLM nào cho Query Planner và Answer Generator? | TASK-10, TASK-13, TASK-16, TASK-17 | Đã quyết định 2026-04-19: dùng Claude (Anthropic). Query Planner: claude-haiku-4-5-20251001. Answer Generator: claude-sonnet-4-6. Tối ưu token bằng cách dùng model nhẹ hơn cho bước phân loại, model mạnh hơn cho bước sinh câu trả lời. |
+| OQ-05 | `[:BELONGS_TO]` có implement trong scope khóa luận không? | TASK-07 | Xem P-03. Khuyến nghị: **không implement trong scope này** — ghi nhận là limitation. |
+| OQ-06 | Top-k mặc định cho Semantic Filtering là bao nhiêu? | TASK-12, TASK-15, TASK-17 | Chưa quyết định. Cần thử nghiệm trong TASK-14. Ảnh hưởng trực tiếp đến Precision@k và Recall@k. |
 
 ---
 
@@ -467,13 +467,20 @@ BGE-M3 chạy local trên máy 8GB RAM có thể gặp bottleneck về tốc đ�
 
 ### P-03 — `[:BELONGS_TO]` không implement trong scope hiện tại
 
-Edge `[:BELONGS_TO]` (Component → Theme) cho phép gán nhãn chuyên ngành cho điều khoản ở cấp độ Component, độc lập với Theme của Norm chứa nó. Ví dụ: một điều khoản trong Bộ luật Dân sự có thể được tag là Theme "dat-dai" nếu nội dung liên quan đến bồi thường đất. Tính năng này giải quyết edge case nhưng đòi hỏi effort gán nhãn thủ công cao.
+**Bối cảnh:** Edge `[:BELONGS_TO]` (Component → Theme) cho phép gán nhãn chuyên ngành **trực tiếp ở cấp Điều/Khoản**, độc lập với Theme của Norm chứa nó.
 
-**Quyết định:** Không implement `[:BELONGS_TO]` trong scope khóa luận. Toàn bộ Component được gán Theme thông qua Norm cha (qua `[:INCLUDES]` chain). Chấp nhận limitation: Component trong văn bản đa-theme (như Bộ luật Dân sự có điều khoản liên quan đất đai) sẽ không được định tuyến đúng nếu Norm không thuộc Theme "dat-dai".
+**Khi nào cần?** Khi scope có **văn bản đa-theme** — tức một văn bản thuộc nhiều lĩnh vực cùng lúc. Ví dụ: Bộ luật Dân sự (BLDS) chứa cả điều khoản dân sự lẫn điều khoản liên quan đến bồi thường đất. Nếu Norm "BLDS" chỉ `[:INCLUDES]` vào Theme "dan-su", thì điều khoản về bồi thường đất sẽ **không được tìm thấy** khi query Theme "dat-dai" — trừ khi có `[:BELONGS_TO]` gán nhãn riêng ở cấp Component.
+
+**Quyết định:** Không implement `[:BELONGS_TO]`. Lý do:
+
+1. **Scope hiện tại không có văn bản đa-theme.** Ba lĩnh vực (Đất đai, Hộ tịch, Nuôi con nuôi) sử dụng các bộ luật **riêng biệt** — không có văn bản nào xuất hiện ở 2 Theme cùng lúc. Do đó, routing qua `Norm → [:INCLUDES] → Theme` đã đủ chính xác.
+2. **Effort gán nhãn thủ công rất cao.** Mỗi Component (Điều/Khoản) cần được đọc nội dung và gán Theme thủ công — không thể tự động hóa đáng tin cậy.
+3. **Không giải quyết gap nghiên cứu nào.** Ba gap (đa lĩnh vực, đa địa phương, đa tầng) đều đã được xử lý bởi các edge khác (`[:INCLUDES]`, `[:APPLIES_TO]`, `[:IMPLEMENTS]`).
+
+**Limitation chấp nhận:** Nếu sau này mở rộng scope bao gồm văn bản đa-theme (ví dụ: Bộ luật Dân sự), các Component liên quan đến đất đai trong văn bản đó sẽ không được routing đúng.
 
 **Điều kiện nâng cấp:** Khi evaluation (Phase 4) cho thấy ≥ 3 failure case có nguyên nhân trực tiếp là thiếu `[:BELONGS_TO]` routing → xem xét implement và đo lại metrics.
 
-TASK-09 trong PROJECT_STATUS.md đã được cập nhật để phản ánh quyết định này — không còn để ngỏ khả năng implement `[:BELONGS_TO]`.
 
 ---
 

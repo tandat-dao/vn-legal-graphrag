@@ -1,5 +1,14 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.3 | Cập nhật 2026-04-19**
+**Phiên bản 0.4 | Cập nhật 2026-05-05**
+
+> **v0.4 — Cập nhật 2026-05-05:**
+> TASK-01: đánh dấu ✅ hoàn thành. Nhánh `develop` đã tạo trên GitHub.
+> Phase 0 hoàn thành toàn bộ (TASK-00 ✅, TASK-01 ✅, TASK-02 ✅).
+> **TASK-05 (Docling Pipeline): ĐÃ XÓA** — không dùng Docling, thu thập thủ công.
+> **TASK-04 + TASK-06: ĐÃ GỘP** thành TASK-04 "Thu thập & Chuẩn hóa văn bản".
+> **Đánh lại số:** TASK-07→TASK-05, TASK-08→TASK-06, ..., TASK-20→TASK-18.
+> Tổng số task: 21 → 19 (TASK-00 đến TASK-18).
+> Loại bỏ `docling` khỏi requirements.txt.
 
 > **v0.3 — Cập nhật 2026-04-19:**
 > TASK-03 (Mapping Table): xác nhận chain [:IMPLEMENTS]
@@ -23,7 +32,7 @@
 > còn thiếu nhánh develop — sẽ tạo khi bắt đầu Phase 1).
 > TASK-02: ✅ (connection_check.py đã chạy pass — xác nhận
 > bởi project owner).
-> Làm rõ TASK-09: loại bỏ mơ hồ về [:BELONGS_TO] —
+> Làm rõ TASK-09 (cũ, nay là TASK-07): loại bỏ mơ hồ về [:BELONGS_TO] —
 > quyết định KHÔNG implement, phản ánh đúng P-03.
 > Sửa nhầm năm 2025 → 2026 trong toàn bộ tài liệu.
 > 0 unit tests passing (chưa có code Phase 1+).
@@ -59,18 +68,18 @@
 | docker-compose.yml (Neo4j 5.18.0 + Qdrant v1.13.6) | `docker-compose.yml` | Implemented & Running |
 | .env.example với đủ biến môi trường | `.env.example` | Implemented |
 | Python environment (venv, packages) | `requirements.txt`, `venv/` | Implemented |
-| Git repository (3 commits, nhánh main) | `.git/` | Implemented |
+| Git repository (nhánh main + develop) | `.git/` | Implemented |
 | Integration smoke test | `src/utils/connection_check.py` | Implemented & Running |
 | Project skeleton (cấu trúc thư mục) | `src/`, `tests/`, `data/`, `notebooks/` | Implemented |
 
 ### §1.2 Đang thực hiện 🔄
 
-**Phase 0 — hoàn thành một phần:**
-- TASK-01: Còn thiếu nhánh `develop` —
-  sẽ tạo khi bắt đầu Phase 1 thực sự.
+**Phase 0 — ✅ hoàn thành toàn bộ.**
 
-**Phase 1 — chưa bắt đầu:**
-- Chưa có file nào trong `data/raw/` hay `data/sources/`.
+**Phase 1 — đang thực hiện:**
+- TASK-03: Mapping Table đang điền (Section 1 Hộ tịch/Khai sinh đã có, 5 section còn lại chờ bổ sung).
+- Chưa có file văn bản chuẩn hóa nào trong `data/raw/` (ngoài mapping_table.md).
+- Chưa có file nguồn nào trong `data/sources/`.
 
 ### §1.3 Chưa bắt đầu 📋
 
@@ -81,9 +90,7 @@
 
 **Phase 1 — Dữ liệu**
 - Bảng ánh xạ văn bản (mapping table)
-- Thu thập văn bản gốc (PDF/DOCX)
-- Docling Pipeline (tự động hóa)
-- Điền metadata thủ công + chuẩn hóa .md
+- Thu thập & chuẩn hóa văn bản (thủ công từ VBHN/vbpl.vn)
 - Cross-check chéo
 
 **Phase 2 — Ingestion Pipeline**
@@ -153,13 +160,13 @@ Dựng hai service cơ sở dữ liệu cốt lõi — Neo4j (đồ thị tri th
 - File `.env` phải có trong `.gitignore`, chỉ commit `.env.example`
 
 ---
-### TASK-01: Thiết lập Python environment và Git repository 🔄
+### TASK-01: Thiết lập Python environment và Git repository ✅
 **Phase:** 0
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (nửa ngày đến 1 ngày)
 **Phụ thuộc vào:** Không có
 **Có thể song song với:** TASK-00
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-05-05
 
 #### Mục tiêu
 Khởi tạo Git repository và môi trường Python được chuẩn hóa để cả hai thành viên làm việc trên cùng một nền tảng. Bao gồm cấu trúc thư mục dự án, dependency management, và Git conventions. Việc thống nhất convention ngay từ đầu tránh merge conflict và desync về sau.
@@ -196,8 +203,8 @@ Khởi tạo Git repository và môi trường Python được chuẩn hóa đ�
 - [x] `import neo4j`, `import qdrant_client`, `import docling` không báo lỗi
 - [x] Cấu trúc thư mục tồn tại trong repo
 - [x] `.env` không xuất hiện trong `git status`
-- [ ] Cả 2 thành viên push được lên nhánh `develop` (nhánh chưa tạo — sẽ tạo khi bắt đầu Phase 1)
-- [ ] Branch `main` được bảo vệ (require PR để merge) (chưa verify)
+- [x] Cả 2 thành viên push được lên nhánh `develop` (nhánh đã tạo trên GitHub — 2026-05-05)
+- [x] Branch `main` được bảo vệ (require PR để merge) (xác nhận 2026-05-05)
 
 #### Ghi chú / Ràng buộc cứng
 - Python ≥ 3.10 bắt buộc (Docling yêu cầu)
@@ -286,103 +293,33 @@ Với mỗi thủ tục trong scope dự án, truy ngược toàn bộ chuỗi v
 - Nuôi con nuôi: ghi chú rõ giao thoa từ vựng với Luật Hình sự (các hành vi cấm)
 
 ---
-### TASK-04: Thu thập văn bản gốc (Raw Document Collection) 📋
+### TASK-04: Thu thập & Chuẩn hóa văn bản (gộp TASK-04 + TASK-06 cũ) 📋
 **Phase:** 1
 **Ưu tiên:** Critical
-**Ước tính công sức:** M (2-3 ngày)
+**Ước tính công sức:** L (5-7 ngày — thu thập + chuẩn hóa + metadata)
 **Phụ thuộc vào:** TASK-03 (bảng mapping phải xong trước)
-**Có thể song song với:** TASK-00, TASK-01, TASK-02
-**Hoàn thành:** Chưa
-
-#### Mục tiêu
-Tải về hoặc copy toàn bộ văn bản pháp lý xác định trong bảng mapping từ các nguồn chính thức. Mỗi văn bản lưu thành một file riêng biệt ở định dạng PDF hoặc DOCX gốc — chưa qua xử lý — để làm đầu vào cho Docling pipeline (TASK-05). Việc lưu bản gốc là bắt buộc để có thể audit sau này.
-
-#### Đầu vào
-- `data/raw/mapping_table.md` — danh sách văn bản cần lấy từ TASK-03
-- Nguồn: vbpl.vn, cổng dịch vụ công tỉnh TP.HCM, cổng dịch vụ công tỉnh Đồng Nai, thư viện pháp luật
-
-#### Đầu ra
-- `data/sources/` — thư mục chứa toàn bộ file gốc, mỗi file đặt tên theo convention:
-  ```
-  [tier]-[slug-ten-van-ban]-[nam].pdf
-  VD: luat-dat-dai-2024.pdf
-      nghi-dinh-102-2024-nd-cp.pdf
-      quyet-dinh-ban-gia-dat-tp-hcm-2025.pdf
-  ```
-- `data/sources/manifest.md` — danh sách tất cả file đã tải, kèm URL nguồn, ngày tải, định dạng (PDF có text layer / PDF scan / DOCX), và ghi chú nếu cần OCR
-
-#### Định nghĩa Hoàn thành (DoD)
-- [ ] Tất cả văn bản trong `mapping_table.md` đều có file tương ứng trong `data/sources/`
-- [ ] `manifest.md` có đủ mục cho mỗi file, trong đó cột "định dạng" được điền rõ ràng
-- [ ] File PDF có text layer: mở bằng PDF reader và chọn được text (không phải ảnh)
-- [ ] File PDF scan được đánh dấu ⚠️ trong manifest — đây là input cần OCR trong TASK-05
-- [ ] Không có file nào được đặt tên theo kiểu `download(1).pdf` hoặc tên tùy tiện
-- [ ] Tất cả file được commit vào Git LFS hoặc ghi rõ link download trong manifest (nếu file quá lớn)
-
-#### Ghi chú / Ràng buộc cứng
-- Ưu tiên lấy bản DOCX nếu có (ít lỗi OCR hơn PDF)
-- Với PDF scan: nếu đánh máy thủ công mất hơn 2 giờ/văn bản, ghi nhận là limitation và tham khảo GVHD
-- Lấy bản text từ **nguồn chính thức** (vbpl.vn) — không lấy từ các blog luật hay trang thứ cấp
-
----
-### TASK-05: Xây dựng Docling Pipeline tự động hóa 📋
-**Phase:** 1
-**Ưu tiên:** High
-**Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-01, TASK-04
-**Có thể song song với:** TASK-03 (về thời gian, nhưng cần output của TASK-04)
-**Hoàn thành:** Chưa
-
-#### Mục tiêu
-Xây dựng pipeline Python tự động hóa việc chuyển đổi từ file PDF/DOCX gốc sang file Markdown có cấu trúc sơ bộ. Pipeline gồm 4 bước nối tiếp: (1) Docling PDF parsing với layout analysis và hierarchy detection, (2) `clean_pdf_text()` loại bỏ boilerplate đặc thù văn bản pháp lý Việt Nam, (3) `article_boundary_split()` bóc tách theo ranh giới từng Điều, (4) `hierarchy_prefix_attach()` gắn Context Path từ DoclingDocument hierarchy. Output là file `.md` sơ bộ — vẫn cần điền metadata thủ công ở TASK-06.
-
-#### Đầu vào
-- `data/sources/*.pdf` và `data/sources/*.docx` từ TASK-04
-- `data/sources/manifest.md` — để biết file nào cần OCR
-
-#### Đầu ra
-- `src/ingestion/docling_pipeline.py` — module chứa 4 hàm:
-  - `run_docling(file_path: str) -> DoclingDocument` — chạy Docling, trả về DoclingDocument
-  - `clean_pdf_text(doc: DoclingDocument) -> DoclingDocument` — xóa boilerplate: khối "Cộng hòa XHCN Việt Nam", "Nơi nhận:", "TM. ỦY BAN NHÂN DÂN", số trang, running header/footer
-  - `article_boundary_split(doc: DoclingDocument) -> list[dict]` — dùng regex pattern `r"^Điều\s+\d+"` trên heading nodes, trả về list dict `{article_id, heading_text, content, context_path}`
-  - `hierarchy_prefix_attach(doc: DoclingDocument, article: dict) -> str` — sinh context path string dạng `"[Tên văn bản] > [Chương] > [Điều]"` từ DoclingDocument heading hierarchy
-- `src/ingestion/run_pipeline.py` — script CLI: nhận đường dẫn folder, chạy pipeline trên tất cả file, ghi output ra `data/raw/[ten-van-ban]-draft.md`
-- `tests/test_docling_pipeline.py` — unit tests dùng 1 file PDF mẫu nhỏ (2-3 Điều)
-
-#### Định nghĩa Hoàn thành (DoD)
-- [ ] `python src/ingestion/run_pipeline.py --input data/sources/` chạy không có lỗi trên toàn bộ file text-layer PDF
-- [ ] File output `*-draft.md` của mỗi văn bản chứa các heading `## Điều X` đúng với số Điều trong văn bản gốc (verify thủ công 3 văn bản bất kỳ)
-- [ ] `clean_pdf_text()` loại bỏ được cụm "Cộng hòa xã hội chủ nghĩa Việt Nam" và "Nơi nhận:" trong 100% file test
-- [ ] Context path của Điều đầu tiên trong mỗi file output có dạng `"[Tên văn bản] > Điều X"` — verify thủ công
-- [ ] Pipeline xử lý được file PDF scan (có OCR via Docling + Tesseract) cho ít nhất 1 file scan trong dataset
-- [ ] Tất cả unit test trong `tests/test_docling_pipeline.py` pass (`pytest tests/test_docling_pipeline.py`)
-- [ ] Script không crash khi gặp file DOCX — xử lý được cả 2 định dạng
-
-#### Ghi chú / Ràng buộc cứng
-- Docling version phải được pin trong `requirements.txt` (không dùng `docling>=x`)
-- `clean_pdf_text()` chỉ xóa boilerplate cấu trúc — **không được** xóa bất kỳ nội dung pháp lý nào
-- Nếu Docling không phát hiện được heading "Điều" trong một file → log warning rõ ràng, không im lặng bỏ qua
-- OCR qua Tesseract cần `lang='vie'` cho tiếng Việt — thiếu language pack sẽ cho kết quả sai
-- File `*-draft.md` output là **trung gian** — không phải file cuối cho Phase 2; người dùng vẫn phải review và điền metadata ở TASK-06
-
----
-### TASK-06: Điền metadata thủ công và chuẩn hóa format .md 📋
-**Phase:** 1
-**Ưu tiên:** Critical
-**Ước tính công sức:** L (4-5 ngày — công việc pháp lý + kiểm tra)
-**Phụ thuộc vào:** TASK-05 (Docling draft output)
 **Có thể song song với:** [A] làm Đất đai, [B] làm Hộ tịch + Nuôi con nuôi
 **Hoàn thành:** Chưa
 
+> **Ghi chú v0.4:** Task này gộp từ TASK-04 (thu thập) và TASK-06 (chuẩn hóa) do
+> chiến lược D-01 chuyển sang thu thập thủ công từ VBHN/vbpl.vn — không cần
+> Docling pipeline trung gian (TASK-05 đã bị xóa).
+
 #### Mục tiêu
-Chuyển đổi các file `*-draft.md` từ Docling thành các file `.md` hoàn chỉnh theo đúng schema kỹ thuật của dự án. Công việc gồm: (1) điền đầy đủ metadata block ở đầu mỗi file, (2) kiểm tra và sửa heading format nếu Docling xử lý sai, (3) lập bảng ánh xạ [:SPECIFIED_IN] — quyết định Điều/Khoản nào thuộc thủ tục nào. Đây là công việc đòi hỏi hiểu biết pháp lý, **không thể tự động hóa hoàn toàn**.
+Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chuẩn hóa trực tiếp thành file `.md` hoàn chỉnh theo schema kỹ thuật của dự án. Công việc gồm: (1) xác định nguồn VBHN trên vbpl.vn, (2) copy nội dung Chương/Mục liên quan, (3) chuẩn hóa heading format, (4) điền metadata YAML frontmatter, (5) lập bảng ánh xạ `[:SPECIFIED_IN]`. Lưu file nguồn gốc (PDF/DOCX) vào `data/sources/` để audit.
 
 #### Đầu vào
-- `data/raw/*-draft.md` từ TASK-05 (Docling pipeline output)
-- `data/raw/mapping_table.md` từ TASK-03
-- Schema metadata đã thống nhất (xem Ghi chú bên dưới)
+- `data/raw/mapping_table.md` — danh sách văn bản cần lấy từ TASK-03
+- Nguồn: vbpl.vn (ưu tiên VBHN), dichvucong.gov.vn, cổng dịch vụ công tỉnh TP.HCM, Đồng Nai
 
 #### Đầu ra
+- `data/sources/` — file gốc (PDF/DOCX) để audit, đặt tên theo convention:
+  ```
+  [slug-ten-van-ban]-[nam].pdf
+  VD: luat-dat-dai-2024.pdf
+      nghi-dinh-102-2024-nd-cp.pdf
+  ```
+- `data/sources/manifest.md` — danh sách file đã lưu, kèm URL nguồn, ngày tải
 - `data/raw/*.md` — các file hoàn chỉnh, mỗi file có:
 
   **Metadata block** (đầu file, định dạng YAML frontmatter):
@@ -397,6 +334,8 @@ Chuyển đổi các file `*-draft.md` từ Docling thành các file `.md` hoàn
   valid_from: "YYYY-MM-DD"
   valid_to: "YYYY-MM-DD hoặc null"
   source_url: "[URL nguồn chính thức]"
+  source_vbhn: null
+  amended_by: null
   ---
   ```
 
@@ -416,29 +355,35 @@ Chuyển đổi các file `*-draft.md` từ Docling thành các file `.md` hoàn
   ```
   | Thủ tục | Component ID (file_id + Điều + Khoản) | Lý do |
   ```
+- `src/utils/validate_metadata.py` — script kiểm tra metadata tự động
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Tất cả file `.md` trong `data/raw/` có metadata block hợp lệ — kiểm tra bằng script Python đọc YAML frontmatter không lỗi
-- [ ] Trường `id` là unique trên toàn bộ tập file — kiểm tra bằng script: `assert len(ids) == len(set(ids))`
-- [ ] Trường `tier` nhận đúng giá trị: Luật=1, Nghị định=2, Thông tư=3, Quyết định UBND=4 — không có giá trị nào khác
-- [ ] Trường `implements` của mỗi Nghị định/Thông tư/Quyết định trỏ đúng `id` của văn bản cha — verify thủ công chuỗi Luật Đất đai 2024 → Nghị định → Thông tư
+- [ ] Tất cả văn bản trong `mapping_table.md` đều có file `.md` tương ứng trong `data/raw/`
+- [ ] Tất cả file `.md` có metadata block hợp lệ — kiểm tra bằng `validate_metadata.py`
+- [ ] Trường `id` là unique trên toàn bộ tập file
+- [ ] Trường `tier` nhận đúng giá trị: Luật=1, Nghị định=2, Thông tư=3, Quyết định UBND=4
+- [ ] Trường `implements` trỏ đúng `id` của văn bản cha — verify thủ công
 - [ ] Không có file nào dùng heading level sai (VD: `# Điều` thay vì `## Điều`)
-- [ ] `specified_in_map.md` có đủ mapping cho 6 thủ tục, mỗi thủ tục có ít nhất 3 Component được map
-- [ ] Ít nhất 1 văn bản trung ương (tier 1-3) + 1 văn bản địa phương (tier 4) cho lĩnh vực Đất đai và Hộ tịch
-- [ ] Hai thủ tục Hộ tịch (Đăng ký khai sinh, Cấp bản sao trích lục) có `jurisdiction: "toan-quoc"` và không có file văn bản địa phương kèm theo
+- [ ] `specified_in_map.md` có đủ mapping cho 6 thủ tục, mỗi thủ tục có ít nhất 3 Component
+- [ ] Ít nhất 1 văn bản trung ương (tier 1-3) + 1 văn bản địa phương (tier 4) cho lĩnh vực Đất đai
+- [ ] Hai thủ tục Hộ tịch có `jurisdiction: "toan-quoc"` và không có file văn bản địa phương
+- [ ] File nguồn gốc (PDF/DOCX) được lưu trong `data/sources/` với `manifest.md` đầy đủ
 
 #### Ghi chú / Ràng buộc cứng
-- **Format `id`:** `[loai-van-ban]-[slug-ten]-[nam]` — VD: `luat-dat-dai-2024`, `nghi-dinh-102-2024-nd-cp`, `quyet-dinh-bang-gia-dat-tp-hcm-2025`
-- **Tier mapping cứng:** 1=Luật/Bộ luật, 2=Nghị định/Pháp lệnh, 3=Thông tư/Thông tư liên tịch, 4=Quyết định UBND tỉnh
-- **KHÔNG** tự suy đoán `implements` — nếu không chắc văn bản cha là gì, để trống và ghi chú để cross-check
-- Cột "Lý do" trong `specified_in_map.md` bắt buộc — ghi rõ tại sao Điều đó thuộc thủ tục đó (để review và audit)
+- **Thu thập theo Chương/Mục** (D-01): chương không có mục → lấy cả chương; chương có mục → lấy cả mục
+- **VBHN là nguồn nội dung** (D-02): metadata vẫn ghi theo văn bản QPPL chính thức
+- **Format `id`:** `[loai-van-ban]-[slug-ten]-[nam]`
+- **Tier mapping cứng:** 1=Luật/Bộ luật/NQ Quốc hội, 2=Nghị định/Pháp lệnh, 3=Thông tư, 4=QĐ UBND/NQ HĐND
+- **KHÔNG** tự suy đoán `implements` — nếu không chắc, để trống và ghi chú để cross-check
+- Cột "Lý do" trong `specified_in_map.md` bắt buộc
+- Lấy bản text từ **nguồn chính thức** (vbpl.vn) — không lấy từ blog luật hay trang thứ cấp
 
 ---
-### TASK-07: Cross-check chéo Phase 1 📋
+### TASK-05: Cross-check chéo Phase 1 📋
 **Phase:** 1
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (1 ngày)
-**Phụ thuộc vào:** TASK-06 (toàn bộ file .md đã hoàn chỉnh)
+**Phụ thuộc vào:** TASK-04 (toàn bộ file .md đã hoàn chỉnh)
 **Có thể song song với:** Không — gate task cuối Phase 1
 **Hoàn thành:** Chưa
 
@@ -446,8 +391,8 @@ Chuyển đổi các file `*-draft.md` từ Docling thành các file `.md` hoàn
 Người không viết file sẽ review file của người kia. Đây là bước kiểm soát chất lượng bắt buộc trước khi chuyển sang Phase 2. Nếu Phase 2 Parser gặp lỗi format → phải quay lại Phase 1, tốn nhiều thời gian hơn là review kỹ ngay bây giờ.
 
 #### Đầu vào
-- Toàn bộ `data/raw/*.md` từ TASK-06
-- Script `src/utils/validate_metadata.py` (viết trong TASK-06) để kiểm tra tự động
+- Toàn bộ `data/raw/*.md` từ TASK-04
+- Script `src/utils/validate_metadata.py` (viết trong TASK-04) để kiểm tra tự động
 
 #### Đầu ra
 - `data/raw/review_log.md` — log cross-check: danh sách lỗi phát hiện, người phát hiện, ngày sửa, người confirm đã sửa
@@ -469,11 +414,11 @@ Người không viết file sẽ review file của người kia. Đây là bư�
 ### PHASE 2 — Offline Pipeline (Ingestion)
 
 ---
-### TASK-08: Structure-aware Parser 📋
+### TASK-06: Structure-aware Parser 📋
 **Phase:** 2
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-07 (Phase 1 phải hoàn toàn xong và verified)
+**Phụ thuộc vào:** TASK-05 (Phase 1 phải hoàn toàn xong và verified)
 **Có thể song song với:** [B] viết unit tests song song với [A] viết parser logic
 **Hoàn thành:** Chưa
 
@@ -506,21 +451,21 @@ Xây dựng parser đọc file `.md` đã chuẩn hóa và tạo ra một cây d
 - **Không** bỏ qua dòng text không có heading cha — raise lỗi hoặc gán về Điều gần nhất
 
 ---
-### TASK-09: Ontology Instantiation — Graph Builder (Neo4j) 📋
+### TASK-07: Ontology Instantiation — Graph Builder (Neo4j) 📋
 **Phase:** 2
 **Ưu tiên:** Critical
 **Ước tính công sức:** L (4-5 ngày)
-**Phụ thuộc vào:** TASK-08 (Parser phải hoàn thành trước)
+**Phụ thuộc vào:** TASK-06 (Parser phải hoàn thành trước)
 **Có thể song song với:** [A] làm Macro Nodes, [B] làm Routing Nodes + Edges
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Đọc AST từ Parser và metadata từ Phase 1, tạo toàn bộ node và cạnh trong Neo4j theo schema Ontology đã định nghĩa (7 loại node, 8 loại edge). Toàn bộ quá trình phải idempotent — chạy lại không tạo duplicate. Cạnh `[:SPECIFIED_IN]` được load từ `specified_in_map.md` (semi-manual mapping từ TASK-06).
+Đọc AST từ Parser và metadata từ Phase 1, tạo toàn bộ node và cạnh trong Neo4j theo schema Ontology đã định nghĩa (7 loại node, 8 loại edge). Toàn bộ quá trình phải idempotent — chạy lại không tạo duplicate. Cạnh `[:SPECIFIED_IN]` được load từ `specified_in_map.md` (semi-manual mapping từ TASK-04).
 
 #### Đầu vào
-- `src/ingestion/parser.py` từ TASK-08
+- `src/ingestion/parser.py` từ TASK-06
 - `data/raw/*.md` toàn bộ
-- `data/raw/specified_in_map.md` từ TASK-06
+- `data/raw/specified_in_map.md` từ TASK-04
 - Neo4j đang chạy (TASK-00)
 
 #### Đầu ra
@@ -550,19 +495,19 @@ Xây dựng parser đọc file `.md` đã chuẩn hóa và tạo ra một cây d
 - Batch write: dùng transaction để upsert từng văn bản thay vì từng node — tránh timeout với dataset lớn
 
 ---
-### TASK-10: Vector Indexing — Qdrant 📋
+### TASK-08: Vector Indexing — Qdrant 📋
 **Phase:** 2
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-09 (Graph Builder phải hoàn thành — TextUnit phải có trong Neo4j)
-**Có thể song song với:** Không — phụ thuộc TASK-09
+**Phụ thuộc vào:** TASK-07 (Graph Builder phải hoàn thành — TextUnit phải có trong Neo4j)
+**Có thể song song với:** Không — phụ thuộc TASK-07
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
 Lấy toàn bộ TextUnit từ Neo4j, encode thành vector bằng model BGE-M3, lưu vào Qdrant kèm metadata payload đầy đủ. ID của vector trong Qdrant phải bằng đúng ID của TextUnit trong Neo4j — đây là cơ chế liên kết giữa hai database. Quá trình phải idempotent (upsert, không insert).
 
 #### Đầu vào
-- Neo4j populated với TextUnit nodes (TASK-09)
+- Neo4j populated với TextUnit nodes (TASK-07)
 - Qdrant đang chạy (TASK-00)
 - Model BGE-M3 (local hoặc API — cần quyết định trước khi implement, xem Open Questions)
 
@@ -589,11 +534,11 @@ Lấy toàn bộ TextUnit từ Neo4j, encode thành vector bằng model BGE-M3, 
 - Upsert theo batch 100 vectors/request — không upsert từng vector một (sẽ timeout)
 
 ---
-### TASK-11: Verification — Kiểm tra tích hợp Phase 2 📋
+### TASK-09: Verification — Kiểm tra tích hợp Phase 2 📋
 **Phase:** 2
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (1 ngày)
-**Phụ thuộc vào:** TASK-09, TASK-10
+**Phụ thuộc vào:** TASK-07, TASK-08
 **Có thể song song với:** Không — gate task cuối Phase 2
 **Hoàn thành:** Chưa
 
@@ -601,7 +546,7 @@ Lấy toàn bộ TextUnit từ Neo4j, encode thành vector bằng model BGE-M3, 
 Kiểm tra thủ công và bán tự động rằng graph Neo4j và vector store Qdrant đều chính xác và nhất quán với nhau. Đây là gate task — Phase 3 không được bắt đầu nếu bất kỳ item nào trong DoD chưa pass.
 
 #### Đầu vào
-- Neo4j và Qdrant đã populated (TASK-09, TASK-10)
+- Neo4j và Qdrant đã populated (TASK-07, TASK-08)
 - `notebooks/phase2_verification.ipynb` — tạo mới trong task này
 
 #### Đầu ra
@@ -622,12 +567,12 @@ Kiểm tra thủ công và bán tự động rằng graph Neo4j và vector store
 ### PHASE 3 — Online Pipeline (Retrieval & Generation)
 
 ---
-### TASK-12: Query Planner 📋
+### TASK-10: Query Planner 📋
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-11 (Phase 2 verified)
-**Có thể song song với:** TASK-13 (nhánh [A])
+**Phụ thuộc vào:** TASK-09 (Phase 2 verified)
+**Có thể song song với:** TASK-11 (nhánh [A])
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
@@ -654,19 +599,19 @@ Xây dựng module nhận câu hỏi tiếng Việt của người dùng và tr�
 - [ ] Với câu hỏi về thủ tục Hộ tịch hoặc Nuôi con nuôi: module tự động gán `jurisdiction = "toan-quoc"` không cần hỏi lại
 
 ---
-### TASK-13: Sub-graph Extraction 📋
+### TASK-11: Sub-graph Extraction 📋
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-11, TASK-12
-**Có thể song song với:** TASK-14 (nhánh song song — TASK-13 dùng Neo4j, TASK-14 dùng Qdrant)
+**Phụ thuộc vào:** TASK-09, TASK-10
+**Có thể song song với:** TASK-12 (nhánh song song — TASK-11 dùng Neo4j, TASK-12 dùng Qdrant)
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Nhận QueryPlan từ TASK-12, duyệt đồ thị Neo4j để tìm ra danh sách Component IDs (LCCIDs) liên quan. Đây là bước "lọc cứng" — thu hẹp không gian tìm kiếm từ toàn bộ graph xuống chỉ còn các Component có liên quan đến thủ tục được hỏi, địa phương được hỏi, và khoảng thời gian hợp lệ.
+Nhận QueryPlan từ TASK-10, duyệt đồ thị Neo4j để tìm ra danh sách Component IDs (LCCIDs) liên quan. Đây là bước "lọc cứng" — thu hẹp không gian tìm kiếm từ toàn bộ graph xuống chỉ còn các Component có liên quan đến thủ tục được hỏi, địa phương được hỏi, và khoảng thời gian hợp lệ.
 
 #### Đầu vào
-- `QueryPlan` từ TASK-12
+- `QueryPlan` từ TASK-10
 - Neo4j driver, database đã populated
 
 #### Đầu ra
@@ -683,19 +628,19 @@ Nhận QueryPlan từ TASK-12, duyệt đồ thị Neo4j để tìm ra danh sác
 - [ ] Số lượng LCCIDs không vượt quá 50 (tránh quá rộng gây noise) — nếu vượt, log warning
 
 ---
-### TASK-14: Semantic Filtering — Hybrid Search 📋
+### TASK-12: Semantic Filtering — Hybrid Search 📋
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-11
-**Có thể song song với:** TASK-13
+**Phụ thuộc vào:** TASK-09
+**Có thể song song với:** TASK-11
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Nhận LCCIDs từ TASK-13 và câu hỏi gốc, thực hiện hybrid search (Dense + Sparse + RRF) trong Qdrant với payload filter để lấy Top-k TextUnit có độ liên quan cao nhất.
+Nhận LCCIDs từ TASK-11 và câu hỏi gốc, thực hiện hybrid search (Dense + Sparse + RRF) trong Qdrant với payload filter để lấy Top-k TextUnit có độ liên quan cao nhất.
 
 #### Đầu vào
-- LCCIDs từ TASK-13
+- LCCIDs từ TASK-11
 - Câu hỏi gốc (string)
 - Qdrant client, collection `legal_texts`
 - BGE-M3 model (đã load)
@@ -714,19 +659,19 @@ Nhận LCCIDs từ TASK-13 và câu hỏi gốc, thực hiện hybrid search (De
 - [ ] `top_k` parameter hoạt động đúng: `top_k=5` trả về đúng 5 kết quả (hoặc ít hơn nếu không đủ)
 
 ---
-### TASK-15: Context Assembly và Answer Generation 📋
+### TASK-13: Context Assembly và Answer Generation 📋
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-14
-**Có thể song song với:** TASK-13 (nhánh [B])
+**Phụ thuộc vào:** TASK-12
+**Có thể song song với:** TASK-11 (nhánh [B])
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Nhận Top-k TextUnit từ TASK-14, sắp xếp theo thứ tự phân cấp pháp lý (tier 1 trước, tier 4 sau), cắt tỉa nếu vượt token budget, đưa vào LLM để sinh câu trả lời có trích dẫn bắt buộc.
+Nhận Top-k TextUnit từ TASK-12, sắp xếp theo thứ tự phân cấp pháp lý (tier 1 trước, tier 4 sau), cắt tỉa nếu vượt token budget, đưa vào LLM để sinh câu trả lời có trích dẫn bắt buộc.
 
 #### Đầu vào
-- Top-k TextUnit với metadata (từ TASK-14)
+- Top-k TextUnit với metadata (từ TASK-12)
 - Câu hỏi gốc
 - LLM client
 
@@ -746,11 +691,11 @@ Nhận Top-k TextUnit từ TASK-14, sắp xếp theo thứ tự phân cấp phá
 - [ ] Câu trả lời không chứa thông tin không có trong context (faithfulness — verify thủ công 3 câu hỏi)
 
 ---
-### TASK-16: Integration — Pipeline End-to-End 📋
+### TASK-14: Integration — Pipeline End-to-End 📋
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (1-2 ngày)
-**Phụ thuộc vào:** TASK-12, TASK-13, TASK-14, TASK-15
+**Phụ thuộc vào:** TASK-10, TASK-11, TASK-12, TASK-13
 **Có thể song song với:** Không — gate task cuối Phase 3
 **Hoàn thành:** Chưa
 
@@ -758,7 +703,7 @@ Nhận Top-k TextUnit từ TASK-14, sắp xếp theo thứ tự phân cấp phá
 Nối toàn bộ 4 module thành một pipeline hoàn chỉnh, chạy thử 12-18 câu hỏi mẫu (2-3 câu/thủ tục). Đây là demo nội bộ trước khi bước vào Phase 4 evaluation.
 
 #### Đầu vào
-- Tất cả module từ TASK-12 đến TASK-15
+- Tất cả module từ TASK-10 đến TASK-13
 
 #### Đầu ra
 - `src/pipeline.py` — hàm `run_pipeline(question: str) -> dict` nối toàn bộ flow
@@ -776,12 +721,12 @@ Nối toàn bộ 4 module thành một pipeline hoàn chỉnh, chạy thử 12-1
 ### PHASE 4 — Đánh giá
 
 ---
-### TASK-17: Xây dựng bộ câu hỏi đánh giá (Test Set) 📋
+### TASK-15: Xây dựng bộ câu hỏi đánh giá (Test Set) 📋
 **Phase:** 4
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-16 (cần biết pipeline hoạt động ổn định để thiết kế test hợp lý)
-**Có thể song song với:** TASK-18
+**Phụ thuộc vào:** TASK-14 (cần biết pipeline hoạt động ổn định để thiết kế test hợp lý)
+**Có thể song song với:** TASK-16
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
@@ -815,12 +760,12 @@ Xây dựng bộ câu hỏi đánh giá ≥ 30 câu với ground truth đi kèm.
 - [ ] Ground truth được verify bằng cách đọc trực tiếp văn bản pháp lý gốc, không dựa vào memory
 
 ---
-### TASK-18: Xây dựng Baseline Naive RAG 📋
+### TASK-16: Xây dựng Baseline Naive RAG 📋
 **Phase:** 4
 **Ưu tiên:** High
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-10 (dùng cùng bộ dữ liệu)
-**Có thể song song với:** TASK-17
+**Phụ thuộc vào:** TASK-08 (dùng cùng bộ dữ liệu)
+**Có thể song song với:** TASK-15
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
@@ -843,11 +788,11 @@ Xây dựng hệ thống Naive RAG để làm baseline so sánh. Điều kiện 
 - [ ] Baseline chạy được trên toàn bộ 30+ câu hỏi trong test set mà không crash
 
 ---
-### TASK-19: Chạy Evaluation và tính Metrics 📋
+### TASK-17: Chạy Evaluation và tính Metrics 📋
 **Phase:** 4
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-16, TASK-17, TASK-18
+**Phụ thuộc vào:** TASK-14, TASK-15, TASK-16
 **Có thể song song với:** Không
 **Hoàn thành:** Chưa
 
@@ -873,16 +818,16 @@ Chạy cả GraphRAG pipeline và Baseline trên toàn bộ test set, tính toá
 - [ ] File kết quả JSON có timestamp và config rõ ràng để reproduce
 
 ---
-### TASK-20: Phân tích kết quả theo Gap 📋
+### TASK-18: Phân tích kết quả theo Gap 📋
 **Phase:** 4
 **Ưu tiên:** High
 **Ước tính công sức:** M (2-3 ngày)
-**Phụ thuộc vào:** TASK-19
+**Phụ thuộc vào:** TASK-17
 **Có thể song song với:** Không
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Phân tích kết quả từ TASK-19 theo 3 Gap của nghiên cứu, xác định failure cases, rút ra kết luận. Đây là nội dung chính của chương "Kết quả & Thảo luận" trong khóa luận.
+Phân tích kết quả từ TASK-17 theo 3 Gap của nghiên cứu, xác định failure cases, rút ra kết luận. Đây là nội dung chính của chương "Kết quả & Thảo luận" trong khóa luận.
 
 #### Đầu vào
 - `data/evaluation/metrics_summary.md`
@@ -914,50 +859,46 @@ Phân tích kết quả từ TASK-19 theo 3 Gap của nghiên cứu, xác địn
               │                          │
 [TASK-03] Mapping Table (song song)      │
      │                                   │
-[TASK-04] Thu thập văn bản               │
+[TASK-04] Thu thập & Chuẩn hóa           │
      │                                   │
-[TASK-05] Docling Pipeline               │
-     │                                   │
-[TASK-06] Điền Metadata + Chuẩn hóa     │
-     │                                   │
-[TASK-07] Cross-check ◄──────────────────┘
+[TASK-05] Cross-check ◄──────────────────┘
      │
-     ├── [A] [TASK-08] Parser ──────────────────────────────────────┐
+     ├── [A] [TASK-06] Parser ──────────────────────────────────────┐
      │         │                                                      │
-     │    [TASK-09] Graph Builder (Neo4j) ──────────────────────────┤
+     │    [TASK-07] Graph Builder (Neo4j) ──────────────────────────┤
      │         │                                                      │
-     │    [TASK-10] Vector Indexing (Qdrant) ───────────────────────┤
+     │    [TASK-08] Vector Indexing (Qdrant) ───────────────────────┤
      │                                                               │
-     └── [B] Unit tests cho TASK-08 (song song)                     │
+     └── [B] Unit tests cho TASK-06 (song song)                     │
                                                                      │
-                        [TASK-11] Phase 2 Verification ◄────────────┘
+                        [TASK-09] Phase 2 Verification ◄────────────┘
                                      │
               ┌──────────────────────┤
      [A]      │              [B]     │
-[TASK-12] Query Planner     [TASK-14] Semantic Filtering
-[TASK-13] Sub-graph Extraction
+[TASK-10] Query Planner     [TASK-12] Semantic Filtering
+[TASK-11] Sub-graph Extraction
               │                      │
               └──────────────────────┤
                                      │
-                        [TASK-15] Context Assembly + Generation
+                        [TASK-13] Context Assembly + Generation
                                      │
-                        [TASK-16] Integration E2E ──── Gate Phase 3
+                        [TASK-14] Integration E2E ──── Gate Phase 3
                                      │
               ┌──────────────────────┤
-[TASK-17] Test Set            [TASK-18] Baseline (song song)
+[TASK-15] Test Set            [TASK-16] Baseline (song song)
      │                               │
      └──────────────────────────────┤
                                     │
-                        [TASK-19] Chạy Evaluation
+                        [TASK-17] Chạy Evaluation
                                     │
-                        [TASK-20] Phân tích theo Gap
+                        [TASK-18] Phân tích theo Gap
 ```
 
 **Các gate task (KHÔNG được bỏ qua):**
 - TASK-02: Gate Phase 0 → Phase 1
-- TASK-07: Gate Phase 1 → Phase 2
-- TASK-11: Gate Phase 2 → Phase 3
-- TASK-16: Gate Phase 3 → Phase 4
+- TASK-05: Gate Phase 1 → Phase 2
+- TASK-09: Gate Phase 2 → Phase 3
+- TASK-14: Gate Phase 3 → Phase 4
 
 ---
 
@@ -968,10 +909,10 @@ Phân tích kết quả từ TASK-19 theo 3 Gap của nghiên cứu, xác địn
 
 2. ~~[A] bắt đầu TASK-00, [B] bắt đầu TASK-01 — song song~~ ✅ Hoàn thành (2026-04-19)
 
-3. **(HIỆN TẠI)** Hoàn thành TASK-01 còn thiếu: tạo nhánh `develop` (thực hiện khi bắt đầu Phase 1).
+3. ~~Hoàn thành TASK-01 còn thiếu: tạo nhánh `develop`~~ ✅ Hoàn thành (2026-05-05)
 
-4. **(HIỆN TẠI)** Bắt đầu TASK-03 (Mapping Table) — không cần chờ môi trường, có thể làm ngay.
+4. **(HIỆN TẠI)** Hoàn thành TASK-03 (Mapping Table) — điền 5 section còn lại.
 
-5. Song song với TASK-03: [A] bắt đầu thu thập văn bản nguồn (TASK-04), [B] setup Docling pipeline (TASK-05) để sẵn sàng khi có file PDF/DOCX.
+5. Sau TASK-03: [A] làm TASK-04 Đất đai, [B] làm TASK-04 Hộ tịch + Nuôi con nuôi — song song.
 
-6. Sau khi TASK-07 pass: tạo nhánh `develop`, [A] viết TASK-08 (Parser), [B] viết unit tests cho Parser — song song.
+6. Sau khi TASK-05 pass: [A] viết TASK-06 (Parser), [B] viết unit tests cho Parser — song song.

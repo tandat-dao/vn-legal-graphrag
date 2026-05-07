@@ -54,22 +54,22 @@ graphrag-vn-law/
 │   └── evaluation/              ← Phase 4: test set, kết quả, phân tích
 ├── src/
 │   ├── ingestion/               ← Phase 2
-│   │   ├── parser.py            ← TASK-08
-│   │   ├── graph_builder.py     ← TASK-09
-│   │   └── vectorizer.py        ← TASK-10
+│   │   ├── parser.py            ← TASK-06
+│   │   ├── graph_builder.py     ← TASK-07
+│   │   └── vectorizer.py        ← TASK-08
 │   ├── retrieval/               ← Phase 3
-│   │   ├── query_planner.py     ← TASK-12
-│   │   ├── subgraph_extractor.py← TASK-13
-│   │   ├── semantic_filter.py   ← TASK-14
-│   │   ├── context_assembler.py ← TASK-15
-│   │   └── answer_generator.py  ← TASK-15
+│   │   ├── query_planner.py     ← TASK-10
+│   │   ├── subgraph_extractor.py← TASK-11
+│   │   ├── semantic_filter.py   ← TASK-12
+│   │   ├── context_assembler.py ← TASK-13
+│   │   └── answer_generator.py  ← TASK-13
 │   ├── baseline/                ← Phase 4
-│   │   └── naive_rag.py         ← TASK-18
+│   │   └── naive_rag.py         ← TASK-16
 │   ├── evaluation/              ← Phase 4
-│   │   └── metrics.py           ← TASK-19
+│   │   └── metrics.py           ← TASK-17
 │   └── utils/
 │       ├── connection_check.py  ← TASK-02
-│       └── validate_metadata.py ← TASK-06
+│       └── validate_metadata.py ← TASK-04
 ├── tests/
 │   ├── test_parser.py
 │   └── test_query_planner.py
@@ -274,9 +274,9 @@ Ví dụ: luat-dat-dai-2024.pdf
 [TASK-XX] type: mô tả ngắn bằng tiếng Việt
 
 Ví dụ:
-  [TASK-05] feat: thêm hàm clean_pdf_text cho boilerplate removal
-  [TASK-08] fix: sửa lỗi Stack pop khi gặp Điều không có Khoản
-  [TASK-09] test: thêm unit test cho idempotency của graph_builder
+  [TASK-04] feat: thêm hàm validate_metadata cho Phase 1
+  [TASK-06] fix: sửa lỗi Stack pop khi gặp Điều không có Khoản
+  [TASK-07] test: thêm unit test cho idempotency của graph_builder
 ```
 
 ---
@@ -375,9 +375,9 @@ Bốn task sau là "cổng" bắt buộc. Phase sau **không được bắt đ�
 | Gate | Cho phép bắt đầu | Verify bằng |
 |---|---|---|
 | TASK-02 (Integration Verification) | Phase 1 | Script `connection_check.py` chạy "✅ PASS" cả Neo4j và Qdrant |
-| TASK-07 (Cross-check Phase 1) | Phase 2 | `review_log.md` có sign-off của cả 2 thành viên; `validate_metadata.py` không báo lỗi |
-| TASK-11 (Phase 2 Verification) | Phase 3 | `phase2_report.md` có đủ count checks và sign-off |
-| TASK-16 (Integration E2E) | Phase 4 | Notebook `phase3_e2e_test.ipynb` chạy được 12+ câu hỏi |
+| TASK-05 (Cross-check Phase 1) | Phase 2 | `review_log.md` có sign-off của cả 2 thành viên; `validate_metadata.py` không báo lỗi |
+| TASK-09 (Phase 2 Verification) | Phase 3 | `phase2_report.md` có đủ count checks và sign-off |
+| TASK-14 (Integration E2E) | Phase 4 | Notebook `phase3_e2e_test.ipynb` chạy được 12+ câu hỏi |
 
 ---
 
