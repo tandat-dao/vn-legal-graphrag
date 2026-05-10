@@ -1,5 +1,13 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.4 | Cập nhật 2026-05-05**
+**Phiên bản 0.5 | Cập nhật 2026-05-10**
+
+> **v0.5 — Cập nhật 2026-05-10:**
+> Xóa `Procedure` node, `[:SPECIFIED_IN]` edge và `specified_in_map.md` khỏi
+> Outputs + DoD của TASK-04 (D-07).
+> Thêm field `summary` vào frontmatter và DoD TASK-04 (D-08).
+> Cập nhật TASK-07 (Graph Builder): bỏ Procedure node + [:SPECIFIED_IN].
+> Cập nhật TASK-08 (Vectorizer): thêm summary vector indexing (Stage 1).
+> validate_metadata.py đã có, PASS 17/17 file Đất đai.
 
 > **v0.4 — Cập nhật 2026-05-05:**
 > TASK-01: đánh dấu ✅ hoàn thành. Nhánh `develop` đã tạo trên GitHub.
@@ -327,6 +335,7 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
   ---
   id: "[slug-dinh-danh-duy-nhat]"
   title: "[Tên đầy đủ của văn bản]"
+  so_hieu: "[Số hiệu chính thức, VD: 31/2024/QH15]"
   tier: [1|2|3|4]
   theme: "[dat-dai|ho-tich|nuoi-con-nuoi]"
   jurisdiction: "[toan-quoc|tp-hcm|dong-nai]"
@@ -351,11 +360,7 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
   [Nội dung điểm a]
   ```
 
-- `data/raw/specified_in_map.md` — bảng ánh xạ thủ công:
-  ```
-  | Thủ tục | Component ID (file_id + Điều + Khoản) | Lý do |
-  ```
-- `src/utils/validate_metadata.py` — script kiểm tra metadata tự động
+- `src/utils/validate_metadata.py` — script kiểm tra metadata tự động ✅ (đã viết)
 
 #### Định nghĩa Hoàn thành (DoD)
 - [ ] Tất cả văn bản trong `mapping_table.md` đều có file `.md` tương ứng trong `data/raw/`
@@ -364,7 +369,7 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
 - [ ] Trường `tier` nhận đúng giá trị: Luật=1, Nghị định=2, Thông tư=3, Quyết định UBND=4
 - [ ] Trường `implements` trỏ đúng `id` của văn bản cha — verify thủ công
 - [ ] Không có file nào dùng heading level sai (VD: `# Điều` thay vì `## Điều`)
-- [ ] `specified_in_map.md` có đủ mapping cho 6 thủ tục, mỗi thủ tục có ít nhất 3 Component
+- [ ] Tất cả file `.md` có field `summary` được điền (không null) — nội dung do con người viết
 - [ ] Ít nhất 1 văn bản trung ương (tier 1-3) + 1 văn bản địa phương (tier 4) cho lĩnh vực Đất đai
 - [ ] Hai thủ tục Hộ tịch có `jurisdiction: "toan-quoc"` và không có file văn bản địa phương
 - [ ] File nguồn gốc (PDF/DOCX) được lưu trong `data/sources/` với `manifest.md` đầy đủ
@@ -481,12 +486,12 @@ Xây dựng parser đọc file `.md` đã chuẩn hóa và tạo ra một cây d
   - `run_ingestion(data_dir: str)` — hàm orchestrator chạy toàn bộ ingestion
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Sau khi chạy `run_ingestion()`, Neo4j Browser hiển thị node của cả 7 loại: Theme, Norm, Component, CTV, TextUnit, Jurisdiction, Procedure
+- [ ] Sau khi chạy `run_ingestion()`, Neo4j Browser hiển thị node của cả 6 loại: Theme, Norm, Component, CTV, TextUnit, Jurisdiction
 - [ ] Cypher query `MATCH (n:Theme) RETURN n.name` trả về đúng 3 kết quả: "dat-dai", "ho-tich", "nuoi-con-nuoi"
 - [ ] Cypher query kiểm tra chain [:IMPLEMENTS]: `MATCH path = (:Norm {tier:2})-[:IMPLEMENTS]->(:Norm {tier:1}) RETURN path LIMIT 5` trả về ít nhất 1 kết quả hợp lệ
 - [ ] Cypher query kiểm tra [:APPLIES_TO]: `MATCH (:Norm)-[:APPLIES_TO]->(j:Jurisdiction {name:"tp-hcm"}) RETURN count(*)` trả về số > 0
 - [ ] Chạy `run_ingestion()` lần 2 không tăng số lượng node (idempotency) — verify bằng `MATCH (n) RETURN count(n)` trước và sau
-- [ ] `MATCH (p:Procedure {name:"dang-ky-khai-sinh"})-[:SPECIFIED_IN]->(c:Component) RETURN c` trả về ít nhất 3 Component
+- [ ] Mỗi Norm node có property `summary` không null
 
 #### Ghi chú / Ràng buộc cứng
 - Dùng `MERGE` thay vì `CREATE` cho tất cả node và edge để đảm bảo idempotency
@@ -520,11 +525,12 @@ Lấy toàn bộ TextUnit từ Neo4j, encode thành vector bằng model BGE-M3, 
   - `run_vectorization(neo4j_driver, qdrant_client)` — orchestrator
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Số vector trong Qdrant collection `legal_texts` = số TextUnit node trong Neo4j — verify bằng `MATCH (t:TextUnit) RETURN count(t)` và Qdrant collection info
-- [ ] Mỗi vector trong Qdrant có payload đầy đủ 7 fields: `component_id`, `jurisdiction`, `tier`, `theme`, `procedure`, `valid_from`, `valid_to`
-- [ ] Vector của 1 TextUnit bất kỳ có thể được lấy từ Qdrant bằng đúng ID của TextUnit đó trong Neo4j
+- [ ] Số vector `content_type="text_unit"` trong Qdrant = số TextUnit node trong Neo4j
+- [ ] Số vector `content_type="summary"` trong Qdrant = số Norm node trong Neo4j (mỗi Norm 1 summary vector)
+- [ ] Mỗi text_unit vector có payload: `norm_id`, `component_id`, `jurisdiction`, `tier`, `theme`, `valid_from`, `valid_to`
+- [ ] Mỗi summary vector có payload: `norm_id`, `tier`, `theme`, `jurisdiction`, `valid_from`
+- [ ] Stage 1 test: query `"điều kiện chuyển mục đích sử dụng đất"` với filter `content_type="summary"`, `theme="dat-dai"` → top-3 norm_ids đều thuộc Đất đai
 - [ ] Chạy `run_vectorization()` lần 2 không tăng số lượng vector (idempotency — dùng upsert)
-- [ ] Qdrant search thử nghiệm: query `"điều kiện cấp sổ đỏ"` với filter `jurisdiction = "toan-quoc"` trả về ít nhất 1 kết quả liên quan đến Đất đai
 - [ ] Thời gian encode toàn bộ dataset < 2 giờ trên máy 8GB RAM (nếu chạy local)
 
 #### Ghi chú / Ràng buộc cứng

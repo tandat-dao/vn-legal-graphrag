@@ -163,24 +163,25 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-04 | Tier 1 bao gồm NQ Quốc hội; Tier 4 bao gồm NQ HĐND | NQ QH có giá trị tương đương Luật; NQ HĐND tỉnh có giá trị tương đương QĐ UBND | 2026-04-27 |
 | D-05 | Scope CMĐSDĐ: cá nhân, đất NN trừ lâm nghiệp, sang đất ở | Hạn chế liên đới tới luật lâm nghiệp, luật đầu tư; giảm số văn bản cần thu thập | 2026-04-27 |
 | D-06 | Điều mới hoàn toàn (VD: Điều 44a) thuộc Norm gốc, CTV ghi added_by | Giữ nhất quán cấu trúc bố cục văn bản; truy vết nguồn gốc qua CTV | 2026-04-27 |
+| D-07 | Xóa Procedure node và edge `[:SPECIFIED_IN]` khỏi schema | Manual mapping không scalable; Theme + Jurisdiction filter + `[:IMPLEMENTS]` traversal đã đủ để routing và chứng minh 3 Gap | 2026-05-10 |
+| D-08 | Thêm field `summary` vào frontmatter; Stage 1 retrieval qua summary embedding | Cho phép semantic routing ở cấp Norm mà không cần manual mapping; con người viết đảm bảo độ chính xác pháp lý | 2026-05-10 |
 
 ---
 
 ## SCHEMA ONTOLOGY — QUICK REFERENCE
 
-### 7 loại Node
+### 6 loại Node
 
 | Node | Mô tả | Key properties |
 |---|---|---|
 | `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi |
-| `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from` |
-| `Component` | Điều/Khoản/Điểm (xuyên thời gian) | `id`, `label` |
+| `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from`, `summary` |
+| `Component` | Điều/Khoản/Điểm/Tiết (xuyên thời gian) | `id`, `label` |
 | `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status`, `amended_by` (optional), `added_by` (optional) |
 | `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic), `text` |
 | `Jurisdiction` | Địa phương | `name`: toan-quoc \| tp-hcm \| dong-nai |
-| `Procedure` | Thủ tục hành chính | `name` (slug), `display_name` |
 
-### 8 loại Edge
+### 6 loại Edge
 
 | Edge | Từ → Đến | Ý nghĩa |
 |---|---|---|
@@ -190,8 +191,8 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | `[:HAS_CTV]` | Component → CTV | Quản lý phiên bản |
 | `[:HAS_TEXT_UNIT]` | CTV → TextUnit | Nội dung vật lý |
 | `[:APPLIES_TO]` | Norm → Jurisdiction | Hard-filter địa phương (Gap 2) |
-| `[:SPECIFIED_IN]` | Procedure → Component | Thủ tục → Điều luật |
-| `[:BELONGS_TO]` | Component → Theme | **Không implement trong scope này** |
+
+> **Lưu ý (D-07):** `Procedure` node và `[:SPECIFIED_IN]` đã bị xóa khỏi schema (xem Decision Log D-07). Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval. `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
 
 ### Tier mapping (CỨNG — không thay đổi)
 
@@ -234,7 +235,8 @@ valid_from: "2025-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/..."
 source_vbhn: null        # số hiệu VBHN nếu nội dung lấy từ văn bản hợp nhất, VD: "44/VBHN-VPQH"
-amended_by: null         # id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: "nghi-dinh-07-2025-nd-cp"
+amended_by_norms: null   # list id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: ["nghi-dinh-07-2025-nd-cp", "nghi-dinh-18-2026-nd-cp"]
+summary: null            # 3-5 câu mô tả phạm vi văn bản (thủ tục, đối tượng, địa phương) — do con người viết
 ---
 
 ## Điều X. [Tên điều]
@@ -242,9 +244,38 @@ amended_by: null         # id văn bản sửa đổi nếu file chứa điều 
 ### Khoản 1.
 
 #### Điểm a.
+
+##### Tiết 1.
+
+```
+
+**Đối với phần Phụ lục:** Cấp `##` dùng đường dẫn phân cấp đầy đủ từ Phụ lục đến Mục, thay thế cho `## Điều`. Từ Mục trở xuống vẫn tổ chức theo `### Khoản` / `#### Điểm` / `##### Tiết` như cũ.
+
+```markdown
+## Phụ lục [X] - Phần [Y] - Mục [N]. [Tên mục]
+## Phụ lục [X] - Phần [Y] - Nội dung [Z] - Mục [N]. [Tên mục]
+## Phụ lục [X]. [Tên phụ lục]
+
+### Khoản 1.
+
+#### Điểm a.
+
+##### Tiết 1.
 ```
 
 **Không được dùng:** `# Điều`, `## Khoản`, hay bất kỳ cấp heading nào khác.
+
+**Quy tắc định dạng nội dung bắt buộc (Rất quan trọng):**
+1. **Bỏ tiêu đề Chương, Mục:** Tuyệt đối không giữ lại các tiêu đề như "Chương I", "Mục 1". Chỉ giữ lại các cấp bậc hợp lệ là `## Điều`, `### Khoản`, `#### Điểm`, `##### Tiết`. **Ngoại lệ:** Phần Phụ lục dùng `## Phụ lục [X] - Phần [Y] - Mục [N]. [Tên]` thay cho `## Điều`.
+2. **Loại bỏ rác (Watermark/Header/Footer):** Phải xóa sạch các đoạn text rác như `CÔNG BÁO/Số.../Ngày...` hoặc số trang.
+3. **Bảo toàn Footnote/Amended:** Tuyệt đối không được làm mất các chú thích sửa đổi, bổ sung (footnote). Phải chuyển đổi chúng thành định dạng HTML comment và đặt ngay bên dưới nội dung bị ảnh hưởng.
+4. **Cấu trúc chuẩn của `amended_by`:** Các ghi chú sửa đổi phải được format thống nhất theo cú pháp:
+   `<!-- amended_by: [SỐ HIỆU LUẬT], [VỊ TRÍ SỬA ĐỔI], hiệu lực: [NGÀY], nội dung: [TÓM TẮT NỘI DUNG SỬA ĐỔI] -->`
+   *(Ví dụ: `<!-- amended_by: 47/2024/QH15, điểm a khoản 2 Điều 57, hiệu lực: 01/07/2025, nội dung: thay "..." bằng "..." -->`)*
+5. **Quy tắc SPACING (Khoảng trắng):**
+   - Luôn có 1 dòng trống giữa các heading (ví dụ giữa `## Điều 1` và `### Khoản 1.`).
+   - Luôn có 1 dòng trống giữa heading và đoạn nội dung đi kèm dưới nó.
+   - Các đoạn văn thuộc cùng một Khoản/Điểm mà không có ký hiệu mới thì viết tiếp xuống hàng dưới heading hiện tại (không tạo heading giả). Do ta áp dụng quy tắc gộp dòng (unwrap), các câu trong cùng một đoạn sẽ nằm trên một dòng duy nhất.
 
 ### Tên file data/raw/
 
@@ -316,8 +347,7 @@ parser.py          ← đọc data/raw/*.md
                    → trả về List[TextUnit] với Deterministic ID
 
 graph_builder.py   ← nhận TextUnit list từ parser.py
-                   ← nhận metadata từ YAML frontmatter
-                   ← nhận specified_in_map.md cho [:SPECIFIED_IN]
+                   ← nhận metadata từ YAML frontmatter (kể cả summary)
                    → write vào Neo4j (MERGE, idempotent)
 
 vectorizer.py      ← đọc TextUnit nodes từ Neo4j

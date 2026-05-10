@@ -190,9 +190,10 @@ handle_pre_write() {
   fi
 
   # -------------------------------------------------------------------------
-  # CHẶN: Ghi vào data/sources/
+  # CHẶN: Ghi vào data/sources/ — ngoại lệ manifest.md (file index)
   # -------------------------------------------------------------------------
-  if echo "$file_path" | grep -q "data/sources/"; then
+  if echo "$file_path" | grep -q "data/sources/" && \
+     ! echo "$file_path" | grep -q "data/sources/manifest.md"; then
     cat >&2 <<'EOF'
 ╔══════════════════════════════════════════════════════════════════╗
 ║  ⛔  CHẶN: Không được sửa file trong data/sources/              ║
@@ -202,6 +203,7 @@ handle_pre_write() {
 ║  không bao giờ sửa file đã có.                                  ║
 ║                                                                  ║
 ║  Nếu muốn sửa nội dung → sửa file tương ứng trong data/raw/    ║
+║  Ngoại lệ cho phép: data/sources/manifest.md (file index)       ║
 ╚══════════════════════════════════════════════════════════════════╝
 EOF
     exit 2

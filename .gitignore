@@ -16,6 +16,11 @@ build/
 data/neo4j/
 data/qdrant/
 
+# Source documents (PDF/DOCX) — lưu cục bộ, không commit lên git
+# manifest.md vẫn được track để có audit trail
+data/sources/*.pdf
+data/sources/*.docx
+
 # IDE
 .vscode/
 .idea/

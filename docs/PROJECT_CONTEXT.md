@@ -3,7 +3,13 @@
 > Để theo dõi tiến độ task, DoD checklist, và hành động tiếp theo, xem `PROJECT_STATUS.md`.
 
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Kiến trúc & Ngữ cảnh Hệ thống
-**Phiên bản 0.3 | Cập nhật 2026-04-27**
+**Phiên bản 0.4 | Cập nhật 2026-05-10**
+
+> **v0.4 — Cập nhật 2026-05-10:**
+> Xóa node `Procedure` và edge `[:SPECIFIED_IN]` khỏi schema ontology (D-07).
+> Thêm field `summary` vào frontmatter và Norm node; bổ sung Stage 1 retrieval
+> qua summary embedding trước Stage 2 TextUnit search (D-08).
+> Cập nhật §2.2, §2.3, §2.4, §2.5, §2.6 và P-05 tương ứng.
 
 > **v0.3 — Cập nhật 2026-04-27:**
 > Thay đổi chiến lược thu thập dữ liệu Phase 1: bỏ Docling/OCR pipeline,
@@ -155,33 +161,33 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
                     └────┬─────┘
                          │ [:INCLUDES]
                          ▼
-                    ┌──────────┐
-                    │   Norm   │ tier: 1-4, valid_from, title
-                    └────┬─────┘
+                    ┌──────────────────────────┐
+                    │   Norm                   │
+                    │   tier: 1-4, valid_from  │
+                    │   title, summary         │
+                    └────┬─────────────────────┘
           [:IMPLEMENTS]  │  [:HAS_COMPONENT]   [:APPLIES_TO]
           (Norm→Norm)    │       │                  │
           ┌─────────────┘       ▼                  ▼
           │              ┌──────────┐        ┌────────────┐
           │              │Component │        │Jurisdiction│
           │              └────┬─────┘        └────────────┘
-          │     [:BELONGS_TO] │ [:HAS_CTV]   (tp-hcm | dong-nai
-          │     (Component    │              | toan-quoc)
-          │     → Theme)      ▼
+          │                   │ [:HAS_CTV]   (tp-hcm | dong-nai
+          │                   │              | toan-quoc)
+          │                   ▼
           │              ┌──────────┐
           │              │   CTV    │ valid_from, valid_to, status
           │              └────┬─────┘
           │                   │ [:HAS_TEXT_UNIT]
           │                   ▼
           │              ┌──────────┐
-          │              │TextUnit  │ id (deterministic), text
-          │              └──────────┘
-          │
-          │         ┌───────────┐
-          └────────►│ Procedure │ [:SPECIFIED_IN]→ Component
-                    └───────────┘
+          └─────────────►│TextUnit  │ id (deterministic), text
+                         └──────────┘
 ```
 
-**Bảng Edge đầy đủ:**
+> **D-07:** Node `Procedure` và edge `[:SPECIFIED_IN]` đã bị xóa. Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval (xem §2.6). `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
+
+**Bảng Edge (6 loại active):**
 
 | Edge | Từ | Đến | Vai trò chiến lược |
 |---|---|---|---|
@@ -191,8 +197,6 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 | `[:HAS_CTV]` | Component | CTV | Quản lý phiên bản theo thời gian |
 | `[:HAS_TEXT_UNIT]` | CTV | TextUnit | Liên kết phiên bản trừu tượng → nội dung vật lý |
 | `[:APPLIES_TO]` | Norm | Jurisdiction | **Xương sống Gap 2** — hard-filter theo địa phương |
-| `[:SPECIFIED_IN]` | Procedure | Component | Gom điều khoản phân tán vào 1 thủ tục |
-| `[:BELONGS_TO]` | Component | Theme | Gán nhãn chuyên ngành cho điều khoản đặc thù (xem P-03) |
 
 ### §2.3 Data Flow — Phase 1 Thu thập thủ công
 
@@ -220,7 +224,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 [Bước 5] Điền metadata YAML frontmatter
   → id, tier, theme, jurisdiction, implements, valid_from, valid_to
   → source_vbhn (nếu dùng VBHN), amended_by (nếu có NĐ sửa đổi)
-  → Lập specified_in_map.md ([:SPECIFIED_IN] mapping)
+  → Viết `summary` (3-5 câu mô tả phạm vi văn bản — con người viết)
   │
   ▼
 [Output] data/raw/*.md ← Input cho Phase 2
@@ -242,7 +246,8 @@ valid_from: "2025-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/..."
 source_vbhn: null        # số hiệu VBHN nếu nội dung lấy từ văn bản hợp nhất, VD: "44/VBHN-VPQH"
-amended_by: null         # id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: "nghi-dinh-07-2025-nd-cp"
+amended_by_norms: null   # list id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: ["nghi-dinh-07-2025-nd-cp"]
+summary: null            # 3-5 câu mô tả phạm vi văn bản (thủ tục, đối tượng, địa phương) — do con người viết
 ---
 
 ## Điều 116. [Tên điều]
@@ -267,7 +272,8 @@ Nội dung điểm a.
 | `valid_from` | string | Format `YYYY-MM-DD` bắt buộc |
 | `valid_to` | string\|null | Format `YYYY-MM-DD` hoặc `null` nếu vẫn còn hiệu lực |
 | `source_vbhn` | string\|null | **Optional.** Số hiệu VBHN dùng làm nguồn nội dung, VD: `"44/VBHN-VPQH"`. null nếu lấy từ văn bản gốc |
-| `amended_by` | string\|null | **Optional.** `id` của văn bản sửa đổi nếu file chứa điều khoản đã bị sửa. null nếu không |
+| `amended_by_norms` | list\|null | **Optional.** List `id` các văn bản sửa đổi nếu file chứa điều khoản đã bị sửa. null nếu không |
+| `summary` | string\|null | **Bắt buộc điền.** 3-5 câu mô tả phạm vi văn bản: thủ tục điều chỉnh, đối tượng áp dụng, địa phương. Do con người viết để đảm bảo độ chính xác pháp lý. Dùng cho Stage 1 retrieval (xem D-08) |
 
 ### §2.5 Data Flow — Dual Indexing (Phase 2)
 
@@ -290,11 +296,15 @@ data/raw/*.md
                                           └──► Qdrant (port 6333)
                                                Collection: legal_texts
                                                Vector dim: 1024 (BGE-M3)
-                                               Payload: component_id,
-                                                 jurisdiction, tier,
-                                                 theme, procedure,
-                                                 valid_from, valid_to
-                                               ID: = TextUnit ID Neo4j
+                                               2 loại vector:
+                                               • content_type="summary": 1 vector/Norm
+                                                 Payload: norm_id, tier, theme,
+                                                          jurisdiction, valid_from
+                                               • content_type="text_unit": 1 vector/TextUnit
+                                                 Payload: norm_id, component_id,
+                                                          tier, theme, jurisdiction,
+                                                          valid_from, valid_to
+                                               ID: = TextUnit ID Neo4j (cho text_unit)
 ```
 
 ### §2.6 Data Flow — Online Retrieval (Phase 3)
@@ -307,17 +317,24 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
            jurisdiction=tp-hcm, temporal=hiện tại
   is_complete=True → tiếp tục
 
-[Sub-graph Extraction — Neo4j]
-  Cypher: START FROM Procedure("chuyen-muc-dich-su-dung-dat")
-          FOLLOW [:SPECIFIED_IN] → Components
-          FOLLOW [:HAS_COMPONENT]← Norms
+[Stage 1 — Summary Retrieval — Qdrant]
+  Filter: content_type="summary", theme="dat-dai",
+          jurisdiction IN ["tp-hcm", "toan-quoc"]
+  Dense: BGE-M3 encode(câu hỏi) → so sánh với summary vectors
+  Output: Top-N norm_ids có summary liên quan nhất
+          VD: ["luat-dat-dai-2024", "nghi-dinh-102-2024-nd-cp",
+               "nghi-quyet-87-2025-nq-hdnd-tp-hcm", ...]
+
+[Stage 2 — Sub-graph Extraction — Neo4j]
+  Cypher: START FROM Norm IDs từ Stage 1
           FOLLOW [:IMPLEMENTS] chains (all tiers)
           FILTER: Norm [:APPLIES_TO] Jurisdiction("tp-hcm") OR "toan-quoc"
           FILTER: CTV.valid_from <= now, CTV.valid_to IS NULL OR > now
+          COLLECT all Component IDs
   Output: LCCIDs = [comp_001, comp_002, comp_045, comp_089, ...]
 
 [Semantic Filtering — Qdrant Hybrid]
-  Payload filter: component_id IN LCCIDs, status = "active"
+  Payload filter: content_type="text_unit", norm_id IN norm_ids
   Dense: BGE-M3 encode("Phí chuyển mục đích sử dụng đất tại TP.HCM?")
   Sparse: BM25 tokenize
   Fusion: RRF(dense_scores, sparse_scores)
@@ -484,13 +501,21 @@ BGE-M3 chạy local trên máy 8GB RAM có thể gặp bottleneck về tốc đ�
 
 ---
 
-### P-05 — `[:SPECIFIED_IN]` mapping phải thủ công
+### P-05 — Routing thủ tục qua summary embedding thay vì `[:SPECIFIED_IN]`
 
-Quan hệ `[:SPECIFIED_IN]` (Procedure → Component) không thể tự động hóa hoàn toàn vì đòi hỏi hiểu biết pháp lý: biết Điều X, Khoản Y trong Văn bản Z quy định thủ tục nào. Đây là bottleneck về effort trong Phase 1.
+**Bối cảnh:** Schema ban đầu dùng edge `[:SPECIFIED_IN]` (Procedure → Component) để ánh xạ thủ công từng thủ tục đến từng Điều/Khoản liên quan. Cách này không scalable: đòi hỏi đọc kỹ từng điều khoản, không tự động hóa được, và khi hệ thống mở rộng lên hàng nghìn văn bản thì chi phí maintenance là không khả thi.
 
-**Quyết định:** Lập `specified_in_map.md` thủ công trong TASK-06. Mỗi mapping phải có cột "Lý do" giải thích tại sao Điều đó thuộc thủ tục đó — để GVHD có thể review và audit. Nếu không chắc → ghi "cần xác nhận GVHD" và giữ lại để review, không bỏ qua.
+**Quyết định (D-07 + D-08):** Xóa `Procedure` node và `[:SPECIFIED_IN]` edge. Thay thế bằng hai cơ chế:
+1. **Theme + Jurisdiction filter** (hard filter): Query Planner classify câu hỏi thành theme + jurisdiction, dùng để lọc cứng trong Qdrant và Neo4j.
+2. **Summary-based Stage 1 retrieval**: Mỗi văn bản có field `summary` (3-5 câu, do con người viết). Vectorizer index summary thành vector riêng (`content_type="summary"`). Khi có câu hỏi, Stage 1 tìm top-N Norm có summary liên quan → Stage 2 mới search TextUnit trong tập đó.
 
-**Điều kiện nâng cấp:** Trong tương lai có thể dùng LLM-assisted mapping, nhưng kết quả vẫn phải qua human review — không tự động inject vào database.
+**Tại sao summary rẻ hơn `[:SPECIFIED_IN]`:**
+- `[:SPECIFIED_IN]` cấp Điều: đọc kỹ, map thủ công từng điều khoản (2-4 giờ/văn bản dài)
+- `summary`: viết 3-5 câu mô tả phạm vi tổng thể (10-15 phút/văn bản)
+
+**Limitation chấp nhận:** Trong cùng một theme, khi jurisdiction không đủ phân biệt (VD: hai thủ tục Hộ tịch đều là toan-quoc), Stage 1 có thể trả về một số văn bản ít liên quan. Stage 2 semantic search sẽ tự nhiên loại chúng ra khi ranking. Ghi nhận là limitation trong thesis.
+
+**Hướng phát triển tương lai:** Auto-generate `[:SPECIFIED_IN]` bằng LLM (document-level routing), hoặc dùng embedding similarity giữa procedure description và Norm summary để tự động xây dựng lại edge này mà không cần manual mapping.
 
 ---
 
