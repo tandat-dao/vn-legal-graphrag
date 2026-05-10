@@ -1,5 +1,12 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.0 | Cập nhật 2026-05-10**
+**Phiên bản 1.1 | Cập nhật 2026-05-10**
+
+> **v1.1 — Cập nhật 2026-05-10:**
+> TASK-10 hoàn thành: `src/retrieval/query_planner.py` — Claude Haiku 4.5 qua Anthropic API.
+> QueryPlan TypedDict với 4 trường: theme, procedure, jurisdiction, temporal.
+> Auto-assign toan-quoc cho Hộ tịch/Nuôi con nuôi. Confirmation Loop cho Đất đai thiếu jurisdiction.
+> 28/28 unit tests PASS. 5/5 DoD cases xác nhận với API thật.
+> Thêm `anthropic>=0.40.0` vào requirements.txt và ANTHROPIC_API_KEY vào .env.example.
 
 > **v1.0 — Cập nhật 2026-05-10:**
 > TASK-09 hoàn thành [A]: Phase 2 Verification pass tất cả DoD items [A] có thể verify.
