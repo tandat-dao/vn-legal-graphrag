@@ -1,5 +1,11 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.7 | Cập nhật 2026-05-10**
+**Phiên bản 0.8 | Cập nhật 2026-05-10**
+
+> **v0.8 — Cập nhật 2026-05-10:**
+> TASK-07 hoàn thành: `src/ingestion/graph_builder.py` chạy thành công trên 17 văn bản Đất đai.
+> Neo4j: 9063 nodes (Norm=17, Component=3014, CTV=3014, TextUnit=3014, Theme=1, Jurisdiction=3).
+> Idempotency verified: chạy lần 2 không tăng node count.
+> 3 [:IMPLEMENTS] edges (tier2→tier1) hợp lệ. 17/17 Norm có summary.
 
 > **v0.7 — Cập nhật 2026-05-10:**
 > TASK-06 hoàn thành: `src/ingestion/parser.py` + `tests/test_parser.py` — 38/38 test PASS.
