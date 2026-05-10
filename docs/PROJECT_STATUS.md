@@ -1,5 +1,11 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.8 | Cập nhật 2026-05-10**
+**Phiên bản 0.9 | Cập nhật 2026-05-10**
+
+> **v0.9 — Cập nhật 2026-05-10:**
+> TASK-08 hoàn thành: `src/ingestion/vectorizer.py` — BGE-M3 local (Apple Silicon MPS).
+> Qdrant: 3031 vectors (3014 text_unit + 17 summary). Idempotency verified.
+> Stage 1 search (summary filter dat-dai) và Stage 2 search (text_unit filter norm_id) đều trả về kết quả hợp lệ.
+> Thêm `sentence-transformers>=3.0.0` và `pyyaml>=6.0` vào requirements.txt.
 
 > **v0.8 — Cập nhật 2026-05-10:**
 > TASK-07 hoàn thành: `src/ingestion/graph_builder.py` chạy thành công trên 17 văn bản Đất đai.
