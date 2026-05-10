@@ -342,7 +342,7 @@ Hẻm đất tính bằng 80% hẻm trải đá, trải nhựa hoặc bê tông,
 
 ### Khoản 6. Một số trường hợp đặc biệt.
 
-#### 6.1. Các trường hợp khu đất, thửa đất có hình thể đặc biệt (áp dụng cho tất cả các vị trí).
+6.1. Các trường hợp khu đất, thửa đất có hình thể đặc biệt (áp dụng cho tất cả các vị trí).
 
 **a) Trường hợp 1**
 Khu đất, thửa đất tiếp giáp mặt tiền đường (hẻm) có hình dáng không cân đối (hình đa giác, chữ L, Chữ T...) có phần diện tích (S2, S3 hình 3) khuất sau phạm vi chiếu theo phương vuông góc so với cạnh tiếp giáp mặt tiền đường (hẻm), thì đơn giá đất phần diện tích bị khuất sau (S2, S3 hình 3) được tính bằng 80% so với đơn giá đất phần tiếp giáp mặt tiền đường (hẻm). Tuy nhiên, chỉ áp dụng khi phần diện tích này từ 15m2 trở lên (diện tích S2 ≥15m2 và S3 ≥15m2).
@@ -367,27 +367,27 @@ Chiều dài khu đất, thửa đất = A + B + C.
 - Phần khu đất, thửa đất có chiều dài lớn hơn 4 lần chiều rộng của khu đất, thửa đất thì tính bằng 40% đơn giá đất mặt tiền đường (hẻm), cụ thể: S3 được tính đơn giá bằng 40% giá đất mặt tiền đường (hẻm).
 *(Nếu khu đất, thửa đất thuộc cả hai trường hợp nêu trên thì khi xác định giá đất được áp dụng theo trường hợp điểm a mục 6.1, sau đó áp dụng trường hợp điểm b mục 6.1)*
 
-#### 6.2. Khu đất, thửa đất hoặc nhà đất nằm ở vị trí tiếp giáp với nhiều mặt tiền đường thì đơn giá đất được xác định theo đường có đơn giá đất cao nhất.
+6.2. Khu đất, thửa đất hoặc nhà đất nằm ở vị trí tiếp giáp với nhiều mặt tiền đường thì đơn giá đất được xác định theo đường có đơn giá đất cao nhất.
 
-#### 6.3. Khu đất, thửa đất hoặc nhà, đất nằm trong hẻm, có địa chỉ mang tên đường nhưng đường đó không có hẻm dẫn vào mà phải đi bằng hẻm của đường khác hoặc có địa chỉ nhưng chỉ ghi tên ấp, khu phố không ghi tên đường thì đơn giá được tính theo hẻm dẫn ra đường gần nhất.
+6.3. Khu đất, thửa đất hoặc nhà, đất nằm trong hẻm, có địa chỉ mang tên đường nhưng đường đó không có hẻm dẫn vào mà phải đi bằng hẻm của đường khác hoặc có địa chỉ nhưng chỉ ghi tên ấp, khu phố không ghi tên đường thì đơn giá được tính theo hẻm dẫn ra đường gần nhất.
 
-#### 6.4. Khu đất, thửa đất hoặc nhà đất ở vị trí trong hẻm ra được nhiều đường có đơn giá khác nhau thì đơn giá đất được xác định theo hẻm dẫn ra đường gần nhất.
+6.4. Khu đất, thửa đất hoặc nhà đất ở vị trí trong hẻm ra được nhiều đường có đơn giá khác nhau thì đơn giá đất được xác định theo hẻm dẫn ra đường gần nhất.
 
-#### 6.5. Khu đất, thửa đất hoặc nhà đất không có đường, hẻm dẫn vào hoặc phải đi vào bằng thuyền, ghe hoặc bờ đất thì đơn giá đất được xác định theo đơn giá đất có vị trí 4 của đường gần nhất đã có giá dẫn đến khu đất nhưng không thấp hơn đơn giá đất của đất trồng cây lâu năm cùng khu vực, vị trí.
+6.5. Khu đất, thửa đất hoặc nhà đất không có đường, hẻm dẫn vào hoặc phải đi vào bằng thuyền, ghe hoặc bờ đất thì đơn giá đất được xác định theo đơn giá đất có vị trí 4 của đường gần nhất đã có giá dẫn đến khu đất nhưng không thấp hơn đơn giá đất của đất trồng cây lâu năm cùng khu vực, vị trí.
 
-#### 6.6. Đối với những khu đất, thửa đất tiếp giáp 2 mặt tiền đường trở lên, tính bằng 110% đơn giá của tuyến đường có đơn giá đất cao nhất.
+6.6. Đối với những khu đất, thửa đất tiếp giáp 2 mặt tiền đường trở lên, tính bằng 110% đơn giá của tuyến đường có đơn giá đất cao nhất.
 
-#### 6.7. Đối với những khu đất, thửa đất thuộc đoạn đường nằm hai bên dạ cầu (song song cầu), tính bằng 70% đơn giá của tuyến đường đó.
+6.7. Đối với những khu đất, thửa đất thuộc đoạn đường nằm hai bên dạ cầu (song song cầu), tính bằng 70% đơn giá của tuyến đường đó.
 
-#### 6.8. Đối với những khu đất, thửa đất thuộc đoạn đường nằm hai bên cầu vượt (song song cầu), dưới chân cầu vượt tính bằng 70% đơn giá của tuyến đường đó.
+6.8. Đối với những khu đất, thửa đất thuộc đoạn đường nằm hai bên cầu vượt (song song cầu), dưới chân cầu vượt tính bằng 70% đơn giá của tuyến đường đó.
 
-#### 6.9. Đối với những khu đất, thửa đất nằm trong hành lang bảo vệ của đường điện cao thế tính bằng 70% đơn giá của tuyến đường đó.
+6.9. Đối với những khu đất, thửa đất nằm trong hành lang bảo vệ của đường điện cao thế tính bằng 70% đơn giá của tuyến đường đó.
 
-#### 6.10. Đối với những khu đất, thửa đất thuộc đường nhánh dẫn lên cầu vượt tính bằng 70% đơn giá của tuyến đường đó.
+6.10. Đối với những khu đất, thửa đất thuộc đường nhánh dẫn lên cầu vượt tính bằng 70% đơn giá của tuyến đường đó.
 
-#### 6.11. Đối với các thửa đất cách lề đường bằng một con kênh, rạch không được san lấp hoặc phần đất phía bên trong của thửa đất tiếp mặt tiền đường (cùng khuôn viên, cùng chủ sử dụng hoặc sử dụng chung) thì giá đất được tính bằng 70% giá đất của đường đó.
+6.11. Đối với các thửa đất cách lề đường bằng một con kênh, rạch không được san lấp hoặc phần đất phía bên trong của thửa đất tiếp mặt tiền đường (cùng khuôn viên, cùng chủ sử dụng hoặc sử dụng chung) thì giá đất được tính bằng 70% giá đất của đường đó.
 
-#### 6.12. Đối với khu đất, thửa đất có địa chỉ thuộc địa giới hành chính xã, phường nhưng không có đường đi ra mà phải đi ra đường thuộc xã, phường, giáp ranh khác thì lấy giá đất của tuyến đường có tên trong Bảng giá đất thuộc xã, phường giáp ranh đó để tính giá.
+6.12. Đối với khu đất, thửa đất có địa chỉ thuộc địa giới hành chính xã, phường nhưng không có đường đi ra mà phải đi ra đường thuộc xã, phường, giáp ranh khác thì lấy giá đất của tuyến đường có tên trong Bảng giá đất thuộc xã, phường giáp ranh đó để tính giá.
 
 ## Phụ lục I - Phần II. Danh mục phường khu vực I.
 

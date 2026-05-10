@@ -1,5 +1,10 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.6 | Cập nhật 2026-05-10**
+**Phiên bản 0.7 | Cập nhật 2026-05-10**
+
+> **v0.7 — Cập nhật 2026-05-10:**
+> TASK-06 hoàn thành: `src/ingestion/parser.py` + `tests/test_parser.py` — 38/38 test PASS.
+> Parser xử lý đúng tất cả 17 file data/raw/ Đất đai.
+> Fix format `nghi-quyet-87`: xóa `#### 6.N.` headings không hợp lệ trong Phụ lục, chuyển thành plain text.
 
 > **v0.6 — Cập nhật 2026-05-10:**
 > TASK-04 [A] hoàn thành: 17 file Đất đai trong data/raw/ pass validate_metadata.py 17/17.
