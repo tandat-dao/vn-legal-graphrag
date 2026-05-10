@@ -46,7 +46,6 @@ graphrag-vn-law/
 │   │   └── manifest.md
 │   ├── raw/                     ← Phase 1 output: *.md đã chuẩn hóa
 │   │   ├── mapping_table.md
-│   │   ├── specified_in_map.md
 │   │   ├── crossref_decisions.md
 │   │   ├── review_log.md
 │   │   └── *.md                 ← văn bản pháp luật đã chuẩn hóa
@@ -481,7 +480,6 @@ docker compose logs neo4j | tail -20
 ## NHỮNG GÌ KHÔNG LÀM
 
 - **Không** tự quyết định cross-reference ngoài scope — hỏi project owner, xem `data/raw/crossref_decisions.md`
-- **Không** tự quyết định `[:SPECIFIED_IN]` mapping nếu không chắc — để trống, ghi "cần xác nhận GVHD"
 - **Không** implement `[:BELONGS_TO]` — đây là enhancement ngoài scope hiện tại
 - **Không** dùng UUID làm ID bất kỳ đâu trong codebase
 - **Không** sửa file trong `data/sources/` — đây là raw data bất biến

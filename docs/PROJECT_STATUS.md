@@ -276,7 +276,7 @@ Viết và chạy một script Python kiểm tra end-to-end rằng code Python c
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Với mỗi thủ tục trong scope dự án, truy ngược toàn bộ chuỗi văn bản pháp lý điều chỉnh nó và lập thành bảng mapping chính thức. Đây là sản phẩm trí tuệ quan trọng nhất của Phase 1 — nếu bảng này sai hoặc thiếu, đồ thị Knowledge Graph sẽ sai quan hệ [:IMPLEMENTS] và [:SPECIFIED_IN] từ gốc.
+Với mỗi thủ tục trong scope dự án, truy ngược toàn bộ chuỗi văn bản pháp lý điều chỉnh nó và lập thành bảng mapping chính thức. Đây là sản phẩm trí tuệ quan trọng nhất của Phase 1 — nếu bảng này sai hoặc thiếu, đồ thị Knowledge Graph sẽ sai quan hệ `[:IMPLEMENTS]` và `[:APPLIES_TO]` từ gốc.
 
 #### Đầu vào
 - `Thesis_Dashboard.docx` — bảng 6 thủ tục × 3 lĩnh vực × 2 địa phương (TP.HCM, Đồng Nai)

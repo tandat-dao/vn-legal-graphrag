@@ -96,7 +96,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 │      │                                                            │
 │      ▼                                                            │
 │  [Chuẩn hóa heading + Điền metadata YAML frontmatter]           │
-│  (tier, jurisdiction, implements, source_vbhn, amended_by, ...)  │
+│  (tier, jurisdiction, implements, source_vbhn, amended_by_norms, ...)  │
 │                                        │                          │
 │                                        ▼                          │
 │                               [data/raw/*.md]                    │
@@ -223,7 +223,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
   ▼
 [Bước 5] Điền metadata YAML frontmatter
   → id, tier, theme, jurisdiction, implements, valid_from, valid_to
-  → source_vbhn (nếu dùng VBHN), amended_by (nếu có NĐ sửa đổi)
+  → source_vbhn (nếu dùng VBHN), amended_by_norms (nếu file chứa điều khoản đã bị sửa)
   → Viết `summary` (3-5 câu mô tả phạm vi văn bản — con người viết)
   │
   ▼
@@ -394,8 +394,8 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 |---|---|---|
 | Bảng ánh xạ văn bản (mapping table) | 1 | Core |
 | Thu thập thủ công từ VBHN/vbpl.vn theo Chương/Mục | 1 | Core |
-| YAML metadata block chuẩn hóa (kể cả source_vbhn, amended_by) | 1 | Core |
-| `specified_in_map.md` ([:SPECIFIED_IN] manual mapping) | 1 | Core |
+| YAML metadata block chuẩn hóa (kể cả source_vbhn, amended_by_norms, summary) | 1 | Core |
+| ~~`specified_in_map.md` ([:SPECIFIED_IN] manual mapping)~~ | ~~1~~ | ~~Đã xóa (D-07)~~ |
 | Script validate metadata | 1 | Core |
 | Cross-check chéo giữa 2 thành viên | 1 | Core |
 
@@ -405,8 +405,8 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 |---|---|---|
 | Structure-aware Parser (AST) | 2 | Core |
 | Deterministic ID generation (SHA256) | 2 | Core |
-| Ontology Instantiation — 7 loại node | 2 | Core |
-| Edge creation — 7 loại edge bắt buộc | 2 | Core |
+| Ontology Instantiation — 6 loại node | 2 | Core |
+| Edge creation — 6 loại edge bắt buộc | 2 | Core |
 | `[:BELONGS_TO]` (Component → Theme) | 2 | Enhancement (xem P-03) |
 | BGE-M3 encoding + Qdrant upsert | 2 | Core |
 | Metadata payload đầy đủ trong Qdrant | 2 | Core |
