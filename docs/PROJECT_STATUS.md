@@ -1,5 +1,10 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.5 | Cập nhật 2026-05-10**
+**Phiên bản 0.6 | Cập nhật 2026-05-10**
+
+> **v0.6 — Cập nhật 2026-05-10:**
+> TASK-04 [A] hoàn thành: 17 file Đất đai trong data/raw/ pass validate_metadata.py 17/17.
+> data/sources/manifest.md tạo xong với đầy đủ URL nguồn cho 17 văn bản.
+> Trạng thái TASK-04: [A] done — chờ [B] hoàn thành phần Hộ tịch + Nuôi con nuôi.
 
 > **v0.5 — Cập nhật 2026-05-10:**
 > Xóa `Procedure` node, `[:SPECIFIED_IN]` edge và `specified_in_map.md` khỏi
@@ -85,9 +90,10 @@
 **Phase 0 — ✅ hoàn thành toàn bộ.**
 
 **Phase 1 — đang thực hiện:**
-- TASK-03: Mapping Table đang điền (Section 1 Hộ tịch/Khai sinh đã có, 5 section còn lại chờ bổ sung).
-- Chưa có file văn bản chuẩn hóa nào trong `data/raw/` (ngoài mapping_table.md).
-- Chưa có file nguồn nào trong `data/sources/`.
+- TASK-03: Mapping Table — Sections 3 (chuyển mục đích SDĐ) và 4 (cấp sổ đỏ) đã điền xong. Sections còn lại (Hộ tịch, Nuôi con nuôi) chờ [B] bổ sung.
+- TASK-04 [A]: **Hoàn thành** — 17 file Đất đai trong `data/raw/`, validate 17/17 PASS, manifest.md đầy đủ.
+- TASK-04 [B]: Chờ [B] hoàn thành phần Hộ tịch + Nuôi con nuôi.
+- TASK-05: Chưa bắt đầu — chờ TASK-04 [B] xong.
 
 ### §1.3 Chưa bắt đầu 📋
 
@@ -363,16 +369,16 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
 - `src/utils/validate_metadata.py` — script kiểm tra metadata tự động ✅ (đã viết)
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Tất cả văn bản trong `mapping_table.md` đều có file `.md` tương ứng trong `data/raw/`
-- [ ] Tất cả file `.md` có metadata block hợp lệ — kiểm tra bằng `validate_metadata.py`
-- [ ] Trường `id` là unique trên toàn bộ tập file
-- [ ] Trường `tier` nhận đúng giá trị: Luật=1, Nghị định=2, Thông tư=3, Quyết định UBND=4
-- [ ] Trường `implements` trỏ đúng `id` của văn bản cha — verify thủ công
-- [ ] Không có file nào dùng heading level sai (VD: `# Điều` thay vì `## Điều`)
-- [ ] Tất cả file `.md` có field `summary` được điền (không null) — nội dung do con người viết
-- [ ] Ít nhất 1 văn bản trung ương (tier 1-3) + 1 văn bản địa phương (tier 4) cho lĩnh vực Đất đai
-- [ ] Hai thủ tục Hộ tịch có `jurisdiction: "toan-quoc"` và không có file văn bản địa phương
-- [ ] File nguồn gốc (PDF/DOCX) được lưu trong `data/sources/` với `manifest.md` đầy đủ
+- [ ] Tất cả văn bản trong `mapping_table.md` đều có file `.md` tương ứng trong `data/raw/` (chờ [B])
+- [x] Tất cả file `.md` có metadata block hợp lệ — `validate_metadata.py` PASS 17/17 ([A], 2026-05-10)
+- [x] Trường `id` là unique trên toàn bộ tập file ([A], 2026-05-10)
+- [x] Trường `tier` nhận đúng giá trị: Luật=1, Nghị định=2, Thông tư=3, Quyết định UBND=4 ([A], 2026-05-10)
+- [x] Trường `implements` trỏ đúng `id` của văn bản cha — verify thủ công ([A], 2026-05-10)
+- [x] Không có file nào dùng heading level sai (VD: `# Điều` thay vì `## Điều`) ([A], 2026-05-10)
+- [x] Tất cả file `.md` có field `summary` được điền (không null) — nội dung do con người viết ([A], 2026-05-10)
+- [x] Ít nhất 1 văn bản trung ương (tier 1-3) + 1 văn bản địa phương (tier 4) cho lĩnh vực Đất đai ([A], 2026-05-10)
+- [ ] Hai thủ tục Hộ tịch có `jurisdiction: "toan-quoc"` và không có file văn bản địa phương (chờ [B])
+- [x] File nguồn gốc (PDF/DOCX) được lưu trong `data/sources/` với `manifest.md` đầy đủ ([A], 2026-05-10)
 
 #### Ghi chú / Ràng buộc cứng
 - **Thu thập theo Chương/Mục** (D-01): chương không có mục → lấy cả chương; chương có mục → lấy cả mục
@@ -917,8 +923,10 @@ Phân tích kết quả từ TASK-17 theo 3 Gap của nghiên cứu, xác địn
 
 3. ~~Hoàn thành TASK-01 còn thiếu: tạo nhánh `develop`~~ ✅ Hoàn thành (2026-05-05)
 
-4. **(HIỆN TẠI)** Hoàn thành TASK-03 (Mapping Table) — điền 5 section còn lại.
+4. ~~Hoàn thành TASK-03 (Mapping Table)~~ [A] đã điền Sections 3+4. [B] cần điền phần Hộ tịch + Nuôi con nuôi.
 
-5. Sau TASK-03: [A] làm TASK-04 Đất đai, [B] làm TASK-04 Hộ tịch + Nuôi con nuôi — song song.
+5. ~~[A] làm TASK-04 Đất đai~~ ✅ Hoàn thành 2026-05-10. **[B] cần hoàn thành TASK-04 Hộ tịch + Nuôi con nuôi.**
 
-6. Sau khi TASK-05 pass: [A] viết TASK-06 (Parser), [B] viết unit tests cho Parser — song song.
+6. **(HIỆN TẠI — chờ [B])** Sau khi [B] hoàn thành TASK-04: hai bên làm TASK-05 Cross-check chéo — [A] review file [B], [B] review file [A], sign-off vào `review_log.md`.
+
+7. Sau TASK-05 pass: [A] viết TASK-06 (Parser), [B] viết unit tests cho Parser — song song.
