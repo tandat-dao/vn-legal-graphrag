@@ -320,7 +320,7 @@ Với mỗi thủ tục trong scope dự án, truy ngược toàn bộ chuỗi v
 > Docling pipeline trung gian (TASK-05 đã bị xóa).
 
 #### Mục tiêu
-Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chuẩn hóa trực tiếp thành file `.md` hoàn chỉnh theo schema kỹ thuật của dự án. Công việc gồm: (1) xác định nguồn VBHN trên vbpl.vn, (2) copy nội dung Chương/Mục liên quan, (3) chuẩn hóa heading format, (4) điền metadata YAML frontmatter, (5) lập bảng ánh xạ `[:SPECIFIED_IN]`. Lưu file nguồn gốc (PDF/DOCX) vào `data/sources/` để audit.
+Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chuẩn hóa trực tiếp thành file `.md` hoàn chỉnh theo schema kỹ thuật của dự án. Công việc gồm: (1) xác định nguồn VBHN trên vbpl.vn, (2) copy nội dung Chương/Mục liên quan, (3) chuẩn hóa heading format, (4) điền metadata YAML frontmatter, (5) viết `summary` 3-5 câu cho mỗi văn bản. Lưu file nguồn gốc (PDF/DOCX) vào `data/sources/` để audit.
 
 #### Đầu vào
 - `data/raw/mapping_table.md` — danh sách văn bản cần lấy từ TASK-03
@@ -341,7 +341,6 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
   ---
   id: "[slug-dinh-danh-duy-nhat]"
   title: "[Tên đầy đủ của văn bản]"
-  so_hieu: "[Số hiệu chính thức, VD: 31/2024/QH15]"
   tier: [1|2|3|4]
   theme: "[dat-dai|ho-tich|nuoi-con-nuoi]"
   jurisdiction: "[toan-quoc|tp-hcm|dong-nai]"
@@ -349,8 +348,9 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
   valid_from: "YYYY-MM-DD"
   valid_to: "YYYY-MM-DD hoặc null"
   source_url: "[URL nguồn chính thức]"
-  source_vbhn: null
-  amended_by: null
+  source_vbhn: "[Số hiệu VBHN nếu lấy từ văn bản hợp nhất, VD: 44/VBHN-VPQH, hoặc null]"
+  amended_by_norms: null
+  summary: "[3-5 câu mô tả phạm vi, thủ tục, đối tượng, địa phương áp dụng]"
   ---
   ```
 
@@ -386,7 +386,6 @@ Thu thập nội dung các Chương/Mục liên quan từ VBHN/vbpl.vn và chu�
 - **Format `id`:** `[loai-van-ban]-[slug-ten]-[nam]`
 - **Tier mapping cứng:** 1=Luật/Bộ luật/NQ Quốc hội, 2=Nghị định/Pháp lệnh, 3=Thông tư, 4=QĐ UBND/NQ HĐND
 - **KHÔNG** tự suy đoán `implements` — nếu không chắc, để trống và ghi chú để cross-check
-- Cột "Lý do" trong `specified_in_map.md` bắt buộc
 - Lấy bản text từ **nguồn chính thức** (vbpl.vn) — không lấy từ blog luật hay trang thứ cấp
 
 ---
@@ -471,31 +470,30 @@ Xây dựng parser đọc file `.md` đã chuẩn hóa và tạo ra một cây d
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Đọc AST từ Parser và metadata từ Phase 1, tạo toàn bộ node và cạnh trong Neo4j theo schema Ontology đã định nghĩa (7 loại node, 8 loại edge). Toàn bộ quá trình phải idempotent — chạy lại không tạo duplicate. Cạnh `[:SPECIFIED_IN]` được load từ `specified_in_map.md` (semi-manual mapping từ TASK-04).
+Đọc AST từ Parser và metadata từ Phase 1, tạo toàn bộ node và cạnh trong Neo4j theo schema Ontology đã định nghĩa (6 loại node, 6 loại edge). Toàn bộ quá trình phải idempotent — chạy lại không tạo duplicate. Node `Norm` phải có property `summary` từ YAML frontmatter để phục vụ Stage 1 retrieval.
 
 #### Đầu vào
 - `src/ingestion/parser.py` từ TASK-06
-- `data/raw/*.md` toàn bộ
-- `data/raw/specified_in_map.md` từ TASK-04
+- `data/raw/*.md` toàn bộ (bao gồm field `summary` trong frontmatter)
 - Neo4j đang chạy (TASK-00)
 
 #### Đầu ra
 - `src/ingestion/graph_builder.py` — module với:
   - `upsert_theme(tx, theme_name: str)` — tạo/cập nhật node `:Theme`
-  - `upsert_norm(tx, metadata: dict)` — tạo/cập nhật node `:Norm`
+  - `upsert_norm(tx, metadata: dict)` — tạo/cập nhật node `:Norm` (bao gồm property `summary`)
   - `upsert_component(tx, component_data: dict)` — tạo/cập nhật node `:Component`
   - `upsert_ctv(tx, ctv_data: dict)` — tạo/cập nhật node `:CTV` với `valid_from`, `valid_to`, `status`
   - `upsert_text_unit(tx, text_unit: TextUnit)` — tạo/cập nhật node `:TextUnit`
   - `upsert_jurisdiction(tx, name: str)` — tạo/cập nhật node `:Jurisdiction`
-  - `upsert_procedure(tx, name: str)` — tạo/cập nhật node `:Procedure`
-  - `create_edges(tx, ...)` — tạo tất cả 8 loại edge
+  - `create_edges(tx, ...)` — tạo tất cả 6 loại edge: INCLUDES, IMPLEMENTS, HAS_COMPONENT, HAS_CTV, HAS_TEXT_UNIT, APPLIES_TO
   - `run_ingestion(data_dir: str)` — hàm orchestrator chạy toàn bộ ingestion
 
 #### Định nghĩa Hoàn thành (DoD)
 - [ ] Sau khi chạy `run_ingestion()`, Neo4j Browser hiển thị node của cả 6 loại: Theme, Norm, Component, CTV, TextUnit, Jurisdiction
 - [ ] Cypher query `MATCH (n:Theme) RETURN n.name` trả về đúng 3 kết quả: "dat-dai", "ho-tich", "nuoi-con-nuoi"
-- [ ] Cypher query kiểm tra chain [:IMPLEMENTS]: `MATCH path = (:Norm {tier:2})-[:IMPLEMENTS]->(:Norm {tier:1}) RETURN path LIMIT 5` trả về ít nhất 1 kết quả hợp lệ
-- [ ] Cypher query kiểm tra [:APPLIES_TO]: `MATCH (:Norm)-[:APPLIES_TO]->(j:Jurisdiction {name:"tp-hcm"}) RETURN count(*)` trả về số > 0
+- [ ] Cypher query kiểm tra chain `[:IMPLEMENTS]`: `MATCH path = (:Norm {tier:2})-[:IMPLEMENTS]->(:Norm {tier:1}) RETURN path LIMIT 5` trả về ít nhất 1 kết quả hợp lệ
+- [ ] Cypher query kiểm tra `[:APPLIES_TO]`: `MATCH (:Norm)-[:APPLIES_TO]->(j:Jurisdiction {name:"tp-hcm"}) RETURN count(*)` trả về số > 0
+- [ ] Cypher query kiểm tra `[:HAS_TEXT_UNIT]`: `MATCH (:CTV)-[:HAS_TEXT_UNIT]->(t:TextUnit) RETURN count(t)` trả về số > 0
 - [ ] Chạy `run_ingestion()` lần 2 không tăng số lượng node (idempotency) — verify bằng `MATCH (n) RETURN count(n)` trước và sau
 - [ ] Mỗi Norm node có property `summary` không null
 
@@ -515,7 +513,7 @@ Xây dựng parser đọc file `.md` đã chuẩn hóa và tạo ra một cây d
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Lấy toàn bộ TextUnit từ Neo4j, encode thành vector bằng model BGE-M3, lưu vào Qdrant kèm metadata payload đầy đủ. ID của vector trong Qdrant phải bằng đúng ID của TextUnit trong Neo4j — đây là cơ chế liên kết giữa hai database. Quá trình phải idempotent (upsert, không insert).
+Lấy toàn bộ TextUnit và Norm từ Neo4j, encode thành vector bằng model BGE-M3, lưu vào Qdrant với 2 loại vector: `content_type="text_unit"` (dùng cho Stage 2 retrieval) và `content_type="summary"` (dùng cho Stage 1 — lọc Norm liên quan). ID của text_unit vector trong Qdrant phải bằng đúng ID TextUnit trong Neo4j — đây là cơ chế liên kết giữa hai database. Quá trình phải idempotent (upsert, không insert).
 
 #### Đầu vào
 - Neo4j populated với TextUnit nodes (TASK-07)
@@ -526,16 +524,18 @@ Lấy toàn bộ TextUnit từ Neo4j, encode thành vector bằng model BGE-M3, 
 - `src/ingestion/vectorizer.py` — module với:
   - `load_model(model_name: str = "BAAI/bge-m3") -> model` — load BGE-M3
   - `encode_text(model, text: str) -> list[float]` — encode 1 text thành vector
-  - `build_payload(text_unit_node: dict) -> dict` — tạo metadata payload từ Neo4j node properties: `{component_id, jurisdiction, tier, theme, procedure, valid_from, valid_to}`
-  - `upsert_vectors(qdrant_client, collection_name: str, text_units: list) -> None` — upsert batch
-  - `run_vectorization(neo4j_driver, qdrant_client)` — orchestrator
+  - `build_text_unit_payload(text_unit_node: dict) -> dict` — payload cho text_unit vector: `{content_type: "text_unit", norm_id, component_id, jurisdiction, tier, theme, valid_from, valid_to}`
+  - `build_summary_payload(norm_node: dict) -> dict` — payload cho summary vector: `{content_type: "summary", norm_id, tier, theme, jurisdiction, valid_from}`
+  - `upsert_vectors(qdrant_client, collection_name: str, points: list) -> None` — upsert batch
+  - `run_vectorization(neo4j_driver, qdrant_client)` — orchestrator: encode cả TextUnit và Norm summary
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Số vector `content_type="text_unit"` trong Qdrant = số TextUnit node trong Neo4j
-- [ ] Số vector `content_type="summary"` trong Qdrant = số Norm node trong Neo4j (mỗi Norm 1 summary vector)
-- [ ] Mỗi text_unit vector có payload: `norm_id`, `component_id`, `jurisdiction`, `tier`, `theme`, `valid_from`, `valid_to`
-- [ ] Mỗi summary vector có payload: `norm_id`, `tier`, `theme`, `jurisdiction`, `valid_from`
-- [ ] Stage 1 test: query `"điều kiện chuyển mục đích sử dụng đất"` với filter `content_type="summary"`, `theme="dat-dai"` → top-3 norm_ids đều thuộc Đất đai
+- [ ] Số vector có `content_type="text_unit"` trong Qdrant = số TextUnit node trong Neo4j
+- [ ] Số vector có `content_type="summary"` trong Qdrant = số Norm node trong Neo4j (mỗi Norm 1 summary vector)
+- [ ] Mỗi text_unit vector có đủ payload: `content_type`, `norm_id`, `component_id`, `jurisdiction`, `tier`, `theme`, `valid_from`, `valid_to`
+- [ ] Mỗi summary vector có đủ payload: `content_type`, `norm_id`, `tier`, `theme`, `jurisdiction`, `valid_from`
+- [ ] Stage 1 test: query `"điều kiện chuyển mục đích sử dụng đất"` với filter `content_type="summary"` và `theme="dat-dai"` → top-3 norm_ids đều thuộc lĩnh vực Đất đai (verify thủ công)
+- [ ] Stage 2 test: query với filter `content_type="text_unit"` và `norm_id IN [list]` → trả về TextUnit có nội dung khớp
 - [ ] Chạy `run_vectorization()` lần 2 không tăng số lượng vector (idempotency — dùng upsert)
 - [ ] Thời gian encode toàn bộ dataset < 2 giờ trên máy 8GB RAM (nếu chạy local)
 
@@ -566,12 +566,13 @@ Kiểm tra thủ công và bán tự động rằng graph Neo4j và vector store
 - `data/verification/phase2_report.md` — báo cáo verification: số node từng loại, số vector, kết quả 3 query mẫu
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `MATCH (n) RETURN labels(n)[0] as type, count(n) as count ORDER BY count DESC` — kết quả được ghi vào `phase2_report.md`, tất cả 7 loại node đều có count > 0
-- [ ] Query `MATCH (p:Procedure)-[:SPECIFIED_IN*1..3]->(c:Component)<-[:HAS_COMPONENT]-(n:Norm) WHERE p.name = "dang-ky-khai-sinh" RETURN DISTINCT n.title` trả về đúng tên văn bản liên quan
-- [ ] Query `MATCH path = (:Norm {tier:2})-[:IMPLEMENTS]->(:Norm {tier:1})-[:IMPLEMENTS*0..1]->(:Norm) RETURN path LIMIT 5` trả về chain hợp lệ
-- [ ] Số vector Qdrant = số TextUnit Neo4j (so sánh 2 số này và ghi vào report)
-- [ ] Vector search `"phí chuyển mục đích sử dụng đất"` với filter `jurisdiction = "tp-hcm"` trả về top-3 kết quả thuộc Đất đai (verify thủ công)
-- [ ] Vector search `"đăng ký khai sinh"` với filter `jurisdiction = "toan-quoc"` trả về top-3 kết quả thuộc Hộ tịch (verify thủ công)
+- [ ] `MATCH (n) RETURN labels(n)[0] as type, count(n) as count ORDER BY count DESC` — kết quả được ghi vào `phase2_report.md`, tất cả 6 loại node (Theme, Norm, Component, CTV, TextUnit, Jurisdiction) đều có count > 0
+- [ ] Query `MATCH path = (:Norm {tier:2})-[:IMPLEMENTS]->(:Norm {tier:1}) RETURN path LIMIT 5` trả về chain hợp lệ
+- [ ] Query `MATCH (n:Norm)-[:APPLIES_TO]->(j:Jurisdiction) RETURN n.id, j.name LIMIT 10` trả về kết quả đúng jurisdiction cho từng văn bản
+- [ ] Số vector `content_type="text_unit"` trong Qdrant = số TextUnit node trong Neo4j (ghi vào report)
+- [ ] Số vector `content_type="summary"` trong Qdrant = số Norm node trong Neo4j (ghi vào report)
+- [ ] Stage 1 vector search: query `"phí chuyển mục đích sử dụng đất"` với filter `content_type="summary"`, `theme="dat-dai"` → top-3 norm_ids hợp lệ (verify thủ công)
+- [ ] Stage 2 vector search: query `"đăng ký khai sinh"` với filter `content_type="text_unit"`, `jurisdiction="toan-quoc"` → top-3 kết quả thuộc Hộ tịch (verify thủ công)
 - [ ] Báo cáo `phase2_report.md` được ký xác nhận bởi cả 2 thành viên
 
 ---
@@ -620,22 +621,29 @@ Xây dựng module nhận câu hỏi tiếng Việt của người dùng và tr�
 **Hoàn thành:** Chưa
 
 #### Mục tiêu
-Nhận QueryPlan từ TASK-10, duyệt đồ thị Neo4j để tìm ra danh sách Component IDs (LCCIDs) liên quan. Đây là bước "lọc cứng" — thu hẹp không gian tìm kiếm từ toàn bộ graph xuống chỉ còn các Component có liên quan đến thủ tục được hỏi, địa phương được hỏi, và khoảng thời gian hợp lệ.
+Nhận QueryPlan từ TASK-10, thực hiện hai bước để thu hẹp không gian tìm kiếm:
+- **Stage 1 (Qdrant):** Encode câu hỏi → vector search trên summary vectors với filter `content_type="summary"` + `theme` → lấy top-N norm_ids có văn bản liên quan nhất về ngữ nghĩa.
+- **Stage 2 (Neo4j):** Từ norm_ids, duyệt graph qua `[:IMPLEMENTS]` (lấy cả chuỗi tier 1→4) và lọc `[:APPLIES_TO]` theo jurisdiction → trả về list Component IDs (LCCIDs).
+
+Đây là bước "lọc cứng" kép: lọc ngữ nghĩa (Stage 1) + lọc địa phương và tầng văn bản (Stage 2).
 
 #### Đầu vào
-- `QueryPlan` từ TASK-10
+- `QueryPlan` từ TASK-10 (có `theme`, `jurisdiction`, `procedure` string, `temporal`)
 - Neo4j driver, database đã populated
+- Qdrant client, collection `legal_texts` đã có summary vectors
 
 #### Đầu ra
 - `src/retrieval/subgraph_extractor.py` — module với:
   - `LCCIDs` type alias: `list[str]` (list of Component node IDs)
-  - `extract_subgraph(query_plan: QueryPlan, neo4j_driver) -> LCCIDs`
-  - Cypher query template được dùng bên trong (document rõ ràng)
+  - `stage1_norm_ids(query_plan: QueryPlan, qdrant_client, model, top_n: int = 5) -> list[str]` — Stage 1: summary search → norm_ids
+  - `stage2_component_ids(norm_ids: list[str], query_plan: QueryPlan, neo4j_driver) -> LCCIDs` — Stage 2: graph traversal → component_ids
+  - `extract_subgraph(query_plan: QueryPlan, neo4j_driver, qdrant_client, model) -> LCCIDs` — orchestrator gọi cả 2 stage
+  - Cypher query template cho Stage 2 được document rõ ràng
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `extract_subgraph({procedure: "chuyen-muc-dich-su-dung-dat", jurisdiction: "tp-hcm", temporal: "2024"})` trả về list IDs bao gồm Component của cả Luật Đất đai (tier 1) và Quyết định TP.HCM (tier 4)
-- [ ] `extract_subgraph({procedure: "dang-ky-khai-sinh", jurisdiction: "toan-quoc"})` trả về KHÔNG có Component của bất kỳ văn bản địa phương nào (tier 4)
-- [ ] `extract_subgraph({procedure: "dang-ky-nuoi-con-nuoi"})` trả về list IDs khác với `extract_subgraph({procedure: "dang-ky-lai-nuoi-con-nuoi"})` — hai thủ tục tương tự phải cho kết quả khác nhau
+- [ ] `extract_subgraph` với câu hỏi về "chuyển mục đích sử dụng đất tại TP.HCM" trả về list IDs bao gồm Component của cả Luật Đất đai (tier 1) và văn bản TP.HCM (tier 4)
+- [ ] `extract_subgraph` với câu hỏi về "đăng ký khai sinh" (`jurisdiction: "toan-quoc"`) trả về KHÔNG có Component của bất kỳ văn bản địa phương nào (tier 4)
+- [ ] Stage 1: câu hỏi về "đăng ký nuôi con nuôi" và "đăng ký lại nuôi con nuôi" cho norm_ids khác nhau — hai thủ tục tương tự phân biệt được qua summary embedding
 - [ ] Temporal filter hoạt động: Component thuộc CTV có `valid_to < temporal` không xuất hiện trong kết quả
 - [ ] Số lượng LCCIDs không vượt quá 50 (tránh quá rộng gây noise) — nếu vượt, log warning
 
@@ -661,7 +669,7 @@ Nhận LCCIDs từ TASK-11 và câu hỏi gốc, thực hiện hybrid search (De
 - `src/retrieval/semantic_filter.py` — module với:
   - `hybrid_search(question: str, lccids: LCCIDs, qdrant_client, model, top_k: int = 10) -> list[TextUnit]`
   - Cơ chế: Dense search (BGE-M3) + Sparse search (BM25) → RRF fusion
-  - Payload filter: `component_id IN lccids AND status = "active"`
+  - Payload filter: `content_type="text_unit" AND component_id IN lccids`
 
 #### Định nghĩa Hoàn thành (DoD)
 - [ ] `hybrid_search("phí chuyển mục đích sử dụng đất", lccids_tp_hcm)` — top-3 kết quả đều thuộc lĩnh vực Đất đai (verify thủ công)
