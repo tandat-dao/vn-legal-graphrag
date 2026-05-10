@@ -1,5 +1,12 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.1 | Cập nhật 2026-05-10**
+**Phiên bản 1.2 | Cập nhật 2026-05-10**
+
+> **v1.2 — Cập nhật 2026-05-10:**
+> TASK-11 hoàn thành: `src/retrieval/subgraph_extractor.py` — Sub-graph Extraction.
+> Stage 1: Qdrant semantic search trên summary vectors → top-N norm_ids.
+> Stage 2: Neo4j [:IMPLEMENTS*0..4] + [:APPLIES_TO] jurisdiction filter → LCCIDs.
+> Temporal filter qua CTV.valid_from/valid_to. Log warning khi > 50 LCCIDs.
+> 18/18 unit tests PASS. Live verify: 295 LCCIDs dat-dai TP.HCM, jurisdiction filter đúng.
 
 > **v1.1 — Cập nhật 2026-05-10:**
 > TASK-10 hoàn thành: `src/retrieval/query_planner.py` — Claude Haiku 4.5 qua Anthropic API.
