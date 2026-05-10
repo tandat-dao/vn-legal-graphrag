@@ -1,5 +1,14 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 0.9 | Cập nhật 2026-05-10**
+**Phiên bản 1.0 | Cập nhật 2026-05-10**
+
+> **v1.0 — Cập nhật 2026-05-10:**
+> TASK-09 hoàn thành [A]: Phase 2 Verification pass tất cả DoD items [A] có thể verify.
+> Neo4j: 6/6 loại node (Theme=1, Norm=17, Component=3014, CTV=3014, TextUnit=3014, Jurisdiction=3).
+> Qdrant: 3014 text_unit + 17 summary vectors — khớp 100% với Neo4j.
+> Stage 1 ("phí chuyển mục đích sử dụng đất", dat-dai): top-3 đều hợp lệ ✅.
+> 3 [:IMPLEMENTS] chains (tier2→tier1) hợp lệ. Idempotency verified.
+> `phase2_report.md` ký [A]. DoD item 7+8 (Stage 2 khai sinh + ký [B]): ⏳ chờ [B] nộp data.
+> Phase 3 có thể bắt đầu với dữ liệu Đất đai.
 
 > **v0.9 — Cập nhật 2026-05-10:**
 > TASK-08 hoàn thành: `src/ingestion/vectorizer.py` — BGE-M3 local (Apple Silicon MPS).
