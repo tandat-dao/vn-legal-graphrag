@@ -5,7 +5,7 @@ so_hieu: "92/2025/QĐ-UBND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "dong-nai"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2026-01-11"
 valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Quyet-dinh-so-92-2025-QD-UBND-quy-dinh-han-muc-giao-dat-o-cho-ca-nhan-tren-dia-ban-tinh-Dong-Nai-9498/"

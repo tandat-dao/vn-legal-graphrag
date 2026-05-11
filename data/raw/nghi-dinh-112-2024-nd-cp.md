@@ -5,7 +5,7 @@ so_hieu: "112/2024/NĐ-CP"
 tier: 2
 theme: "dat-dai"
 jurisdiction: "toan-quoc"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2024-09-11"
 valid_to: null
 source_url: "https://vanban.chinhphu.vn/?pageid=27160&docid=211120"

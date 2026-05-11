@@ -5,7 +5,7 @@ so_hieu: "52/2016/QĐ-UBND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "tp-hcm"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2017-01-01"
 valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/quyet-dinh/so/52-2016-qd-ubnd/ngay/10-12-2016/noi-dung/42191"

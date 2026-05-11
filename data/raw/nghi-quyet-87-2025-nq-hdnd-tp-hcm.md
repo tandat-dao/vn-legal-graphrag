@@ -5,7 +5,7 @@ so_hieu: "87/2025/NQ-HĐND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "tp-hcm"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2026-01-01"
 valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/nghi-quyet/so/87-2025-nq-hdnd/ngay/26-12-2025/noi-dung/48983"

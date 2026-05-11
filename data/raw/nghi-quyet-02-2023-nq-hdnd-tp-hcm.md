@@ -5,7 +5,7 @@ so_hieu: "02/2023/NQ-HĐND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "tp-hcm"
-implements: null
+implements: "nghi-dinh-101-2024-nd-cp"
 valid_from: "2023-06-01"
 valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/nghi-quyet/so/02-2023-nq-hdnd/ngay/18-04-2023/45608"

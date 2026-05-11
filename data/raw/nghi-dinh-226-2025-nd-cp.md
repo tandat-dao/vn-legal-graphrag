@@ -5,7 +5,7 @@ so_hieu: "226/2025/NĐ-CP"
 tier: 2
 theme: "dat-dai"
 jurisdiction: "toan-quoc"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2025-08-15"
 valid_to: null
 source_url: "https://congbao.chinhphu.vn/van-ban/nghi-dinh-so-226-2025-nd-cp-45839.htm"

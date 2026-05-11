@@ -5,7 +5,7 @@ so_hieu: "28/2025/NQ-HĐND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "dong-nai"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2026-01-01"
 valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Nghi-quyet-so-28-2025-NQ-HDND-Ban-hanh-Quy-dinh-Bang-gia-dat-lan-dau-tren-dia-ban-tinh-Dong-Nai-nam-2026-9508/"

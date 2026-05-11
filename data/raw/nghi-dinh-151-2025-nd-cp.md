@@ -5,7 +5,7 @@ so_hieu: "151/2025/NĐ-CP"
 tier: 2
 theme: "dat-dai"
 jurisdiction: "toan-quoc"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2025-07-01"
 valid_to: null
 source_url: "https://chinhphu.vn/?pageid=27160&docid=217453"

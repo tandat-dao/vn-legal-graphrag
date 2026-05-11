@@ -5,7 +5,7 @@ so_hieu: "21/2024/NQ-HĐND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "dong-nai"
-implements: null
+implements: "nghi-dinh-101-2024-nd-cp"
 valid_from: "2024-12-09"
 valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Nghi-quyet-so-21-2024-NQ-HDND-cua-Hoi-dong-nhan-dan-tinh-9044/"

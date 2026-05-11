@@ -5,7 +5,7 @@ so_hieu: "101/2024/NĐ-CP"
 tier: 2
 theme: "dat-dai"
 jurisdiction: "toan-quoc"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2024-08-01"
 valid_to: null
 source_url: "https://mae.gov.vn/van-ban-phap-luat-820.htm"

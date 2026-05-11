@@ -5,7 +5,7 @@ so_hieu: "69/2024/QĐ-UBND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "tp-hcm"
-implements: null
+implements: "luat-dat-dai-2024"
 valid_from: "2024-09-30"
 valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/quyet-dinh/so/69-2024-qd-ubnd/ngay/30-09-2024/noi-dung/46959"
