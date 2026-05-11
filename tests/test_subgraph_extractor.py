@@ -55,15 +55,8 @@ def _mock_qdrant(norm_ids: list[str]) -> MagicMock:
     return client
 
 
-def _mock_neo4j(
-    component_ids: list[str],
-    norm_id: str = "luat-dat-dai-2024",
-    norm_tier: int = 1,
-) -> MagicMock:
-    rows = [
-        {"component_id": cid, "norm_id": norm_id, "norm_tier": norm_tier}
-        for cid in component_ids
-    ]
+def _mock_neo4j(component_ids: list[str]) -> MagicMock:
+    rows = [{"component_id": cid} for cid in component_ids]
     session = MagicMock()
     session.__enter__ = MagicMock(return_value=session)
     session.__exit__ = MagicMock(return_value=False)
@@ -166,7 +159,7 @@ class TestStage2ComponentIds:
 
         result = stage2_component_ids(["luat-dat-dai-2024"], plan, driver)
 
-        assert result == comp_ids
+        assert set(result) == set(comp_ids)
 
     def test_empty_norm_ids_returns_empty(self):
         driver = _mock_neo4j([])
@@ -220,26 +213,16 @@ class TestStage2ComponentIds:
         assert temporal == "2025-08-01"
 
     def test_warning_when_over_limit(self, caplog):
-        # Cần nhiều norm để tổng vượt LCCID_LIMIT (150) sau per-norm cap (40/norm)
-        # 4 norms × 40 components = 160 > 150 → trigger warning
-        rows = [
-            {"component_id": f"norm{ni}-comp-{ci}", "norm_id": f"norm-{ni}", "norm_tier": ni + 1}
-            for ni in range(4)
-            for ci in range(40)
-        ]
-        session = MagicMock()
-        session.__enter__ = MagicMock(return_value=session)
-        session.__exit__ = MagicMock(return_value=False)
-        session.run.return_value.data.return_value = rows
-        driver = MagicMock()
-        driver.session.return_value = session
+        # LCCID_LIMIT = 2000; tạo 2001 component_ids để trigger warning
+        many_ids = [f"comp-{i}" for i in range(LCCID_LIMIT + 1)]
+        driver = _mock_neo4j(many_ids)
         plan = _make_plan()
 
         import logging
         with caplog.at_level(logging.WARNING, logger="src.retrieval.subgraph_extractor"):
-            result = stage2_component_ids([f"norm-{i}" for i in range(4)], plan, driver)
+            result = stage2_component_ids(["norm-1"], plan, driver)
 
-        assert len(result) == 160  # 4 × 40 = 160 > LCCID_LIMIT
+        assert len(result) == LCCID_LIMIT + 1
         assert any("vượt giới hạn" in msg for msg in caplog.messages)
 
 

@@ -42,8 +42,7 @@ from src.retrieval.query_planner import QueryPlan
 
 logger = logging.getLogger(__name__)
 
-LCCID_LIMIT = 150   # cảnh báo nếu vượt mức này
-MAX_COMPONENTS_PER_NORM = 40  # tối đa N component mỗi norm để tránh 1 norm chiếm hết pool
+LCCID_LIMIT = 2000  # cảnh báo nếu vượt mức này (Stage 3 semantic search xử lý được)
 
 # jurisdiction → danh sách jurisdiction được phép (quốc gia luôn được bao gồm)
 _JURISDICTION_ALLOW = {
@@ -73,7 +72,7 @@ WHERE j.name IN $allowed_jurisdictions
 MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
 WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
   AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
-RETURN DISTINCT c.id AS component_id, related.id AS norm_id, related.tier AS norm_tier
+RETURN DISTINCT c.id AS component_id
 """
 
 
@@ -172,35 +171,15 @@ def stage2_component_ids(
     with neo4j_driver.session() as session:
         rows = session.run(_STAGE2_CYPHER, **params).data()
 
-    # Nhóm component theo norm, ưu tiên tier cao (cụ thể) trước tier thấp (chung)
-    # tier 4 (QĐ/NQ địa phương) > tier 3 (TT) > tier 2 (NĐ) > tier 1 (Luật)
-    from collections import defaultdict
-    norm_components: dict[str, list[str]] = defaultdict(list)
-    norm_tier: dict[str, int] = {}
-    seen: set[str] = set()
-    for row in rows:
-        cid = row["component_id"]
-        nid = row["norm_id"]
-        if cid not in seen:
-            norm_components[nid].append(cid)
-            norm_tier[nid] = row["norm_tier"]
-            seen.add(cid)
-
-    # Sắp xếp norms: tier cao trước (đặc thù → chung)
-    sorted_norms = sorted(norm_tier, key=lambda n: norm_tier[n], reverse=True)
-
-    component_ids: list[str] = []
-    for nid in sorted_norms:
-        component_ids.extend(norm_components[nid][:MAX_COMPONENTS_PER_NORM])
+    component_ids = list({row["component_id"] for row in rows})
 
     if len(component_ids) > LCCID_LIMIT:
         logger.warning(
-            f"Stage 2: {len(component_ids)} LCCIDs vượt giới hạn {LCCID_LIMIT} "
-            f"(max {MAX_COMPONENTS_PER_NORM}/norm, {len(sorted_norms)} norms)"
+            f"Stage 2: {len(component_ids)} LCCIDs vượt giới hạn {LCCID_LIMIT}"
         )
 
     logger.info(
-        f"Stage 2: {len(component_ids)} component_ids từ {len(sorted_norms)} norms "
+        f"Stage 2: {len(component_ids)} component_ids "
         f"(jurisdiction={jurisdiction}, temporal={temporal})"
     )
     return component_ids
