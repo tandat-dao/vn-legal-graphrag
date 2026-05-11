@@ -17,7 +17,7 @@ Cypher Stage 2 (template):
     UNWIND $seed_ids AS seed_id
     MATCH (seed:Norm {id: seed_id})
     MATCH (related:Norm)
-    WHERE (related)-[:IMPLEMENTS*0..4]->(seed)
+    WHERE related.id = seed_id
        OR (seed)-[:IMPLEMENTS*0..4]->(related)
     MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
     WHERE j.name IN $allowed_jurisdictions
@@ -25,6 +25,11 @@ Cypher Stage 2 (template):
     WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
       AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
     RETURN DISTINCT c.id AS component_id
+
+Chiến lược traversal (bottom-up):
+    Stage 1 tìm norm CỤ THỂ nhất (tier cao) khớp câu hỏi.
+    Stage 2 leo lên luật cha (upward-only) — không mở rộng xuống implementors.
+    Tránh LCCID explosion khi seed là Luật (tier 1) với 15+ implementors.
 """
 import logging
 
@@ -37,7 +42,7 @@ from src.retrieval.query_planner import QueryPlan
 
 logger = logging.getLogger(__name__)
 
-LCCID_LIMIT = 50  # cảnh báo nếu vượt mức này
+LCCID_LIMIT = 200  # cảnh báo nếu vượt mức này
 
 # jurisdiction → danh sách jurisdiction được phép (quốc gia luôn được bao gồm)
 _JURISDICTION_ALLOW = {
@@ -60,7 +65,7 @@ _STAGE2_CYPHER = """
 UNWIND $seed_ids AS seed_id
 MATCH (seed:Norm {id: seed_id})
 MATCH (related:Norm)
-WHERE (related)-[:IMPLEMENTS*0..4]->(seed)
+WHERE related.id = seed_id
    OR (seed)-[:IMPLEMENTS*0..4]->(related)
 MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
 WHERE j.name IN $allowed_jurisdictions
@@ -76,7 +81,8 @@ def stage1_norm_ids(
     query_plan: QueryPlan,
     qdrant_client: QdrantClient,
     model,
-    top_n: int = 5,
+    top_n: int = 3,
+    min_score: float = 0.3,
 ) -> list[str]:
     """Stage 1: encode câu hỏi → search summary vectors → trả về top-N norm_ids.
 
@@ -86,6 +92,8 @@ def stage1_norm_ids(
         qdrant_client: Qdrant client đã kết nối.
         model: BGE-M3 model đã load.
         top_n: Số norm_ids tối đa trả về.
+        min_score: Ngưỡng similarity tối thiểu; kết quả dưới ngưỡng bị loại.
+                   Fallback: luôn giữ ít nhất top-1 dù dưới ngưỡng.
 
     Returns:
         List norm_ids được sắp xếp theo độ liên quan giảm dần.
@@ -109,8 +117,17 @@ def stage1_norm_ids(
         query_filter=Filter(must=must_conditions),
     ).points
 
-    norm_ids = [r.payload["norm_id"] for r in results]
-    logger.info(f"Stage 1: top-{top_n} norm_ids = {norm_ids}")
+    scores = [r.score for r in results]
+    norm_ids = [r.payload["norm_id"] for r in results if r.score >= min_score]
+
+    # Fallback: giữ ít nhất top-1 dù dưới ngưỡng
+    if not norm_ids and results:
+        norm_ids = [results[0].payload["norm_id"]]
+
+    logger.info(
+        f"Stage 1: top-{top_n} scores={[round(s, 3) for s in scores]}, "
+        f"threshold={min_score} → {len(norm_ids)} norm_ids = {norm_ids}"
+    )
     return norm_ids
 
 
@@ -125,7 +142,8 @@ def stage2_component_ids(
 ) -> LCCIDs:
     """Stage 2: từ seed norm_ids, duyệt graph → Component IDs.
 
-    Mở rộng qua [:IMPLEMENTS] (cả lên và xuống chain tối đa 4 bước).
+    Chiến lược bottom-up: chỉ đi lên (seed → luật cha) qua [:IMPLEMENTS*0..4].
+    Không mở rộng xuống implementors để tránh LCCID explosion.
     Lọc cứng theo jurisdiction và temporal.
 
     Args:
@@ -178,7 +196,7 @@ def extract_subgraph(
     neo4j_driver: Driver,
     qdrant_client: QdrantClient,
     model,
-    top_n: int = 5,
+    top_n: int = 3,
 ) -> LCCIDs:
     """Orchestrator: Stage 1 + Stage 2 → LCCIDs.
 
