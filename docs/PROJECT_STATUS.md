@@ -1,5 +1,11 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.2 | Cập nhật 2026-05-10**
+**Phiên bản 1.3 | Cập nhật 2026-05-11**
+
+> **v1.3 — Cập nhật 2026-05-11:**
+> TASK-12 hoàn thành: `src/retrieval/semantic_filter.py` — Hybrid Search.
+> Dense (BGE-M3 + lccid filter) + Keyword scroll (slug overlap, broad) → Two-path RRF fusion.
+> Fix đ/Đ slugify cho số hiệu văn bản tiếng Việt. 23/23 unit tests PASS.
+> DoD 1-5 đều pass với live data. Keyword boost bắt đúng NĐ 102/2024/NĐ-CP khi có trong lccids.
 
 > **v1.2 — Cập nhật 2026-05-10:**
 > TASK-11 hoàn thành: `src/retrieval/subgraph_extractor.py` — Sub-graph Extraction.
