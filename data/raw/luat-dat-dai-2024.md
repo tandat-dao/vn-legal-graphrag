@@ -23,7 +23,7 @@ amended_by_norms:
   - "luat-142-2025-qh15"
   - "luat-146-2025-qh15"
   - "luat-147-2025-qh15"
-summary: "Luật Đất đai 2024 là văn bản tầng 1 áp dụng toàn quốc, quy định nền tảng pháp lý cho hai thủ tục: chuyển mục đích sử dụng đất (Điều 121–124) và cấp Giấy chứng nhận quyền sử dụng đất lần đầu (Điều 136–139). Đây là văn bản gốc mà các Nghị định hướng dẫn thi hành (tier 2) phải triển khai cụ thể hóa. Đối tượng áp dụng là hộ gia đình, cá nhân và tổ chức trên toàn lãnh thổ Việt Nam."
+summary: "Luật Đất đai 2024 là văn bản tầng 1 áp dụng toàn quốc, quy định nền tảng pháp lý cho hai thủ tục: (1) chuyển mục đích sử dụng đất — căn cứ giao đất/cho phép CMĐSDĐ (Điều 116), điều kiện cho phép CMĐSDĐ (Điều 122), thẩm quyền (Điều 123), phân loại trường hợp CMĐSDĐ (Điều 121); (2) cấp Giấy chứng nhận quyền sử dụng đất lần đầu (Điều 135–139). Đây là văn bản gốc mà các Nghị định hướng dẫn thi hành (tier 2) phải triển khai cụ thể hóa. Đối tượng áp dụng là hộ gia đình, cá nhân và tổ chức trên toàn lãnh thổ Việt Nam."
 ---
 
 ## Điều 1. Phạm vi điều chỉnh

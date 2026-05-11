@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/nghi-quyet/so/87-2025-nq-hdnd/ngay/26-12-2025/noi-dung/48983"
 source_vbhn: null
 amended_by_norms: null
-summary: "Nghị quyết 87/2025/NQ-HĐND TP.HCM (tier 4, tp-hcm) ban hành Bảng giá đất lần đầu trên địa bàn TP.HCM, áp dụng từ 01/01/2026 — căn cứ tính tiền sử dụng đất khi chuyển mục đích sử dụng đất và xác định nghĩa vụ tài chính khi cấp Giấy chứng nhận lần đầu tại TP.HCM. Bảng giá phân 4 khu vực (trung tâm đến ngoại thành), phân vị trí theo mặt tiền đường và độ rộng hẻm; quy định mức giá cho đất ở, thương mại dịch vụ, sản xuất kinh doanh, nông nghiệp và các loại đặc thù (Khu Công nghệ cao, đất tôn giáo, đất dưới hành lang điện cao thế). Tương đương NQ 28/2025 của Đồng Nai nhưng áp dụng riêng cho TP.HCM."
+summary: "Nghị quyết 87/2025/NQ-HĐND TP.HCM (tier 4, tp-hcm) ban hành Bảng giá đất lần đầu trên địa bàn TP.HCM, áp dụng từ 01/01/2026 — căn cứ tính các khoản tiền liên quan đến đất (tiền sử dụng đất, tiền thuê đất, lệ phí trước bạ, định giá bồi thường) tại TP.HCM. Bảng giá phân 4 khu vực (trung tâm đến ngoại thành), phân vị trí theo mặt tiền đường và độ rộng hẻm; quy định mức giá cho đất ở, thương mại dịch vụ, sản xuất kinh doanh, nông nghiệp và các loại đặc thù (Khu Công nghệ cao, đất tôn giáo, đất dưới hành lang điện cao thế). Tương đương NQ 28/2025 của Đồng Nai nhưng áp dụng riêng cho TP.HCM."
 ---
 
 ## Điều 1. Phạm vi điều chỉnh

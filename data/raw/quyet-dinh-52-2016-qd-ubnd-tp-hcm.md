@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/quyet-dinh/so/52-2016-qd-ubnd/ngay/10-12-2016/noi-dung/42191"
 source_vbhn: null
 amended_by_norms: null
-summary: "Quyết định 52/2016/QĐ-UBND TP.HCM (tier 4, tp-hcm) quy định mức thu 10 loại phí và 7 loại lệ phí trên địa bàn thành phố, trong đó có phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất — liên quan trực tiếp đến thủ tục cấp sổ đỏ lần đầu tại TP.HCM (Phụ lục 16). Mức thu phân loại theo đối tượng và loại hồ sơ; miễn phí cho trẻ em, hộ nghèo, người cao tuổi, người khuyết tật, người có công; cơ quan thu giữ lại 10–100% tùy loại phí, lệ phí còn lại nộp ngân sách. Hiệu lực từ 01/01/2017; một phần nội dung đã được NQ 02/2023/NQ-HĐND TP.HCM cập nhật thay thế đối với phí thẩm định cấp GCN."
+summary: "Quyết định 52/2016/QĐ-UBND TP.HCM (tier 4, tp-hcm) quy định mức thu 10 loại phí và 7 loại lệ phí trên địa bàn thành phố, trong đó có phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại TP.HCM (Phụ lục 16) — chỉ quy định mức thu tài chính, không quy định điều kiện hay quy trình cấp GCN. Mức thu phân loại theo đối tượng và loại hồ sơ; miễn phí cho trẻ em, hộ nghèo, người cao tuổi, người khuyết tật, người có công; cơ quan thu giữ lại 10–100% tùy loại phí, lệ phí còn lại nộp ngân sách. Hiệu lực từ 01/01/2017; một phần nội dung đã được NQ 02/2023/NQ-HĐND TP.HCM cập nhật thay thế đối với phí thẩm định cấp GCN."
 ---
 
 ## Phụ lục 16. Mức thu lệ phí cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà, tài sản gắn liền với đất.

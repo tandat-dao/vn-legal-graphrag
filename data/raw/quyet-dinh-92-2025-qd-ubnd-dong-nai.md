@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Quyet-dinh-so-92-2025-QD-UBND-quy-dinh-han-muc-giao-dat-o-cho-ca-nhan-tren-dia-ban-tinh-Dong-Nai-9498/"
 source_vbhn: null
 amended_by_norms: null
-summary: "Quyết định 92/2025/QĐ-UBND Đồng Nai (tier 4, dong-nai) quy định hạn mức giao đất ở cho cá nhân tại tỉnh Đồng Nai — căn cứ xác định diện tích được công nhận khi cấp Giấy chứng nhận quyền sử dụng đất lần đầu và khi chuyển mục đích sang đất ở. Hạn mức: tối đa 200–300 m² tại khu vực đô thị (phường); tối đa 300–400 m² tại khu vực nông thôn (xã), phân nhóm theo từng địa bàn cụ thể. Thay thế QĐ 42/2024/QĐ-UBND Đồng Nai, hiệu lực từ 11/01/2026; tương đương QĐ 69/2024 của TP.HCM nhưng áp dụng riêng cho Đồng Nai."
+summary: "Quyết định 92/2025/QĐ-UBND Đồng Nai (tier 4, dong-nai) quy định hạn mức diện tích đất ở được giao, được công nhận quyền sử dụng cho cá nhân tại Đồng Nai; áp dụng khi xác định phần diện tích trong hạn mức khi đăng ký cấp Giấy chứng nhận lần đầu. Hạn mức: tối đa 200–300 m² tại khu vực đô thị (phường); tối đa 300–400 m² tại khu vực nông thôn (xã), phân nhóm theo từng địa bàn cụ thể. Thay thế QĐ 42/2024/QĐ-UBND Đồng Nai, hiệu lực từ 11/01/2026; tương đương QĐ 69/2024 của TP.HCM nhưng áp dụng riêng cho Đồng Nai."
 ---
 
 ## Điều 1. Phạm vi điều chỉnh

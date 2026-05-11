@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/nghi-quyet/so/02-2023-nq-hdnd/ngay/18-04-2023/45608"
 source_vbhn: null
 amended_by_norms: null
-summary: "Nghị quyết 02/2023/NQ-HĐND TP.HCM (tier 4, tp-hcm) quy định mức thu phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại TP.HCM — văn bản địa phương trực tiếp cho thủ tục cấp sổ đỏ lần đầu. Mức phí phân loại theo diện tích, đối tượng (hộ gia đình/cá nhân/tổ chức) và hình thức hồ sơ (cấp lần đầu, cấp mới, cấp đổi, đăng ký biến động); miễn phí cho hộ nghèo, người cao tuổi, người khuyết tật, người có công. Cơ quan thu giữ lại 85% nguồn thu, nộp 15% vào ngân sách nhà nước."
+summary: "Nghị quyết 02/2023/NQ-HĐND TP.HCM (tier 4, tp-hcm) quy định mức thu phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại TP.HCM — chỉ quy định mức thu tài chính (phí thẩm định), không quy định điều kiện hay quy trình cấp GCN lần đầu. Mức phí phân loại theo diện tích, đối tượng (hộ gia đình/cá nhân/tổ chức) và hình thức hồ sơ (cấp lần đầu, cấp mới, cấp đổi, đăng ký biến động); miễn phí cho hộ nghèo, người cao tuổi, người khuyết tật, người có công. Cơ quan thu giữ lại 85% nguồn thu, nộp 15% vào ngân sách nhà nước."
 ---
 
 ## Điều 1. Quy định về thu phí thẩm định hồ sơ cấp giấy chứng nhận quyền sử dụng đất

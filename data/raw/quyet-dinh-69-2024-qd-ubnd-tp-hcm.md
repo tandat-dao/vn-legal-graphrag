@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.hochiminhcity.gov.vn/cong-bao/van-ban/quyet-dinh/so/69-2024-qd-ubnd/ngay/30-09-2024/noi-dung/46959"
 source_vbhn: null
 amended_by_norms: null
-summary: "Quyết định 69/2024/QĐ-UBND TP.HCM (tier 4, tp-hcm) quy định hạn mức giao đất ở cho cá nhân tại TP.HCM — căn cứ xác định diện tích được công nhận khi cấp Giấy chứng nhận quyền sử dụng đất lần đầu và khi chuyển mục đích sang đất ở. Hạn mức: tối đa 160 m² tại các quận và TP. Thủ Đức; tối đa 200 m² tại thị trấn/đô thị mới 5 huyện ngoại thành; tối đa 250 m² tại các xã huyện ngoại thành. Thay thế QĐ 18/2016/QĐ-UBND, đồng bộ với Luật Đất đai 2024."
+summary: "Quyết định 69/2024/QĐ-UBND TP.HCM (tier 4, tp-hcm) quy định hạn mức diện tích đất ở được giao, được công nhận quyền sử dụng cho cá nhân tại TP.HCM; áp dụng khi xác định phần diện tích trong hạn mức khi đăng ký cấp Giấy chứng nhận lần đầu. Hạn mức: tối đa 160 m² tại các quận và TP. Thủ Đức; tối đa 200 m² tại thị trấn/đô thị mới 5 huyện ngoại thành; tối đa 250 m² tại các xã huyện ngoại thành. Thay thế QĐ 18/2016/QĐ-UBND, đồng bộ với Luật Đất đai 2024."
 ---
 
 ## Điều 1. Phạm vi điều chỉnh

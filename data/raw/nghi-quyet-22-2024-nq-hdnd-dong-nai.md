@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Nghi-quyet-so-22-2024-NQ-HDND-cua-Hoi-dong-nhan-dan-tinh-9045/"
 source_vbhn: null
 amended_by_norms: null
-summary: "Nghị quyết 22/2024/NQ-HĐND Đồng Nai (tier 4, dong-nai) quy định mức thu phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại tỉnh Đồng Nai — văn bản địa phương trực tiếp cho thủ tục cấp sổ đỏ lần đầu, đọc song song với NQ 21/2024 (lệ phí) của cùng tỉnh. Mức phí phân loại theo loại hồ sơ (cấp lần đầu, cấp mới, cấp đổi, đăng ký biến động), hồ sơ trực tuyến thu thấp hơn trực tiếp; miễn 100% cho hộ nghèo, cận nghèo, người cao tuổi, người khuyết tật, người có công. Văn phòng Đăng ký đất đai được giữ lại 100% phí thu để trang trải chi phí thẩm định; hiệu lực từ 09/12/2024."
+summary: "Nghị quyết 22/2024/NQ-HĐND Đồng Nai (tier 4, dong-nai) quy định mức thu phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại tỉnh Đồng Nai — chỉ quy định mức thu tài chính (phí thẩm định), không quy định điều kiện hay quy trình cấp GCN lần đầu; đọc song song với NQ 21/2024 (lệ phí) của cùng tỉnh. Mức phí phân loại theo loại hồ sơ (cấp lần đầu, cấp mới, cấp đổi, đăng ký biến động), hồ sơ trực tuyến thu thấp hơn trực tiếp; miễn 100% cho hộ nghèo, cận nghèo, người cao tuổi, người khuyết tật, người có công. Văn phòng Đăng ký đất đai được giữ lại 100% phí thu để trang trải chi phí thẩm định; hiệu lực từ 09/12/2024."
 ---
 
 ## Điều 1. Quy định phí thẩm định hồ sơ cấp giấy chứng nhận quyền sử dụng đất trên địa bàn tỉnh Đồng Nai, cụ thể như sau:

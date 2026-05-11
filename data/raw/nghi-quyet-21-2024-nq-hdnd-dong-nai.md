@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Nghi-quyet-so-21-2024-NQ-HDND-cua-Hoi-dong-nhan-dan-tinh-9044/"
 source_vbhn: null
 amended_by_norms: null
-summary: "Nghị quyết 21/2024/NQ-HĐND Đồng Nai (tier 4, dong-nai) quy định mức thu lệ phí cấp Giấy chứng nhận quyền sử dụng đất tại tỉnh Đồng Nai — văn bản địa phương trực tiếp cho thủ tục cấp sổ đỏ lần đầu. Mức phí phân loại theo đối tượng (tổ chức/hộ gia đình/cá nhân) và khu vực (phường tại Biên Hòa, Long Khánh vs. xã, thị trấn); miễn phí cho hộ nghèo, người cao tuổi, người khuyết tật, người có công; hồ sơ trực tuyến thu 0%. Toàn bộ lệ phí thu được nộp 100% vào ngân sách nhà nước; thay thế NQ 09/2020/NQ-HĐND, hiệu lực từ 09/12/2024."
+summary: "Nghị quyết 21/2024/NQ-HĐND Đồng Nai (tier 4, dong-nai) quy định mức thu lệ phí cấp Giấy chứng nhận quyền sử dụng đất tại tỉnh Đồng Nai — chỉ quy định mức thu tài chính (lệ phí), không quy định điều kiện hay quy trình cấp GCN lần đầu. Mức phí phân loại theo đối tượng (tổ chức/hộ gia đình/cá nhân) và khu vực (phường tại Biên Hòa, Long Khánh vs. xã, thị trấn); miễn phí cho hộ nghèo, người cao tuổi, người khuyết tật, người có công; hồ sơ trực tuyến thu 0%. Toàn bộ lệ phí thu được nộp 100% vào ngân sách nhà nước; thay thế NQ 09/2020/NQ-HĐND, hiệu lực từ 09/12/2024."
 ---
 
 ## Điều 1. Quy định lệ phí cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trên địa bàn tỉnh Đồng Nai, cụ thể như sau:

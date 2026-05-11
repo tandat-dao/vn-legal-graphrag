@@ -11,7 +11,7 @@ valid_to: null
 source_url: "https://congbao.dongnai.gov.vn/vi/vanban/detail/Nghi-quyet-so-28-2025-NQ-HDND-Ban-hanh-Quy-dinh-Bang-gia-dat-lan-dau-tren-dia-ban-tinh-Dong-Nai-nam-2026-9508/"
 source_vbhn: null
 amended_by_norms: null
-summary: "Nghị quyết 28/2025/NQ-HĐND Đồng Nai (tier 4, dong-nai) ban hành Bảng giá đất lần đầu trên địa bàn tỉnh Đồng Nai, áp dụng từ 01/01/2026 — căn cứ tính tiền sử dụng đất khi chuyển mục đích sử dụng đất và xác định nghĩa vụ tài chính khi cấp Giấy chứng nhận lần đầu tại Đồng Nai. Bảng giá phân loại theo nhóm đất (nông nghiệp, phi nông nghiệp, chưa sử dụng) và tiêu chí vị trí (mặt tiền, chiều sâu, độ rộng hẻm, tuyến đường); xử lý các trường hợp đặc thù như đất tiếp giáp nhiều mặt tiền, đất khu công nghiệp, đất giáp ranh tỉnh lân cận. UBND tỉnh có trách nhiệm rà soát, điều chỉnh bảng giá hằng năm theo biến động thực tế."
+summary: "Nghị quyết 28/2025/NQ-HĐND Đồng Nai (tier 4, dong-nai) ban hành Bảng giá đất lần đầu trên địa bàn tỉnh Đồng Nai, áp dụng từ 01/01/2026 — căn cứ tính các khoản tiền liên quan đến đất (tiền sử dụng đất, tiền thuê đất, lệ phí trước bạ, định giá bồi thường) tại Đồng Nai. Bảng giá phân loại theo nhóm đất (nông nghiệp, phi nông nghiệp, chưa sử dụng) và tiêu chí vị trí (mặt tiền, chiều sâu, độ rộng hẻm, tuyến đường); xử lý các trường hợp đặc thù như đất tiếp giáp nhiều mặt tiền, đất khu công nghiệp, đất giáp ranh tỉnh lân cận. UBND tỉnh có trách nhiệm rà soát, điều chỉnh bảng giá hằng năm theo biến động thực tế."
 ---
 
 ## Điều 1. Phạm vi điều chỉnh

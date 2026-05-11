@@ -16,7 +16,7 @@ amended_by_norms:
   - "nghi-dinh-226-2025-nd-cp"
   - "nghi-dinh-49-2026-nd-cp"
   - "nghi-dinh-70-2026-nd-cp"
-summary: "Nghị định 102/2024/NĐ-CP (VBHN 46/VBHN-BTNMT, tier 2, toàn quốc) quy định chi tiết thi hành Luật Đất đai về phân loại đất, quy hoạch và kế hoạch sử dụng đất, giao đất, cho thuê đất, thu hồi đất — văn bản nền tảng cho cả hai thủ tục chuyển mục đích sử dụng đất và cấp sổ đỏ lần đầu. Văn bản thiết lập khung pháp lý cho tổ chức dịch vụ công đất đai (Văn phòng đăng ký đất đai, Tổ chức phát triển quỹ đất), quy trình đấu giá, đấu thầu đất, và chế độ quản lý đất đặc thù (đất lấn biển, đất đa mục đích, đất quốc phòng). Áp dụng toàn quốc, là nghị định hướng dẫn tổng thể bổ sung cho NĐ 101/2024 về đăng ký và cấp GCN."
+summary: "Nghị định 102/2024/NĐ-CP (VBHN 46/VBHN-BTNMT, tier 2, toàn quốc) quy định chi tiết thi hành Luật Đất đai về: (1) điều kiện, tiêu chí và thủ tục chuyển mục đích sử dụng đất nông nghiệp (đất trồng lúa, đất rừng) sang mục đích khác — bao gồm căn cứ giao đất, cho phép CMĐSDĐ (Điều 44, 44a) và tiêu chí điều kiện (Điều 46); (2) phân loại đất (Điều 1–7); (3) quy hoạch và kế hoạch sử dụng đất; (4) khung pháp lý cho Văn phòng đăng ký đất đai và quy trình đấu giá đất. Áp dụng toàn quốc, là nghị định hướng dẫn tổng thể bổ sung cho NĐ 101/2024 về đăng ký và cấp GCN."
 ---
 
 ## Điều 1. Phạm vi điều chỉnh
