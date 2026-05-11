@@ -165,8 +165,11 @@ def build_prompt(question: str, context: str) -> str:
 
 Yêu cầu bắt buộc:
 - Trả lời bằng tiếng Việt, rõ ràng, súc tích.
-- Mỗi ý quan trọng PHẢI có trích dẫn nguồn theo định dạng: [Điều X, Khoản Y, Văn bản Z]
-  (Khoản Y có thể bỏ qua nếu trích dẫn cả điều)
+- Mỗi ý quan trọng PHẢI có trích dẫn nguồn. Định dạng trích dẫn BẮT BUỘC là:
+    [Điều X, Văn bản Y]                       — ví dụ: [Điều 116, Văn bản luat-dat-dai-2024]
+    [Điều X, Khoản Y, Văn bản Z]              — ví dụ: [Điều 57, Khoản 1, Văn bản luat-dat-dai-2024]
+    [Điều X, Khoản Y, Điểm Z, Văn bản W]     — ví dụ: [Điều 1, Khoản 6, Điểm a, Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]
+  Từ khoá "Văn bản" PHẢI có mặt trước tên văn bản. Dùng id văn bản từ header "--- ... ---" trong CONTEXT.
 - Nếu context không đủ thông tin để trả lời, nêu rõ điều đó.
 
 CONTEXT:
