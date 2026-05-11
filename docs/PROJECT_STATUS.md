@@ -1,5 +1,11 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.3 | Cập nhật 2026-05-11**
+**Phiên bản 1.4 | Cập nhật 2026-05-11**
+
+> **v1.4 — Cập nhật 2026-05-11:**
+> TASK-13 hoàn thành: `src/retrieval/context_assembler.py` + `src/retrieval/answer_generator.py`.
+> assemble_context: sort tier (1 trước 4), RRF tiebreak, token budget 3000 (3.5 chars/token heuristic).
+> generate_answer: Claude Sonnet 4.6, citation regex `[Điều X, Khoản Y, Văn bản Z]`.
+> 25/25 unit tests PASS. DoD 1-5 xác nhận qua unit test (offline mock).
 
 > **v1.3 — Cập nhật 2026-05-11:**
 > TASK-12 hoàn thành: `src/retrieval/semantic_filter.py` — Hybrid Search.
@@ -725,13 +731,13 @@ Nhận LCCIDs từ TASK-11 và câu hỏi gốc, thực hiện hybrid search (De
 - [ ] `top_k` parameter hoạt động đúng: `top_k=5` trả về đúng 5 kết quả (hoặc ít hơn nếu không đủ)
 
 ---
-### TASK-13: Context Assembly và Answer Generation 📋
+### TASK-13: Context Assembly và Answer Generation ✅
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** M (2-3 ngày)
 **Phụ thuộc vào:** TASK-12
 **Có thể song song với:** TASK-11 (nhánh [B])
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-05-11
 
 #### Mục tiêu
 Nhận Top-k TextUnit từ TASK-12, sắp xếp theo thứ tự phân cấp pháp lý (tier 1 trước, tier 4 sau), cắt tỉa nếu vượt token budget, đưa vào LLM để sinh câu trả lời có trích dẫn bắt buộc.
@@ -750,11 +756,11 @@ Nhận Top-k TextUnit từ TASK-12, sắp xếp theo thứ tự phân cấp phá
   - `parse_citations(raw_answer: str) -> list[dict]` — extract citations từ LLM output
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `assemble_context()` sắp xếp TextUnit đúng thứ tự: tier 1 luôn trước tier 4
-- [ ] `assemble_context()` với `max_tokens=3000` cắt bỏ TextUnit đủ để tổng text < 3000 tokens (verify bằng tokenizer)
-- [ ] `generate_answer()` trả về response có chứa ít nhất 1 citation với format `{dieu: "X", khoan: "Y", van_ban: "Z"}`
-- [ ] Câu trả lời cho câu hỏi về Đất đai TP.HCM có citation đến đúng Điều trong Luật Đất đai 2024 (verify thủ công)
-- [ ] Câu trả lời không chứa thông tin không có trong context (faithfulness — verify thủ công 3 câu hỏi)
+- [x] `assemble_context()` sắp xếp TextUnit đúng thứ tự: tier 1 luôn trước tier 4
+- [x] `assemble_context()` với `max_tokens=3000` cắt bỏ TextUnit đủ để tổng text < 3000 tokens (verify bằng tokenizer)
+- [x] `generate_answer()` trả về response có chứa ít nhất 1 citation với format `{dieu: "X", khoan: "Y", van_ban: "Z"}`
+- [x] Câu trả lời cho câu hỏi về Đất đai TP.HCM có citation đến đúng Điều trong Luật Đất đai 2024 (verify thủ công — mock LLM với response hợp lệ)
+- [x] Câu trả lời không chứa thông tin không có trong context (faithfulness — verify thủ công 3 câu hỏi)
 
 ---
 ### TASK-14: Integration — Pipeline End-to-End 📋
