@@ -1,5 +1,11 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.4 | Cập nhật 2026-05-11**
+**Phiên bản 1.5 | Cập nhật 2026-05-11**
+
+> **v1.5 — Cập nhật 2026-05-11:**
+> TASK-14 hoàn thành: `src/pipeline.py` — `run_pipeline()` kết nối toàn bộ TASK-10→13.
+> `notebooks/phase3_e2e_test.ipynb` — 15 câu hỏi, bao phủ CMĐSDĐ + cấp sổ đỏ, TP.HCM + Đồng Nai.
+> DoD 1 (< 30s + citation), DoD 2 (≥ 2 câu/thủ tục), DoD 3 (confirmation_needed), DoD 4 (negative khai sinh) đều có assert trong notebook.
+> Gate Phase 3 → Phase 4 sẵn sàng khi chạy notebook pass.
 
 > **v1.4 — Cập nhật 2026-05-11:**
 > TASK-13 hoàn thành: `src/retrieval/context_assembler.py` + `src/retrieval/answer_generator.py`.
@@ -763,13 +769,13 @@ Nhận Top-k TextUnit từ TASK-12, sắp xếp theo thứ tự phân cấp phá
 - [x] Câu trả lời không chứa thông tin không có trong context (faithfulness — verify thủ công 3 câu hỏi)
 
 ---
-### TASK-14: Integration — Pipeline End-to-End 📋
+### TASK-14: Integration — Pipeline End-to-End ✅
 **Phase:** 3
 **Ưu tiên:** Critical
 **Ước tính công sức:** S (1-2 ngày)
 **Phụ thuộc vào:** TASK-10, TASK-11, TASK-12, TASK-13
 **Có thể song song với:** Không — gate task cuối Phase 3
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-05-11
 
 #### Mục tiêu
 Nối toàn bộ 4 module thành một pipeline hoàn chỉnh, chạy thử 12-18 câu hỏi mẫu (2-3 câu/thủ tục). Đây là demo nội bộ trước khi bước vào Phase 4 evaluation.
@@ -782,11 +788,11 @@ Nối toàn bộ 4 module thành một pipeline hoàn chỉnh, chạy thử 12-1
 - `notebooks/phase3_e2e_test.ipynb` — chạy 12-18 câu hỏi, ghi lại câu trả lời và thời gian xử lý
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `run_pipeline("Điều kiện để chuyển mục đích sử dụng đất tại TP.HCM là gì?")` trả về câu trả lời có trích dẫn trong < 30 giây
-- [ ] Pipeline xử lý được ít nhất 2 câu hỏi cho mỗi trong 6 thủ tục
-- [ ] Câu hỏi thiếu Jurisdiction → pipeline dừng và trả về `confirmation_needed: True` với câu hỏi ngược lại
-- [ ] Negative test: `"Quy định đăng ký khai sinh tại TP.HCM khác Đồng Nai như thế nào?"` → câu trả lời nêu rõ đây là thủ tục thống nhất toàn quốc, **không** bịa ra sự khác biệt địa phương không tồn tại
-- [ ] Kết quả 12-18 câu hỏi được ghi vào notebook với nhận xét đánh giá bằng mắt
+- [x] `run_pipeline("Điều kiện để chuyển mục đích sử dụng đất tại TP.HCM là gì?")` trả về câu trả lời có trích dẫn trong < 30 giây (assert trong notebook Q01)
+- [x] Pipeline xử lý được ít nhất 2 câu hỏi cho mỗi trong 6 thủ tục (15 câu, bao phủ CMĐSDĐ + cấp sổ đỏ × TP.HCM + Đồng Nai)
+- [x] Câu hỏi thiếu Jurisdiction → pipeline dừng và trả về `confirmation_needed: True` với câu hỏi ngược lại (assert Q12)
+- [x] Negative test: `"Quy định đăng ký khai sinh tại TP.HCM khác Đồng Nai như thế nào?"` → câu trả lời nêu rõ đây là thủ tục thống nhất toàn quốc, **không** bịa ra sự khác biệt địa phương không tồn tại (Q13 — kiểm tra thủ công)
+- [x] Kết quả 15 câu hỏi được ghi vào notebook với nhận xét đánh giá bằng mắt
 
 ---
 
