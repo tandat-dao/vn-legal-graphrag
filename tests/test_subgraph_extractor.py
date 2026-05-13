@@ -10,10 +10,12 @@ import pytest
 
 from src.retrieval.subgraph_extractor import (
     LCCID_LIMIT,
+    MAX_COMPONENTS_PER_NORM,
     _JURISDICTION_ALLOW,
     extract_subgraph,
     stage1_norm_ids,
     stage2_component_ids,
+    stage2_norm_ids,
 )
 from src.retrieval.query_planner import QueryPlan
 
@@ -56,7 +58,15 @@ def _mock_qdrant(norm_ids: list[str]) -> MagicMock:
 
 
 def _mock_neo4j(component_ids: list[str]) -> MagicMock:
-    rows = [{"component_id": cid} for cid in component_ids]
+    # Infer norm_id từ prefix trước ">" (VD: "luat-dat-dai-2024>Điều 116" → "luat-dat-dai-2024")
+    # Nếu không có ">", dùng "norm-default"
+    rows = [
+        {
+            "norm_id": cid.split(">")[0] if ">" in cid else "norm-default",
+            "component_id": cid,
+        }
+        for cid in component_ids
+    ]
     session = MagicMock()
     session.__enter__ = MagicMock(return_value=session)
     session.__exit__ = MagicMock(return_value=False)
@@ -213,8 +223,11 @@ class TestStage2ComponentIds:
         assert temporal == "2025-08-01"
 
     def test_warning_when_over_limit(self, caplog):
-        # LCCID_LIMIT = 2000; tạo 2001 component_ids để trigger warning
-        many_ids = [f"comp-{i}" for i in range(LCCID_LIMIT + 1)]
+        # Tạo đủ norms để tổng LCCIDs sau cap vượt LCCID_LIMIT.
+        # n_norms = LCCID_LIMIT // MAX_COMPONENTS_PER_NORM + 1, mỗi norm đúng bằng cap.
+        n_norms = LCCID_LIMIT // MAX_COMPONENTS_PER_NORM + 1
+        total = n_norms * MAX_COMPONENTS_PER_NORM
+        many_ids = [f"norm-{i // MAX_COMPONENTS_PER_NORM}>comp-{i}" for i in range(total)]
         driver = _mock_neo4j(many_ids)
         plan = _make_plan()
 
@@ -222,7 +235,7 @@ class TestStage2ComponentIds:
         with caplog.at_level(logging.WARNING, logger="src.retrieval.subgraph_extractor"):
             result = stage2_component_ids(["norm-1"], plan, driver)
 
-        assert len(result) == LCCID_LIMIT + 1
+        assert len(result) == total
         assert any("vượt giới hạn" in msg for msg in caplog.messages)
 
 
@@ -233,7 +246,7 @@ class TestStage2ComponentIds:
 class TestExtractSubgraph:
     @patch("src.retrieval.subgraph_extractor.encode_text", return_value=[0.1] * 1024)
     def test_dod_1_dat_dai_tp_hcm_returns_components(self, mock_encode):
-        """DoD: CMĐSDĐ TP.HCM → có Component của cả Luật (tier1) và văn bản TP.HCM (tier4)."""
+        """DoD: CMĐSDĐ TP.HCM → extract_subgraph trả về norm_ids của cả tier1 và tier4."""
         norm_ids_stage1 = ["nghi-dinh-50-2026-nd-cp"]
         comp_ids = [
             "luat-dat-dai-2024>Điều 116>Khoản 1",       # tier 1
@@ -247,15 +260,15 @@ class TestExtractSubgraph:
         result = extract_subgraph("phí chuyển mục đích đất TP.HCM", plan, driver, client, model)
 
         assert len(result) == 2
-        # Phải có cả tier 1 và tier 4
-        assert any("luat-dat-dai" in cid for cid in result)
-        assert any("tp-hcm" in cid for cid in result)
+        # Phải có norm_ids của cả tier 1 và tier 4
+        assert "luat-dat-dai-2024" in result
+        assert "quyet-dinh-tp-hcm-2025" in result
 
     @patch("src.retrieval.subgraph_extractor.encode_text", return_value=[0.1] * 1024)
     def test_dod_2_khai_sinh_no_local_components(self, mock_encode):
-        """DoD: đăng ký khai sinh (toan-quoc) → KHÔNG có Component địa phương."""
+        """DoD: đăng ký khai sinh (toan-quoc) → KHÔNG có norm_id địa phương."""
         norm_ids_stage1 = ["luat-ho-tich-2014"]
-        # Chỉ trả về toan-quoc components (Neo4j đã lọc bằng Cypher)
+        # Chỉ trả về toan-quoc norms (Neo4j đã lọc bằng Cypher)
         comp_ids = [
             "luat-ho-tich-2014>Điều 14",
             "nghi-dinh-123-2015-nd-cp>Điều 7",
@@ -270,8 +283,8 @@ class TestExtractSubgraph:
 
         result = extract_subgraph("điều kiện đăng ký khai sinh", plan, driver, client, model)
 
-        # Không có component của văn bản địa phương
-        assert not any("tp-hcm" in cid.lower() or "dong-nai" in cid.lower() for cid in result)
+        # result là norm_ids — không có địa phương
+        assert not any("tp-hcm" in nid.lower() or "dong-nai" in nid.lower() for nid in result)
         # Cypher phải được gọi với allowed = ["toan-quoc"]
         session = driver.session.return_value.__enter__.return_value
         call_kwargs = session.run.call_args

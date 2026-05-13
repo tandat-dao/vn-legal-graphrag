@@ -163,7 +163,7 @@ class TestQdrantIdToHex:
 
 
 # ---------------------------------------------------------------------------
-# 5. Tests cho hybrid_search
+# 4. Tests cho hybrid_search
 # ---------------------------------------------------------------------------
 
 class TestHybridSearch:
@@ -176,9 +176,9 @@ class TestHybridSearch:
         ]
         client = _mock_qdrant(points)
         model = _mock_model()
-        lccids = [f"comp-{i}" for i in range(7)]
+        norm_ids = [f"norm-{i}" for i in range(7)]
 
-        results = hybrid_search("câu hỏi đất đai", lccids, client, model, top_k=5)
+        results = hybrid_search("câu hỏi đất đai", norm_ids, client, model, top_k=5)
 
         assert len(results) == 5
 
@@ -192,18 +192,18 @@ class TestHybridSearch:
         client = _mock_qdrant(points)
         model = _mock_model()
 
-        results = hybrid_search("câu hỏi", ["comp-0", "comp-1", "comp-2"], client, model, top_k=10)
+        results = hybrid_search("câu hỏi", ["norm-0", "norm-1", "norm-2"], client, model, top_k=10)
 
         assert len(results) == 3
 
     @patch("src.retrieval.semantic_filter.encode_text", return_value=[0.1] * 1024)
-    def test_dod_2_lccids_filter_passed_to_qdrant(self, mock_encode):
-        """Payload filter component_id IN lccids được truyền vào Qdrant."""
+    def test_dod_2_norm_ids_filter_passed_to_qdrant(self, mock_encode):
+        """Payload filter norm_id IN norm_ids được truyền vào Qdrant."""
         client = _mock_qdrant([])
         model = _mock_model()
-        lccids = ["comp-abc", "comp-def"]
+        norm_ids = ["luat-dat-dai-2024", "nghi-dinh-102-2024-nd-cp"]
 
-        hybrid_search("câu hỏi", lccids, client, model)
+        hybrid_search("câu hỏi", norm_ids, client, model)
 
         assert client.query_points.called
         call_kwargs = client.query_points.call_args
@@ -229,7 +229,7 @@ class TestHybridSearch:
 
         results = hybrid_search(
             "Nghị định 102/2024/NĐ-CP quy định gì",
-            ["comp-1", "comp-2", "comp-3"],
+            ["luat-dat-dai-2024", "nghi-dinh-102-2024-nd-cp", "nghi-dinh-50-2026-nd-cp"],
             client,
             model,
             top_k=3,
@@ -241,8 +241,8 @@ class TestHybridSearch:
         assert norm_ids_ranked[0] == "nghi-dinh-102-2024-nd-cp"
 
     @patch("src.retrieval.semantic_filter.encode_text", return_value=[0.1] * 1024)
-    def test_empty_lccids_returns_empty(self, mock_encode):
-        """Nếu lccids rỗng → trả về [] ngay, không gọi Qdrant."""
+    def test_empty_norm_ids_returns_empty(self, mock_encode):
+        """Nếu norm_ids rỗng → trả về [] ngay, không gọi Qdrant."""
         client = _mock_qdrant([])
         model = _mock_model()
 
@@ -260,7 +260,7 @@ class TestHybridSearch:
         client = _mock_qdrant(points)
         model = _mock_model()
 
-        results = hybrid_search("đất đai", ["comp-abc"], client, model, top_k=1)
+        results = hybrid_search("đất đai", ["luat-dat-dai-2024"], client, model, top_k=1)
 
         assert len(results) == 1
         r = results[0]
@@ -284,7 +284,7 @@ class TestHybridSearch:
         client = _mock_qdrant(points)
         model = _mock_model()
 
-        results = hybrid_search("câu hỏi", [f"comp-{i}" for i in range(5)], client, model)
+        results = hybrid_search("câu hỏi", [f"norm-{i}" for i in range(5)], client, model)
 
         scores = [r["rrf_score"] for r in results]
         assert scores == sorted(scores, reverse=True)
@@ -295,7 +295,7 @@ class TestHybridSearch:
         client = _mock_qdrant([])
         model = _mock_model()
 
-        hybrid_search("câu hỏi", ["comp-1"], client, model, top_k=5)
+        hybrid_search("câu hỏi", ["luat-dat-dai-2024"], client, model, top_k=5)
 
         call_kwargs = client.query_points.call_args
         limit = call_kwargs.kwargs.get("limit")

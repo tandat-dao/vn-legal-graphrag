@@ -4,12 +4,15 @@ Hybrid search: Dense (BGE-M3) + Keyword (slug overlap) → RRF fusion.
 
 Thuật toán:
   1. Dense search: encode câu hỏi → Qdrant query_points
-     filter: content_type="text_unit" AND component_id IN lccids
+     filter: content_type="text_unit" AND norm_id IN norm_ids
      → top 2*top_k candidates với dense_score
   2. Keyword scoring: slugify query tokens → overlap vs norm_id + component_id payload
      → keyword_rank
   3. RRF: score = 1/(k+dense_rank) + 1/(k+keyword_rank), k=60
   4. Return top_k theo rrf_score
+
+norm_ids filter (P2): dùng norm_id (~13 IDs) thay vì component_id (~300 IDs).
+BGE-M3 tự chọn TextUnit tốt nhất trong mỗi norm — không bị per-norm cap cắt xén.
 
 ScoredTextUnit là output TypedDict — text_unit_id cho phép TASK-13 fetch text từ Neo4j.
 """
@@ -22,7 +25,6 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import FieldCondition, Filter, MatchAny, MatchValue
 
 from src.ingestion.vectorizer import encode_text
-from src.retrieval.subgraph_extractor import LCCIDs
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +107,7 @@ def _scroll_keyword_candidates(
     query_tokens: set[str],
     limit: int,
 ) -> list:
-    """Scroll text_units trong lccids, score theo keyword, trả về top `limit` điểm."""
+    """Scroll text_units trong norm_ids, score theo keyword, trả về top `limit` điểm."""
     points, _ = qdrant_client.scroll(
         "legal_texts",
         scroll_filter=search_filter,
@@ -124,7 +126,7 @@ def _scroll_keyword_candidates(
 
 def hybrid_search(
     question: str,
-    lccids: LCCIDs,
+    norm_ids: list[str],
     qdrant_client: QdrantClient,
     model,
     top_k: int = 10,
@@ -133,22 +135,23 @@ def hybrid_search(
 
     Hai path độc lập:
     - Dense path: semantic embedding search → top dense_pool results
-    - Keyword path: scroll all lccids text_units → score theo slug overlap → top keyword_pool
+    - Keyword path: scroll all text_units trong norm_ids → score theo slug overlap → top keyword_pool
     RRF merger: điểm không có trong list → rank cuối (len+1).
 
     Args:
         question: Câu hỏi tiếng Việt gốc từ người dùng.
-        lccids: List Component IDs từ Sub-graph Extraction (TASK-11).
+        norm_ids: List norm_ids từ Sub-graph Extraction (TASK-11, P2 fix).
+                  Dùng filter norm_id IN norm_ids thay vì component_id IN lccids.
         qdrant_client: Qdrant client đã kết nối.
         model: BGE-M3 model đã load.
         top_k: Số kết quả tối đa trả về.
 
     Returns:
         List ScoredTextUnit sắp xếp theo rrf_score giảm dần.
-        Trả về [] nếu lccids rỗng hoặc không có kết quả.
+        Trả về [] nếu norm_ids rỗng hoặc không có kết quả.
     """
-    if not lccids:
-        logger.warning("hybrid_search: lccids rỗng — trả về []")
+    if not norm_ids:
+        logger.warning("hybrid_search: norm_ids rỗng — trả về []")
         return []
 
     dense_pool = max(top_k * _DENSE_POOL_MULTIPLIER, _DENSE_POOL_MIN)
@@ -157,7 +160,7 @@ def hybrid_search(
     search_filter = Filter(
         must=[
             FieldCondition(key="content_type", match=MatchValue(value="text_unit")),
-            FieldCondition(key="component_id", match=MatchAny(any=lccids)),
+            FieldCondition(key="norm_id", match=MatchAny(any=norm_ids)),
         ]
     )
 

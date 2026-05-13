@@ -1,16 +1,21 @@
 """
 Sub-graph Extractor — TASK-11
-Nhận QueryPlan từ TASK-10, trả về LCCIDs (list Component IDs) qua 2 bước:
+Nhận QueryPlan từ TASK-10, trả về norm_ids qua 2 bước:
 
 Stage 1 — Qdrant semantic search:
     Encode câu hỏi bằng BGE-M3 → search summary vectors
-    filter content_type="summary" + theme → top-N norm_ids
+    filter content_type="summary" + theme → top-N seed norm_ids
 
 Stage 2 — Neo4j graph traversal:
-    Từ seed norm_ids, mở rộng qua [:IMPLEMENTS] (cả chiều lên và xuống)
+    Từ seed norm_ids, mở rộng qua [:IMPLEMENTS] (upward-only)
     Lọc cứng theo jurisdiction qua [:APPLIES_TO]
     Lọc temporal theo CTV.valid_from / CTV.valid_to
-    → trả về DISTINCT Component IDs
+    → trả về DISTINCT norm_ids (dùng làm Qdrant filter cho Stage 3)
+
+Thiết kế norm_id filter (P2):
+    Thay vì filter component_id IN [300+ hashes], dùng norm_id IN [~13 norms].
+    Cho phép BGE-M3 dense search tự chọn TextUnit tốt nhất trong mỗi norm —
+    tránh per-norm cap cắt xén ngẫu nhiên các điều khoản quan trọng.
 
 Cypher Stage 2 (template):
 
@@ -24,12 +29,11 @@ Cypher Stage 2 (template):
     MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
     WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
       AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
-    RETURN DISTINCT c.id AS component_id
+    RETURN related.id AS norm_id, c.id AS component_id
 
 Chiến lược traversal (bottom-up):
     Stage 1 tìm norm CỤ THỂ nhất (tier cao) khớp câu hỏi.
     Stage 2 leo lên luật cha (upward-only) — không mở rộng xuống implementors.
-    Tránh LCCID explosion khi seed là Luật (tier 1) với 15+ implementors.
 """
 import logging
 
@@ -42,7 +46,8 @@ from src.retrieval.query_planner import QueryPlan
 
 logger = logging.getLogger(__name__)
 
-LCCID_LIMIT = 2000  # cảnh báo nếu vượt mức này (Stage 3 semantic search xử lý được)
+LCCID_LIMIT = 500            # cảnh báo nếu stage2_component_ids() vượt mức này
+MAX_COMPONENTS_PER_NORM = 100  # cap per-norm trong stage2_component_ids() (dùng để test/debug)
 
 # jurisdiction → danh sách jurisdiction được phép (quốc gia luôn được bao gồm)
 _JURISDICTION_ALLOW = {
@@ -72,7 +77,7 @@ WHERE j.name IN $allowed_jurisdictions
 MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
 WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
   AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
-RETURN DISTINCT c.id AS component_id
+RETURN related.id AS norm_id, c.id AS component_id
 """
 
 
@@ -171,7 +176,27 @@ def stage2_component_ids(
     with neo4j_driver.session() as session:
         rows = session.run(_STAGE2_CYPHER, **params).data()
 
-    component_ids = list({row["component_id"] for row in rows})
+    # Nhóm theo norm và áp dụng per-norm cap để tránh luật lớn (tier 1) thống trị pool
+    norm_to_components: dict[str, list[str]] = {}
+    for row in rows:
+        nid = row["norm_id"]
+        cid = row["component_id"]
+        if nid not in norm_to_components:
+            norm_to_components[nid] = []
+        norm_to_components[nid].append(cid)
+
+    component_ids: list[str] = []
+    for nid, cids in norm_to_components.items():
+        # Sort deterministic (SHA256 hex) trước khi cap
+        capped = sorted(set(cids))[:MAX_COMPONENTS_PER_NORM]
+        if len(set(cids)) > MAX_COMPONENTS_PER_NORM:
+            logger.info(
+                f"Stage 2: norm '{nid}' có {len(set(cids))} components → "
+                f"capped xuống {MAX_COMPONENTS_PER_NORM}"
+            )
+        component_ids.extend(capped)
+
+    component_ids = list(set(component_ids))
 
     if len(component_ids) > LCCID_LIMIT:
         logger.warning(
@@ -179,10 +204,64 @@ def stage2_component_ids(
         )
 
     logger.info(
-        f"Stage 2: {len(component_ids)} component_ids "
-        f"(jurisdiction={jurisdiction}, temporal={temporal})"
+        f"Stage 2: {len(component_ids)} component_ids từ {len(norm_to_components)} norms "
+        f"(jurisdiction={jurisdiction}, temporal={temporal}, cap={MAX_COMPONENTS_PER_NORM}/norm)"
     )
     return component_ids
+
+
+# ---------------------------------------------------------------------------
+# Stage 2b — norm_ids cho Qdrant filter (P2 fix)
+# ---------------------------------------------------------------------------
+
+def stage2_norm_ids(
+    norm_ids: list[str],
+    query_plan: QueryPlan,
+    neo4j_driver: Driver,
+) -> list[str]:
+    """Stage 2 (norm_ids variant): từ seed norm_ids, duyệt graph → unique norm_ids liên quan.
+
+    Cùng Cypher và filter (jurisdiction + temporal) với stage2_component_ids(),
+    nhưng trả về DISTINCT norm_ids thay vì component_ids.
+    Dùng làm Qdrant filter `norm_id IN [...]` cho Stage 3 hybrid_search().
+
+    Lợi thế so với component_id filter:
+    - ~13 norm_ids thay vì ~300 component_id hashes → filter nhẹ hơn
+    - BGE-M3 dense search tự chọn TextUnit tốt nhất trong mỗi norm
+    - Không bị per-norm cap cắt xén ngẫu nhiên các điều khoản quan trọng
+
+    Args:
+        norm_ids: Danh sách seed norm_ids từ Stage 1.
+        query_plan: QueryPlan chứa jurisdiction và temporal.
+        neo4j_driver: Neo4j driver đã kết nối.
+
+    Returns:
+        List norm_ids DISTINCT (sau filter jurisdiction + temporal).
+    """
+    if not norm_ids:
+        logger.warning("stage2_norm_ids: norm_ids rỗng — trả về []")
+        return []
+
+    jurisdiction = query_plan.get("jurisdiction") or "toan-quoc"
+    allowed = _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"])
+    temporal = query_plan.get("temporal")
+
+    params = {
+        "seed_ids": norm_ids,
+        "allowed_jurisdictions": allowed,
+        "temporal": temporal,
+    }
+
+    with neo4j_driver.session() as session:
+        rows = session.run(_STAGE2_CYPHER, **params).data()
+
+    result_norm_ids = list({row["norm_id"] for row in rows})
+
+    logger.info(
+        f"Stage 2 (norm_ids): {len(result_norm_ids)} norms "
+        f"(jurisdiction={jurisdiction}, temporal={temporal}): {result_norm_ids}"
+    )
+    return result_norm_ids
 
 
 # ---------------------------------------------------------------------------
@@ -196,8 +275,8 @@ def extract_subgraph(
     qdrant_client: QdrantClient,
     model,
     top_n: int = 3,
-) -> LCCIDs:
-    """Orchestrator: Stage 1 + Stage 2 → LCCIDs.
+) -> list[str]:
+    """Orchestrator: Stage 1 + Stage 2 → norm_ids (dùng làm Qdrant filter cho Stage 3).
 
     Args:
         question: Câu hỏi tiếng Việt gốc từ người dùng.
@@ -208,7 +287,8 @@ def extract_subgraph(
         top_n: Số norm_ids tối đa Stage 1 trả về.
 
     Returns:
-        LCCIDs — list Component IDs dùng làm đầu vào cho Semantic Filtering.
+        list[str] — norm_ids liên quan sau filter jurisdiction + temporal.
+        Đầu vào cho hybrid_search() (TASK-12) qua filter norm_id IN norm_ids.
     """
-    norm_ids = stage1_norm_ids(question, query_plan, qdrant_client, model, top_n)
-    return stage2_component_ids(norm_ids, query_plan, neo4j_driver)
+    seed_norm_ids = stage1_norm_ids(question, query_plan, qdrant_client, model, top_n)
+    return stage2_norm_ids(seed_norm_ids, query_plan, neo4j_driver)

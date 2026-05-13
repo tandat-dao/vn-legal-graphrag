@@ -34,7 +34,7 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TOP_K = 10
+DEFAULT_TOP_K = 25
 CONTEXT_MAX_TOKENS = 3000
 
 
@@ -140,13 +140,13 @@ def run_pipeline(
 
         # --- TASK-11: Sub-graph Extraction ---
         logger.info("run_pipeline: extract_subgraph")
-        lccids = extract_subgraph(
+        norm_ids = extract_subgraph(
             question, query_plan, neo4j_driver, qdrant_client, model
         )
-        logger.info(f"run_pipeline: {len(lccids)} LCCIDs")
+        logger.info(f"run_pipeline: {len(norm_ids)} norm_ids từ Stage 2")
 
         # Không tìm được văn bản liên quan
-        if not lccids:
+        if not norm_ids:
             elapsed = time.perf_counter() - t_start
             return PipelineResult(
                 question=question,
@@ -164,7 +164,7 @@ def run_pipeline(
 
         # --- TASK-12: Hybrid Search ---
         logger.info("run_pipeline: hybrid_search")
-        scored_units = hybrid_search(question, lccids, qdrant_client, model, top_k=top_k)
+        scored_units = hybrid_search(question, norm_ids, qdrant_client, model, top_k=top_k)
         logger.info(f"run_pipeline: {len(scored_units)} scored units")
 
         # --- TASK-13a: Context Assembly ---
@@ -187,7 +187,7 @@ def run_pipeline(
             query_plan=query_plan,
             confirmation_needed=False,
             confirmation_prompt=None,
-            lccids_count=len(lccids),
+            lccids_count=len(norm_ids),
             top_k_count=len(scored_units),
             context_tokens=context_tokens,
             answer=result["answer"],
