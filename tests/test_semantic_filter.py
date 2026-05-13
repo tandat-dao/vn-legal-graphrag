@@ -14,6 +14,7 @@ from src.retrieval.semantic_filter import (
     _qdrant_id_to_hex,
     _rrf_score,
     _slugify_tokens,
+    _strip_jurisdiction_for_dense,
     hybrid_search,
 )
 
@@ -96,7 +97,57 @@ class TestSlugifyTokens:
 
 
 # ---------------------------------------------------------------------------
-# 2. Unit tests cho _keyword_score
+# 2. Unit tests cho _strip_jurisdiction_for_dense
+# ---------------------------------------------------------------------------
+
+class TestStripJurisdictionForDense:
+    def test_strip_tai_tp_hcm(self):
+        q = "Điều kiện chuyển mục đích sử dụng đất tại TP.HCM là gì?"
+        result = _strip_jurisdiction_for_dense(q)
+        assert "TP.HCM" not in result
+        assert "TP" not in result
+        assert "chuyển mục đích" in result
+
+    def test_strip_tai_dong_nai(self):
+        q = "Quy trình cấp sổ đỏ tại Đồng Nai như thế nào?"
+        result = _strip_jurisdiction_for_dense(q)
+        assert "Đồng Nai" not in result
+        assert "cấp sổ đỏ" in result
+
+    def test_strip_o_dong_nai(self):
+        q = "Hồ sơ xin cấp sổ đỏ ở Đồng Nai gồm những gì?"
+        result = _strip_jurisdiction_for_dense(q)
+        assert "Đồng Nai" not in result
+
+    def test_strip_tren_dia_ban(self):
+        q = "Lệ phí trên địa bàn TP.HCM là bao nhiêu?"
+        result = _strip_jurisdiction_for_dense(q)
+        assert "TP.HCM" not in result
+        assert "Lệ phí" in result
+
+    def test_no_jurisdiction_unchanged(self):
+        q = "Điều kiện để chuyển mục đích sử dụng đất là gì?"
+        assert _strip_jurisdiction_for_dense(q) == q
+
+    def test_fallback_when_all_stripped(self):
+        # Câu chỉ có jurisdiction → fallback về question gốc
+        q = "tại TP.HCM"
+        result = _strip_jurisdiction_for_dense(q)
+        assert result == q
+
+    def test_strip_thanh_pho_ho_chi_minh(self):
+        q = "Điều kiện giao đất tại Thành phố Hồ Chí Minh là gì?"
+        result = _strip_jurisdiction_for_dense(q)
+        assert "Hồ Chí Minh" not in result
+
+    def test_no_double_space_after_strip(self):
+        q = "Điều kiện tại TP.HCM và thủ tục hồ sơ"
+        result = _strip_jurisdiction_for_dense(q)
+        assert "  " not in result
+
+
+# ---------------------------------------------------------------------------
+# 3. Unit tests cho _keyword_score
 # ---------------------------------------------------------------------------
 
 class TestKeywordScore:
@@ -124,7 +175,7 @@ class TestKeywordScore:
 
 
 # ---------------------------------------------------------------------------
-# 3. Unit tests cho _rrf_score
+# 4. Unit tests cho _rrf_score
 # ---------------------------------------------------------------------------
 
 class TestRrfScore:
@@ -145,7 +196,7 @@ class TestRrfScore:
 
 
 # ---------------------------------------------------------------------------
-# 4. Unit tests cho _qdrant_id_to_hex
+# 5. Unit tests cho _qdrant_id_to_hex
 # ---------------------------------------------------------------------------
 
 class TestQdrantIdToHex:
@@ -163,7 +214,7 @@ class TestQdrantIdToHex:
 
 
 # ---------------------------------------------------------------------------
-# 4. Tests cho hybrid_search
+# 6. Tests cho hybrid_search
 # ---------------------------------------------------------------------------
 
 class TestHybridSearch:

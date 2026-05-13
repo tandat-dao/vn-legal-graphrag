@@ -33,6 +33,35 @@ _DENSE_POOL_MULTIPLIER = 2   # lấy 2*top_k từ dense search trước khi re-r
 _DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng viên dense
 _KEYWORD_SCROLL_LIMIT = 200  # scroll tối đa cho keyword path
 
+# Regex strip địa danh jurisdiction khỏi query trước dense encoding (P3 fix).
+# Jurisdiction đã được xử lý ở Stage 2 (Neo4j APPLIES_TO + norm_id filter).
+# Giữ lại "tại TP.HCM" trong dense query gây locality bias: BGE-M3 ưu tiên
+# text units địa phương (lệ phí, bảng giá) và đẩy Điều 121/122 ra khỏi top-k.
+_JURISDICTION_STRIP_RE = re.compile(
+    r"\b(?:tại|ở|trên\s+địa\s+bàn(?:\s+tỉnh)?)\s+"
+    r"(?:TP\.?\s*HCM|TP\.?\s*Hồ\s+Chí\s+Minh|Thành\s+phố\s+Hồ\s+Chí\s+Minh|TPHCM"
+    r"|Đồng\s+Nai|tỉnh\s+Đồng\s+Nai)",
+    flags=re.IGNORECASE,
+)
+
+
+# ---------------------------------------------------------------------------
+# Query preprocessing
+# ---------------------------------------------------------------------------
+
+def _strip_jurisdiction_for_dense(question: str) -> str:
+    """Strip địa danh jurisdiction khỏi câu hỏi trước khi encode dense vector.
+
+    Ví dụ:
+        "Điều kiện CMĐSDĐ tại TP.HCM là gì?" → "Điều kiện CMĐSDĐ là gì?"
+        "Quy trình cấp sổ đỏ ở Đồng Nai"    → "Quy trình cấp sổ đỏ"
+
+    Trả về question gốc nếu sau khi strip không còn nội dung.
+    """
+    stripped = _JURISDICTION_STRIP_RE.sub("", question)
+    stripped = re.sub(r" {2,}", " ", stripped).strip()
+    return stripped or question
+
 
 # ---------------------------------------------------------------------------
 # Types
@@ -164,8 +193,11 @@ def hybrid_search(
         ]
     )
 
-    # --- Path 1: Dense search ---
-    query_vector = encode_text(model, question)
+    # --- Path 1: Dense search (dùng query đã strip jurisdiction) ---
+    question_for_dense = _strip_jurisdiction_for_dense(question)
+    if question_for_dense != question:
+        logger.info(f"hybrid_search: dense query stripped → '{question_for_dense}'")
+    query_vector = encode_text(model, question_for_dense)
     dense_results = qdrant_client.query_points(
         "legal_texts",
         query=query_vector,
