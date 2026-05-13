@@ -98,8 +98,13 @@ def parse_file(filepath: str) -> dict:
         if not text_buffer:
             return
         context_path = [norm_id] + [h[1] for h in stack]
-        text = "\n".join(text_buffer).strip()
-        if text:
+        body = "\n".join(text_buffer).strip()
+        if body:
+            # Prepend heading vào text để BGE-M3 thấy ngữ cảnh Điều/Khoản.
+            # Bỏ qua norm_id (gốc), chỉ giữ heading từ cấp Điều xuống.
+            # Đây là điều kiện để embedding của Điều 122 chứa "Điều kiện..." từ tiêu đề.
+            heading_lines = [h[1] for h in stack]
+            text = "\n".join(heading_lines + [body])
             nodes.append(
                 TextUnit(
                     id=generate_id(context_path),
