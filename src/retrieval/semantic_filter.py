@@ -32,6 +32,8 @@ _RRF_K = 60
 _DENSE_POOL_MULTIPLIER = 2   # lấy 2*top_k từ dense search trước khi re-rank
 _DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng viên dense
 _KEYWORD_SCROLL_LIMIT = 200  # scroll tối đa cho keyword path
+_KEYWORD_MIN_SCORE = 0.5     # ngưỡng tối thiểu để text_unit được tham gia keyword path
+                              # — tránh nhiễu khi query chứa "tp"/"hcm" match nhẹ với norm_id
 
 # Regex strip địa danh jurisdiction khỏi query trước dense encoding (P3 fix).
 # Jurisdiction đã được xử lý ở Stage 2 (Neo4j APPLIES_TO + norm_id filter).
@@ -135,8 +137,14 @@ def _scroll_keyword_candidates(
     search_filter: Filter,
     query_tokens: set[str],
     limit: int,
+    min_score: float = _KEYWORD_MIN_SCORE,
 ) -> list:
-    """Scroll text_units trong norm_ids, score theo keyword, trả về top `limit` điểm."""
+    """Scroll text_units trong norm_ids, chỉ giữ text_unit có keyword score ≥ min_score.
+
+    Mục đích: keyword path chỉ kích hoạt khi user citate cụ thể (vd "Nghị định 102/2024").
+    Generic query → keyword_results = [] → RRF dùng pure dense ranking, không bị nhiễu
+    bởi "tp"/"hcm" trong query khớp lệch với norm_id địa phương.
+    """
     points, _ = qdrant_client.scroll(
         "legal_texts",
         scroll_filter=search_filter,
@@ -144,13 +152,10 @@ def _scroll_keyword_candidates(
         with_payload=True,
         with_vectors=False,
     )
-    # Sắp xếp theo keyword score giảm dần, giữ lại top `limit`
-    scored = sorted(
-        points,
-        key=lambda p: _keyword_score(query_tokens, p.payload),
-        reverse=True,
-    )
-    return scored
+    scored = [(p, _keyword_score(query_tokens, p.payload)) for p in points]
+    filtered = [(p, s) for p, s in scored if s >= min_score]
+    filtered.sort(key=lambda ps: ps[1], reverse=True)
+    return [p for p, _ in filtered]
 
 
 def hybrid_search(
