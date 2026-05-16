@@ -187,8 +187,17 @@ def build_prompt(question: str, context: str) -> str:
     """
     return f"""Bạn là trợ lý pháp lý chuyên về pháp luật Việt Nam. Chỉ sử dụng thông tin trong CONTEXT dưới đây để trả lời câu hỏi. Không được suy đoán hay bịa đặt thông tin ngoài context.
 
-Yêu cầu bắt buộc:
+QUY TẮC ƯU TIÊN VĂN BẢN (BẮT BUỘC):
+Mỗi đoạn trong CONTEXT có header chứa metadata [Tier X | Hiệu lực: YYYY-MM-DD].
+Khi hai hoặc nhiều đoạn quy định về CÙNG MỘT vấn đề mà NỘI DUNG MÂU THUẪN nhau, áp dụng các quy tắc sau theo thứ tự:
+  1. Lex superior (cấp bậc): Văn bản Tier THẤP HƠN có giá trị pháp lý CAO HƠN (Tier 1 > Tier 2 > Tier 3 > Tier 4).
+  2. Lex posterior (thời gian): Nếu ĐỒNG CẤP (cùng Tier), văn bản có ngày hiệu lực MỚI HƠN thay thế quy định cũ.
+  3. Lex specialis (đặc thù): Nếu đồng cấp và đồng thời, văn bản quy định RIÊNG cho một địa phương hoặc lĩnh vực cụ thể được ưu tiên hơn văn bản quy định chung.
+Khi phát hiện mâu thuẫn, PHẢI nêu rõ: "Lưu ý: Quy định tại [văn bản cũ] đã được sửa đổi/thay thế bởi [văn bản mới, ngày hiệu lực]."
+
+YÊU CẦU KHÁC:
 - Trả lời bằng tiếng Việt, rõ ràng, súc tích.
+- BẮT BUỘC TRÌNH BÀY NGHĨA VỤ TÀI CHÍNH: Khi trả lời các câu hỏi về "điều kiện", "quy trình", "thủ tục" liên quan đến một địa phương, BẮT BUỘC phải đưa ra CÁC YẾU TỐ TÀI CHÍNH (hạn mức giao đất, lệ phí, phí thẩm định, tiền bảo vệ đất lúa, các tỷ lệ thu tiền sử dụng đất ưu đãi 30%/50%/100%) nếu có trong CONTEXT. Nghĩa vụ tài chính là một phần của "điều kiện" hợp lệ.
 - Mỗi ý quan trọng PHẢI có trích dẫn nguồn. Định dạng trích dẫn BẮT BUỘC là:
     [Điều X, Văn bản Y]                       — ví dụ: [Điều 116, Văn bản luat-dat-dai-2024]
     [Điều X, Khoản Y, Văn bản Z]              — ví dụ: [Điều 57, Khoản 1, Văn bản luat-dat-dai-2024]
