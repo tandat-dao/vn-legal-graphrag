@@ -333,8 +333,13 @@ VALID_PROCEDURES = [
 
 QDRANT_COLLECTION_NAME = "legal_texts"
 QDRANT_VECTOR_DIM = 1024          # BGE-M3
-CONTEXT_MAX_TOKENS = 3000
-DEFAULT_TOP_K = 10
+CONTEXT_MAX_TOKENS = 6000
+DEFAULT_TOP_K = 25
+MAX_PER_NORM = 5                  # per-norm diversity cap trong hybrid_search
+
+# Neo4j schema: 7 edge types
+# IMPLEMENTS: hướng dẫn thi hành (NĐ -> Luật)
+# AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [v1.7]
 ```
 
 ---
