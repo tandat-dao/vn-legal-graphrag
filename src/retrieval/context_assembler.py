@@ -69,18 +69,37 @@ def fetch_texts(
 # Citation label helpers
 # ---------------------------------------------------------------------------
 
-def _format_citation_label(context_path: list[str], norm_id: str) -> str:
-    """Tạo nhãn citation ngắn gọn từ context_path.
+def _format_citation_label(
+    context_path: list[str],
+    norm_id: str,
+    tier: int | None = None,
+    valid_from: str | None = None,
+) -> str:
+    """Tạo nhãn citation kèm metadata tier + valid_from cho LLM suy luận.
 
-    Ví dụ: ["luat-dat-dai-2024", "Điều 116", "Khoản 1"] → "Điều 116, Khoản 1 (luat-dat-dai-2024)"
+    Ví dụ:
+        context_path=["luat-dat-dai-2024", "Điều 116", "Khoản 1"], tier=1, valid_from="2024-08-01"
+        → "[Tier 1 | Hiệu lực: 2024-08-01] Điều 116, Khoản 1 (luat-dat-dai-2024)"
+
+    Metadata prefix cho phép LLM áp dụng quy tắc lex posterior / lex superior
+    mà KHÔNG cần inline `amended_by` annotation trong markdown nguồn.
     """
     if not context_path:
-        return norm_id
-    parts = context_path[1:]  # bỏ norm_id ở đầu
-    location = ", ".join(parts) if parts else ""
-    if location:
-        return f"{location} ({context_path[0]})"
-    return context_path[0]
+        base = norm_id
+    else:
+        parts = context_path[1:]  # bỏ norm_id ở đầu
+        location = ", ".join(parts) if parts else ""
+        base = f"{location} ({context_path[0]})" if location else context_path[0]
+
+    # Metadata prefix: [Tier X | Hiệu lực: YYYY-MM-DD]
+    meta_parts = []
+    if tier is not None:
+        meta_parts.append(f"Tier {tier}")
+    if valid_from:
+        meta_parts.append(f"Hiệu lực: {valid_from}")
+    if meta_parts:
+        return f"[{' | '.join(meta_parts)}] {base}"
+    return base
 
 
 def _estimate_tokens(text: str) -> int:
@@ -130,7 +149,12 @@ def assemble_context(
         if not fetched or not fetched["text"].strip():
             continue
 
-        label = _format_citation_label(fetched["context_path"], fetched["norm_id"])
+        label = _format_citation_label(
+            fetched["context_path"],
+            fetched["norm_id"],
+            tier=unit.get("tier"),
+            valid_from=unit.get("valid_from"),
+        )
         block = f"--- {label} ---\n{fetched['text'].strip()}"
         block_tokens = _estimate_tokens(block)
 
