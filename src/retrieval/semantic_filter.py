@@ -34,9 +34,29 @@ _DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng
 _KEYWORD_SCROLL_LIMIT = 200  # scroll tối đa cho keyword path
 _KEYWORD_MIN_SCORE = 0.5     # ngưỡng tối thiểu để text_unit được tham gia keyword path
                               # — tránh nhiễu khi query chứa "tp"/"hcm" match nhẹ với norm_id
-_MAX_PER_NORM = 5             # tối đa N TextUnit từ cùng 1 norm trong top-k output
+_MAX_PER_NORM = 3             # tối đa N TextUnit từ cùng 1 norm trong top-k output
                               # — tránh norm lớn (Luật ĐĐ 2024, ~2800 TU) chiếm hết slot
-                              # — đảm bảo VB sửa đổi/bổ sung (NQ 254, NĐ 50...) có representation
+                              # — đảm bảo các norm match dense kém (NĐ 50, QĐ 69) vẫn có
+                              # representation thay vì bị 1-2 norm match tốt đè trong cùng tier
+                              # — với ~13 norm trong pool: 13×3=39 slot tiềm năng > top_k=25,
+                              # đủ chỗ cho mọi norm có RRF reasonable, đảm bảo norm-breadth
+
+# Tier Diversity Constraint: stratified cap per tier để đảm bảo top-k bao phủ
+# đa tầng pháp lý (Luật + NĐ + TT + QĐ địa phương). Câu trả lời pháp lý cho
+# thủ tục hành chính thường cần tổng hợp đa tầng:
+#   - Tier 1: định nghĩa khung pháp lý
+#   - Tier 2: nghị định hướng dẫn chi tiết
+#   - Tier 3: thông tư cụ thể
+#   - Tier 4: quy định địa phương (hạn mức, lệ phí)
+# Cap này NGĂN một tier (đặc biệt Tier 4 với nhiều norms địa phương) áp đảo
+# top-k và đẩy các tier khác (NĐ 50/2026 Đ6 30/50/100% — Tier 2) khỏi context.
+#
+# Khác với "tier multiplier" có rủi ro nhầm Lex Superior (conflict-resolution)
+# với Information Relevance (Lex Specialis): diversity constraint TÔN TRỌNG
+# cả 2 nguyên tắc bằng cách đảm bảo chỗ cho mọi tier, để LLM tự suy luận
+# qua header [Tier X | Hiệu lực: ...] khi có mâu thuẫn.
+_MAX_PER_TIER = {1: 8, 2: 8, 3: 6, 4: 8}
+_MAX_PER_TIER_DEFAULT = 25    # tier=None hoặc ngoài 1-4: không cap
 
 # Regex strip địa danh jurisdiction khỏi query trước dense encoding (P3 fix).
 # Jurisdiction đã được xử lý ở Stage 2 (Neo4j APPLIES_TO + norm_id filter).
@@ -287,20 +307,38 @@ def hybrid_search(
 
     scored.sort(key=lambda x: x[0], reverse=True)
 
-    # --- Build output (per-norm diversity cap) ---
+    # --- Build output: 2-pass allocation (norm-breadth + RRF-depth) ---
+    #
+    # Pass 1 (breadth): top-1 per norm — đảm bảo MỌI norm trong pool có ≥1
+    #   representation. Khắc phục bug khi một số norm match dense kém (NĐ 50,
+    #   QĐ 69 cho query "Điều kiện CMĐSDĐ") bị các norm match tốt đè trong
+    #   cùng tier dù chúng chứa thông tin quan trọng (tiền SDĐ 30/50/100%,
+    #   hạn mức 160m²).
+    #
+    # Pass 2 (depth): fill remaining slots theo RRF order, respect cả 2 cap.
+    #
+    # Cả 2 pass đều tôn trọng per-tier cap (đa dạng tầng pháp lý) và per-norm
+    # cap (chống dominance). Pass 1 ưu tiên BREADTH; Pass 2 ưu tiên RELEVANCE.
     results: list[ScoredTextUnit] = []
     norm_count: dict[str, int] = {}
-    skipped_by_cap = 0
-    for rrf_score_val, point in scored:
+    tier_count: dict[int | None, int] = {}
+    used_point_ids: set = set()
+
+    def _try_add(rrf_score_val, point) -> bool:
+        """Thêm point vào results nếu thỏa cả 2 cap. Trả True nếu thêm thành công."""
         if len(results) >= top_k:
-            break
+            return False
         payload = point.payload
         nid = payload.get("norm_id", "")
-        # Per-norm cap: tránh norm lớn (Luật ĐĐ 2024) chiếm hết top-k
+        tier = payload.get("tier")
         if norm_count.get(nid, 0) >= _MAX_PER_NORM:
-            skipped_by_cap += 1
-            continue
+            return False
+        tier_max = _MAX_PER_TIER.get(tier, _MAX_PER_TIER_DEFAULT)
+        if tier_count.get(tier, 0) >= tier_max:
+            return False
         norm_count[nid] = norm_count.get(nid, 0) + 1
+        tier_count[tier] = tier_count.get(tier, 0) + 1
+        used_point_ids.add(point.id)
         results.append(
             ScoredTextUnit(
                 text_unit_id=_qdrant_id_to_hex(point.id),
@@ -314,12 +352,36 @@ def hybrid_search(
                 valid_to=payload.get("valid_to"),
             )
         )
+        return True
+
+    # Pass 1: top-1 per norm (breadth guarantee)
+    seen_norms_in_pass1: set = set()
+    for rrf_score_val, point in scored:
+        if len(results) >= top_k:
+            break
+        nid = point.payload.get("norm_id", "")
+        if nid in seen_norms_in_pass1:
+            continue
+        if _try_add(rrf_score_val, point):
+            seen_norms_in_pass1.add(nid)
+    pass1_count = len(results)
+
+    # Pass 2: fill remaining by RRF order (skip already used)
+    for rrf_score_val, point in scored:
+        if len(results) >= top_k:
+            break
+        if point.id in used_point_ids:
+            continue
+        _try_add(rrf_score_val, point)
 
     if results:
         norm_dist = {n: c for n, c in norm_count.items()}
+        tier_dist = {t: c for t, c in sorted(tier_count.items(), key=lambda x: (x[0] is None, x[0]))}
         logger.info(
-            f"hybrid_search: top-{len(results)} (skipped {skipped_by_cap} by per-norm cap={_MAX_PER_NORM}) | "
-            f"best rrf={results[0]['rrf_score']:.4f} | norm_dist={norm_dist}"
+            f"hybrid_search: top-{len(results)} | pass1(breadth)={pass1_count}, "
+            f"pass2(depth)={len(results) - pass1_count} | "
+            f"caps: per_norm={_MAX_PER_NORM}, per_tier={_MAX_PER_TIER} | "
+            f"best rrf={results[0]['rrf_score']:.4f} | tier_dist={tier_dist} | norm_dist={norm_dist}"
         )
     return results
 
