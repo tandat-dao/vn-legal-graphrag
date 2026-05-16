@@ -189,10 +189,35 @@ class TestRrfScore:
     def test_positive(self):
         assert _rrf_score(10, 10) > 0
 
-    def test_formula(self):
+    def test_formula_base_with_default_multipliers(self):
+        """Default: tier=1, is_graph_boosted=False, rarity_score=0.0
+        → score = base * 1.1 (tier_mult) * 1.0 (graph_mult) * 1.0 (rarity_mult).
+        """
         k = 60
-        expected = 1.0 / (k + 3) + 1.0 / (k + 7)
+        base = 1.0 / (k + 3) + 1.0 / (k + 7)
+        expected = base * 1.1  # tier_multiplier = 1 + 1*0.1
         assert abs(_rrf_score(3, 7) - expected) < 1e-9
+
+    def test_tier_multiplier(self):
+        """Tier càng cao multiplier càng lớn (Lex Specialis cho VB địa phương)."""
+        # Cùng rank, khác tier
+        score_t1 = _rrf_score(3, 7, tier=1)
+        score_t4 = _rrf_score(3, 7, tier=4)
+        assert score_t4 > score_t1
+        # Ratio = 1.4 / 1.1
+        assert abs(score_t4 / score_t1 - (1.4 / 1.1)) < 1e-9
+
+    def test_graph_boost_multiplier(self):
+        """is_graph_boosted=True → score × 100 (đẩy nhóm graph lên trên)."""
+        score_off = _rrf_score(3, 7, is_graph_boosted=False)
+        score_on = _rrf_score(3, 7, is_graph_boosted=True)
+        assert abs(score_on / score_off - 100.0) < 1e-6
+
+    def test_rarity_multiplier(self):
+        """rarity_score = 1.0 → multiplier 1 + 1.5*1.0 = 2.5."""
+        score_no_rarity = _rrf_score(3, 7, rarity_score=0.0)
+        score_max_rarity = _rrf_score(3, 7, rarity_score=1.0)
+        assert abs(score_max_rarity / score_no_rarity - 2.5) < 1e-6
 
 
 # ---------------------------------------------------------------------------

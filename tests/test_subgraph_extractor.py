@@ -246,7 +246,9 @@ class TestStage2ComponentIds:
 class TestExtractSubgraph:
     @patch("src.retrieval.subgraph_extractor.encode_text", return_value=[0.1] * 1024)
     def test_dod_1_dat_dai_tp_hcm_returns_components(self, mock_encode):
-        """DoD: CMĐSDĐ TP.HCM → extract_subgraph trả về norm_ids của cả tier1 và tier4."""
+        """DoD: CMĐSDĐ TP.HCM → extract_subgraph trả tuple (norm_ids, graph_comp_ids)
+        với norm_ids của cả tier1 và tier4 (Stage 2 result).
+        """
         norm_ids_stage1 = ["nghi-dinh-50-2026-nd-cp"]
         comp_ids = [
             "luat-dat-dai-2024>Điều 116>Khoản 1",       # tier 1
@@ -257,12 +259,16 @@ class TestExtractSubgraph:
         model = _mock_model()
         plan = _make_plan(theme="dat-dai", jurisdiction="tp-hcm")
 
-        result = extract_subgraph("phí chuyển mục đích đất TP.HCM", plan, driver, client, model)
+        norm_ids, graph_comp_ids = extract_subgraph(
+            "phí chuyển mục đích đất TP.HCM", plan, driver, client, model
+        )
 
-        assert len(result) == 2
+        assert len(norm_ids) == 2
         # Phải có norm_ids của cả tier 1 và tier 4
-        assert "luat-dat-dai-2024" in result
-        assert "quyet-dinh-tp-hcm-2025" in result
+        assert "luat-dat-dai-2024" in norm_ids
+        assert "quyet-dinh-tp-hcm-2025" in norm_ids
+        # graph_comp_ids có thể rỗng nếu procedure không match concepts trong mock
+        assert isinstance(graph_comp_ids, list)
 
     @patch("src.retrieval.subgraph_extractor.encode_text", return_value=[0.1] * 1024)
     def test_dod_2_khai_sinh_no_local_components(self, mock_encode):
@@ -281,15 +287,19 @@ class TestExtractSubgraph:
             jurisdiction="toan-quoc",
         )
 
-        result = extract_subgraph("điều kiện đăng ký khai sinh", plan, driver, client, model)
+        norm_ids, _ = extract_subgraph("điều kiện đăng ký khai sinh", plan, driver, client, model)
 
-        # result là norm_ids — không có địa phương
-        assert not any("tp-hcm" in nid.lower() or "dong-nai" in nid.lower() for nid in result)
+        # norm_ids: không có địa phương
+        assert not any("tp-hcm" in nid.lower() or "dong-nai" in nid.lower() for nid in norm_ids)
         # Cypher phải được gọi với allowed = ["toan-quoc"]
         session = driver.session.return_value.__enter__.return_value
-        call_kwargs = session.run.call_args
-        allowed = call_kwargs.kwargs.get("allowed_jurisdictions")
-        assert allowed == ["toan-quoc"]
+        # Stage 2 + Stage 3 đều dùng session — lấy lần gọi đầu tiên với param này
+        for call in session.run.call_args_list:
+            if call.kwargs.get("allowed_jurisdictions") is not None:
+                assert call.kwargs["allowed_jurisdictions"] == ["toan-quoc"]
+                break
+        else:
+            pytest.fail("Không có lần gọi nào với allowed_jurisdictions param")
 
     @patch("src.retrieval.subgraph_extractor.encode_text", return_value=[0.1] * 1024)
     def test_dod_3_nuoi_con_nuoi_vs_dang_ky_lai(self, mock_encode):
@@ -322,9 +332,13 @@ class TestExtractSubgraph:
         extract_subgraph("quy định đất đai tháng 8/2025", plan, driver, client, model)
 
         session = driver.session.return_value.__enter__.return_value
-        call_kwargs = session.run.call_args
-        temporal = call_kwargs.kwargs.get("temporal")
-        assert temporal == "2025-08-01"
+        # Stage 2 truyền temporal param vào Cypher
+        for call in session.run.call_args_list:
+            if call.kwargs.get("temporal") is not None:
+                assert call.kwargs["temporal"] == "2025-08-01"
+                break
+        else:
+            pytest.fail("Không có lần gọi nào với temporal param")
 
     @patch("src.retrieval.subgraph_extractor.encode_text", return_value=[0.1] * 1024)
     def test_empty_plan_theme_returns_empty(self, mock_encode):
@@ -334,7 +348,10 @@ class TestExtractSubgraph:
         model = _mock_model()
         plan = _make_plan(theme=None, is_complete=False)
 
-        result = extract_subgraph("câu hỏi không rõ", plan, driver, client, model)
+        norm_ids, graph_comp_ids = extract_subgraph(
+            "câu hỏi không rõ", plan, driver, client, model
+        )
 
-        assert result == []
+        assert norm_ids == []
+        assert graph_comp_ids == []
         driver.session.assert_not_called()
