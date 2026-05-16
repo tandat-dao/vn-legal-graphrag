@@ -3,7 +3,23 @@
 > Để theo dõi tiến độ task, DoD checklist, và hành động tiếp theo, xem `PROJECT_STATUS.md`.
 
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Kiến trúc & Ngữ cảnh Hệ thống
-**Phiên bản 0.2 | Cập nhật 2026-04-19**
+**Phiên bản 0.4 | Cập nhật 2026-05-10**
+
+> **v0.4 — Cập nhật 2026-05-10:**
+> Xóa node `Procedure` và edge `[:SPECIFIED_IN]` khỏi schema ontology (D-07).
+> Thêm field `summary` vào frontmatter và Norm node; bổ sung Stage 1 retrieval
+> qua summary embedding trước Stage 2 TextUnit search (D-08).
+> Cập nhật §2.2, §2.3, §2.4, §2.5, §2.6 và P-05 tương ứng.
+
+> **v0.3 — Cập nhật 2026-04-27:**
+> Thay đổi chiến lược thu thập dữ liệu Phase 1: bỏ Docling/OCR pipeline,
+> chuyển sang thu thập thủ công từ VBHN/vbpl.vn theo Chương/Mục.
+> Cập nhật Tier mapping: tier 1 bổ sung NQ Quốc hội, tier 4 bổ sung NQ HĐND tỉnh.
+> Bổ sung thuộc tính CTV: amended_by, added_by.
+> Bổ sung metadata fields: source_vbhn, amended_by.
+> Cập nhật Tech Stack, Lộ trình tính năng Phase 1, và §2.3 Data Flow.
+> Xóa P-04 (Docling OCR accuracy) — không còn liên quan.
+> Ghi nhận 6 quyết định thiết kế D-01 đến D-06 (xem CLAUDE.md Decision Log).
 
 > **v0.2 — Cập nhật sau audit 2026-04-19:**
 > Đóng OQ-04: xác nhận dùng Claude (Anthropic) làm LLM
@@ -12,7 +28,7 @@
 > token; Answer Generator dùng claude-sonnet-4-6 cho output
 > chất lượng cao. Cập nhật Tech Stack Section 3 tương ứng.
 > Làm rõ INCONSISTENCY-02: [:BELONGS_TO] KHÔNG implement
-> trong scope khóa luận — TASK-09 được cập nhật để phản
+> trong scope khóa luận — TASK-07 được cập nhật để phản
 > ánh quyết định dứt khoát này (xem PROJECT_STATUS.md v0.2).
 
 > **v0.1 — Khởi tạo tài liệu (2026-04-18):**
@@ -60,7 +76,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 - Văn bản đã được số hóa và làm sạch (pre-processed)
 
 **Ngoài scope:**
-- OCR / Data Extraction từ ảnh hoặc PDF scan (chỉ xử lý văn bản đã có text layer, hoặc dùng Docling OCR cho trường hợp scan giới hạn)
+- OCR / Data Extraction từ ảnh hoặc PDF scan — dữ liệu được lấy từ VBHN/vbpl.vn dạng text, không xử lý tài liệu scan
 - Đánh giá trên toàn bộ hệ thống pháp luật Việt Nam (không mở rộng ngoài 6 thủ tục)
 - Suy luận pháp lý nội hàm (legal reasoning) — hệ thống tìm và trình bày thông tin, không giải quyết tranh chấp pháp lý
 - Giao diện người dùng đồ họa (UI) — scope khóa luận dừng ở pipeline và đánh giá
@@ -75,15 +91,12 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 ┌─────────────────────────────────────────────────────────────────┐
 │                    OFFLINE PIPELINE (Data Ingestion)             │
 │                                                                   │
-│  PDF/DOCX gốc                                                    │
+│  Thu thập thủ công từ VBHN / vbpl.vn                             │
+│  (dichvucong.gov.vn → danh sách văn bản → VBHN → copy nội dung) │
 │      │                                                            │
 │      ▼                                                            │
-│  [Docling Parser]──►[clean_pdf_text()]──►[article_boundary_split]│
-│      │                                        │                   │
-│      │                              [hierarchy_prefix_attach]     │
-│      │                                        │                   │
-│      ▼                                        ▼                   │
-│  [*-draft.md]              [Metadata điền tay + Review]          │
+│  [Chuẩn hóa heading + Điền metadata YAML frontmatter]           │
+│  (tier, jurisdiction, implements, source_vbhn, amended_by_norms, ...)  │
 │                                        │                          │
 │                                        ▼                          │
 │                               [data/raw/*.md]                    │
@@ -148,33 +161,33 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
                     └────┬─────┘
                          │ [:INCLUDES]
                          ▼
-                    ┌──────────┐
-                    │   Norm   │ tier: 1-4, valid_from, title
-                    └────┬─────┘
+                    ┌──────────────────────────┐
+                    │   Norm                   │
+                    │   tier: 1-4, valid_from  │
+                    │   title, summary         │
+                    └────┬─────────────────────┘
           [:IMPLEMENTS]  │  [:HAS_COMPONENT]   [:APPLIES_TO]
           (Norm→Norm)    │       │                  │
           ┌─────────────┘       ▼                  ▼
           │              ┌──────────┐        ┌────────────┐
           │              │Component │        │Jurisdiction│
           │              └────┬─────┘        └────────────┘
-          │     [:BELONGS_TO] │ [:HAS_CTV]   (tp-hcm | dong-nai
-          │     (Component    │              | toan-quoc)
-          │     → Theme)      ▼
+          │                   │ [:HAS_CTV]   (tp-hcm | dong-nai
+          │                   │              | toan-quoc)
+          │                   ▼
           │              ┌──────────┐
           │              │   CTV    │ valid_from, valid_to, status
           │              └────┬─────┘
           │                   │ [:HAS_TEXT_UNIT]
           │                   ▼
           │              ┌──────────┐
-          │              │TextUnit  │ id (deterministic), text
-          │              └──────────┘
-          │
-          │         ┌───────────┐
-          └────────►│ Procedure │ [:SPECIFIED_IN]→ Component
-                    └───────────┘
+          └─────────────►│TextUnit  │ id (deterministic), text
+                         └──────────┘
 ```
 
-**Bảng Edge đầy đủ:**
+> **D-07:** Node `Procedure` và edge `[:SPECIFIED_IN]` đã bị xóa. Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval (xem §2.6). `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
+
+**Bảng Edge (6 loại active):**
 
 | Edge | Từ | Đến | Vai trò chiến lược |
 |---|---|---|---|
@@ -184,48 +197,40 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 | `[:HAS_CTV]` | Component | CTV | Quản lý phiên bản theo thời gian |
 | `[:HAS_TEXT_UNIT]` | CTV | TextUnit | Liên kết phiên bản trừu tượng → nội dung vật lý |
 | `[:APPLIES_TO]` | Norm | Jurisdiction | **Xương sống Gap 2** — hard-filter theo địa phương |
-| `[:SPECIFIED_IN]` | Procedure | Component | Gom điều khoản phân tán vào 1 thủ tục |
-| `[:BELONGS_TO]` | Component | Theme | Gán nhãn chuyên ngành cho điều khoản đặc thù (xem P-03) |
 
-### §2.3 Data Flow — Phase 1 với Docling
+### §2.3 Data Flow — Phase 1 Thu thập thủ công
 
 ```
-Input: PDF/DOCX từ vbpl.vn, cổng dịch vụ công tỉnh
+[Bước 1] Xác định thủ tục trên dichvucong.gov.vn
+  → Lấy danh sách văn bản liên quan cho từng thủ tục
   │
   ▼
-[Bước 1] run_docling(file_path)
-  → DoclingDocument: heading hierarchy, text blocks, tables
-  → Xử lý OCR tự động nếu là PDF scan (Tesseract, lang='vie')
+[Bước 2] Tìm Văn bản hợp nhất (VBHN) trên vbpl.vn
+  → Nếu có VBHN: dùng làm nguồn nội dung (giải quyết chồng chéo NĐ sửa đổi)
+  → Nếu không có VBHN: lấy trực tiếp từ văn bản gốc
   │
   ▼
-[Bước 2] clean_pdf_text(doc)
-  → Xóa: "Cộng hòa XHCN Việt Nam", "Nơi nhận:", "TM. ỦY BAN NHÂN DÂN"
-  → Xóa: số trang, running header/footer
-  → GIỮ NGUYÊN: toàn bộ nội dung pháp lý
+[Bước 3] Xác định phạm vi lấy theo Chương/Mục
+  → Chương không có Mục: có ≥1 điều liên quan → lấy cả Chương
+  → Chương có Mục: có ≥1 điều liên quan → lấy cả Mục chứa điều đó
   │
   ▼
-[Bước 3] article_boundary_split(doc)
-  → Regex: r"^Điều\s+\d+" trên heading nodes của DoclingDocument
-  → Output: list[{article_id, heading_text, content}]
+[Bước 4] Copy nội dung + chuẩn hóa heading format
+  → ## Điều X. [Tên điều]
+  → ### Khoản 1.
+  → #### Điểm a.
   │
   ▼
-[Bước 4] hierarchy_prefix_attach(doc, article)
-  → Từ DoclingDocument heading hierarchy
-  → Sinh: "Luật Đất đai 2024 > Điều 116"
-  │
-  ▼
-[Output Trung gian] data/raw/*-draft.md
-  → Có structure cơ bản, CHƯA có metadata block
-  │
-  ▼
-[Thủ công] Điền metadata YAML frontmatter
+[Bước 5] Điền metadata YAML frontmatter
   → id, tier, theme, jurisdiction, implements, valid_from, valid_to
-  → Kiểm tra và sửa heading format nếu cần
-  → Lập specified_in_map.md ([:SPECIFIED_IN] mapping)
+  → source_vbhn (nếu dùng VBHN), amended_by_norms (nếu file chứa điều khoản đã bị sửa)
+  → Viết `summary` (3-5 câu mô tả phạm vi văn bản — con người viết)
   │
   ▼
-[Output Cuối] data/raw/*.md ← Input cho Phase 2
+[Output] data/raw/*.md ← Input cho Phase 2
 ```
+
+**Lưu ý VBHN:** `source_vbhn` chỉ ghi nhận nguồn lấy nội dung. Metadata `id`, `tier`, `implements` vẫn theo văn bản QPPL chính thức (Luật, NĐ, TT gốc), không phải số hiệu VBHN.
 
 ### §2.4 Schema File `.md` chuẩn (Phase 1 Output)
 
@@ -240,6 +245,9 @@ implements: null
 valid_from: "2025-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/..."
+source_vbhn: null        # số hiệu VBHN nếu nội dung lấy từ văn bản hợp nhất, VD: "44/VBHN-VPQH"
+amended_by_norms: null   # list id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: ["nghi-dinh-07-2025-nd-cp"]
+summary: null            # 3-5 câu mô tả phạm vi văn bản (thủ tục, đối tượng, địa phương) — do con người viết
 ---
 
 ## Điều 116. [Tên điều]
@@ -257,12 +265,15 @@ Nội dung điểm a.
 | Trường | Type | Ràng buộc |
 |---|---|---|
 | `id` | string | Unique trên toàn bộ tập file. Format: `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`, `nghi-dinh-102-2024-nd-cp`, `quyet-dinh-bang-gia-dat-tp-hcm-2025` |
-| `tier` | int | Chỉ nhận 1 trong 4 giá trị: 1=Luật/Bộ luật, 2=Nghị định/Pháp lệnh, 3=Thông tư, 4=Quyết định UBND tỉnh |
+| `tier` | int | Chỉ nhận 1 trong 4 giá trị: 1=Luật/Bộ luật/NQ Quốc hội, 2=Nghị định/Pháp lệnh, 3=Thông tư/Thông tư liên tịch, 4=Quyết định UBND tỉnh/NQ HĐND tỉnh |
 | `theme` | string | Chỉ nhận: `dat-dai`, `ho-tich`, `nuoi-con-nuoi` |
 | `jurisdiction` | string | Chỉ nhận: `toan-quoc`, `tp-hcm`, `dong-nai` |
 | `implements` | string\|null | Phải trỏ đúng `id` tồn tại trong tập file. null nếu là Luật gốc |
 | `valid_from` | string | Format `YYYY-MM-DD` bắt buộc |
 | `valid_to` | string\|null | Format `YYYY-MM-DD` hoặc `null` nếu vẫn còn hiệu lực |
+| `source_vbhn` | string\|null | **Optional.** Số hiệu VBHN dùng làm nguồn nội dung, VD: `"44/VBHN-VPQH"`. null nếu lấy từ văn bản gốc |
+| `amended_by_norms` | list\|null | **Optional.** List `id` các văn bản sửa đổi nếu file chứa điều khoản đã bị sửa. null nếu không |
+| `summary` | string\|null | **Bắt buộc điền.** 3-5 câu mô tả phạm vi văn bản: thủ tục điều chỉnh, đối tượng áp dụng, địa phương. Do con người viết để đảm bảo độ chính xác pháp lý. Dùng cho Stage 1 retrieval (xem D-08) |
 
 ### §2.5 Data Flow — Dual Indexing (Phase 2)
 
@@ -285,11 +296,15 @@ data/raw/*.md
                                           └──► Qdrant (port 6333)
                                                Collection: legal_texts
                                                Vector dim: 1024 (BGE-M3)
-                                               Payload: component_id,
-                                                 jurisdiction, tier,
-                                                 theme, procedure,
-                                                 valid_from, valid_to
-                                               ID: = TextUnit ID Neo4j
+                                               2 loại vector:
+                                               • content_type="summary": 1 vector/Norm
+                                                 Payload: norm_id, tier, theme,
+                                                          jurisdiction, valid_from
+                                               • content_type="text_unit": 1 vector/TextUnit
+                                                 Payload: norm_id, component_id,
+                                                          tier, theme, jurisdiction,
+                                                          valid_from, valid_to
+                                               ID: = TextUnit ID Neo4j (cho text_unit)
 ```
 
 ### §2.6 Data Flow — Online Retrieval (Phase 3)
@@ -302,17 +317,24 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
            jurisdiction=tp-hcm, temporal=hiện tại
   is_complete=True → tiếp tục
 
-[Sub-graph Extraction — Neo4j]
-  Cypher: START FROM Procedure("chuyen-muc-dich-su-dung-dat")
-          FOLLOW [:SPECIFIED_IN] → Components
-          FOLLOW [:HAS_COMPONENT]← Norms
+[Stage 1 — Summary Retrieval — Qdrant]
+  Filter: content_type="summary", theme="dat-dai",
+          jurisdiction IN ["tp-hcm", "toan-quoc"]
+  Dense: BGE-M3 encode(câu hỏi) → so sánh với summary vectors
+  Output: Top-N norm_ids có summary liên quan nhất
+          VD: ["luat-dat-dai-2024", "nghi-dinh-102-2024-nd-cp",
+               "nghi-quyet-87-2025-nq-hdnd-tp-hcm", ...]
+
+[Stage 2 — Sub-graph Extraction — Neo4j]
+  Cypher: START FROM Norm IDs từ Stage 1
           FOLLOW [:IMPLEMENTS] chains (all tiers)
           FILTER: Norm [:APPLIES_TO] Jurisdiction("tp-hcm") OR "toan-quoc"
           FILTER: CTV.valid_from <= now, CTV.valid_to IS NULL OR > now
+          COLLECT all Component IDs
   Output: LCCIDs = [comp_001, comp_002, comp_045, comp_089, ...]
 
 [Semantic Filtering — Qdrant Hybrid]
-  Payload filter: component_id IN LCCIDs, status = "active"
+  Payload filter: content_type="text_unit", norm_id IN norm_ids
   Dense: BGE-M3 encode("Phí chuyển mục đích sử dụng đất tại TP.HCM?")
   Sparse: BM25 tokenize
   Fusion: RRF(dense_scores, sparse_scores)
@@ -343,8 +365,6 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | **Ngôn ngữ lập trình** | Python | ≥ 3.10 | ✅ Đã xác nhận |
 | **Neo4j driver** | neo4j (Python official) | 5.x | ✅ Đã xác nhận |
 | **Qdrant client** | qdrant-client | latest | ✅ Đã xác nhận |
-| **PDF/DOCX parsing** | Docling (IBM) | pin version | ✅ Đã xác nhận (quyết định 2025-04-18) |
-| **OCR engine** | Tesseract (via Docling) | lang='vie' bắt buộc | ✅ Đã xác nhận |
 | **Embedding model** | BGE-M3 (BAAI/bge-m3) | dim=1024 | ⚙️ Cần quyết định: local vs API |
 | **Sparse retrieval** | BM25 (via Qdrant sparse) | — | ✅ Đã xác nhận |
 | **Rank fusion** | Reciprocal Rank Fusion (RRF) | custom impl hoặc thư viện | ✅ Đã xác nhận |
@@ -373,13 +393,9 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | Tính năng | Phase | Loại |
 |---|---|---|
 | Bảng ánh xạ văn bản (mapping table) | 1 | Core |
-| Thu thập văn bản gốc từ nguồn chính thức | 1 | Core |
-| Docling pipeline: PDF → draft .md | 1 | Core |
-| Boilerplate removal (`clean_pdf_text`) | 1 | Core |
-| Article-boundary chunking (ranh giới Điều) | 1 | Core |
-| Hierarchy prefix từ DoclingDocument | 1 | Core |
-| YAML metadata block chuẩn hóa | 1 | Core |
-| `specified_in_map.md` ([:SPECIFIED_IN] manual mapping) | 1 | Core |
+| Thu thập thủ công từ VBHN/vbpl.vn theo Chương/Mục | 1 | Core |
+| YAML metadata block chuẩn hóa (kể cả source_vbhn, amended_by_norms, summary) | 1 | Core |
+| ~~`specified_in_map.md` ([:SPECIFIED_IN] manual mapping)~~ | ~~1~~ | ~~Đã xóa (D-07)~~ |
 | Script validate metadata | 1 | Core |
 | Cross-check chéo giữa 2 thành viên | 1 | Core |
 
@@ -389,8 +405,8 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 |---|---|---|
 | Structure-aware Parser (AST) | 2 | Core |
 | Deterministic ID generation (SHA256) | 2 | Core |
-| Ontology Instantiation — 7 loại node | 2 | Core |
-| Edge creation — 7 loại edge bắt buộc | 2 | Core |
+| Ontology Instantiation — 6 loại node | 2 | Core |
+| Edge creation — 6 loại edge bắt buộc | 2 | Core |
 | `[:BELONGS_TO]` (Component → Theme) | 2 | Enhancement (xem P-03) |
 | BGE-M3 encoding + Qdrant upsert | 2 | Core |
 | Metadata payload đầy đủ trong Qdrant | 2 | Core |
@@ -433,12 +449,12 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 
 | # | Câu hỏi / Blocker | Chặn task nào | Giải quyết |
 |---|---|---|---|
-| OQ-01 | Format `id` cuối cùng: `luat-dat-dai-2024` hay `LDD-2024` hay hash? | TASK-06, TASK-09, toàn bộ Phase 2 | **Đã quyết định trong tài liệu này:** format `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`. Xem §2.4. |
+| OQ-01 | Format `id` cuối cùng: `luat-dat-dai-2024` hay `LDD-2024` hay hash? | TASK-06, TASK-07, toàn bộ Phase 2 | **Đã quyết định trong tài liệu này:** format `[loai-vb]-[slug]-[nam]`. VD: `luat-dat-dai-2024`. Xem §2.4. |
 | OQ-02 | Cross-reference ngoài scope: lấy thêm Điều hay ghi limitation? | TASK-03, TASK-06 | Cần project owner quyết định từng trường hợp trong TASK-03. Output: `crossref_decisions.md`. |
-| OQ-03 | BGE-M3: chạy local hay dùng API? | TASK-10, TASK-14 | Ngưỡng quyết định: nếu encode toàn bộ dataset > 2 giờ trên máy 8GB RAM → chuyển sang API. Xem P-02. |
-| OQ-04 | LLM nào cho Query Planner và Answer Generator? | TASK-12, TASK-15, TASK-18, TASK-19 | Đã quyết định 2026-04-19: dùng Claude (Anthropic). Query Planner: claude-haiku-4-5-20251001. Answer Generator: claude-sonnet-4-6. Tối ưu token bằng cách dùng model nhẹ hơn cho bước phân loại, model mạnh hơn cho bước sinh câu trả lời. |
-| OQ-05 | `[:BELONGS_TO]` có implement trong scope khóa luận không? | TASK-09 | Xem P-03. Khuyến nghị: **không implement trong scope này** — ghi nhận là limitation. |
-| OQ-06 | Top-k mặc định cho Semantic Filtering là bao nhiêu? | TASK-14, TASK-17, TASK-19 | Chưa quyết định. Cần thử nghiệm trong TASK-16. Ảnh hưởng trực tiếp đến Precision@k và Recall@k. |
+| OQ-03 | BGE-M3: chạy local hay dùng API? | TASK-08, TASK-12 | Ngưỡng quyết định: nếu encode toàn bộ dataset > 2 giờ trên máy 8GB RAM → chuyển sang API. Xem P-02. |
+| OQ-04 | LLM nào cho Query Planner và Answer Generator? | TASK-10, TASK-13, TASK-16, TASK-17 | Đã quyết định 2026-04-19: dùng Claude (Anthropic). Query Planner: claude-haiku-4-5-20251001. Answer Generator: claude-sonnet-4-6. Tối ưu token bằng cách dùng model nhẹ hơn cho bước phân loại, model mạnh hơn cho bước sinh câu trả lời. |
+| OQ-05 | `[:BELONGS_TO]` có implement trong scope khóa luận không? | TASK-07 | Xem P-03. Khuyến nghị: **không implement trong scope này** — ghi nhận là limitation. |
+| OQ-06 | Top-k mặc định cho Semantic Filtering là bao nhiêu? | TASK-12, TASK-15, TASK-17 | Chưa quyết định. Cần thử nghiệm trong TASK-14. Ảnh hưởng trực tiếp đến Precision@k và Recall@k. |
 
 ---
 
@@ -468,33 +484,38 @@ BGE-M3 chạy local trên máy 8GB RAM có thể gặp bottleneck về tốc đ�
 
 ### P-03 — `[:BELONGS_TO]` không implement trong scope hiện tại
 
-Edge `[:BELONGS_TO]` (Component → Theme) cho phép gán nhãn chuyên ngành cho điều khoản ở cấp độ Component, độc lập với Theme của Norm chứa nó. Ví dụ: một điều khoản trong Bộ luật Dân sự có thể được tag là Theme "dat-dai" nếu nội dung liên quan đến bồi thường đất. Tính năng này giải quyết edge case nhưng đòi hỏi effort gán nhãn thủ công cao.
+**Bối cảnh:** Edge `[:BELONGS_TO]` (Component → Theme) cho phép gán nhãn chuyên ngành **trực tiếp ở cấp Điều/Khoản**, độc lập với Theme của Norm chứa nó.
 
-**Quyết định:** Không implement `[:BELONGS_TO]` trong scope khóa luận. Toàn bộ Component được gán Theme thông qua Norm cha (qua `[:INCLUDES]` chain). Chấp nhận limitation: Component trong văn bản đa-theme (như Bộ luật Dân sự có điều khoản liên quan đất đai) sẽ không được định tuyến đúng nếu Norm không thuộc Theme "dat-dai".
+**Khi nào cần?** Khi scope có **văn bản đa-theme** — tức một văn bản thuộc nhiều lĩnh vực cùng lúc. Ví dụ: Bộ luật Dân sự (BLDS) chứa cả điều khoản dân sự lẫn điều khoản liên quan đến bồi thường đất. Nếu Norm "BLDS" chỉ `[:INCLUDES]` vào Theme "dan-su", thì điều khoản về bồi thường đất sẽ **không được tìm thấy** khi query Theme "dat-dai" — trừ khi có `[:BELONGS_TO]` gán nhãn riêng ở cấp Component.
+
+**Quyết định:** Không implement `[:BELONGS_TO]`. Lý do:
+
+1. **Scope hiện tại không có văn bản đa-theme.** Ba lĩnh vực (Đất đai, Hộ tịch, Nuôi con nuôi) sử dụng các bộ luật **riêng biệt** — không có văn bản nào xuất hiện ở 2 Theme cùng lúc. Do đó, routing qua `Norm → [:INCLUDES] → Theme` đã đủ chính xác.
+2. **Effort gán nhãn thủ công rất cao.** Mỗi Component (Điều/Khoản) cần được đọc nội dung và gán Theme thủ công — không thể tự động hóa đáng tin cậy.
+3. **Không giải quyết gap nghiên cứu nào.** Ba gap (đa lĩnh vực, đa địa phương, đa tầng) đều đã được xử lý bởi các edge khác (`[:INCLUDES]`, `[:APPLIES_TO]`, `[:IMPLEMENTS]`).
+
+**Limitation chấp nhận:** Nếu sau này mở rộng scope bao gồm văn bản đa-theme (ví dụ: Bộ luật Dân sự), các Component liên quan đến đất đai trong văn bản đó sẽ không được routing đúng.
 
 **Điều kiện nâng cấp:** Khi evaluation (Phase 4) cho thấy ≥ 3 failure case có nguyên nhân trực tiếp là thiếu `[:BELONGS_TO]` routing → xem xét implement và đo lại metrics.
 
-TASK-09 trong PROJECT_STATUS.md đã được cập nhật để phản ánh quyết định này — không còn để ngỏ khả năng implement `[:BELONGS_TO]`.
 
 ---
 
-### P-04 — Docling không bảo đảm 100% accuracy cho PDF scan
+### P-05 — Routing thủ tục qua summary embedding thay vì `[:SPECIFIED_IN]`
 
-Docling + Tesseract OCR cho kết quả không chắc chắn trên PDF scan chất lượng thấp (đặc biệt là quyết định UBND cấp tỉnh đã cũ). Tỷ lệ lỗi OCR có thể ảnh hưởng đến chất lượng TextUnit và vector embedding tương ứng.
+**Bối cảnh:** Schema ban đầu dùng edge `[:SPECIFIED_IN]` (Procedure → Component) để ánh xạ thủ công từng thủ tục đến từng Điều/Khoản liên quan. Cách này không scalable: đòi hỏi đọc kỹ từng điều khoản, không tự động hóa được, và khi hệ thống mở rộng lên hàng nghìn văn bản thì chi phí maintenance là không khả thi.
 
-**Quyết định:** Với mỗi file PDF scan được xử lý qua OCR: thành viên phụ trách phải review kết quả OCR trong file `*-draft.md` trước khi chuyển sang TASK-06. Nếu lỗi OCR quá nhiều (> 20% nội dung bị sai): đánh máy thủ công hoặc ghi nhận là limitation. Mọi file đi qua OCR phải được đánh dấu trong `manifest.md` với ghi chú chất lượng.
+**Quyết định (D-07 + D-08):** Xóa `Procedure` node và `[:SPECIFIED_IN]` edge. Thay thế bằng hai cơ chế:
+1. **Theme + Jurisdiction filter** (hard filter): Query Planner classify câu hỏi thành theme + jurisdiction, dùng để lọc cứng trong Qdrant và Neo4j.
+2. **Summary-based Stage 1 retrieval**: Mỗi văn bản có field `summary` (3-5 câu, do con người viết). Vectorizer index summary thành vector riêng (`content_type="summary"`). Khi có câu hỏi, Stage 1 tìm top-N Norm có summary liên quan → Stage 2 mới search TextUnit trong tập đó.
 
-**Điều kiện nâng cấp:** Nếu có bản DOCX chính thức của văn bản đó → ưu tiên dùng DOCX thay vì OCR PDF.
+**Tại sao summary rẻ hơn `[:SPECIFIED_IN]`:**
+- `[:SPECIFIED_IN]` cấp Điều: đọc kỹ, map thủ công từng điều khoản (2-4 giờ/văn bản dài)
+- `summary`: viết 3-5 câu mô tả phạm vi tổng thể (10-15 phút/văn bản)
 
----
+**Limitation chấp nhận:** Trong cùng một theme, khi jurisdiction không đủ phân biệt (VD: hai thủ tục Hộ tịch đều là toan-quoc), Stage 1 có thể trả về một số văn bản ít liên quan. Stage 2 semantic search sẽ tự nhiên loại chúng ra khi ranking. Ghi nhận là limitation trong thesis.
 
-### P-05 — `[:SPECIFIED_IN]` mapping phải thủ công
-
-Quan hệ `[:SPECIFIED_IN]` (Procedure → Component) không thể tự động hóa hoàn toàn vì đòi hỏi hiểu biết pháp lý: biết Điều X, Khoản Y trong Văn bản Z quy định thủ tục nào. Đây là bottleneck về effort trong Phase 1.
-
-**Quyết định:** Lập `specified_in_map.md` thủ công trong TASK-06. Mỗi mapping phải có cột "Lý do" giải thích tại sao Điều đó thuộc thủ tục đó — để GVHD có thể review và audit. Nếu không chắc → ghi "cần xác nhận GVHD" và giữ lại để review, không bỏ qua.
-
-**Điều kiện nâng cấp:** Trong tương lai có thể dùng LLM-assisted mapping, nhưng kết quả vẫn phải qua human review — không tự động inject vào database.
+**Hướng phát triển tương lai:** Auto-generate `[:SPECIFIED_IN]` bằng LLM (document-level routing), hoặc dùng embedding similarity giữa procedure description và Norm summary để tự động xây dựng lại edge này mà không cần manual mapping.
 
 ---
 

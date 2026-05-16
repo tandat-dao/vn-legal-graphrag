@@ -1,0 +1,98 @@
+{
+  "version": "1.0",
+  "effective_date": "2024-01-01",
+  "procedures": [
+    {
+      "id": "chuyen-muc-dich-su-dung-dat",
+      "name": "Chuyển mục đích sử dụng đất",
+      "required_concepts": [
+        "nghia-vu-tai-chinh",
+        "han-muc",
+        "ho-so-giay-to",
+        "trinh-tu-thu-tuc",
+        "tham-quyen",
+        "dieu-kien"
+      ]
+    },
+    {
+      "id": "cap-so-do-lan-dau",
+      "name": "Cấp giấy chứng nhận quyền sử dụng đất lần đầu",
+      "required_concepts": [
+        "nghia-vu-tai-chinh",
+        "han-muc",
+        "ho-so-giay-to",
+        "trinh-tu-thu-tuc",
+        "tham-quyen",
+        "dieu-kien"
+      ]
+    },
+    {
+      "id": "dang-ky-khai-sinh",
+      "name": "Đăng ký khai sinh",
+      "required_concepts": [
+        "nghia-vu-tai-chinh",
+        "ho-so-giay-to",
+        "trinh-tu-thu-tuc",
+        "tham-quyen"
+      ]
+    },
+    {
+      "id": "cap-ban-sao-trich-luc-ho-tich",
+      "name": "Cấp bản sao trích lục hộ tịch",
+      "required_concepts": [
+        "nghia-vu-tai-chinh",
+        "ho-so-giay-to",
+        "trinh-tu-thu-tuc",
+        "tham-quyen"
+      ]
+    },
+    {
+      "id": "dang-ky-nuoi-con-nuoi",
+      "name": "Đăng ký nuôi con nuôi trong nước",
+      "required_concepts": [
+        "nghia-vu-tai-chinh",
+        "ho-so-giay-to",
+        "trinh-tu-thu-tuc",
+        "tham-quyen",
+        "dieu-kien"
+      ]
+    },
+    {
+      "id": "dang-ky-lai-nuoi-con-nuoi",
+      "name": "Đăng ký lại nuôi con nuôi trong nước",
+      "required_concepts": [
+        "nghia-vu-tai-chinh",
+        "ho-so-giay-to",
+        "trinh-tu-thu-tuc",
+        "tham-quyen",
+        "dieu-kien"
+      ]
+    }
+  ],
+  "concepts": [
+    {
+      "id": "nghia-vu-tai-chinh",
+      "name": "Nghĩa vụ tài chính, tiền sử dụng đất, lệ phí, phí thẩm định, thuế, tiền bảo vệ đất trồng lúa"
+    },
+    {
+      "id": "han-muc",
+      "name": "Hạn mức giao đất, diện tích tối thiểu, diện tích tối đa"
+    },
+    {
+      "id": "ho-so-giay-to",
+      "name": "Hồ sơ, thành phần giấy tờ, tài liệu cần chuẩn bị, biểu mẫu"
+    },
+    {
+      "id": "trinh-tu-thu-tuc",
+      "name": "Trình tự các bước, thời gian giải quyết, thời hạn"
+    },
+    {
+      "id": "tham-quyen",
+      "name": "Thẩm quyền giải quyết, cơ quan tiếp nhận, cơ quan nhà nước có trách nhiệm"
+    },
+    {
+      "id": "dieu-kien",
+      "name": "Điều kiện, yêu cầu bắt buộc, căn cứ pháp lý, đối tượng áp dụng"
+    }
+  ]
+}

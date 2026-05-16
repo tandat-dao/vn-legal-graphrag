@@ -46,7 +46,6 @@ graphrag-vn-law/
 │   │   └── manifest.md
 │   ├── raw/                     ← Phase 1 output: *.md đã chuẩn hóa
 │   │   ├── mapping_table.md
-│   │   ├── specified_in_map.md
 │   │   ├── crossref_decisions.md
 │   │   ├── review_log.md
 │   │   └── *.md                 ← văn bản pháp luật đã chuẩn hóa
@@ -54,26 +53,23 @@ graphrag-vn-law/
 │   └── evaluation/              ← Phase 4: test set, kết quả, phân tích
 ├── src/
 │   ├── ingestion/               ← Phase 2
-│   │   ├── docling_pipeline.py  ← TASK-05
-│   │   ├── run_pipeline.py      ← CLI runner cho Docling
-│   │   ├── parser.py            ← TASK-08
-│   │   ├── graph_builder.py     ← TASK-09
-│   │   └── vectorizer.py        ← TASK-10
+│   │   ├── parser.py            ← TASK-06
+│   │   ├── graph_builder.py     ← TASK-07
+│   │   └── vectorizer.py        ← TASK-08
 │   ├── retrieval/               ← Phase 3
-│   │   ├── query_planner.py     ← TASK-12
-│   │   ├── subgraph_extractor.py← TASK-13
-│   │   ├── semantic_filter.py   ← TASK-14
-│   │   ├── context_assembler.py ← TASK-15
-│   │   └── answer_generator.py  ← TASK-15
+│   │   ├── query_planner.py     ← TASK-10
+│   │   ├── subgraph_extractor.py← TASK-11
+│   │   ├── semantic_filter.py   ← TASK-12
+│   │   ├── context_assembler.py ← TASK-13
+│   │   └── answer_generator.py  ← TASK-13
 │   ├── baseline/                ← Phase 4
-│   │   └── naive_rag.py         ← TASK-18
+│   │   └── naive_rag.py         ← TASK-16
 │   ├── evaluation/              ← Phase 4
-│   │   └── metrics.py           ← TASK-19
+│   │   └── metrics.py           ← TASK-17
 │   └── utils/
 │       ├── connection_check.py  ← TASK-02
-│       └── validate_metadata.py ← TASK-06
+│       └── validate_metadata.py ← TASK-04
 ├── tests/
-│   ├── test_docling_pipeline.py
 │   ├── test_parser.py
 │   └── test_query_planner.py
 └── notebooks/
@@ -156,21 +152,35 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 
 ---
 
+## QUYẾT ĐỊNH THIẾT KẾ — DECISION LOG
+
+| # | Quyết định | Lý do | Ngày |
+|---|---|---|---|
+| D-01 | Thu thập theo Chương/Mục thay vì từng Điều | Tiết kiệm thời gian Phase 1; dữ liệu thừa dùng làm noise test cho evaluation | 2026-04-27 |
+| D-02 | Dùng VBHN làm nguồn nội dung chính | Giải quyết vấn đề nghị định chồng chéo sửa đổi lẫn nhau, không cần tự tra từng NĐ | 2026-04-27 |
+| D-03 | CTV chỉ tạo bản hiện hành trước | Ưu tiên chạy pipeline end-to-end; bổ sung temporal versioning sau nếu kịp | 2026-04-27 |
+| D-04 | Tier 1 bao gồm NQ Quốc hội; Tier 4 bao gồm NQ HĐND | NQ QH có giá trị tương đương Luật; NQ HĐND tỉnh có giá trị tương đương QĐ UBND | 2026-04-27 |
+| D-05 | Scope CMĐSDĐ: cá nhân, đất NN trừ lâm nghiệp, sang đất ở | Hạn chế liên đới tới luật lâm nghiệp, luật đầu tư; giảm số văn bản cần thu thập | 2026-04-27 |
+| D-06 | Điều mới hoàn toàn (VD: Điều 44a) thuộc Norm gốc, CTV ghi added_by | Giữ nhất quán cấu trúc bố cục văn bản; truy vết nguồn gốc qua CTV | 2026-04-27 |
+| D-07 | Xóa Procedure node và edge `[:SPECIFIED_IN]` khỏi schema | Manual mapping không scalable; Theme + Jurisdiction filter + `[:IMPLEMENTS]` traversal đã đủ để routing và chứng minh 3 Gap | 2026-05-10 |
+| D-08 | Thêm field `summary` vào frontmatter; Stage 1 retrieval qua summary embedding | Cho phép semantic routing ở cấp Norm mà không cần manual mapping; con người viết đảm bảo độ chính xác pháp lý | 2026-05-10 |
+
+---
+
 ## SCHEMA ONTOLOGY — QUICK REFERENCE
 
-### 7 loại Node
+### 6 loại Node
 
 | Node | Mô tả | Key properties |
 |---|---|---|
 | `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi |
-| `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from` |
-| `Component` | Điều/Khoản/Điểm (xuyên thời gian) | `id`, `label` |
-| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status` |
+| `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from`, `summary` |
+| `Component` | Điều/Khoản/Điểm/Tiết (xuyên thời gian) | `id`, `label` |
+| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status`, `amended_by` (optional), `added_by` (optional) |
 | `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic), `text` |
 | `Jurisdiction` | Địa phương | `name`: toan-quoc \| tp-hcm \| dong-nai |
-| `Procedure` | Thủ tục hành chính | `name` (slug), `display_name` |
 
-### 8 loại Edge
+### 6 loại Edge
 
 | Edge | Từ → Đến | Ý nghĩa |
 |---|---|---|
@@ -180,16 +190,16 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | `[:HAS_CTV]` | Component → CTV | Quản lý phiên bản |
 | `[:HAS_TEXT_UNIT]` | CTV → TextUnit | Nội dung vật lý |
 | `[:APPLIES_TO]` | Norm → Jurisdiction | Hard-filter địa phương (Gap 2) |
-| `[:SPECIFIED_IN]` | Procedure → Component | Thủ tục → Điều luật |
-| `[:BELONGS_TO]` | Component → Theme | **Không implement trong scope này** |
+
+> **Lưu ý (D-07):** `Procedure` node và `[:SPECIFIED_IN]` đã bị xóa khỏi schema (xem Decision Log D-07). Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval. `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
 
 ### Tier mapping (CỨNG — không thay đổi)
 
 ```
-tier 1 = Luật / Bộ luật
+tier 1 = Luật / Bộ luật / Nghị quyết Quốc hội
 tier 2 = Nghị định / Pháp lệnh
 tier 3 = Thông tư / Thông tư liên tịch
-tier 4 = Quyết định UBND tỉnh
+tier 4 = Quyết định UBND tỉnh / Nghị quyết HĐND tỉnh
 ```
 
 ---
@@ -223,6 +233,9 @@ implements: null
 valid_from: "2025-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/..."
+source_vbhn: null        # số hiệu VBHN nếu nội dung lấy từ văn bản hợp nhất, VD: "44/VBHN-VPQH"
+amended_by_norms: null   # list id văn bản sửa đổi nếu file chứa điều khoản đã bị sửa, VD: ["nghi-dinh-07-2025-nd-cp", "nghi-dinh-18-2026-nd-cp"]
+summary: null            # 3-5 câu mô tả phạm vi văn bản (thủ tục, đối tượng, địa phương) — do con người viết
 ---
 
 ## Điều X. [Tên điều]
@@ -230,9 +243,38 @@ source_url: "https://vbpl.vn/..."
 ### Khoản 1.
 
 #### Điểm a.
+
+##### Tiết 1.
+
+```
+
+**Đối với phần Phụ lục:** Cấp `##` dùng đường dẫn phân cấp đầy đủ từ Phụ lục đến Mục, thay thế cho `## Điều`. Từ Mục trở xuống vẫn tổ chức theo `### Khoản` / `#### Điểm` / `##### Tiết` như cũ.
+
+```markdown
+## Phụ lục [X] - Phần [Y] - Mục [N]. [Tên mục]
+## Phụ lục [X] - Phần [Y] - Nội dung [Z] - Mục [N]. [Tên mục]
+## Phụ lục [X]. [Tên phụ lục]
+
+### Khoản 1.
+
+#### Điểm a.
+
+##### Tiết 1.
 ```
 
 **Không được dùng:** `# Điều`, `## Khoản`, hay bất kỳ cấp heading nào khác.
+
+**Quy tắc định dạng nội dung bắt buộc (Rất quan trọng):**
+1. **Bỏ tiêu đề Chương, Mục:** Tuyệt đối không giữ lại các tiêu đề như "Chương I", "Mục 1". Chỉ giữ lại các cấp bậc hợp lệ là `## Điều`, `### Khoản`, `#### Điểm`, `##### Tiết`. **Ngoại lệ:** Phần Phụ lục dùng `## Phụ lục [X] - Phần [Y] - Mục [N]. [Tên]` thay cho `## Điều`.
+2. **Loại bỏ rác (Watermark/Header/Footer):** Phải xóa sạch các đoạn text rác như `CÔNG BÁO/Số.../Ngày...` hoặc số trang.
+3. **Bảo toàn Footnote/Amended:** Tuyệt đối không được làm mất các chú thích sửa đổi, bổ sung (footnote). Phải chuyển đổi chúng thành định dạng HTML comment và đặt ngay bên dưới nội dung bị ảnh hưởng.
+4. **Cấu trúc chuẩn của `amended_by`:** Các ghi chú sửa đổi phải được format thống nhất theo cú pháp:
+   `<!-- amended_by: [SỐ HIỆU LUẬT], [VỊ TRÍ SỬA ĐỔI], hiệu lực: [NGÀY], nội dung: [TÓM TẮT NỘI DUNG SỬA ĐỔI] -->`
+   *(Ví dụ: `<!-- amended_by: 47/2024/QH15, điểm a khoản 2 Điều 57, hiệu lực: 01/07/2025, nội dung: thay "..." bằng "..." -->`)*
+5. **Quy tắc SPACING (Khoảng trắng):**
+   - Luôn có 1 dòng trống giữa các heading (ví dụ giữa `## Điều 1` và `### Khoản 1.`).
+   - Luôn có 1 dòng trống giữa heading và đoạn nội dung đi kèm dưới nó.
+   - Các đoạn văn thuộc cùng một Khoản/Điểm mà không có ký hiệu mới thì viết tiếp xuống hàng dưới heading hiện tại (không tạo heading giả). Do ta áp dụng quy tắc gộp dòng (unwrap), các câu trong cùng một đoạn sẽ nằm trên một dòng duy nhất.
 
 ### Tên file data/raw/
 
@@ -262,9 +304,9 @@ Ví dụ: luat-dat-dai-2024.pdf
 [TASK-XX] type: mô tả ngắn bằng tiếng Việt
 
 Ví dụ:
-  [TASK-05] feat: thêm hàm clean_pdf_text cho boilerplate removal
-  [TASK-08] fix: sửa lỗi Stack pop khi gặp Điều không có Khoản
-  [TASK-09] test: thêm unit test cho idempotency của graph_builder
+  [TASK-04] feat: thêm hàm validate_metadata cho Phase 1
+  [TASK-06] fix: sửa lỗi Stack pop khi gặp Điều không có Khoản
+  [TASK-07] test: thêm unit test cho idempotency của graph_builder
 ```
 
 ---
@@ -281,7 +323,7 @@ VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 VALID_TIERS = [1, 2, 3, 4]
 
 VALID_PROCEDURES = [
-    "chuyen-muc-dich-su-dung-dat",
+    "chuyen-muc-dich-su-dung-dat",  # Scope: cá nhân, từ đất nông nghiệp (trừ đất lâm nghiệp) sang đất ở (nông thôn + đô thị)
     "cap-so-do-lan-dau",
     "dang-ky-khai-sinh",
     "cap-ban-sao-trich-luc-ho-tich",
@@ -291,8 +333,13 @@ VALID_PROCEDURES = [
 
 QDRANT_COLLECTION_NAME = "legal_texts"
 QDRANT_VECTOR_DIM = 1024          # BGE-M3
-CONTEXT_MAX_TOKENS = 3000
-DEFAULT_TOP_K = 10
+CONTEXT_MAX_TOKENS = 6000
+DEFAULT_TOP_K = 25
+MAX_PER_NORM = 5                  # per-norm diversity cap trong hybrid_search
+
+# Neo4j schema: 7 edge types
+# IMPLEMENTS: hướng dẫn thi hành (NĐ -> Luật)
+# AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [v1.7]
 ```
 
 ---
@@ -304,8 +351,7 @@ parser.py          ← đọc data/raw/*.md
                    → trả về List[TextUnit] với Deterministic ID
 
 graph_builder.py   ← nhận TextUnit list từ parser.py
-                   ← nhận metadata từ YAML frontmatter
-                   ← nhận specified_in_map.md cho [:SPECIFIED_IN]
+                   ← nhận metadata từ YAML frontmatter (kể cả summary)
                    → write vào Neo4j (MERGE, idempotent)
 
 vectorizer.py      ← đọc TextUnit nodes từ Neo4j
@@ -333,24 +379,26 @@ answer_generator.py  ← nhận context + câu hỏi gốc
 
 ---
 
-## DOCLING PIPELINE — QUICK REFERENCE
+## PIPELINE THU THẬP DỮ LIỆU — QUICK REFERENCE
 
-```
-PDF/DOCX gốc
-  ↓ run_docling(file_path)           # Docling parsing + layout analysis
-  ↓ clean_pdf_text(doc)              # Xóa boilerplate VN
-  ↓ article_boundary_split(doc)      # Regex r"^Điều\s+\d+" trên headings
-  ↓ hierarchy_prefix_attach(doc)     # Sinh context path từ DoclingDocument
-  → *-draft.md                       # TRUNG GIAN — chưa có metadata
-  ↓ Điền metadata thủ công           # tier, jurisdiction, implements, etc.
-  → data/raw/*.md                    # INPUT cho Phase 2
-```
+Dữ liệu được thu thập **thủ công** từ các nguồn pháp luật chính thức, không dùng Docling/OCR pipeline.
 
-**Lưu ý OCR:** Nếu file là PDF scan → Docling dùng Tesseract với `lang='vie'`.
-Thiếu `vie` language pack → kết quả OCR sai hoàn toàn. Kiểm tra trước khi chạy:
-```bash
-tesseract --list-langs | grep vie
-```
+**Workflow:**
+1. Xác định thủ tục trên dichvucong.gov.vn → lấy danh sách văn bản liên quan
+2. Tìm Văn bản hợp nhất (VBHN) trên vbpl.vn nếu có → dùng làm nguồn nội dung
+3. Nếu không có VBHN → lấy trực tiếp từ văn bản gốc
+4. Copy nội dung các Chương/Mục liên quan → chuẩn hóa thành file `data/raw/*.md`
+
+**Quy tắc thu thập:**
+- Nếu chương **không** có mục: có ít nhất 1 điều liên quan → lấy **cả chương**
+- Nếu chương **có** mục: có ít nhất 1 điều liên quan → lấy **cả mục** chứa điều đó
+- VBHN chỉ là nguồn lấy nội dung; metadata vẫn ghi theo văn bản QPPL chính thức
+- Điều mới hoàn toàn (được thêm bởi nghị định sửa đổi): Component thuộc Norm gốc, CTV ghi `added_by`
+
+**Chiến lược CTV:**
+- Phase 1: chỉ tạo CTV bản hiện hành (`status: active`) từ VBHN
+- Sau Phase 3 nếu kịp: bổ sung 2-3 CTV phiên bản cũ bằng cách truy ngược từ VBHN để demo temporal evolution
+- Không bắt buộc tạo CTV cũ cho tất cả điều khoản
 
 ---
 
@@ -361,9 +409,9 @@ Bốn task sau là "cổng" bắt buộc. Phase sau **không được bắt đ�
 | Gate | Cho phép bắt đầu | Verify bằng |
 |---|---|---|
 | TASK-02 (Integration Verification) | Phase 1 | Script `connection_check.py` chạy "✅ PASS" cả Neo4j và Qdrant |
-| TASK-07 (Cross-check Phase 1) | Phase 2 | `review_log.md` có sign-off của cả 2 thành viên; `validate_metadata.py` không báo lỗi |
-| TASK-11 (Phase 2 Verification) | Phase 3 | `phase2_report.md` có đủ count checks và sign-off |
-| TASK-16 (Integration E2E) | Phase 4 | Notebook `phase3_e2e_test.ipynb` chạy được 12+ câu hỏi |
+| TASK-05 (Cross-check Phase 1) | Phase 2 | `review_log.md` có sign-off của cả 2 thành viên; `validate_metadata.py` không báo lỗi |
+| TASK-09 (Phase 2 Verification) | Phase 3 | `phase2_report.md` có đủ count checks và sign-off |
+| TASK-14 (Integration E2E) | Phase 4 | Notebook `phase3_e2e_test.ipynb` chạy được 12+ câu hỏi |
 
 ---
 
@@ -384,9 +432,6 @@ python src/utils/validate_metadata.py data/raw/
 
 # Kiểm tra kết nối
 python src/utils/connection_check.py
-
-# Chạy Docling pipeline (Phase 1)
-python src/ingestion/run_pipeline.py --input data/sources/ --output data/raw/
 
 # Chạy ingestion (Phase 2) — chỉ sau khi Phase 1 done
 python src/ingestion/graph_builder.py
@@ -429,13 +474,6 @@ docker compose logs neo4j | tail -20
 # Mở file đó, tìm heading bắt đầu bằng #, sửa thành ##
 ```
 
-**Docling OCR kết quả sai hoàn toàn:**
-```bash
-# Thiếu Vietnamese language pack cho Tesseract
-sudo apt-get install tesseract-ocr-vie  # Ubuntu/Debian
-brew install tesseract-lang             # macOS
-```
-
 **Deterministic ID bị duplicate giữa hai file khác nhau:**
 ```
 # Hai TextUnit có cùng context_path → một trong hai file có id metadata trùng
@@ -447,7 +485,6 @@ brew install tesseract-lang             # macOS
 ## NHỮNG GÌ KHÔNG LÀM
 
 - **Không** tự quyết định cross-reference ngoài scope — hỏi project owner, xem `data/raw/crossref_decisions.md`
-- **Không** tự quyết định `[:SPECIFIED_IN]` mapping nếu không chắc — để trống, ghi "cần xác nhận GVHD"
 - **Không** implement `[:BELONGS_TO]` — đây là enhancement ngoài scope hiện tại
 - **Không** dùng UUID làm ID bất kỳ đâu trong codebase
 - **Không** sửa file trong `data/sources/` — đây là raw data bất biến
