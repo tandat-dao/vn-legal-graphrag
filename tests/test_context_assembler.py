@@ -115,8 +115,15 @@ class TestEstimateTokens:
 # ---------------------------------------------------------------------------
 
 class TestAssembleContext:
-    def test_dod_1_tier_order(self):
-        """DoD: tier 1 luôn trước tier 4."""
+    def test_respects_rrf_order_not_tier(self):
+        """assemble_context tôn trọng thứ tự RRF (đã tích hợp tier multiplier +
+        graph boost), KHÔNG sort lại theo tier.
+
+        Trước đây sort theo tier 1→4 đã phá hoại tier multiplier/graph boost
+        ở hybrid_search và đẩy Tier 4 (NQ địa phương) khỏi token budget.
+        Tier vẫn được expose qua header `[Tier X | Hiệu lực: ...]` để LLM
+        áp dụng lex superior khi mâu thuẫn (xem prompt build_prompt).
+        """
         units = [
             _make_unit("0000000000000004", "quyet-dinh-tp-hcm", "comp-4", tier=4, rrf_score=0.05),
             _make_unit("0000000000000001", "luat-dat-dai-2024", "comp-1", tier=1, rrf_score=0.03),
@@ -131,10 +138,18 @@ class TestAssembleContext:
 
         context = assemble_context(units, driver, max_tokens=3000)
 
-        # tier 1 phải xuất hiện trước tier 4 trong context
-        pos_tier1 = context.find("Nội dung Luật")
+        # RRF order: 0.05 (T4) > 0.04 (T2) > 0.03 (T1)
         pos_tier4 = context.find("Nội dung QĐ TP.HCM")
-        assert pos_tier1 < pos_tier4
+        pos_tier2 = context.find("Nội dung NĐ")
+        pos_tier1 = context.find("Nội dung Luật")
+        assert pos_tier4 < pos_tier2 < pos_tier1, (
+            f"Sort không tôn trọng RRF: T4@{pos_tier4} T2@{pos_tier2} T1@{pos_tier1}"
+        )
+
+        # Header phải chứa tier metadata để LLM tự suy luận lex superior
+        assert "[Tier 1" in context
+        assert "[Tier 2" in context
+        assert "[Tier 4" in context
 
     def test_dod_2_token_budget(self):
         """DoD: max_tokens=100 cắt bỏ đủ để tổng text < budget."""
@@ -249,6 +264,71 @@ class TestParseCitations:
 
     def test_empty_string(self):
         assert parse_citations("") == []
+
+    def test_citation_with_diem(self):
+        """Citation [Điều X, Khoản Y, Điểm Z, Văn bản W] phải parse đúng."""
+        raw = "Theo [Điều 137, Khoản 1, Điểm b, Văn bản luat-dat-dai-2024], quy định..."
+        citations = parse_citations(raw)
+        assert len(citations) == 1
+        assert citations[0]["dieu"] == "137"
+        assert citations[0]["khoan"] == "1"
+        assert citations[0]["diem"] == "b"
+        assert citations[0]["van_ban"] == "luat-dat-dai-2024"
+        assert citations[0]["loai"] == "dieu"
+
+    def test_citation_with_diem_and_tiet(self):
+        """Citation đầy đủ 4 cấp Điều/Khoản/Điểm/Tiết."""
+        raw = "Quy định [Điều 5, Khoản 2, Điểm a, Tiết 1, Văn bản nd-50-2026]"
+        citations = parse_citations(raw)
+        assert len(citations) == 1
+        assert citations[0]["dieu"] == "5"
+        assert citations[0]["khoan"] == "2"
+        assert citations[0]["diem"] == "a"
+        assert citations[0]["tiet"] == "1"
+        assert citations[0]["van_ban"] == "nd-50-2026"
+
+    def test_citation_phu_luc(self):
+        """Citation [Phụ lục X, Văn bản Y]."""
+        raw = "Theo [Phụ lục I, Văn bản nq-22-2024-dong-nai], biểu phí..."
+        citations = parse_citations(raw)
+        assert len(citations) == 1
+        assert citations[0]["loai"] == "phu_luc"
+        assert citations[0]["dieu"] == "I"
+        assert citations[0]["khoan"] is None
+        assert citations[0]["van_ban"] == "nq-22-2024-dong-nai"
+
+    def test_citation_phu_luc_with_khoan(self):
+        """Citation [Phụ lục X, Khoản Y, Văn bản Z]."""
+        raw = "[Phụ lục 16, Khoản 2, Văn bản qd-52-2016-tp-hcm]"
+        citations = parse_citations(raw)
+        assert len(citations) == 1
+        assert citations[0]["loai"] == "phu_luc"
+        assert citations[0]["dieu"] == "16"
+        assert citations[0]["khoan"] == "2"
+
+    def test_mixed_formats_in_one_text(self):
+        """Mix nhiều định dạng trong cùng 1 đoạn text."""
+        raw = (
+            "[Điều 1, Văn bản a]. "
+            "[Điều 2, Khoản 3, Văn bản b]. "
+            "[Điều 137, Khoản 1, Điểm b, Văn bản c]. "
+            "[Phụ lục I, Văn bản d]."
+        )
+        citations = parse_citations(raw)
+        assert len(citations) == 4
+        assert citations[2]["diem"] == "b"
+        assert citations[3]["loai"] == "phu_luc"
+
+    def test_backward_compat_old_format(self):
+        """Format cũ phải vẫn parse được + có field mới (None/loai='dieu')."""
+        raw = "[Điều 116, Khoản 1, Văn bản luat-dat-dai-2024]"
+        citations = parse_citations(raw)
+        assert len(citations) == 1
+        assert citations[0]["dieu"] == "116"
+        assert citations[0]["khoan"] == "1"
+        assert citations[0]["diem"] is None
+        assert citations[0]["tiet"] is None
+        assert citations[0]["loai"] == "dieu"
 
 
 # ---------------------------------------------------------------------------
