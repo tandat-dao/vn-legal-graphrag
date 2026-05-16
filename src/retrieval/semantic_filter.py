@@ -34,6 +34,9 @@ _DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng
 _KEYWORD_SCROLL_LIMIT = 200  # scroll tối đa cho keyword path
 _KEYWORD_MIN_SCORE = 0.5     # ngưỡng tối thiểu để text_unit được tham gia keyword path
                               # — tránh nhiễu khi query chứa "tp"/"hcm" match nhẹ với norm_id
+_MAX_PER_NORM = 5             # tối đa N TextUnit từ cùng 1 norm trong top-k output
+                              # — tránh norm lớn (Luật ĐĐ 2024, ~2800 TU) chiếm hết slot
+                              # — đảm bảo VB sửa đổi/bổ sung (NQ 254, NĐ 50...) có representation
 
 # Regex strip địa danh jurisdiction khỏi query trước dense encoding (P3 fix).
 # Jurisdiction đã được xử lý ở Stage 2 (Neo4j APPLIES_TO + norm_id filter).
@@ -115,8 +118,17 @@ def _keyword_score(query_tokens: set[str], payload: dict) -> float:
 # RRF
 # ---------------------------------------------------------------------------
 
-def _rrf_score(dense_rank: int, keyword_rank: int, k: int = _RRF_K) -> float:
-    return 1.0 / (k + dense_rank) + 1.0 / (k + keyword_rank)
+def _rrf_score(dense_rank: int, keyword_rank: int, k: int = _RRF_K, is_graph_boosted: bool = False, tier: int = 1) -> float:
+    base_score = 1.0 / (k + dense_rank) + 1.0 / (k + keyword_rank)
+    
+    # Bảo toàn phân phối: Dùng phép nhân trọng số (Multiplier)
+    # Tier 4 -> x1.4 | Tier 1 -> x1.1
+    tier_multiplier = 1.0 + (tier * 0.1)
+    
+    # Graph Boost -> x100.0 (Đẩy vọt nhóm Graph lên trên nhóm Vector thuần)
+    graph_multiplier = 100.0 if is_graph_boosted else 1.0
+    
+    return base_score * tier_multiplier * graph_multiplier
 
 
 # ---------------------------------------------------------------------------
@@ -164,6 +176,7 @@ def hybrid_search(
     qdrant_client: QdrantClient,
     model,
     top_k: int = 10,
+    graph_component_ids: list[str] = None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -179,6 +192,7 @@ def hybrid_search(
         qdrant_client: Qdrant client đã kết nối.
         model: BGE-M3 model đã load.
         top_k: Số kết quả tối đa trả về.
+        procedure: Loại thủ tục (từ QueryPlanner) để mở rộng dense query (tùy chọn).
 
     Returns:
         List ScoredTextUnit sắp xếp theo rrf_score giảm dần.
@@ -200,8 +214,7 @@ def hybrid_search(
 
     # --- Path 1: Dense search (dùng query đã strip jurisdiction) ---
     question_for_dense = _strip_jurisdiction_for_dense(question)
-    if question_for_dense != question:
-        logger.info(f"hybrid_search: dense query stripped → '{question_for_dense}'")
+    
     query_vector = encode_text(model, question_for_dense)
     dense_results = qdrant_client.query_points(
         "legal_texts",
@@ -215,12 +228,31 @@ def hybrid_search(
         qdrant_client, search_filter, query_tokens, _KEYWORD_SCROLL_LIMIT
     )
 
-    if not dense_results and not keyword_results:
-        logger.info("hybrid_search: cả hai path đều rỗng")
+    # --- Path 3: Graph Boost explicit fetch ---
+    graph_results = []
+    if graph_component_ids:
+        graph_filter = Filter(
+            must=[
+                FieldCondition(key="content_type", match=MatchValue(value="text_unit")),
+                FieldCondition(key="norm_id", match=MatchAny(any=norm_ids)),
+                FieldCondition(key="component_id", match=MatchAny(any=graph_component_ids)),
+            ]
+        )
+        points, _ = qdrant_client.scroll(
+            "legal_texts",
+            scroll_filter=graph_filter,
+            limit=1000,
+            with_payload=True,
+            with_vectors=False,
+        )
+        graph_results = points
+
+    if not dense_results and not keyword_results and not graph_results:
+        logger.info("hybrid_search: tất cả các path đều rỗng")
         return []
 
     logger.info(
-        f"hybrid_search: dense={len(dense_results)}, keyword={len(keyword_results)} candidates"
+        f"hybrid_search: dense={len(dense_results)}, keyword={len(keyword_results)}, graph={len(graph_results)} candidates"
     )
 
     # --- RRF merger ---
@@ -228,35 +260,52 @@ def hybrid_search(
     dense_rank_map: dict[int, int] = {p.id: rank for rank, p in enumerate(dense_results)}
     keyword_rank_map: dict[int, int] = {p.id: rank for rank, p in enumerate(keyword_results)}
 
-    # Tập hợp tất cả point IDs từ cả hai path
+    # Tập hợp tất cả point IDs từ cả 3 path
     all_ids: dict[int, object] = {}
     for p in dense_results:
         all_ids[p.id] = p
     for p in keyword_results:
         if p.id not in all_ids:
             all_ids[p.id] = p
+    for p in graph_results:
+        if p.id not in all_ids:
+            all_ids[p.id] = p
 
     dense_fallback = len(dense_results)    # rank khi không có trong dense list
     keyword_fallback = len(keyword_results)  # rank khi không có trong keyword list
+    graph_boost_set = set(graph_component_ids or [])
 
     scored: list[tuple[float, object]] = []
     for pid, point in all_ids.items():
         dr = dense_rank_map.get(pid, dense_fallback)
         kr = keyword_rank_map.get(pid, keyword_fallback)
-        score = _rrf_score(dr, kr)
+        comp_id = point.payload.get("component_id", "")
+        tier = point.payload.get("tier") or 1
+        is_boosted = comp_id in graph_boost_set
+        score = _rrf_score(dr, kr, is_graph_boosted=is_boosted, tier=tier)
         scored.append((score, point))
 
     scored.sort(key=lambda x: x[0], reverse=True)
 
-    # --- Build output ---
+    # --- Build output (per-norm diversity cap) ---
     results: list[ScoredTextUnit] = []
-    for rrf_score_val, point in scored[:top_k]:
+    norm_count: dict[str, int] = {}
+    skipped_by_cap = 0
+    for rrf_score_val, point in scored:
+        if len(results) >= top_k:
+            break
         payload = point.payload
+        nid = payload.get("norm_id", "")
+        # Per-norm cap: tránh norm lớn (Luật ĐĐ 2024) chiếm hết top-k
+        if norm_count.get(nid, 0) >= _MAX_PER_NORM:
+            skipped_by_cap += 1
+            continue
+        norm_count[nid] = norm_count.get(nid, 0) + 1
         results.append(
             ScoredTextUnit(
                 text_unit_id=_qdrant_id_to_hex(point.id),
                 rrf_score=round(rrf_score_val, 6),
-                norm_id=payload.get("norm_id", ""),
+                norm_id=nid,
                 component_id=payload.get("component_id", ""),
                 jurisdiction=payload.get("jurisdiction", ""),
                 tier=payload.get("tier"),
@@ -267,8 +316,10 @@ def hybrid_search(
         )
 
     if results:
+        norm_dist = {n: c for n, c in norm_count.items()}
         logger.info(
-            f"hybrid_search: top-{len(results)} | "
-            f"best rrf={results[0]['rrf_score']:.4f} norm={results[0]['norm_id']}"
+            f"hybrid_search: top-{len(results)} (skipped {skipped_by_cap} by per-norm cap={_MAX_PER_NORM}) | "
+            f"best rrf={results[0]['rrf_score']:.4f} | norm_dist={norm_dist}"
         )
     return results
+
