@@ -129,10 +129,14 @@ def assemble_context(
     if not scored_text_units:
         return ""
 
-    # Sắp xếp: tier tăng dần (1 trước), cùng tier thì rrf_score giảm dần
+    # Tôn trọng thứ tự RRF từ hybrid_search (đã tích hợp tier multiplier + graph boost).
+    # Sort lại theo tier sẽ phá hoại boost: Tier 4 (NQ địa phương, NQ 254 với tier=1
+    # nhưng AMENDS) bị đẩy xuống cuối context, dễ bị token budget cắt.
+    # LLM vẫn nhận tier qua header "[Tier X | Hiệu lực: YYYY-MM-DD]" của từng block,
+    # nên việc áp dụng lex superior/posterior không phụ thuộc vào thứ tự block.
     sorted_units = sorted(
         scored_text_units,
-        key=lambda u: (u["tier"] or 99, -u["rrf_score"]),
+        key=lambda u: -u["rrf_score"],
     )
 
     # Fetch text từ Neo4j
