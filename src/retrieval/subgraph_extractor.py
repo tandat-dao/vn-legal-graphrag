@@ -23,10 +23,7 @@ Cypher Stage 2 (template):
     MATCH (seed:Norm {id: seed_id})
     MATCH (related:Norm)
     WHERE related.id = seed_id
-       OR (seed)-[:IMPLEMENTS*1..4]->(related)
-       OR (related)-[:IMPLEMENTS*1..4]->(seed)
-       OR (related)-[:AMENDS]->(seed)
-       OR (seed)-[:AMENDS]->(related)
+       OR EXISTS { MATCH (seed)-[:IMPLEMENTS|AMENDS*1..4]-(related) }
     MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
     WHERE j.name IN $allowed_jurisdictions
     MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
@@ -34,17 +31,22 @@ Cypher Stage 2 (template):
       AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
     RETURN DISTINCT related.id AS norm_id, c.id AS component_id
 
-Chiến lược traversal (bidirectional + amendment-aware):
+Chiến lược traversal (composed-edge derivation closure):
     Stage 1 tìm norm khớp câu hỏi nhất qua summary embedding.
-    Stage 2 mở rộng qua 2 loại relationship:
-    - [:IMPLEMENTS] (bidirectional, *1..4):
-      • Upward:   (seed)-[:IMPLEMENTS*1..4]->(parent)   — lấy luật cha
-      • Downward: (child)-[:IMPLEMENTS*1..4]->(seed)     — lấy NĐ, NQ con
-    - [:AMENDS] (bidirectional, depth=1):
-      • (amender)-[:AMENDS]->(seed) — lấy VB sửa đổi seed (NQ 254 sửa Luật ĐĐ)
-      • (seed)-[:AMENDS]->(target) — lấy VB bị seed sửa đổi
-    Đảm bảo Gap 3 (đa tầng) + temporal supersession: khi Đ.122 K1 (Luật ĐĐ) được
-    retrieve, NQ 254 K3 Đ4 (bãi bỏ yêu cầu NQ HĐND tỉnh) cũng tự động vào search space.
+    Stage 2 mở rộng qua BAO ĐÓNG (transitive closure) của tập edge derivation
+    {IMPLEMENTS, AMENDS}, undirected, depth tối đa 4 hop.
+
+    Nguyên lý: trong KG pháp lý, quan hệ phái sinh giữa các văn bản có thể đi qua
+    CHUỖI HỖN HỢP nhiều loại edge — hướng dẫn thi hành của văn bản sửa đổi cũng là
+    một phần của hệ thống pháp lý hiệu lực, cần được retrieve cùng nhau.
+
+    Ví dụ chain 2 loại edge cần bắt được (trước fix Cypher cũ không bắt được):
+        (NĐ 50/2026) -[:IMPLEMENTS]-> (NQ 254) -[:AMENDS]-> (Luật ĐĐ)
+        → seed=Luật ĐĐ phải reach được NĐ 50/2026 qua 2 hop AMENDS+IMPLEMENTS.
+
+    Đảm bảo Gap 3 (đa tầng): NQ 254 K3 Đ4 (bãi bỏ HĐND) và NĐ 50/2026 Đ6 (tỷ lệ
+    30%/50%/100% tiền SDĐ) đều vào search space khi user hỏi về "điều kiện CMĐSDĐ"
+    có seed Stage 1 chỉ là Luật ĐĐ.
 """
 import logging
 
@@ -82,10 +84,7 @@ UNWIND $seed_ids AS seed_id
 MATCH (seed:Norm {id: seed_id})
 MATCH (related:Norm)
 WHERE related.id = seed_id
-   OR (seed)-[:IMPLEMENTS*1..4]->(related)
-   OR (related)-[:IMPLEMENTS*1..4]->(seed)
-   OR (related)-[:AMENDS]->(seed)
-   OR (seed)-[:AMENDS]->(related)
+   OR EXISTS { MATCH (seed)-[:IMPLEMENTS|AMENDS*1..4]-(related) }
 MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
 WHERE j.name IN $allowed_jurisdictions
 MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
