@@ -35,7 +35,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 DEFAULT_TOP_K = 25
-CONTEXT_MAX_TOKENS = 3000
+CONTEXT_MAX_TOKENS = 6000
 
 
 # ---------------------------------------------------------------------------
@@ -140,10 +140,10 @@ def run_pipeline(
 
         # --- TASK-11: Sub-graph Extraction ---
         logger.info("run_pipeline: extract_subgraph")
-        norm_ids = extract_subgraph(
+        norm_ids, graph_comp_ids = extract_subgraph(
             question, query_plan, neo4j_driver, qdrant_client, model
         )
-        logger.info(f"run_pipeline: {len(norm_ids)} norm_ids từ Stage 2")
+        logger.info(f"run_pipeline: {len(norm_ids)} norm_ids, {len(graph_comp_ids)} graph_comp_ids từ Stage 2+3")
 
         # Không tìm được văn bản liên quan
         if not norm_ids:
@@ -164,7 +164,16 @@ def run_pipeline(
 
         # --- TASK-12: Hybrid Search ---
         logger.info("run_pipeline: hybrid_search")
-        scored_units = hybrid_search(question, norm_ids, qdrant_client, model, top_k=top_k)
+        scored_units = hybrid_search(
+            question,
+            norm_ids,
+            qdrant_client,
+            model,
+            top_k=top_k,
+            graph_component_ids=graph_comp_ids,
+            neo4j_driver=neo4j_driver,
+            procedure_id=query_plan.get("procedure"),
+        )
         logger.info(f"run_pipeline: {len(scored_units)} scored units")
 
         # --- TASK-13a: Context Assembly ---

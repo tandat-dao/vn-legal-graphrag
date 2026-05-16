@@ -138,17 +138,150 @@ def _keyword_score(query_tokens: set[str], payload: dict) -> float:
 # RRF
 # ---------------------------------------------------------------------------
 
-def _rrf_score(dense_rank: int, keyword_rank: int, k: int = _RRF_K, is_graph_boosted: bool = False, tier: int = 1) -> float:
+_RARITY_ALPHA = 1.5            # hệ số trọng số cho concept rarity boost
+                              # multiplier = 1 + α × rarity_score
+                              # α=1.5 đủ mạnh để pull Điều chuyên sâu (ít concept hiếm
+                              # trong norm) lên trên Điều tổng quát (concept phổ biến)
+
+
+def _rrf_score(
+    dense_rank: int,
+    keyword_rank: int,
+    k: int = _RRF_K,
+    is_graph_boosted: bool = False,
+    tier: int = 1,
+    rarity_score: float = 0.0,
+) -> float:
     base_score = 1.0 / (k + dense_rank) + 1.0 / (k + keyword_rank)
-    
-    # Bảo toàn phân phối: Dùng phép nhân trọng số (Multiplier)
+
+    # Tier multiplier: ưu tiên quy định địa phương (Lex Specialis)
     # Tier 4 -> x1.4 | Tier 1 -> x1.1
     tier_multiplier = 1.0 + (tier * 0.1)
-    
-    # Graph Boost -> x100.0 (Đẩy vọt nhóm Graph lên trên nhóm Vector thuần)
+
+    # Graph Boost -> x100.0 (đẩy nhóm graph-mapped lên trên Vector thuần)
     graph_multiplier = 100.0 if is_graph_boosted else 1.0
-    
-    return base_score * tier_multiplier * graph_multiplier
+
+    # Concept Rarity boost (TF-IDF trên đồ thị):
+    # Component bao phủ concept HIẾM trong norm của nó = chuyên sâu = boost.
+    # Khắc phục bias dense embedding ưu ái Điều tổng quát (Phạm vi, Đối tượng)
+    # đè Điều chuyên sâu chứa số liệu cụ thể (30/50/100%, 160m²).
+    rarity_multiplier = 1.0 + _RARITY_ALPHA * rarity_score
+
+    return base_score * tier_multiplier * graph_multiplier * rarity_multiplier
+
+
+# ---------------------------------------------------------------------------
+# Concept Rarity (TF-IDF trên đồ thị)
+# ---------------------------------------------------------------------------
+
+def _fetch_norm_concept_stats(norm_ids: list[str], neo4j_driver) -> tuple[dict, dict]:
+    """Fetch concept frequency stats cho từng norm trong pool.
+
+    Args:
+        norm_ids: List norm_ids trong retrieval pool.
+        neo4j_driver: Neo4j driver.
+
+    Returns:
+        Tuple (norm_total_components, norm_concept_count):
+        - norm_total_components: {norm_id: total số Component có ≥1 concept mapped}
+        - norm_concept_count: {(norm_id, concept_id): số Component trong norm có concept này}
+    """
+    if not norm_ids:
+        return {}, {}
+    cypher = """
+    UNWIND $norm_ids AS nid
+    MATCH (n:Norm {id: nid})-[:HAS_COMPONENT]->(c:Component)
+    OPTIONAL MATCH (c)-[:MAPS_TO_CONCEPT]->(con:Concept)
+    RETURN nid AS norm_id, c.id AS comp_id, collect(DISTINCT con.id) AS concepts
+    """
+    with neo4j_driver.session() as s:
+        rows = s.run(cypher, norm_ids=norm_ids).data()
+
+    norm_total: dict[str, int] = {}
+    norm_concept_count: dict[tuple[str, str], int] = {}
+    for row in rows:
+        nid = row["norm_id"]
+        concepts = [c for c in row["concepts"] if c is not None]
+        if concepts:  # chỉ đếm component có ≥1 concept mapped
+            norm_total[nid] = norm_total.get(nid, 0) + 1
+            for concept in concepts:
+                key = (nid, concept)
+                norm_concept_count[key] = norm_concept_count.get(key, 0) + 1
+    return norm_total, norm_concept_count
+
+
+def _fetch_component_concepts(component_ids: list[str], neo4j_driver) -> dict[str, list[str]]:
+    """Fetch concept mapping cho từng component candidate.
+
+    Returns:
+        {component_id: [concept_id, ...]}
+    """
+    if not component_ids:
+        return {}
+    cypher = """
+    UNWIND $cids AS cid
+    MATCH (c:Component {id: cid})
+    OPTIONAL MATCH (c)-[:MAPS_TO_CONCEPT]->(con:Concept)
+    RETURN cid AS comp_id, collect(DISTINCT con.id) AS concepts
+    """
+    with neo4j_driver.session() as s:
+        rows = s.run(cypher, cids=list(set(component_ids))).data()
+    return {r["comp_id"]: [c for c in r["concepts"] if c is not None] for r in rows}
+
+
+def _fetch_required_concepts(procedure_id: str, neo4j_driver) -> set[str]:
+    """Fetch concept ids mà procedure require."""
+    if not procedure_id:
+        return set()
+    cypher = """
+    MATCH (p:Procedure {id: $pid})-[:REQUIRES_CONCEPT]->(c:Concept)
+    RETURN collect(c.id) AS concepts
+    """
+    with neo4j_driver.session() as s:
+        res = s.run(cypher, pid=procedure_id).data()
+    if not res:
+        return set()
+    return set(res[0]["concepts"])
+
+
+def _compute_rarity(
+    comp_concepts: list[str],
+    norm_id: str,
+    required_concepts: set[str],
+    norm_total: dict[str, int],
+    norm_concept_count: dict[tuple[str, str], int],
+) -> float:
+    """Tính concept rarity score cho 1 component — dùng MAX rarity.
+
+    Rarity(C, norm) = 1 - (count(C in norm) / total_components(norm))
+    Score = MAX rarity(C, norm) cho C ∈ comp_concepts ∩ required_concepts
+
+    Nguyên lý TF-IDF (graph variant) — MAX thay vì SUM:
+    Một component được boost theo concept HIẾM NHẤT mà nó bao phủ trong norm.
+    Lý do dùng MAX không dùng SUM: SUM thưởng cho component có NHIỀU concept
+    (kể cả concept phổ biến), gây bias về Điều tổng quát ("Phạm vi điều chỉnh",
+    "Đối tượng áp dụng" — gắn nhiều concept một cách lướt qua). MAX phản ánh
+    đúng degree of SPECIALIZATION: component "chuyên sâu" về 1 concept hiếm
+    (vd: hạn mức 160m² của QĐ 69 Đ3) được boost mạnh, không bị diluted bởi
+    concept phổ biến đi kèm.
+
+    Score nằm trong [0, 1].
+    """
+    if not comp_concepts or not required_concepts or not norm_id:
+        return 0.0
+    total = norm_total.get(norm_id, 0)
+    if total == 0:
+        return 0.0
+    relevant = set(comp_concepts) & required_concepts
+    if not relevant:
+        return 0.0
+    max_rarity = 0.0
+    for concept in relevant:
+        count = norm_concept_count.get((norm_id, concept), 0)
+        rarity = 1.0 - (count / total) if total > 0 else 0.0
+        if rarity > max_rarity:
+            max_rarity = rarity
+    return max_rarity
 
 
 # ---------------------------------------------------------------------------
@@ -197,6 +330,8 @@ def hybrid_search(
     model,
     top_k: int = 10,
     graph_component_ids: list[str] = None,
+    neo4j_driver=None,
+    procedure_id: str | None = None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -295,14 +430,42 @@ def hybrid_search(
     keyword_fallback = len(keyword_results)  # rank khi không có trong keyword list
     graph_boost_set = set(graph_component_ids or [])
 
+    # Concept Rarity stats: fetch một lần cho toàn pool, dùng làm TF-IDF graph signal.
+    # Chỉ activate khi có neo4j_driver + procedure_id (backward compat).
+    norm_total: dict[str, int] = {}
+    norm_concept_count: dict[tuple[str, str], int] = {}
+    component_concepts: dict[str, list[str]] = {}
+    required_concepts: set[str] = set()
+    rarity_enabled = neo4j_driver is not None and procedure_id is not None
+    if rarity_enabled:
+        candidate_norm_ids = list({p.payload.get("norm_id", "") for p in all_ids.values() if p.payload.get("norm_id")})
+        candidate_comp_ids = list({p.payload.get("component_id", "") for p in all_ids.values() if p.payload.get("component_id")})
+        norm_total, norm_concept_count = _fetch_norm_concept_stats(candidate_norm_ids, neo4j_driver)
+        component_concepts = _fetch_component_concepts(candidate_comp_ids, neo4j_driver)
+        required_concepts = _fetch_required_concepts(procedure_id, neo4j_driver)
+        logger.info(
+            f"hybrid_search: rarity stats — {len(norm_total)} norms, "
+            f"{len(component_concepts)} components mapped, {len(required_concepts)} required concepts"
+        )
+
     scored: list[tuple[float, object]] = []
     for pid, point in all_ids.items():
         dr = dense_rank_map.get(pid, dense_fallback)
         kr = keyword_rank_map.get(pid, keyword_fallback)
         comp_id = point.payload.get("component_id", "")
+        nid = point.payload.get("norm_id", "")
         tier = point.payload.get("tier") or 1
         is_boosted = comp_id in graph_boost_set
-        score = _rrf_score(dr, kr, is_graph_boosted=is_boosted, tier=tier)
+        rarity = 0.0
+        if rarity_enabled:
+            rarity = _compute_rarity(
+                component_concepts.get(comp_id, []),
+                nid,
+                required_concepts,
+                norm_total,
+                norm_concept_count,
+            )
+        score = _rrf_score(dr, kr, is_graph_boosted=is_boosted, tier=tier, rarity_score=rarity)
         scored.append((score, point))
 
     scored.sort(key=lambda x: x[0], reverse=True)
