@@ -7,7 +7,7 @@ Stage 1 — Qdrant semantic search:
     filter content_type="summary" + theme → top-N seed norm_ids
 
 Stage 2 — Neo4j graph traversal:
-    Từ seed norm_ids, mở rộng qua [:IMPLEMENTS] (upward-only)
+    Từ seed norm_ids, mở rộng qua [:IMPLEMENTS] (BIDIRECTIONAL)
     Lọc cứng theo jurisdiction qua [:APPLIES_TO]
     Lọc temporal theo CTV.valid_from / CTV.valid_to
     → trả về DISTINCT norm_ids (dùng làm Qdrant filter cho Stage 3)
@@ -23,17 +23,28 @@ Cypher Stage 2 (template):
     MATCH (seed:Norm {id: seed_id})
     MATCH (related:Norm)
     WHERE related.id = seed_id
-       OR (seed)-[:IMPLEMENTS*0..4]->(related)
+       OR (seed)-[:IMPLEMENTS*1..4]->(related)
+       OR (related)-[:IMPLEMENTS*1..4]->(seed)
+       OR (related)-[:AMENDS]->(seed)
+       OR (seed)-[:AMENDS]->(related)
     MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
     WHERE j.name IN $allowed_jurisdictions
     MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
     WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
       AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
-    RETURN related.id AS norm_id, c.id AS component_id
+    RETURN DISTINCT related.id AS norm_id, c.id AS component_id
 
-Chiến lược traversal (bottom-up):
-    Stage 1 tìm norm CỤ THỂ nhất (tier cao) khớp câu hỏi.
-    Stage 2 leo lên luật cha (upward-only) — không mở rộng xuống implementors.
+Chiến lược traversal (bidirectional + amendment-aware):
+    Stage 1 tìm norm khớp câu hỏi nhất qua summary embedding.
+    Stage 2 mở rộng qua 2 loại relationship:
+    - [:IMPLEMENTS] (bidirectional, *1..4):
+      • Upward:   (seed)-[:IMPLEMENTS*1..4]->(parent)   — lấy luật cha
+      • Downward: (child)-[:IMPLEMENTS*1..4]->(seed)     — lấy NĐ, NQ con
+    - [:AMENDS] (bidirectional, depth=1):
+      • (amender)-[:AMENDS]->(seed) — lấy VB sửa đổi seed (NQ 254 sửa Luật ĐĐ)
+      • (seed)-[:AMENDS]->(target) — lấy VB bị seed sửa đổi
+    Đảm bảo Gap 3 (đa tầng) + temporal supersession: khi Đ.122 K1 (Luật ĐĐ) được
+    retrieve, NQ 254 K3 Đ4 (bãi bỏ yêu cầu NQ HĐND tỉnh) cũng tự động vào search space.
 """
 import logging
 
@@ -71,13 +82,16 @@ UNWIND $seed_ids AS seed_id
 MATCH (seed:Norm {id: seed_id})
 MATCH (related:Norm)
 WHERE related.id = seed_id
-   OR (seed)-[:IMPLEMENTS*0..4]->(related)
+   OR (seed)-[:IMPLEMENTS*1..4]->(related)
+   OR (related)-[:IMPLEMENTS*1..4]->(seed)
+   OR (related)-[:AMENDS]->(seed)
+   OR (seed)-[:AMENDS]->(related)
 MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
 WHERE j.name IN $allowed_jurisdictions
 MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
 WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
   AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
-RETURN related.id AS norm_id, c.id AS component_id
+RETURN DISTINCT related.id AS norm_id, c.id AS component_id
 """
 
 
@@ -86,7 +100,7 @@ def stage1_norm_ids(
     query_plan: QueryPlan,
     qdrant_client: QdrantClient,
     model,
-    top_n: int = 3,
+    top_n: int = 5,
     min_score: float = 0.3,
 ) -> list[str]:
     """Stage 1: encode câu hỏi → search summary vectors → trả về top-N norm_ids.
@@ -147,8 +161,8 @@ def stage2_component_ids(
 ) -> LCCIDs:
     """Stage 2: từ seed norm_ids, duyệt graph → Component IDs.
 
-    Chiến lược bottom-up: chỉ đi lên (seed → luật cha) qua [:IMPLEMENTS*0..4].
-    Không mở rộng xuống implementors để tránh LCCID explosion.
+    Chiến lược bidirectional: đi cả lên (seed → luật cha) và xuống (NĐ/NQ con → seed)
+    qua [:IMPLEMENTS*1..4].
     Lọc cứng theo jurisdiction và temporal.
 
     Args:
@@ -265,6 +279,35 @@ def stage2_norm_ids(
 
 
 # ---------------------------------------------------------------------------
+# Stage 3 — Ontology Mapping Graph Filter (Soft Boost Candidates)
+# ---------------------------------------------------------------------------
+
+_GRAPH_BOOST_CYPHER = """
+UNWIND $norm_ids AS nid
+MATCH (n:Norm {id: nid})-[:HAS_COMPONENT]->(comp:Component)
+MATCH (p:Procedure {id: $proc_id})-[:REQUIRES_CONCEPT]->(c:Concept)<-[:MAPS_TO_CONCEPT]-(comp)
+RETURN DISTINCT comp.id AS component_id
+"""
+
+def stage3_graph_component_ids(
+    norm_ids: list[str],
+    query_plan: QueryPlan,
+    neo4j_driver: Driver,
+) -> list[str]:
+    """Stage 3: lấy các component_id được map trực tiếp với các Concept của Procedure."""
+    proc_id = query_plan.get("procedure")
+    if not proc_id or not norm_ids:
+        return []
+        
+    with neo4j_driver.session() as session:
+        rows = session.run(_GRAPH_BOOST_CYPHER, norm_ids=norm_ids, proc_id=proc_id).data()
+    
+    comp_ids = [row["component_id"] for row in rows]
+    logger.info(f"Stage 3: {len(comp_ids)} graph_component_ids mapped for procedure {proc_id}")
+    return comp_ids
+
+
+# ---------------------------------------------------------------------------
 # Orchestrator
 # ---------------------------------------------------------------------------
 
@@ -274,9 +317,9 @@ def extract_subgraph(
     neo4j_driver: Driver,
     qdrant_client: QdrantClient,
     model,
-    top_n: int = 3,
-) -> list[str]:
-    """Orchestrator: Stage 1 + Stage 2 → norm_ids (dùng làm Qdrant filter cho Stage 3).
+    top_n: int = 5,
+) -> tuple[list[str], list[str]]:
+    """Orchestrator: Stage 1 + Stage 2 + Stage 3.
 
     Args:
         question: Câu hỏi tiếng Việt gốc từ người dùng.
@@ -287,8 +330,11 @@ def extract_subgraph(
         top_n: Số norm_ids tối đa Stage 1 trả về.
 
     Returns:
-        list[str] — norm_ids liên quan sau filter jurisdiction + temporal.
-        Đầu vào cho hybrid_search() (TASK-12) qua filter norm_id IN norm_ids.
+        tuple (norm_ids, graph_component_ids):
+        - norm_ids: Danh sách văn bản liên quan (Qdrant filter).
+        - graph_component_ids: Các điều khoản được Soft Boost qua Ontology Mapping.
     """
     seed_norm_ids = stage1_norm_ids(question, query_plan, qdrant_client, model, top_n)
-    return stage2_norm_ids(seed_norm_ids, query_plan, neo4j_driver)
+    result_norm_ids = stage2_norm_ids(seed_norm_ids, query_plan, neo4j_driver)
+    graph_comp_ids = stage3_graph_component_ids(result_norm_ids, query_plan, neo4j_driver)
+    return result_norm_ids, graph_comp_ids
