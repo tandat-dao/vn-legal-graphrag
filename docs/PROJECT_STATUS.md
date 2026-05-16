@@ -1,5 +1,48 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.5 | Cập nhật 2026-05-11**
+**Phiên bản 1.8 | Cập nhật 2026-05-16**
+
+> **v1.8 — Cập nhật 2026-05-16 (Stable — Phase 3 đóng băng):**
+> Hoàn thiện retrieval quality cho câu hỏi tổng quát qua 4 fix khoa học (generic, không hardcode).
+> Validated bằng E2E test 15 câu (14/15 ok + 1 confirmation đúng DoD). 149/149 unit tests PASS.
+>
+> **Fix 1 (Macro — Cypher composed-edge):** `subgraph_extractor.py` Stage 2 thay 4 OR clause (IMPLEMENTS×2 dir + AMENDS×2 dir) bằng pattern `[:IMPLEMENTS|AMENDS*1..4]` undirected (bao đóng transitive). Sửa bug chain hỗn hợp: `(NĐ 50)-[:IMPLEMENTS]->(NQ 254)-[:AMENDS]->(Luật ĐĐ)` — trước fix, seed=Luật ĐĐ không reach được NĐ 50.
+>
+> **Fix 2 (Macro — Tier Diversity Constraint + 2-pass):** `semantic_filter.py` thêm `_MAX_PER_TIER={1:8,2:8,3:6,4:8}`, hạ `_MAX_PER_NORM` 5→3, áp dụng 2-pass allocation (Pass 1 top-1/norm cho breadth, Pass 2 fill by RRF cho depth). Đảm bảo top-k bao phủ đa tầng pháp lý (T1 Luật + T2 NĐ + T4 địa phương) thay vì 17/25 bị Tier 4 chiếm.
+>
+> **Fix 3 (Micro — Concept Rarity MAX):** Thêm TF-IDF micro-boost trên đồ thị. `_compute_rarity()` tính `1 - count_C_in_norm/total_components`, dùng **MAX** thay SUM để tránh "trap" Điều tổng quát (Phạm vi/Đối tượng — gắn nhiều concept lướt qua) thắng Điều chuyên sâu (concept hiếm + nội dung định lượng). Sửa bug intra-norm: NĐ 50 Pass 1 chọn Đ3 K3 → giờ chọn Đ6 (30/50/100% tiền SDĐ). RRF multiplier mới: `base × tier_mult × graph_mult × (1 + 1.5×max_rarity)`.
+>
+> **Fix 4 (Parser citation):** `parse_citations()` regex mở rộng bắt `Điểm Z` và `Tiết K` giữa Khoản và Văn bản, kèm `Phụ lục X`. Output dict thêm 3 field: `diem`, `tiet`, `loai`. Trước fix: Q08+Q11 báo cit=0 (thực tế có 3-5 citation). Sau fix: chuẩn hóa metric Citation Accuracy cho Phase 4.
+>
+> **Validated với feedback Q01 gốc:**
+> - HĐND quay lại — SỬA (LLM tự áp lex posterior, trích NQ 254 Đ4 K3)
+> - Bịa "không có 30/50/100%" — SỬA (bảng đầy đủ từ NQ 254 Đ10 K2c)
+> - Bảng phí TỔ CHỨC nhầm hộ gia đình — SỬA (phân loại rõ)
+> - Bỏ sót tiền bảo vệ đất lúa — SỬA (NĐ 151 ≥50%)
+>
+> **Limitations chấp nhận:** QĐ 69 Đ3 (hạn mức 160m² cụ thể) đôi khi bị Đ1 (Phạm vi điều chỉnh) thắng do concept mapping coarse (cả 2 đều mapped `han-muc`). Bù đắp bằng NQ 254 Đ10 đề cập "trong hạn mức giao đất ở". Ghi nhận trong thesis Limitations.
+>
+> **Note phương pháp luận:** Tranh luận liên-AI (Claude vs Gemini) đã loại bỏ 2 phương án sai hướng: (1) Tier Multiplier ngược lex superior — nhầm conflict-resolution với IR relevance; (2) Dynamic Multiplier intent-based — câu hỏi đa-intent không phân biệt được; (3) Coverage SUM — rơi vào trap Điều tổng quát. Cuối cùng chốt 3 fix trên với nguyên lý khoa học defensible.
+>
+> **Phase 3 STABLE — đóng băng retrieval module.** Sẵn sàng vào Phase 4 (TASK-15→18).
+
+> **v1.7 — Cập nhật 2026-05-15:**
+> Sửa 3 lỗi gốc rễ phát hiện qua domain-expert feedback trên Q01 E2E test:
+> **Fix 1 (Data):** Thêm NQ 254 vào `amended_by_norms` frontmatter Luật ĐĐ (document-level, scalable).
+> **Fix 2 (Graph):** Thêm relationship `[:AMENDS]` trong `graph_builder.py` (Pass 3) — phân biệt sửa đổi vs hướng dẫn thi hành.
+> **Fix 3 (Cypher):** Mở rộng Stage 2 Cypher với `[:AMENDS]` traversal — khi lấy Luật ĐĐ, tự động kéo NQ 254.
+> **Fix 4 (Prompt):** Context block headers giờ chứa `[Tier X | Hiệu lực: YYYY-MM-DD]`.
+>   Prompt chứa quy tắc lex superior (cấp bậc) + lex posterior (thời gian) + lex specialis (đặc thù)
+>   → LLM tự suy luận mâu thuẫn giữa VB mà KHÔNG cần inline `amended_by` annotation.
+> **Fix 5 (Diversity):** Per-norm cap `_MAX_PER_NORM=5` trong hybrid_search output.
+> Schema: 7 edge (thêm AMENDS). 140/140 unit tests PASS. Cần re-ingest để áp dụng Fix 2+3.
+
+> **v1.6 — Cập nhật 2026-05-15:**
+> Sửa 3 vấn đề retrieval nghiêm trọng phát hiện qua E2E test notebook:
+> **Fix P1:** `[:IMPLEMENTS]` traversal chuyển từ upward-only (`*0..4`) sang **bidirectional** (`*1..4` cả 2 chiều).
+> Root cause: Stage 2 chỉ đi lên (seed→luật cha), không đi xuống (Luật→NĐ→NQ) → Gap 3 (đa tầng) không hoạt động.
+> **Fix P2:** `stage1_norm_ids` top_n tăng từ 3 → **5** để cover nhiều văn bản hơn.
+> **Fix P3:** `CONTEXT_MAX_TOKENS` tăng từ 3000 → **6000** (Claude Sonnet context window = 200k).
+> Đồng bộ `CLAUDE.md` constants. 140/140 unit tests PASS.
 
 > **v1.5 — Cập nhật 2026-05-11:**
 > TASK-14 hoàn thành: `src/pipeline.py` — `run_pipeline()` kết nối toàn bộ TASK-10→13.
