@@ -3,10 +3,16 @@ Graph Builder — TASK-07
 Đọc AST từ Parser, tạo toàn bộ node và edge trong Neo4j theo schema Ontology.
 
 Schema: 6 node (Theme, Norm, Component, CTV, TextUnit, Jurisdiction)
-        6 edge (INCLUDES, IMPLEMENTS, HAS_COMPONENT, HAS_CTV, HAS_TEXT_UNIT, APPLIES_TO)
+        7 edge (INCLUDES, IMPLEMENTS, AMENDS, HAS_COMPONENT, HAS_CTV, HAS_TEXT_UNIT, APPLIES_TO)
+
+AMENDS vs IMPLEMENTS:
+  - IMPLEMENTS: norm con hướng dẫn thi hành norm cha  (NĐ 102 -[:IMPLEMENTS]-> Luật ĐĐ)
+  - AMENDS: norm mới sửa đổi/bổ sung norm cũ          (NQ 254 -[:AMENDS]-> Luật ĐĐ)
+  Nguồn: `amended_by_norms` trong YAML frontmatter.
 
 Idempotent: chạy lại không tạo duplicate (dùng MERGE cho tất cả node và edge).
 """
+import json
 import logging
 import os
 from pathlib import Path
@@ -15,6 +21,7 @@ from dotenv import load_dotenv
 from neo4j import GraphDatabase, ManagedTransaction
 
 from src.ingestion.parser import TextUnit, generate_id, parse_file
+from src.ingestion.ontology_mapper import map_component_to_concepts
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
@@ -23,7 +30,32 @@ _NON_NORM_FILES = {"crossref_decisions.md", "mapping_table.md", "review_log.md"}
 
 
 # ---------------------------------------------------------------------------
-# Upsert — Nodes
+# Upsert — Ontology Nodes
+# ---------------------------------------------------------------------------
+
+def upsert_ontology(tx: ManagedTransaction, core_data: dict) -> None:
+    for concept in core_data.get("concepts", []):
+        tx.run(
+            "MERGE (c:Concept {id: $id}) SET c.name = $name",
+            id=concept["id"], name=concept["name"]
+        )
+    for proc in core_data.get("procedures", []):
+        tx.run(
+            "MERGE (p:Procedure {id: $id}) SET p.name = $name",
+            id=proc["id"], name=proc["name"]
+        )
+        for req_concept_id in proc.get("required_concepts", []):
+            tx.run(
+                """
+                MATCH (p:Procedure {id: $proc_id})
+                MATCH (c:Concept {id: $concept_id})
+                MERGE (p)-[:REQUIRES_CONCEPT]->(c)
+                """,
+                proc_id=proc["id"], concept_id=req_concept_id
+            )
+
+# ---------------------------------------------------------------------------
+# Upsert — Document Nodes
 # ---------------------------------------------------------------------------
 
 def upsert_theme(tx: ManagedTransaction, theme_name: str) -> None:
@@ -192,6 +224,18 @@ def run_ingestion(data_dir: str) -> None:
             logger.info(f"Parsed {filepath.name}: {len(result['nodes'])} TextUnits")
 
         with driver.session() as session:
+            # Pass 0: Khởi tạo Core Ontology
+            ontology_path = Path("data/ontology/core_v1.json")
+            if ontology_path.exists():
+                with open(ontology_path, "r", encoding="utf-8") as f:
+                    core_data = json.load(f)
+                with session.begin_transaction() as tx:
+                    upsert_ontology(tx, core_data)
+                    tx.commit()
+                logger.info("Pass 0 — Khởi tạo Core Ontology thành công.")
+            else:
+                logger.warning("Pass 0 — Bỏ qua do không tìm thấy core_v1.json")
+
             # Pass 1: upsert tất cả nodes + edges (trừ IMPLEMENTS nếu target chưa tồn tại)
             for result in all_results:
                 meta = result["metadata"]
@@ -239,7 +283,7 @@ def run_ingestion(data_dir: str) -> None:
                     meta = result["metadata"]
                     if meta.get("implements"):
                         tx.run(
-                            "MATCH (n:Norm {id: $id}), (p:Norm {id: $parent}) "
+                            "MATCH (n:Norm {id: $id}) MATCH (p:Norm {id: $parent}) "
                             "MERGE (n)-[:IMPLEMENTS]->(p)",
                             id=meta["id"],
                             parent=meta["implements"],
@@ -247,6 +291,109 @@ def run_ingestion(data_dir: str) -> None:
                         implements_count += 1
                 tx.commit()
             logger.info(f"Pass 2 — {implements_count} [:IMPLEMENTS] edges đã xử lý.")
+
+            # Pass 3: tạo [:AMENDS] edges từ amended_by_norms trong frontmatter
+            # AMENDS: norm sửa đổi -[:AMENDS]-> norm bị sửa đổi
+            # Ví dụ: (nghi-quyet-254-2025-qh15)-[:AMENDS]->(luat-dat-dai-2024)
+            amends_count = 0
+            with session.begin_transaction() as tx:
+                for result in all_results:
+                    meta = result["metadata"]
+                    amended_by = meta.get("amended_by_norms")
+                    if amended_by and isinstance(amended_by, list):
+                        for amending_norm_id in amended_by:
+                            if not isinstance(amending_norm_id, str):
+                                continue
+                            tx.run(
+                                "MATCH (amender:Norm {id: $amender_id}) MATCH (target:Norm {id: $target_id}) "
+                                "MERGE (amender)-[:AMENDS]->(target)",
+                                amender_id=amending_norm_id,
+                                target_id=meta["id"],
+                            )
+                            amends_count += 1
+                tx.commit()
+            logger.info(f"Pass 3 — {amends_count} [:AMENDS] edges đã xử lý.")
+
+            # Pass 4: Ontology Mapping (Bottom-up LLM Classification)
+            # Dùng Claude Haiku để gán nhãn từng Component vào các Concept có sẵn.
+            ontology_path = Path("data/ontology/core_v1.json")
+            if ontology_path.exists():
+                logger.info("Pass 4 — Bắt đầu Ontology Mapping (LLM Classification)...")
+                anthropic_client = __import__("anthropic").Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+                with open(ontology_path, "r", encoding="utf-8") as f:
+                    core_data = json.load(f)
+                
+                # Tính lũy đẳng (Idempotency): Tải trước danh sách các component đã map
+                with session.begin_transaction() as tx:
+                    mapped_records = tx.run(
+                        """
+                        MATCH (c:Component)
+                        WHERE c.ontology_mapped = true OR EXISTS { MATCH (c)-[:MAPS_TO_CONCEPT]->() }
+                        RETURN DISTINCT c.id AS comp_id
+                        """
+                    ).data()
+                    mapped_set = {r["comp_id"] for r in mapped_records}
+                logger.info(f"Pass 4 — Bỏ qua {len(mapped_set)} components đã map từ lần chạy trước để tiết kiệm chi phí.")
+                
+                mapping_count = 0
+                total_nodes = sum(len(res["nodes"]) for res in all_results)
+                processed = 0
+                batch_size = 50
+
+                for result in all_results:
+                    tx = session.begin_transaction()
+                    try:
+                        for idx, node in enumerate(result["nodes"]):
+                            comp_id = node["id"]
+                            
+                            # Idempotency: Skip nếu đã map
+                            if comp_id in mapped_set:
+                                processed += 1
+                                continue
+                                
+                            text = node["text"]
+                            if not text.strip():
+                                processed += 1
+                                continue
+                            
+                            mapped_concepts = map_component_to_concepts(anthropic_client, text, core_data)
+                            
+                            # Đánh dấu đã quét LLM (dù có ra mảng rỗng hay không)
+                            tx.run(
+                                "MATCH (c:Component {id: $comp_id}) SET c.ontology_mapped = true",
+                                comp_id=comp_id
+                            )
+                            
+                            for concept_id in mapped_concepts:
+                                tx.run(
+                                    """
+                                    MATCH (c:Component {id: $comp_id})
+                                    MATCH (concept:Concept {id: $concept_id})
+                                    MERGE (c)-[:MAPS_TO_CONCEPT]->(concept)
+                                    """,
+                                    comp_id=comp_id, concept_id=concept_id
+                                )
+                                mapping_count += 1
+                            
+                            processed += 1
+                            if processed % 100 == 0:
+                                logger.info(f"  Đã map {processed}/{total_nodes} components...")
+                            
+                            # Batch commit sau mỗi 50 node
+                            if (idx + 1) % batch_size == 0:
+                                tx.commit()
+                                tx = session.begin_transaction()
+
+                        # Commit những node còn lại của văn bản
+                        tx.commit()
+                    except Exception as e:
+                        if not tx.closed():
+                            tx.rollback()
+                        logger.error(f"Lỗi ở văn bản {result['metadata']['id']}, rollback lô hiện tại: {e}")
+                        raise e
+                logger.info(f"Pass 4 — Hoàn thành {mapping_count} [:MAPS_TO_CONCEPT] edges.")
+            else:
+                logger.warning("Pass 4 — Bỏ qua do không có core_v1.json")
 
         logger.info(
             f"run_ingestion() hoàn thành — {len(all_results)} văn bản được nạp vào Neo4j."
