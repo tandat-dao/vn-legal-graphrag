@@ -66,6 +66,43 @@ def _citation_key(c: dict, level: str = "khoan") -> tuple:
 # Citation accuracy (per question)
 # ---------------------------------------------------------------------------
 
+def _flex_match_count(pred: list[dict], gt: list[dict], level: str) -> int:
+    """Đếm số match giữa pred và gt với SEMANTIC WILDCARD ở các field None của GT.
+
+    Quy tắc:
+      - level='khoan': nếu gt.khoan is None → match bất kỳ khoan nào của pred (gt designer
+        cố tình cite cấp Điều, không quan tâm Khoản). Tương tự gt.diem is None khi level='diem'.
+      - Mỗi GT chỉ absorb được 1 pred (greedy 1-1 matching).
+      - van_ban và dieu luôn phải khớp.
+    """
+    def _matches(p: dict, g: dict) -> bool:
+        if _norm_str(p.get("van_ban")) != _norm_str(g.get("van_ban")):
+            return False
+        if _norm_str(p.get("dieu")) != _norm_str(g.get("dieu")):
+            return False
+        if level in ("khoan", "diem"):
+            g_khoan = _norm_str(g.get("khoan"))
+            if g_khoan is not None and _norm_str(p.get("khoan")) != g_khoan:
+                return False
+        if level == "diem":
+            g_diem = _norm_str(g.get("diem"))
+            if g_diem is not None and _norm_str(p.get("diem")) != g_diem:
+                return False
+        return True
+
+    used = [False] * len(gt)
+    matched = 0
+    for p in pred:
+        for i, g in enumerate(gt):
+            if used[i]:
+                continue
+            if _matches(p, g):
+                used[i] = True
+                matched += 1
+                break
+    return matched
+
+
 def citation_score(
     pred: list[dict],
     gt: list[dict],
@@ -73,35 +110,43 @@ def citation_score(
 ) -> CitationScore:
     """Tính precision/recall/F1 cho citations của một câu hỏi.
 
-    Dùng multiset (Counter) — duplicates được đếm. Match là intersection của hai
-    multiset ở cấp `level`.
+    Dùng greedy 1-1 matching với SEMANTIC WILDCARD: nếu GT có field None (ví dụ
+    khoan=None khi level='khoan'), pred sẽ match nếu cùng (dieu, van_ban) bất kể
+    khoan của pred. Lý do: GT designer cố tình cite cấp Điều khi không quan tâm
+    Khoản cụ thể — pred trả về bất kỳ Khoản nào của cùng Điều đều đúng ngữ nghĩa.
 
     Trường hợp đặc biệt:
       - gt rỗng, pred rỗng: precision=recall=f1=1.0 (correct refuse)
-      - gt rỗng, pred khác rỗng: precision=0, recall=1 (theo convention), f1=0
-        — câu negative bịa citation → penalize qua precision
-      - gt khác rỗng, pred rỗng: precision=1 (theo convention), recall=0, f1=0
+      - gt rỗng, pred khác rỗng: precision=0, recall=1, f1=0 (negative bịa → phạt qua precision)
+      - gt khác rỗng, pred rỗng: precision=1, recall=0, f1=0
     """
-    pred_keys = Counter(_citation_key(c, level) for c in pred)
-    gt_keys = Counter(_citation_key(c, level) for c in gt)
+    if level == "van_ban":
+        # Coarse: multiset intersection trên (van_ban,) — không cần wildcard
+        pred_keys = Counter(_citation_key(c, level) for c in pred)
+        gt_keys = Counter(_citation_key(c, level) for c in gt)
+        if not pred_keys and not gt_keys:
+            return CitationScore(precision=1.0, recall=1.0, f1=1.0, pred_count=0, gt_count=0, match_count=0)
+        match = sum((pred_keys & gt_keys).values())
+        n_pred = sum(pred_keys.values())
+        n_gt = sum(gt_keys.values())
+    else:
+        # dieu / khoan / diem: dùng greedy 1-1 với semantic wildcard
+        if not pred and not gt:
+            return CitationScore(precision=1.0, recall=1.0, f1=1.0, pred_count=0, gt_count=0, match_count=0)
+        match = _flex_match_count(pred, gt, level)
+        n_pred = len(pred)
+        n_gt = len(gt)
 
-    if not pred_keys and not gt_keys:
-        return CitationScore(precision=1.0, recall=1.0, f1=1.0, pred_count=0, gt_count=0, match_count=0)
-
-    intersection = pred_keys & gt_keys  # multiset intersection
-    match = sum(intersection.values())
-    # Precision: pred rỗng → 1.0 (không bịa) nếu gt cũng rỗng, else 0.0 (gt có mà không trả).
-    # Recall: gt rỗng → 1.0 (không có gì để recall — không phạt qua recall, mà phạt qua precision).
-    p = match / sum(pred_keys.values()) if pred_keys else (1.0 if not gt_keys else 0.0)
-    r = match / sum(gt_keys.values()) if gt_keys else 1.0
+    p = match / n_pred if n_pred else (1.0 if not n_gt else 0.0)
+    r = match / n_gt if n_gt else 1.0
     f1 = 2 * p * r / (p + r) if (p + r) > 0 else 0.0
 
     return CitationScore(
         precision=p,
         recall=r,
         f1=f1,
-        pred_count=sum(pred_keys.values()),
-        gt_count=sum(gt_keys.values()),
+        pred_count=n_pred,
+        gt_count=n_gt,
         match_count=match,
     )
 

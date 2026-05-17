@@ -24,11 +24,13 @@ MAX_ANSWER_TOKENS = 3000
 #   [Điều X, Khoản Y, Điểm Z, Tiết K, Văn bản W]
 #   [Phụ lục X, Văn bản Z]
 #   [Phụ lục X, Khoản Y, Văn bản Z]
-# Group 1: loại đầu (Điều | Phụ lục), Group 2: số/ký hiệu
+#   [Phụ lục, Khoản Y, Văn bản Z]  (Phụ lục KHÔNG có số — văn bản chỉ 1 Phụ lục duy nhất)
+# Group 1: loại đầu (Điều | Phụ lục), Group 2: số/ký hiệu (optional cho Phụ lục)
 # Group 3: Khoản (optional), Group 4: Điểm (optional), Group 5: Tiết (optional)
 # Group 6: Văn bản id
 _CITATION_RE = re.compile(
-    r"\[(Điều|Phụ lục)\s+([^,\]]+)"
+    r"\[(Điều|Phụ lục)"
+    r"(?:\s+([^,\]]+))?"  # số/ký hiệu optional (cần thiết cho Phụ lục duy nhất, VD NQ 02/2023)
     r"(?:,\s*Khoản\s+([^,\]]+))?"
     r"(?:,\s*Điểm\s+([^,\]]+))?"
     r"(?:,\s*Tiết\s+([^,\]]+))?"
@@ -57,7 +59,14 @@ def parse_citations(raw_answer: str) -> list[dict]:
     for match in _CITATION_RE.finditer(raw_answer):
         loai_raw = match.group(1).strip().lower()
         loai = "phu_luc" if loai_raw.startswith("phụ") else "dieu"
-        number = match.group(2).strip()
+        # Group 2 (số/ký hiệu) optional cho Phụ lục duy nhất; Điều bắt buộc có
+        raw_number = match.group(2)
+        if raw_number is None:
+            if loai == "dieu":
+                continue  # "Điều" không có số là format không hợp lệ
+            number = "_default"  # Phụ lục duy nhất → sentinel
+        else:
+            number = raw_number.strip()
         khoan = match.group(3).strip() if match.group(3) else None
         diem = match.group(4).strip() if match.group(4) else None
         tiet = match.group(5).strip() if match.group(5) else None

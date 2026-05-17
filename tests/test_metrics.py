@@ -27,6 +27,26 @@ def test_partial_match():
     assert abs(s["f1"] - 0.8) < 1e-6
 
 
+def test_gt_khoan_none_wildcard():
+    """GT cite cấp Điều (khoan=None) — pred trả về Khoản cụ thể vẫn match (semantic)."""
+    gt = [_c("6", None, "nq87")]  # designer chỉ cite Đ6
+    pred = [_c("6", "1", "nq87"), _c("6", "2", "nq87")]  # pipeline trả Đ6.1, Đ6.2
+    s = citation_score(pred, gt, level="khoan")
+    # 1 match (greedy 1-1), 2 pred, 1 gt
+    assert s["precision"] == 0.5
+    assert s["recall"] == 1.0
+    assert abs(s["f1"] - 2/3) < 1e-6
+
+
+def test_gt_khoan_none_wrong_dieu():
+    """GT (Đ6, None) — pred (Đ5, 1) KHÔNG match (khác Điều)."""
+    gt = [_c("6", None, "x")]
+    pred = [_c("5", "1", "x"), _c("7", None, "x")]
+    s = citation_score(pred, gt, level="khoan")
+    assert s["match_count"] == 0
+    assert s["recall"] == 0.0
+
+
 def test_extra_predictions():
     gt = [_c("3", "1", "a")]
     pred = [_c("3", "1", "a"), _c("9", "9", "b")]

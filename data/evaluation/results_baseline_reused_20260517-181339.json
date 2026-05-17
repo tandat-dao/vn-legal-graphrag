@@ -1,8 +1,8 @@
 {
   "system": "baseline",
   "test_set": "data/evaluation/test_set_dat_dai.json",
-  "timestamp": "20260517-170108",
-  "total_elapsed_s": 385.92,
+  "timestamp": "20260517-181339",
+  "reused_from": "data/evaluation/results_baseline_20260517-170108.json",
   "results": [
     {
       "id": "Q001",
@@ -310,12 +310,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
         "pred_count": 3,
         "gt_count": 2,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.3333333333333333,
@@ -375,12 +375,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
         "pred_count": 3,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.3333333333333333,
@@ -467,19 +467,19 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
         "pred_count": 2,
-        "gt_count": 1,
-        "match_count": 0
+        "gt_count": 2,
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.5,
-        "recall": 1.0,
-        "f1": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5,
         "pred_count": 2,
-        "gt_count": 1,
+        "gt_count": 2,
         "match_count": 1
       },
       "norm_recall": 1.0,
@@ -548,20 +548,20 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.6,
+        "recall": 1.0,
+        "f1": 0.7499999999999999,
         "pred_count": 5,
-        "gt_count": 1,
-        "match_count": 0
+        "gt_count": 3,
+        "match_count": 3
       },
       "citation_score_dieu": {
-        "precision": 0.2,
+        "precision": 0.6,
         "recall": 1.0,
-        "f1": 0.33333333333333337,
+        "f1": 0.7499999999999999,
         "pred_count": 5,
-        "gt_count": 1,
-        "match_count": 1
+        "gt_count": 3,
+        "match_count": 3
       },
       "norm_recall": 1.0,
       "negative_correct": null,
@@ -613,12 +613,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
         "pred_count": 3,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.3333333333333333,
@@ -718,12 +718,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.125,
+        "recall": 1.0,
+        "f1": 0.2222222222222222,
         "pred_count": 8,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.125,
@@ -1443,12 +1443,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.1111111111111111,
-        "recall": 0.2,
-        "f1": 0.14285714285714285,
+        "precision": 0.3333333333333333,
+        "recall": 0.6,
+        "f1": 0.42857142857142855,
         "pred_count": 9,
         "gt_count": 5,
-        "match_count": 1
+        "match_count": 3
       },
       "citation_score_dieu": {
         "precision": 0.3333333333333333,

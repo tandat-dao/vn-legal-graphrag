@@ -250,6 +250,14 @@ def main() -> int:
     )
     parser.add_argument("--limit", type=int, default=0, help="Chỉ chạy N câu đầu (0=full)")
     parser.add_argument("--out-dir", type=Path, default=Path("data/evaluation/"))
+    parser.add_argument(
+        "--reuse-results",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="Re-compute metric từ file results_*.json đã chạy (skip LLM). "
+             "Truyền 1 hoặc 2 file (graphrag + baseline). Tiết kiệm API khi sửa metric.",
+    )
     args = parser.parse_args()
 
     if not args.test_set.exists():
@@ -259,6 +267,64 @@ def main() -> int:
     test_set = json.loads(args.test_set.read_text(encoding="utf-8"))
     if args.limit > 0:
         test_set = test_set[: args.limit]
+
+    # --- Reuse mode: re-compute metric từ results JSON cũ, không gọi LLM ---
+    if args.reuse_results:
+        logger.info(f"REUSE MODE: re-compute metric từ {len(args.reuse_results)} file, KHÔNG gọi API")
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        all_aggs = {}
+        for path in args.reuse_results:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            system = data["system"]
+            old_results = data["results"]
+            # Build map id -> answer+citations để re-compute metric
+            test_by_id = {it["id"]: it for it in test_set}
+            new_results = []
+            from src.retrieval.answer_generator import parse_citations
+            for old in old_results:
+                item = test_by_id.get(old["id"])
+                if not item:
+                    continue
+                # Re-parse citations từ answer text với regex hiện tại (parser có thể đã sửa).
+                # Nếu answer rỗng (eval cũ crash) → fall back về pred_citations đã lưu.
+                if old.get("answer", "").strip() and not old["answer"].startswith("<<ERROR"):
+                    pred_cits = parse_citations(old["answer"])
+                else:
+                    pred_cits = old.get("pred_citations", [])
+                gt_cits = item.get("ground_truth_citations", [])
+                from src.evaluation.metrics import citation_score as _cs
+                cs_khoan = _cs(pred_cits, gt_cits, level="khoan")
+                cs_dieu = _cs(pred_cits, gt_cits, level="dieu")
+                nr = norm_recall(pred_cits, gt_cits)
+                nc = negative_correct(pred_cits, item["gap_type"]) if item["gap_type"] == "negative" else None
+                new_results.append({
+                    **old,
+                    "pred_citations": pred_cits,  # re-parsed với parser hiện tại
+                    "citation_score": cs_khoan,
+                    "citation_score_dieu": cs_dieu,
+                    "norm_recall": nr,
+                    "negative_correct": nc,
+                })
+            agg = aggregate(new_results)
+            all_aggs[system] = agg
+            out_path = args.out_dir / f"results_{system}_reused_{timestamp}.json"
+            out_path.write_text(json.dumps({
+                "system": system, "test_set": str(args.test_set),
+                "timestamp": timestamp, "reused_from": str(path),
+                "results": new_results,
+            }, ensure_ascii=False, indent=2), encoding="utf-8")
+            logger.info(f"[{system}] re-computed → {out_path}")
+            logger.info(f"[{system}] aggregate: F1_kh={agg['f1_mean']:.3f} F1_di={agg['f1_dieu_mean']:.3f} NormR={agg['norm_recall_mean']:.3f}")
+
+        if "graphrag" in all_aggs and "baseline" in all_aggs:
+            md = render_summary_md(all_aggs["graphrag"], all_aggs["baseline"],
+                                    test_set_file=str(args.test_set), timestamp=timestamp + "-reused")
+            md_path = args.out_dir / f"metrics_summary_reused_{timestamp}.md"
+            md_path.write_text(md, encoding="utf-8")
+            logger.info(f"Markdown summary: {md_path}")
+            print("\n" + md)
+        return 0
 
     systems = [s.strip() for s in args.systems.split(",") if s.strip()]
     invalid = set(systems) - {"graphrag", "baseline"}

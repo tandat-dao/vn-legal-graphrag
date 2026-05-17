@@ -1,8 +1,8 @@
 {
   "system": "graphrag",
   "test_set": "data/evaluation/test_set_dat_dai.json",
-  "timestamp": "20260517-170108",
-  "total_elapsed_s": 399.08,
+  "timestamp": "20260517-181339",
+  "reused_from": "data/evaluation/results_graphrag_20260517-170108.json",
   "results": [
     {
       "id": "Q001",
@@ -350,12 +350,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.2,
+        "recall": 1.0,
+        "f1": 0.33333333333333337,
         "pred_count": 5,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.2,
@@ -426,7 +426,32 @@
       "difficulty": "medium",
       "system": "graphrag",
       "answer": "# Mức Phí Thẩm Định Hồ Sơ Cấp Giấy Chứng Nhận Quyền Sử Dụng Đất Tại TP.HCM\n\nCăn cứ Nghị quyết 02/2023/NQ-HĐND TP.HCM (hiệu lực từ 01/06/2023), mức thu phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất được quy định theo từng loại hình đăng ký như sau:\n\n---\n\n## 1. Đăng ký, cấp đổi Giấy chứng nhận đồng loạt tại **xã, thị trấn**\n\n[Phụ lục, Khoản 2, Điểm đ, Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm]\n\n| Loại công việc | Đối tượng | Đơn vị | Mức thu |\n|---|---|---|---|\n| Theo **Hồ sơ** | Đất | Hồ sơ | 400.000 đồng |\n| Theo **Hồ sơ** | Tài sản | Hồ sơ | 400.000 đồng |\n| Theo **Hồ sơ** | Đất và tài sản gắn liền | Hồ sơ | 500.000 đồng |\n| Theo **Thửa** | Đất | Thửa | 60.000 đồng |\n| Theo **Thửa** | Tài sản | Thửa | 60.000 đồng |\n| Theo **Thửa** | Đất và tài sản gắn liền | Thửa | 80.000 đồng |\n\n---\n\n## 2. Đăng ký, cấp Giấy chứng nhận lần đầu đồng loạt đối với hộ gia đình, cá nhân ở **phường**\n\n[Phụ lục, Khoản 2, Điểm b, Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm]\n\n| Loại công việc | Đối tượng | Đơn vị | Mức thu |\n|---|---|---|---|\n| Theo **Hồ sơ** | Đất | Hồ sơ | 850.000 đồng |\n| Theo **Hồ sơ** | Tài sản | Hồ sơ | 850.000 đồng |\n| Theo **Hồ sơ** | Đất và tài sản gắn liền | Hồ sơ | 1.400.000 đồng |\n| Theo **Thửa** | Đất | Thửa | 60.000 đồng |\n| Theo **Thửa** | Tài sản | Thửa | 60.000 đồng |\n| Theo **Thửa** | Đất và tài sản gắn liền | Thửa | 100.000 đồng |\n\n---\n\n## 3. Đăng ký biến động mà thực hiện cấp mới Giấy chứng nhận đối với **hộ gia đình, cá nhân**\n\n[Phụ lục, Khoản 2, Điểm i, Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm]\n\n| Loại công việc | Đối tượng | Đơn vị | Mức thu |\n|---|---|---|---|\n| Theo **Hồ sơ** | Đất | Hồ sơ | 810.000 đồng |\n| Theo **Hồ sơ** | Tài sản | Hồ sơ | 950.000 đồng |\n| Theo **Hồ sơ** | Đất và tài sản gắn liền | Hồ sơ | 1.200.000 đồng |\n| Theo **Thửa** | Đất | Thửa | 50.000 đồng |\n| Theo **Thửa** | Tài sản | Thửa | 70.000 đồng |\n| Theo **Thửa** | Đất và tài sản gắn liền | Thửa | 120.000 đồng |\n\n---\n\n## Lưu ý quan trọng\n\n- Phí thẩm định hồ sơ **khác với lệ phí cấp Giấy chứng nhận**. Context cũng đề cập đến lệ phí cấp Giấy chứng nhận tại Quyết định 52/2016/QĐ-UBND TP.HCM, tuy nhiên mức thu cụ thể của lệ phí này **không được cung cấp đầy đủ trong context** để có thể trích dẫn chính xác.\n- Context hiện tại chỉ cung cấp thông tin cho **03 loại hình** nêu trên. Các loại hình đăng ký khác (điểm a, c, d, e, g, h...) không có trong context được cung cấp.",
-      "pred_citations": [],
+      "pred_citations": [
+        {
+          "dieu": "_default",
+          "khoan": "2",
+          "diem": "đ",
+          "tiet": null,
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "phu_luc"
+        },
+        {
+          "dieu": "_default",
+          "khoan": "2",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "phu_luc"
+        },
+        {
+          "dieu": "_default",
+          "khoan": "2",
+          "diem": "i",
+          "tiet": null,
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "phu_luc"
+        }
+      ],
       "ground_truth_citations": [
         {
           "dieu": "1",
@@ -434,22 +459,22 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "pred_count": 0,
-        "gt_count": 1,
-        "match_count": 0
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "pred_count": 3,
+        "gt_count": 2,
+        "match_count": 1
       },
       "citation_score_dieu": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
-        "pred_count": 0,
-        "gt_count": 1,
-        "match_count": 0
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "pred_count": 3,
+        "gt_count": 2,
+        "match_count": 1
       },
-      "norm_recall": 0.0,
+      "norm_recall": 1.0,
       "negative_correct": null,
       "elapsed_seconds": 19.52,
       "confirmation_needed": false,
@@ -547,20 +572,20 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
         "pred_count": 9,
-        "gt_count": 1,
-        "match_count": 0
+        "gt_count": 3,
+        "match_count": 3
       },
       "citation_score_dieu": {
-        "precision": 0.1111111111111111,
+        "precision": 0.3333333333333333,
         "recall": 1.0,
-        "f1": 0.19999999999999998,
+        "f1": 0.5,
         "pred_count": 9,
-        "gt_count": 1,
-        "match_count": 1
+        "gt_count": 3,
+        "match_count": 3
       },
       "norm_recall": 1.0,
       "negative_correct": null,
@@ -620,12 +645,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "f1": 0.4,
         "pred_count": 4,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.25,
@@ -832,12 +857,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.2,
+        "recall": 0.6666666666666666,
+        "f1": 0.30769230769230765,
         "pred_count": 10,
         "gt_count": 3,
-        "match_count": 0
+        "match_count": 2
       },
       "citation_score_dieu": {
         "precision": 0.2,
@@ -939,12 +964,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.14285714285714285,
-        "recall": 0.3333333333333333,
-        "f1": 0.2,
+        "precision": 0.2857142857142857,
+        "recall": 0.6666666666666666,
+        "f1": 0.4,
         "pred_count": 7,
         "gt_count": 3,
-        "match_count": 1
+        "match_count": 2
       },
       "citation_score_dieu": {
         "precision": 0.2857142857142857,
@@ -1124,12 +1149,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "f1": 0.4,
         "pred_count": 4,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.25,
@@ -1197,12 +1222,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.25,
+        "recall": 1.0,
+        "f1": 0.4,
         "pred_count": 4,
         "gt_count": 1,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.25,
@@ -1339,12 +1364,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.25,
-        "recall": 0.16666666666666666,
-        "f1": 0.2,
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4,
         "pred_count": 4,
         "gt_count": 6,
-        "match_count": 1
+        "match_count": 2
       },
       "citation_score_dieu": {
         "precision": 0.75,
@@ -1508,12 +1533,12 @@
         }
       ],
       "citation_score": {
-        "precision": 0.0,
-        "recall": 0.0,
-        "f1": 0.0,
+        "precision": 0.2,
+        "recall": 0.2,
+        "f1": 0.20000000000000004,
         "pred_count": 5,
         "gt_count": 5,
-        "match_count": 0
+        "match_count": 1
       },
       "citation_score_dieu": {
         "precision": 0.2,

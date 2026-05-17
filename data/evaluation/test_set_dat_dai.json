@@ -96,12 +96,13 @@
     "jurisdiction": "tp-hcm",
     "gap_type": "gap2",
     "difficulty": "medium",
-    "ground_truth_answer": "Nghị quyết 02/2023/NQ-HĐND TP.HCM Điều 1 quy định mức thu phí thẩm định hồ sơ cấp GCN tại TP.HCM. Mức phí phân theo: loại hồ sơ (cấp lần đầu, cấp mới, cấp đổi, đăng ký biến động), đối tượng (hộ gia đình/cá nhân/tổ chức), và diện tích thửa đất. Cụ thể mức thu xem Phụ lục kèm theo. Cơ quan thu giữ lại 85% và nộp 15% vào ngân sách. Miễn phí cho hộ nghèo, người cao tuổi, người khuyết tật, người có công.",
+    "ground_truth_answer": "Nghị quyết 02/2023/NQ-HĐND TP.HCM Điều 1 quy định nguyên tắc mức thu phí thẩm định hồ sơ cấp GCN tại TP.HCM (cơ chế thu 85% giữ lại / 15% ngân sách, miễn cho hộ nghèo). Phụ lục kèm theo liệt kê chi tiết mức thu cụ thể theo từng loại hình hồ sơ (Phụ lục, Khoản 2, các điểm a-i cho cấp lần đầu, cấp đổi, đăng ký biến động).",
     "ground_truth_citations": [
-      {"dieu": "1", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm"}
+      {"dieu": "1", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm"},
+      {"dieu": "_default", "khoan": "2", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm", "loai": "phu_luc"}
     ],
     "relevant_component_ids": [],
-    "notes": "Gap 2 — cặp với Q008 (Đồng Nai). HCM dùng cơ chế thu 85/15, ĐN giữ 100%."
+    "notes": "Gap 2 — cặp với Q008 (Đồng Nai). HCM dùng cơ chế thu 85/15. GT cập nhật 2026-05-17 sau dry run: bổ sung Phụ lục (dieu='_default' vì NQ 02/2023 chỉ có 1 Phụ lục duy nhất không đánh số). LLM cite Phụ lục là hợp lệ vì đó là chỗ chứa bảng phí cụ thể."
   },
   {
     "id": "Q008",
@@ -110,12 +111,14 @@
     "jurisdiction": "dong-nai",
     "gap_type": "gap2",
     "difficulty": "medium",
-    "ground_truth_answer": "Nghị quyết 22/2024/NQ-HĐND Đồng Nai Điều 1 quy định mức thu phí thẩm định hồ sơ cấp GCN tại Đồng Nai. Mức phí phân theo loại hồ sơ (cấp lần đầu - Phụ lục I; cấp mới, cấp đổi, đăng ký biến động - Phụ lục II), hồ sơ nộp trực tuyến thu thấp hơn nộp trực tiếp. Văn phòng Đăng ký đất đai giữ lại 100% phí thu để trang trải chi phí thẩm định. Miễn phí cho hộ nghèo, cận nghèo, người cao tuổi, người khuyết tật, người có công.",
+    "ground_truth_answer": "Nghị quyết 22/2024/NQ-HĐND Đồng Nai Điều 1 quy định nguyên tắc mức thu phí thẩm định hồ sơ cấp GCN tại Đồng Nai (giữ lại 100%, miễn cho hộ nghèo/cận nghèo/người cao tuổi/khuyết tật/có công). Chi tiết mức thu xem Phụ lục I (cấp lần đầu) và Phụ lục II (cấp mới, cấp đổi, đăng ký biến động); hồ sơ trực tuyến có ưu đãi giảm phí.",
     "ground_truth_citations": [
-      {"dieu": "1", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai"}
+      {"dieu": "1", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai"},
+      {"dieu": "I", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai", "loai": "phu_luc"},
+      {"dieu": "II", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai", "loai": "phu_luc"}
     ],
     "relevant_component_ids": [],
-    "notes": "Gap 2 — cặp với Q007. ĐN khác HCM ở cơ chế giữ lại 100% và ưu đãi cho hồ sơ trực tuyến."
+    "notes": "Gap 2 — cặp với Q007. ĐN khác HCM ở cơ chế giữ lại 100%. GT cập nhật 2026-05-17 bổ sung Phụ lục I (cấp lần đầu) + Phụ lục II (cấp đổi/biến động) — LLM cite Phụ lục là hợp lệ vì chứa bảng phí cụ thể."
   },
   {
     "id": "Q009",
