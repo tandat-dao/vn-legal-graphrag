@@ -3,7 +3,14 @@
 
 > **v1.9 — Cập nhật 2026-05-17 (Phase 4 khởi động):**
 > Bắt đầu Phase 4 (Evaluation). TASK-15 (Test Set) đang tiến hành — phần Đất đai do [A] hoàn tất.
-> TASK-16 (Baseline Naive RAG) DONE.
+> TASK-16 (Baseline Naive RAG) DONE. TASK-17 (infrastructure + metrics + runner) DONE; chờ test set đủ 30+ câu để chạy báo cáo chính thức.
+>
+> **TASK-17 (infrastructure DONE, full report chờ TASK-15):**
+> - `src/evaluation/metrics.py`: `citation_score` (multiset intersection trên `(dieu, khoan, van_ban)`), `norm_recall` (van_ban coarse), `negative_correct`, `aggregate` (mean + p95 + breakdown gap_type/theme), `render_summary_md`.
+> - `src/evaluation/run_evaluation.py`: CLI orchestrator chạy GraphRAG và/hoặc Baseline; lưu `results_<system>_<timestamp>.json` + `metrics_summary_<timestamp>.md`.
+> - `_augment_question()` mô phỏng user trả lời Confirmation Loop → retry 1 lần khi `confirmation_needed`. Latency cộng dồn để fair.
+> - `tests/test_metrics.py`: 9 unit tests PASS.
+> - Dry run 16 câu Đất đai (`data/evaluation/DRY_RUN_REPORT.md`): GraphRAG F1=0.125 vs Baseline F1=0.257; Norm Recall 0.48 vs 0.80; Negative 100% cả 2. Phát hiện: (1) Confirmation Loop trigger 13/16 lần — Phase 3 design conservative; (2) GraphRAG vẫn chọn Đ1 thay Đ chuyên sâu (limitation v1.8); (3) Baseline ăn may chunk structure markdown. Findings dùng cho TASK-18.
 >
 > **TASK-15 (partial — Đất đai):**
 > - `data/evaluation/SCHEMA.md`: spec field, gap_type, DoD checklist, quy trình soạn (data contract chung cho 2 thành viên).
@@ -950,11 +957,11 @@ Chạy cả GraphRAG pipeline và Baseline trên toàn bộ test set, tính toá
 - `data/evaluation/metrics_summary.md` — bảng so sánh GraphRAG vs Baseline
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Cả 2 hệ thống đã chạy trên toàn bộ ≥ 30 câu hỏi và lưu kết quả
-- [ ] Bảng metrics đầy đủ: Precision@5, Recall@5, MRR, Citation Accuracy cho cả 2 hệ thống
-- [ ] Metrics được tính chia theo lĩnh vực (Đất đai, Hộ tịch, Nuôi con nuôi)
+- [ ] Cả 2 hệ thống đã chạy trên toàn bộ ≥ 30 câu hỏi và lưu kết quả (hiện chỉ chạy 16 câu Đất đai — chờ TASK-15 thêm Hộ tịch + Nuôi con nuôi)
+- [x] Bảng metrics đầy đủ: Citation Precision/Recall/F1 (cấp Khoản), Norm-level Recall, Latency mean+p95, Negative correct rate cho cả 2 hệ thống — output `metrics_summary_<timestamp>.md`
+- [x] Metrics được tính chia theo lĩnh vực (`by_theme`) và gap_type (`by_gap`) — aggregate() trong metrics.py
 - [ ] Correctness và Faithfulness được đánh giá thủ công cho ≥ 10 câu hỏi/hệ thống
-- [ ] File kết quả JSON có timestamp và config rõ ràng để reproduce
+- [x] File kết quả JSON có timestamp và config rõ ràng để reproduce (`results_<system>_<timestamp>.json` chứa test_set path, timestamp, per-question full)
 
 ---
 ### TASK-18: Phân tích kết quả theo Gap 📋
