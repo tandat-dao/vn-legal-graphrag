@@ -79,14 +79,16 @@ def _run_one_graphrag(item: dict, clients) -> dict:
         anthropic_client=anthropic_client,
         model=model,
         force_jurisdiction=item["jurisdiction"],
+        bypass_completeness=True,  # Eval mode: chạy retrieval ngay cả khi planner thiếu procedure/theme
     )
 
+    # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
+    # Giữ retry như defensive fallback cho trường hợp bất thường.
     retried = False
     if res["confirmation_needed"]:
-        # Hiếm khi xảy ra: query_planner thiếu field khác ngoài jurisdiction
         aug_q = _augment_question(item["question"], item["jurisdiction"])
         if aug_q != item["question"]:
-            logger.info(f"  [retry] confirmation_needed dù đã force → augment: '{aug_q[:80]}...'")
+            logger.info(f"  [retry] confirmation_needed bất thường → augment: '{aug_q[:80]}...'")
             res2 = run_pipeline(
                 aug_q,
                 neo4j_driver=neo4j_driver,
@@ -94,6 +96,7 @@ def _run_one_graphrag(item: dict, clients) -> dict:
                 anthropic_client=anthropic_client,
                 model=model,
                 force_jurisdiction=item["jurisdiction"],
+                bypass_completeness=True,
             )
             res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
             res = res2

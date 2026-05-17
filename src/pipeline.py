@@ -89,6 +89,7 @@ def run_pipeline(
     top_k: int = DEFAULT_TOP_K,
     max_tokens: int = CONTEXT_MAX_TOKENS,
     force_jurisdiction: str | None = None,
+    bypass_completeness: bool = False,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -135,6 +136,16 @@ def run_pipeline(
                     f"run_pipeline: force_jurisdiction='{force_jurisdiction}' áp dụng, "
                     f"is_complete={query_plan['is_complete']}"
                 )
+
+        # Bypass toàn diện cho evaluation: chấp nhận query_plan thiếu field (procedure,
+        # theme...) và chạy retrieval với best-effort. Dùng cho TASK-17 để đo retrieval
+        # + generation thuần, không đo cơ chế Confirmation Loop. KHÔNG dùng trong production.
+        if bypass_completeness and not query_plan["is_complete"]:
+            logger.info(
+                f"run_pipeline: bypass_completeness=True — bỏ qua missing={query_plan['missing_fields']}, "
+                f"tiếp tục retrieval với best-effort"
+            )
+            query_plan["is_complete"] = True
 
         # Thiếu thông tin → yêu cầu xác nhận
         if not query_plan["is_complete"]:
