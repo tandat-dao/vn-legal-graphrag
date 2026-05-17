@@ -1,5 +1,37 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.9 | Cập nhật 2026-05-17**
+**Phiên bản 2.0 | Cập nhật 2026-05-17**
+
+> **v2.0 — Cập nhật 2026-05-17 (TASK-17 evaluation framework hoàn thiện):**
+> TASK-17 hoàn thành phần infrastructure + 6 vòng iteration đo lường (v1→v6). Có evidence khoa học rõ ràng cho thesis claim.
+>
+> **Headline số liệu (19 câu Đất đai, v6 — Smart Matching + parser fix + GT verify + bypass + force_jurisdiction):**
+> - GraphRAG F1 Khoản 0.288 / F1 Điều 0.312 / Norm Recall 0.715
+> - Baseline F1 Khoản 0.403 / F1 Điều 0.403 / Norm Recall 0.776
+>
+> **GraphRAG THẮNG ở 2 phân khúc:**
+> - gap1 (3 câu, single-domain): F1 0.378 vs 0.250 (+51%); NormR 1.000 vs 1.000 (tie tối đa)
+> - gap3 (8 câu, multi-tier amendment): F1 0.213/0.270 vs 0.167; NormR 0.573 vs 0.469
+> - 4/6 killer gap3 G WIN (Q011, Q012, Q013, Q017 — đặc biệt Q017 lex posterior chain 0.60 vs 0.00)
+>
+> **GraphRAG THUA ở 2 phân khúc:**
+> - gap2 (6 câu small QĐ lookup) — gap thu hẹp đáng kể; NormR tie 1.000 nhưng F1 thua do baseline ăn cấu trúc chunk
+> - negative (2 câu) — bypass_completeness cho phép retrieve out-of-scope → LLM bịa citation. Trade-off ghi vào Future Work.
+>
+> **Tooling mới giúp giảm chi phí $$ debug:**
+> - `--reuse-results <file>`: re-compute metric từ JSON, **0 API call** (dùng khi sửa metric/parser/GT)
+> - `--llm-cache-dir`: local cache theo hash(prompt). Lần 2 = 0.4s, $0 (97% latency giảm)
+> - `--clear-llm-cache` / `--no-llm-cache`: control cache khi cần
+>
+> **Bài học scientific (TASK-18 input):**
+> 1. Ontology + AMENDS edges giải quyết được lex posterior chain (Q017 evidence)
+> 2. Theme + summary embedding routing tốt hơn naive top-K cho định tuyến văn bản (gap1)
+> 3. Baseline có lợi tự nhiên với corpus chứa nhiều văn bản nhỏ (chunk 512 ký tự bắt nguyên block Điều)
+> 4. Smart Matching (GT khoan=None là wildcard) — cần thiết về phương pháp luận đo lường
+> 5. Confirmation Loop + jurisdiction check là feature production nhưng phải bypass cho fair eval
+>
+> **Còn lại để TASK-17 full DoD:**
+> - Test set 30+ câu (đợi [B] phần Hộ tịch + Nuôi con nuôi)
+> - Manual eval ≥10 câu/hệ thống về Correctness và Faithfulness
 
 > **v1.9 — Cập nhật 2026-05-17 (Phase 4 khởi động):**
 > Bắt đầu Phase 4 (Evaluation). TASK-15 (Test Set) đang tiến hành — phần Đất đai do [A] hoàn tất.
@@ -957,11 +989,12 @@ Chạy cả GraphRAG pipeline và Baseline trên toàn bộ test set, tính toá
 - `data/evaluation/metrics_summary.md` — bảng so sánh GraphRAG vs Baseline
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Cả 2 hệ thống đã chạy trên toàn bộ ≥ 30 câu hỏi và lưu kết quả (hiện chỉ chạy 16 câu Đất đai — chờ TASK-15 thêm Hộ tịch + Nuôi con nuôi)
-- [x] Bảng metrics đầy đủ: Citation Precision/Recall/F1 (cấp Khoản), Norm-level Recall, Latency mean+p95, Negative correct rate cho cả 2 hệ thống — output `metrics_summary_<timestamp>.md`
+- [ ] Cả 2 hệ thống đã chạy trên toàn bộ ≥ 30 câu hỏi và lưu kết quả (hiện chạy 19 câu Đất đai — chờ TASK-15 thêm Hộ tịch + Nuôi con nuôi)
+- [x] Bảng metrics đầy đủ: Citation Precision/Recall/F1 (cấp Khoản + cấp Điều), Norm-level Recall, Latency mean+p95, Negative correct rate cho cả 2 hệ thống — output `metrics_summary_<timestamp>.md`
 - [x] Metrics được tính chia theo lĩnh vực (`by_theme`) và gap_type (`by_gap`) — aggregate() trong metrics.py
 - [ ] Correctness và Faithfulness được đánh giá thủ công cho ≥ 10 câu hỏi/hệ thống
 - [x] File kết quả JSON có timestamp và config rõ ràng để reproduce (`results_<system>_<timestamp>.json` chứa test_set path, timestamp, per-question full)
+- [x] Tooling tối ưu chi phí dev: `--reuse-results` (re-compute metric không tốn API), `--llm-cache-dir` (cache hit $0)
 
 ---
 ### TASK-18: Phân tích kết quả theo Gap 📋
