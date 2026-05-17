@@ -42,31 +42,72 @@ logger = logging.getLogger(__name__)
 # Per-system runners
 # ---------------------------------------------------------------------------
 
-def _run_one_graphrag(question: str, clients) -> dict:
+_JURIS_SUFFIX = {
+    "toan-quoc": "trên cả nước Việt Nam",
+    "tp-hcm": "tại Thành phố Hồ Chí Minh",
+    "dong-nai": "tại tỉnh Đồng Nai",
+}
+
+
+def _augment_question(question: str, jurisdiction: str) -> str:
+    """Phụ trợ jurisdiction vào câu hỏi khi pipeline yêu cầu confirmation.
+
+    Mô phỏng user trả lời confirmation prompt với jurisdiction lấy từ test_set.
+    Chỉ append nếu suffix chưa xuất hiện trong câu.
+    """
+    suffix = _JURIS_SUFFIX.get(jurisdiction, "")
+    if not suffix or suffix.lower() in question.lower():
+        return question
+    base = question.rstrip("?.! ")
+    return f"{base} {suffix}?"
+
+
+def _run_one_graphrag(item: dict, clients) -> dict:
+    """Chạy GraphRAG; nếu confirmation_needed thì augment + retry 1 lần."""
     from src.pipeline import run_pipeline
     neo4j_driver, qdrant_client, anthropic_client, model = clients
+
     res = run_pipeline(
-        question,
+        item["question"],
         neo4j_driver=neo4j_driver,
         qdrant_client=qdrant_client,
         anthropic_client=anthropic_client,
         model=model,
     )
+
+    retried = False
+    if res["confirmation_needed"]:
+        aug_q = _augment_question(item["question"], item["jurisdiction"])
+        if aug_q != item["question"]:
+            logger.info(f"  [retry] confirmation_needed → augment: '{aug_q[:80]}...'")
+            res2 = run_pipeline(
+                aug_q,
+                neo4j_driver=neo4j_driver,
+                qdrant_client=qdrant_client,
+                anthropic_client=anthropic_client,
+                model=model,
+            )
+            # Cộng dồn latency của cả 2 lần gọi để fair
+            res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
+            res = res2
+            retried = True
+
     return {
         "answer": res["answer"],
         "citations": res["citations"],
         "elapsed_seconds": res["elapsed_seconds"],
         "confirmation_needed": res["confirmation_needed"],
+        "confirmation_retried": retried,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
     }
 
 
-def _run_one_baseline(question: str, clients) -> dict:
+def _run_one_baseline(item: dict, clients) -> dict:
     from src.baseline.naive_rag import run_baseline_query
     _, qdrant_client, anthropic_client, model = clients
     res = run_baseline_query(
-        question,
+        item["question"],
         qdrant_client=qdrant_client,
         anthropic_client=anthropic_client,
         model=model,
@@ -76,6 +117,7 @@ def _run_one_baseline(question: str, clients) -> dict:
         "citations": res["citations"],
         "elapsed_seconds": res["elapsed_seconds"],
         "confirmation_needed": False,
+        "confirmation_retried": False,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
     }
@@ -127,7 +169,7 @@ def run_system_on_test_set(
         qid = item["id"]
         logger.info(f"[{system}] {i}/{len(test_set)} {qid}: {item['question'][:60]}...")
         try:
-            sys_out = runner(item["question"], clients)
+            sys_out = runner(item, clients)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
             sys_out = {
@@ -135,6 +177,7 @@ def run_system_on_test_set(
                 "citations": [],
                 "elapsed_seconds": 0.0,
                 "confirmation_needed": False,
+                "confirmation_retried": False,
                 "context_used": False,
                 "top_k_count": 0,
             }
@@ -163,6 +206,7 @@ def run_system_on_test_set(
             "negative_correct": nc,
             "elapsed_seconds": sys_out["elapsed_seconds"],
             "confirmation_needed": sys_out["confirmation_needed"],
+            "confirmation_retried": sys_out["confirmation_retried"],
             "context_used": sys_out["context_used"],
             "top_k_count": sys_out["top_k_count"],
         }
