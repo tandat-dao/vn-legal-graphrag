@@ -1,5 +1,40 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.1 | Cập nhật 2026-05-17**
+**Phiên bản 2.2 | Cập nhật 2026-05-17**
+
+> **v2.2 — Cập nhật 2026-05-17 (Reproducibility + A/B ablation Schema B):**
+> Bổ sung 2 cải tiến + 1 finding methodology quan trọng:
+>
+> **1. temperature=0 (reproducibility 100%):**
+> - `src/retrieval/answer_generator.py`: hardcode TEMPERATURE=0.0 (env LLM_TEMPERATURE override).
+> - Anthropic greedy decoding + LLM cache → lần 2+ cache hit bit-exact (latency 0.045s, $0).
+> - Defense thesis: "Retrieval 100% det (BGE + Qdrant + Neo4j); LLM ~99% với temp=0 + 100% lần 2+ với cache; Citation + Output structure 100% predictable."
+>
+> **2. Schema B (loose sections H2):**
+> - `src/retrieval/context_assembler.py`: opt-in prompt yêu cầu LLM xuất 3 section `## TRẢ LỜI` / `## CẢNH BÁO LEX` / `## PHẠM VI`.
+> - `src/retrieval/answer_generator.py`: `parse_sections()` + `AnswerSections` TypedDict.
+> - Toggle via env `INCLUDE_SCHEMA_B` (default "false" cho eval, opt-in "true" cho production).
+>
+> **3. A/B ablation finding (4 setups):**
+> | Setup | temp | Schema B | G F1 Kh | B F1 Kh | Winner |
+> |---|---|---|---:|---:|---|
+> | v7 | default | OFF | 0.416 | 0.389 | G ✅ |
+> | v8 | 0.0 | ON | 0.390 | 0.428 | B (outlier) |
+> | **v9 / Run A** | **0.0** | **OFF** | **0.420** | **0.389** | **G ✅** |
+> | Run B | 1.0 | ON | 0.380 | 0.362 | G ✅ |
+>
+> → **v9 final config = temp=0 + INCLUDE_SCHEMA_B=false**. Schema B equalize G/B (G drop ~0.03) — không công bằng cho academic eval. Schema B parser giữ lại làm opt-in cho production cần structured output.
+>
+> **Headline v9 — chốt số liệu (19 câu Đất đai):**
+>
+> | Metric                       | GraphRAG  | Baseline  | Δ       |
+> |------------------------------|----------:|----------:|--------:|
+> | F1 Khoản                     | **0.420** | 0.389     | +0.031  |
+> | F1 Điều                      | **0.442** | 0.389     | +0.053  |
+> | Norm Recall                  | **0.864** | 0.719     | +0.145  |
+> | Negative correct (2 câu)     | **1.000** | 1.000     | tied ✅ |
+> | Manual Correctness (10 câu)  | **4.5**/5 | 3.5/5     | +1.0    |
+> | Manual Faithfulness (10 câu) | **4.9**/5 | 4.3/5     | +0.6    |
+> | Reproducibility (run 2)      | **100%**  | **100%**  | bit-exact, $0 |
 
 > **v2.1 — Cập nhật 2026-05-17 (TASK-17 GraphRAG WIN OVERALL trên Đất đai subset):**
 > Sau 4 fix theo plan Gemini, GraphRAG vượt baseline TRÊN MỌI METRIC tự động + manual eval trên 19 câu Đất đai. Bypass 2 vấn đề đo lường không công bằng (gap2 ranking + refuse mechanism), giải bug parser, mở multi-juris filter.

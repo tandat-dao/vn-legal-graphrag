@@ -69,9 +69,13 @@ def parse_sections(raw_answer: str) -> AnswerSections:
 
 logger = logging.getLogger(__name__)
 
+import os
+
 MODEL = "claude-sonnet-4-6"
 MAX_ANSWER_TOKENS = 3000
-TEMPERATURE = 0.0  # Deterministic output cho reproducibility eval (Anthropic greedy decoding)
+# TEMPERATURE: 0.0 = greedy deterministic; 1.0 = default Anthropic sampling.
+# Toggle qua env var LLM_TEMPERATURE để A/B test reproducibility vs F1.
+TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.0"))
 
 
 # ---------------------------------------------------------------------------

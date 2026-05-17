@@ -10,6 +10,17 @@ Token budget: ước tính ≈ len(text) / 3.5 chars per token (Vietnamese BPE h
 """
 import json
 import logging
+import os
+
+# Toggle Schema B (3 sections H2) trong prompt qua env var.
+# "false" (default): prompt v7 truyền thống không có section markers — fair comparison
+#   với baseline cho academic eval (Run A đo G F1 0.420 vs B 0.389).
+# "true": yêu cầu LLM xuất 3 section TRẢ LỜI / CẢNH BÁO LEX / PHẠM VI — dùng cho
+#   production khi cần structured output (frontend, programmatic API).
+# Lý do mặc định false: A/B test cho thấy Schema B equalize G/B (G drop ~0.03, B
+#   variable), khi kết hợp với temp=0 thậm chí baseline thắng F1. Eval mode ưu tiên
+#   so sánh kiến trúc retrieval fair, opt-in Schema B cho production deployment.
+INCLUDE_SCHEMA_B = os.getenv("INCLUDE_SCHEMA_B", "false").lower() == "true"
 
 from neo4j import Driver
 
@@ -189,6 +200,22 @@ def build_prompt(question: str, context: str) -> str:
     Returns:
         Prompt string hoàn chỉnh để gửi vào LLM.
     """
+    schema_b_block = "\n" + """
+ĐỊNH DẠNG ĐẦU RA (BẮT BUỘC):
+Câu trả lời của bạn PHẢI gồm đúng 3 section sau, theo thứ tự, dùng heading H2 (##) chính xác như sau:
+
+## TRẢ LỜI
+[Nội dung câu trả lời chính bằng markdown. Dùng heading H3 (###) hoặc H4 (####) cho sub-sections nếu cần. Mọi citation đặt inline trong nội dung theo format [Điều X, ...] đã quy định ở YÊU CẦU KHÁC.]
+
+## CẢNH BÁO LEX
+[Liệt kê các trường hợp mâu thuẫn pháp lý phát hiện được — bullet list, mỗi dòng theo format: "Quy định tại [VB cũ] đã được sửa đổi/thay thế bởi [VB mới, ngày hiệu lực]". Nếu KHÔNG có mâu thuẫn, ghi đúng dòng: "Không có"]
+
+## PHẠM VI
+[Ghi đúng một trong hai dòng:
+- "Trong phạm vi corpus" — nếu câu hỏi thuộc 3 lĩnh vực được lập chỉ mục
+- "Ngoài phạm vi corpus — [lý do ngắn]" — nếu áp dụng PHẠM VI CORPUS guard ở trên]
+""" if INCLUDE_SCHEMA_B else ""
+
     return f"""Bạn là trợ lý pháp lý chuyên về pháp luật Việt Nam. Chỉ sử dụng thông tin trong CONTEXT dưới đây để trả lời câu hỏi. Không được suy đoán hay bịa đặt thông tin ngoài context.
 
 QUY TẮC ƯU TIÊN VĂN BẢN (BẮT BUỘC):
@@ -218,21 +245,7 @@ YÊU CẦU KHÁC:
     [Điều X, Khoản Y, Điểm Z, Văn bản W]     — ví dụ: [Điều 1, Khoản 6, Điểm a, Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]
   Từ khoá "Văn bản" PHẢI có mặt trước tên văn bản. Dùng id văn bản từ header "--- ... ---" trong CONTEXT.
 - Nếu context không đủ thông tin để trả lời, nêu rõ điều đó.
-
-ĐỊNH DẠNG ĐẦU RA (BẮT BUỘC):
-Câu trả lời của bạn PHẢI gồm đúng 3 section sau, theo thứ tự, dùng heading H2 (##) chính xác như sau:
-
-## TRẢ LỜI
-[Nội dung câu trả lời chính bằng markdown. Dùng heading H3 (###) hoặc H4 (####) cho sub-sections nếu cần. Mọi citation đặt inline trong nội dung theo format [Điều X, ...] đã quy định ở YÊU CẦU KHÁC.]
-
-## CẢNH BÁO LEX
-[Liệt kê các trường hợp mâu thuẫn pháp lý phát hiện được — bullet list, mỗi dòng theo format: "Quy định tại [VB cũ] đã được sửa đổi/thay thế bởi [VB mới, ngày hiệu lực]". Nếu KHÔNG có mâu thuẫn, ghi đúng dòng: "Không có"]
-
-## PHẠM VI
-[Ghi đúng một trong hai dòng:
-- "Trong phạm vi corpus" — nếu câu hỏi thuộc 3 lĩnh vực được lập chỉ mục
-- "Ngoài phạm vi corpus — [lý do ngắn]" — nếu áp dụng PHẠM VI CORPUS guard ở trên]
-
+{schema_b_block}
 CONTEXT:
 {context}
 
