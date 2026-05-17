@@ -1,5 +1,23 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.8 | Cập nhật 2026-05-16**
+**Phiên bản 1.9 | Cập nhật 2026-05-17**
+
+> **v1.9 — Cập nhật 2026-05-17 (Phase 4 khởi động):**
+> Bắt đầu Phase 4 (Evaluation). TASK-15 (Test Set) đang tiến hành — phần Đất đai do [A] hoàn tất.
+> TASK-16 (Baseline Naive RAG) DONE.
+>
+> **TASK-15 (partial — Đất đai):**
+> - `data/evaluation/SCHEMA.md`: spec field, gap_type, DoD checklist, quy trình soạn (data contract chung cho 2 thành viên).
+> - `data/evaluation/test_set_template.json`: 6 câu mẫu Đất đai (Q001-Q006) cover gap1/gap2/gap3/negative.
+> - `data/evaluation/test_set_dat_dai.json`: 16 câu Đất đai (Q001-Q016) — 3 gap1 + 6 gap2 (3 cặp HCM-ĐN: hạn mức/phí thẩm định/bảng giá) + 5 gap3 (multi-tier: Luật + NĐ + NQ QH) + 2 negative. Ground truth verified trực tiếp trên `data/raw/*.md`.
+> - `src/evaluation/validate_test_set.py`: validator 2 mode (`--partial` cho file từng thành viên, full DoD cho merge cuối). Kiểm field bắt buộc, tier diversity cho gap3, phân bổ tổng (≥30, ≥10 đất đai, ≥10 ho-tich+nuoi-con-nuoi, ≥5 negative).
+> - Còn lại để full DoD: 10+ câu Hộ tịch + Nuôi con nuôi (team viên [B]) + cross-review sign-off.
+>
+> **TASK-16 (DONE):**
+> - `src/baseline/naive_rag.py`: `fixed_chunker(512, 50)` cắt theo ký tự + overlap; `run_baseline_ingestion()` đọc `data/raw/*.md`, encode BGE-M3, upsert Qdrant collection `baseline_legal_texts`; `run_baseline_query()` pure vector top-10 + Claude Sonnet 4.6 qua `generate_answer()` của GraphRAG (cùng prompt, đảm bảo "chỉ khác retrieval").
+> - `BaselineResult` TypedDict khớp `PipelineResult` để TASK-17 chấm chung.
+> - `tests/test_naive_rag.py`: 7 smoke tests (chunker, parse frontmatter, deterministic ID) — 7/7 PASS.
+> - Live verify: ingestion 17 file → **1718 chunks**; Q001 (hạn mức TP.HCM) trả 4 citations đúng (Đ3.1/3.2/3.3 + bonus Đ5.2 QĐ 69/2024).
+> - DoD: ✅ collection tạo OK | ✅ output schema khớp pipeline | ✅ BGE-M3 + Claude Sonnet 4.6 reused | ⏳ "chạy được trên 30+ câu test set" — chờ test set full (TASK-15).
 
 > **v1.8 — Cập nhật 2026-05-16 (Stable — Phase 3 đóng băng):**
 > Hoàn thiện retrieval quality cho câu hỏi tổng quát qua 4 fix khoa học (generic, không hardcode).
@@ -881,13 +899,13 @@ Xây dựng bộ câu hỏi đánh giá ≥ 30 câu với ground truth đi kèm.
 - [ ] Ground truth được verify bằng cách đọc trực tiếp văn bản pháp lý gốc, không dựa vào memory
 
 ---
-### TASK-16: Xây dựng Baseline Naive RAG 📋
+### TASK-16: Xây dựng Baseline Naive RAG ✅
 **Phase:** 4
 **Ưu tiên:** High
 **Ước tính công sức:** M (2-3 ngày)
 **Phụ thuộc vào:** TASK-08 (dùng cùng bộ dữ liệu)
 **Có thể song song với:** TASK-15
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-05-17
 
 #### Mục tiêu
 Xây dựng hệ thống Naive RAG để làm baseline so sánh. Điều kiện bắt buộc để so sánh có giá trị khoa học: cùng bộ dữ liệu, cùng LLM, cùng embedding model — **chỉ khác phần retrieval** (chunking cố định thay vì graph-aware).
@@ -903,10 +921,10 @@ Xây dựng hệ thống Naive RAG để làm baseline so sánh. Điều kiện 
   - `run_baseline_query(question: str) -> dict` — vector search thuần, không có graph, không có metadata filter
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `run_baseline_ingestion()` chạy thành công, tạo collection `baseline_legal_texts` trong Qdrant
-- [ ] `run_baseline_query(question)` trả về câu trả lời với cùng format output như `run_pipeline(question)`
-- [ ] Baseline dùng đúng BGE-M3 và LLM — không được dùng model khác (verify bằng code review)
-- [ ] Baseline chạy được trên toàn bộ 30+ câu hỏi trong test set mà không crash
+- [x] `run_baseline_ingestion()` chạy thành công, tạo collection `baseline_legal_texts` trong Qdrant (17 files, 1718 chunks)
+- [x] `run_baseline_query(question)` trả về câu trả lời với cùng format output như `run_pipeline(question)` (BaselineResult TypedDict khớp PipelineResult)
+- [x] Baseline dùng đúng BGE-M3 và LLM — reuse trực tiếp `load_model()` và `generate_answer()` của GraphRAG
+- [ ] Baseline chạy được trên toàn bộ 30+ câu hỏi trong test set mà không crash (chờ test set full ở TASK-15; sample Q001 OK với 4 citations đúng)
 
 ---
 ### TASK-17: Chạy Evaluation và tính Metrics 📋
