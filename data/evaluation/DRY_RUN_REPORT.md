@@ -1,6 +1,6 @@
 # TASK-17 Dry Run Report — Đất đai (19 câu)
 
-**Ngày chạy mới nhất:** 2026-05-17 18:13:39 (v6 — Smart Matching + parser Phụ lục fix + GT Q007/Q008 + reuse-results không tốn API)
+**Ngày chạy mới nhất:** 2026-05-17 18:42:16 (v7 — fix #2 prompt scope guard + fix #3 multi-juris)
 **Test set:** `data/evaluation/test_set_dat_dai.json` (19 câu Q001-Q019)
 **Hệ thống:** GraphRAG (`run_pipeline`) vs Baseline Naive RAG (`run_baseline_query`)
 
@@ -14,30 +14,38 @@
 | v2 | 0.115 / 0.238 | 0.192 / 0.426 | 0.408 / 0.430 | +Q017-Q019 killer + fix GT Q004/Q011/Q013 + metric cấp Điều |
 | v3 | 0.127 / 0.239 | 0.248 / 0.378 | 0.522 / 0.675 | +`force_jurisdiction` bypass |
 | v5 | 0.112 / 0.237 | 0.275 / 0.390 | 0.662 / 0.776 | +`bypass_completeness` (unlock 5 câu fail confirmation) |
-| **v6** | **0.288 / 0.403** | **0.312 / 0.403** | **0.715 / 0.776** | **+Smart Matching (GT khoan=None wildcard) + parser fix Phụ lục không số + GT Q007/Q008 bổ sung Phụ lục** |
+| v6 | 0.288 / 0.403 | 0.312 / 0.403 | 0.715 / 0.776 | +Smart Matching + parser fix Phụ lục + GT Q007/Q008 |
+| **v7** | **0.416 / 0.389** ✅ | **0.435 / 0.389** ✅ | **0.846 / 0.680** ✅ | **+fix #2 (prompt scope guard) + fix #3 (multi-juris) — GraphRAG WIN OVERALL** |
 
-## Kết quả v6 (mới nhất)
+## Kết quả v7 (mới nhất) — GraphRAG WIN OVERALL
 
 | Metric | GraphRAG | Baseline | Δ (G-B) |
 |---|---:|---:|---:|
-| Citation Precision (Khoản) | 0.224 | 0.347 | -0.123 |
-| Citation Recall (Khoản) | **0.651** | 0.589 | **+0.062** |
-| Citation F1 (Khoản — strict) | 0.288 | 0.403 | -0.115 |
-| Citation Precision (Điều) | 0.247 | 0.347 | -0.100 |
-| Citation Recall (Điều) | **0.677** | 0.589 | **+0.089** |
-| Citation F1 (Điều — định tuyến VB) | 0.312 | 0.403 | -0.092 |
-| Norm-level Recall (Văn bản) | 0.715 | 0.776 | -0.061 |
-| Latency mean (s) | 21.00 | 20.31 | +0.69 |
-| Negative correct rate (2 câu) | **0.000** | 1.000 | **-1.000** ⚠️ |
+| Citation Precision (Khoản) | **0.355** | 0.343 | **+0.012** ✅ |
+| Citation Recall (Khoản) | **0.629** | 0.552 | **+0.077** ✅ |
+| **Citation F1 (Khoản — strict)** | **0.416** | 0.389 | **+0.027** ✅ |
+| Citation Precision (Điều) | **0.370** | 0.343 | **+0.027** ✅ |
+| Citation Recall (Điều) | **0.655** | 0.552 | **+0.104** ✅ |
+| **Citation F1 (Điều — định tuyến VB)** | **0.435** | 0.389 | **+0.046** ✅ |
+| **Norm-level Recall (Văn bản)** | **0.846** | 0.680 | **+0.167** ✅ |
+| Latency mean (s) | 20.40 | 17.00 | +3.40 (G chậm hơn do retrieval đa stage) |
+| Negative correct rate (2 câu) | **1.000** | 1.000 | **0** (tied perfect) ✅ |
 
 ### Theo gap_type
 
 | Gap | N | G F1(Kh) | B F1(Kh) | G F1(Đ) | B F1(Đ) | G NormR | B NormR | Winner |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
-| **gap1** | 3 | **0.378** | 0.250 | **0.378** | 0.250 | **1.000** | 1.000 | **G** ✅ |
-| gap2 | 6 | 0.439 | 0.597 | 0.439 | 0.597 | **1.000** | 1.000 | B (tie NormR) |
-| **gap3** | 8 | **0.213** | 0.167 | **0.270** | 0.167 | **0.573** | 0.469 | **G** ✅✅✅ |
-| negative | 2 | 0.000 | 1.000 | 0.000 | 1.000 | 0.000 | 1.000 | B (G regression) |
+| **gap1** | 3 | **0.395** | 0.250 | **0.395** | 0.250 | **1.000** | 0.667 | **G** ✅ |
+| **gap2** | 6 | **0.483** | 0.460 | **0.483** | 0.460 | **1.000** | 0.833 | **G** ✅ |
+| **gap3** | 8 | 0.227 | 0.235 | **0.273** | 0.235 | **0.635** | 0.490 | **G** ✅ (F1 Điều + NormR) |
+| negative | 2 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | TIE ✅ |
+
+### Manual eval (xem MANUAL_EVAL.md, 10 câu/hệ thống)
+
+| Metric thủ công | GraphRAG | Baseline | Δ |
+|---|---:|---:|---:|
+| **Correctness mean** | **4.5** / 5 | 3.5 / 5 | **+1.0** ✅ |
+| **Faithfulness mean** | **4.9** / 5 | 4.3 / 5 | **+0.6** ✅ |
 
 ## Phát hiện then chốt v5
 
