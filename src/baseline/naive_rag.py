@@ -275,6 +275,7 @@ def run_baseline_query(
     anthropic_client: anthropic.Anthropic | None = None,
     model=None,
     top_k: int = DEFAULT_TOP_K,
+    llm_cache_dir: Path | None = None,
 ) -> BaselineResult:
     """Pure vector search + LLM. Trả về output schema giống run_pipeline().
 
@@ -340,7 +341,7 @@ def run_baseline_query(
             )
 
         # Dùng đúng generate_answer của GraphRAG để cùng prompt + cùng LLM
-        gen = generate_answer(question, context, anthropic_client)
+        gen = generate_answer(question, context, anthropic_client, cache_dir=llm_cache_dir)
 
         elapsed = time.perf_counter() - t_start
         logger.info(

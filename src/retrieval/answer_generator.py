@@ -4,9 +4,16 @@ Gửi prompt vào Claude Sonnet 4.6, parse citations từ raw output.
 
 Citation format trong câu trả lời: [Điều X, Khoản Y, Văn bản Z]
 parse_citations() extract thành list[dict] với keys: dieu, khoan, van_ban.
+
+Optional LLM cache: nếu `cache_dir` được truyền, kết quả được lưu/đọc theo
+hash(prompt) — repeat call cùng prompt sẽ trả cache hit (tiết kiệm $ API).
+Cache auto-invalidate khi prompt thay đổi (vì hash khác).
 """
+import hashlib
+import json
 import logging
 import re
+from pathlib import Path
 
 import anthropic
 
@@ -16,6 +23,35 @@ logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-6"
 MAX_ANSWER_TOKENS = 3000
+
+
+# ---------------------------------------------------------------------------
+# Local LLM cache (tiết kiệm $ API khi rerun eval với cùng prompt)
+# ---------------------------------------------------------------------------
+
+def _prompt_hash(prompt: str, model: str) -> str:
+    return hashlib.sha256(f"{model}|{prompt}".encode()).hexdigest()[:16]
+
+
+def _cache_get(cache_dir: Path | None, key: str) -> dict | None:
+    if cache_dir is None:
+        return None
+    path = cache_dir / f"{key}.json"
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _cache_put(cache_dir: Path | None, key: str, data: dict) -> None:
+    if cache_dir is None:
+        return
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    (cache_dir / f"{key}.json").write_text(
+        json.dumps(data, ensure_ascii=False), encoding="utf-8"
+    )
 
 # Regex bắt citation đa dạng định dạng:
 #   [Điều X, Văn bản Z]
@@ -87,6 +123,7 @@ def generate_answer(
     question: str,
     context: str,
     llm_client: anthropic.Anthropic,
+    cache_dir: Path | None = None,
 ) -> dict:
     """Gửi prompt vào Claude Sonnet 4.6, trả về answer + citations.
 
@@ -94,17 +131,32 @@ def generate_answer(
         question: Câu hỏi tiếng Việt của người dùng.
         context: Context string từ assemble_context().
         llm_client: Anthropic client đã khởi tạo.
+        cache_dir: Nếu set, lưu/đọc answer theo hash(prompt). Repeat call cùng
+                   prompt → cache hit, không gọi API ($0 cost). Dùng cho eval/dev.
 
     Returns:
         Dict với keys:
           - answer (str): Câu trả lời tiếng Việt với citations inline.
           - citations (list[dict]): Danh sách citations đã parse.
           - context_used (bool): True nếu context không rỗng.
+          - cache_hit (bool): True nếu kết quả từ cache (tiết kiệm API).
     """
     if not context.strip():
         logger.warning("generate_answer: context rỗng — LLM sẽ trả lời không có nguồn")
 
     prompt = build_prompt(question, context)
+    cache_key = _prompt_hash(prompt, MODEL)
+    cached = _cache_get(cache_dir, cache_key)
+    if cached is not None:
+        logger.info(f"generate_answer: cache HIT ({cache_key}) — $0 API")
+        # Re-parse citations với parser hiện tại (parser có thể đã sửa từ lúc cache)
+        citations = parse_citations(cached["answer"])
+        return {
+            "answer": cached["answer"],
+            "citations": citations,
+            "context_used": bool(context.strip()),
+            "cache_hit": True,
+        }
 
     message = llm_client.messages.create(
         model=MODEL,
@@ -119,8 +171,11 @@ def generate_answer(
         f"generate_answer: {len(raw_answer)} chars, {len(citations)} citations"
     )
 
+    _cache_put(cache_dir, cache_key, {"answer": raw_answer})
+
     return {
         "answer": raw_answer,
         "citations": citations,
         "context_used": bool(context.strip()),
+        "cache_hit": False,
     }

@@ -62,7 +62,7 @@ def _augment_question(question: str, jurisdiction: str) -> str:
     return f"{base} {suffix}?"
 
 
-def _run_one_graphrag(item: dict, clients) -> dict:
+def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) -> dict:
     """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
 
     Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
@@ -80,6 +80,7 @@ def _run_one_graphrag(item: dict, clients) -> dict:
         model=model,
         force_jurisdiction=item["jurisdiction"],
         bypass_completeness=True,  # Eval mode: chạy retrieval ngay cả khi planner thiếu procedure/theme
+        llm_cache_dir=llm_cache_dir,
     )
 
     # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
@@ -97,6 +98,7 @@ def _run_one_graphrag(item: dict, clients) -> dict:
                 model=model,
                 force_jurisdiction=item["jurisdiction"],
                 bypass_completeness=True,
+                llm_cache_dir=llm_cache_dir,
             )
             res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
             res = res2
@@ -113,7 +115,7 @@ def _run_one_graphrag(item: dict, clients) -> dict:
     }
 
 
-def _run_one_baseline(item: dict, clients) -> dict:
+def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None) -> dict:
     from src.baseline.naive_rag import run_baseline_query
     _, qdrant_client, anthropic_client, model = clients
     res = run_baseline_query(
@@ -121,6 +123,7 @@ def _run_one_baseline(item: dict, clients) -> dict:
         qdrant_client=qdrant_client,
         anthropic_client=anthropic_client,
         model=model,
+        llm_cache_dir=llm_cache_dir,
     )
     return {
         "answer": res["answer"],
@@ -165,6 +168,7 @@ def run_system_on_test_set(
     test_set: list[dict],
     system: str,
     clients,
+    llm_cache_dir: Path | None = None,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -179,7 +183,7 @@ def run_system_on_test_set(
         qid = item["id"]
         logger.info(f"[{system}] {i}/{len(test_set)} {qid}: {item['question'][:60]}...")
         try:
-            sys_out = runner(item, clients)
+            sys_out = runner(item, clients, llm_cache_dir=llm_cache_dir)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
             sys_out = {
@@ -258,6 +262,23 @@ def main() -> int:
         help="Re-compute metric từ file results_*.json đã chạy (skip LLM). "
              "Truyền 1 hoặc 2 file (graphrag + baseline). Tiết kiệm API khi sửa metric.",
     )
+    parser.add_argument(
+        "--llm-cache-dir",
+        type=Path,
+        default=Path("data/evaluation/.llm_cache/"),
+        help="Thư mục lưu LLM cache. Cache HIT khi hash(prompt) trùng → $0 API. "
+             "Auto-invalidate khi retrieval thay đổi (prompt khác). Default bật.",
+    )
+    parser.add_argument(
+        "--no-llm-cache",
+        action="store_true",
+        help="Tắt LLM cache (luôn gọi API). Dùng khi test latency hoặc cần kết quả non-deterministic mới.",
+    )
+    parser.add_argument(
+        "--clear-llm-cache",
+        action="store_true",
+        help="Xóa toàn bộ cache trước khi chạy. Dùng khi thay đổi prompt template.",
+    )
     args = parser.parse_args()
 
     if not args.test_set.exists():
@@ -335,6 +356,17 @@ def main() -> int:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
+    # --- LLM cache setup ---
+    llm_cache_dir = None if args.no_llm_cache else args.llm_cache_dir
+    if args.clear_llm_cache and llm_cache_dir and llm_cache_dir.exists():
+        import shutil
+        shutil.rmtree(llm_cache_dir)
+        logger.info(f"LLM cache cleared: {llm_cache_dir}")
+    if llm_cache_dir:
+        logger.info(f"LLM cache enabled: {llm_cache_dir} (cache HIT → $0 API)")
+    else:
+        logger.info("LLM cache DISABLED — sẽ tốn API cho mọi câu")
+
     logger.info(f"Build shared clients (Neo4j + Qdrant + Anthropic + BGE-M3)...")
     clients = _build_shared_clients()
 
@@ -342,7 +374,7 @@ def main() -> int:
     try:
         for system in systems:
             t0 = time.perf_counter()
-            results = run_system_on_test_set(test_set, system, clients)
+            results = run_system_on_test_set(test_set, system, clients, llm_cache_dir=llm_cache_dir)
             elapsed = time.perf_counter() - t0
             logger.info(f"[{system}] hoàn thành {len(results)} câu trong {elapsed:.1f}s")
 

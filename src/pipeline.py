@@ -16,6 +16,7 @@ Trả về PipelineResult TypedDict.
 import logging
 import os
 import time
+from pathlib import Path
 from typing import TypedDict
 
 import anthropic
@@ -90,6 +91,7 @@ def run_pipeline(
     max_tokens: int = CONTEXT_MAX_TOKENS,
     force_jurisdiction: str | None = None,
     bypass_completeness: bool = False,
+    llm_cache_dir: Path | None = None,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -210,7 +212,7 @@ def run_pipeline(
 
         # --- TASK-13b: Answer Generation ---
         logger.info("run_pipeline: generate_answer")
-        result = generate_answer(question, context, anthropic_client)
+        result = generate_answer(question, context, anthropic_client, cache_dir=llm_cache_dir)
 
         elapsed = time.perf_counter() - t_start
         logger.info(

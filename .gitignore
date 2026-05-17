@@ -38,3 +38,6 @@ Thumbs.db
 .pytest_cache/
 htmlcov/
 .coverage
+
+# LLM cache cho eval (large, ephemeral, sinh ra khi chạy run_evaluation)
+data/evaluation/.llm_cache/
