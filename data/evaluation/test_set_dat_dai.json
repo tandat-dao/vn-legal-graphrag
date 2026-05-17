@@ -258,7 +258,7 @@
     "id": "Q018",
     "question": "Cá nhân tại TP.HCM và cá nhân tại Đồng Nai cùng làm hồ sơ cấp Giấy chứng nhận quyền sử dụng đất lần đầu thì các nghĩa vụ tài chính (phí thẩm định hồ sơ, lệ phí cấp GCN) khác nhau ở những điểm nào?",
     "theme": "dat-dai",
-    "jurisdiction": "toan-quoc",
+    "jurisdiction": "multi-juris",
     "gap_type": "gap3",
     "difficulty": "hard",
     "ground_truth_answer": "Cùng thủ tục cấp GCN lần đầu nhưng nghĩa vụ tài chính khác nhau giữa 2 địa phương do cơ chế thu phí/lệ phí khác nhau: (1) TP.HCM — Nghị quyết 02/2023/NQ-HĐND TP.HCM Điều 1 quy định phí thẩm định, cơ quan thu giữ lại 85% / nộp 15% ngân sách; (2) Đồng Nai — Nghị quyết 22/2024/NQ-HĐND Đồng Nai Điều 1 quy định phí thẩm định, văn phòng đăng ký đất đai giữ lại 100%; ĐN còn có Nghị quyết 21/2024/NQ-HĐND Điều 1 riêng cho lệ phí cấp GCN (nộp 100% ngân sách); hồ sơ trực tuyến tại ĐN có ưu đãi giảm phí. Khung pháp lý chung cho cả 2 là Luật Đất đai 2024 (Đ142 về cấp GCN lần đầu, Đ153 về nghĩa vụ tài chính).",

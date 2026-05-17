@@ -17,7 +17,7 @@ from collections import Counter
 from pathlib import Path
 
 VALID_THEMES = {"dat-dai", "ho-tich", "nuoi-con-nuoi"}
-VALID_JURISDICTIONS = {"toan-quoc", "tp-hcm", "dong-nai"}
+VALID_JURISDICTIONS = {"toan-quoc", "tp-hcm", "dong-nai", "multi-juris"}
 VALID_GAPS = {"gap1", "gap2", "gap3", "negative"}
 VALID_DIFFICULTY = {"easy", "medium", "hard"}
 

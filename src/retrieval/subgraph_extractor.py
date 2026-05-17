@@ -63,10 +63,13 @@ LCCID_LIMIT = 500            # cảnh báo nếu stage2_component_ids() vượt 
 MAX_COMPONENTS_PER_NORM = 100  # cap per-norm trong stage2_component_ids() (dùng để test/debug)
 
 # jurisdiction → danh sách jurisdiction được phép (quốc gia luôn được bao gồm)
+# "multi-juris": dùng cho câu hỏi so sánh chéo nhiều tỉnh (VD Q018: HCM vs ĐN)
+#   — pipeline include tất cả jurisdictions để LLM có context đầy đủ.
 _JURISDICTION_ALLOW = {
     "toan-quoc": ["toan-quoc"],
     "tp-hcm": ["toan-quoc", "tp-hcm"],
     "dong-nai": ["toan-quoc", "dong-nai"],
+    "multi-juris": ["toan-quoc", "tp-hcm", "dong-nai"],
 }
 
 # ---------------------------------------------------------------------------
