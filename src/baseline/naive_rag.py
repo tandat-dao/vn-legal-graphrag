@@ -304,11 +304,11 @@ def run_baseline_query(
     try:
         # Vector search thuần — không filter, không hybrid
         question_vec = encode_text(model, question)
-        hits = qdrant_client.search(
+        hits = qdrant_client.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=question_vec,
+            query=question_vec,
             limit=top_k,
-        )
+        ).points
         scored_chunks = [
             {
                 "norm_id": h.payload.get("norm_id"),
