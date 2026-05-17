@@ -63,7 +63,12 @@ def _augment_question(question: str, jurisdiction: str) -> str:
 
 
 def _run_one_graphrag(item: dict, clients) -> dict:
-    """Chạy GraphRAG; nếu confirmation_needed thì augment + retry 1 lần."""
+    """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
+
+    Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
+    Mục tiêu là đo retrieval + generation, không đo UX Confirmation Loop.
+    Vẫn giữ augment+retry như fallback cho trường hợp pipeline thiếu field khác.
+    """
     from src.pipeline import run_pipeline
     neo4j_driver, qdrant_client, anthropic_client, model = clients
 
@@ -73,21 +78,23 @@ def _run_one_graphrag(item: dict, clients) -> dict:
         qdrant_client=qdrant_client,
         anthropic_client=anthropic_client,
         model=model,
+        force_jurisdiction=item["jurisdiction"],
     )
 
     retried = False
     if res["confirmation_needed"]:
+        # Hiếm khi xảy ra: query_planner thiếu field khác ngoài jurisdiction
         aug_q = _augment_question(item["question"], item["jurisdiction"])
         if aug_q != item["question"]:
-            logger.info(f"  [retry] confirmation_needed → augment: '{aug_q[:80]}...'")
+            logger.info(f"  [retry] confirmation_needed dù đã force → augment: '{aug_q[:80]}...'")
             res2 = run_pipeline(
                 aug_q,
                 neo4j_driver=neo4j_driver,
                 qdrant_client=qdrant_client,
                 anthropic_client=anthropic_client,
                 model=model,
+                force_jurisdiction=item["jurisdiction"],
             )
-            # Cộng dồn latency của cả 2 lần gọi để fair
             res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
             res = res2
             retried = True
@@ -183,7 +190,8 @@ def run_system_on_test_set(
             }
 
         gt_cits = item.get("ground_truth_citations", [])
-        cs = citation_score(sys_out["citations"], gt_cits, level="khoan")
+        cs_khoan = citation_score(sys_out["citations"], gt_cits, level="khoan")
+        cs_dieu = citation_score(sys_out["citations"], gt_cits, level="dieu")
         nr = norm_recall(sys_out["citations"], gt_cits)
         nc = (
             negative_correct(sys_out["citations"], item["gap_type"])
@@ -201,7 +209,8 @@ def run_system_on_test_set(
             "answer": sys_out["answer"],
             "pred_citations": sys_out["citations"],
             "ground_truth_citations": gt_cits,
-            "citation_score": cs,
+            "citation_score": cs_khoan,  # backwards-compat: cấp khoản
+            "citation_score_dieu": cs_dieu,  # cấp Điều (looser — đo định tuyến văn bản)
             "norm_recall": nr,
             "negative_correct": nc,
             "elapsed_seconds": sys_out["elapsed_seconds"],
@@ -213,7 +222,8 @@ def run_system_on_test_set(
         results.append(result)
 
         logger.info(
-            f"  → F1={cs['f1']:.2f} NormR={nr:.2f} cit={len(sys_out['citations'])}/{len(gt_cits)} "
+            f"  → F1_khoan={cs_khoan['f1']:.2f} F1_dieu={cs_dieu['f1']:.2f} "
+            f"NormR={nr:.2f} cit={len(sys_out['citations'])}/{len(gt_cits)} "
             f"{sys_out['elapsed_seconds']:.1f}s"
         )
 

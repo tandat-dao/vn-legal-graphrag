@@ -88,6 +88,7 @@ def run_pipeline(
     model=None,
     top_k: int = DEFAULT_TOP_K,
     max_tokens: int = CONTEXT_MAX_TOKENS,
+    force_jurisdiction: str | None = None,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -119,6 +120,21 @@ def run_pipeline(
             f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']} "
             f"complete={query_plan['is_complete']}"
         )
+
+        # Bypass Confirmation Loop cho evaluation: inject jurisdiction từ ground truth
+        # nếu được cung cấp. Chỉ unblock khi jurisdiction là field thiếu duy nhất.
+        if force_jurisdiction and not query_plan["is_complete"]:
+            if "jurisdiction" in query_plan["missing_fields"]:
+                query_plan["jurisdiction"] = force_jurisdiction
+                query_plan["missing_fields"] = [
+                    f for f in query_plan["missing_fields"] if f != "jurisdiction"
+                ]
+                if not query_plan["missing_fields"]:
+                    query_plan["is_complete"] = True
+                logger.info(
+                    f"run_pipeline: force_jurisdiction='{force_jurisdiction}' áp dụng, "
+                    f"is_complete={query_plan['is_complete']}"
+                )
 
         # Thiếu thông tin → yêu cầu xác nhận
         if not query_plan["is_complete"]:

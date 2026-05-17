@@ -149,9 +149,15 @@ def aggregate(per_question: list[dict]) -> dict:
 
     overall = {
         "count": len(per_question),
+        # Cấp Khoản (strict): citation đúng (dieu, khoan, van_ban)
         "precision_mean": _mean(q["citation_score"]["precision"] for q in per_question),
         "recall_mean": _mean(q["citation_score"]["recall"] for q in per_question),
         "f1_mean": _mean(q["citation_score"]["f1"] for q in per_question),
+        # Cấp Điều (looser): citation đúng (dieu, van_ban) — đo định tuyến văn bản
+        "precision_dieu_mean": _mean(q.get("citation_score_dieu", {}).get("precision") for q in per_question),
+        "recall_dieu_mean": _mean(q.get("citation_score_dieu", {}).get("recall") for q in per_question),
+        "f1_dieu_mean": _mean(q.get("citation_score_dieu", {}).get("f1") for q in per_question),
+        # Norm + latency
         "norm_recall_mean": _mean(q["norm_recall"] for q in per_question),
         "latency_mean_s": _mean(q["elapsed_seconds"] for q in per_question),
         "latency_p95_s": (
@@ -173,9 +179,8 @@ def aggregate(per_question: list[dict]) -> dict:
     overall["by_gap"] = {
         gap: {
             "count": len(qs),
-            "precision": _mean(q["citation_score"]["precision"] for q in qs),
-            "recall": _mean(q["citation_score"]["recall"] for q in qs),
             "f1": _mean(q["citation_score"]["f1"] for q in qs),
+            "f1_dieu": _mean(q.get("citation_score_dieu", {}).get("f1") for q in qs),
             "norm_recall": _mean(q["norm_recall"] for q in qs),
         }
         for gap, qs in sorted(by_gap.items())
@@ -225,10 +230,13 @@ def render_summary_md(
         f"|---|---:|---:|---:|",
     ]
     for key, label in [
-        ("precision_mean", "Citation Precision (khoan)"),
-        ("recall_mean", "Citation Recall (khoan)"),
-        ("f1_mean", "Citation F1 (khoan)"),
-        ("norm_recall_mean", "Norm-level Recall (van_ban)"),
+        ("precision_mean", "Citation Precision (Khoản)"),
+        ("recall_mean", "Citation Recall (Khoản)"),
+        ("f1_mean", "Citation F1 (Khoản — strict)"),
+        ("precision_dieu_mean", "Citation Precision (Điều)"),
+        ("recall_dieu_mean", "Citation Recall (Điều)"),
+        ("f1_dieu_mean", "Citation F1 (Điều — đo định tuyến văn bản)"),
+        ("norm_recall_mean", "Norm-level Recall (Văn bản)"),
         ("latency_mean_s", "Latency mean (s)"),
         ("latency_p95_s", "Latency p95 (s)"),
     ]:
@@ -243,14 +251,16 @@ def render_summary_md(
         n = graphrag_agg.get("negative_count", 0)
         lines.append(f"| Negative correct rate ({n} câu) | {_f(g)} | {_f(b)} | {_f(g - b)} |")
 
-    lines += ["", "## Theo gap_type", "", "| Gap | N | G F1 | B F1 | G NormRecall | B NormRecall |", "|---|---:|---:|---:|---:|---:|"]
+    lines += ["", "## Theo gap_type", "", "| Gap | N | G F1(Kh) | B F1(Kh) | G F1(Đ) | B F1(Đ) | G NormR | B NormR |", "|---|---:|---:|---:|---:|---:|---:|---:|"]
     gaps = sorted(set(graphrag_agg.get("by_gap", {}).keys()) | set(baseline_agg.get("by_gap", {}).keys()))
     for gap in gaps:
         g = graphrag_agg.get("by_gap", {}).get(gap, {})
         b = baseline_agg.get("by_gap", {}).get(gap, {})
         n = g.get("count", b.get("count", 0))
         lines.append(
-            f"| {gap} | {n} | {_f(g.get('f1', 0))} | {_f(b.get('f1', 0))} "
+            f"| {gap} | {n} "
+            f"| {_f(g.get('f1', 0))} | {_f(b.get('f1', 0))} "
+            f"| {_f(g.get('f1_dieu', 0))} | {_f(b.get('f1_dieu', 0))} "
             f"| {_f(g.get('norm_recall', 0))} | {_f(b.get('norm_recall', 0))} |"
         )
 

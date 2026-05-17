@@ -50,18 +50,18 @@
   },
   {
     "id": "Q004",
-    "question": "Hộ gia đình, cá nhân đang sử dụng đất ổn định trước ngày 01/7/2014 mà chưa có giấy chứng nhận thì được cấp Giấy chứng nhận quyền sử dụng đất theo điều kiện nào?",
+    "question": "Hộ gia đình, cá nhân sử dụng đất do lấn chiếm hoặc sử dụng sai mục đích trước ngày 01/7/2014 thì được cấp Giấy chứng nhận quyền sử dụng đất theo điều kiện nào?",
     "theme": "dat-dai",
     "jurisdiction": "toan-quoc",
     "gap_type": "gap3",
     "difficulty": "hard",
-    "ground_truth_answer": "Việc cấp Giấy chứng nhận lần đầu cho hộ gia đình, cá nhân đang sử dụng đất căn cứ vào: (1) Luật Đất đai 2024 Điều 139 quy định nguyên tắc và các trường hợp được cấp GCN cho đất sử dụng ổn định; (2) Nghị định 101/2024/NĐ-CP Điều 25 quy định chi tiết hồ sơ, trình tự cấp GCN cho hộ gia đình, cá nhân đang sử dụng đất quy định tại khoản 1 và khoản 3 Điều 139 của Luật Đất đai. Điều kiện chính: sử dụng đất ổn định, không có tranh chấp, phù hợp quy hoạch sử dụng đất, và có một trong các loại giấy tờ chứng minh quyền sử dụng đất hợp pháp hoặc xác nhận của UBND cấp xã.",
+    "ground_truth_answer": "Trường hợp hộ gia đình, cá nhân sử dụng đất có VI PHẠM pháp luật đất đai (lấn chiếm, sai mục đích) trước 01/7/2014 căn cứ: (1) Luật Đất đai 2024 Điều 139 quy định các trường hợp xử lý đối với đất vi phạm trước 01/7/2014; (2) Nghị định 101/2024/NĐ-CP Điều 25 hướng dẫn chi tiết cấp GCN cho trường hợp tại khoản 1 và khoản 3 Điều 139 — phân theo mốc thời gian (trước 15/10/1993 và 15/10/1993 đến trước 01/7/2014), diện tích đất ở được công nhận theo hạn mức tương ứng.",
     "ground_truth_citations": [
       {"dieu": "139", "van_ban": "luat-dat-dai-2024"},
       {"dieu": "25", "van_ban": "nghi-dinh-101-2024-nd-cp"}
     ],
     "relevant_component_ids": [],
-    "notes": "Gap 3 — 2 tier (Luật + NĐ hướng dẫn). Điều 25 NĐ 101 dẫn chiếu trực tiếp Điều 139 Luật ĐĐ."
+    "notes": "Gap 3 — 2 tier (Luật + NĐ hướng dẫn). Đ139 Luật ĐĐ nói cụ thể về VI PHẠM (lấn chiếm/sai mục đích) trước 01/7/2014, KHÔNG phải sử dụng ổn định nói chung. [GT verified 2026-05-17 sau dry run TASK-17 — bản gốc Q004 đã rephrase để khớp đúng nội dung Đ139.]"
   },
   {
     "id": "Q005",
@@ -147,19 +147,19 @@
   },
   {
     "id": "Q011",
-    "question": "Khi chuyển đất chuyên trồng lúa sang mục đích phi nông nghiệp, người sử dụng đất có nghĩa vụ bóc tách tầng đất mặt như thế nào theo quy định hiện hành?",
+    "question": "Khi cá nhân được giao đất, cho thuê đất để sử dụng vào mục đích phi nông nghiệp từ đất chuyên trồng lúa thì có những nghĩa vụ tài chính và nghĩa vụ kỹ thuật gì (bao gồm nộp tiền bổ sung và bóc tách tầng đất mặt)?",
     "theme": "dat-dai",
     "jurisdiction": "toan-quoc",
     "gap_type": "gap3",
     "difficulty": "hard",
-    "ground_truth_answer": "Nghĩa vụ bóc tách tầng đất mặt khi chuyển đất chuyên trồng lúa sang phi nông nghiệp căn cứ vào: (1) Luật Đất đai 2024 Điều 182 về bảo vệ đất trồng lúa quy định nguyên tắc chung; (2) Nghị định 112/2024/NĐ-CP Điều 10 quy định chi tiết về bóc tách và sử dụng tầng đất mặt khi xây dựng công trình trên đất được chuyển đổi; (3) Nghị định 226/2025/NĐ-CP Điều 5 sửa đổi, bổ sung Điều 10 NĐ 112/2024 nói trên — phải áp dụng phiên bản đã sửa đổi (lex posterior).",
+    "ground_truth_answer": "Các nghĩa vụ khi chuyển đất chuyên trồng lúa sang phi nông nghiệp gồm: (1) Nghĩa vụ TÀI CHÍNH — Luật Đất đai 2024 Điều 182 khoản 4 điểm b: nộp một khoản tiền để Nhà nước bổ sung diện tích đất chuyên trồng lúa bị mất hoặc tăng hiệu quả sử dụng đất trồng lúa; (2) Nghĩa vụ KỸ THUẬT (bóc tách tầng đất mặt) — Nghị định 112/2024/NĐ-CP Điều 10 quy định chi tiết phương án bóc tách tầng đất mặt (độ sâu tối thiểu 20cm), được sửa đổi bổ sung bởi Nghị định 226/2025/NĐ-CP Điều 5 — áp dụng phiên bản đã sửa đổi (lex posterior).",
     "ground_truth_citations": [
-      {"dieu": "182", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "182", "khoan": "4", "diem": "b", "van_ban": "luat-dat-dai-2024"},
       {"dieu": "10", "van_ban": "nghi-dinh-112-2024-nd-cp"},
       {"dieu": "5", "van_ban": "nghi-dinh-226-2025-nd-cp"}
     ],
     "relevant_component_ids": [],
-    "notes": "Gap 3 — Luật (tier 1) + 2 NĐ (tier 2). Test khả năng phát hiện amendment: NĐ 226/2025 sửa NĐ 112/2024. Hệ thống tốt phải dẫn cả 2 NĐ và ưu tiên phiên bản đã sửa."
+    "notes": "Gap 3 — Luật (tier 1, Đ182.K4.b nghĩa vụ tài chính) + 2 NĐ (tier 2, Đ10 NĐ 112 bóc tách kỹ thuật, NĐ 226 sửa NĐ 112). [GT verified 2026-05-17 — bản gốc Q011 cite Đ182 chung là không chính xác (Đ182 không nói về bóc tách); rephrased để bao quát cả 2 nghĩa vụ và cite cụ thể Đ182.K4.b cho phần tài chính.]"
   },
   {
     "id": "Q012",
@@ -179,18 +179,18 @@
   },
   {
     "id": "Q013",
-    "question": "Tranh chấp đất đai được phân cấp giải quyết giữa các cấp Ủy ban nhân dân (huyện, xã) theo quy định hiện hành như thế nào?",
+    "question": "Tranh chấp đất đai giữa hộ gia đình, cá nhân do Chủ tịch Ủy ban nhân dân cấp nào giải quyết, và quyền khiếu nại / khởi kiện được quy định ra sao?",
     "theme": "dat-dai",
     "jurisdiction": "toan-quoc",
     "gap_type": "gap3",
     "difficulty": "medium",
-    "ground_truth_answer": "Việc phân cấp giải quyết tranh chấp đất đai giữa cấp huyện và cấp xã căn cứ vào: (1) Luật Đất đai 2024 Điều 236 quy định thẩm quyền giải quyết tranh chấp đất đai theo cấp hành chính; (2) Nghị định 151/2025/NĐ-CP Điều 5 quy định thẩm quyền của UBND cấp huyện, Chủ tịch UBND cấp huyện chuyển giao cho Chủ tịch UBND cấp xã theo mô hình chính quyền 2 cấp, trong đó có thẩm quyền giải quyết tranh chấp đất đai và thẩm quyền liên quan khác (cưỡng chế thu hồi, bồi thường, định giá).",
+    "ground_truth_answer": "Theo Luật Đất đai 2024 Điều 236 khoản 3 điểm a: tranh chấp giữa hộ gia đình, cá nhân, cộng đồng dân cư với nhau do Chủ tịch UBND cấp huyện giải quyết. Trong 30 ngày kể từ ngày nhận quyết định, các bên không khởi kiện/khiếu nại thì quyết định có hiệu lực; nếu không đồng ý thì khởi kiện tại Tòa án (tố tụng hành chính) hoặc khiếu nại đến Chủ tịch UBND cấp tỉnh. Nghị định 151/2025/NĐ-CP Điều 5 khoản 2 quy định Chủ tịch UBND cấp huyện chuyển giao thẩm quyền cho Chủ tịch UBND cấp xã theo mô hình chính quyền 2 cấp.",
     "ground_truth_citations": [
-      {"dieu": "236", "van_ban": "luat-dat-dai-2024"},
-      {"dieu": "5", "van_ban": "nghi-dinh-151-2025-nd-cp"}
+      {"dieu": "236", "khoan": "3", "diem": "a", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "5", "khoan": "2", "van_ban": "nghi-dinh-151-2025-nd-cp"}
     ],
     "relevant_component_ids": [],
-    "notes": "Gap 3 — Luật (tier 1, Đ236 thẩm quyền tranh chấp) + NĐ phân cấp (tier 2, Đ5 chuyển giao). Test khả năng nối Luật gốc với NĐ phân cấp hành chính 2 cấp."
+    "notes": "Gap 3 — Luật (tier 1) + NĐ phân cấp (tier 2). [GT verified 2026-05-17 — narrowed scope từ thẩm quyền chung sang case-by-case (hộ gia đình ↔ Chủ tịch huyện). Đ5 NĐ 151 K1 phần lớn bị NĐ 49/2026 bãi bỏ, nhưng K2 vẫn hiệu lực — chỉ định K2 cụ thể.]"
   },
   {
     "id": "Q014",
@@ -231,5 +231,59 @@
     "ground_truth_citations": [],
     "relevant_component_ids": [],
     "notes": "Negative case — câu hỏi nghe rất liên quan đất đai nhưng nội dung thuế nằm ở pháp luật thuế. Test phân biệt nghĩa vụ tài chính dùng đất (trong scope) vs thuế thu nhập (ngoài scope)."
+  },
+  {
+    "id": "Q017",
+    "question": "Cá nhân chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở từ năm 2026 trở đi cần áp dụng những quy định nào về thẩm quyền cho phép và cách tính tiền sử dụng đất (kể cả cơ chế ưu đãi nếu có)?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Khung pháp lý áp dụng từ 2026 cho cá nhân chuyển NN→ở gồm 4 lớp văn bản: (1) Luật Đất đai 2024 Điều 121 khoản 1 điểm b (trường hợp phải được cho phép) + Điều 156 khoản 1 (nguyên tắc nộp tiền SDĐ); (2) Nghị quyết 254/2025/QH15 Điều 4 (thẩm quyền cho phép — không phải trình HĐND tỉnh) + Điều 10 khoản 2 điểm c (cơ chế ưu đãi tiền SDĐ cho hộ cá nhân chuyển vườn/ao/NN sang ở); (3) Nghị định 102/2024/NĐ-CP Điều 44a (chi tiết điều chỉnh quyết định cho phép chuyển MĐSDĐ); (4) Nghị định 50/2026/NĐ-CP Điều 6 (chi tiết cách tính tiền SDĐ theo Đ10.K2.c NQ 254). Áp dụng lex posterior: NQ 254 và NĐ 50/2026 là quy định MỚI so với Luật ĐĐ và NĐ 102/2024 — phải ưu tiên bản mới khi có mâu thuẫn về thẩm quyền và cách tính.",
+    "ground_truth_citations": [
+      {"dieu": "121", "khoan": "1", "diem": "b", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "156", "khoan": "1", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "4", "van_ban": "nghi-quyet-254-2025-qh15"},
+      {"dieu": "10", "khoan": "2", "diem": "c", "van_ban": "nghi-quyet-254-2025-qh15"},
+      {"dieu": "44a", "van_ban": "nghi-dinh-102-2024-nd-cp"},
+      {"dieu": "6", "van_ban": "nghi-dinh-50-2026-nd-cp"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Killer gap3 #1 — LEX POSTERIOR CHAIN. 6 citations từ 2 tier (Luật + NQ QH ở tier 1; 2 NĐ ở tier 2). Pipeline phải: (a) bao gồm cả 4 văn bản trong context, (b) ưu tiên NQ 254 + NĐ 50/2026 (bản mới) khi nói về thẩm quyền và tiền SDĐ. Baseline có thể trả Luật + NĐ 102 cũ mà bỏ NQ 254/NĐ 50 — không hiểu amendment chain."
+  },
+  {
+    "id": "Q018",
+    "question": "Cá nhân tại TP.HCM và cá nhân tại Đồng Nai cùng làm hồ sơ cấp Giấy chứng nhận quyền sử dụng đất lần đầu thì các nghĩa vụ tài chính (phí thẩm định hồ sơ, lệ phí cấp GCN) khác nhau ở những điểm nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Cùng thủ tục cấp GCN lần đầu nhưng nghĩa vụ tài chính khác nhau giữa 2 địa phương do cơ chế thu phí/lệ phí khác nhau: (1) TP.HCM — Nghị quyết 02/2023/NQ-HĐND TP.HCM Điều 1 quy định phí thẩm định, cơ quan thu giữ lại 85% / nộp 15% ngân sách; (2) Đồng Nai — Nghị quyết 22/2024/NQ-HĐND Đồng Nai Điều 1 quy định phí thẩm định, văn phòng đăng ký đất đai giữ lại 100%; ĐN còn có Nghị quyết 21/2024/NQ-HĐND Điều 1 riêng cho lệ phí cấp GCN (nộp 100% ngân sách); hồ sơ trực tuyến tại ĐN có ưu đãi giảm phí. Khung pháp lý chung cho cả 2 là Luật Đất đai 2024 (Đ142 về cấp GCN lần đầu, Đ153 về nghĩa vụ tài chính).",
+    "ground_truth_citations": [
+      {"dieu": "153", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "1", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm"},
+      {"dieu": "1", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai"},
+      {"dieu": "1", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Killer gap3 #2 — MULTI-JURISDICTION CONFLICT. 4 citations từ 2 tier (Luật tier 1 + 3 NQ HĐND tier 4). Pipeline phải: (a) hiểu câu hỏi là so sánh 2 tỉnh, (b) lấy đồng thời văn bản HCM VÀ ĐN, (c) không lẫn lộn phí HCM vs phí ĐN. Baseline naive thường chỉ kéo 1 nhóm (HCM hoặc ĐN) tùy chunks nào match tốt hơn, hoặc lẫn lộn 2 nhóm."
+  },
+  {
+    "id": "Q019",
+    "question": "Khi cá nhân được giao đất từ đất chuyên trồng lúa sang xây dựng nhà ở, phương án bóc tách tầng đất mặt cần được cấp nào phê duyệt và theo trình tự nào theo quy định hiện hành?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Phương án bóc tách tầng đất mặt thực hiện qua chuỗi quy định: (1) Luật Đất đai 2024 Điều 182 khoản 4 điểm b xác lập nghĩa vụ chung; (2) Nghị định 112/2024/NĐ-CP Điều 10 quy định nội dung phương án (độ sâu tối thiểu 20cm), Điều 11 quy định hồ sơ và trình tự thẩm định; (3) Nghị định 226/2025/NĐ-CP Điều 5 sửa đổi Điều 10 NĐ 112/2024 — phải áp dụng phiên bản mới (lex posterior); (4) Nghị định 151/2025/NĐ-CP Điều 5 khoản 2 quy định thẩm quyền phê duyệt của Chủ tịch UBND cấp huyện được chuyển giao cho Chủ tịch UBND cấp xã theo mô hình chính quyền 2 cấp.",
+    "ground_truth_citations": [
+      {"dieu": "182", "khoan": "4", "diem": "b", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "10", "van_ban": "nghi-dinh-112-2024-nd-cp"},
+      {"dieu": "11", "van_ban": "nghi-dinh-112-2024-nd-cp"},
+      {"dieu": "5", "van_ban": "nghi-dinh-226-2025-nd-cp"},
+      {"dieu": "5", "khoan": "2", "van_ban": "nghi-dinh-151-2025-nd-cp"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Killer gap3 #3 — DEEP AMENDMENT + PHÂN CẤP CHAIN. 5 citations từ 2 tier (Luật + 3 NĐ). Pipeline phải kết nối: (a) Luật cấp nghĩa vụ chung → (b) NĐ chuyên ngành về phương án → (c) NĐ sửa đổi → (d) NĐ phân cấp thẩm quyền. Baseline naive khó liên kết NĐ 151 (phân cấp) với NĐ 112 (bóc tách) vì chủ đề khác nhau, embedding không thấy được mối quan hệ semantic mà ontology + IMPLEMENTS edges của GraphRAG nắm được."
   }
 ]
