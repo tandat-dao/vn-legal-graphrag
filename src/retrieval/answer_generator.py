@@ -14,15 +14,64 @@ import json
 import logging
 import re
 from pathlib import Path
+from typing import TypedDict
 
 import anthropic
 
 from src.retrieval.context_assembler import build_prompt
 
+
+# ---------------------------------------------------------------------------
+# Output schema (loose sections — Schema B trong v2.2)
+# ---------------------------------------------------------------------------
+
+class AnswerSections(TypedDict):
+    """3 section structured trong câu trả lời LLM (theo prompt template)."""
+    tra_loi: str          # Nội dung chính
+    canh_bao_lex: str     # "Không có" hoặc danh sách amendments
+    pham_vi: str          # "Trong phạm vi corpus" / "Ngoài phạm vi corpus — ..."
+
+
+# Regex bắt 3 section headers H2. KHÔNG yêu cầu thứ tự (LLM đôi khi đảo).
+_SECTION_HEADERS = {
+    "tra_loi": re.compile(r"^##\s+TRẢ\s*LỜI\s*$", re.MULTILINE | re.IGNORECASE),
+    "canh_bao_lex": re.compile(r"^##\s+CẢNH\s*BÁO\s*LEX\s*$", re.MULTILINE | re.IGNORECASE),
+    "pham_vi": re.compile(r"^##\s+PHẠM\s*VI\s*$", re.MULTILINE | re.IGNORECASE),
+}
+
+
+def parse_sections(raw_answer: str) -> AnswerSections:
+    """Tách câu trả lời thành 3 section theo H2 markers.
+
+    Nếu LLM không tuân thủ format (thiếu section, sai header), trường tương ứng
+    sẽ là chuỗi rỗng. Vẫn return TypedDict đầy đủ keys để downstream xử lý.
+
+    Args:
+        raw_answer: Câu trả lời thô từ LLM.
+
+    Returns:
+        AnswerSections với 3 keys; mỗi value là nội dung sau header tới header
+        kế tiếp (hoặc end-of-string). Trống nếu header không tìm thấy.
+    """
+    # Tìm vị trí từng header
+    positions = []
+    for key, pattern in _SECTION_HEADERS.items():
+        m = pattern.search(raw_answer)
+        if m:
+            positions.append((m.start(), m.end(), key))
+    positions.sort()
+
+    sections = AnswerSections(tra_loi="", canh_bao_lex="", pham_vi="")
+    for i, (_, end, key) in enumerate(positions):
+        next_start = positions[i + 1][0] if i + 1 < len(positions) else len(raw_answer)
+        sections[key] = raw_answer[end:next_start].strip()
+    return sections
+
 logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-6"
 MAX_ANSWER_TOKENS = 3000
+TEMPERATURE = 0.0  # Deterministic output cho reproducibility eval (Anthropic greedy decoding)
 
 
 # ---------------------------------------------------------------------------
@@ -149,11 +198,13 @@ def generate_answer(
     cached = _cache_get(cache_dir, cache_key)
     if cached is not None:
         logger.info(f"generate_answer: cache HIT ({cache_key}) — $0 API")
-        # Re-parse citations với parser hiện tại (parser có thể đã sửa từ lúc cache)
+        # Re-parse citations + sections với parser hiện tại (parser có thể đã sửa từ lúc cache)
         citations = parse_citations(cached["answer"])
+        sections = parse_sections(cached["answer"])
         return {
             "answer": cached["answer"],
             "citations": citations,
+            "sections": sections,
             "context_used": bool(context.strip()),
             "cache_hit": True,
         }
@@ -161,14 +212,17 @@ def generate_answer(
     message = llm_client.messages.create(
         model=MODEL,
         max_tokens=MAX_ANSWER_TOKENS,
+        temperature=TEMPERATURE,
         messages=[{"role": "user", "content": prompt}],
     )
 
     raw_answer = message.content[0].text.strip()
     citations = parse_citations(raw_answer)
+    sections = parse_sections(raw_answer)
 
     logger.info(
-        f"generate_answer: {len(raw_answer)} chars, {len(citations)} citations"
+        f"generate_answer: {len(raw_answer)} chars, {len(citations)} citations, "
+        f"sections={ {k: bool(v) for k, v in sections.items()} }"
     )
 
     _cache_put(cache_dir, cache_key, {"answer": raw_answer})
@@ -176,6 +230,7 @@ def generate_answer(
     return {
         "answer": raw_answer,
         "citations": citations,
+        "sections": sections,
         "context_used": bool(context.strip()),
         "cache_hit": False,
     }

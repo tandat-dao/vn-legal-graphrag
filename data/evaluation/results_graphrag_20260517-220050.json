@@ -1,0 +1,107 @@
+{
+  "system": "graphrag",
+  "test_set": "/tmp/test_q12.json",
+  "timestamp": "20260517-220050",
+  "total_elapsed_s": 24.61,
+  "results": [
+    {
+      "id": "Q012",
+      "question": "Cách tính tiền sử dụng đất khi hộ gia đình, cá nhân chuyển mục đích sử dụng đất từ đất vườn, ao, đất nông nghiệp sang đất ở được quy định như thế nào?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## TRẢ LỜI\n\n### Cách tính tiền sử dụng đất khi chuyển mục đích từ đất vườn, ao, đất nông nghiệp sang đất ở\n\n#### 1. Các mức thu tiền sử dụng đất\n\nĐối với trường hợp đất vườn, ao, đất nông nghiệp trong cùng thửa đất có đất ở được xác định khi công nhận quyền sử dụng đất mà chuyển sang đất ở; hoặc đất có nguồn gốc là đất vườn, ao gắn liền đất ở nhưng người sử dụng đất tách ra để chuyển quyền hoặc do đơn vị đo đạc tách thành các thửa riêng trước ngày 01/7/2014, tiền sử dụng đất được tính theo **chênh lệch** giữa tiền sử dụng đất tính theo giá đất ở và tiền sử dụng đất tính theo giá đất nông nghiệp tại thời điểm có quyết định cho phép chuyển mục đích, cụ thể:\n\n| Diện tích | Mức thu |\n|---|---|\n| Trong hạn mức giao đất ở tại địa phương | **30%** chênh lệch |\n| Vượt hạn mức nhưng không quá 01 lần hạn mức giao đất ở | **50%** chênh lệch |\n| Vượt hạn mức mà vượt quá 01 lần hạn mức giao đất ở | **100%** chênh lệch |\n\n[Điều 10, Khoản 2, Điểm c, Văn bản nghi-quyet-254-2025-qh15]\n\n> **Lưu ý quan trọng:** Mức thu ưu đãi này **chỉ được tính một lần cho một hộ gia đình, cá nhân** (tính trên 01 thửa đất). [Điều 10, Khoản 2, Điểm c, Văn bản nghi-quyet-254-2025-qh15]\n\n#### 2. Xác định hạn mức giao đất ở để tính tiền\n\nHạn mức giao đất ở tại địa phương đối với hộ gia đình được tính **theo hạn mức giao đất ở cho cá nhân** tại thời điểm có quyết định cho phép chuyển mục đích sử dụng đất, **không phụ thuộc vào số thành viên** trong hộ gia đình có chung quyền sử dụng đất. [Điều 6, Khoản 5, Điểm c, Văn bản nghi-dinh-50-2026-nd-cp]\n\n#### 3. Thời điểm tính (mốc áp dụng)\n\nViệc tính số lần chuyển mục đích sử dụng đất, xác định hạn mức giao đất ở, lựa chọn thửa đất để áp dụng các mức thu trên được **tính từ ngày 01 tháng 8 năm 2024**. [Điều 6, Khoản 3, Văn bản nghi-dinh-50-2026-nd-cp]\n\nThời điểm định giá đất để tính tiền sử dụng đất là **thời điểm Nhà nước ban hành quyết định cho phép chuyển mục đích sử dụng đất**. [Điều 155, Khoản 3, Điểm a, Văn bản luat-dat-dai-2024]\n\n#### 4. Quy định chuyển tiếp (trường hợp đã nộp tiền từ 01/8/2024 đến trước khi Nghị quyết 254 có hiệu lực)\n\nĐối với hộ gia đình, cá nhân đã được cơ quan nhà nước cho phép chuyển mục đích sử dụng đất trong giai đoạn từ **01/8/2024 đến trước ngày 01/01/2026** (ngày Nghị quyết 254/2025/QH15 có hiệu lực):\n\n- Nếu đã nộp tiền sử dụng đất theo thông báo của cơ quan thuế, được **đề nghị cơ quan thuế tính lại** theo quy định của Nghị quyết này.\n- Nếu số tiền sau khi tính lại **thấp hơn** số đã nộp, người sử dụng đất được **hoàn trả** bằng cách trừ vào nghĩa vụ tài chính khác hoặc hoàn trả bằng tiền theo quy định pháp luật về ngân sách nhà nước.\n\n[Điều 4, Khoản 10, Điểm b, Văn bản nghi-quyet-254-2025-qh15]\n\n---\n\n## CẢNH BÁO LEX\n\nKhông có\n\n## PHẠM VI\n\nTrong phạm vi corpus",
+      "pred_citations": [
+        {
+          "dieu": "10",
+          "khoan": "2",
+          "diem": "c",
+          "tiet": null,
+          "van_ban": "nghi-quyet-254-2025-qh15",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "10",
+          "khoan": "2",
+          "diem": "c",
+          "tiet": null,
+          "van_ban": "nghi-quyet-254-2025-qh15",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "5",
+          "diem": "c",
+          "tiet": null,
+          "van_ban": "nghi-dinh-50-2026-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "3",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-50-2026-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "155",
+          "khoan": "3",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "4",
+          "khoan": "10",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "nghi-quyet-254-2025-qh15",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "156",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "10",
+          "khoan": "2",
+          "diem": "c",
+          "van_ban": "nghi-quyet-254-2025-qh15"
+        },
+        {
+          "dieu": "6",
+          "van_ban": "nghi-dinh-50-2026-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.3333333333333333,
+        "recall": 0.6666666666666666,
+        "f1": 0.4444444444444444,
+        "pred_count": 6,
+        "gt_count": 3,
+        "match_count": 2
+      },
+      "citation_score_dieu": {
+        "precision": 0.3333333333333333,
+        "recall": 0.6666666666666666,
+        "f1": 0.4444444444444444,
+        "pred_count": 6,
+        "gt_count": 3,
+        "match_count": 2
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 24.6,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 14
+    }
+  ]
+}

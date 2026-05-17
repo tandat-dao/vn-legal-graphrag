@@ -219,6 +219,20 @@ YÊU CẦU KHÁC:
   Từ khoá "Văn bản" PHẢI có mặt trước tên văn bản. Dùng id văn bản từ header "--- ... ---" trong CONTEXT.
 - Nếu context không đủ thông tin để trả lời, nêu rõ điều đó.
 
+ĐỊNH DẠNG ĐẦU RA (BẮT BUỘC):
+Câu trả lời của bạn PHẢI gồm đúng 3 section sau, theo thứ tự, dùng heading H2 (##) chính xác như sau:
+
+## TRẢ LỜI
+[Nội dung câu trả lời chính bằng markdown. Dùng heading H3 (###) hoặc H4 (####) cho sub-sections nếu cần. Mọi citation đặt inline trong nội dung theo format [Điều X, ...] đã quy định ở YÊU CẦU KHÁC.]
+
+## CẢNH BÁO LEX
+[Liệt kê các trường hợp mâu thuẫn pháp lý phát hiện được — bullet list, mỗi dòng theo format: "Quy định tại [VB cũ] đã được sửa đổi/thay thế bởi [VB mới, ngày hiệu lực]". Nếu KHÔNG có mâu thuẫn, ghi đúng dòng: "Không có"]
+
+## PHẠM VI
+[Ghi đúng một trong hai dòng:
+- "Trong phạm vi corpus" — nếu câu hỏi thuộc 3 lĩnh vực được lập chỉ mục
+- "Ngoài phạm vi corpus — [lý do ngắn]" — nếu áp dụng PHẠM VI CORPUS guard ở trên]
+
 CONTEXT:
 {context}
 
