@@ -80,20 +80,29 @@ def fetch_texts(
 # Citation label helpers
 # ---------------------------------------------------------------------------
 
+VALID_TO_SENTINEL = "9999-12-31"  # sync với graph_builder.VALID_TO_SENTINEL
+
+
 def _format_citation_label(
     context_path: list[str],
     norm_id: str,
     tier: int | None = None,
     valid_from: str | None = None,
+    valid_to: str | None = None,
 ) -> str:
-    """Tạo nhãn citation kèm metadata tier + valid_from cho LLM suy luận.
+    """Tạo nhãn citation kèm metadata tier + valid_from + valid_to cho LLM suy luận.
 
-    Ví dụ:
-        context_path=["luat-dat-dai-2024", "Điều 116", "Khoản 1"], tier=1, valid_from="2024-08-01"
+    Ví dụ VB còn hiệu lực:
+        valid_from="2024-08-01", valid_to="9999-12-31"
         → "[Tier 1 | Hiệu lực: 2024-08-01] Điều 116, Khoản 1 (luat-dat-dai-2024)"
 
+    Ví dụ VB đã hết hiệu lực (temporal layer):
+        valid_from="2014-07-01", valid_to="2025-01-01"
+        → "[Tier 1 | Hiệu lực: 2014-07-01 → 2025-01-01 (HẾT HIỆU LỰC)] Điều 95 (luat-dat-dai-2013)"
+
     Metadata prefix cho phép LLM áp dụng quy tắc lex posterior / lex superior
-    mà KHÔNG cần inline `amended_by` annotation trong markdown nguồn.
+    + nhận biết VB hết hiệu lực để xử lý câu hỏi temporal đúng (TH1 chuyển tiếp,
+    TH2 cắt ngang).
     """
     if not context_path:
         base = norm_id
@@ -102,12 +111,16 @@ def _format_citation_label(
         location = ", ".join(parts) if parts else ""
         base = f"{location} ({context_path[0]})" if location else context_path[0]
 
-    # Metadata prefix: [Tier X | Hiệu lực: YYYY-MM-DD]
+    # Metadata prefix: [Tier X | Hiệu lực: YYYY-MM-DD] hoặc
+    #                 [Tier X | Hiệu lực: YYYY-MM-DD → YYYY-MM-DD (HẾT HIỆU LỰC)]
     meta_parts = []
     if tier is not None:
         meta_parts.append(f"Tier {tier}")
     if valid_from:
-        meta_parts.append(f"Hiệu lực: {valid_from}")
+        if valid_to and valid_to != VALID_TO_SENTINEL:
+            meta_parts.append(f"Hiệu lực: {valid_from} → {valid_to} (HẾT HIỆU LỰC)")
+        else:
+            meta_parts.append(f"Hiệu lực: {valid_from}")
     if meta_parts:
         return f"[{' | '.join(meta_parts)}] {base}"
     return base
@@ -169,6 +182,7 @@ def assemble_context(
             fetched["norm_id"],
             tier=unit.get("tier"),
             valid_from=unit.get("valid_from"),
+            valid_to=unit.get("valid_to"),
         )
         block = f"--- {label} ---\n{fetched['text'].strip()}"
         block_tokens = _estimate_tokens(block)
@@ -225,6 +239,15 @@ Khi hai hoặc nhiều đoạn quy định về CÙNG MỘT vấn đề mà NỘ
   2. Lex posterior (thời gian): Nếu ĐỒNG CẤP (cùng Tier), văn bản có ngày hiệu lực MỚI HƠN thay thế quy định cũ.
   3. Lex specialis (đặc thù): Nếu đồng cấp và đồng thời, văn bản quy định RIÊNG cho một địa phương hoặc lĩnh vực cụ thể được ưu tiên hơn văn bản quy định chung.
 Khi phát hiện mâu thuẫn, PHẢI nêu rõ: "Lưu ý: Quy định tại [văn bản cũ] đã được sửa đổi/thay thế bởi [văn bản mới, ngày hiệu lực]."
+
+QUY TẮC TEMPORAL (XỬ LÝ VĂN BẢN HẾT HIỆU LỰC):
+Khi CONTEXT chứa cả văn bản còn hiệu lực VÀ văn bản đã hết hiệu lực (nhận biết qua metadata header "Hiệu lực: ... → ... (HẾT HIỆU LỰC)"):
+1. TRÌNH BÀY rõ ràng cả 2 văn bản (cũ + mới) với ngày hiệu lực để user hiểu bối cảnh.
+2. KHÔNG được tự quyết định "áp dụng văn bản nào" khi câu hỏi chưa nêu rõ trạng thái hồ sơ user. Thay vào đó:
+   (a) NẾU CONTEXT có Điều khoản chuyển tiếp (VD: Điều 256 Luật Đất đai 2024): TRÍCH NGUYÊN VĂN và giải thích các trường hợp được quy định (tiếp tục luật cũ / bắt buộc luật mới / người dân chọn).
+   (b) NẾU CONTEXT KHÔNG có điều khoản chuyển tiếp: nêu nguyên tắc "pháp luật không hồi tố" — hồ sơ đã có quyết định cuối cùng giữ luật cũ; hồ sơ chưa có quyết định cuối cùng áp dụng luật mới (cắt ngang).
+   (c) NÊN HỎI LẠI user trạng thái hồ sơ (đã có quyết định cuối chưa? thời điểm nộp? loại sự kiện) để chốt câu trả lời.
+3. KHÔNG được im lặng bỏ qua văn bản hết hiệu lực nếu nó liên quan trực tiếp đến câu hỏi temporal (VD user hỏi "trước 2024 quy định ra sao?").
 
 PHẠM VI CORPUS (BẮT BUỘC ĐỌC TRƯỚC KHI TRẢ LỜI):
 Hệ thống này chỉ lập chỉ mục PHÁP LUẬT ĐẤT ĐAI, HỘ TỊCH và NUÔI CON NUÔI tại Việt Nam.

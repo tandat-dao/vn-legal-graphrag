@@ -15,6 +15,7 @@ Trả về PipelineResult TypedDict.
 """
 import logging
 import os
+import re
 import time
 from pathlib import Path
 from typing import TypedDict
@@ -37,6 +38,43 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_TOP_K = 25
 CONTEXT_MAX_TOKENS = 6000
+
+
+# ---------------------------------------------------------------------------
+# Temporal helpers (Option C Phần 2 — temporal-aware retrieval)
+# ---------------------------------------------------------------------------
+
+_TEMPORAL_ISO_PATTERNS = [
+    (re.compile(r"^\d{4}-\d{2}-\d{2}$"), lambda s: s),                # YYYY-MM-DD
+    (re.compile(r"^\d{4}-\d{2}$"), lambda s: f"{s}-01"),              # YYYY-MM
+    (re.compile(r"^\d{4}$"), lambda s: f"{s}-01-01"),                  # YYYY
+]
+
+
+def _resolve_temporal_anchor(anchor: str | None) -> str | None:
+    """Convert temporal_anchor từ planner thành ISO date cho Cypher filter.
+
+    Trả về:
+      - ISO date string nếu anchor là date cụ thể → Cypher filter strict tại thời điểm này.
+      - None nếu anchor vague ('luat-cu', 'unspecified_past', 'trước-...') → broad retrieve
+        (Cypher KHÔNG filter theo thời gian, kéo cả VB cũ + mới; prompt sẽ guide LLM).
+
+    Args:
+        anchor: temporal_intent.temporal_anchor từ QueryPlan.
+
+    Returns:
+        ISO date "YYYY-MM-DD" hoặc None.
+    """
+    if not anchor:
+        return None
+    if anchor in ("luat-cu", "unspecified_past"):
+        return None
+    if anchor.startswith("trước-") or anchor.startswith("sau-"):
+        return None  # phạm vi mở rộng, để broad
+    for pattern, fmt in _TEMPORAL_ISO_PATTERNS:
+        if pattern.match(anchor):
+            return fmt(anchor)
+    return None  # unrecognized → broad
 
 
 # ---------------------------------------------------------------------------
@@ -165,6 +203,29 @@ def run_pipeline(
                 citations=[],
                 context_used=False,
                 elapsed_seconds=round(elapsed, 2),
+            )
+
+        # --- TEMPORAL LAYER (Option C Phần 2) ---
+        # Khi câu hỏi có yếu tố thời gian/dở dang/regime change, điều chỉnh
+        # query_plan["temporal"] để retrieval bao gồm VB hết hiệu lực.
+        ti = query_plan.get("temporal_intent", {}) or {}
+        if ti.get("has_temporal_context"):
+            case_status = ti.get("case_status")
+            anchor = ti.get("temporal_anchor")
+            # Hồ sơ dở dang / sự kiện mới phát sinh có thể span 2 regime → broad retrieve
+            # để pull CẢ VB lúc nộp lẫn VB hiện hành. Hệ thống sẽ trình bày 2 khung
+            # cho user, không tự quyết áp dụng cái nào (xem prompt rule TEMPORAL).
+            if case_status in ("do-dang", "moi"):
+                resolved = None
+                reason = f"span-regime (case_status={case_status})"
+            else:
+                resolved = _resolve_temporal_anchor(anchor)
+                reason = f"strict date={resolved}" if resolved else "broad (vague anchor)"
+            query_plan = dict(query_plan)  # immutable copy
+            query_plan["temporal"] = resolved
+            logger.info(
+                f"run_pipeline: TEMPORAL MODE — anchor='{anchor}' "
+                f"status='{case_status}' → {reason}"
             )
 
         # --- TASK-11: Sub-graph Extraction ---

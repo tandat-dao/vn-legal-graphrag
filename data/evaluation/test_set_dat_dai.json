@@ -288,5 +288,65 @@
     ],
     "relevant_component_ids": [],
     "notes": "Killer gap3 #3 — DEEP AMENDMENT + PHÂN CẤP CHAIN. 5 citations từ 2 tier (Luật + 3 NĐ). Pipeline phải kết nối: (a) Luật cấp nghĩa vụ chung → (b) NĐ chuyên ngành về phương án → (c) NĐ sửa đổi → (d) NĐ phân cấp thẩm quyền. Baseline naive khó liên kết NĐ 151 (phân cấp) với NĐ 112 (bóc tách) vì chủ đề khác nhau, embedding không thấy được mối quan hệ semantic mà ontology + IMPLEMENTS edges của GraphRAG nắm được."
+  },
+  {
+    "id": "Q020",
+    "question": "Năm 2020, hạn mức giao đất ở cho cá nhân tại Quận 1 TP.HCM được quy định ở văn bản nào và mức bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Năm 2020, hạn mức giao đất ở tại Quận 1 TP.HCM được quy định bởi Quyết định 18/2016/QĐ-UBND (hiệu lực từ 26/5/2016 đến 29/9/2024). Theo Điều 1 khoản 1 điểm a, hạn mức là KHÔNG QUÁ 160m²/hộ. Đây là văn bản đã hết hiệu lực và được thay thế bởi Quyết định 69/2024/QĐ-UBND TP.HCM từ ngày 30/9/2024.",
+    "ground_truth_citations": [
+      {"dieu": "1", "khoan": "1", "diem": "a", "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #1 — TƯỜNG MINH THỜI ĐIỂM (năm 2020). temporal_intent.has_temporal_context=True, temporal_anchor='2020', case_status=null. Pipeline phải retrieve QĐ 18/2016 (active 2016-2024) và LLM cite đúng. Test khả năng phân biệt văn bản còn/hết hiệu lực qua metadata header '[... HẾT HIỆU LỰC]'."
+  },
+  {
+    "id": "Q021",
+    "question": "So sánh hạn mức giao đất ở cho cá nhân tại các quận nội thành TP.HCM theo Quyết định 18/2016 (cũ) và Quyết định 69/2024 (hiện hành) có gì khác nhau?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "medium",
+    "ground_truth_answer": "Cả hai Quyết định đều quy định 160m² cho các quận nội thành, nhưng khác về DANH SÁCH QUẬN cụ thể: (1) QĐ 18/2016 Điều 1 khoản 1 điểm a liệt kê: Quận 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú (KHÔNG có Quận 2, 7, 9, 12, Bình Tân, Thủ Đức); (2) QĐ 69/2024 Điều 3 khoản 1 mở rộng nhóm 160m² gồm Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và TP Thủ Đức.",
+    "ground_truth_citations": [
+      {"dieu": "1", "khoan": "1", "diem": "a", "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"},
+      {"dieu": "3", "khoan": "1", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #2 — SO SÁNH 2 PHIÊN BẢN. has_temporal_context=True, temporal_anchor='unspecified_past' (so sánh cũ-mới). Pipeline phải retrieve cả 2 QĐ + LLM trình bày bảng so sánh, làm rõ khác biệt phân loại quận."
+  },
+  {
+    "id": "Q022",
+    "question": "Hồ sơ giao đất ở của tôi nộp tháng 6/2024 nhưng đến nay (tháng 10/2024) vẫn chưa có quyết định cuối cùng, áp dụng hạn mức theo Quyết định 18/2016 hay Quyết định 69/2024?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Hồ sơ nộp 6/2024 chưa có quyết định cuối khi QĐ 69/2024 có hiệu lực (30/9/2024). Quyết định 69/2024 KHÔNG có điều khoản chuyển tiếp bảo lưu cho hồ sơ dở dang. Áp dụng nguyên tắc 'cắt ngang' — hồ sơ chưa có quyết định hành chính cuối cùng sẽ áp dụng QĐ 69/2024 (hạn mức mới). Quy định cụ thể hạn mức theo phân loại quận tại Điều 3 QĐ 69/2024. Hệ thống NÊN HỎI LẠI user: quyết định hành chính cuối cùng chưa? loại đất gì? đang tại quận/huyện nào?",
+    "ground_truth_citations": [
+      {"dieu": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"},
+      {"dieu": "1", "khoan": "1", "diem": "a", "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #3 — HỒ SƠ DỞ DANG (case_status='do-dang'). temporal_intent.has_temporal_context=True, temporal_anchor='2024-06' (hoặc 'unspecified_past'). Pipeline phải: (a) retrieve cả QĐ 18 lẫn QĐ 69; (b) trình bày nguyên tắc 'pháp luật không hồi tố' + 'cắt ngang'; (c) HỎI LẠI user trạng thái hồ sơ. KHÔNG được im lặng bỏ qua QĐ 18."
+  },
+  {
+    "id": "Q023",
+    "question": "Hồ sơ cấp Giấy chứng nhận quyền sử dụng đất nộp năm 2023 nhưng chưa giải quyết xong, hiện áp dụng Luật Đất đai 2013 hay Luật Đất đai 2024?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Hồ sơ cấp GCN nộp 2023 (thời Luật 2013) chưa giải quyết xong khi Luật 2024 có hiệu lực (01/8/2024). Việc áp dụng Luật cũ hay mới phụ thuộc điều khoản chuyển tiếp tại Điều 256 Luật Đất đai 2024 (3 hướng: tiếp tục luật cũ / bắt buộc luật mới / người dân chọn — tùy loại hồ sơ và đối tượng). Hệ thống nên TRÌNH BÀY 2 khung pháp lý (Luật 2013 Điều 95-100 đăng ký + cấp GCN; Luật 2024 Điều 139 cấp GCN trường hợp vi phạm) và HỎI LẠI user: hồ sơ thuộc trường hợp nào, đã có thông báo nào của cơ quan đăng ký chưa. Nếu Điều 256 Luật 2024 chưa có trong corpus, NÊN nói rõ thiếu thông tin chuyển tiếp.",
+    "ground_truth_citations": [
+      {"dieu": "139", "van_ban": "luat-dat-dai-2024"},
+      {"dieu": "100", "van_ban": "luat-dat-dai-2013"},
+      {"dieu": "99", "van_ban": "luat-dat-dai-2013"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #4 — REGIME CHANGE LUẬT 2013→2024 + HỒ SƠ DỞ DANG. has_temporal_context=True, temporal_anchor='2023' hoặc 'luat-cu', case_status='do-dang'. Pipeline phải: (a) retrieve CẢ Luật 2013 (hết hiệu lực 2025-01-01) lẫn Luật 2024; (b) header metadata thể hiện 'HẾT HIỆU LỰC' cho Luật 2013; (c) admit honest nếu Điều 256 chuyển tiếp KHÔNG có trong corpus thay vì bịa; (d) hỏi user để chốt. Đây là test failure-mode-aware: pipeline KHÔNG tự quyết khi thiếu data chuyển tiếp."
   }
 ]
