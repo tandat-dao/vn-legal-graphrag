@@ -14,6 +14,7 @@ from src.retrieval.query_planner import (
     _apply_jurisdiction_rules,
     _compute_completeness,
     _validate_and_clean,
+    _validate_temporal_intent,
     build_confirmation_prompt,
     plan_query,
 )
@@ -43,8 +44,11 @@ class TestValidateAndClean:
         raw = {"theme": "dat-dai", "procedure": "cap-so-do-lan-dau",
                "jurisdiction": "tp-hcm", "temporal": "2025-01-01"}
         result = _validate_and_clean(raw)
-        assert result == {"theme": "dat-dai", "procedure": "cap-so-do-lan-dau",
-                          "jurisdiction": "tp-hcm", "temporal": "2025-01-01"}
+        assert result["theme"] == "dat-dai"
+        assert result["procedure"] == "cap-so-do-lan-dau"
+        assert result["jurisdiction"] == "tp-hcm"
+        assert result["temporal"] == "2025-01-01"
+        assert result["temporal_intent"]["has_temporal_context"] is False
 
     def test_invalid_theme_cleared(self):
         raw = {"theme": "luat-hinh-su", "procedure": None,
@@ -66,8 +70,17 @@ class TestValidateAndClean:
 
     def test_empty_raw(self):
         result = _validate_and_clean({})
-        assert result == {"theme": None, "procedure": None,
-                          "jurisdiction": None, "temporal": None}
+        assert result["theme"] is None
+        assert result["procedure"] is None
+        assert result["jurisdiction"] is None
+        assert result["temporal"] is None
+        # temporal_intent default rỗng
+        assert result["temporal_intent"] == {
+            "has_temporal_context": False,
+            "temporal_anchor": None,
+            "case_status": None,
+            "reasoning": "",
+        }
 
 
 # ---------------------------------------------------------------------------
@@ -293,3 +306,81 @@ class TestPlanQuery:
         plan = plan_query("???", client)
         assert plan["theme"] is None
         assert plan["is_complete"] is False
+
+
+# ---------------------------------------------------------------------------
+# 5. Unit tests cho _validate_temporal_intent (B2 — Temporal Layer)
+# ---------------------------------------------------------------------------
+
+class TestValidateTemporalIntent:
+    def test_default_when_input_none(self):
+        result = _validate_temporal_intent(None)
+        assert result["has_temporal_context"] is False
+        assert result["temporal_anchor"] is None
+        assert result["case_status"] is None
+
+    def test_default_when_input_not_dict(self):
+        assert _validate_temporal_intent("not a dict")["has_temporal_context"] is False
+        assert _validate_temporal_intent([1, 2, 3])["has_temporal_context"] is False
+
+    def test_full_temporal_context(self):
+        raw = {
+            "has_temporal_context": True,
+            "temporal_anchor": "2020-06",
+            "case_status": "do-dang",
+            "reasoning": "Hồ sơ nộp 2020 chưa có quyết định",
+        }
+        result = _validate_temporal_intent(raw)
+        assert result["has_temporal_context"] is True
+        assert result["temporal_anchor"] == "2020-06"
+        assert result["case_status"] == "do-dang"
+
+    def test_invalid_case_status_cleared(self):
+        raw = {
+            "has_temporal_context": True,
+            "temporal_anchor": "2020-06",
+            "case_status": "linh-tinh",  # không hợp lệ
+            "reasoning": "...",
+        }
+        result = _validate_temporal_intent(raw)
+        assert result["case_status"] is None
+
+    def test_empty_anchor_normalized_to_none(self):
+        raw = {
+            "has_temporal_context": True,
+            "temporal_anchor": "   ",  # whitespace
+            "case_status": None,
+            "reasoning": "test",
+        }
+        result = _validate_temporal_intent(raw)
+        assert result["temporal_anchor"] is None
+
+    def test_has_ctx_false_clears_fields(self):
+        """Khi LLM bảo has_temporal_context=False, anchor/case_status forced None."""
+        raw = {
+            "has_temporal_context": False,
+            "temporal_anchor": "2020",  # nên bị xoá
+            "case_status": "do-dang",   # nên bị xoá
+            "reasoning": "Câu hỏi hiện hành",
+        }
+        result = _validate_temporal_intent(raw)
+        assert result["temporal_anchor"] is None
+        assert result["case_status"] is None
+        assert result["reasoning"] == "Câu hỏi hiện hành"
+
+    def test_validate_and_clean_includes_temporal_intent(self):
+        """_validate_and_clean trả về dict có temporal_intent key."""
+        raw = {
+            "theme": "dat-dai", "procedure": None, "jurisdiction": "tp-hcm",
+            "temporal": None,
+            "temporal_intent": {
+                "has_temporal_context": True,
+                "temporal_anchor": "luat-cu",
+                "case_status": "moi",
+                "reasoning": "Mua đất luật cũ giờ mới làm thủ tục",
+            },
+        }
+        result = _validate_and_clean(raw)
+        assert result["temporal_intent"]["has_temporal_context"] is True
+        assert result["temporal_intent"]["temporal_anchor"] == "luat-cu"
+        assert result["temporal_intent"]["case_status"] == "moi"
