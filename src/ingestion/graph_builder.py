@@ -96,7 +96,18 @@ def upsert_component(tx: ManagedTransaction, component_id: str, label: str) -> N
     )
 
 
+# Sentinel "vô thời hạn" cho valid_to: dùng cho văn bản CÒN HIỆU LỰC tại thời điểm
+# ingest. Lý do dùng sentinel thay vì NULL: Neo4j 5+ coi `SET prop = null` là REMOVE
+# property → tạo warning "missing property" trong query có v.valid_to. Dùng sentinel
+# far-future giữ property tồn tại + semantic đúng (chưa có ngày hết hạn).
+# Khi bổ sung văn bản đã hết hiệu lực (roadmap temporal reasoning), valid_to sẽ có
+# giá trị ngày cụ thể như "2024-08-01" — vẫn so sánh được với sentinel qua >=.
+VALID_TO_SENTINEL = "9999-12-31"
+
+
 def upsert_ctv(tx: ManagedTransaction, ctv_data: dict) -> None:
+    raw_valid_to = ctv_data.get("valid_to")
+    valid_to = raw_valid_to if raw_valid_to else VALID_TO_SENTINEL
     tx.run(
         """
         MERGE (v:CTV {id: $id})
@@ -106,7 +117,7 @@ def upsert_ctv(tx: ManagedTransaction, ctv_data: dict) -> None:
         """,
         id=ctv_data["id"],
         valid_from=ctv_data.get("valid_from"),
-        valid_to=ctv_data.get("valid_to"),
+        valid_to=valid_to,
         status=ctv_data["status"],
     )
 

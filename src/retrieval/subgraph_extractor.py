@@ -28,7 +28,7 @@ Cypher Stage 2 (template):
     WHERE j.name IN $allowed_jurisdictions
     MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
     WHERE ($temporal IS NULL OR v.valid_from <= $temporal)
-      AND ($temporal IS NULL OR v.valid_to IS NULL OR v.valid_to >= $temporal)
+      AND ($temporal IS NULL OR v.valid_to >= $temporal)
     RETURN DISTINCT related.id AS norm_id, c.id AS component_id
 
 Chiến lược traversal (composed-edge derivation closure):
