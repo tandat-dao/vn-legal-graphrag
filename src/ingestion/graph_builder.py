@@ -138,6 +138,59 @@ def upsert_text_unit(tx: ManagedTransaction, text_unit: TextUnit) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Amendment node + edge (Ý 2 — khai thác <!-- amended_by ... --> annotations)
+# ---------------------------------------------------------------------------
+
+def _amendment_id(target_component_id: str, amending_norm: str, amending_loc: str) -> str:
+    """Deterministic ID cho Amendment node.
+
+    Key gồm component đích + số hiệu VB sửa + vị trí trong VB sửa → unique
+    cho mỗi (component, amending_action) pair.
+    """
+    import hashlib
+    raw = f"{target_component_id}|{amending_norm}|{amending_loc}"
+    return "amend-" + hashlib.sha256(raw.encode()).hexdigest()[:16]
+
+
+def upsert_amendment(
+    tx: ManagedTransaction,
+    target_component_id: str,
+    amendment: dict,
+) -> None:
+    """Upsert Amendment node + cạnh AMENDED_BY từ Component đích.
+
+    Args:
+        target_component_id: ID Component bị sửa đổi.
+        amendment: dict từ parser.extract_amendments() với keys
+            amending_norm, amending_loc, effective_date, change_type,
+            content_summary.
+    """
+    amend_id = _amendment_id(
+        target_component_id, amendment["amending_norm"], amendment["amending_loc"]
+    )
+    tx.run(
+        """
+        MERGE (a:Amendment {id: $id})
+        SET a.amending_norm    = $amending_norm,
+            a.amending_loc     = $amending_loc,
+            a.effective_date   = $effective_date,
+            a.change_type      = $change_type,
+            a.content_summary  = $content_summary
+        WITH a
+        MATCH (c:Component {id: $comp_id})
+        MERGE (c)-[:AMENDED_BY]->(a)
+        """,
+        id=amend_id,
+        amending_norm=amendment["amending_norm"],
+        amending_loc=amendment["amending_loc"],
+        effective_date=amendment.get("effective_date"),
+        change_type=amendment.get("change_type", "khac"),
+        content_summary=amendment.get("content_summary", ""),
+        comp_id=target_component_id,
+    )
+
+
+# ---------------------------------------------------------------------------
 # Upsert — Edges
 # ---------------------------------------------------------------------------
 
@@ -284,8 +337,17 @@ def run_ingestion(data_dir: str) -> None:
                             text_unit_id=node["id"],
                         )
 
+                        # Pass 1.5: upsert Amendment nodes + AMENDED_BY edges
+                        # (Ý 2 — khai thác <!-- amended_by ... --> annotations)
+                        for amendment in node.get("amendments", []) or []:
+                            upsert_amendment(tx, comp_id, amendment)
+
                     tx.commit()
-                logger.info(f"Pass 1 — ingested {norm_id}: {len(result['nodes'])} TextUnits")
+                amendment_count = sum(len(n.get("amendments", []) or []) for n in result["nodes"])
+                logger.info(
+                    f"Pass 1 — ingested {norm_id}: {len(result['nodes'])} TextUnits, "
+                    f"{amendment_count} amendments"
+                )
 
             # Pass 2: tạo lại [:IMPLEMENTS] — lúc này tất cả Norm đã tồn tại
             implements_count = 0

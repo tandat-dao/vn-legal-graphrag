@@ -38,10 +38,19 @@ CHARS_PER_TOKEN = 3.5  # heuristic cho tiếng Việt với BPE tokenizer
 _FETCH_TEXT_CYPHER = """
 MATCH (t:TextUnit)
 WHERE t.id IN $ids
+OPTIONAL MATCH (t)<-[:HAS_TEXT_UNIT]-(:CTV)<-[:HAS_CTV]-(c:Component)-[:AMENDED_BY]->(a:Amendment)
+WITH t, collect(DISTINCT {
+    amending_norm: a.amending_norm,
+    amending_loc: a.amending_loc,
+    effective_date: a.effective_date,
+    change_type: a.change_type,
+    content_summary: a.content_summary
+}) AS amendments
 RETURN t.id AS id,
        t.text AS text,
        t.context_path AS context_path,
-       t.norm_id AS norm_id
+       t.norm_id AS norm_id,
+       [x IN amendments WHERE x.amending_norm IS NOT NULL] AS amendments
 """
 
 
@@ -49,10 +58,12 @@ def fetch_texts(
     text_unit_ids: list[str],
     neo4j_driver: Driver,
 ) -> dict[str, dict]:
-    """Fetch text + context_path từ Neo4j cho danh sách text_unit_ids.
+    """Fetch text + context_path + amendments từ Neo4j cho danh sách text_unit_ids.
 
     Returns:
-        Dict mapping text_unit_id → {text, context_path, norm_id}.
+        Dict mapping text_unit_id → {text, context_path, norm_id, amendments}.
+        amendments = list dict {amending_norm, amending_loc, effective_date,
+        change_type, content_summary} (rỗng nếu Component không có amendment).
     """
     if not text_unit_ids:
         return {}
@@ -72,6 +83,7 @@ def fetch_texts(
             "text": row["text"] or "",
             "context_path": context_path or [],
             "norm_id": row["norm_id"] or "",
+            "amendments": row.get("amendments") or [],
         }
     return result
 
@@ -130,6 +142,31 @@ def _estimate_tokens(text: str) -> int:
     return max(1, int(len(text) / CHARS_PER_TOKEN))
 
 
+def _format_amendments_warning(amendments: list[dict]) -> str:
+    """Format amendments thành block cảnh báo cho LLM trước text Component.
+
+    Returns chuỗi rỗng nếu không có amendment. Ngược lại trả block dạng:
+        [AMENDMENT WARNING]
+        - <amending_norm>, <amending_loc>, hiệu lực <YYYY-MM-DD>: <content_summary>
+        - ...
+    """
+    if not amendments:
+        return ""
+    lines = ["[AMENDMENT WARNING — nội dung Component này đã/sắp bị sửa đổi:]"]
+    # Sort theo effective_date ascending để LLM thấy chronology
+    sorted_amends = sorted(
+        amendments,
+        key=lambda a: a.get("effective_date") or "0000-00-00",
+    )
+    for a in sorted_amends:
+        norm = a.get("amending_norm", "?")
+        loc = a.get("amending_loc", "?")
+        date = a.get("effective_date") or "?"
+        content = (a.get("content_summary") or "").strip()
+        lines.append(f"  - {norm} ({loc}, hiệu lực {date}): {content}")
+    return "\n".join(lines)
+
+
 # ---------------------------------------------------------------------------
 # Core functions
 # ---------------------------------------------------------------------------
@@ -184,7 +221,14 @@ def assemble_context(
             valid_from=unit.get("valid_from"),
             valid_to=unit.get("valid_to"),
         )
-        block = f"--- {label} ---\n{fetched['text'].strip()}"
+        # AMENDMENT preamble (Ý 2 — khai thác AMENDED_BY graph):
+        # Khi Component này có amendment, thêm warning trước text để LLM biết
+        # nội dung sắp đọc đã/sắp bị sửa đổi và áp dụng lex posterior chính xác.
+        amend_block = _format_amendments_warning(fetched.get("amendments", []))
+        if amend_block:
+            block = f"--- {label} ---\n{amend_block}\n{fetched['text'].strip()}"
+        else:
+            block = f"--- {label} ---\n{fetched['text'].strip()}"
         block_tokens = _estimate_tokens(block)
 
         if used_tokens + block_tokens > max_tokens:
@@ -239,6 +283,13 @@ Khi hai hoặc nhiều đoạn quy định về CÙNG MỘT vấn đề mà NỘ
   2. Lex posterior (thời gian): Nếu ĐỒNG CẤP (cùng Tier), văn bản có ngày hiệu lực MỚI HƠN thay thế quy định cũ.
   3. Lex specialis (đặc thù): Nếu đồng cấp và đồng thời, văn bản quy định RIÊNG cho một địa phương hoặc lĩnh vực cụ thể được ưu tiên hơn văn bản quy định chung.
 Khi phát hiện mâu thuẫn, PHẢI nêu rõ: "Lưu ý: Quy định tại [văn bản cũ] đã được sửa đổi/thay thế bởi [văn bản mới, ngày hiệu lực]."
+
+QUY TẮC AMENDMENT WARNING (BẮT BUỘC):
+Khi một đoạn trong CONTEXT mở đầu bằng block "[AMENDMENT WARNING — ...]" liệt kê các văn bản đã/sắp sửa đổi Component này, BẮT BUỘC:
+  1. ĐỌC danh sách amendment trước khi trích dẫn nội dung Component → biết phiên bản nào còn hiệu lực tại thời điểm câu hỏi.
+  2. NẾU effective_date trong amendment SỚM HƠN thời điểm câu hỏi: phải nói rõ "Nội dung này đã được sửa đổi/bổ sung bởi [amending_norm] tại [amending_loc] kể từ [effective_date]: [content_summary]" và áp dụng phiên bản sửa đổi.
+  3. NẾU effective_date MUỘN HƠN thời điểm câu hỏi: phiên bản gốc trong CONTEXT vẫn áp dụng tại thời điểm đó, NHƯNG vẫn phải nói cho user biết quy định sẽ thay đổi sắp tới để tránh hiểu nhầm.
+  4. Trong câu trả lời, ưu tiên trích dẫn `[Điều X, Văn bản amending_norm]` khi đã có amendment có hiệu lực, KHÔNG được giả vờ amendment không tồn tại.
 
 QUY TẮC TEMPORAL (XỬ LÝ VĂN BẢN HẾT HIỆU LỰC):
 Khi CONTEXT chứa cả văn bản còn hiệu lực VÀ văn bản đã hết hiệu lực (nhận biết qua metadata header "Hiệu lực: ... → ... (HẾT HIỆU LỰC)"):
