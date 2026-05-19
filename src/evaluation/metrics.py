@@ -66,37 +66,48 @@ def _citation_key(c: dict, level: str = "khoan") -> tuple:
 # Citation accuracy (per question)
 # ---------------------------------------------------------------------------
 
-def _flex_match_count(pred: list[dict], gt: list[dict], level: str) -> int:
-    """Đếm số match giữa pred và gt với SEMANTIC WILDCARD ở các field None của GT.
+def cit_matches(pred: dict, gt: dict, level: str = "khoan") -> bool:
+    """Kiểm tra 1 pred citation có khớp 1 gt citation không, theo SEMANTIC WILDCARD.
+
+    Đây là **single source of truth** cho semantic match giữa pred và gt — được dùng
+    bởi: (1) `_flex_match_count` để tính F1, (2) `report_builder._cit_matches_gt` để
+    gắn ✅/❌ vào pred citations trong report. Mọi consumer khác PHẢI dùng hàm này
+    để đảm bảo F1 hiển thị nhất quán với ✅/❌ trong report.
 
     Quy tắc:
-      - level='khoan': nếu gt.khoan is None → match bất kỳ khoan nào của pred (gt designer
-        cố tình cite cấp Điều, không quan tâm Khoản). Tương tự gt.diem is None khi level='diem'.
-      - Mỗi GT chỉ absorb được 1 pred (greedy 1-1 matching).
-      - van_ban và dieu luôn phải khớp.
+      - van_ban + dieu LUÔN phải khớp.
+      - level='khoan'|'diem': gt.khoan=None → wildcard cho mọi pred.khoan
+        (gt designer cố ý cite cấp Điều khi không quan tâm Khoản).
+      - level='diem': tương tự cho gt.diem=None.
     """
-    def _matches(p: dict, g: dict) -> bool:
-        if _norm_str(p.get("van_ban")) != _norm_str(g.get("van_ban")):
+    if _norm_str(pred.get("van_ban")) != _norm_str(gt.get("van_ban")):
+        return False
+    if _norm_str(pred.get("dieu")) != _norm_str(gt.get("dieu")):
+        return False
+    if level in ("khoan", "diem"):
+        g_khoan = _norm_str(gt.get("khoan"))
+        if g_khoan is not None and _norm_str(pred.get("khoan")) != g_khoan:
             return False
-        if _norm_str(p.get("dieu")) != _norm_str(g.get("dieu")):
+    if level == "diem":
+        g_diem = _norm_str(gt.get("diem"))
+        if g_diem is not None and _norm_str(pred.get("diem")) != g_diem:
             return False
-        if level in ("khoan", "diem"):
-            g_khoan = _norm_str(g.get("khoan"))
-            if g_khoan is not None and _norm_str(p.get("khoan")) != g_khoan:
-                return False
-        if level == "diem":
-            g_diem = _norm_str(g.get("diem"))
-            if g_diem is not None and _norm_str(p.get("diem")) != g_diem:
-                return False
-        return True
+    return True
 
+
+def _flex_match_count(pred: list[dict], gt: list[dict], level: str) -> int:
+    """Đếm số match giữa pred và gt với greedy 1-1 matching.
+
+    Mỗi GT chỉ absorb được 1 pred. Logic match đơn lẻ delegate cho `cit_matches`
+    (đảm bảo report builder và F1 metric dùng cùng một định nghĩa khớp).
+    """
     used = [False] * len(gt)
     matched = 0
     for p in pred:
         for i, g in enumerate(gt):
             if used[i]:
                 continue
-            if _matches(p, g):
+            if cit_matches(p, g, level):
                 used[i] = True
                 matched += 1
                 break
