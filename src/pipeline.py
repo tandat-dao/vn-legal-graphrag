@@ -160,7 +160,7 @@ def run_pipeline(
     try:
         # --- TASK-10: Query Planning ---
         logger.info(f"run_pipeline: plan_query cho '{question[:60]}...'")
-        query_plan = plan_query(question, anthropic_client)
+        query_plan = plan_query(question, anthropic_client, neo4j_driver=neo4j_driver)
         logger.info(
             f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']} "
             f"complete={query_plan['is_complete']}"

@@ -11,6 +11,7 @@ Quy tắc tự động:
 import json
 import logging
 import os
+import re
 
 import anthropic
 from dotenv import load_dotenv
@@ -262,18 +263,91 @@ def _compute_completeness(fields: dict) -> tuple[bool, list[str]]:
     return (len(missing) == 0, missing)
 
 
-def plan_query(question: str, client: anthropic.Anthropic) -> QueryPlan:
+# ---------------------------------------------------------------------------
+# Backfill theme từ tham chiếu số hiệu văn bản trong câu hỏi
+# ---------------------------------------------------------------------------
+
+# Token số hiệu văn bản kiểu "102/2024/NĐ-CP", "69/2024/QĐ-UBND", "31/2024/QH15"
+_NORM_NUM_RE = re.compile(
+    r"\b\d{1,4}/\d{4}/(?:NĐ-CP|ND-CP|NQ-HĐND|NQ-HDND|QĐ-UBND|QD-UBND|QH\d+|TT-[A-ZĐ\-]+)\b",
+    re.IGNORECASE,
+)
+# Slug-style id nếu user gõ trực tiếp
+_NORM_ID_SLUG_RE = re.compile(
+    r"\b(?:luat|nghi-dinh|thong-tu|quyet-dinh|nghi-quyet)-[a-z0-9\-]+\b"
+)
+# "Luật Đất đai YYYY" → suy ra id luat-dat-dai-YYYY
+_LUAT_DAT_DAI_RE = re.compile(r"Luật\s+Đất\s+đai\s+(\d{4})", re.IGNORECASE)
+
+_THEME_LOOKUP_CYPHER = """
+MATCH (t:Theme)-[:INCLUDES]->(n:Norm)
+WHERE ANY(tok IN $tokens WHERE toLower(n.title) CONTAINS toLower(tok))
+   OR n.id IN $ids
+RETURN DISTINCT t.name AS theme
+"""
+
+
+def _extract_norm_refs(question: str) -> tuple[list[str], list[str]]:
+    """Tách tham chiếu văn bản từ câu hỏi.
+
+    Returns:
+        (title_tokens, id_candidates) — dùng để CONTAINS Norm.title hoặc match Norm.id.
+    """
+    tokens = list({m.group(0) for m in _NORM_NUM_RE.finditer(question)})
+    ids = list({m.group(0).lower() for m in _NORM_ID_SLUG_RE.finditer(question)})
+    for m in _LUAT_DAT_DAI_RE.finditer(question):
+        ids.append(f"luat-dat-dai-{m.group(1)}")
+    return tokens, list(set(ids))
+
+
+def _lookup_theme_from_refs(neo4j_driver, tokens: list[str], ids: list[str]) -> str | None:
+    """Truy vấn Neo4j: nếu mọi norm reference cùng 1 theme → trả theme, ngược lại None."""
+    if not tokens and not ids:
+        return None
+    try:
+        with neo4j_driver.session() as session:
+            rows = session.run(_THEME_LOOKUP_CYPHER, tokens=tokens, ids=ids).data()
+    except Exception as e:
+        logger.warning(f"_lookup_theme_from_refs: Neo4j lỗi — {e}")
+        return None
+    themes = {row["theme"] for row in rows if row.get("theme") in VALID_THEMES}
+    if len(themes) == 1:
+        return themes.pop()
+    return None
+
+
+def plan_query(
+    question: str,
+    client: anthropic.Anthropic,
+    neo4j_driver=None,
+) -> QueryPlan:
     """Phân tích câu hỏi, trả về QueryPlan.
 
     Args:
         question: Câu hỏi tiếng Việt từ người dùng.
         client: Anthropic client đã khởi tạo.
+        neo4j_driver: Driver Neo4j (tùy chọn). Nếu được cung cấp và LLM trả
+            theme=None, hàm sẽ thử backfill theme bằng cách lookup các tham
+            chiếu số hiệu văn bản (Nghị định 102/2024/NĐ-CP, Luật Đất đai 2024)
+            trong câu hỏi. Chỉ backfill khi LLM trả None — KHÔNG override.
 
     Returns:
         QueryPlan với đầy đủ các trường.
     """
     raw = _call_llm(client, question)
     fields = _validate_and_clean(raw)
+
+    # Backfill theme từ norm references nếu LLM bỏ trống (defensive: chỉ khi None)
+    if fields["theme"] is None and neo4j_driver is not None:
+        tokens, ids = _extract_norm_refs(question)
+        backfilled = _lookup_theme_from_refs(neo4j_driver, tokens, ids)
+        if backfilled is not None:
+            logger.info(
+                f"plan_query: backfill theme='{backfilled}' từ norm refs "
+                f"tokens={tokens} ids={ids}"
+            )
+            fields["theme"] = backfilled
+
     fields = _apply_jurisdiction_rules(fields)
     is_complete, missing = _compute_completeness(fields)
 
