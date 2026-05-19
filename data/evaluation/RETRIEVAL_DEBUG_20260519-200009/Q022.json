@@ -1,0 +1,247 @@
+{
+  "id": "Q022",
+  "question": "Hồ sơ giao đất ở của tôi nộp tháng 6/2024 nhưng đến nay (tháng 10/2024) vẫn chưa có quyết định cuối cùng, áp dụng hạn mức theo Quyết định 18/2016 hay Quyết định 69/2024?",
+  "investigation": "Stage 1 OK (QĐ 18 rank #1). Tại đâu old regime bị drop?",
+  "query_plan": {
+    "theme": "dat-dai",
+    "procedure": "cap-so-do-lan-dau",
+    "jurisdiction": "tp-hcm",
+    "temporal": null,
+    "temporal_reason": "broad (case_status=do-dang)",
+    "temporal_intent": {
+      "has_temporal_context": true,
+      "temporal_anchor": "2024-06",
+      "case_status": "do-dang",
+      "reasoning": "Hồ sơ nộp tháng 6/2024 chưa có quyết định cuối — hồ sơ dở dang qua hai chế độ luật (QĐ 18/2016 → QĐ 69/2024)"
+    }
+  },
+  "stage1_seed_norms": [
+    "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+    "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+    "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-102-2024-nd-cp",
+    "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+    "nghi-dinh-101-2024-nd-cp",
+    "quyet-dinh-52-2016-qd-ubnd-tp-hcm",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-quyet-02-2023-nq-hdnd-tp-hcm"
+  ],
+  "stage2_result_norms": [
+    "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+    "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+    "nghi-dinh-112-2024-nd-cp",
+    "nghi-dinh-102-2024-nd-cp",
+    "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-226-2025-nd-cp",
+    "nghi-dinh-151-2025-nd-cp",
+    "luat-dat-dai-2024",
+    "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+    "luat-dat-dai-2013",
+    "nghi-dinh-101-2024-nd-cp",
+    "nghi-quyet-254-2025-qh15",
+    "quyet-dinh-52-2016-qd-ubnd-tp-hcm"
+  ],
+  "stage3_graph_components": [
+    "f248af9abbf4021b",
+    "8027b8a88ab0b82d",
+    "47b218c880c78b7d",
+    "7b0e023121417e84",
+    "0d2946259c452820",
+    "798535dd26f5475a",
+    "14230be052fc8297",
+    "92972e314c19d492",
+    "66fae46464f7136d",
+    "3f2edd2dfacfc4b5",
+    "3f51c5b3d127c128",
+    "4921a9009f846f45",
+    "7294b09c4298b250",
+    "b8d0447d8fba1a2f",
+    "ed6e59d1a8399ade",
+    "fa9d00b9b25f42e7",
+    "54c2bf0584b8482b",
+    "afd6cf46954fa041",
+    "b1c2475a3f65a1b9",
+    "a2981829cc54de1a"
+  ],
+  "stage3_graph_components_count": 2634,
+  "hybrid_top_25": [
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "aa44897d033ef9b7",
+      "component_label": "Điều 26. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân đang sử dụng đất có nguồn gốc nông, lâm trường > Khoản 2. > Điểm b.",
+      "rrf_score": 9.5039,
+      "text_preview": "Điều 26. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân đang "
+    },
+    {
+      "norm_id": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+      "component_id": "2cfc785c53a8f8c6",
+      "component_label": "Điều 1. Phạm vi điều chỉnh",
+      "rrf_score": 9.1212,
+      "text_preview": "Điều 1. Phạm vi điều chỉnh Quyết định này quy định hạn mức giao đất ở cho cá nhân tại nông thôn, tại đô thị trên địa bàn"
+    },
+    {
+      "norm_id": "nghi-dinh-151-2025-nd-cp",
+      "component_id": "0cde07fa84ad2909",
+      "component_label": "Điều 18. Quy định liên quan đến thủ tục, hồ sơ đăng ký đất đai, tài sản gắn liền với đất, hồ sơ địa chính > Khoản 1.",
+      "rrf_score": 9.1015,
+      "text_preview": "Điều 18. Quy định liên quan đến thủ tục, hồ sơ đăng ký đất đai, tài sản gắn liền với đất, hồ sơ địa chính Khoản 1. Việc "
+    },
+    {
+      "norm_id": "nghi-dinh-50-2026-nd-cp",
+      "component_id": "fcedc71e2ed02778",
+      "component_label": "Điều 6. Tính tiền sử dụng đất đối với hộ gia đình, cá nhân khi chuyển mục đích sử dụng đất từ đất vườn, ao, đất nông nghiệp sang đất ở quy định tại điểm c khoản 2 Điều 10 Nghị quyết số 254/2025/QH15 > Khoản 3.",
+      "rrf_score": 8.798,
+      "text_preview": "Điều 6. Tính tiền sử dụng đất đối với hộ gia đình, cá nhân khi chuyển mục đích sử dụng đất từ đất vườn, ao, đất nông ngh"
+    },
+    {
+      "norm_id": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+      "component_id": "01abc0fe2897c014",
+      "component_label": "Điều 1. Quy định hạn mức đất ở đối với hộ gia đình, cá nhân và mục đích áp dụng hạn mức như sau > Khoản 2. > Điểm b.",
+      "rrf_score": 8.7576,
+      "text_preview": "Điều 1. Quy định hạn mức đất ở đối với hộ gia đình, cá nhân và mục đích áp dụng hạn mức như sau Khoản 2. Điểm b. Xác địn"
+    },
+    {
+      "norm_id": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+      "component_id": "4921a9009f846f45",
+      "component_label": "Điều 1. Quy định về thu phí thẩm định hồ sơ cấp giấy chứng nhận quyền sử dụng đất > Khoản 1. Phạm vi điều chỉnh và đối tượng áp dụng. > Điểm a. Phạm vi điều chỉnh.",
+      "rrf_score": 8.5379,
+      "text_preview": "Điều 1. Quy định về thu phí thẩm định hồ sơ cấp giấy chứng nhận quyền sử dụng đất Khoản 1. Phạm vi điều chỉnh và đối tượ"
+    },
+    {
+      "norm_id": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+      "component_id": "1ed669762e2d441c",
+      "component_label": "Phụ lục I. Các vị trí khác đối với đất phi nông nghiệp. > Khoản 6. Một số trường hợp đặc biệt.",
+      "rrf_score": 8.4742,
+      "text_preview": "Phụ lục I. Các vị trí khác đối với đất phi nông nghiệp. Khoản 6. Một số trường hợp đặc biệt. 6.1. Các trường hợp khu đất"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "211c7ae22baaf7c2",
+      "component_label": "Điều 140. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất cho hộ gia đình, cá nhân đang sử dụng đất được giao không đúng thẩm quyền > Khoản 4.",
+      "rrf_score": 8.2213,
+      "text_preview": "Điều 140. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất cho hộ gia đình, cá nhân đang sử"
+    },
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "ba77448fa84ae5d5",
+      "component_label": "Điều 15. Quy định trình tự, thủ tục hành chính về đất đai > Khoản 1.",
+      "rrf_score": 7.8677,
+      "text_preview": "Điều 15. Quy định trình tự, thủ tục hành chính về đất đai Khoản 1. Ủy ban nhân dân cấp tỉnh quy định trình tự, thủ tục h"
+    },
+    {
+      "norm_id": "nghi-quyet-254-2025-qh15",
+      "component_id": "db59a390c469ae1f",
+      "component_label": "Điều 4. Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất > Khoản 9. > Điểm b.",
+      "rrf_score": 7.7039,
+      "text_preview": "Điều 4. Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất Khoản 9. Điểm b. Đối với quỹ đất được sử dụng để"
+    },
+    {
+      "norm_id": "nghi-dinh-102-2024-nd-cp",
+      "component_id": "29598d317ff3f60d",
+      "component_label": "Điều 108. Căn cứ để giải quyết tranh chấp đất đai trong trường hợp các bên tranh chấp không có giấy tờ về quyền sử dụng đất, cưỡng chế thi hành quyết định giải quyết tranh chấp đất đai > Khoản 1. > Điểm b.",
+      "rrf_score": 7.6282,
+      "text_preview": "Điều 108. Căn cứ để giải quyết tranh chấp đất đai trong trường hợp các bên tranh chấp không có giấy tờ về quyền sử dụng "
+    },
+    {
+      "norm_id": "nghi-dinh-112-2024-nd-cp",
+      "component_id": "0731114b22f7f8d3",
+      "component_label": "Điều 9. Xây dựng công trình phục vụ trực tiếp sản xuất nông nghiệp trên đất trồng lúa > Khoản 1. > Điểm c.",
+      "rrf_score": 7.4375,
+      "text_preview": "Điều 9. Xây dựng công trình phục vụ trực tiếp sản xuất nông nghiệp trên đất trồng lúa Khoản 1. Điểm c. Khu vực đất trồng"
+    },
+    {
+      "norm_id": "quyet-dinh-52-2016-qd-ubnd-tp-hcm",
+      "component_id": "1d3ffdd682533b37",
+      "component_label": "Phụ lục 16. Mức thu lệ phí cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà, tài sản gắn liền với đất. > Khoản 1. Đối tượng áp dụng.",
+      "rrf_score": 6.8515,
+      "text_preview": "Phụ lục 16. Mức thu lệ phí cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà, tài sản gắn liền với đất. Khoản 1. Đ"
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "061867d6b5753d81",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 4. > Điểm c.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 4. Điểm c. Trường hợp diện tích thửa đất nhỏ hơn"
+    },
+    {
+      "norm_id": "nghi-dinh-226-2025-nd-cp",
+      "component_id": "0c3d1e935a4794dc",
+      "component_label": "Điều 5. Sửa đổi, bổ sung một số điều của Nghị định số 112/2024/NĐ-CP ngày 11 tháng 9 năm 2024 của Chính phủ quy định chi tiết về đất trồng lúa > Khoản 2. Sửa đổi, bổ sung Điều 10 như sau:",
+      "rrf_score": 3.0909,
+      "text_preview": "Điều 5. Sửa đổi, bổ sung một số điều của Nghị định số 112/2024/NĐ-CP ngày 11 tháng 9 năm 2024 của Chính phủ quy định chi"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "6abe58b7fc917040",
+      "component_label": "Điều 25. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá nhân đang sử dụng đất quy định tại khoản 1 và khoản 3 Điều 139 của Luật Đất đai > Khoản 2.",
+      "rrf_score": 8.8825,
+      "text_preview": "Điều 25. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá"
+    },
+    {
+      "norm_id": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+      "component_id": "4b19c03344041323",
+      "component_label": "Điều 2. Công nhận quyền sử dụng đất ở đối với trường hợp đất ở có vườn, ao > Khoản 1.",
+      "rrf_score": 8.5,
+      "text_preview": "Điều 2. Công nhận quyền sử dụng đất ở đối với trường hợp đất ở có vườn, ao Khoản 1. Đối với trường hợp thửa đất ở có vườ"
+    },
+    {
+      "norm_id": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+      "component_id": "2d1a5cd7b0b75ca4",
+      "component_label": "Điều 5. Đối với đất nông nghiệp > Khoản 5. Bảng giá đất chăn nuôi tập trung.",
+      "rrf_score": 8.4742,
+      "text_preview": "Điều 5. Đối với đất nông nghiệp Khoản 5. Bảng giá đất chăn nuôi tập trung. Đất chăn nuôi tập trung được tính bằng 150% đ"
+    },
+    {
+      "norm_id": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+      "component_id": "534446869bc2312b",
+      "component_label": "Điều 6. Bảng giá đất phi nông nghiệp > Khoản 1. Bảng giá đất ở. > Điểm c.",
+      "rrf_score": 8.4742,
+      "text_preview": "Điều 6. Bảng giá đất phi nông nghiệp Khoản 1. Bảng giá đất ở. Điểm c. Trường hợp các vị trí nêu trên có độ sâu tính từ m"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "6e2ff62bcf9d955e",
+      "component_label": "Điều 176. Hạn mức giao đất nông nghiệp > Khoản 6.",
+      "rrf_score": 7.9683,
+      "text_preview": "Điều 176. Hạn mức giao đất nông nghiệp Khoản 6. Đối với diện tích đất nông nghiệp của cá nhân đang sử dụng ngoài xã, phư"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "78fecb5bdc93f6da",
+      "component_label": "Điều 176. Hạn mức giao đất nông nghiệp > Khoản 5.",
+      "rrf_score": 7.8321,
+      "text_preview": "Điều 176. Hạn mức giao đất nông nghiệp Khoản 5. Hạn mức giao đất chưa sử dụng cho cá nhân đưa vào sử dụng theo quy hoạch"
+    },
+    {
+      "norm_id": "nghi-quyet-254-2025-qh15",
+      "component_id": "97e29598df6e8dfc",
+      "component_label": "Điều 4. Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất > Khoản 10.",
+      "rrf_score": 7.0759,
+      "text_preview": "Điều 4. Quy định về giao đất, cho thuê đất, chuyển mục đích sử dụng đất Khoản 10. Quy định chuyển tiếp đối với trường hợ"
+    },
+    {
+      "norm_id": "nghi-quyet-254-2025-qh15",
+      "component_id": "41a920cd544313f2",
+      "component_label": "Điều 10. Miễn, giảm tiền sử dụng đất, tiền thuê đất; nộp tiền sử dụng đất, tiền thuê đất khi chuyển mục đích sử dụng đất > Khoản 2. > Điểm c.",
+      "rrf_score": 7.0088,
+      "text_preview": "Điều 10. Miễn, giảm tiền sử dụng đất, tiền thuê đất; nộp tiền sử dụng đất, tiền thuê đất khi chuyển mục đích sử dụng đất"
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "267844e579b82da3",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 4. > Điểm a.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 4. Điểm a. Ủy ban nhân dân cấp tỉnh căn cứ vào đ"
+    }
+  ],
+  "expected_norms": [
+    "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+    "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+  ],
+  "expected_component_substr": null,
+  "norms_missing_from_top_k": [],
+  "expected_component_matches_in_top_k": []
+}
