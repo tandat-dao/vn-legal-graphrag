@@ -1,0 +1,124 @@
+{
+  "id": "Q026",
+  "question": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?",
+  "investigation": "Pred has Khoản 11/12 thay vì Khoản 1 — H2_khoan. Top-k có Khoản 1 không?",
+  "query_plan": {
+    "theme": "dat-dai",
+    "procedure": null,
+    "jurisdiction": "toan-quoc",
+    "temporal": null,
+    "temporal_reason": "no_temporal_context",
+    "temporal_intent": {
+      "has_temporal_context": false,
+      "temporal_anchor": null,
+      "case_status": null,
+      "reasoning": "Câu hỏi về hiệu lực và sửa đổi văn bản pháp luật hiện hành, không liên quan trường hợp cụ thể"
+    }
+  },
+  "stage1_seed_norms": [
+    "nghi-dinh-102-2024-nd-cp",
+    "nghi-dinh-226-2025-nd-cp",
+    "nghi-dinh-49-2026-nd-cp",
+    "luat-dat-dai-2013",
+    "nghi-dinh-101-2024-nd-cp",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-quyet-254-2025-qh15",
+    "luat-dat-dai-2024",
+    "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+    "nghi-dinh-112-2024-nd-cp"
+  ],
+  "stage2_result_norms": [
+    "luat-dat-dai-2013",
+    "nghi-dinh-226-2025-nd-cp",
+    "nghi-dinh-102-2024-nd-cp",
+    "luat-dat-dai-2024",
+    "nghi-dinh-112-2024-nd-cp",
+    "nghi-dinh-151-2025-nd-cp",
+    "nghi-dinh-101-2024-nd-cp",
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-quyet-254-2025-qh15"
+  ],
+  "stage3_graph_components": [],
+  "stage3_graph_components_count": 0,
+  "hybrid_top_25": [
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "49c983f6cc56bd95",
+      "component_label": "Điều 16. Hiệu lực thi hành > Khoản 3. > Điểm d.",
+      "rrf_score": 0.04,
+      "text_preview": "Điều 16. Hiệu lực thi hành Khoản 3. Điểm d. Khoản 4 Điều 77 của Nghị định số 102/2024/NĐ-CP (đã được sửa đổi, bổ sung tạ"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "3c876704172db0a5",
+      "component_label": "Điều 67. Hiệu lực thi hành > Khoản 3. > Điểm a.",
+      "rrf_score": 0.0374,
+      "text_preview": "Điều 67. Hiệu lực thi hành Khoản 3. Điểm a. Khoản 1 và 2 Điều 1 Nghị định số 136/2018/NĐ-CP ngày 05 tháng 10 năm 2018 củ"
+    },
+    {
+      "norm_id": "nghi-dinh-151-2025-nd-cp",
+      "component_id": "c51fb1825f12ef98",
+      "component_label": "Điều 20. (được bãi bỏ)",
+      "rrf_score": 0.0335,
+      "text_preview": "Điều 20. (được bãi bỏ) <!-- amended_by: 49/2026/NĐ-CP, tiết đ1 điểm đ khoản 3 Điều 16, hiệu lực: 31/01/2026, nội dung: b"
+    },
+    {
+      "norm_id": "nghi-dinh-102-2024-nd-cp",
+      "component_id": "7b56a40e8cdd1b1f",
+      "component_label": "Điều 106. (được bãi bỏ)",
+      "rrf_score": 0.0329,
+      "text_preview": "Điều 106. (được bãi bỏ) <!-- amended_by: 151/2025/NĐ-CP, điểm c khoản 4 Điều 21, hiệu lực: 01/07/2025, nội dung: bãi bỏ "
+    },
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "27edd903edc73290",
+      "component_label": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định chi tiết thi hành một số điều của Luật Đất đai (được sửa đổi, bổ sung tại Nghị định số 151/2025/NĐ-CP, Nghị định số 226/2025/NĐ-CP) > Khoản 12.",
+      "rrf_score": 0.0397,
+      "text_preview": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định ch"
+    },
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "a4b7cc8aa77b5542",
+      "component_label": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định chi tiết thi hành một số điều của Luật Đất đai (được sửa đổi, bổ sung tại Nghị định số 151/2025/NĐ-CP, Nghị định số 226/2025/NĐ-CP) > Khoản 11.",
+      "rrf_score": 0.0394,
+      "text_preview": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định ch"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "fea91ee36446947a",
+      "component_label": "Điều 67. Hiệu lực thi hành > Khoản 2. > Điểm d.",
+      "rrf_score": 0.0362,
+      "text_preview": "Điều 67. Hiệu lực thi hành Khoản 2. Điểm d. Nghị định số 10/2023/NĐ-CP ngày 03 tháng 4 năm 2023 của Chính phủ sửa đổi, b"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "81821fa3b325987f",
+      "component_label": "Điều 67. Hiệu lực thi hành > Khoản 3. > Điểm b.",
+      "rrf_score": 0.0343,
+      "text_preview": "Điều 67. Hiệu lực thi hành Khoản 3. Điểm b. Điều 11 Nghị định số 104/2022/NĐ-CP ngày 21 tháng 12 năm 2022 của Chính phủ "
+    }
+  ],
+  "expected_norms": [
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-102-2024-nd-cp"
+  ],
+  "expected_component_substr": "dieu-13-khoan-1",
+  "norms_missing_from_top_k": [],
+  "expected_component_matches_in_top_k": [
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "27edd903edc73290",
+      "component_label": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định chi tiết thi hành một số điều của Luật Đất đai (được sửa đổi, bổ sung tại Nghị định số 151/2025/NĐ-CP, Nghị định số 226/2025/NĐ-CP) > Khoản 12.",
+      "rrf_score": 0.0397,
+      "text_preview": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định ch"
+    },
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "a4b7cc8aa77b5542",
+      "component_label": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định chi tiết thi hành một số điều của Luật Đất đai (được sửa đổi, bổ sung tại Nghị định số 151/2025/NĐ-CP, Nghị định số 226/2025/NĐ-CP) > Khoản 11.",
+      "rrf_score": 0.0394,
+      "text_preview": "Điều 13. Sửa đổi, bổ sung một số điều của Nghị định số 102/2024/NĐ-CP ngày 30 tháng 7 năm 2024 của Chính phủ quy định ch"
+    }
+  ]
+}

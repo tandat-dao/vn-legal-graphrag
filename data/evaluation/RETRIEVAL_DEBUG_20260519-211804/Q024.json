@@ -1,0 +1,174 @@
+{
+  "id": "Q024",
+  "question": "Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?",
+  "investigation": "Pred miss Điều 116 K5 entirely → hybrid search không rank Điều 116 K5 vào top-k?",
+  "query_plan": {
+    "theme": "dat-dai",
+    "procedure": "chuyen-muc-dich-su-dung-dat",
+    "jurisdiction": "toan-quoc",
+    "temporal": "2024-12-31",
+    "temporal_reason": "strict=2024-12-31",
+    "temporal_intent": {
+      "has_temporal_context": true,
+      "temporal_anchor": "2024",
+      "case_status": null,
+      "reasoning": "Câu hỏi tường minh về quy định Luật Đất đai 2024, yêu cầu so sánh với luật cũ"
+    }
+  },
+  "stage1_seed_norms": [
+    "luat-dat-dai-2024",
+    "nghi-dinh-102-2024-nd-cp",
+    "nghi-dinh-112-2024-nd-cp",
+    "luat-dat-dai-2013",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-226-2025-nd-cp",
+    "nghi-quyet-254-2025-qh15",
+    "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+    "nghi-dinh-101-2024-nd-cp"
+  ],
+  "stage2_result_norms": [
+    "luat-dat-dai-2013",
+    "nghi-dinh-102-2024-nd-cp",
+    "luat-dat-dai-2024",
+    "nghi-dinh-112-2024-nd-cp",
+    "nghi-dinh-101-2024-nd-cp"
+  ],
+  "stage3_graph_components": [
+    "df4a60a6ea8be15e",
+    "b5e5006cabb9f637",
+    "7d42ed846739188d",
+    "1ccc135c354d6f6e",
+    "684b9e4bfdbbeae9",
+    "44b308f1213b7db6",
+    "dcea1f594b36d8f5",
+    "c63898b2b6c4fd85",
+    "339e882447712883",
+    "c8592771f660ca2d",
+    "123a798f8b054e0d",
+    "027b0789068d9ebb",
+    "41e32312efe682fb",
+    "8fde1c37b11e6502",
+    "8fd8448b3213429c",
+    "a323025dc2edc69c",
+    "1a07bd14f3feac7e",
+    "c31e991fd07578db",
+    "4cb56f4ea7ad7079",
+    "e82bc0cfd1e2155a"
+  ],
+  "stage3_graph_components_count": 2113,
+  "hybrid_top_25": [
+    {
+      "norm_id": "nghi-dinh-102-2024-nd-cp",
+      "component_id": "52124891e7ddcd58",
+      "component_label": "Điều 44. Căn cứ giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất đối với trường hợp không thuộc diện chấp thuận chủ trương đầu tư, chấp thuận nhà đầu tư theo pháp luật về đầu tư",
+      "rrf_score": 7.9744,
+      "text_preview": "Điều 44. Căn cứ giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất đối với trường hợp không thuộc diện chấp th"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "38bdd711eb6777b4",
+      "component_label": "Điều 116. Căn cứ để giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất > Khoản 5.",
+      "rrf_score": 7.0776,
+      "text_preview": "Điều 116. Căn cứ để giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất Khoản 5. Căn cứ cho phép chuyển mục đíc"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "b1c95b96ae2bd88e",
+      "component_label": "Điều 23. Các trường hợp đăng ký biến động đất đai, tài sản gắn liền với đất phải cấp mới Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất > Khoản 2.",
+      "rrf_score": 7.0863,
+      "text_preview": "Điều 23. Các trường hợp đăng ký biến động đất đai, tài sản gắn liền với đất phải cấp mới Giấy chứng nhận quyền sử dụng đ"
+    },
+    {
+      "norm_id": "nghi-dinh-112-2024-nd-cp",
+      "component_id": "0067338eef8415d9",
+      "component_label": "Điều 10. Quy định bóc tách và sử dụng tầng đất mặt khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng lúa sang mục đích phi nông nghiệp > Khoản 2. > Điểm a.",
+      "rrf_score": 6.207,
+      "text_preview": "Điều 10. Quy định bóc tách và sử dụng tầng đất mặt khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng "
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "061867d6b5753d81",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 4. > Điểm c.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 4. Điểm c. Trường hợp diện tích thửa đất nhỏ hơn"
+    },
+    {
+      "norm_id": "nghi-dinh-102-2024-nd-cp",
+      "component_id": "29598d317ff3f60d",
+      "component_label": "Điều 108. Căn cứ để giải quyết tranh chấp đất đai trong trường hợp các bên tranh chấp không có giấy tờ về quyền sử dụng đất, cưỡng chế thi hành quyết định giải quyết tranh chấp đất đai > Khoản 1. > Điểm b.",
+      "rrf_score": 7.6282,
+      "text_preview": "Điều 108. Căn cứ để giải quyết tranh chấp đất đai trong trường hợp các bên tranh chấp không có giấy tờ về quyền sử dụng "
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "0dc9937e1570f9de",
+      "component_label": "Điều 25. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá nhân đang sử dụng đất quy định tại khoản 1 và khoản 3 Điều 139 của Luật Đất đai > Khoản 5.",
+      "rrf_score": 7.5809,
+      "text_preview": "Điều 25. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "2f6204ea140a3d1c",
+      "component_label": "Điều 25. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá nhân đang sử dụng đất quy định tại khoản 1 và khoản 3 Điều 139 của Luật Đất đai > Khoản 1.",
+      "rrf_score": 7.5809,
+      "text_preview": "Điều 25. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "1bee5d7ead109ac3",
+      "component_label": "Điều 227. Trình tự, thủ tục cho phép chuyển mục đích sử dụng đất",
+      "rrf_score": 7.5195,
+      "text_preview": "Điều 227. Trình tự, thủ tục cho phép chuyển mục đích sử dụng đất Các trường hợp chuyển mục đích sử dụng đất phải được cơ"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "742cefdac9ad7f30",
+      "component_label": "Điều 121. Chuyển mục đích sử dụng đất > Khoản 1. > Điểm d.",
+      "rrf_score": 7.4859,
+      "text_preview": "Điều 121. Chuyển mục đích sử dụng đất Khoản 1. Điểm d. Chuyển đất phi nông nghiệp được Nhà nước giao đất không thu tiền "
+    },
+    {
+      "norm_id": "nghi-dinh-102-2024-nd-cp",
+      "component_id": "02f02f61e6000af8",
+      "component_label": "Điều 109. Hành vi vi phạm pháp luật về đất đai khi thi hành công vụ trong lĩnh vực đất đai > Khoản 11. > Điểm g.",
+      "rrf_score": 7.4697,
+      "text_preview": "Điều 109. Hành vi vi phạm pháp luật về đất đai khi thi hành công vụ trong lĩnh vực đất đai Khoản 11. Điểm g. Sử dụng quỹ"
+    },
+    {
+      "norm_id": "nghi-dinh-112-2024-nd-cp",
+      "component_id": "3d21ee3b9fe9a2ff",
+      "component_label": "Điều 10. Quy định bóc tách và sử dụng tầng đất mặt khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng lúa sang mục đích phi nông nghiệp > Khoản 2. > Điểm b.",
+      "rrf_score": 7.4616,
+      "text_preview": "Điều 10. Quy định bóc tách và sử dụng tầng đất mặt khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng "
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "267844e579b82da3",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 4. > Điểm a.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 4. Điểm a. Ủy ban nhân dân cấp tỉnh căn cứ vào đ"
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "41e32312efe682fb",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 2.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 2. Đối với trường hợp thửa đất ở có vườn, ao đượ"
+    }
+  ],
+  "expected_norms": [
+    "luat-dat-dai-2024"
+  ],
+  "expected_component_substr": "dieu-116-khoan-5",
+  "norms_missing_from_top_k": [],
+  "expected_component_matches_in_top_k": [
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "38bdd711eb6777b4",
+      "component_label": "Điều 116. Căn cứ để giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất > Khoản 5.",
+      "rrf_score": 7.0776,
+      "text_preview": "Điều 116. Căn cứ để giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất Khoản 5. Căn cứ cho phép chuyển mục đíc"
+    }
+  ]
+}

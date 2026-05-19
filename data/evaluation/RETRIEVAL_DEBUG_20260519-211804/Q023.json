@@ -1,0 +1,186 @@
+{
+  "id": "Q023",
+  "question": "Hồ sơ cấp Giấy chứng nhận quyền sử dụng đất nộp năm 2023 nhưng chưa giải quyết xong, hiện áp dụng Luật Đất đai 2013 hay Luật Đất đai 2024?",
+  "investigation": "Stage 1 OK (Luật 2013 rank #1). Tại đâu old regime bị drop?",
+  "query_plan": {
+    "theme": "dat-dai",
+    "procedure": "cap-so-do-lan-dau",
+    "jurisdiction": "toan-quoc",
+    "temporal": null,
+    "temporal_reason": "broad (case_status=do-dang)",
+    "temporal_intent": {
+      "has_temporal_context": true,
+      "temporal_anchor": "2023",
+      "case_status": "do-dang",
+      "reasoning": "Hồ sơ nộp năm 2023 nhưng chưa giải quyết xong — hồ sơ dở dang cần xác định luật áp dụng"
+    }
+  },
+  "stage1_seed_norms": [
+    "luat-dat-dai-2013",
+    "luat-dat-dai-2024",
+    "nghi-dinh-102-2024-nd-cp",
+    "nghi-quyet-254-2025-qh15",
+    "nghi-dinh-226-2025-nd-cp",
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-101-2024-nd-cp",
+    "nghi-dinh-151-2025-nd-cp",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-dinh-112-2024-nd-cp"
+  ],
+  "stage2_result_norms": [
+    "luat-dat-dai-2013",
+    "nghi-dinh-226-2025-nd-cp",
+    "nghi-dinh-102-2024-nd-cp",
+    "luat-dat-dai-2024",
+    "nghi-dinh-112-2024-nd-cp",
+    "nghi-dinh-151-2025-nd-cp",
+    "nghi-dinh-101-2024-nd-cp",
+    "nghi-dinh-49-2026-nd-cp",
+    "nghi-dinh-50-2026-nd-cp",
+    "nghi-quyet-254-2025-qh15"
+  ],
+  "stage3_graph_components": [
+    "df4a60a6ea8be15e",
+    "b5e5006cabb9f637",
+    "7d42ed846739188d",
+    "1ccc135c354d6f6e",
+    "684b9e4bfdbbeae9",
+    "44b308f1213b7db6",
+    "dcea1f594b36d8f5",
+    "c63898b2b6c4fd85",
+    "339e882447712883",
+    "c8592771f660ca2d",
+    "123a798f8b054e0d",
+    "027b0789068d9ebb",
+    "41e32312efe682fb",
+    "8fde1c37b11e6502",
+    "8fd8448b3213429c",
+    "a323025dc2edc69c",
+    "1a07bd14f3feac7e",
+    "c31e991fd07578db",
+    "4cb56f4ea7ad7079",
+    "e82bc0cfd1e2155a"
+  ],
+  "stage3_graph_components_count": 2503,
+  "hybrid_top_25": [
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "aa44897d033ef9b7",
+      "component_label": "Điều 26. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân đang sử dụng đất có nguồn gốc nông, lâm trường > Khoản 2. > Điểm b.",
+      "rrf_score": 9.8105,
+      "text_preview": "Điều 26. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân đang "
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "9496bfe5ff87b20d",
+      "component_label": "Điều 138. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, cá nhân đang sử dụng đất không có giấy tờ về quyền sử dụng đất mà không vi phạm pháp luật về đất đai, không thuộc trường hợp đất được giao không đúng thẩm quyền > Khoản 3.",
+      "rrf_score": 7.937,
+      "text_preview": "Điều 138. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với trường hợp hộ gia đình, "
+    },
+    {
+      "norm_id": "nghi-dinh-49-2026-nd-cp",
+      "component_id": "1a04ad1cdad67e4b",
+      "component_label": "Điều 20. Quy định về đăng ký đất đai, cấp Giấy chứng nhận > Khoản 1.",
+      "rrf_score": 7.556,
+      "text_preview": "Điều 20. Quy định về đăng ký đất đai, cấp Giấy chứng nhận Khoản 1. Trường hợp giấy chứng nhận về quyền sử dụng đất đã cấ"
+    },
+    {
+      "norm_id": "nghi-dinh-50-2026-nd-cp",
+      "component_id": "14ff2893ddfddf84",
+      "component_label": "Điều 12. Xử lý chuyển tiếp về tiền sử dụng đất, tiền thuê đất khi Nghị quyết số 254/2025/QH15 có hiệu lực thi hành > Khoản 1. > Điểm b.",
+      "rrf_score": 7.8824,
+      "text_preview": "Điều 12. Xử lý chuyển tiếp về tiền sử dụng đất, tiền thuê đất khi Nghị quyết số 254/2025/QH15 có hiệu lực thi hành Khoản"
+    },
+    {
+      "norm_id": "nghi-quyet-254-2025-qh15",
+      "component_id": "8dd9ae3c967601f6",
+      "component_label": "Điều 11. Quy định về thực hiện quyền, chế độ sử dụng đất, đăng ký đất đai, tài sản gắn liền với đất, cấp Giấy chứng nhận, tách thửa đất, hợp thửa đất, hệ thống thông tin về đất đai > Khoản 2. > Điểm đ.",
+      "rrf_score": 6.3322,
+      "text_preview": "Điều 11. Quy định về thực hiện quyền, chế độ sử dụng đất, đăng ký đất đai, tài sản gắn liền với đất, cấp Giấy chứng nhận"
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "459cacefabf94d12",
+      "component_label": "Điều 100. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà ở và tài sản khác gắn liền với đất cho hộ gia đình, cá nhân, cộng đồng dân cư đang sử dụng đất có giấy tờ về quyền sử dụng đất > Khoản 4.",
+      "rrf_score": 7.1641,
+      "text_preview": "Điều 100. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nhà ở và tài sản khác gắn liền với đất cho hộ gia đình, cá"
+    },
+    {
+      "norm_id": "nghi-dinh-151-2025-nd-cp",
+      "component_id": "2540dac74cf68cd0",
+      "component_label": "Phụ lục I - Phần V - Nội dung C - Mục VII. Trình tự, thủ tục cấp đổi Giấy chứng nhận đã cấp. > Khoản 1. > Điểm a.",
+      "rrf_score": 7.4445,
+      "text_preview": "Phụ lục I - Phần V - Nội dung C - Mục VII. Trình tự, thủ tục cấp đổi Giấy chứng nhận đã cấp. Khoản 1. Điểm a. Người sử d"
+    },
+    {
+      "norm_id": "nghi-dinh-102-2024-nd-cp",
+      "component_id": "8484988af734b654",
+      "component_label": "Điều 7. Xác định loại đất đối với trường hợp không có giấy tờ quy định tại khoản 1 Điều 10 Luật Đất đai hoặc trường hợp loại đất xác định trên giấy tờ đã cấp khác với phân loại đất theo quy định của Luật Đất đai hoặc khác với hiện trạng sử dụng đất > Khoản 3. > Điểm b.",
+      "rrf_score": 4.8553,
+      "text_preview": "Điều 7. Xác định loại đất đối với trường hợp không có giấy tờ quy định tại khoản 1 Điều 10 Luật Đất đai hoặc trường hợp "
+    },
+    {
+      "norm_id": "nghi-dinh-112-2024-nd-cp",
+      "component_id": "0731114b22f7f8d3",
+      "component_label": "Điều 9. Xây dựng công trình phục vụ trực tiếp sản xuất nông nghiệp trên đất trồng lúa > Khoản 1. > Điểm c.",
+      "rrf_score": 7.4375,
+      "text_preview": "Điều 9. Xây dựng công trình phục vụ trực tiếp sản xuất nông nghiệp trên đất trồng lúa Khoản 1. Điểm c. Khu vực đất trồng"
+    },
+    {
+      "norm_id": "nghi-dinh-226-2025-nd-cp",
+      "component_id": "0c3d1e935a4794dc",
+      "component_label": "Điều 5. Sửa đổi, bổ sung một số điều của Nghị định số 112/2024/NĐ-CP ngày 11 tháng 9 năm 2024 của Chính phủ quy định chi tiết về đất trồng lúa > Khoản 2. Sửa đổi, bổ sung Điều 10 như sau:",
+      "rrf_score": 3.0909,
+      "text_preview": "Điều 5. Sửa đổi, bổ sung một số điều của Nghị định số 112/2024/NĐ-CP ngày 11 tháng 9 năm 2024 của Chính phủ quy định chi"
+    },
+    {
+      "norm_id": "nghi-dinh-101-2024-nd-cp",
+      "component_id": "2f76dfd4c159ab0f",
+      "component_label": "Điều 26. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân đang sử dụng đất có nguồn gốc nông, lâm trường > Khoản 1. > Điểm a.",
+      "rrf_score": 9.6523,
+      "text_preview": "Điều 26. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân đang "
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "211c7ae22baaf7c2",
+      "component_label": "Điều 140. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất cho hộ gia đình, cá nhân đang sử dụng đất được giao không đúng thẩm quyền > Khoản 4.",
+      "rrf_score": 8.2213,
+      "text_preview": "Điều 140. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất cho hộ gia đình, cá nhân đang sử"
+    },
+    {
+      "norm_id": "luat-dat-dai-2024",
+      "component_id": "59a02940afa7747d",
+      "component_label": "Điều 137. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân, cộng đồng dân cư đang sử dụng đất có giấy tờ về quyền sử dụng đất > Khoản 4.",
+      "rrf_score": 7.8637,
+      "text_preview": "Điều 137. Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất đối với hộ gia đình, cá nhân, cộ"
+    },
+    {
+      "norm_id": "nghi-quyet-254-2025-qh15",
+      "component_id": "41a920cd544313f2",
+      "component_label": "Điều 10. Miễn, giảm tiền sử dụng đất, tiền thuê đất; nộp tiền sử dụng đất, tiền thuê đất khi chuyển mục đích sử dụng đất > Khoản 2. > Điểm c.",
+      "rrf_score": 7.0088,
+      "text_preview": "Điều 10. Miễn, giảm tiền sử dụng đất, tiền thuê đất; nộp tiền sử dụng đất, tiền thuê đất khi chuyển mục đích sử dụng đất"
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "061867d6b5753d81",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 4. > Điểm c.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 4. Điểm c. Trường hợp diện tích thửa đất nhỏ hơn"
+    },
+    {
+      "norm_id": "luat-dat-dai-2013",
+      "component_id": "267844e579b82da3",
+      "component_label": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao > Khoản 4. > Điểm a.",
+      "rrf_score": 6.8446,
+      "text_preview": "Điều 103. Xác định diện tích đất ở đối với trường hợp có vườn, ao Khoản 4. Điểm a. Ủy ban nhân dân cấp tỉnh căn cứ vào đ"
+    }
+  ],
+  "expected_norms": [
+    "luat-dat-dai-2013",
+    "luat-dat-dai-2024"
+  ],
+  "expected_component_substr": null,
+  "norms_missing_from_top_k": [],
+  "expected_component_matches_in_top_k": []
+}
