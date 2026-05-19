@@ -145,6 +145,11 @@ def parse_citations(raw_answer: str) -> list[dict]:
         của Điều hoặc Phụ lục để backward compat.
     """
     citations = []
+    # Dedupe: LLM đôi khi cite cùng 1 vị trí 2+ lần trong cùng answer (đã quan sát ở
+    # Q025 canonical run 20260519: cite "Điều 116, Khoản 5, Văn bản luat-dat-dai-2024"
+    # 2 lần liên tiếp). Trùng lặp hạ precision oan trong metric F1. Giữ duy nhất bản
+    # đầu tiên — đây là idempotent fix, không thay đổi semantics câu trả lời.
+    seen: set[tuple] = set()
     for match in _CITATION_RE.finditer(raw_answer):
         loai_raw = match.group(1).strip().lower()
         loai = "phu_luc" if loai_raw.startswith("phụ") else "dieu"
@@ -160,6 +165,10 @@ def parse_citations(raw_answer: str) -> list[dict]:
         diem = match.group(4).strip() if match.group(4) else None
         tiet = match.group(5).strip() if match.group(5) else None
         van_ban = match.group(6).strip()
+        key = (loai, number, khoan, diem, tiet, van_ban)
+        if key in seen:
+            continue
+        seen.add(key)
         c = {
             "dieu": number,
             "khoan": khoan,
