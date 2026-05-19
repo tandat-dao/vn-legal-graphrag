@@ -113,7 +113,10 @@ def _build_clients() -> tuple:
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    anthropic_client = anthropic.Anthropic(
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+        max_retries=8,  # SDK exponential backoff cho 429/5xx/529 — ~vài phút retry trước khi raise
+    )
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 

@@ -298,7 +298,10 @@ def run_baseline_query(
             port=int(os.getenv("QDRANT_PORT", "6333")),
         )
     if anthropic_client is None:
-        anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        anthropic_client = anthropic.Anthropic(
+            api_key=os.getenv("ANTHROPIC_API_KEY"),
+            max_retries=8,
+        )
     if model is None:
         model = load_model()
 

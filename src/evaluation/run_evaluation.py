@@ -155,7 +155,10 @@ def _build_shared_clients():
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    anthropic_client = anthropic.Anthropic(
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+        max_retries=8,
+    )
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
