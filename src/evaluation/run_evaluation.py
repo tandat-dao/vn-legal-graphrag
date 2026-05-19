@@ -34,6 +34,7 @@ from src.evaluation.metrics import (
     norm_recall,
     render_summary_md,
 )
+from src.evaluation.report_builder import build_human_report
 
 logger = logging.getLogger(__name__)
 
@@ -141,11 +142,11 @@ def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None) ->
 # ---------------------------------------------------------------------------
 
 def _build_shared_clients():
-    import anthropic
     from neo4j import GraphDatabase
     from qdrant_client import QdrantClient
 
     from src.ingestion.vectorizer import load_model
+    from src.utils.llm_config import make_anthropic_client
 
     neo4j_driver = GraphDatabase.driver(
         os.getenv("NEO4J_URI", "bolt://localhost:7687"),
@@ -155,10 +156,7 @@ def _build_shared_clients():
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = anthropic.Anthropic(
-        api_key=os.getenv("ANTHROPIC_API_KEY"),
-        max_retries=8,
-    )
+    anthropic_client = make_anthropic_client()
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
@@ -298,6 +296,7 @@ def main() -> int:
         args.out_dir.mkdir(parents=True, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
         all_aggs = {}
+        all_results: dict[str, list[dict]] = {}
         for path in args.reuse_results:
             data = json.loads(path.read_text(encoding="utf-8"))
             system = data["system"]
@@ -332,6 +331,7 @@ def main() -> int:
                 })
             agg = aggregate(new_results)
             all_aggs[system] = agg
+            all_results[system] = new_results
             out_path = args.out_dir / f"results_{system}_reused_{timestamp}.json"
             out_path.write_text(json.dumps({
                 "system": system, "test_set": str(args.test_set),
@@ -348,6 +348,21 @@ def main() -> int:
             md_path.write_text(md, encoding="utf-8")
             logger.info(f"Markdown summary: {md_path}")
             print("\n" + md)
+
+        if all_results:
+            report_path = args.out_dir / f"REPORT_reused_{timestamp}.md"
+            build_human_report(
+                test_set,
+                all_results,
+                report_path,
+                timestamp=timestamp + " (reused)",
+                test_set_file=str(args.test_set),
+                run_config={
+                    "mode": "REUSE — re-compute metric từ results_*.json cũ, KHÔNG gọi LLM",
+                    "reused_files": [str(p) for p in args.reuse_results],
+                },
+            )
+            logger.info(f"Human-readable report: {report_path}")
         return 0
 
     systems = [s.strip() for s in args.systems.split(",") if s.strip()]
@@ -374,10 +389,12 @@ def main() -> int:
     clients = _build_shared_clients()
 
     all_aggs = {}
+    all_results: dict[str, list[dict]] = {}
     try:
         for system in systems:
             t0 = time.perf_counter()
             results = run_system_on_test_set(test_set, system, clients, llm_cache_dir=llm_cache_dir)
+            all_results[system] = results
             elapsed = time.perf_counter() - t0
             logger.info(f"[{system}] hoàn thành {len(results)} câu trong {elapsed:.1f}s")
 
@@ -415,6 +432,31 @@ def main() -> int:
             md_path.write_text(md, encoding="utf-8")
             logger.info(f"Markdown summary: {md_path}")
             print("\n" + md)
+
+        # Human-readable report: gộp câu hỏi + GT + answer + citations của TẤT CẢ
+        # hệ thống đã chạy. Sinh ra ngay cả khi chỉ chạy 1 hệ thống.
+        # run_config: minh bạch các flag ảnh hưởng kết quả để người đọc biết
+        # eval đã chạy dưới điều kiện nào (reproducibility).
+        if all_results:
+            from src.utils.llm_config import ANTHROPIC_MAX_RETRIES
+            run_config = {
+                "systems": ",".join(systems),
+                "limit": args.limit or "full",
+                "force_jurisdiction": "ground-truth (eval-mode bypass Confirmation Loop)",
+                "bypass_completeness": True,
+                "llm_cache": "ON" if llm_cache_dir else "OFF",
+                "anthropic_max_retries": ANTHROPIC_MAX_RETRIES,
+            }
+            report_path = args.out_dir / f"REPORT_{timestamp}.md"
+            build_human_report(
+                test_set,
+                all_results,
+                report_path,
+                timestamp=timestamp,
+                test_set_file=str(args.test_set),
+                run_config=run_config,
+            )
+            logger.info(f"Human-readable report: {report_path}")
 
     finally:
         clients[0].close()  # neo4j_driver
