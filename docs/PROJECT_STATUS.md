@@ -1,5 +1,43 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.4 | Cập nhật 2026-05-19**
+**Phiên bản 2.5 | Cập nhật 2026-05-19**
+
+> **v2.5 — Cập nhật 2026-05-19 (Dense Floor fix — Q024 retrieval depth giải quyết):**
+> Sau v2.4 (prompt tuning với gain modest +0.026), tiếp tục debug retrieval-depth cho Q022/Q024/Q026 (3 câu vẫn F1=0). Instrumentation định lượng từng case → phát hiện **bug nguyên tắc** trong hybrid_search: Stage 3 graph_boost từ procedure mapping override pure dense semantic match.
+>
+> **1. Diagnosis cụ thể (instrumentation API-free)**:
+> | Q | GT exists trong graph? | Pure dense rank của GT | Top-25 hybrid có GT? |
+> |---|---|---|---|
+> | Q022 | ✅ (Điều 1 K1 Đa của QĐ 18) | **#11/35** | ❌ (per-norm cap đẩy ra) |
+> | Q024 | ✅ (Điều 116 K5 Luật ĐĐ 2024) | **#2/100** | ❌ (graph_boost đẩy Điều 121/123/227 lên đầu) |
+> | Q026 | NĐ 102 K1Đ13 không tồn tại standalone (đã wholly amended) | n/a | n/a |
+>
+> **2. Fix Dense Floor (Pass 0 trong [semantic_filter.py](../src/retrieval/semantic_filter.py)):**
+> - Thêm Pass 0 trước Pass 1 RRF-breadth + Pass 2 depth
+> - Iterate `dense_results` theo dense score order, ép top-1 dense per norm vào output
+> - Khoa học: "embedding similarity là ground signal; KG augments, không override"
+> - Q024 ngay lập tức: pure dense rank #2 → hybrid rank #2 với rrf=7.08 (trước đó MISSING entirely)
+>
+> **3. Full 26-câu validation ([COMPARE_prompt-fix_vs_dense-floor_20260519.md](../data/evaluation/COMPARE_prompt-fix_vs_dense-floor_20260519.md)):**
+>
+> | Metric | v2.3 canonical | v2.4 (+prompt) | **v2.5 (+Dense Floor)** | Δ tổng vs canon |
+> |---|---:|---:|---:|---:|
+> | F1 Khoản | 0.440 | 0.466 | **0.485** | +0.045 (+10.2%) |
+> | F1 Điều | 0.453 | 0.483 | **0.519** | +0.066 (+14.6%) |
+> | Norm Recall | 0.891 | 0.869 | **0.917** | +0.026 |
+> | Latency | 2.85 (cache) | 22.53 (real) | 23.03 (real) | — |
+>
+> **Per-Q v2.5 vs v2.4**: 7 wins / 6 losses, magnitude 1.58 vs 1.05 = 1.5:1 net positive.
+> - **Top wins**: Q024 +0.67 ✅ (target case fully fixed), Q011 +0.27, Q004 +0.17 (recovery), Q013 +0.17
+> - **Regressions**: pattern chung pred_count tăng (Q019: 1→5, Q008: 2→4) → Dense Floor đưa nhiều norms vào context → LLM cite nhiều hơn → precision drop ở case over-cite. Trade-off chấp nhận được vì NormR (kế cận để judge legal answer quality) tăng đáng kể.
+> - Q008 stochastic: +0.40 winner trong v2.4 → -0.23 trong v2.5 — cùng prompt, cùng retrieval (no change cho Q008), khác chỉ LLM sampling
+>
+> **Còn lại sau v2.5**:
+> - **Q022 retrieval-depth khác**: Dense Floor preserve top-1 dense per norm, nhưng top dense của QĐ 18 = "Điều 4 K2 Điểm a" ≠ GT "Điều 1 K1 Điểm a". GT có trong norm nhưng rank thấp → cần label-keyword boost hoặc per-norm Pass 0 = top-N (≥2)
+> - **Q026 norm-mention boost** (Fix 3 chưa implement): question mention "Nghị định 102/2024/NĐ-CP" nhưng dense không pull NĐ 102 chunk nào (all top-20 là NĐ 49 amending) → cần regex extract + ad-hoc boost cho norms mentioned trong câu hỏi
+>
+> **Total session 2026-05-19 từ canonical 161509**: 11 commits (faeed8f → 5bb5ba8), F1 Khoản +10.2%, NormR +2.9%, methodology document đầy đủ (ROOT_CAUSE + PROMPT_TUNING_EXPERIMENT + 2 COMPARE reports).
+
+---
 
 > **v2.4 — Cập nhật 2026-05-19 (Root-cause analysis + dedupe + prompt TEMPORAL #4 + fresh full re-run):**
 > Sau v2.3 canonical, làm root-cause analysis có hệ thống để định vị chính xác nguyên nhân khoảng cách F1 (0.440) vs NormR (0.891) — refute cả 2 hypothesis ban đầu (regex Khoản+Điều / chunking limit) bằng dữ liệu thực nghiệm. Áp dụng 2 minimal fix có evidence + chạy lại full 26 câu với --no-llm-cache cho latency honest.
