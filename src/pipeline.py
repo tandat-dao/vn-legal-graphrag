@@ -20,12 +20,12 @@ import time
 from pathlib import Path
 from typing import TypedDict
 
-import anthropic
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
 
 from src.ingestion.vectorizer import load_model
+from src.utils.llm_config import make_anthropic_client
 from src.retrieval.answer_generator import generate_answer
 from src.retrieval.context_assembler import assemble_context
 from src.retrieval.query_planner import QueryPlan, build_confirmation_prompt, plan_query
@@ -113,10 +113,7 @@ def _build_clients() -> tuple:
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = anthropic.Anthropic(
-        api_key=os.getenv("ANTHROPIC_API_KEY"),
-        max_retries=8,  # SDK exponential backoff cho 429/5xx/529 — ~vài phút retry trước khi raise
-    )
+    anthropic_client = make_anthropic_client()
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 

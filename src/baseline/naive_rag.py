@@ -29,6 +29,7 @@ from qdrant_client.models import Distance, PointStruct, VectorParams
 
 from src.ingestion.vectorizer import encode_text, load_model
 from src.retrieval.answer_generator import generate_answer
+from src.utils.llm_config import make_anthropic_client
 
 logger = logging.getLogger(__name__)
 
@@ -298,10 +299,7 @@ def run_baseline_query(
             port=int(os.getenv("QDRANT_PORT", "6333")),
         )
     if anthropic_client is None:
-        anthropic_client = anthropic.Anthropic(
-            api_key=os.getenv("ANTHROPIC_API_KEY"),
-            max_retries=8,
-        )
+        anthropic_client = make_anthropic_client()
     if model is None:
         model = load_model()
 
