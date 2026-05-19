@@ -1,5 +1,57 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.3 | Cập nhật 2026-05-19**
+**Phiên bản 2.4 | Cập nhật 2026-05-19**
+
+> **v2.4 — Cập nhật 2026-05-19 (Root-cause analysis + dedupe + prompt TEMPORAL #4 + fresh full re-run):**
+> Sau v2.3 canonical, làm root-cause analysis có hệ thống để định vị chính xác nguyên nhân khoảng cách F1 (0.440) vs NormR (0.891) — refute cả 2 hypothesis ban đầu (regex Khoản+Điều / chunking limit) bằng dữ liệu thực nghiệm. Áp dụng 2 minimal fix có evidence + chạy lại full 26 câu với --no-llm-cache cho latency honest.
+>
+> **1. Root-cause analysis ([ROOT_CAUSE_ANALYSIS_20260519.md](../data/evaluation/ROOT_CAUSE_ANALYSIS_20260519.md)):**
+> Phân loại 24 câu non-negative theo 5 categories. Findings:
+> - **H3 LLM over-cite**: 47 excess citations (DOMINANT cause của low precision)
+> - **H2_dieu sai Điều của đúng Norm**: 20 instances
+> - **H4 metric artifact**: 9 cases (wildcard GT + greedy 1-1 matching)
+> - **H5 Phụ lục format mismatch**: 8 instances / 4 cases (NQ HĐND có cấu trúc Roman/path, GT cite Arabic)
+> - **H2_khoan sai Khoản của đúng Điều**: chỉ 4 instances (REFUTE hypothesis "regex Khoản+Điều fix")
+>
+> Instrumentation downstream ([RETRIEVAL_DEBUG_20260519-200009/](../data/evaluation/RETRIEVAL_DEBUG_20260519-200009/)) trên Q022/Q023/Q024/Q026:
+> **3/4 failure cases là LLM behavior, không phải retrieval/chunking** — top-25 hybrid đã chứa đúng target component (Q022: QĐ 18 rank #5, Q023: Luật 2013 Điều 100 rank #8, Q026: NĐ 49 Điều 13 K1 rank #5/6). LLM ignore trong cite. Chỉ Q024 là retrieval issue thực sự (Điều 116 không trong top-15 — legal terminology mismatch).
+>
+> **2. Fix #1 — Dedupe parse_citations ([answer_generator.py](../src/retrieval/answer_generator.py)):**
+> LLM đôi khi cite cùng vị trí 2+ lần trong cùng answer (VD Q025: Điều 116 K5 cite 2 lần). Dedupe theo tuple (loai, number, khoan, diem, tiet, van_ban) — giữ first occurrence. Idempotent. Impact (qua reuse mode, $0 API): F1 Khoản 0.440 → 0.461, không regression.
+>
+> **3. Fix #2 — Prompt rule TEMPORAL #4 ([context_assembler.py](../src/retrieval/context_assembler.py)):**
+> Thêm rule cite cả 2 regime cho câu hỏi SPAN-REGIME ("hồ sơ dở dang", "chưa giải quyết xong"). SCOPED hẹp — không áp dụng POINT-IN-TIME ("năm X", "trước/sau ngày Y"). Qua 3-round ablation 7 câu: Q023 robust win +0.40, Q022/Q023 NormR +0.50. Edit 2 (parsimonious) thử nhưng REVERT vì không cải thiện. Methodology lesson: N=1 ablation noisy do LLM stochastic, cần N≥3 future work ([PROMPT_TUNING_EXPERIMENT_20260519.md](../data/evaluation/PROMPT_TUNING_EXPERIMENT_20260519.md)).
+>
+> **4. Tooling infrastructure:**
+> - `src/utils/llm_config.py` — centralize Anthropic max_retries (DRY refactor)
+> - `src/evaluation/metrics.cit_matches` — single source of truth cho semantic match (cả F1 và report ✅/❌ delegate cho cùng helper)
+> - `src/evaluation/report_builder.py` — auto sinh REPORT_<timestamp>.md human-readable mỗi run (overview + bảng so sánh + per-Q detail với GT vs pred ✅/❌)
+> - `src/evaluation/instrument_retrieval.py` — debug Stage 1/2/3 retrieval cho failure cases
+> - `src/evaluation/compare_runs.py` — A/B diff 2 results JSON
+>
+> **Headline v2.4 — 26 câu Đất đai fresh re-run (--no-llm-cache, honest latency):**
+>
+> | Metric                       | v2.3 canonical | v2.4 sau fix | Δ       |
+> |------------------------------|---------------:|-------------:|--------:|
+> | F1 Khoản                     | 0.440          | **0.466**    | +0.026 (+5.9%) |
+> | F1 Điều                      | 0.453          | **0.483**    | +0.030 (+6.6%) |
+> | Norm Recall                  | 0.891          | 0.869        | −0.022  |
+> | Latency mean (s)             | 2.85 (cache)   | **22.53** (fresh) | +19.68 |
+> | Negative correct (2 câu)     | 1.000          | 1.000        | tied ✅ |
+>
+> **Per-Q**: 8 improvements vs 3 regressions, magnitude 2:1 net positive ([COMPARE_canonical_vs_prompt-fix_20260519.md](../data/evaluation/COMPARE_canonical_vs_prompt-fix_20260519.md)).
+> - Top wins: Q008 (+0.40, gap2 NQ Đồng Nai Phụ lục), Q023 (+0.40, gap3 regime change — Edit 1 designed-for)
+> - 6 wins khác (+0.06 to +0.15) đều có pred_count giảm → dedupe pattern
+> - 3 regressions (Q004 −0.30, Q020 −0.33, Q017 −0.06): NONE có span-regime signal → Edit 1 không trigger → **LLM stochastic noise** (đã document)
+>
+> **Latency note**: canonical v2.3 latency 2.85s là CACHE ARTIFACT (cache hit từ debugging session). 22.53s là số real fresh — dùng cho luận văn. Baseline 18.29s tương tự (canonical 0.04s cũng artifact).
+>
+> **Refute cả 2 hypothesis ban đầu (Claude và Gemini)**:
+> - "Regex Khoản+Điều → LCCID filter sẽ lift F1 0.44→0.6+" (Claude): H2_khoan chỉ 4 instances, không phải dominant cause.
+> - "F1 gap thuần do chunking limit, không fix được" (Gemini): top-25 đã có đúng target trong 3/4 failure cases → không phải chunking.
+>
+> **Limitation honest**: prompt tuning N=1 không đủ tin cậy để claim mọi regression là prompt-caused. Cần multi-run ablation cho future prompt experiments. Real bottleneck cho Q022/Q024/Q026 là retrieval depth + LLM cite behavior, không phải prompt.
+
+---
 
 > **v2.3 — Cập nhật 2026-05-19 (Q026 AMENDED_BY + Cách C + 26-câu full eval):**
 > Mở rộng test set + đóng gap classification Query Planner cho câu hỏi metadata thuần.
