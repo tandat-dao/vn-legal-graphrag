@@ -1,5 +1,38 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.2 | Cập nhật 2026-05-17**
+**Phiên bản 2.3 | Cập nhật 2026-05-19**
+
+> **v2.3 — Cập nhật 2026-05-19 (Q026 AMENDED_BY + Cách C + 26-câu full eval):**
+> Mở rộng test set + đóng gap classification Query Planner cho câu hỏi metadata thuần.
+>
+> **1. Q026 — AMENDED_BY direct test ([test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)):**
+> - Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?"
+> - GT citations bắt buộc chứa cả norm gốc (`nghi-dinh-102-2024-nd-cp`) + amending norm (`nghi-dinh-49-2026-nd-cp`) → F1 đo trực tiếp khả năng cite amendment metadata. Trước đó Q025 exercise AMENDED_BY chỉ gián tiếp.
+>
+> **2. Cách C — Backfill theme từ tham chiếu số hiệu văn bản ([query_planner.py](../src/retrieval/query_planner.py)):**
+> - Vấn đề: Câu hỏi metadata thuần không có từ khóa lĩnh vực → LLM Query Planner trả `theme=None` → Stage 1 retrieval trả `[]` → pipeline short-circuit, F1=0 không phải do logic mà do classification gap.
+> - Fix (defensive — chỉ trigger khi LLM trả None): regex extract "102/2024/NĐ-CP", "Luật Đất đai 2024", slug id... → lookup Neo4j `(Theme)-[:INCLUDES]->(Norm)` → backfill nếu mọi reference cùng 1 theme.
+> - Q026 post-fix: backfill thành công, Stage 1 retrieve 5 norms gồm `nghi-dinh-102-2024-nd-cp`, NormRecall 0→0.5.
+>
+> **3. Infra fix — Anthropic max_retries=8 chống crash 529 Overloaded:**
+> - Eval gặp Anthropic API 529 gián đoạn → SDK default `max_retries=2` không đủ; crash 6-12 câu/run khi server load cao.
+> - 3 site khởi tạo client (`pipeline.py`, `naive_rag.py`, `run_evaluation.py`) → tăng `max_retries=8`, SDK tự exponential backoff với jitter.
+>
+> **Headline v2.3 — 26 câu Đất đai full set (merged snapshot post-fix):**
+>
+> | Metric                       | GraphRAG  | Baseline  | Δ       |
+> |------------------------------|----------:|----------:|--------:|
+> | F1 Khoản                     | **0.440** | 0.285     | +0.155 (+54%) |
+> | F1 Điều                      | **0.453** | 0.285     | +0.168 (+59%) |
+> | Norm Recall                  | **0.891** | 0.737     | +0.154 (+21%) |
+> | gap3 F1 Khoản (15 câu)       | **0.341** | 0.126     | +0.215 (+170%) |
+> | gap3 Norm Recall (15 câu)    | **0.811** | 0.544     | +0.267 |
+> | Negative correct (2 câu)     | **1.000** | 1.000     | tied ✅ |
+>
+> **Q026 spotlight — AMENDED_BY exploitation (Ý 2):**
+> - Backfill theme=dat-dai HOẠT ĐỘNG, retrieve 10 norms + 8 units, answer cite được `nghi-dinh-49-2026-nd-cp` (NormRecall 0.5).
+> - F1=0 vì retrieval lấy nhầm Khoản 11/12 (cùng có amended_by 49/2026) thay vì Khoản 1 → vấn đề **retrieval depth (Component-level pinpoint)**, không phải Query Planner. Future work: regex `Khoản X Điều Y` từ câu hỏi → force LCCID filter ở Stage 2.
+>
+> **Limitation chấp nhận:** Snapshot ghép từ v1 (Q001-Q025) + v2 (Q026) vì Anthropic 529 outage cùng ngày khiến rerun v2/v3 crash 6-12 câu. Đã verify Q001-Q025 không bị ảnh hưởng bởi Cách C (chỉ trigger khi theme=None; LLM correct cho 25 câu kia, cache hits identical). Cần rerun verify khi API ổn định.
 
 > **v2.2 — Cập nhật 2026-05-17 (Reproducibility + A/B ablation Schema B):**
 > Bổ sung 2 cải tiến + 1 finding methodology quan trọng:
