@@ -470,18 +470,25 @@ def hybrid_search(
 
     scored.sort(key=lambda x: x[0], reverse=True)
 
-    # --- Build output: 2-pass allocation (norm-breadth + RRF-depth) ---
+    # --- Build output: 3-pass allocation (dense-floor + RRF-breadth + RRF-depth) ---
     #
-    # Pass 1 (breadth): top-1 per norm — đảm bảo MỌI norm trong pool có ≥1
-    #   representation. Khắc phục bug khi một số norm match dense kém (NĐ 50,
-    #   QĐ 69 cho query "Điều kiện CMĐSDĐ") bị các norm match tốt đè trong
-    #   cùng tier dù chúng chứa thông tin quan trọng (tiền SDĐ 30/50/100%,
-    #   hạn mức 160m²).
+    # Pass 0 (DENSE FLOOR — added 2026-05-19): top-1 per norm theo DENSE RANK.
+    #   Lý do: bảo toàn pure semantic match — embedding similarity là ground
+    #   signal mạnh nhất, KG/graph boost (procedure mapping ở Stage 3) chỉ là
+    #   context augmentation, KHÔNG được override. Đã quan sát: Q024 GT
+    #   "Điều 116 K5 Luật ĐĐ 2024" rank #2 trong dense bị drop khỏi top-25 vì
+    #   graph_boost của procedure "chuyen-muc-dich-su-dung-dat" đẩy Điều
+    #   121/123/227 lên đầu RRF, chiếm hết per-norm cap (3). Pass 0 ép top-1
+    #   dense per norm vào output trước khi RRF re-rank chạy.
+    #
+    # Pass 1 (breadth): top-1 per norm THEO RRF — bổ sung norms chưa được
+    #   Pass 0 cover (norms không có chunk trong dense_results vì dense_pool
+    #   hữu hạn — nhưng có trong keyword/graph paths).
     #
     # Pass 2 (depth): fill remaining slots theo RRF order, respect cả 2 cap.
     #
-    # Cả 2 pass đều tôn trọng per-tier cap (đa dạng tầng pháp lý) và per-norm
-    # cap (chống dominance). Pass 1 ưu tiên BREADTH; Pass 2 ưu tiên RELEVANCE.
+    # Cả 3 pass đều tôn trọng per-tier cap (đa dạng tầng pháp lý) và per-norm
+    # cap (chống dominance).
     results: list[ScoredTextUnit] = []
     norm_count: dict[str, int] = {}
     tier_count: dict[int | None, int] = {}
@@ -517,8 +524,41 @@ def hybrid_search(
         )
         return True
 
-    # Pass 1: top-1 per norm (breadth guarantee)
-    seen_norms_in_pass1: set = set()
+    # Helper: tính lại RRF score cho 1 point (dùng trong Pass 0 để log + try_add)
+    def _rrf_for(point) -> float:
+        pid = point.id
+        dr = dense_rank_map.get(pid, dense_fallback)
+        kr = keyword_rank_map.get(pid, keyword_fallback)
+        comp_id = point.payload.get("component_id", "")
+        nid_ = point.payload.get("norm_id", "")
+        tier = point.payload.get("tier") or 1
+        is_boosted = comp_id in graph_boost_set
+        rarity = 0.0
+        if rarity_enabled:
+            rarity = _compute_rarity(
+                component_concepts.get(comp_id, []),
+                nid_,
+                required_concepts,
+                norm_total,
+                norm_concept_count,
+            )
+        return _rrf_score(dr, kr, is_graph_boosted=is_boosted, tier=tier, rarity_score=rarity)
+
+    # Pass 0 (DENSE FLOOR): top-1 per norm theo DENSE RANK
+    seen_norms_in_pass0: set = set()
+    for point in dense_results:  # already sorted by dense score desc
+        if len(results) >= top_k:
+            break
+        nid = point.payload.get("norm_id", "")
+        if nid in seen_norms_in_pass0:
+            continue
+        rrf_val = _rrf_for(point)
+        if _try_add(rrf_val, point):
+            seen_norms_in_pass0.add(nid)
+    pass0_count = len(results)
+
+    # Pass 1: top-1 per norm theo RRF (bổ sung norms chưa có trong Pass 0)
+    seen_norms_in_pass1: set = set(seen_norms_in_pass0)
     for rrf_score_val, point in scored:
         if len(results) >= top_k:
             break
@@ -527,7 +567,7 @@ def hybrid_search(
             continue
         if _try_add(rrf_score_val, point):
             seen_norms_in_pass1.add(nid)
-    pass1_count = len(results)
+    pass1_count = len(results) - pass0_count
 
     # Pass 2: fill remaining by RRF order (skip already used)
     for rrf_score_val, point in scored:
@@ -541,8 +581,9 @@ def hybrid_search(
         norm_dist = {n: c for n, c in norm_count.items()}
         tier_dist = {t: c for t, c in sorted(tier_count.items(), key=lambda x: (x[0] is None, x[0]))}
         logger.info(
-            f"hybrid_search: top-{len(results)} | pass1(breadth)={pass1_count}, "
-            f"pass2(depth)={len(results) - pass1_count} | "
+            f"hybrid_search: top-{len(results)} | pass0(dense-floor)={pass0_count}, "
+            f"pass1(rrf-breadth)={pass1_count}, "
+            f"pass2(depth)={len(results) - pass0_count - pass1_count} | "
             f"caps: per_norm={_MAX_PER_NORM}, per_tier={_MAX_PER_TIER} | "
             f"best rrf={results[0]['rrf_score']:.4f} | tier_dist={tier_dist} | norm_dist={norm_dist}"
         )
