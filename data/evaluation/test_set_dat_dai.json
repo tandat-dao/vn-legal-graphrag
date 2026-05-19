@@ -348,5 +348,33 @@
     ],
     "relevant_component_ids": [],
     "notes": "Temporal #4 — REGIME CHANGE LUẬT 2013→2024 + HỒ SƠ DỞ DANG. has_temporal_context=True, temporal_anchor='2023' hoặc 'luat-cu', case_status='do-dang'. Pipeline phải: (a) retrieve CẢ Luật 2013 (hết hiệu lực 2025-01-01) lẫn Luật 2024; (b) header metadata thể hiện 'HẾT HIỆU LỰC' cho Luật 2013; (c) admit honest nếu Điều 256 chuyển tiếp KHÔNG có trong corpus thay vì bịa; (d) hỏi user để chốt. Đây là test failure-mode-aware: pipeline KHÔNG tự quyết khi thiếu data chuyển tiếp."
+  },
+  {
+    "id": "Q024",
+    "question": "Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Tại năm 2024 (trước ngày Luật 47/2024/QH15 sửa đổi có hiệu lực 01/07/2025), Luật Đất đai 2024 Điều 116 khoản 5 quy định: căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở, hoặc chuyển mục đích các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia đình, cá nhân là 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị đã được cơ quan có thẩm quyền phê duyệt'. (Lưu ý: cụm từ 'pháp luật về quy hoạch đô thị' đã được Luật 47/2024/QH15 thay thế bằng 'pháp luật về quy hoạch đô thị và nông thôn' kể từ 01/07/2025.)",
+    "ground_truth_citations": [
+      {"dieu": "116", "khoan": "5", "van_ban": "luat-dat-dai-2024"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #5 — MULTI-CTV CẤP COMPONENT. has_temporal_context=True, temporal_anchor='2024' → end-of-year 2024-12-31. Pipeline phải retrieve CTV_v0 (active 2024-08-01 → 2025-06-30) của Component Đ116 K5, trả về TextUnit GỐC chứa 'pháp luật về quy hoạch đô thị' (KHÔNG có 'và nông thôn'). Đây là demo Cấp B multi-version CTV — TextUnit khác nhau theo từng phiên bản thời gian. Pipeline phải KHÔNG retrieve CTV_v1 (2025-07-01 → sentinel) tại thời điểm 2024."
+  },
+  {
+    "id": "Q025",
+    "question": "Hiện nay năm 2026, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì? Có gì khác so với bản gốc không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Hiện nay (2026), Luật Đất đai 2024 Điều 116 khoản 5 quy định căn cứ cho phép chuyển mục đích sử dụng đất là 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị và nông thôn đã được cơ quan có thẩm quyền phê duyệt'. So với bản gốc Luật 2024 (hiệu lực 01/08/2024), cụm từ 'pháp luật về quy hoạch đô thị' đã được Luật 47/2024/QH15 (điểm a khoản 2 Điều 57) thay thế bằng 'pháp luật về quy hoạch đô thị và nông thôn', có hiệu lực từ 01/07/2025.",
+    "ground_truth_citations": [
+      {"dieu": "116", "khoan": "5", "van_ban": "luat-dat-dai-2024"}
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #6 — MULTI-CTV COMPARISON. has_temporal_context=True, temporal_anchor='2026' → 2026-12-31. Pipeline phải retrieve CTV_v1 (active 2025-07-01 → sentinel) của Component Đ116 K5 — TextUnit hiện hành chứa 'pháp luật về quy hoạch đô thị và nông thôn'. Câu hỏi 'có gì khác so với bản gốc' khiến LLM cần BIẾT cả 2 phiên bản → demo span-regime (broad retrieve) hoặc temporal_anchor='unspecified_past'/'luat-cu'. Pipeline phải trình bày BẢNG SO SÁNH 2 phiên bản + cite Luật 47/2024 là amending norm."
   }
 ]

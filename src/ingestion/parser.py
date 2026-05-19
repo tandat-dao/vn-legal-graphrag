@@ -34,6 +34,18 @@ _AMENDMENT_RE = re.compile(
     re.DOTALL,
 )
 
+# Regex bắt annotation original version (multi-CTV demo Cấp B):
+#   <!-- original_v_2024-08-01:
+#   [text nguyên văn trước sửa]
+#   -->
+# Group 1: date label (VD "2024-08-01") — đánh dấu version
+# Group 2: nội dung text gốc (multi-line, đến khi gặp -->)
+_ORIGINAL_VERSION_RE = re.compile(
+    r"<!--\s*original_v_(\d{4}-\d{2}-\d{2}):\s*(.+?)\s*-->",
+    re.DOTALL,
+)
+
+
 # Map keyword đầu nội dung → change_type chuẩn (longest-match-first)
 _CHANGE_TYPE_KEYWORDS = (
     ("sửa đổi, bổ sung", "sua-doi-bo-sung"),
@@ -89,6 +101,25 @@ def extract_amendments(text: str) -> list[dict]:
             "raw_match": m.group(0),
         })
     return results
+
+
+def extract_original_version(text: str) -> dict | None:
+    """Extract original version annotation (multi-CTV demo Cấp B).
+
+    Tìm `<!-- original_v_<date>: <nguyên văn trước sửa> -->` trong text.
+    Mỗi Component chỉ kỳ vọng 0 hoặc 1 annotation (snapshot bản gốc duy nhất).
+
+    Returns:
+        Dict {date_label, text, raw_match} nếu tìm thấy, None nếu không.
+    """
+    m = _ORIGINAL_VERSION_RE.search(text)
+    if not m:
+        return None
+    return {
+        "date_label": m.group(1).strip(),  # VD "2024-08-01"
+        "text": m.group(2).strip(),
+        "raw_match": m.group(0),
+    }
 
 
 def generate_id(context_path: list[str]) -> str:
@@ -174,11 +205,18 @@ def parse_file(filepath: str) -> dict:
             # Extract amendments TỪ raw body trước khi process text.
             # Mỗi Component có thể có 0+ amendments (HTML comments inline).
             amendments = extract_amendments(body)
+            # Extract original_version (multi-CTV demo) — TextUnit gốc trước sửa.
+            original_version = extract_original_version(body)
+            # Loại bỏ HTML comment original_v khỏi current body (giữ amendments hiển thị cho LLM warning).
+            if original_version:
+                body_current = body.replace(original_version["raw_match"], "").strip()
+            else:
+                body_current = body
             # Prepend heading vào text để BGE-M3 thấy ngữ cảnh Điều/Khoản.
             # Bỏ qua norm_id (gốc), chỉ giữ heading từ cấp Điều xuống.
             # Đây là điều kiện để embedding của Điều 122 chứa "Điều kiện..." từ tiêu đề.
             heading_lines = [h[1] for h in stack]
-            text = "\n".join(heading_lines + [body])
+            text = "\n".join(heading_lines + [body_current])
             node = TextUnit(
                 id=generate_id(context_path),
                 context_path=context_path,
@@ -188,6 +226,13 @@ def parse_file(filepath: str) -> dict:
             # Gắn amendments vào node (TypedDict tolerate extra key tại runtime)
             if amendments:
                 node["amendments"] = amendments  # type: ignore
+            if original_version:
+                # Wrap heading + original text giống như current để embedding nhất quán
+                orig_text_full = "\n".join(heading_lines + [original_version["text"]])
+                node["original_version"] = {  # type: ignore
+                    "date_label": original_version["date_label"],
+                    "text": orig_text_full,
+                }
             nodes.append(node)
         text_buffer = []
 

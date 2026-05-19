@@ -46,8 +46,12 @@ CONTEXT_MAX_TOKENS = 6000
 
 _TEMPORAL_ISO_PATTERNS = [
     (re.compile(r"^\d{4}-\d{2}-\d{2}$"), lambda s: s),                # YYYY-MM-DD
-    (re.compile(r"^\d{4}-\d{2}$"), lambda s: f"{s}-01"),              # YYYY-MM
-    (re.compile(r"^\d{4}$"), lambda s: f"{s}-01-01"),                  # YYYY
+    (re.compile(r"^\d{4}-\d{2}$"), lambda s: f"{s}-15"),              # YYYY-MM → mid-month
+    (re.compile(r"^\d{4}$"), lambda s: f"{s}-12-31"),                  # YYYY → end-of-year
+    # Lý do dùng end-of-year cho YYYY: câu hỏi "năm 2024" thường ý chỉ "trong
+    # khoảng nào đó của năm 2024" — point query đầu năm (01-01) sẽ miss VB có
+    # hiệu lực sau 01-01 (VD Luật ĐĐ 2024 valid_from=2024-08-01). End-of-year
+    # cover full năm, mid-month tương tự cho YYYY-MM.
 ]
 
 

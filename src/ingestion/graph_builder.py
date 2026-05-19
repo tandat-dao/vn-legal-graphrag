@@ -137,6 +137,37 @@ def upsert_text_unit(tx: ManagedTransaction, text_unit: TextUnit) -> None:
     )
 
 
+def upsert_text_unit_raw(
+    tx: ManagedTransaction,
+    tu_id: str,
+    text: str,
+    context_path: list[str],
+) -> None:
+    """Upsert TextUnit với ID + content tuỳ chỉnh (dùng cho multi-version)."""
+    tx.run(
+        """
+        MERGE (t:TextUnit {id: $id})
+        SET t.text         = $text,
+            t.context_path = $context_path,
+            t.norm_id      = $norm_id
+        """,
+        id=tu_id,
+        text=text,
+        context_path=context_path,
+        norm_id=context_path[0],
+    )
+
+
+def _date_subtract_one_day(iso_date: str) -> str:
+    """'2025-07-01' → '2025-06-30'. Trả as-is nếu format không khớp."""
+    from datetime import date, timedelta
+    try:
+        d = date.fromisoformat(iso_date)
+        return (d - timedelta(days=1)).isoformat()
+    except (ValueError, TypeError):
+        return iso_date
+
+
 # ---------------------------------------------------------------------------
 # Amendment node + edge (Ý 2 — khai thác <!-- amended_by ... --> annotations)
 # ---------------------------------------------------------------------------
@@ -313,40 +344,101 @@ def run_ingestion(data_dir: str) -> None:
 
                     for node in result["nodes"]:
                         comp_id = node["id"]
-                        # CTV ID phân biệt theo phiên bản (valid_from) để Phase 2 thêm CTV cũ
-                        ctv_id = generate_id(node["context_path"] + [valid_from])
                         label = " > ".join(node["context_path"][1:])
 
                         upsert_component(tx, comp_id, label)
-                        upsert_ctv(tx, {
-                            "id": ctv_id,
-                            "valid_from": meta.get("valid_from"),
-                            "valid_to": meta.get("valid_to"),
-                            "status": "active",
-                        })
-                        upsert_text_unit(tx, node)
 
-                        create_edges(
-                            tx,
-                            norm_id=norm_id,
-                            theme_name=meta["theme"],
-                            jurisdiction=meta["jurisdiction"],
-                            implements=meta.get("implements"),
-                            component_id=comp_id,
-                            ctv_id=ctv_id,
-                            text_unit_id=node["id"],
-                        )
+                        original_version = node.get("original_version")
+                        amendments = node.get("amendments", []) or []
+
+                        if original_version and amendments:
+                            # MULTI-CTV PATH (Ý 2 Cấp B):
+                            # Component có cả original_version annotation + amendment
+                            # → tạo 2 CTV với 2 TextUnit khác nhau.
+                            earliest_amend_date = min(
+                                a["effective_date"] for a in amendments
+                            )
+                            split_date_minus_one = _date_subtract_one_day(earliest_amend_date)
+                            orig_label = original_version["date_label"]
+
+                            # CTV_v0 (original — superseded)
+                            ctv_v0_id = generate_id(node["context_path"] + [orig_label, "v0"])
+                            tu_v0_id = generate_id(node["context_path"] + [orig_label, "v0_text"])
+                            upsert_ctv(tx, {
+                                "id": ctv_v0_id,
+                                "valid_from": meta.get("valid_from"),
+                                "valid_to": split_date_minus_one,
+                                "status": "superseded",
+                            })
+                            upsert_text_unit_raw(
+                                tx, tu_v0_id, original_version["text"], node["context_path"]
+                            )
+
+                            # CTV_v1 (current — active sau khi apply amendment đầu tiên)
+                            ctv_v1_id = generate_id(node["context_path"] + [earliest_amend_date, "v1"])
+                            tu_v1_id = node["id"]  # keep original TextUnit ID for backward compat
+                            upsert_ctv(tx, {
+                                "id": ctv_v1_id,
+                                "valid_from": earliest_amend_date,
+                                "valid_to": meta.get("valid_to"),  # sentinel hoặc concrete
+                                "status": "active",
+                            })
+                            upsert_text_unit(tx, node)
+
+                            # Edges chung
+                            create_edges(
+                                tx,
+                                norm_id=norm_id,
+                                theme_name=meta["theme"],
+                                jurisdiction=meta["jurisdiction"],
+                                implements=meta.get("implements"),
+                                component_id=comp_id,
+                                ctv_id=ctv_v0_id,
+                                text_unit_id=tu_v0_id,
+                            )
+                            create_edges(
+                                tx,
+                                norm_id=norm_id,
+                                theme_name=meta["theme"],
+                                jurisdiction=meta["jurisdiction"],
+                                implements=meta.get("implements"),
+                                component_id=comp_id,
+                                ctv_id=ctv_v1_id,
+                                text_unit_id=tu_v1_id,
+                            )
+                        else:
+                            # SINGLE-CTV PATH (default — backward compat).
+                            # CTV ID phân biệt theo phiên bản (valid_from) để Phase 2 thêm CTV cũ.
+                            ctv_id = generate_id(node["context_path"] + [valid_from])
+                            upsert_ctv(tx, {
+                                "id": ctv_id,
+                                "valid_from": meta.get("valid_from"),
+                                "valid_to": meta.get("valid_to"),
+                                "status": "active",
+                            })
+                            upsert_text_unit(tx, node)
+                            create_edges(
+                                tx,
+                                norm_id=norm_id,
+                                theme_name=meta["theme"],
+                                jurisdiction=meta["jurisdiction"],
+                                implements=meta.get("implements"),
+                                component_id=comp_id,
+                                ctv_id=ctv_id,
+                                text_unit_id=node["id"],
+                            )
 
                         # Pass 1.5: upsert Amendment nodes + AMENDED_BY edges
                         # (Ý 2 — khai thác <!-- amended_by ... --> annotations)
-                        for amendment in node.get("amendments", []) or []:
+                        for amendment in amendments:
                             upsert_amendment(tx, comp_id, amendment)
 
                     tx.commit()
                 amendment_count = sum(len(n.get("amendments", []) or []) for n in result["nodes"])
+                multi_ctv_count = sum(1 for n in result["nodes"] if n.get("original_version"))
                 logger.info(
                     f"Pass 1 — ingested {norm_id}: {len(result['nodes'])} TextUnits, "
-                    f"{amendment_count} amendments"
+                    f"{amendment_count} amendments, {multi_ctv_count} multi-CTV Components"
                 )
 
             # Pass 2: tạo lại [:IMPLEMENTS] — lúc này tất cả Norm đã tồn tại
