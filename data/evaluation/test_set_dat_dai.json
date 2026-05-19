@@ -376,5 +376,26 @@
     ],
     "relevant_component_ids": [],
     "notes": "Temporal #6 — MULTI-CTV COMPARISON. has_temporal_context=True, temporal_anchor='2026' → 2026-12-31. Pipeline phải retrieve CTV_v1 (active 2025-07-01 → sentinel) của Component Đ116 K5 — TextUnit hiện hành chứa 'pháp luật về quy hoạch đô thị và nông thôn'. Câu hỏi 'có gì khác so với bản gốc' khiến LLM cần BIẾT cả 2 phiên bản → demo span-regime (broad retrieve) hoặc temporal_anchor='unspecified_past'/'luat-cu'. Pipeline phải trình bày BẢNG SO SÁNH 2 phiên bản + cite Luật 47/2024 là amending norm."
+  },
+  {
+    "id": "Q026",
+    "question": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP (quy định khái niệm đất ở: đất làm nhà ở và các mục đích khác phục vụ cho đời sống trong cùng một thửa đất, gồm đất ở tại nông thôn và đất ở tại đô thị) đã được Nghị định 49/2026/NĐ-CP sửa đổi, bổ sung. Hiệu lực sửa đổi từ ngày 31/01/2026.",
+    "ground_truth_citations": [
+      {
+        "dieu": "13",
+        "khoan": "1",
+        "van_ban": "nghi-dinh-102-2024-nd-cp"
+      },
+      {
+        "van_ban": "nghi-dinh-49-2026-nd-cp"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "AMENDED_BY direct test — đo trực tiếp Ý 2 (AMENDED_BY exploitation). Pipeline phải: (a) retrieve Component Đ13 K1 của NĐ 102/2024/NĐ-CP; (b) surface Amendment node liên kết qua [:AMENDED_BY] với amending_norm='nghi-dinh-49-2026-nd-cp', effective_date='2026-01-31', summary='sửa đổi, bổ sung khoản này'; (c) Answer Generator phải cite CẢ amending norm trong citations (không chỉ norm gốc). GT citations BẮT BUỘC chứa nghi-dinh-49-2026-nd-cp → F1 sẽ phạt recall nếu LLM bỏ sót amending norm. Hôm nay 2026-05-19 (sau 31/01/2026) → amendment đã hiệu lực; câu hỏi không yêu cầu nội dung sau sửa đổi mà chỉ hỏi 'văn bản nào sửa + hiệu lực ngày nào' → đáp án thuần metadata, không cần TextUnit của bản sửa đổi."
   }
 ]
