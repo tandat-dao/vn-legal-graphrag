@@ -113,6 +113,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) ->
         "confirmation_retried": retried,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
+        "context": res.get("context", ""),  # needed cho faithfulness eval
     }
 
 
@@ -134,6 +135,7 @@ def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None) ->
         "confirmation_retried": False,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
+        "context": res.get("context", ""),
     }
 
 
@@ -170,14 +172,26 @@ def run_system_on_test_set(
     system: str,
     clients,
     llm_cache_dir: Path | None = None,
+    faithfulness_tier: int = 0,  # 0=skip, 1=existence only, 2=existence+LLM judge
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
+
+    Args:
+        faithfulness_tier: 0=skip Faithfulness; 1=Tier 1 (deterministic existence
+            check, $0); 2=Tier 1 + Tier 2 (LLM-as-judge, ~1 Haiku call per citation).
 
     Returns:
         List per-question result dict.
     """
     assert system in {"graphrag", "baseline"}
     runner = _run_one_graphrag if system == "graphrag" else _run_one_baseline
+
+    # Faithfulness setup (lazy import để không break khi không dùng)
+    judge_client = None
+    if faithfulness_tier >= 1:
+        from src.evaluation.faithfulness import evaluate_faithfulness
+        if faithfulness_tier >= 2:
+            _, _, judge_client, _ = clients  # reuse anthropic_client làm judge
 
     results = []
     for i, item in enumerate(test_set, 1):
@@ -195,6 +209,7 @@ def run_system_on_test_set(
                 "confirmation_retried": False,
                 "context_used": False,
                 "top_k_count": 0,
+                "context": "",
             }
 
         gt_cits = item.get("ground_truth_citations", [])
@@ -205,6 +220,15 @@ def run_system_on_test_set(
             negative_correct(sys_out["citations"], item["gap_type"])
             if item["gap_type"] == "negative" else None
         )
+
+        # Faithfulness eval (optional)
+        faithfulness = None
+        if faithfulness_tier >= 1:
+            faithfulness = evaluate_faithfulness(
+                sys_out["citations"], sys_out["answer"], sys_out.get("context", ""),
+                llm_client=judge_client,
+                tier2=(faithfulness_tier >= 2),
+            )
 
         result = {
             "id": qid,
@@ -217,10 +241,11 @@ def run_system_on_test_set(
             "answer": sys_out["answer"],
             "pred_citations": sys_out["citations"],
             "ground_truth_citations": gt_cits,
-            "citation_score": cs_khoan,  # backwards-compat: cấp khoản
-            "citation_score_dieu": cs_dieu,  # cấp Điều (looser — đo định tuyến văn bản)
+            "citation_score": cs_khoan,
+            "citation_score_dieu": cs_dieu,
             "norm_recall": nr,
             "negative_correct": nc,
+            "faithfulness": faithfulness,
             "elapsed_seconds": sys_out["elapsed_seconds"],
             "confirmation_needed": sys_out["confirmation_needed"],
             "confirmation_retried": sys_out["confirmation_retried"],
@@ -229,9 +254,14 @@ def run_system_on_test_set(
         }
         results.append(result)
 
+        faith_str = ""
+        if faithfulness:
+            faith_str = f" Faith[exist={faithfulness['existence_rate']:.2f}]"
+            if faithfulness_tier >= 2:
+                faith_str = f" Faith[exist={faithfulness['existence_rate']:.2f} support={faithfulness['support_rate']:.2f}]"
         logger.info(
             f"  → F1_khoan={cs_khoan['f1']:.2f} F1_dieu={cs_dieu['f1']:.2f} "
-            f"NormR={nr:.2f} cit={len(sys_out['citations'])}/{len(gt_cits)} "
+            f"NormR={nr:.2f}{faith_str} cit={len(sys_out['citations'])}/{len(gt_cits)} "
             f"{sys_out['elapsed_seconds']:.1f}s"
         )
 
@@ -279,6 +309,13 @@ def main() -> int:
         "--clear-llm-cache",
         action="store_true",
         help="Xóa toàn bộ cache trước khi chạy. Dùng khi thay đổi prompt template.",
+    )
+    parser.add_argument(
+        "--faithfulness-tier",
+        type=int, default=0, choices=[0, 1, 2],
+        help="Faithfulness metric tier: 0=skip (default), 1=existence-only ($0), "
+             "2=existence+LLM-judge (~1 Haiku call per citation). Đo % citation "
+             "có chunk match context (Tier 1) và semantic support (Tier 2).",
     )
     args = parser.parse_args()
 
@@ -393,7 +430,11 @@ def main() -> int:
     try:
         for system in systems:
             t0 = time.perf_counter()
-            results = run_system_on_test_set(test_set, system, clients, llm_cache_dir=llm_cache_dir)
+            results = run_system_on_test_set(
+                test_set, system, clients,
+                llm_cache_dir=llm_cache_dir,
+                faithfulness_tier=args.faithfulness_tier,
+            )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
             logger.info(f"[{system}] hoàn thành {len(results)} câu trong {elapsed:.1f}s")

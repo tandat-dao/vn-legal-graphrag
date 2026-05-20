@@ -54,6 +54,7 @@ class BaselineResult(TypedDict):
     context_used: bool
     top_k_count: int
     context_tokens: int
+    context: str           # full assembled context — dùng cho faithfulness eval
     elapsed_seconds: float
     # Các field GraphRAG không có trong baseline (để None nhằm giữ schema chung)
     query_plan: None
@@ -334,6 +335,7 @@ def run_baseline_query(
                 context_used=False,
                 top_k_count=0,
                 context_tokens=0,
+                context="",
                 elapsed_seconds=round(elapsed, 2),
                 query_plan=None,
                 confirmation_needed=False,
@@ -357,6 +359,7 @@ def run_baseline_query(
             context_used=gen["context_used"],
             top_k_count=len(scored_chunks),
             context_tokens=context_tokens,
+            context=context,
             elapsed_seconds=round(elapsed, 2),
             query_plan=None,
             confirmation_needed=False,

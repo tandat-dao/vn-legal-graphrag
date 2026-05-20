@@ -93,6 +93,7 @@ class PipelineResult(TypedDict):
     lccids_count: int
     top_k_count: int
     context_tokens: int
+    context: str            # full assembled context — dùng cho faithfulness eval
     answer: str
     citations: list[dict]
     context_used: bool
@@ -203,6 +204,7 @@ def run_pipeline(
                 lccids_count=0,
                 top_k_count=0,
                 context_tokens=0,
+                context="",
                 answer="",
                 citations=[],
                 context_used=False,
@@ -250,6 +252,7 @@ def run_pipeline(
                 lccids_count=0,
                 top_k_count=0,
                 context_tokens=0,
+                context="",
                 answer="Không tìm thấy văn bản pháp luật liên quan đến câu hỏi này.",
                 citations=[],
                 context_used=False,
@@ -293,6 +296,7 @@ def run_pipeline(
             lccids_count=len(norm_ids),
             top_k_count=len(scored_units),
             context_tokens=context_tokens,
+            context=context,
             answer=result["answer"],
             citations=result["citations"],
             context_used=result["context_used"],
