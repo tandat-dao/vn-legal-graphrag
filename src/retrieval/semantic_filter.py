@@ -121,6 +121,132 @@ def _fetch_components_matching_cites(
     return result
 
 
+# ---------------------------------------------------------------------------
+# Content-keyword extraction — for Pass -0.5 Label-keyword Boost
+# ---------------------------------------------------------------------------
+# Vietnamese stopwords + structural legal keywords — skip khi extract content tokens
+_VN_STOPWORDS = frozenset([
+    "và", "hay", "hoặc", "với", "cho", "từ", "vào", "trên", "dưới", "tại",
+    "theo", "được", "có", "không", "phải", "cần", "sẽ", "đã", "đang", "này",
+    "đó", "kia", "gì", "sao", "nào", "ai", "khi", "nếu", "mà", "để", "nên",
+    "vì", "do", "bởi", "qua", "đến", "thì", "cũng", "rằng", "trong", "ngoài",
+    "trước", "sau", "giữa", "ra", "vô", "lên", "xuống", "về", "như", "rất",
+    "nhiều", "ít", "một", "hai", "ba", "các", "những", "mỗi", "mọi", "ai",
+    "cá", "nhân", "cả", "bằng", "bao", "nhiêu", "đối", "hơn",
+    # Bổ sung sau diagnostic Q022:
+    "của", "tôi", "cùng", "cuối", "nay", "nhưng", "vẫn", "chưa",
+    "dụng",  # "áp dụng/sử dụng" — quá generic trong văn bản pháp luật
+])
+
+# Structural legal terms — đã được Pass -1 Struct Cite xử lý + parser
+_LEGAL_STRUCTURAL = frozenset([
+    "khoản", "điều", "điểm", "tiết", "chương", "mục", "văn", "bản",
+    "nghị", "định", "quyết", "luật", "thông", "tư", "phụ", "lục", "số",
+    "ngày", "tháng", "năm", "qđ", "nđ", "tt",
+])
+
+
+def _extract_content_tokens(question: str, min_len: int = 3) -> set[str]:
+    """Extract content tokens từ câu hỏi để label-overlap scoring.
+
+    Filter chain:
+      1. Lowercase + tokenize bằng Unicode letter regex
+      2. Loại Vietnamese stopwords (và, có, được, etc.)
+      3. Loại structural legal keywords (khoản, điều, etc. — Pass -1 lo)
+      4. Loại tokens < min_len chars
+
+    Args:
+        question: câu hỏi tiếng Việt gốc.
+        min_len: độ dài tối thiểu của token (default 3).
+
+    Returns:
+        Set tokens content-bearing để dùng cho label-overlap scoring.
+    """
+    if not question:
+        return set()
+    lowered = question.lower()
+    tokens_raw = re.findall(r"[a-zà-ỹ]+", lowered, flags=re.UNICODE)
+    return {
+        t for t in tokens_raw
+        if len(t) >= min_len and t not in _VN_STOPWORDS and t not in _LEGAL_STRUCTURAL
+    }
+
+
+def _score_label_overlap(label: str, tokens: set[str]) -> int:
+    """Đếm số tokens content xuất hiện substring trong label (case-insensitive)."""
+    if not label or not tokens:
+        return 0
+    label_lower = label.lower()
+    return sum(1 for t in tokens if t in label_lower)
+
+
+def _fetch_component_labels(comp_ids: list[str], neo4j_driver) -> dict[str, str]:
+    """Fetch labels của Components trong batch — dùng cho label-overlap scoring."""
+    if not comp_ids or neo4j_driver is None:
+        return {}
+    with neo4j_driver.session() as sess:
+        rows = sess.run(
+            "MATCH (c:Component) WHERE c.id IN $ids RETURN c.id AS cid, c.label AS label",
+            ids=comp_ids,
+        ).data()
+    return {r["cid"]: (r.get("label") or "") for r in rows}
+
+
+def _fetch_components_by_label_keywords(
+    tokens: set[str],
+    norm_ids: list[str],
+    neo4j_driver,
+    min_overlap: int = 2,
+    max_per_norm: int = 3,
+) -> list[tuple[int, str, str]]:
+    """Tìm Components trong norm_ids có label chứa nhiều tokens content nhất.
+
+    Lý do tách thành function riêng: Pass -0.5 cần fetch CANDIDATES từ Neo4j
+    TRƯỚC khi vào hybrid_search candidate pool — bởi dense_pool=50 có thể không
+    chứa các Components có label match content keyword mạnh nhưng dense score
+    thấp (VD GT của Q022: "Điều 1 Khoản 1 Điểm a" — label match "hạn mức đất"
+    rõ ràng nhưng dense rank ~50+ vì question text-similarity bias sang chunks
+    có metadata văn bản chuyển giao).
+
+    Args:
+        tokens: content tokens đã extract từ question.
+        norm_ids: pool norm IDs filter.
+        neo4j_driver: Neo4j driver.
+        min_overlap: số token match tối thiểu để chunk được xét.
+        max_per_norm: top-N components per norm trong kết quả.
+
+    Returns:
+        List of (overlap_score, component_id, norm_id) sorted by score desc.
+    """
+    if not tokens or not norm_ids or neo4j_driver is None:
+        return []
+    with neo4j_driver.session() as sess:
+        # Lấy tất cả Components trong pool với label, score lexical overlap trong Python
+        rows = sess.run(
+            "MATCH (n:Norm)-[:HAS_COMPONENT]->(c:Component) "
+            "WHERE n.id IN $norms "
+            "RETURN c.id AS cid, c.label AS label, n.id AS norm_id",
+            norms=norm_ids,
+        ).data()
+    # Score
+    scored: list[tuple[int, str, str]] = []
+    for r in rows:
+        label = (r.get("label") or "").lower()
+        score = sum(1 for t in tokens if t in label)
+        if score >= min_overlap:
+            scored.append((score, r["cid"], r["norm_id"]))
+    # Sort by score desc, then group by norm and cap
+    scored.sort(key=lambda x: -x[0])
+    per_norm_count: dict[str, int] = {}
+    result: list[tuple[int, str, str]] = []
+    for sc, cid, nid in scored:
+        if per_norm_count.get(nid, 0) >= max_per_norm:
+            continue
+        result.append((sc, cid, nid))
+        per_norm_count[nid] = per_norm_count.get(nid, 0) + 1
+    return result
+
+
 _RRF_K = 60
 _DENSE_POOL_MULTIPLIER = 2   # lấy 2*top_k từ dense search trước khi re-rank
 _DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng viên dense
@@ -495,6 +621,18 @@ def hybrid_search(
         )
         graph_results = points
 
+    # NOTE: Path -0.5 Label-keyword Boost đã được THỬ và REVERT (2026-05-20).
+    # Lý do (empirical evidence): ablation 8-câu (Q022 + 4 canary + 3 Gap 2 noise)
+    # cho thấy net F1 -0.055 (-7.9%). Win:Loss = 1:2 magnitude (+0.50 cho Q022 nhưng
+    # -0.95 spread across Q001/Q002/Q008/Q024). Nguyên nhân: trong text pháp luật,
+    # keywords "hạn mức"/"giao đất"/"thẩm định" xuất hiện trong label của ĐA điều
+    # khoản chéo nhiều Norm — lexical overlap không phân biệt được Điều CORRECT
+    # (Q022 GT: "Quy định hạn mức đất ở") vs Điều DIFFERENT-TOPIC ("Hạn mức cho
+    # người có công"). Q022 documented as embedding-model limitation cho thesis
+    # Discussion (xem [RETRIEVAL_LIMITATIONS_20260520.md](../../data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md)).
+    label_keyword_points: list = []
+    label_keyword_meta: list[tuple[int, str, str]] = []
+
     # --- Path -1: Structured Citation explicit fetch ---
     # Khi câu hỏi đề cập trực tiếp "Khoản X Điều Y" / "Điều Y", fetch Components
     # matching cấu trúc này → ép vào output trước (Pass -1 trong allocation phase).
@@ -526,7 +664,8 @@ def hybrid_search(
             f"{len(priority_comp_meta)} comps → {len(priority_points)} text_units"
         )
 
-    if not dense_results and not keyword_results and not graph_results and not priority_points:
+    if (not dense_results and not keyword_results and not graph_results
+            and not priority_points and not label_keyword_points):
         logger.info("hybrid_search: tất cả các path đều rỗng")
         return []
 
@@ -550,6 +689,9 @@ def hybrid_search(
         if p.id not in all_ids:
             all_ids[p.id] = p
     for p in priority_points:
+        if p.id not in all_ids:
+            all_ids[p.id] = p
+    for p in label_keyword_points:
         if p.id not in all_ids:
             all_ids[p.id] = p
 
@@ -686,6 +828,36 @@ def hybrid_search(
             if _try_add(rrf_val, point):
                 pass_neg1_count += 1
 
+    # Pass -0.5 (LABEL-KEYWORD BOOST): top-1 per norm theo CONTENT TOKEN OVERLAP
+    # Sử dụng label_keyword_meta đã fetch từ Path -0.5: list (score, cid, nid)
+    # sorted by overlap_score desc, capped max_per_norm=3.
+    pass_neg05_count = 0
+    if label_keyword_meta and label_keyword_points:
+        # Map component_id → text_unit points
+        cid_to_points: dict[str, list] = {}
+        for p in label_keyword_points:
+            cid = p.payload.get("component_id", "")
+            cid_to_points.setdefault(cid, []).append(p)
+        # Allocate top-1 per norm theo score order
+        seen_norms_in_pass_neg05: set = set()
+        for score, cid, nid in label_keyword_meta:
+            if len(results) >= top_k:
+                break
+            if nid in seen_norms_in_pass_neg05:
+                continue
+            pts = cid_to_points.get(cid, [])
+            if not pts:
+                continue
+            # Lấy point đầu tiên của component (1 TextUnit per Component thường)
+            point = pts[0]
+            if point.id in used_point_ids:
+                seen_norms_in_pass_neg05.add(nid)
+                continue
+            rrf_val = _rrf_for(point)
+            if _try_add(rrf_val, point):
+                seen_norms_in_pass_neg05.add(nid)
+                pass_neg05_count += 1
+
     # Pass 0 (DENSE FLOOR): top-1 per norm theo DENSE RANK
     seen_norms_in_pass0: set = set()
     for point in dense_results:  # already sorted by dense score desc
@@ -700,7 +872,7 @@ def hybrid_search(
         rrf_val = _rrf_for(point)
         if _try_add(rrf_val, point):
             seen_norms_in_pass0.add(nid)
-    pass0_count = len(results) - pass_neg1_count
+    pass0_count = len(results) - pass_neg1_count - pass_neg05_count
 
     # Pass 1: top-1 per norm theo RRF (bổ sung norms chưa có trong Pass 0)
     seen_norms_in_pass1: set = set(seen_norms_in_pass0)
@@ -727,8 +899,9 @@ def hybrid_search(
         tier_dist = {t: c for t, c in sorted(tier_count.items(), key=lambda x: (x[0] is None, x[0]))}
         logger.info(
             f"hybrid_search: top-{len(results)} | pass-1(struct-cite)={pass_neg1_count}, "
-            f"pass0(dense-floor)={pass0_count}, pass1(rrf-breadth)={pass1_count}, "
-            f"pass2(depth)={len(results) - pass_neg1_count - pass0_count - pass1_count} | "
+            f"pass-0.5(label-keyword)={pass_neg05_count}, pass0(dense-floor)={pass0_count}, "
+            f"pass1(rrf-breadth)={pass1_count}, "
+            f"pass2(depth)={len(results) - pass_neg1_count - pass_neg05_count - pass0_count - pass1_count} | "
             f"caps: per_norm={_MAX_PER_NORM}, per_tier={_MAX_PER_TIER} | "
             f"best rrf={results[0]['rrf_score']:.4f} | tier_dist={tier_dist} | norm_dist={norm_dist}"
         )

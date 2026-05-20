@@ -1,0 +1,189 @@
+[
+  {
+    "id": "Q001",
+    "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "difficulty": "easy",
+    "ground_truth_answer": "Theo Quyết định 69/2024/QĐ-UBND TP.HCM Điều 3, hạn mức giao đất ở cho cá nhân tại TP.HCM được phân theo khu vực: (1) các quận nội thành (Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân) và TP Thủ Đức không quá 160 m²/cá nhân; (2) thị trấn các huyện và khu vực đã thực hiện dự án đô thị mới tại Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ không quá 200 m²/cá nhân; (3) các xã của 5 huyện trên không quá 250 m²/cá nhân.",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap 2 — cặp với Q002 (Đồng Nai). Câu trả lời chấp nhận được nếu nêu đủ 3 mức 160/200/250 m²."
+  },
+  {
+    "id": "Q002",
+    "question": "Hạn mức giao đất ở cho cá nhân tại tỉnh Đồng Nai tối đa là bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "difficulty": "easy",
+    "ground_truth_answer": "Theo Quyết định 92/2025/QĐ-UBND Đồng Nai Điều 3, hạn mức giao đất ở cho cá nhân tại Đồng Nai phân theo khu vực đô thị và nông thôn: (1) tại đô thị: nhóm phường loại I (Biên Hòa, Trấn Biên, Tam Hiệp, Long Bình, ...) không quá 200 m², nhóm phường loại II (Minh Hưng, Chơn Thành, Bình Long, ...) không quá 300 m²; (2) tại nông thôn: nhóm xã loại I (Đại Phước, Nhơn Trạch, ...) không quá 300 m², nhóm xã loại II (Nha Bích, Tân Quan, ...) không quá 400 m².",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+      },
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": "b",
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+      },
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": "a",
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+      },
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": "b",
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap 2 — cặp với Q001. Hạn mức Đồng Nai (200-400 m²) cao hơn TP.HCM (160-250 m²)."
+  },
+  {
+    "id": "Q006",
+    "question": "Mức phí công chứng hợp đồng chuyển nhượng quyền sử dụng đất hiện nay là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "difficulty": "easy",
+    "ground_truth_answer": "Câu hỏi này không có đáp án trong phạm vi corpus đang đánh giá. Phí công chứng được quy định bởi Luật Công chứng và Thông tư của Bộ Tài chính, không thuộc bộ văn bản về Đất đai trong scope của hệ thống. Hệ thống cần từ chối trả lời hoặc nêu rõ ngoài phạm vi, không được bịa số liệu.",
+    "ground_truth_citations": [],
+    "relevant_component_ids": [],
+    "notes": "Negative case — câu hỏi nghe liên quan đất đai (chuyển nhượng QSDĐ) nhưng phí công chứng nằm ở pháp luật công chứng."
+  },
+  {
+    "id": "Q007",
+    "question": "Mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại TP.HCM được quy định như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "difficulty": "medium",
+    "ground_truth_answer": "Nghị quyết 02/2023/NQ-HĐND TP.HCM Điều 1 quy định nguyên tắc mức thu phí thẩm định hồ sơ cấp GCN tại TP.HCM (cơ chế thu 85% giữ lại / 15% ngân sách, miễn cho hộ nghèo). Phụ lục kèm theo liệt kê chi tiết mức thu cụ thể theo từng loại hình hồ sơ (Phụ lục, Khoản 2, các điểm a-i cho cấp lần đầu, cấp đổi, đăng ký biến động).",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm"
+      },
+      {
+        "dieu": "_default",
+        "khoan": "2",
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "phu_luc"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap 2 — cặp với Q008 (Đồng Nai). HCM dùng cơ chế thu 85/15. GT cập nhật 2026-05-17 sau dry run: bổ sung Phụ lục (dieu='_default' vì NQ 02/2023 chỉ có 1 Phụ lục duy nhất không đánh số). LLM cite Phụ lục là hợp lệ vì đó là chỗ chứa bảng phí cụ thể."
+  },
+  {
+    "id": "Q008",
+    "question": "Mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại tỉnh Đồng Nai được quy định như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "difficulty": "medium",
+    "ground_truth_answer": "Nghị quyết 22/2024/NQ-HĐND Đồng Nai Điều 1 quy định nguyên tắc mức thu phí thẩm định hồ sơ cấp GCN tại Đồng Nai (giữ lại 100%, miễn cho hộ nghèo/cận nghèo/người cao tuổi/khuyết tật/có công). Chi tiết mức thu xem Phụ lục I (cấp lần đầu) và Phụ lục II (cấp mới, cấp đổi, đăng ký biến động); hồ sơ trực tuyến có ưu đãi giảm phí.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai"
+      },
+      {
+        "dieu": "I",
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      {
+        "dieu": "II",
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap 2 — cặp với Q007. ĐN khác HCM ở cơ chế giữ lại 100%. GT cập nhật 2026-05-17 bổ sung Phụ lục I (cấp lần đầu) + Phụ lục II (cấp đổi/biến động) — LLM cite Phụ lục là hợp lệ vì chứa bảng phí cụ thể."
+  },
+  {
+    "id": "Q020",
+    "question": "Năm 2020, hạn mức giao đất ở cho cá nhân tại Quận 1 TP.HCM được quy định ở văn bản nào và mức bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Năm 2020, hạn mức giao đất ở tại Quận 1 TP.HCM được quy định bởi Quyết định 18/2016/QĐ-UBND (hiệu lực từ 26/5/2016 đến 29/9/2024). Theo Điều 1 khoản 1 điểm a, hạn mức là KHÔNG QUÁ 160m²/hộ. Đây là văn bản đã hết hiệu lực và được thay thế bởi Quyết định 69/2024/QĐ-UBND TP.HCM từ ngày 30/9/2024.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #1 — TƯỜNG MINH THỜI ĐIỂM (năm 2020). temporal_intent.has_temporal_context=True, temporal_anchor='2020', case_status=null. Pipeline phải retrieve QĐ 18/2016 (active 2016-2024) và LLM cite đúng. Test khả năng phân biệt văn bản còn/hết hiệu lực qua metadata header '[... HẾT HIỆU LỰC]'."
+  },
+  {
+    "id": "Q022",
+    "question": "Hồ sơ giao đất ở của tôi nộp tháng 6/2024 nhưng đến nay (tháng 10/2024) vẫn chưa có quyết định cuối cùng, áp dụng hạn mức theo Quyết định 18/2016 hay Quyết định 69/2024?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Hồ sơ nộp 6/2024 chưa có quyết định cuối khi QĐ 69/2024 có hiệu lực (30/9/2024). Quyết định 69/2024 KHÔNG có điều khoản chuyển tiếp bảo lưu cho hồ sơ dở dang. Áp dụng nguyên tắc 'cắt ngang' — hồ sơ chưa có quyết định hành chính cuối cùng sẽ áp dụng QĐ 69/2024 (hạn mức mới). Quy định cụ thể hạn mức theo phân loại quận tại Điều 3 QĐ 69/2024. Hệ thống NÊN HỎI LẠI user: quyết định hành chính cuối cùng chưa? loại đất gì? đang tại quận/huyện nào?",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #3 — HỒ SƠ DỞ DANG (case_status='do-dang'). temporal_intent.has_temporal_context=True, temporal_anchor='2024-06' (hoặc 'unspecified_past'). Pipeline phải: (a) retrieve cả QĐ 18 lẫn QĐ 69; (b) trình bày nguyên tắc 'pháp luật không hồi tố' + 'cắt ngang'; (c) HỎI LẠI user trạng thái hồ sơ. KHÔNG được im lặng bỏ qua QĐ 18."
+  },
+  {
+    "id": "Q024",
+    "question": "Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Tại năm 2024 (trước ngày Luật 47/2024/QH15 sửa đổi có hiệu lực 01/07/2025), Luật Đất đai 2024 Điều 116 khoản 5 quy định: căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở, hoặc chuyển mục đích các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia đình, cá nhân là 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị đã được cơ quan có thẩm quyền phê duyệt'. (Lưu ý: cụm từ 'pháp luật về quy hoạch đô thị' đã được Luật 47/2024/QH15 thay thế bằng 'pháp luật về quy hoạch đô thị và nông thôn' kể từ 01/07/2025.)",
+    "ground_truth_citations": [
+      {
+        "dieu": "116",
+        "khoan": "5",
+        "van_ban": "luat-dat-dai-2024"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #5 — MULTI-CTV CẤP COMPONENT. has_temporal_context=True, temporal_anchor='2024' → end-of-year 2024-12-31. Pipeline phải retrieve CTV_v0 (active 2024-08-01 → 2025-06-30) của Component Đ116 K5, trả về TextUnit GỐC chứa 'pháp luật về quy hoạch đô thị' (KHÔNG có 'và nông thôn'). Đây là demo Cấp B multi-version CTV — TextUnit khác nhau theo từng phiên bản thời gian. Pipeline phải KHÔNG retrieve CTV_v1 (2025-07-01 → sentinel) tại thời điểm 2024."
+  }
+]
