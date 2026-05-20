@@ -28,7 +28,14 @@ CONFIGS = [
     ("+ parse_citations dedupe", "results_graphrag_reused_20260519-195317.json", "v2.3+dedupe"),
     ("+ Prompt TEMPORAL #4", "results_graphrag_20260519-204426.json", "v2.4"),
     ("+ Dense Floor (Pass 0)", "results_graphrag_20260519-212405.json", "v2.5"),
-    ("+ Structured Cite (Pass -1)", "results_graphrag_20260520-merged_pass-neg1.json", "v2.6"),
+    ("+ Structured Cite (Pass -1) [N=3 mean]", "results_graphrag_20260520-205113.json", "v2.6"),
+]
+
+# Repro N=3 cho v2.6 — list các runs cùng code state
+V26_REPRO_RUNS = [
+    "results_graphrag_20260520-205113.json",
+    "results_graphrag_20260520-210859.json",
+    "results_graphrag_20260520-211930.json",
 ]
 
 
@@ -61,6 +68,40 @@ def _aggregate(results: list[dict]) -> dict:
     }
 
 
+def _aggregate_repro_n3(filenames: list[str]) -> dict:
+    """Compute mean across N runs cho v2.6 final config."""
+    import math, statistics
+    aggs = []
+    for fname in filenames:
+        path = DATA_DIR / fname
+        if not path.exists():
+            continue
+        data = json.loads(path.read_text(encoding="utf-8"))
+        aggs.append(_aggregate(data["results"]))
+    if not aggs:
+        return {}
+    def _safe_mean(key):
+        vals = [a[key] for a in aggs if a.get(key) is not None]
+        return statistics.mean(vals) if vals else 0.0
+    def _safe_std(key):
+        vals = [a[key] for a in aggs if a.get(key) is not None]
+        return statistics.stdev(vals) if len(vals) > 1 else 0.0
+    return {
+        "n": aggs[0]["n"],
+        "f1_khoan": _safe_mean("f1_khoan"),
+        "f1_khoan_std": _safe_std("f1_khoan"),
+        "f1_dieu": _safe_mean("f1_dieu"),
+        "norm_recall": _safe_mean("norm_recall"),
+        "latency_s": _safe_mean("latency_s"),
+        "negative_rate": _safe_mean("negative_rate"),
+        "gap_f1": {
+            g: statistics.mean([a["gap_f1"].get(g, 0) for a in aggs])
+            for g in set().union(*(a.get("gap_f1", {}).keys() for a in aggs))
+        },
+        "n_runs": len(aggs),
+    }
+
+
 def build_table() -> str:
     """Build markdown table."""
     rows = []
@@ -76,19 +117,28 @@ def build_table() -> str:
                  " (Claude Sonnet 4.6), cùng eval-mode (force_jurisdiction +"
                  " bypass_completeness). **Chỉ khác retrieval/parsing logic**.")
     lines.append("")
+    lines.append("**Reproducibility note**: v2.6 final config có N=3 runs cùng"
+                 " code state với `--no-llm-cache` để measure variance. Các config"
+                 " trước (v2.3-v2.5) là N=1 — variance không đo nhưng cùng order"
+                 " of magnitude (xem REPRODUCIBILITY_REPORT_20260520.md).")
+    lines.append("")
     lines.append("## Aggregate metrics")
     lines.append("")
     lines.append("| # | Configuration | F1 Khoản | F1 Điều | NormR | Latency (s) | Neg. correct | Δ vs Baseline | Δ vs Prev |")
     lines.append("|---|---|---:|---:|---:|---:|---:|---:|---:|")
 
     aggregates = []
-    for label, fname, _key in CONFIGS:
+    for label, fname, key in CONFIGS:
         path = DATA_DIR / fname
         if not path.exists():
             lines.append(f"| ? | {label} | _(file missing: {fname})_ | | | | | | |")
             continue
-        data = json.loads(path.read_text(encoding="utf-8"))
-        agg = _aggregate(data["results"])
+        # v2.6 dùng N=3 reproducibility mean thay vì single run
+        if key == "v2.6":
+            agg = _aggregate_repro_n3(V26_REPRO_RUNS)
+        else:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            agg = _aggregate(data["results"])
         aggregates.append((label, agg))
 
         if baseline_f1 is None:
@@ -104,9 +154,10 @@ def build_table() -> str:
         if label == "v2.3 GraphRAG canonical":
             canonical_f1 = agg["f1_khoan"]
 
+        std_suffix = f" ±{agg.get('f1_khoan_std', 0):.3f}" if agg.get("f1_khoan_std") else ""
         lines.append(
             f"| {len(aggregates)} | {label} "
-            f"| **{agg['f1_khoan']:.3f}** | {agg['f1_dieu']:.3f} | {agg['norm_recall']:.3f} "
+            f"| **{agg['f1_khoan']:.3f}**{std_suffix} | {agg['f1_dieu']:.3f} | {agg['norm_recall']:.3f} "
             f"| {agg['latency_s']:.2f} | {agg['negative_rate']:.0%} "
             f"| {delta_baseline} | {delta_prev} |"
         )
