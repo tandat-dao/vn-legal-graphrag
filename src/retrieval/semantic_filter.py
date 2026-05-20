@@ -28,6 +28,99 @@ from src.ingestion.vectorizer import encode_text
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Structured Citation Extraction — for Pass -1 boost
+# ---------------------------------------------------------------------------
+# Khi câu hỏi đề cập trực tiếp tham chiếu cấu trúc ("Khoản X Điều Y", "Điều Y"),
+# Pass -1 ép Components matching cấu trúc này vào output trước cả Pass 0
+# (dense floor). Lý do: user (chuyên viên pháp lý) thường truy vấn trực tiếp
+# điều khoản; embedding similarity có thể không xếp đúng chunk lên đầu do
+# label dài và mâu thuẫn với câu hỏi tự nhiên.
+#
+# Phải robust với: dấu thanh tiếng Việt (Khoản/Khoản), dạng số (1/01), Điểm.
+_STRUCT_CITE_KHOAN_RE = re.compile(
+    r"[Kk]ho[ảà]n\s+(\d+\w*)\s+(?:c[ủù]a\s+)?[ĐĐdd]i[ềê]u\s+(\d+\w*)",
+)
+_STRUCT_CITE_DIEU_ONLY_RE = re.compile(
+    r"[ĐĐdd]i[ềê]u\s+(\d+\w*)"
+)
+
+
+def _extract_struct_cites(question: str) -> list[tuple[str, str | None]]:
+    """Trả về list (dieu, khoan|None) từ câu hỏi.
+
+    Quy tắc:
+      - "Khoản X Điều Y" hoặc "Khoản X của Điều Y" → (Y, X)
+      - "Điều Y" trần (không có Khoản đi kèm) → (Y, None)
+      - Loại trùng: nếu (Y, X) đã có thì bỏ qua (Y, None)
+
+    Returns:
+        List of tuples sorted để deterministic.
+    """
+    pairs: list[tuple[str, str | None]] = []
+    seen_dieu_with_khoan: set[str] = set()
+    # Pass khoan+dieu trước (specific hơn)
+    for m in _STRUCT_CITE_KHOAN_RE.finditer(question):
+        khoan, dieu = m.group(1), m.group(2)
+        key = (dieu, khoan)
+        if key not in pairs:
+            pairs.append(key)
+            seen_dieu_with_khoan.add(dieu)
+    # Sau đó dieu-only (skip nếu đã có khoan của dieu đó)
+    for m in _STRUCT_CITE_DIEU_ONLY_RE.finditer(question):
+        dieu = m.group(1)
+        if dieu in seen_dieu_with_khoan:
+            continue
+        key_dieu_only = (dieu, None)
+        if key_dieu_only not in pairs:
+            pairs.append(key_dieu_only)
+    return pairs
+
+
+def _fetch_components_matching_cites(
+    cites: list[tuple[str, str | None]],
+    norm_ids: list[str],
+    neo4j_driver,
+) -> dict[str, dict]:
+    """Fetch Component IDs matching structured citation patterns trong norms.
+
+    Cho mỗi (dieu, khoan|None), tìm Components có label STARTS WITH 'Điều {dieu}.'
+    AND (nếu khoan != None) CONTAINS 'Khoản {khoan}.'.
+
+    Returns:
+        Dict {component_id: {label, norm_id, dieu, khoan}}.
+    """
+    if not cites or not norm_ids or neo4j_driver is None:
+        return {}
+    result: dict[str, dict] = {}
+    with neo4j_driver.session() as sess:
+        for dieu, khoan in cites:
+            dieu_pat = f"Điều {dieu}."
+            if khoan is not None:
+                khoan_pat = f"Khoản {khoan}."
+                rows = sess.run(
+                    "MATCH (n:Norm)-[:HAS_COMPONENT]->(c:Component) "
+                    "WHERE n.id IN $norms AND c.label STARTS WITH $dieu_pat "
+                    "AND c.label CONTAINS $khoan_pat "
+                    "RETURN c.id AS cid, c.label AS label, n.id AS norm_id",
+                    norms=norm_ids, dieu_pat=dieu_pat, khoan_pat=khoan_pat,
+                ).data()
+            else:
+                rows = sess.run(
+                    "MATCH (n:Norm)-[:HAS_COMPONENT]->(c:Component) "
+                    "WHERE n.id IN $norms AND c.label STARTS WITH $dieu_pat "
+                    "RETURN c.id AS cid, c.label AS label, n.id AS norm_id",
+                    norms=norm_ids, dieu_pat=dieu_pat,
+                ).data()
+            for r in rows:
+                if r["cid"] not in result:
+                    result[r["cid"]] = {
+                        "label": r["label"], "norm_id": r["norm_id"],
+                        "dieu": dieu, "khoan": khoan,
+                    }
+    return result
+
+
 _RRF_K = 60
 _DENSE_POOL_MULTIPLIER = 2   # lấy 2*top_k từ dense search trước khi re-rank
 _DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng viên dense
@@ -402,7 +495,38 @@ def hybrid_search(
         )
         graph_results = points
 
-    if not dense_results and not keyword_results and not graph_results:
+    # --- Path -1: Structured Citation explicit fetch ---
+    # Khi câu hỏi đề cập trực tiếp "Khoản X Điều Y" / "Điều Y", fetch Components
+    # matching cấu trúc này → ép vào output trước (Pass -1 trong allocation phase).
+    # Đây là **additive boost** (không filter strict): nếu pattern không match,
+    # priority_points = [] và pipeline fallback về dense/keyword/graph + Pass 0/1/2.
+    struct_cites = _extract_struct_cites(question)
+    priority_points = []
+    priority_comp_meta: dict[str, dict] = {}
+    if struct_cites and neo4j_driver is not None:
+        priority_comp_meta = _fetch_components_matching_cites(struct_cites, norm_ids, neo4j_driver)
+        if priority_comp_meta:
+            cite_filter = Filter(
+                must=[
+                    FieldCondition(key="content_type", match=MatchValue(value="text_unit")),
+                    FieldCondition(key="norm_id", match=MatchAny(any=norm_ids)),
+                    FieldCondition(key="component_id", match=MatchAny(any=list(priority_comp_meta.keys()))),
+                ]
+            )
+            pts, _ = qdrant_client.scroll(
+                "legal_texts",
+                scroll_filter=cite_filter,
+                limit=200,
+                with_payload=True,
+                with_vectors=False,
+            )
+            priority_points = pts
+        logger.info(
+            f"hybrid_search Path -1 (struct cite): cites={struct_cites} → "
+            f"{len(priority_comp_meta)} comps → {len(priority_points)} text_units"
+        )
+
+    if not dense_results and not keyword_results and not graph_results and not priority_points:
         logger.info("hybrid_search: tất cả các path đều rỗng")
         return []
 
@@ -415,7 +539,7 @@ def hybrid_search(
     dense_rank_map: dict[int, int] = {p.id: rank for rank, p in enumerate(dense_results)}
     keyword_rank_map: dict[int, int] = {p.id: rank for rank, p in enumerate(keyword_results)}
 
-    # Tập hợp tất cả point IDs từ cả 3 path
+    # Tập hợp tất cả point IDs từ cả 4 path (dense, keyword, graph, priority)
     all_ids: dict[int, object] = {}
     for p in dense_results:
         all_ids[p.id] = p
@@ -423,6 +547,9 @@ def hybrid_search(
         if p.id not in all_ids:
             all_ids[p.id] = p
     for p in graph_results:
+        if p.id not in all_ids:
+            all_ids[p.id] = p
+    for p in priority_points:
         if p.id not in all_ids:
             all_ids[p.id] = p
 
@@ -544,6 +671,21 @@ def hybrid_search(
             )
         return _rrf_score(dr, kr, is_graph_boosted=is_boosted, tier=tier, rarity_score=rarity)
 
+    # Pass -1 (STRUCTURED CITATION BOOST): force priority components vào output
+    # Lý do: khi user gõ trực tiếp "Khoản X Điều Y" (chuyên viên pháp lý), retrieval
+    # PHẢI bảo đảm chunk khớp cấu trúc xuất hiện trong context, bất kể dense rank
+    # hay graph_boost ưu tiên gì khác. Quan sát Q026: GT là "Đ13 K1 NĐ 49" nhưng
+    # dense top của NĐ 49 = K11/K12 vì label dài 200+ chars chứa metadata sửa
+    # đổi → mô hình embedding match toàn label, không phân biệt được Khoản.
+    pass_neg1_count = 0
+    if priority_points:
+        for point in priority_points:
+            if len(results) >= top_k:
+                break
+            rrf_val = _rrf_for(point)
+            if _try_add(rrf_val, point):
+                pass_neg1_count += 1
+
     # Pass 0 (DENSE FLOOR): top-1 per norm theo DENSE RANK
     seen_norms_in_pass0: set = set()
     for point in dense_results:  # already sorted by dense score desc
@@ -552,10 +694,13 @@ def hybrid_search(
         nid = point.payload.get("norm_id", "")
         if nid in seen_norms_in_pass0:
             continue
+        if point.id in used_point_ids:
+            seen_norms_in_pass0.add(nid)
+            continue
         rrf_val = _rrf_for(point)
         if _try_add(rrf_val, point):
             seen_norms_in_pass0.add(nid)
-    pass0_count = len(results)
+    pass0_count = len(results) - pass_neg1_count
 
     # Pass 1: top-1 per norm theo RRF (bổ sung norms chưa có trong Pass 0)
     seen_norms_in_pass1: set = set(seen_norms_in_pass0)
@@ -581,9 +726,9 @@ def hybrid_search(
         norm_dist = {n: c for n, c in norm_count.items()}
         tier_dist = {t: c for t, c in sorted(tier_count.items(), key=lambda x: (x[0] is None, x[0]))}
         logger.info(
-            f"hybrid_search: top-{len(results)} | pass0(dense-floor)={pass0_count}, "
-            f"pass1(rrf-breadth)={pass1_count}, "
-            f"pass2(depth)={len(results) - pass0_count - pass1_count} | "
+            f"hybrid_search: top-{len(results)} | pass-1(struct-cite)={pass_neg1_count}, "
+            f"pass0(dense-floor)={pass0_count}, pass1(rrf-breadth)={pass1_count}, "
+            f"pass2(depth)={len(results) - pass_neg1_count - pass0_count - pass1_count} | "
             f"caps: per_norm={_MAX_PER_NORM}, per_tier={_MAX_PER_TIER} | "
             f"best rrf={results[0]['rrf_score']:.4f} | tier_dist={tier_dist} | norm_dist={norm_dist}"
         )

@@ -389,13 +389,10 @@
       {
         "dieu": "13",
         "khoan": "1",
-        "van_ban": "nghi-dinh-102-2024-nd-cp"
-      },
-      {
         "van_ban": "nghi-dinh-49-2026-nd-cp"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "AMENDED_BY direct test — đo trực tiếp Ý 2 (AMENDED_BY exploitation). Pipeline phải: (a) retrieve Component Đ13 K1 của NĐ 102/2024/NĐ-CP; (b) surface Amendment node liên kết qua [:AMENDED_BY] với amending_norm='nghi-dinh-49-2026-nd-cp', effective_date='2026-01-31', summary='sửa đổi, bổ sung khoản này'; (c) Answer Generator phải cite CẢ amending norm trong citations (không chỉ norm gốc). GT citations BẮT BUỘC chứa nghi-dinh-49-2026-nd-cp → F1 sẽ phạt recall nếu LLM bỏ sót amending norm. Hôm nay 2026-05-19 (sau 31/01/2026) → amendment đã hiệu lực; câu hỏi không yêu cầu nội dung sau sửa đổi mà chỉ hỏi 'văn bản nào sửa + hiệu lực ngày nào' → đáp án thuần metadata, không cần TextUnit của bản sửa đổi."
+    "notes": "AMENDED_BY direct test — đo trực tiếp Ý 2 (AMENDED_BY exploitation). GT FIX 2026-05-20: nghi-dinh-102-2024-nd-cp KHÔNG có Điều 13 trong scope corpus hiện tại (data/raw/ chỉ có Điều 1-12, rồi 14+), do D-01/D-05 thu thập theo chương — chương chứa Điều 13 không thuộc scope CMĐSDĐ cá nhân. Vì vậy GT chỉ có thể reference AMENDING provision tại NĐ 49 Điều 13 Khoản 1 (chunk này tồn tại trong graph với id 75a8fa9705c58b2e, chứa text sửa đổi). Pipeline phải: (a) detect explicit reference 'Khoản 1 Điều 13 NĐ 102/2024' trong câu hỏi; (b) qua AMENDED_BY edge trỏ tới NĐ 49 Đ13 K1; (c) cite chính xác Khoản 1 Điều 13 NĐ 49 (không phải Khoản 11/12 dù cũng được sửa bởi NĐ 49). F1 cấp Khoản đo retrieval-depth chính xác."
   }
 ]
