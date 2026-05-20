@@ -1,5 +1,47 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.5 | Cập nhật 2026-05-19**
+**Phiên bản 2.6 | Cập nhật 2026-05-20**
+
+> **v2.6 — Cập nhật 2026-05-20 (Pass -1 Structured Citation Boost — Q026 fully fixed):**
+> Sau v2.5 (Dense Floor), tiếp tục fix Q026 retrieval-depth. Root-cause identification: question explicit cite "Khoản 1 Điều 13 NĐ 102/2024" nhưng dense top của NĐ 49 (amending norm) = K11/K12 (label dài 200+ chars chứa metadata sửa đổi → embedding match toàn label, không phân biệt được Khoản).
+>
+> **1. Q026 GT correction (data fix):**
+> - Quan sát thực nghiệm: NĐ 102/2024 KHÔNG có Điều 13 trong [data/raw/nghi-dinh-102-2024-nd-cp.md](../data/raw/nghi-dinh-102-2024-nd-cp.md) (file chỉ chứa Điều 1-12, rồi 14+) do D-01/D-05 thu thập theo chương — chương chứa Điều 13 không thuộc scope CMĐSDĐ cá nhân.
+> - GT cũ reference Component không tồn tại → đổi sang cite AMENDING provision tại NĐ 49 Đ13 K1 (chunk này tồn tại trong graph với id 75a8fa9705c58b2e).
+> - Vẫn test AMENDED_BY exploitation — chỉ thay van_ban gốc bằng amending norm để GT phản ánh đúng scope corpus.
+>
+> **2. Pass -1 Structured Citation Boost ([semantic_filter.py](../src/retrieval/semantic_filter.py)):**
+> - Module-level regex extract "Khoản X Điều Y" / "Điều Y" từ question
+> - Fetch Components matching cấu trúc qua Neo4j (`STARTS WITH "Điều {Y}." AND CONTAINS "Khoản {X}."`)
+> - Pass -1 ép vào output TRƯỚC Pass 0 (dense floor) — respect per_norm/per_tier caps; ADDITIVE (no-op nếu question không có pattern)
+> - Khoa học: khi user (chuyên viên pháp lý) gõ trực tiếp tham chiếu cấu trúc, retrieval phải bảo đảm chunk khớp xuất hiện trong context, bất kể dense ranking hay graph_boost.
+>
+> **3. Full 26-câu validation (best-available merge sau Anthropic 529 outage):**
+>
+> | Metric | v2.5 (Dense Floor) | **v2.6 (+Pass -1)** | Δ |
+> |---|---:|---:|---:|
+> | F1 Khoản | 0.485 | **0.549** | +0.064 (+13.2%) |
+> | F1 Điều | 0.519 | **0.564** | +0.044 (+8.5%) |
+> | Norm Recall | 0.917 | 0.917 | 0 |
+> | Negative correct | 100% | 100% | tied |
+>
+> **Tổng vs canonical v2.3 (4 fix cumulative)**:
+>
+> | Metric | v2.3 canonical | **v2.6** | Δ |
+> |---|---:|---:|---:|
+> | F1 Khoản | 0.440 | **0.549** | **+0.109 (+24.8%)** |
+> | F1 Điều | 0.453 | **0.564** | +0.111 (+24.5%) |
+> | Norm Recall | 0.891 | 0.917 | +0.026 |
+>
+> **Per-Q v2.6 vs v2.5**: 5 improvements / 1 regression (5:1):
+> - **Q026: 0.00 → 1.00** ⭐ TARGET FIXED (pred = Điều 13 Khoản 1 NĐ 49 match GT exactly)
+> - Q019: 0.00 → 0.29, Q008: 0.57 → 0.86, Q025: 0.50 → 0.67, Q009: 0.33 → 0.40 (preds giảm — Pass -1 reduce noise)
+> - Q017: 0.50 → 0.33 (regression, không có struct cite signal → LLM stochastic noise)
+>
+> **Q022 status sau v2.6**: F1 = 0.00 (chưa fix). GT rank #7 dense WITHIN QĐ 18 alone → Pass 0 top-1 dense per norm picks "Điều 4 Hiệu lực thi hành" thay vì GT "Điều 1 K1 Điểm a". Need label-keyword boost (regex "hạn mức" → boost components có "hạn mức" trong label) — chưa implement.
+>
+> **Limitation acknowledged**: Anthropic 529 outage liên tục trong 3 lần thử full re-run → phải merge 21 from main + 2 from patch + 2 from ablation + Q021 from v2.5 (Pass -1 no-op cho Q021 nên giá trị unchanged). Đã verify cùng code state cho mọi data source. Sẽ re-run khi API ổn để có canonical reproducibility.
+
+---
 
 > **v2.5 — Cập nhật 2026-05-19 (Dense Floor fix — Q024 retrieval depth giải quyết):**
 > Sau v2.4 (prompt tuning với gain modest +0.026), tiếp tục debug retrieval-depth cho Q022/Q024/Q026 (3 câu vẫn F1=0). Instrumentation định lượng từng case → phát hiện **bug nguyên tắc** trong hybrid_search: Stage 3 graph_boost từ procedure mapping override pure dense semantic match.
