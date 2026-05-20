@@ -1,5 +1,39 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.6 | Cập nhật 2026-05-20**
+**Phiên bản 2.6.1 | Cập nhật 2026-05-20**
+
+> **v2.6.1 — Cập nhật 2026-05-20 (Label-keyword Boost attempt → REVERT; Q022 documented as limitation):**
+>
+> Sau v2.6 (Pass -1 Struct Cite fix Q026), tiếp tục thử fix Q022 retrieval-depth qua **Label-keyword Boost** (Pass -0.5: lexical overlap content tokens question vs Component label). Empirical ablation 8-câu chứng minh **net F1 -0.055 (-7.9%)** — Gemini's "lexical noise prediction" validated. **REVERT**.
+>
+> **Hypothesis tested**: Q022 GT rank #7 dense trong QĐ 18 alone; lexical-overlap có thể phân biệt được Điều CONTENT-RELEVANT vs Điều META-related.
+>
+> **Empirical failure ([RETRIEVAL_LIMITATIONS_20260520.md](../data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md))**:
+>
+> | Metric | +Pass -1 baseline | +Label-keyword | Δ |
+> |---|---:|---:|---:|
+> | AVG F1 (8 câu) | 0.693 | 0.638 | **−0.055 (−7.9%)** |
+> | Win:Loss count | — | **1:4** | net negative |
+> | Win:Loss magnitude | — | +0.50 vs −0.95 | **1:2 net negative** |
+>
+> Regressions: Q001 (-0.20 canary), Q002 (-0.29 cross-jurisdiction noise), Q008 (-0.19 cross-jurisdiction noise), Q024 (-0.27 canary). Only Q022 +0.50 win.
+>
+> **Root cause Q022 không fix nổi**:
+> - QĐ 18 có MULTIPLE Điều cùng prefix "Hạn mức đất ở" (Điều 1 GT cho "hộ gia đình, cá nhân" vs Điều 3 cho "người có công với cách mạng") — label-overlap score TIE → Cypher row order pick Điều 3 (wrong)
+> - **Embedding semantic blindness**: BGE-M3 KHÔNG phân biệt được target population qua label prefix giống nhau
+> - Lexical overlap đặt thêm noise cross-jurisdiction (Gap 2 cases regress)
+>
+> **Q022 → documented as Limitation cho thesis Discussion chapter.** Future work (out of scope): cross-encoder re-ranking (BGE-Reranker), multi-query expansion, question-aware label filtering.
+>
+> **Phương pháp luận lesson** (Gemini đồng tình):
+> - Empirical evidence trumps a priori reasoning **both ways**:
+>   - Gemini's "regex = overfitting" predicted wrong → Pass -1 Struct Cite work (Q026 +1.0)
+>   - Gemini's "label-keyword = p-hacking" predicted right → Pass -0.5 fail (net -0.055)
+> - Quyết định per-case dựa trên ablation, không dogma.
+> - Helper functions giữ trong code (inactive) để future cross-encoder reuse.
+>
+> **System state v2.6.1 unchanged vs v2.6**: F1 Khoản 0.549 (Q022 vẫn = 0.00; Pass -0.5 reverted nên không tác động). Active retrieval enhancements: Pass -1 Struct Cite + Pass 0 Dense Floor + Pass 1/2 RRF.
+
+---
 
 > **v2.6 — Cập nhật 2026-05-20 (Pass -1 Structured Citation Boost — Q026 fully fixed):**
 > Sau v2.5 (Dense Floor), tiếp tục fix Q026 retrieval-depth. Root-cause identification: question explicit cite "Khoản 1 Điều 13 NĐ 102/2024" nhưng dense top của NĐ 49 (amending norm) = K11/K12 (label dài 200+ chars chứa metadata sửa đổi → embedding match toàn label, không phân biệt được Khoản).
