@@ -8,10 +8,12 @@ Quy tắc tự động:
   - Hộ tịch và Nuôi con nuôi luôn gán jurisdiction = "toan-quoc" (không hỏi lại)
   - Đất đai không có jurisdiction → is_complete = False, missing_fields = ["jurisdiction"]
 """
+import hashlib
 import json
 import logging
 import os
 import re
+from pathlib import Path
 
 import anthropic
 from dotenv import load_dotenv
@@ -157,8 +159,55 @@ class QueryPlan(TypedDict):
 # Core functions
 # ---------------------------------------------------------------------------
 
-def _call_llm(client: anthropic.Anthropic, question: str) -> dict:
-    """Gọi Claude Haiku, parse JSON response."""
+# ---------------------------------------------------------------------------
+# LLM cache cho plan_query — song song answer_generator. Mục đích: tránh
+# block toàn pipeline khi Anthropic 529 outage (đã quan sát kéo dài hàng giờ).
+# Cache key = hash(MODEL + SYSTEM_PROMPT + question) → invalidate tự động khi
+# prompt template thay đổi. Default cache dir = data/evaluation/.planner_cache/.
+# ---------------------------------------------------------------------------
+
+_DEFAULT_PLANNER_CACHE_DIR = Path("data/evaluation/.planner_cache")
+
+
+def _planner_cache_key(question: str) -> str:
+    return hashlib.sha256(
+        f"{MODEL}|{_SYSTEM_PROMPT}|{question}".encode()
+    ).hexdigest()[:16]
+
+
+def _planner_cache_get(cache_dir: Path | None, key: str) -> dict | None:
+    if cache_dir is None:
+        return None
+    fp = cache_dir / f"{key}.json"
+    if not fp.exists():
+        return None
+    try:
+        return json.loads(fp.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def _planner_cache_put(cache_dir: Path | None, key: str, data: dict) -> None:
+    if cache_dir is None:
+        return
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    (cache_dir / f"{key}.json").write_text(
+        json.dumps(data, ensure_ascii=False), encoding="utf-8"
+    )
+
+
+def _call_llm(
+    client: anthropic.Anthropic,
+    question: str,
+    cache_dir: Path | None = _DEFAULT_PLANNER_CACHE_DIR,
+) -> dict:
+    """Gọi Claude Haiku để plan câu hỏi, parse JSON response. Có cache."""
+    key = _planner_cache_key(question)
+    cached = _planner_cache_get(cache_dir, key)
+    if cached is not None:
+        logger.info(f"plan_query: cache HIT ({key}) — $0 API")
+        return cached
+
     message = client.messages.create(
         model=MODEL,
         max_tokens=256,
@@ -173,10 +222,13 @@ def _call_llm(client: anthropic.Anthropic, question: str) -> dict:
             raw = raw[4:]
         raw = raw.strip()
     try:
-        return json.loads(raw)
+        parsed = json.loads(raw)
     except json.JSONDecodeError as e:
         logger.warning(f"LLM trả về JSON không hợp lệ: {raw!r} — lỗi: {e}")
         return {}
+
+    _planner_cache_put(cache_dir, key, parsed)
+    return parsed
 
 
 def _validate_temporal_intent(raw: dict | None) -> TemporalIntent:
