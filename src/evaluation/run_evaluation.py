@@ -251,6 +251,7 @@ def run_system_on_test_set(
             "confirmation_retried": sys_out["confirmation_retried"],
             "context_used": sys_out["context_used"],
             "top_k_count": sys_out["top_k_count"],
+            "context": sys_out.get("context", ""),  # save cho future faithfulness re-eval
         }
         results.append(result)
 

@@ -69,22 +69,37 @@ def _citation_in_context(citation: dict, context: str) -> bool:
       --- [Tier X | Hiệu lực: ...] Điều Y. <title> > Khoản Z. ... (van-ban-id) ---
 
     Logic: tìm 1 header match (case-insensitive) cùng van_ban + dieu + (khoan
-    nếu specified).
+    nếu specified). Hỗ trợ Phụ lục (loai='phu_luc'): khi dieu='_default'
+    (sentinel cho Phụ lục duy nhất) hoặc loai='phu_luc', match "phụ lục" trong
+    header thay vì "điều X".
     """
     vb = _norm(citation.get("van_ban"))
     dieu = _norm(citation.get("dieu"))
     khoan = _norm(citation.get("khoan"))
-    if not vb or not dieu:
+    loai = _norm(citation.get("loai"))
+    if not vb:
         return False
+    if not dieu and loai != "phu_luc":
+        return False
+
+    is_phu_luc = loai == "phu_luc" or dieu == "_default"
     # Extract headers
     headers = re.findall(r"^---[^\n]*$", context, flags=re.MULTILINE)
     for h in headers:
         h_low = h.lower()
         if vb not in h_low:
             continue
-        # Tìm "điều {dieu}." (có dấu chấm sau số để tránh "Điều 1" match "Điều 10")
-        if f"điều {dieu}." not in h_low:
-            continue
+        if is_phu_luc:
+            # Match "phụ lục" + optional "{dieu}" nếu dieu khác '_default'
+            if "phụ lục" not in h_low:
+                continue
+            if dieu and dieu != "_default":
+                if f"phụ lục {dieu}" not in h_low:
+                    continue
+        else:
+            # Tìm "điều {dieu}." (có dấu chấm sau số để tránh "Điều 1" match "Điều 10")
+            if f"điều {dieu}." not in h_low:
+                continue
         if khoan is not None:
             if f"khoản {khoan}." not in h_low:
                 continue
@@ -108,21 +123,37 @@ Output JSON ONLY:
 
 
 def _extract_chunk_for_citation(citation: dict, context: str) -> str | None:
-    """Lấy nội dung chunk (text + header) tương ứng citation từ context."""
+    """Lấy nội dung chunk (text + header) tương ứng citation từ context.
+
+    Search trong header block đầy đủ (không phải chỉ first 300 chars) vì header
+    của Component sửa đổi (VD NĐ 49 Điều 13) có thể dài 250+ chars trước khi
+    đến "Khoản X" suffix. Hỗ trợ Phụ lục: match "phụ lục" khi loai='phu_luc'.
+    """
     vb = _norm(citation.get("van_ban"))
     dieu = _norm(citation.get("dieu"))
     khoan = _norm(citation.get("khoan"))
-    if not vb or not dieu:
+    loai = _norm(citation.get("loai"))
+    if not vb:
         return None
+    if not dieu and loai != "phu_luc":
+        return None
+    is_phu_luc = loai == "phu_luc" or dieu == "_default"
     # Split context theo header blocks
     blocks = re.split(r"(?=^---[^\n]*$)", context, flags=re.MULTILINE)
     for block in blocks:
-        block_low = block[:300].lower()  # check trong header phần đầu
-        if vb not in block_low:
+        first_line_end = block.find("\n")
+        header = (block[:first_line_end] if first_line_end > 0 else block).lower()
+        if vb not in header:
             continue
-        if f"điều {dieu}." not in block_low:
-            continue
-        if khoan is not None and f"khoản {khoan}." not in block_low:
+        if is_phu_luc:
+            if "phụ lục" not in header:
+                continue
+            if dieu and dieu != "_default" and f"phụ lục {dieu}" not in header:
+                continue
+        else:
+            if f"điều {dieu}." not in header:
+                continue
+        if khoan is not None and f"khoản {khoan}." not in header:
             continue
         return block.strip()
     return None
@@ -176,7 +207,24 @@ CONTEXT CHUNK được cite:
         raw = message.content[0].text.strip()
         if raw.startswith("```"):
             raw = raw.split("```", 2)[1].lstrip("json").strip()
-        parsed = json.loads(raw)
+        # Robust JSON parse — handle multi-line reason strings từ LLM
+        try:
+            parsed = json.loads(raw)
+        except json.JSONDecodeError:
+            # Fallback: regex extract verdict + reason
+            verdict_m = re.search(r'"verdict"\s*:\s*"(SUPPORTED|UNSUPPORTED)"', raw, re.IGNORECASE)
+            reason_m = re.search(r'"reason"\s*:\s*"([^"]*)', raw)
+            if verdict_m:
+                parsed = {
+                    "verdict": verdict_m.group(1).upper(),
+                    "reason": reason_m.group(1) if reason_m else raw[:200],
+                }
+            else:
+                # Last resort: detect SUPPORTED/UNSUPPORTED keyword anywhere
+                if "SUPPORTED" in raw.upper() and "UNSUPPORTED" not in raw.upper():
+                    parsed = {"verdict": "SUPPORTED", "reason": raw[:200]}
+                else:
+                    parsed = {"verdict": "UNSUPPORTED", "reason": raw[:200]}
         return {
             "supported": parsed.get("verdict") == "SUPPORTED",
             "reason": parsed.get("reason", ""),
