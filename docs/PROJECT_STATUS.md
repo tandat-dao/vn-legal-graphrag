@@ -1,5 +1,54 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.6.1 | Cập nhật 2026-05-20**
+**Phiên bản 2.7 | Cập nhật 2026-05-20**
+
+> **v2.7 — Cập nhật 2026-05-20 (Demo CLI + Faithfulness + Reproducibility N=3 + Ablation Matrix + Thesis Outline):**
+>
+> Sau v2.6.1 (architecture soft-frozen cho Đất đai), thực hiện 4 task chuẩn bị cho thesis writing:
+>
+> **1. Demo CLI ([src/demo.py](../src/demo.py))** — rich-based UI cho weekly meeting với giảng viên:
+> - Panel câu hỏi / Trả lời (markdown render) / Citations (table) / Thống kê
+> - Status spinner trong khi pipeline chạy ~23s (UX feedback)
+> - `--trace` Tree view cho pipeline stages
+> - Graceful 529 outage handling
+> - **Query Planner cache** mới — tránh block toàn pipeline khi Anthropic API outage
+>
+> **2. Faithfulness metric ([src/evaluation/faithfulness.py](../src/evaluation/faithfulness.py))** — 2-tier citation trustworthiness:
+> - Tier 1 (deterministic, $0): % citations có chunk match trong context — catch hallucination thô
+> - Tier 2 (Claude Haiku judge): % existing citations được context semantically support — catch hallucination tinh vi
+> - Combined: `faithful_rate = #(exist AND supported) / #total`
+> - Hỗ trợ Phụ lục citations (`loai='phu_luc'`, `dieu='_default'`)
+>
+> **3. Reproducibility study N=3 ([REPRODUCIBILITY_REPORT_20260520.md](../data/evaluation/REPRODUCIBILITY_REPORT_20260520.md))**:
+> - 3 independent runs cùng code state, `--no-llm-cache`, measure variance
+> - **F1 Khoản = 0.539 ± 0.021** (95% CI [0.515, 0.563])
+> - **F1 Điều = 0.567 ± 0.032**
+> - **NormR = 0.931 ± 0.005** (cực stable, ~0.5% variation)
+> - Latency = 22.92 ± 0.12s (pipeline deterministic)
+> - **Faithful rate = 0.916 ± 0.069**
+> - Per-Q variance: 5-6 câu σ ≥ 0.1 (Q008 σ=0.22, Q020/Q024 σ=0.19) — LLM stochastic empirically confirmed
+>
+> **4. Ablation Matrix ([ABLATION_MATRIX.md](../data/evaluation/ABLATION_MATRIX.md))**:
+>
+> | Configuration | F1 Khoản | F1 Điều | NormR | Δ vs Baseline |
+> |---|---:|---:|---:|---:|
+> | Baseline (Naive RAG) | 0.295 | 0.295 | 0.699 | — |
+> | v2.3 canonical | 0.440 | 0.453 | 0.891 | +49.1% |
+> | + parse_citations dedupe | 0.461 | 0.476 | 0.891 | +56.3% |
+> | + Prompt TEMPORAL #4 | 0.466 | 0.483 | 0.869 | +58.0% |
+> | + Dense Floor (Pass 0) | 0.485 | 0.519 | 0.917 | +64.6% |
+> | **+ Structured Cite (Pass -1) [N=3]** | **0.539 ±0.021** | **0.567** | **0.931** | **+82.8%** |
+>
+> **Per-Gap final breakdown (v2.6, N=3)**:
+> - Gap 1 (đa lĩnh vực, n=3): F1 0.350 vs Baseline 0.194 (+80%)
+> - Gap 2 (đa địa phương, n=6): F1 0.604 vs Baseline 0.485 (+25%)
+> - **Gap 3 (đa tầng, n=15): F1 0.466 vs Baseline 0.145 (+221%)** ← thesis hypothesis chính được chứng minh statistically
+> - Negative (n=2): 100% vs 100% tied
+>
+> **5. Thesis chapter skeleton ([thesis/CHAPTERS_OUTLINE.md](../thesis/CHAPTERS_OUTLINE.md))**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
+>
+> **Tổng commits session 2026-05-19/20**: 22 commits từ canonical `225b3aa` → `2b72bb8`. F1 Khoản improvement: +22.6% qua 4 fix layers, statistically backed (N=3).
+
+---
 
 > **v2.6.1 — Cập nhật 2026-05-20 (Label-keyword Boost attempt → REVERT; Q022 documented as limitation):**
 >
