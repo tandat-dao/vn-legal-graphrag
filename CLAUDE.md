@@ -10,7 +10,7 @@
 
 **Tên:** Ontology-Driven GraphRAG cho Pháp luật Việt Nam
 **Loại:** Khóa luận tốt nghiệp — 2 thành viên [A] và [B]
-**Mục tiêu kỹ thuật:** Xây dựng hệ thống trả lời câu hỏi pháp lý có trích dẫn, kết hợp Knowledge Graph (Neo4j) và Vector Search (Qdrant), giải quyết 3 gap: đa lĩnh vực, đa địa phương, đa tầng văn bản.
+**Mục tiêu kỹ thuật:** Xây dựng hệ thống trả lời câu hỏi pháp lý có trích dẫn, kết hợp Knowledge Graph (Neo4j) và Vector Search (Qdrant), giải quyết 4 gap: đa lĩnh vực, đa địa phương, đa tầng văn bản, đa phiên bản.
 **Ngôn ngữ user-facing:** Tiếng Việt. Mọi string, log, comment trong code đều bằng tiếng Việt trừ khi là tên kỹ thuật chuẩn (class name, function name, config key).
 
 ---
@@ -162,7 +162,7 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-04 | Tier 1 bao gồm NQ Quốc hội; Tier 4 bao gồm NQ HĐND | NQ QH có giá trị tương đương Luật; NQ HĐND tỉnh có giá trị tương đương QĐ UBND | 2026-04-27 |
 | D-05 | Scope CMĐSDĐ: cá nhân, đất NN trừ lâm nghiệp, sang đất ở | Hạn chế liên đới tới luật lâm nghiệp, luật đầu tư; giảm số văn bản cần thu thập | 2026-04-27 |
 | D-06 | Điều mới hoàn toàn (VD: Điều 44a) thuộc Norm gốc, CTV ghi added_by | Giữ nhất quán cấu trúc bố cục văn bản; truy vết nguồn gốc qua CTV | 2026-04-27 |
-| D-07 | Xóa Procedure node và edge `[:SPECIFIED_IN]` khỏi schema | Manual mapping không scalable; Theme + Jurisdiction filter + `[:IMPLEMENTS]` traversal đã đủ để routing và chứng minh 3 Gap | 2026-05-10 |
+| D-07 | Xóa Procedure node và edge `[:SPECIFIED_IN]` khỏi schema | Manual mapping không scalable; Theme + Jurisdiction filter + `[:IMPLEMENTS]` traversal đã đủ để routing và chứng minh 4 Gap | 2026-05-10 |
 | D-08 | Thêm field `summary` vào frontmatter; Stage 1 retrieval qua summary embedding | Cho phép semantic routing ở cấp Norm mà không cần manual mapping; con người viết đảm bảo độ chính xác pháp lý | 2026-05-10 |
 | D-09 | Thêm edge `[:AMENDS]` (Norm → Norm) cho sửa đổi/bổ sung | Phân biệt với `[:IMPLEMENTS]` (hướng dẫn thi hành) — VD: NQ 254 AMENDS Luật ĐĐ, NĐ 49 IMPLEMENTS NQ 254. Stage 2 traversal qua `[:IMPLEMENTS|AMENDS*1..4]` undirected | 2026-05-19 |
 | D-10 | Pass 0 Dense Floor trong `hybrid_search` — top-1 dense per norm | KG graph_boost (procedure mapping) có thể override pure semantic match → Q024 GT Điều 116 K5 rank #2 dense bị drop. Principle: "embedding similarity là ground signal; KG augments, không replace" | 2026-05-19 |
@@ -190,23 +190,23 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 
 ### 10 loại Edge
 
-**Edge cốt lõi cho retrieval (Gap 1/2/3):**
+**Edge cốt lõi cho retrieval (Gap 1/2/3/4):**
 
 | Edge | Từ → Đến | Ý nghĩa |
 |---|---|---|
 | `[:INCLUDES]` | Theme → Norm | Văn bản thuộc lĩnh vực (Gap 1) |
 | `[:IMPLEMENTS]` | Norm → Norm | Hướng dẫn thi hành (NĐ → Luật) — Gap 3 |
-| `[:AMENDS]` | Norm → Norm | Sửa đổi/bổ sung (VD: NQ 254 → Luật ĐĐ). Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
+| `[:AMENDS]` | Norm → Norm | Sửa đổi/bổ sung (VD: NQ 254 → Luật ĐĐ) — **Gap 4**. Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
 | `[:HAS_COMPONENT]` | Norm → Component | Phân rã cấu trúc |
-| `[:HAS_CTV]` | Component → CTV | Quản lý phiên bản |
+| `[:HAS_CTV]` | Component → CTV | Quản lý phiên bản theo thời gian — **Gap 4** |
 | `[:HAS_TEXT_UNIT]` | CTV → TextUnit | Nội dung vật lý |
 | `[:APPLIES_TO]` | Norm → Jurisdiction | Hard-filter địa phương (Gap 2) |
 
-**Edge cho metadata + concept scoring (Phase 4):**
+**Edge cho metadata + concept scoring:**
 
 | Edge | Từ → Đến | Ý nghĩa |
 |---|---|---|
-| `[:AMENDED_BY]` | Component → Amendment | Liên kết điều khoản bị sửa đổi với metadata (parse từ `<!-- amended_by -->` annotation) |
+| `[:AMENDED_BY]` | Component → Amendment | Liên kết điều khoản bị sửa đổi với metadata sửa đổi (parse từ `<!-- amended_by -->` annotation) — **Gap 4** |
 | `[:MAPS_TO_CONCEPT]` | Component → Concept | Bottom-up LLM classification (TASK-15) gán concept cho từng Điều/Khoản. Dùng trong `hybrid_search._compute_rarity` để boost components giàu concept hiếm |
 | `[:REQUIRES_CONCEPT]` | Procedure → Concept | Top-down mapping thủ tục → concepts cần thiết. Dùng để identify Component khả năng liên quan procedure |
 

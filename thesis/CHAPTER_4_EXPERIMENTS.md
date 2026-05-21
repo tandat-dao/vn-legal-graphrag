@@ -15,7 +15,7 @@
 
 **Specs**:
 - **Test set**: [data/evaluation/test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json) — 26 câu pháp luật Đất đai
-- **Phân bố**: 3 câu Gap 1 (đa lĩnh vực), 6 câu Gap 2 (đa địa phương), 15 câu Gap 3 (đa tầng văn bản), 2 câu negative (ngoài phạm vi)
+- **Phân bố**: 3 câu Gap 1 (đa lĩnh vực), 6 câu Gap 2 (đa địa phương), 9 câu Gap 3 (đa tầng văn bản), 6 câu Gap 4 (đa phiên bản), 2 câu negative (ngoài phạm vi)
 - **Độ khó**: easy/medium/hard distribution
 - **Ground truth**: mỗi câu có `ground_truth_citations` cấp Khoản chi tiết, do tác giả [A] cú soạn dựa trên Luật/NĐ/QĐ thực tế
 
@@ -54,7 +54,7 @@
 
 **Sao chép từ [ABLATION_MATRIX.md](../data/evaluation/ABLATION_MATRIX.md)**:
 
-| Metric | Baseline | GraphRAG v2.7 (N=3) | Δ % |
+| Metric | Baseline | GraphRAG v2.8 (N=3) | Δ % |
 |---|---:|---:|---:|
 | F1 Khoản | 0.295 | **0.539 ± 0.021** | **+82.7%** |
 | F1 Điều | 0.295 | **0.567 ± 0.032** | +92.2% |
@@ -66,20 +66,22 @@
 
 ### 4.2.2 Phân tích theo Gap (chứng minh hypothesis chính)
 
-`[TODO PROSE: nêu hypothesis chính của thesis — KG advantage lớn nhất ở Gap 3 (đa tầng)]`
+`[TODO PROSE: nêu hypothesis chính của thesis — KG advantage lớn nhất ở Gap 3 (đa tầng) và Gap 4 (đa phiên bản)]`
 
 | Gap | N câu | Baseline F1 | GraphRAG F1 | Δ % | Verdict |
 |---|---:|---:|---:|---:|---|
-| Gap 1 (đa lĩnh vực) | 3 | 0.194 | 0.350 | +80% | ✓ KG advantage rõ |
-| Gap 2 (đa địa phương) | 6 | 0.485 | 0.604 | +25% | △ Baseline đủ tốt qua keyword |
-| **Gap 3 (đa tầng văn bản)** | **15** | **0.145** | **0.466** | **+221%** | **✓✓ Mạnh nhất, hypothesis chứng minh** |
+| Gap 1 (đa lĩnh vực) | 3 | 0.194 | 0.343 | +77% | ✓ KG advantage rõ |
+| Gap 2 (đa địa phương) | 6 | 0.485 | 0.618 | +27% | △ Baseline đủ tốt qua keyword |
+| **Gap 3 (đa tầng văn bản)** | **9** | **0.186** | **0.453** | **+144%** | **✓✓ KG traversal advantage** |
+| **Gap 4 (đa phiên bản)** | **6** | **0.083** | **0.534** | **+543%** | **✓✓✓ Differentiator mạnh nhất** |
 | Negative (ngoài corpus) | 2 | 1.000 | 1.000 | tied | ✓ Cả 2 refuse đúng |
 
 **Findings chính** (numbers sẵn sàng đưa vào prose):
-1. Gap 3 GraphRAG vượt **3.2× Baseline** (0.466 vs 0.145) — đúng với thesis claim KG traversal advantage cho cross-tier queries
-2. Gap 2 chỉ +25% — Baseline còn lexical-overlap với keyword địa danh ("TP.HCM"/"Đồng Nai") đủ tốt. **Finding khoa học**: pure embedding đủ cho Gap 2 dạng câu hỏi này
-3. Gap 1 +80% — KG theme filter có lợi
-4. Negative 100% cả 2 — prompt rule "PHẠM VI CORPUS" mạnh hơn architecture
+1. Gap 4 GraphRAG vượt **6.4× Baseline** (0.534 vs 0.083) — baseline hoàn toàn blind với temporal (không CTV, không AMENDS, không valid_from/to)
+2. Gap 3 GraphRAG vượt **2.4× Baseline** (0.453 vs 0.186) — KG traversal `[:IMPLEMENTS]` cho cross-tier queries
+3. Gap 2 chỉ +27% — Baseline còn lexical-overlap với keyword địa danh ("TP.HCM"/"Đồng Nai") đủ tốt. **Finding khoa học**: pure embedding đủ cho Gap 2 dạng câu hỏi này
+4. Gap 1 +77% — KG theme filter có lợi
+5. Negative 100% cả 2 — prompt rule "PHẠM VI CORPUS" mạnh hơn architecture
 
 ---
 
@@ -214,7 +216,7 @@ for point in dense_results:  # already sorted by dense score
 | ID | Mean F1 | σ | Values |
 |---|---:|---:|---|
 | Q008 (gap2 Phụ lục) | 0.583 | **0.220** | 0.67, 0.75, 0.33 |
-| Q020 (gap3 point-in-time) | 0.778 | **0.192** | 1.00, 0.67, 0.67 |
+| Q020 (gap4 point-in-time) | 0.778 | **0.192** | 1.00, 0.67, 0.67 |
 | Q024 (gap3 — Dense Floor fixed) | 0.778 | **0.192** | 0.67, 1.00, 0.67 |
 | Q019 (gap3) | 0.190 | **0.165** | 0.29, 0.29, 0.00 |
 | Q013 (gap3) | 0.624 | **0.157** | 0.80, 0.57, 0.50 |
@@ -229,7 +231,7 @@ for point in dense_results:  # already sorted by dense score
 
 `[TODO PROSE: motivate Faithfulness as orthogonal dimension to F1]`
 
-### 4.6.1 Aggregate Faithfulness (v2.7, N=3 mean)
+### 4.6.1 Aggregate Faithfulness (v2.8, N=3 mean)
 
 | Metric | Mean | Diễn giải |
 |---|---:|---|
@@ -284,7 +286,8 @@ for point in dense_results:  # already sorted by dense score
 
 **Headline (numbers ready):**
 - **GraphRAG outperform Baseline +82.7% F1 Khoản** (0.295 → 0.539 ± 0.021, N=3)
-- **Gap 3 advantage +221%** — hypothesis chính của thesis được chứng minh empirically + statistically
+- **Gap 4 advantage +543%** — differentiator mạnh nhất, baseline hoàn toàn blind với temporal versioning
+- **Gap 3 advantage +144%** — KG traversal cho cross-tier queries
 - **NormR 93.1%** — system định tuyến văn bản gần đạt tối đa
 - **Faithfulness 91.6%** — citations đáng tin cậy
 - **Negative refusal 100%** — system safe cho out-of-scope queries

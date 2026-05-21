@@ -30,7 +30,7 @@ File `test_set.json` là array các object. Mỗi object là một câu hỏi đ
 | `question` | ✓ | string | Tiếng Việt, đặt như người dùng cuối hỏi |
 | `theme` | ✓ | string | `dat-dai` \| `ho-tich` \| `nuoi-con-nuoi` (xem VALID_THEMES trong CLAUDE.md) |
 | `jurisdiction` | ✓ | string | `toan-quoc` \| `tp-hcm` \| `dong-nai` |
-| `gap_type` | ✓ | string | `gap1` \| `gap2` \| `gap3` \| `negative` (xem bên dưới) |
+| `gap_type` | ✓ | string | `gap1` \| `gap2` \| `gap3` \| `gap4` \| `negative` (xem bên dưới) |
 | `difficulty` | ✓ | string | `easy` \| `medium` \| `hard` |
 | `ground_truth_answer` | ✓ | string | Tóm tắt 3-6 câu — dùng cho Answer Quality (LLM-as-judge) |
 | `ground_truth_citations` | ✓ | array | List dict `{dieu, khoan?, diem?, van_ban}`. `negative` cho phép `[]` |
@@ -56,6 +56,7 @@ Format này khớp với output của [parse_citations()](src/retrieval/answer_g
 | `gap1` | **Đa lĩnh vực** — câu hỏi rơi đúng 1 trong 3 themes; kiểm tra routing không nhiễu | Câu hỏi tiêu chuẩn, có 1 theme rõ ràng |
 | `gap2` | **Đa địa phương** — cùng nội dung nhưng ground truth khác giữa TP.HCM và Đồng Nai | Phải nêu rõ tỉnh trong câu; thường có cặp Q_HCM / Q_DN |
 | `gap3` | **Đa tầng văn bản** — đáp án đòi hỏi tổng hợp ≥ 2 văn bản khác tier (VD: Luật + Nghị định + Thông tư) | `ground_truth_citations` chứa ≥ 2 `van_ban` thuộc tier khác nhau |
+| `gap4` | **Đa phiên bản** — câu hỏi đòi hỏi temporal reasoning: phân biệt VB còn/hết hiệu lực, span-regime, amendment tracking | Câu hỏi có yếu tố thời gian ("năm 20XX", "hồ sơ dở dang", "sửa đổi bởi") hoặc so sánh 2 phiên bản |
 | `negative` | **Câu hỏi không có đáp án trong corpus** — kiểm tra mô hình có "bịa" không | `ground_truth_citations: []`, `ground_truth_answer` nêu rõ "không có quy định" |
 
 ## DoD checklist (theo TASK-15)

@@ -1,15 +1,16 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam
 
-Hệ thống trả lời câu hỏi pháp lý hành chính Việt Nam có trích dẫn, kết hợp Knowledge Graph (Neo4j) và Vector Search (Qdrant). Hệ thống xử lý 3 lĩnh vực: **Đất đai**, **Hộ tịch**, và **Nuôi con nuôi** (Hôn nhân & Gia đình), giải quyết 3 gap nghiên cứu: đa lĩnh vực, đa địa phương (TP.HCM & Đồng Nai), và đa tầng văn bản (Luật → Nghị định → Thông tư → Quyết định UBND).
+Hệ thống trả lời câu hỏi pháp lý hành chính Việt Nam có trích dẫn, kết hợp Knowledge Graph (Neo4j) và Vector Search (Qdrant). Hệ thống xử lý 3 lĩnh vực: **Đất đai**, **Hộ tịch**, và **Nuôi con nuôi** (Hôn nhân & Gia đình), giải quyết 4 gap nghiên cứu: đa lĩnh vực, đa địa phương (TP.HCM & Đồng Nai), đa tầng văn bản (Luật → Nghị định → Thông tư → Quyết định UBND), và **đa phiên bản** (temporal versioning: CTV, amendment tracking, regime change).
 
-## Kết quả chính (v2.7, 26 câu Đất đai, N=3)
+## Kết quả chính (v2.8, 26 câu Đất đai, N=3)
 
-| Metric | GraphRAG (v2.7) | Baseline (Naive RAG) | Δ % |
+| Metric | GraphRAG (v2.8) | Baseline (Naive RAG) | Δ % |
 |---|---:|---:|---:|
 | **F1 Khoản** (strict cấp Điều+Khoản) | **0.539 ± 0.021** | 0.295 | **+82.7%** |
 | F1 Điều (cấp văn bản+Điều) | 0.567 ± 0.032 | 0.295 | +92.2% |
 | Norm Recall (văn bản) | 0.931 ± 0.005 | 0.699 | +33.2% |
-| **Gap 3 (đa tầng, n=15)** | **0.466** | 0.145 | **+221%** ← hypothesis chính chứng minh |
+| Gap 3 (đa tầng, n=9) | 0.453 | 0.186 | +144% |
+| **Gap 4 (đa phiên bản, n=6)** | **0.534** | **0.083** | **+543%** ← differentiator mạnh nhất |
 | Faithfulness (citation trust) | 0.916 ± 0.069 | n/a | mới |
 | Negative correct (refusal) | 100% | 100% | tied |
 | Latency mean | 22.92 ± 0.12s | 18.29s | +25% |
@@ -194,12 +195,12 @@ graphrag-vn-law/
 ## Tài liệu dự án
 
 - [`CLAUDE.md`](CLAUDE.md) — Conventions, rules, schema quick reference, Decision Log
-- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Changelog đầy đủ + trạng thái task hiện tại (v2.7)
+- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Changelog đầy đủ + trạng thái task hiện tại (v2.8)
 - [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) — Kiến trúc hệ thống, schema Ontology, tech stack, known problems
 - [`docs/plan.md`](docs/plan.md) — Kế hoạch thực thi ban đầu (historical reference)
 
 ### Tài liệu evaluation
-- [`data/evaluation/ABLATION_MATRIX.md`](data/evaluation/ABLATION_MATRIX.md) — Bảng impact cumulative 4 fix layers (Baseline → v2.7)
+- [`data/evaluation/ABLATION_MATRIX.md`](data/evaluation/ABLATION_MATRIX.md) — Bảng impact cumulative 4 fix layers + per-gap 4-gap breakdown (Baseline → v2.8)
 - [`data/evaluation/REPRODUCIBILITY_REPORT_20260520.md`](data/evaluation/REPRODUCIBILITY_REPORT_20260520.md) — N=3 study (F1 = 0.539 ± 0.021)
 - [`data/evaluation/ROOT_CAUSE_ANALYSIS_20260519.md`](data/evaluation/ROOT_CAUSE_ANALYSIS_20260519.md) — Phân tích nguyên nhân F1 gap
 - [`data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md`](data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md) — Limitations honest (Q022 embedding blindness)

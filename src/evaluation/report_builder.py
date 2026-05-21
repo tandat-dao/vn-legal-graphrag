@@ -73,6 +73,7 @@ def _gap_display(gap: str) -> str:
         "gap1": "Gap 1 — Đa lĩnh vực",
         "gap2": "Gap 2 — Đa địa phương",
         "gap3": "Gap 3 — Đa tầng văn bản",
+        "gap4": "Gap 4 — Đa phiên bản",
         "negative": "Negative — Ngoài phạm vi",
     }.get(gap, gap)
 

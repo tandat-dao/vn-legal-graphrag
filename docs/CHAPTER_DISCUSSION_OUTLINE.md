@@ -3,8 +3,8 @@
 **Trạng thái:** Dàn ý + luận điểm định tính cố định + bảng định lượng RỖNG chờ data full (sau khi [B] nộp Hộ tịch + Nuôi con nuôi).
 
 **Nguồn evidence hiện có:**
-- 19 câu Đất đai (Q001-Q019) — [test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)
-- Kết quả v7: [results_graphrag_20260517-184216.json](../data/evaluation/results_graphrag_20260517-184216.json), [results_baseline_20260517-184216.json](../data/evaluation/results_baseline_20260517-184216.json)
+- 26 câu Đất đai (Q001-Q026) — [test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)
+- Kết quả v2.8: [results_graphrag_20260520-211930.json](../data/evaluation/results_graphrag_20260520-211930.json) (hoặc kết quả chạy mới nhất)
 - Manual eval 10 câu: [MANUAL_EVAL.md](../data/evaluation/MANUAL_EVAL.md)
 - Dry run report: [DRY_RUN_REPORT.md](../data/evaluation/DRY_RUN_REPORT.md)
 
@@ -35,22 +35,21 @@ Cùng dữ liệu (`data/raw/*.md`), cùng embedding (BGE-M3), cùng LLM (Claude
 | Latency p95 (s) | — | — | — | — |
 | Negative correct rate | — | — | — | — |
 
-**Subset Đất đai 19 câu (v7 — đã có):**
+**Subset Đất đai 26 câu (v2.8 — đã có):**
 
 | Metric | GraphRAG | Baseline | Δ |
 |---|---:|---:|---:|
-| F1 Khoản | 0.416 | 0.389 | **+0.027** ✅ |
-| F1 Điều | 0.435 | 0.389 | **+0.046** ✅ |
-| Norm Recall | 0.846 | 0.680 | **+0.167** ✅ |
+| F1 Khoản | 0.539 | 0.295 | **+0.244 (+82.8%)** ✅ |
+| F1 Điều | 0.567 | 0.295 | **+0.272 (+92.2%)** ✅ |
+| Norm Recall | 0.931 | 0.699 | **+0.232 (+33.2%)** ✅ |
 | Negative correct | 1.000 | 1.000 | tied ✅ |
-| Manual Correctness | 4.5/5 | 3.5/5 | **+1.0** ✅ |
-| Manual Faithfulness | 4.9/5 | 4.3/5 | **+0.6** ✅ |
+| Faithful rate | 0.916 | — | — |
 
 ### 1.3 Bảng theo lĩnh vực (chờ điền)
 
 | Theme | N | G F1(Kh) | B F1(Kh) | G NormR | B NormR |
 |---|---:|---:|---:|---:|---:|
-| dat-dai | 19 | 0.416 | 0.389 | 0.846 | 0.680 |
+| dat-dai | 26 | 0.539 | 0.295 | 0.931 | 0.699 |
 | ho-tich | — | — | — | — | — |
 | nuoi-con-nuoi | — | — | — | — | — |
 
@@ -58,10 +57,11 @@ Cùng dữ liệu (`data/raw/*.md`), cùng embedding (BGE-M3), cùng LLM (Claude
 
 | Gap | N | G F1(Kh) | B F1(Kh) | G F1(Đ) | B F1(Đ) | G NormR | B NormR |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| gap1 (đa lĩnh vực) | — | — | — | — | — | — | — |
-| gap2 (đa địa phương) | — | — | — | — | — | — | — |
-| gap3 (đa tầng VB) | — | — | — | — | — | — | — |
-| negative (ngoài scope) | — | — | — | — | — | — | — |
+| gap1 (đa lĩnh vực) | 3 | 0.343 | 0.194 | 0.343 | 0.194 | 1.000 | 0.667 |
+| gap2 (đa địa phương) | 6 | 0.618 | 0.485 | 0.618 | 0.485 | 1.000 | 0.833 |
+| gap3 (đa tầng VB) | 9 | 0.453 | 0.186 | 0.518 | 0.186 | 0.889 | 0.593 |
+| gap4 (đa phiên bản) | 6 | 0.534 | 0.083 | 0.556 | 0.083 | 0.889 | 0.556 |
+| negative (ngoài scope) | 2 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
 
 ---
 
