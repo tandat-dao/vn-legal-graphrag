@@ -3,7 +3,23 @@
 > Để theo dõi tiến độ task, DoD checklist, và hành động tiếp theo, xem `PROJECT_STATUS.md`.
 
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Kiến trúc & Ngữ cảnh Hệ thống
-**Phiên bản 0.5 | Cập nhật 2026-05-21**
+**Phiên bản 0.5.1 | Cập nhật 2026-05-21**
+
+> **v0.5.1 — Patch cập nhật 2026-05-21 (Concept/Procedure layer audit):**
+> Audit phát hiện 3 node types + 3 edge types active trong production database (đo
+> 4092 [:MAPS_TO_CONCEPT] + 30 [:REQUIRES_CONCEPT] + 232 Amendment nodes) nhưng
+> chưa được document trong §2.2:
+> - **`Concept` node** (6 instances) — Core Ontology từ `data/ontology/core_v1.json`
+> - **`Procedure` node** (6 instances) — RETAINED (D-13) cho concept rarity scoring,
+>   không phải đã xóa hoàn toàn như D-07 ban đầu mô tả
+> - **`Amendment` node** (232 instances) — từ `<!-- amended_by --> ` HTML comment
+> - **`[:AMENDED_BY]`** (Component → Amendment) — metadata sửa đổi điều khoản
+> - **`[:MAPS_TO_CONCEPT]`** (Component → Concept) — bottom-up LLM classification
+>   qua `src/ingestion/ontology_mapper.py`
+> - **`[:REQUIRES_CONCEPT]`** (Procedure → Concept) — top-down mapping
+>
+> Thêm D-13 vào CLAUDE.md Decision Log để rõ ràng: D-07 chỉ xóa `[:SPECIFIED_IN]`
+> edge, `Procedure` node được giữ + repurpose.
 
 > **v0.5 — Cập nhật 2026-05-21 (Architecture evolution session 2026-05-19/20):**
 > Cập nhật phản ánh 4 fix layers + Faithfulness + reproducibility study sau session:
@@ -171,22 +187,32 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
                     └────┬─────┘
                          │ [:INCLUDES]
                          ▼
-                    ┌──────────────────────────┐
-                    │   Norm                   │
-                    │   tier: 1-4, valid_from  │
-                    │   title, summary         │◄──┐
-                    └────┬─────────────────────┘   │
-[:IMPLEMENTS]+[:AMENDS]  │  [:HAS_COMPONENT]       │ [:APPLIES_TO]
-   (Norm→Norm,           │       │                 │
-    derivation chain)    ▼       ▼                 ▼
-          ┌──────────────┐  ┌──────────┐    ┌────────────┐
-          │ (self-loop)  │  │Component │    │Jurisdiction│
-          └──────────────┘  └────┬─────┘    └────────────┘
-                                │ [:HAS_CTV]   (tp-hcm | dong-nai
-                                │              | toan-quoc)
+                    ┌──────────────────────────┐                  ┌────────────┐
+                    │   Norm                   │                  │  Procedure │ (D-13: retained)
+                    │   tier: 1-4, valid_from  │◄──┐              │  id, name  │
+                    │   title, summary         │   │              └────┬───────┘
+                    └────┬─────────────────────┘   │                   │ [:REQUIRES_CONCEPT]
+[:IMPLEMENTS]+[:AMENDS]  │  [:HAS_COMPONENT]       │ [:APPLIES_TO]     │
+   (Norm→Norm,           │       │                 │                   ▼
+    derivation chain)    ▼       ▼                 ▼            ┌──────────┐
+          ┌──────────────┐  ┌──────────┐    ┌────────────┐      │ Concept  │ (6 nodes,
+          │ (self-loop)  │  │Component │◄───┤Jurisdiction│      │ id, name │  Core Ontology
+          └──────────────┘  └────┬─────┘    └────────────┘      └──────┬───┘  từ core_v1.json)
+                                │ [:HAS_CTV]   (tp-hcm | dong-nai     ▲
+                                │              | toan-quoc)            │ [:MAPS_TO_CONCEPT]
+                                │             ▲                        │ (Bottom-up LLM
+                                │             │ [:AMENDED_BY]          │  classification —
+                                │             │                        │  TASK-15)
+                                │       ┌─────┴───────┐                │
+                                │       │ Amendment   │                │
+                                │       │ amending_norm│  ◄────────────┘
+                                │       │ amending_loc│
+                                │       │ effective_date│
+                                │       │ content_summary│
+                                │       └─────────────┘
                                 ▼
                            ┌──────────┐
-                           │   CTV    │ valid_from, valid_to, status,
+                           │   CTV    │ valid_from, valid_to (sentinel 9999-12-31), status,
                            └────┬─────┘  amended_by, added_by (optional)
                                 │ [:HAS_TEXT_UNIT]
                                 ▼
@@ -194,17 +220,24 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
                            │TextUnit  │ id (deterministic SHA256), text
                            └──────────┘
 
-   Phụ trợ:  Component [:AMENDED_BY]→ Amendment  (parse từ <!-- amended_by --> annotation)
-                                       (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt)
+(9 node types active: Theme, Norm, Component, CTV, TextUnit, Jurisdiction,
+ Amendment, Concept, Procedure;  10 edge types active.)
 ```
 
-> **D-07:** Node `Procedure` và edge `[:SPECIFIED_IN]` đã bị xóa. Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval (xem §2.6). `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
+> **D-07 + D-13 — clarification quan trọng:**
+> - `[:SPECIFIED_IN]` edge ĐÃ XÓA khỏi schema (D-07, 2026-05-10) — manual mapping không scalable
+> - Tuy nhiên `Procedure` node ĐƯỢC GIỮ LẠI (D-13, Phase 4) cho **concept rarity scoring** — repurposed kết nối qua `[:REQUIRES_CONCEPT]` thay vì `[:SPECIFIED_IN]`
+> - Routing thủ tục cấp coarse: Theme + Jurisdiction filter + summary-based Stage 1 retrieval
+> - Routing thủ tục cấp fine: concept rarity boost trong `hybrid_search` (qua Concept nodes)
+> - `[:BELONGS_TO]` (Component → Theme) cũng không implement (xem P-03)
 
-**Bảng Edge (7 loại active):**
+**Tổng cộng 9 node types + 10 edge types active.** Phân thành 2 nhóm chức năng:
+
+**Bảng Edge — Retrieval cốt lõi cho Gap 1/2/3 (7 loại):**
 
 | Edge | Từ | Đến | Vai trò chiến lược |
 |---|---|---|---|
-| `[:INCLUDES]` | Theme | Norm | Phân nhóm văn bản theo lĩnh vực |
+| `[:INCLUDES]` | Theme | Norm | **Xương sống Gap 1** — Phân nhóm văn bản theo lĩnh vực |
 | `[:IMPLEMENTS]` | Norm | Norm | **Xương sống Gap 3** — duyệt chuỗi Luật→NĐ→TT→QĐ (hướng dẫn thi hành) |
 | `[:AMENDS]` | Norm | Norm | **Sửa đổi/bổ sung** — VD: NQ 254/2025 AMENDS Luật ĐĐ 2024. Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
 | `[:HAS_COMPONENT]` | Norm | Component | Phân rã văn bản thành đơn vị cấu trúc |
@@ -212,8 +245,18 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 | `[:HAS_TEXT_UNIT]` | CTV | TextUnit | Liên kết phiên bản trừu tượng → nội dung vật lý |
 | `[:APPLIES_TO]` | Norm | Jurisdiction | **Xương sống Gap 2** — hard-filter theo địa phương |
 
-**Edge phụ trợ cho metadata sửa đổi** (parse từ `<!-- amended_by: ... -->` annotations):
-- `[:AMENDED_BY]` (Component → Amendment): liên kết điều khoản bị sửa với metadata sửa đổi (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt nội dung)
+**Bảng Edge — Metadata + concept scoring (3 loại — Phase 4 thêm):**
+
+| Edge | Từ | Đến | Vai trò |
+|---|---|---|---|
+| `[:AMENDED_BY]` | Component | Amendment | Metadata sửa đổi điều khoản (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt). Parse từ `<!-- amended_by: ... -->` HTML comment annotations |
+| `[:MAPS_TO_CONCEPT]` | Component | Concept | **Bottom-up LLM classification** (TASK-15 — `ontology_mapper.py`) — Claude Haiku gán concept_ids cho mỗi Điều/Khoản dựa trên label. Dùng trong `hybrid_search._compute_rarity` để boost components giàu concept hiếm |
+| `[:REQUIRES_CONCEPT]` | Procedure | Concept | **Top-down mapping** — load từ `data/ontology/core_v1.json`. Identify concept thiết yếu cho mỗi thủ tục → boost components có MAPS_TO_CONCEPT trùng |
+
+**Production state (đo 2026-05-21):**
+- Component: ~3000 nodes; `[:MAPS_TO_CONCEPT]`: 4092 edges
+- Concept: 6 nodes; Procedure: 6 nodes; `[:REQUIRES_CONCEPT]`: 30 edges
+- Amendment: 232 nodes; `[:AMENDED_BY]`: ~232 edges (parsed từ annotations trong data/raw/)
 
 ### §2.3 Data Flow — Phase 1 Thu thập thủ công
 

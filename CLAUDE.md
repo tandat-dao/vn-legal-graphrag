@@ -168,27 +168,33 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-10 | Pass 0 Dense Floor trong `hybrid_search` — top-1 dense per norm | KG graph_boost (procedure mapping) có thể override pure semantic match → Q024 GT Điều 116 K5 rank #2 dense bị drop. Principle: "embedding similarity là ground signal; KG augments, không replace" | 2026-05-19 |
 | D-11 | Pass -1 Structured Citation Boost — regex "Khoản X Điều Y" → ép Components match vào top-K | Q026 GT cite trực tiếp "Khoản 1 Điều 13" — dense top NĐ 49 = K11/K12 vì label dài bias embedding. Additive boost: no-op nếu pattern không match | 2026-05-20 |
 | D-12 | Label-keyword Boost (Pass -0.5) — REJECTED sau ablation | Empirical net F1 −0.055 trên 8-câu (Q022 +0.5 nhưng Q001/Q002/Q008/Q024 regress vì label keyword overlap đa Điều cùng tier). Documented as embedding limitation, future work cross-encoder | 2026-05-20 |
+| D-13 | Giữ `Procedure` node + thêm `Concept` node (TASK-15) cho concept rarity scoring | D-07 xóa `[:SPECIFIED_IN]` (manual mapping không scalable) nhưng node `Procedure` được REPURPOSED: kết hợp `Concept` node (Core Ontology) + `[:MAPS_TO_CONCEPT]` (Component → Concept) + `[:REQUIRES_CONCEPT]` (Procedure → Concept) → `hybrid_search` boost components giàu concept hiếm thuộc procedure quan tâm. Ontology Mapping bottom-up qua LLM Haiku (`src/ingestion/ontology_mapper.py`) | Phase 4 |
 
 ---
 
 ## SCHEMA ONTOLOGY — QUICK REFERENCE
 
-### 6 loại Node
+### 9 loại Node
 
 | Node | Mô tả | Key properties |
 |---|---|---|
 | `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi |
 | `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from`, `summary` |
-| `Component` | Điều/Khoản/Điểm/Tiết (xuyên thời gian) | `id`, `label` |
-| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to`, `status`, `amended_by` (optional), `added_by` (optional) |
-| `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic), `text` |
+| `Component` | Điều/Khoản/Điểm/Tiết (xuyên thời gian) | `id`, `label`, `ontology_mapped` (bool) |
+| `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to` (sentinel `9999-12-31` khi còn hiệu lực), `status`, `amended_by`, `added_by` (optional) |
+| `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic SHA256), `text` |
 | `Jurisdiction` | Địa phương | `name`: toan-quoc \| tp-hcm \| dong-nai |
+| `Amendment` | Metadata sửa đổi (parse từ `<!-- amended_by --> comment`) | `amending_norm`, `amending_loc`, `effective_date`, `content_summary` |
+| `Concept` | Core Ontology concept (TASK-15 Phase 4) | `id`, `name` — load từ `data/ontology/core_v1.json` |
+| `Procedure` | Mapping thủ tục → concepts (D-13) | `id`, `name` — KHÔNG có `[:SPECIFIED_IN]` edge (D-07), chỉ `[:REQUIRES_CONCEPT]` |
 
-### 7 loại Edge
+### 10 loại Edge
+
+**Edge cốt lõi cho retrieval (Gap 1/2/3):**
 
 | Edge | Từ → Đến | Ý nghĩa |
 |---|---|---|
-| `[:INCLUDES]` | Theme → Norm | Văn bản thuộc lĩnh vực |
+| `[:INCLUDES]` | Theme → Norm | Văn bản thuộc lĩnh vực (Gap 1) |
 | `[:IMPLEMENTS]` | Norm → Norm | Hướng dẫn thi hành (NĐ → Luật) — Gap 3 |
 | `[:AMENDS]` | Norm → Norm | Sửa đổi/bổ sung (VD: NQ 254 → Luật ĐĐ). Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
 | `[:HAS_COMPONENT]` | Norm → Component | Phân rã cấu trúc |
@@ -196,7 +202,18 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | `[:HAS_TEXT_UNIT]` | CTV → TextUnit | Nội dung vật lý |
 | `[:APPLIES_TO]` | Norm → Jurisdiction | Hard-filter địa phương (Gap 2) |
 
-> **Lưu ý (D-07):** `Procedure` node và `[:SPECIFIED_IN]` đã bị xóa khỏi schema. Routing theo thủ tục qua Theme filter + summary-based Stage 1 retrieval. `[:BELONGS_TO]` không implement trong scope này (xem P-03).
+**Edge cho metadata + concept scoring (Phase 4):**
+
+| Edge | Từ → Đến | Ý nghĩa |
+|---|---|---|
+| `[:AMENDED_BY]` | Component → Amendment | Liên kết điều khoản bị sửa đổi với metadata (parse từ `<!-- amended_by -->` annotation) |
+| `[:MAPS_TO_CONCEPT]` | Component → Concept | Bottom-up LLM classification (TASK-15) gán concept cho từng Điều/Khoản. Dùng trong `hybrid_search._compute_rarity` để boost components giàu concept hiếm |
+| `[:REQUIRES_CONCEPT]` | Procedure → Concept | Top-down mapping thủ tục → concepts cần thiết. Dùng để identify Component khả năng liên quan procedure |
+
+> **Lưu ý (D-07 + D-13):**
+> - `[:SPECIFIED_IN]` edge ĐÃ XÓA khỏi schema (D-07). Routing theo thủ tục qua Theme + Jurisdiction filter + summary-based Stage 1 retrieval.
+> - `Procedure` node ĐƯỢC GIỮ LẠI (D-13) cho mục đích **concept rarity scoring** (TASK-15 Phase 4) — chỉ kết nối qua `[:REQUIRES_CONCEPT]`, KHÔNG có `[:SPECIFIED_IN]` cũ.
+> - `[:BELONGS_TO]` không implement (xem P-03).
 
 ### Tier mapping (CỨNG — không thay đổi)
 
@@ -361,7 +378,16 @@ parser.py          ← đọc data/raw/*.md
 graph_builder.py   ← nhận TextUnit list từ parser.py
                    ← nhận metadata từ YAML frontmatter (summary, amended_by_norms,...)
                    → write vào Neo4j (MERGE, idempotent)
-                   → tạo Amendment nodes + [:AMENDED_BY] edges từ <!-- amended_by --> annotations
+                   → 5 pass:
+                     Pass 0: Concept + Procedure + REQUIRES_CONCEPT từ data/ontology/core_v1.json
+                     Pass 1: Theme + Jurisdiction nodes
+                     Pass 2: Norm + Component + CTV + TextUnit + structural edges
+                     Pass 3: Amendment nodes + [:AMENDED_BY] edges (<!-- amended_by --> annotation)
+                     Pass 4: Ontology Mapping LLM (TASK-15) — gán [:MAPS_TO_CONCEPT] cho Components
+
+ontology_mapper.py ← Claude Haiku 4.5 classification: Component label → Concept IDs
+                   ← input: data/ontology/core_v1.json (Core Ontology — concepts + procedures)
+                   → return list concept_ids cho mỗi Component (temperature=0, filter hallucinated)
 
 vectorizer.py      ← đọc TextUnit nodes từ Neo4j
                    ← BGE-M3 encode
