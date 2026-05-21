@@ -3,7 +3,17 @@
 > Để theo dõi tiến độ task, DoD checklist, và hành động tiếp theo, xem `PROJECT_STATUS.md`.
 
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Kiến trúc & Ngữ cảnh Hệ thống
-**Phiên bản 0.4 | Cập nhật 2026-05-10**
+**Phiên bản 0.5 | Cập nhật 2026-05-21**
+
+> **v0.5 — Cập nhật 2026-05-21 (Architecture evolution session 2026-05-19/20):**
+> Cập nhật phản ánh 4 fix layers + Faithfulness + reproducibility study sau session:
+> - **Schema**: thêm edge `[:AMENDS]` (D-09) — phân biệt sửa đổi với hướng dẫn thi hành. §2.2 lên 7 edges. Edge `[:AMENDED_BY]` (Component → Amendment) cho amendment metadata.
+> - **Retrieval §2.6 viết lại**: 4-pass Hybrid Search (Pass -1 Structured Cite, Pass 0 Dense Floor, Pass 1 RRF breadth, Pass 2 RRF depth) thay cho 1-pass RRF cũ.
+> - **Phase 4 metrics §4**: thay "Precision@k / Recall@k / MRR" planned → thực tế F1 Khoản/Điều, Norm Recall, Faithfulness (2-tier), Negative correctness, Latency P95.
+> - **Token budget**: `CONTEXT_MAX_TOKENS = 6000` (không phải 3000). Cập nhật §2.6.
+> - **Tech Stack**: thêm `rich` library cho Demo CLI; LLM judge Haiku cho Faithfulness.
+> - **Known problems**: thêm P-07 (graph_boost vs dense match trade-off → Dense Floor fix), P-08 (label-keyword boost rejected — embedding semantic blindness), P-09 (LLM stochastic noise N=1 limit → N≥3 ablation).
+> - **Lộ trình Phase 4**: thêm tooling (Demo CLI, compare_runs, ablation matrix builder, reproducibility builder, instrumentation).
 
 > **v0.4 — Cập nhật 2026-05-10:**
 > Xóa node `Procedure` và edge `[:SPECIFIED_IN]` khỏi schema ontology (D-07).
@@ -164,39 +174,46 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
                     ┌──────────────────────────┐
                     │   Norm                   │
                     │   tier: 1-4, valid_from  │
-                    │   title, summary         │
-                    └────┬─────────────────────┘
-          [:IMPLEMENTS]  │  [:HAS_COMPONENT]   [:APPLIES_TO]
-          (Norm→Norm)    │       │                  │
-          ┌─────────────┘       ▼                  ▼
-          │              ┌──────────┐        ┌────────────┐
-          │              │Component │        │Jurisdiction│
-          │              └────┬─────┘        └────────────┘
-          │                   │ [:HAS_CTV]   (tp-hcm | dong-nai
-          │                   │              | toan-quoc)
-          │                   ▼
-          │              ┌──────────┐
-          │              │   CTV    │ valid_from, valid_to, status
-          │              └────┬─────┘
-          │                   │ [:HAS_TEXT_UNIT]
-          │                   ▼
-          │              ┌──────────┐
-          └─────────────►│TextUnit  │ id (deterministic), text
-                         └──────────┘
+                    │   title, summary         │◄──┐
+                    └────┬─────────────────────┘   │
+[:IMPLEMENTS]+[:AMENDS]  │  [:HAS_COMPONENT]       │ [:APPLIES_TO]
+   (Norm→Norm,           │       │                 │
+    derivation chain)    ▼       ▼                 ▼
+          ┌──────────────┐  ┌──────────┐    ┌────────────┐
+          │ (self-loop)  │  │Component │    │Jurisdiction│
+          └──────────────┘  └────┬─────┘    └────────────┘
+                                │ [:HAS_CTV]   (tp-hcm | dong-nai
+                                │              | toan-quoc)
+                                ▼
+                           ┌──────────┐
+                           │   CTV    │ valid_from, valid_to, status,
+                           └────┬─────┘  amended_by, added_by (optional)
+                                │ [:HAS_TEXT_UNIT]
+                                ▼
+                           ┌──────────┐
+                           │TextUnit  │ id (deterministic SHA256), text
+                           └──────────┘
+
+   Phụ trợ:  Component [:AMENDED_BY]→ Amendment  (parse từ <!-- amended_by --> annotation)
+                                       (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt)
 ```
 
 > **D-07:** Node `Procedure` và edge `[:SPECIFIED_IN]` đã bị xóa. Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval (xem §2.6). `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
 
-**Bảng Edge (6 loại active):**
+**Bảng Edge (7 loại active):**
 
 | Edge | Từ | Đến | Vai trò chiến lược |
 |---|---|---|---|
 | `[:INCLUDES]` | Theme | Norm | Phân nhóm văn bản theo lĩnh vực |
-| `[:IMPLEMENTS]` | Norm | Norm | **Xương sống Gap 3** — duyệt chuỗi Luật→NĐ→TT→QĐ |
+| `[:IMPLEMENTS]` | Norm | Norm | **Xương sống Gap 3** — duyệt chuỗi Luật→NĐ→TT→QĐ (hướng dẫn thi hành) |
+| `[:AMENDS]` | Norm | Norm | **Sửa đổi/bổ sung** — VD: NQ 254/2025 AMENDS Luật ĐĐ 2024. Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
 | `[:HAS_COMPONENT]` | Norm | Component | Phân rã văn bản thành đơn vị cấu trúc |
 | `[:HAS_CTV]` | Component | CTV | Quản lý phiên bản theo thời gian |
 | `[:HAS_TEXT_UNIT]` | CTV | TextUnit | Liên kết phiên bản trừu tượng → nội dung vật lý |
 | `[:APPLIES_TO]` | Norm | Jurisdiction | **Xương sống Gap 2** — hard-filter theo địa phương |
+
+**Edge phụ trợ cho metadata sửa đổi** (parse từ `<!-- amended_by: ... -->` annotations):
+- `[:AMENDED_BY]` (Component → Amendment): liên kết điều khoản bị sửa với metadata sửa đổi (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt nội dung)
 
 ### §2.3 Data Flow — Phase 1 Thu thập thủ công
 
@@ -309,48 +326,70 @@ data/raw/*.md
 
 ### §2.6 Data Flow — Online Retrieval (Phase 3)
 
-```
-Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
+Pipeline retrieval qua 3 stages + Hybrid Search 4-pass + Context Assembly + Answer Generation.
+Kiến trúc dưới đây phản ánh hệ thống v2.7 (sau 4 fix layers session 2026-05-19/20).
 
-[Query Planner — LLM]
-  Extract: theme=dat-dai, procedure=chuyen-muc-dich-su-dung-dat,
-           jurisdiction=tp-hcm, temporal=hiện tại
-  is_complete=True → tiếp tục
+```
+Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào sửa đổi?"
+
+[Query Planner — Claude Haiku 4.5]
+  Extract: theme, procedure, jurisdiction, temporal, temporal_intent
+  Cách C (defensive): nếu theme=None, regex extract số hiệu VB → Neo4j lookup
+  Output: QueryPlan (planner cache: data/evaluation/.planner_cache/)
 
 [Stage 1 — Summary Retrieval — Qdrant]
-  Filter: content_type="summary", theme="dat-dai",
-          jurisdiction IN ["tp-hcm", "toan-quoc"]
-  Dense: BGE-M3 encode(câu hỏi) → so sánh với summary vectors
-  Output: Top-N norm_ids có summary liên quan nhất
-          VD: ["luat-dat-dai-2024", "nghi-dinh-102-2024-nd-cp",
-               "nghi-quyet-87-2025-nq-hdnd-tp-hcm", ...]
+  Filter: content_type="summary", theme="dat-dai", jurisdiction IN allowed
+  Dense: BGE-M3 encode(question) → cosine vs summary vectors
+  Output: Top-N=10 norm_ids (threshold 0.3)
 
-[Stage 2 — Sub-graph Extraction — Neo4j]
-  Cypher: START FROM Norm IDs từ Stage 1
-          FOLLOW [:IMPLEMENTS] chains (all tiers)
-          FILTER: Norm [:APPLIES_TO] Jurisdiction("tp-hcm") OR "toan-quoc"
-          FILTER: CTV.valid_from <= now, CTV.valid_to IS NULL OR > now
-          COLLECT all Component IDs
-  Output: LCCIDs = [comp_001, comp_002, comp_045, comp_089, ...]
+[Stage 2 — Graph Traversal — Neo4j]
+  Cypher: MATCH (n:Norm)-[:IMPLEMENTS|AMENDS*1..4]-(related:Norm)
+          WHERE related thuộc allowed_jurisdictions
+            AND CTV.valid_from <= $temporal AND CTV.valid_to >= $temporal
+          RETURN related, Components
+  Derivation closure: IMPLEMENTS + AMENDS undirected, depth=4 hop
+  Output: result_norms (~5-15 norms)
 
-[Semantic Filtering — Qdrant Hybrid]
-  Payload filter: content_type="text_unit", norm_id IN norm_ids
-  Dense: BGE-M3 encode("Phí chuyển mục đích sử dụng đất tại TP.HCM?")
-  Sparse: BM25 tokenize
-  Fusion: RRF(dense_scores, sparse_scores)
-  Output: Top-10 TextUnit
+[Stage 3 — Procedure Component Mapping — Neo4j]
+  Cypher: MATCH (proc-related-components) qua [:IMPLEMENTS] chains
+  Output: graph_component_ids (~1000-2600 component IDs cho hybrid boost)
 
-[Context Assembly]
-  Sort: tier 1 → tier 4
-  Cap: max 3000 tokens
-  Output: Ordered context string
+[Hybrid Search 4-pass — Qdrant + Neo4j] (semantic_filter.py)
 
-[Answer Generator — LLM]
-  Prompt: [System: bắt buộc trích dẫn] + [Context] + [Question]
-  Output: {
-    answer: "Theo Điều X Luật Đất đai 2024... Tuy nhiên tại TP.HCM, theo Điều Y Quyết định Z...",
-    citations: [{dieu:"X", khoan:"1", van_ban:"luat-dat-dai-2024"}, ...]
-  }
+  ┌─ Path -1: Structured Citation fetch (D-11)
+  │   Regex "Khoản X Điều Y" trong question → Neo4j fetch Components
+  │   match cấu trúc → Qdrant scroll TextUnits → priority_points
+  │
+  ├─ Path 0: Dense search (BGE-M3, dense_pool=50)
+  │   Question encode → top-50 candidates với norm_id filter
+  │
+  ├─ Path 1: Keyword scroll (slug overlap với query tokens)
+  │   _KEYWORD_SCROLL_LIMIT=200, _KEYWORD_MIN_SCORE=0.5
+  │
+  └─ Path 2: Graph boost (procedure components)
+      Scroll TextUnits có component_id IN graph_component_ids
+
+  RRF scoring: 1/(60+dense_rank) + 1/(60+kw_rank), boost ×1.5 nếu graph,
+               × tier multiplier, × rarity multiplier
+
+  4-pass allocation (respect _MAX_PER_NORM=3 + _MAX_PER_TIER cap):
+    Pass -1: priority_points (struct cite) — ưu tiên cao nhất
+    Pass 0 (D-10): top-1 dense per norm — preserve semantic ground truth
+    Pass 1: top-1 RRF per remaining norm — bổ sung norms ko có dense
+    Pass 2: fill remaining slot theo RRF order
+  Output: Top-k=25 ScoredTextUnit
+
+[Context Assembly] (context_assembler.py)
+  Sort: tier 1 → tier 4 (lex superior)
+  Cap: CONTEXT_MAX_TOKENS = 6000
+  Build prompt: 5 rule blocks (lex superior/posterior/specialis, amendment
+                warning, TEMPORAL #4 span-regime cite, phạm vi corpus)
+  Output: context string + prompt cho LLM
+
+[Answer Generator — Claude Sonnet 4.6] (answer_generator.py)
+  Input: prompt, temperature=0, max_retries=8, cache_dir=.llm_cache/
+  Output: raw answer text → parse_citations() (regex + dedupe) →
+          {answer, citations: [{dieu, khoan, diem, tiet, van_ban, loai}]}
 ```
 
 ---
@@ -368,8 +407,10 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 | **Embedding model** | BGE-M3 (BAAI/bge-m3) | dim=1024 | ⚙️ Cần quyết định: local vs API |
 | **Sparse retrieval** | BM25 (via Qdrant sparse) | — | ✅ Đã xác nhận |
 | **Rank fusion** | Reciprocal Rank Fusion (RRF) | custom impl hoặc thư viện | ✅ Đã xác nhận |
-| **LLM — Query Planner** | Claude (Anthropic) | claude-haiku-4-5-20251001 | ✅ Đã xác nhận |
-| **LLM — Answer Generator** | Claude (Anthropic) | claude-sonnet-4-6 | ✅ Đã xác nhận |
+| **LLM — Query Planner** | Claude (Anthropic) | claude-haiku-4-5-20251001 (có planner cache) | ✅ Đã xác nhận |
+| **LLM — Answer Generator** | Claude (Anthropic) | claude-sonnet-4-6, temperature=0, max_retries=8 | ✅ Đã xác nhận |
+| **LLM — Faithfulness Judge** | Claude (Anthropic) | claude-haiku-4-5-20251001 (Tier 2 metric) | ✅ Đã xác nhận |
+| **CLI UI** | rich (Python) | ≥ 13.7 — Panel, Markdown, Table, Tree cho Demo CLI | ✅ Đã xác nhận |
 | **Testing** | pytest | latest | ✅ Đã xác nhận |
 | **Notebook** | Jupyter | — | ✅ Đã xác nhận |
 | **Version control** | Git | — | ✅ Đã xác nhận |
@@ -433,15 +474,26 @@ Câu hỏi: "Phí chuyển mục đích sử dụng đất tại TP.HCM?"
 
 ### Đánh giá (Phase 4)
 
-| Tính năng | Phase | Loại |
-|---|---|---|
-| Test set ≥ 30 câu hỏi với ground truth | 4 | Core |
-| Baseline Naive RAG (chunking 512 + vector search) | 4 | Core |
-| Retrieval metrics: Precision@k, Recall@k, MRR | 4 | Core |
-| Generation metrics: Correctness, Faithfulness, Citation Accuracy | 4 | Core |
-| Gap analysis (Gap 1, 2, 3) | 4 | Core |
-| Failure case analysis | 4 | Core |
-| Limitations documentation | 4 | Core |
+| Tính năng | Phase | Loại | Trạng thái |
+|---|---|---|---|
+| Test set Đất đai 26 câu với ground truth Khoản-level | 4 | Core | ✅ Hoàn tất (chờ [B] mở rộng Hộ tịch + Nuôi con nuôi) |
+| Baseline Naive RAG (chunking 512 + vector search) | 4 | Core | ✅ Hoàn tất |
+| Metric — **F1 Khoản** (strict): cấp (Điều, Khoản, Văn bản) | 4 | Core | ✅ |
+| Metric — **F1 Điều** (looser): cấp (Điều, Văn bản) — đo định tuyến văn bản | 4 | Core | ✅ |
+| Metric — **Norm Recall**: cấp văn bản | 4 | Core | ✅ |
+| Metric — **Negative correctness**: refusal rate cho câu ngoài phạm vi | 4 | Core | ✅ |
+| Metric — **Faithfulness 2-tier** (Tier 1 existence $0, Tier 2 LLM judge) | 4 | Enhancement | ✅ Hoàn tất |
+| Metric — **Latency mean/P95** | 4 | Core | ✅ |
+| Gap analysis (Gap 1, 2, 3 + Negative) | 4 | Core | ✅ |
+| Failure case analysis (Q022/Q024/Q026 case studies) | 4 | Core | ✅ |
+| Limitations documentation (RETRIEVAL_LIMITATIONS_20260520.md) | 4 | Core | ✅ |
+| Ablation Matrix (cumulative impact fix layers) | 4 | Enhancement | ✅ |
+| Reproducibility study N=3 (F1 = mean ± σ với 95% CI) | 4 | Enhancement | ✅ |
+| Tooling: Demo CLI (src/demo.py rich-based) | 4 | Enhancement | ✅ |
+| Tooling: compare_runs, build_ablation_matrix, build_reproducibility_report | 4 | Enhancement | ✅ |
+| Tooling: instrument_retrieval (Stage 1/2/3 debug API-free) | 4 | Enhancement | ✅ |
+
+> **Lưu ý**: Phase 4 ban đầu plan dùng "Precision@k, Recall@k, MRR" cho retrieval — đã evolve sang **F1 cấp Khoản** (citation-level matching với semantic wildcard) phù hợp hơn cho legal QA. Precision@k/Recall@k vẫn có thể compute từ pred_citations vs ground_truth_citations nếu cần.
 
 ---
 
@@ -521,8 +573,77 @@ BGE-M3 chạy local trên máy 8GB RAM có thể gặp bottleneck về tốc đ�
 
 ### P-06 — Token Budget Cap mất thông tin
 
-Context Assembly cắt bỏ TextUnit khi vượt `max_tokens=3000`. Với câu hỏi đa tầng đòi hỏi nhiều văn bản, cắt tỉa có thể loại bỏ TextUnit quan trọng ở tier thấp (Quyết định địa phương) vì nằm cuối danh sách sau sort.
+Context Assembly cắt bỏ TextUnit khi vượt `CONTEXT_MAX_TOKENS=6000` (đã tăng từ 3000 ban đầu sau khi đo Claude Sonnet 4.6 context window thoải mái). Với câu hỏi đa tầng đòi hỏi nhiều văn bản, cắt tỉa có thể loại bỏ TextUnit quan trọng ở tier thấp (Quyết định địa phương).
 
-**Quyết định:** Sort theo tier (tier 1 trước) nhưng **không** chỉ đưa tier 1 vào. Sau khi sort, fill từ top xuống cho đến khi gần đạt `max_tokens=3000`. Nếu tier 4 (Quyết định địa phương) bị cut hoàn toàn → log warning vì đây là thông tin địa phương quan trọng cho Gap 2. Xem xét tăng `max_tokens` nếu LLM context window cho phép.
+**Quyết định:** Sort theo tier (tier 1 trước) + per-norm/per-tier diversity cap trong hybrid_search (_MAX_PER_NORM=3, _MAX_PER_TIER={1:8, 2:8, 3:6, 4:8}) → đảm bảo top-25 retrieval không bị 1-2 norm thống trị. Token budget cap 6000 fill từ top RRF score xuống.
 
-**Điều kiện nâng cấp:** Nếu evaluation (Phase 4) cho thấy câu hỏi Gap 2 có Citation Accuracy thấp hơn Gap 1 đáng kể → nguyên nhân có thể là token budget cắt mất văn bản địa phương → tăng budget hoặc ưu tiên đảm bảo ít nhất 1 TextUnit từ mỗi tier có mặt trong context.
+**Trạng thái:** Đã verify trên 26 câu Đất đai — không câu nào hit hard limit gây miss critical citation.
+
+---
+
+### P-07 — Graph_boost ưu tiên over Dense semantic match (D-10 Dense Floor fix)
+
+**Bối cảnh:** Trong hybrid_search ban đầu (v2.3), Stage 3 procedure-mapped Components được boost qua RRF (graph_multiplier × 1.5). Với câu hỏi mà procedure đã extract chính xác, boost này hữu ích. Nhưng khi câu hỏi đề cập content **không** thuộc procedure mapping, graph_boost có thể **đẩy chunk không liên quan lên đầu**, đè chunk dense match cao.
+
+**Empirical evidence:** Q024 ("Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?"):
+- GT chunk = Điều 116 Khoản 5 (luat-dat-dai-2024) — dense rank **#2 trên 50**, score 0.606
+- Procedure mapping `chuyen-muc-dich-su-dung-dat` boost Điều 121/123/227 (về thẩm quyền, trình tự) → 3 chunks này chiếm hết per_norm cap (3) của Luật ĐĐ 2024
+- GT bị đẩy ra khỏi top-25 → F1 = 0
+
+**Quyết định (D-10):** Thêm **Pass 0 Dense Floor** vào hybrid_search — preserve **top-1 dense per norm** TRƯỚC khi Pass 1 RRF-breadth chạy. Đảm bảo chunk có dense score cao nhất của mỗi norm luôn có representation, bất kể graph_boost prioritize chunk khác.
+
+**Principle:** "Embedding similarity là ground signal mạnh nhất; Knowledge Graph augment context, KHÔNG được override pure semantic match".
+
+**Impact:** Q024 F1 0.00 → 0.67 sau Pass 0. Aggregate v2.4 → v2.5: +0.019 F1 Khoản, +0.048 NormR.
+
+---
+
+### P-08 — Embedding semantic blindness cho disambiguation cấp Điều (Label-keyword Boost rejected)
+
+**Bối cảnh:** Q022 ("Áp dụng hạn mức theo Quyết định 18/2016 hay Quyết định 69/2024?"): GT = Điều 1 Khoản 1 Điểm a của QĐ 18/2016. Dense rank của GT trong QĐ 18 alone = **#7/23**. Top dense của QĐ 18 = "Điều 4 Hiệu lực thi hành" — chunk này có metadata văn bản match câu hỏi mạnh hơn content keyword "hạn mức".
+
+**Hypothesis thử nghiệm:** Pass -0.5 **Label-keyword Boost** — extract content tokens từ question (stopword-filtered), boost Components có label-overlap cao.
+
+**Ablation 8-câu (Q022 + 4 canary + 3 Gap 2 noise) → REJECTED (D-12):**
+
+| Metric | +Pass -1 baseline | +Label-keyword | Δ |
+|---|---:|---:|---:|
+| AVG F1 (8 câu) | 0.693 | 0.638 | **−0.055 (−7.9%)** |
+| Win:Loss count | — | 1:4 | net negative |
+
+**Root cause failure:** QĐ 18 có **MULTIPLE Điều cùng prefix "Hạn mức đất ở"**:
+- Điều 1 (GT): "Quy định hạn mức đất ở đối với hộ gia đình, cá nhân..."
+- Điều 3: "Hạn mức đất ở áp dụng hỗ trợ người có công với cách mạng..."
+
+Sau filter stopwords, label-overlap score TIE giữa Điều 1 và Điều 3. Cypher row order pick Điều 3 (wrong). **BGE-M3 alone không phân biệt được target population qua label prefix similar**.
+
+**Quyết định:** Q022 documented as **embedding limitation** trong [RETRIEVAL_LIMITATIONS_20260520.md](../data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md). Helper functions (`_extract_content_tokens`, `_score_label_overlap`, `_fetch_components_by_label_keywords`) giữ trong code (inactive) để future cross-encoder re-ranking có thể tái sử dụng.
+
+**Hướng phát triển tương lai:**
+- Cross-encoder re-ranking (BGE-Reranker / multilingual cross-encoder) — attention bidirectional có thể phân biệt được semantic differences ở label
+- Question-aware label filtering: parse question để extract target population trước khi rank
+- Multi-query expansion: rewrite câu hỏi thành nhiều sub-questions để dense match improve
+
+---
+
+### P-09 — LLM stochastic noise đe doạ N=1 ablation reliability
+
+**Bối cảnh:** Trong session debugging 2026-05-19/20, observed F1 swing trên CÙNG câu hỏi qua nhiều runs cùng code state (cùng prompt, cùng retrieval, temp=0):
+- Q008: F1 swing **0.33 ↔ 0.67 ↔ 0.75** qua 3 runs (σ = 0.220)
+- Q020: F1 swing **0.67 ↔ 0.67 ↔ 1.00** (σ = 0.192)
+- Q024: F1 swing **0.67 ↔ 1.00 ↔ 0.67** (σ = 0.192)
+
+Mặc dù `temperature=0`, Claude Sonnet vẫn có **stochastic decoding** (do floating-point non-determinism + retry token sampling). Effect aggregate F1: σ ≈ 0.021 (4% mean) → **negligible at aggregate level** nhưng đủ gây F1 swing 0.3-0.5 ở cấp câu.
+
+**Implication cho methodology:** N=1 ablation đặc biệt nguy hiểm khi:
+- Compare 2 code states với delta nhỏ (< 0.05 aggregate F1) — noise lớn hơn signal
+- Attribute regression cho code change vs LLM noise — không thể distinguish
+
+**Quyết định (lesson learned):** Future prompt/retrieval ablations dùng **N≥3 runs** + bootstrap CI. Aggregate F1 cần claim với mean ± σ, không phải single number.
+
+**Empirical chứng minh:** Reproducibility study 26-câu × 3 runs (cùng code state v2.6, --no-llm-cache):
+- F1 Khoản = **0.539 ± 0.021** (95% CI [0.515, 0.563])
+- NormR = 0.931 ± 0.005 (extremely stable)
+- Faithfulness = 0.916 ± 0.069 (higher variance — LLM judge cũng stochastic)
+
+Documented in [REPRODUCIBILITY_REPORT_20260520.md](../data/evaluation/REPRODUCIBILITY_REPORT_20260520.md).
