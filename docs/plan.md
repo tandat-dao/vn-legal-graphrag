@@ -7,6 +7,21 @@ title: KẾ HOẠCH THỰC THI DỰ ÁN
 ## Ontology-Driven GraphRAG cho Pháp luật Việt Nam
 ### Nhóm 2 người — Ký hiệu: [A] và [B]
 
+> **⚠️ Lưu ý 2026-05-21**: Tài liệu này là **kế hoạch ban đầu** (historical reference).
+> Một số chi tiết đã evolve trong quá trình thực hiện. Để biết trạng thái hiện tại
+> (v2.7, F1 = 0.539 ± 0.021), xem:
+> - **[`docs/PROJECT_STATUS.md`](PROJECT_STATUS.md)** — changelog đầy đủ + trạng thái task
+> - **[`docs/PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md)** — kiến trúc hệ thống v0.5
+> - **[`data/evaluation/ABLATION_MATRIX.md`](../data/evaluation/ABLATION_MATRIX.md)** — kết quả thực nghiệm
+>
+> Các điểm chính đã evolve so với plan ban đầu:
+> - **Metrics framework** (Phase 4): thay "Precision@k / Recall@k / MRR" → **F1 Khoản/Điều, Norm Recall, Faithfulness 2-tier, Negative correctness** (lý do: phù hợp hơn cho legal QA với citation-level evaluation)
+> - **Test set size**: plan ≥30 câu → actual 26 câu Đất đai (chờ [B] mở rộng Hộ tịch + Nuôi con nuôi để đạt ≥40)
+> - **Hybrid Search**: plan "Dense + Sparse + RRF" → actual **4-pass allocation** (Pass -1 Structured Citation / Pass 0 Dense Floor / Pass 1 RRF breadth / Pass 2 RRF depth) sau debugging session
+> - **Schema**: thêm `[:AMENDS]` edge (D-09) — không có trong plan ban đầu
+> - **Tooling mở rộng**: thêm Demo CLI (rich), compare_runs, ablation matrix builder, reproducibility builder, instrumentation script
+> - **Timeline**: Phase 4 thực tế kéo dài hơn 7-10 ngày do iteration debugging (4 fix layers + reproducibility study)
+
 ---
 
 # PHASE 0 — THIẾT LẬP NỀN TẢNG
