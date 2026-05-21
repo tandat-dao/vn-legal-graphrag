@@ -552,7 +552,7 @@
     "question": "Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?",
     "theme": "dat-dai",
     "jurisdiction": "toan-quoc",
-    "gap_type": "gap3",
+    "gap_type": "gap4",
     "difficulty": "hard",
     "ground_truth_answer": "Tại năm 2024 (trước ngày Luật 47/2024/QH15 sửa đổi có hiệu lực 01/07/2025), Luật Đất đai 2024 Điều 116 khoản 5 quy định: căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở, hoặc chuyển mục đích các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia đình, cá nhân là 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị đã được cơ quan có thẩm quyền phê duyệt'. (Lưu ý: cụm từ 'pháp luật về quy hoạch đô thị' đã được Luật 47/2024/QH15 thay thế bằng 'pháp luật về quy hoạch đô thị và nông thôn' kể từ 01/07/2025.)",
     "ground_truth_citations": [
