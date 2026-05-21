@@ -6,11 +6,11 @@ Hệ thống trả lời câu hỏi pháp lý hành chính Việt Nam có trích
 
 | Metric | GraphRAG (v2.8) | Baseline (Naive RAG) | Δ % |
 |---|---:|---:|---:|
-| **F1 Khoản** (strict cấp Điều+Khoản) | **0.539 ± 0.021** | 0.295 | **+82.7%** |
-| F1 Điều (cấp văn bản+Điều) | 0.567 ± 0.032 | 0.295 | +92.2% |
-| Norm Recall (văn bản) | 0.931 ± 0.005 | 0.699 | +33.2% |
-| Gap 3 (đa tầng, n=9) | 0.453 | 0.186 | +144% |
-| **Gap 4 (đa phiên bản, n=6)** | **0.534** | **0.083** | **+543%** ← differentiator mạnh nhất |
+| **F1 Khoản** (strict cấp Điều+Khoản) | **0.539 ± 0.021** | 0.333 | **+61.8%** |
+| F1 Điều (cấp văn bản+Điều) | 0.567 ± 0.032 | 0.333 | +70.3% |
+| Norm Recall (văn bản) | 0.931 ± 0.005 | 0.718 | +29.7% |
+| Gap 3 (đa tầng, n=8) | 0.412 ± 0.013 | 0.209 | +97.1% |
+| **Gap 4 (đa phiên bản, n=7)** | **0.568 ± 0.031** | **0.214** | **+165.4%** ← differentiator mạnh nhất |
 | Faithfulness (citation trust) | 0.916 ± 0.069 | n/a | mới |
 | Negative correct (refusal) | 100% | 100% | tied |
 | Latency mean | 22.92 ± 0.12s | 18.29s | +25% |

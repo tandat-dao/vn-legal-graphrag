@@ -11,7 +11,7 @@ title: KẾ HOẠCH THỰC THI DỰ ÁN
 > Một số chi tiết đã evolve trong quá trình thực hiện. Để biết trạng thái hiện tại
 > (v2.8, F1 = 0.539 ± 0.021), xem:
 > - **[`docs/PROJECT_STATUS.md`](PROJECT_STATUS.md)** — changelog đầy đủ + trạng thái task
-> - **[`docs/PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md)** — kiến trúc hệ thống v2.8
+> - **[`docs/PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md)** — kiến trúc hệ thống v0.5.1
 > - **[`data/evaluation/ABLATION_MATRIX.md`](../data/evaluation/ABLATION_MATRIX.md)** — kết quả thực nghiệm
 >
 > Các điểm chính đã evolve so với plan ban đầu:

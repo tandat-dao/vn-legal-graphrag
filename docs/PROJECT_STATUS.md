@@ -1,9 +1,9 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
 **Phiên bản 2.8 | Cập nhật 2026-05-21**
 
-> **v2.8 — Cập nhật 2026-05-21 (Gap 4 — Đa phiên bản):**
+> **v2.8 — Cập nhật 2026-05-21 (Gap 4 — Đa phiên bản + Q024 re-label + Baseline re-aggregate):**
 >
-> **Quyết định tách Gap 4**: Phân tích cho thấy 6 câu temporal (Q020-Q023, Q025-Q026)
+> **Quyết định tách Gap 4**: Phân tích cho thấy 7 câu temporal (Q020-Q026)
 > đang bị xếp vào `gap3` nhưng thực tế test **năng lực orthogonal** — temporal reasoning
 > (phân biệt VB hết/còn hiệu lực, span-regime, amendment tracking) chứ không phải
 > structural traversal (multi-tier `[:IMPLEMENTS]`). Tách thành Gap 4 cho phép:
@@ -11,16 +11,32 @@
 > - Per-gap F1 chính xác hơn: Gap 3 cũ bị kéo xuống bởi Q022 (F1=0, embedding limitation)
 > - Baseline hoàn toàn blind với temporal → differentiator mạnh
 >
+> **Bao gồm Q024 trong gap4**: ban đầu vẫn để gap3 nhưng validator phát hiện Q024 chỉ
+> trích 1 tier (Luật ĐĐ 2024 Đ116 K5) — không thoả ràng buộc gap3 (≥2 tier). Bản chất
+> câu này là **point-in-time CTV retrieval** (Năm 2024, trước khi Luật 47/2024 sửa đổi),
+> đúng phạm vi Gap 4.
+>
+> **Phân bổ mới**: gap1=3, gap2=6, gap3=8, **gap4=7**, negative=2 (total=26).
+>
 > **Thay đổi:**
-> - `test_set_dat_dai.json`: 6 câu re-label `gap3` → `gap4`
-> - Phân bổ mới: gap1=3, gap2=6, gap3=9, **gap4=6**, negative=2
-> - `validate_test_set.py`: thêm `gap4` vào `VALID_GAPS` + validation
-> - `report_builder.py`: thêm `gap4` display name
+> - `test_set_dat_dai.json`: 7 câu re-label `gap3` → `gap4` (Q020-Q026)
+> - `validate_test_set.py`: thêm `gap4` vào `VALID_GAPS` + validation ≥3 câu
+> - `report_builder.py`: thêm `gap4` display name "Gap 4 — Đa phiên bản"
+> - `run_evaluation.py:362-369`: bug fix — force-refresh `gap_type/theme/jurisdiction/GT`
+>   từ test_set hiện tại khi `--reuse-results`. Trước đó dict `**old` propagate stale label.
 > - CLAUDE.md, PROJECT_CONTEXT.md, CHAPTERS_OUTLINE.md: narrative 3→4 gap
 > - `[:AMENDS]`, `[:HAS_CTV]`, `[:AMENDED_BY]` gán annotation **Gap 4**
-> - ABLATION_MATRIX.md: re-compute per-gap với gap3/gap4 split
+> - ABLATION_MATRIX.md: re-compute per-gap với gap3/gap4 split + Baseline re-aggregate
 >
-> **Không thay đổi code pipeline** — chỉ framing + documentation + test label.
+> **Baseline re-aggregate**: F1 Khoản 0.295 → **0.333** vì GT của Q026 đã được rút gọn
+> còn 1 citation từ commit 705a02c (Q026 GT fix), baseline run trước commit đó nên
+> citation_score cũ stale. Sau re-aggregate với GT v2.8, baseline trích đúng (citation
+> match từ refusal answer — xem §"Q026 Evaluation Artifact" trong CHAPTER_4_EXPERIMENTS).
+> Improvement v2.6 vs Baseline: 0.539 vs 0.333 = **+61.8%** (giảm từ +82.7% công bố trước
+> đó nhưng honest hơn — baseline + GraphRAG cùng GT v2.8).
+>
+> **Không thay đổi code pipeline retrieval** — chỉ framing + documentation + test label
+> + 1 bug fix trong `run_evaluation.py --reuse-results` mode.
 
 > **v2.7 — Cập nhật 2026-05-20 (Demo CLI + Faithfulness + Reproducibility N=3 + Ablation Matrix + Thesis Outline):**
 >
@@ -52,19 +68,22 @@
 >
 > | Configuration | F1 Khoản | F1 Điều | NormR | Δ vs Baseline |
 > |---|---:|---:|---:|---:|
-> | Baseline (Naive RAG) | 0.295 | 0.295 | 0.699 | — |
-> | v2.3 canonical | 0.440 | 0.453 | 0.891 | +49.1% |
-> | + parse_citations dedupe | 0.461 | 0.476 | 0.891 | +56.3% |
-> | + Prompt TEMPORAL #4 | 0.466 | 0.483 | 0.869 | +58.0% |
-> | + Dense Floor (Pass 0) | 0.485 | 0.519 | 0.917 | +64.6% |
-> | **+ Structured Cite (Pass -1) [N=3]** | **0.539 ±0.021** | **0.567** | **0.931** | **+82.8%** |
+> | Baseline (Naive RAG, GT v2.8) | 0.333 | 0.333 | 0.718 | — |
+> | v2.3 canonical † | 0.440 | 0.453 | 0.891 | +32.1% |
+> | + parse_citations dedupe † | 0.461 | 0.476 | 0.891 | +38.4% |
+> | + Prompt TEMPORAL #4 † | 0.466 | 0.483 | 0.869 | +39.9% |
+> | + Dense Floor (Pass 0) † | 0.485 | 0.519 | 0.917 | +45.6% |
+> | **+ Structured Cite (Pass -1) [N=3]** | **0.539 ±0.021** | **0.567** | **0.931** | **+61.8%** |
 >
-> **Per-Gap final breakdown (v2.8, re-computed with gap3/gap4 split)**:
-> - Gap 1 (đa lĩnh vực, n=3): F1 0.343 vs Baseline 0.194 (+77%)
-> - Gap 2 (đa địa phương, n=6): F1 0.618 vs Baseline 0.485 (+27%)
-> - **Gap 3 (đa tầng, n=9): F1 0.453 vs Baseline 0.186 (+144%)**
-> - **Gap 4 (đa phiên bản, n=6): F1 0.534 vs Baseline 0.083 (+543%)** ← differentiator mạnh nhất
+> † row v2.3-v2.5 chưa re-aggregate với GT v2.8 (N=1 single-run); order-of-magnitude vẫn đúng nhưng số chính xác cần re-run.
+>
+> **Per-Gap final breakdown (v2.8, N=3 mean, GT v2.8, Q024 ∈ gap4)**:
+> - Gap 1 (đa lĩnh vực, n=3): F1 0.343 ±0.013 vs Baseline 0.194 (+76.8%)
+> - Gap 2 (đa địa phương, n=6): F1 0.618 ±0.041 vs Baseline 0.485 (+27.4%)
+> - **Gap 3 (đa tầng, n=8): F1 0.412 ±0.013 vs Baseline 0.209 (+97.1%)**
+> - **Gap 4 (đa phiên bản, n=7): F1 0.568 ±0.031 vs Baseline 0.214 (+165.4%)** ← differentiator mạnh nhất
 > - Negative (n=2): 100% vs 100% tied
+> - Q026 evaluation artifact (baseline citation match từ refusal): nếu loại bỏ → Gap 4 baseline thực = 0.071 → improvement +700%
 >
 > **5. Thesis chapter skeleton ([thesis/CHAPTERS_OUTLINE.md](../thesis/CHAPTERS_OUTLINE.md))**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
 >
