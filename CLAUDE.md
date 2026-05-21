@@ -164,6 +164,10 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-06 | Điều mới hoàn toàn (VD: Điều 44a) thuộc Norm gốc, CTV ghi added_by | Giữ nhất quán cấu trúc bố cục văn bản; truy vết nguồn gốc qua CTV | 2026-04-27 |
 | D-07 | Xóa Procedure node và edge `[:SPECIFIED_IN]` khỏi schema | Manual mapping không scalable; Theme + Jurisdiction filter + `[:IMPLEMENTS]` traversal đã đủ để routing và chứng minh 3 Gap | 2026-05-10 |
 | D-08 | Thêm field `summary` vào frontmatter; Stage 1 retrieval qua summary embedding | Cho phép semantic routing ở cấp Norm mà không cần manual mapping; con người viết đảm bảo độ chính xác pháp lý | 2026-05-10 |
+| D-09 | Thêm edge `[:AMENDS]` (Norm → Norm) cho sửa đổi/bổ sung | Phân biệt với `[:IMPLEMENTS]` (hướng dẫn thi hành) — VD: NQ 254 AMENDS Luật ĐĐ, NĐ 49 IMPLEMENTS NQ 254. Stage 2 traversal qua `[:IMPLEMENTS|AMENDS*1..4]` undirected | 2026-05-19 |
+| D-10 | Pass 0 Dense Floor trong `hybrid_search` — top-1 dense per norm | KG graph_boost (procedure mapping) có thể override pure semantic match → Q024 GT Điều 116 K5 rank #2 dense bị drop. Principle: "embedding similarity là ground signal; KG augments, không replace" | 2026-05-19 |
+| D-11 | Pass -1 Structured Citation Boost — regex "Khoản X Điều Y" → ép Components match vào top-K | Q026 GT cite trực tiếp "Khoản 1 Điều 13" — dense top NĐ 49 = K11/K12 vì label dài bias embedding. Additive boost: no-op nếu pattern không match | 2026-05-20 |
+| D-12 | Label-keyword Boost (Pass -0.5) — REJECTED sau ablation | Empirical net F1 −0.055 trên 8-câu (Q022 +0.5 nhưng Q001/Q002/Q008/Q024 regress vì label keyword overlap đa Điều cùng tier). Documented as embedding limitation, future work cross-encoder | 2026-05-20 |
 
 ---
 
@@ -180,18 +184,19 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | `TextUnit` | Nội dung văn bản thuần túy | `id` (deterministic), `text` |
 | `Jurisdiction` | Địa phương | `name`: toan-quoc \| tp-hcm \| dong-nai |
 
-### 6 loại Edge
+### 7 loại Edge
 
 | Edge | Từ → Đến | Ý nghĩa |
 |---|---|---|
 | `[:INCLUDES]` | Theme → Norm | Văn bản thuộc lĩnh vực |
-| `[:IMPLEMENTS]` | Norm → Norm | NĐ implements Luật (Gap 3) |
+| `[:IMPLEMENTS]` | Norm → Norm | Hướng dẫn thi hành (NĐ → Luật) — Gap 3 |
+| `[:AMENDS]` | Norm → Norm | Sửa đổi/bổ sung (VD: NQ 254 → Luật ĐĐ). Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
 | `[:HAS_COMPONENT]` | Norm → Component | Phân rã cấu trúc |
 | `[:HAS_CTV]` | Component → CTV | Quản lý phiên bản |
 | `[:HAS_TEXT_UNIT]` | CTV → TextUnit | Nội dung vật lý |
 | `[:APPLIES_TO]` | Norm → Jurisdiction | Hard-filter địa phương (Gap 2) |
 
-> **Lưu ý (D-07):** `Procedure` node và `[:SPECIFIED_IN]` đã bị xóa khỏi schema (xem Decision Log D-07). Routing theo thủ tục được thực hiện qua Theme filter + summary-based Stage 1 retrieval. `[:BELONGS_TO]` cũng không implement trong scope này (xem P-03).
+> **Lưu ý (D-07):** `Procedure` node và `[:SPECIFIED_IN]` đã bị xóa khỏi schema. Routing theo thủ tục qua Theme filter + summary-based Stage 1 retrieval. `[:BELONGS_TO]` không implement trong scope này (xem P-03).
 
 ### Tier mapping (CỨNG — không thay đổi)
 
@@ -335,11 +340,13 @@ QDRANT_COLLECTION_NAME = "legal_texts"
 QDRANT_VECTOR_DIM = 1024          # BGE-M3
 CONTEXT_MAX_TOKENS = 6000
 DEFAULT_TOP_K = 25
-MAX_PER_NORM = 5                  # per-norm diversity cap trong hybrid_search
+MAX_PER_NORM = 3                  # _MAX_PER_NORM trong semantic_filter.py — cap top-k diversity
+ANTHROPIC_MAX_RETRIES = 8         # src/utils/llm_config.py — chống 529 Overloaded
+VALID_TO_SENTINEL = "9999-12-31"  # CTV.valid_to khi vẫn còn hiệu lực (thay null per ac516ad)
 
 # Neo4j schema: 7 edge types
 # IMPLEMENTS: hướng dẫn thi hành (NĐ -> Luật)
-# AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [v1.7]
+# AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [D-09]
 ```
 
 ---
@@ -347,34 +354,72 @@ MAX_PER_NORM = 5                  # per-norm diversity cap trong hybrid_search
 ## DEPENDENCIES — CÁC MODULE LIÊN KẾT
 
 ```
+Phase 2 — Ingestion:
 parser.py          ← đọc data/raw/*.md
                    → trả về List[TextUnit] với Deterministic ID
 
 graph_builder.py   ← nhận TextUnit list từ parser.py
-                   ← nhận metadata từ YAML frontmatter (kể cả summary)
+                   ← nhận metadata từ YAML frontmatter (summary, amended_by_norms,...)
                    → write vào Neo4j (MERGE, idempotent)
+                   → tạo Amendment nodes + [:AMENDED_BY] edges từ <!-- amended_by --> annotations
 
 vectorizer.py      ← đọc TextUnit nodes từ Neo4j
-                   ← dùng BGE-M3 để encode
-                   → upsert vào Qdrant collection "legal_texts"
-                   → ID vector = ID TextUnit trong Neo4j (BẮT BUỘC)
+                   ← BGE-M3 encode
+                   → upsert vào Qdrant collection "legal_texts" (text_unit + summary vectors)
 
-query_planner.py   ← nhận câu hỏi string
-                   → trả về QueryPlan TypedDict
+Phase 3 — Retrieval (3-stage + 4-pass hybrid):
+query_planner.py   ← câu hỏi string + Anthropic client + Neo4j (cho Cách C backfill)
+                   → QueryPlan TypedDict + có planner cache (data/evaluation/.planner_cache/)
 
-subgraph_extractor.py ← nhận QueryPlan
-                      ← query Neo4j
-                      → trả về LCCIDs (List[str])
+subgraph_extractor.py
+  stage1_norm_ids() ← question → Qdrant summary search → top-N norm_ids
+  stage2_norm_ids() ← Neo4j traversal [:IMPLEMENTS|AMENDS*1..4] + filter juris/temporal → result_norms
+  stage3_graph_component_ids() ← procedure mapping → component IDs cho Pass -1/-0/-1/-2
 
-semantic_filter.py ← nhận LCCIDs + câu hỏi gốc
-                   ← query Qdrant với payload filter
-                   → trả về Top-k List[TextUnit]
+semantic_filter.py — Hybrid Search 4-pass:
+  Path -1: Structured Citation fetch (regex "Khoản X Điều Y" → Neo4j → Qdrant)
+  Path -0.5: Label-keyword [REJECTED D-12, inactive]
+  Path 0: Dense search (BGE-M3, dense_pool=50)
+  Path 1: Keyword search (slug overlap)
+  Path 2: Graph boost (procedure components)
+  Pass -1: Structured Cite alloc (top priority)
+  Pass 0: Dense Floor (top-1 dense per norm, D-10)
+  Pass 1: RRF breadth (top-1 RRF per remaining norm)
+  Pass 2: RRF depth (fill remaining)
 
-context_assembler.py ← nhận List[TextUnit]
-                     → trả về sorted, capped context string
+context_assembler.py ← List[ScoredTextUnit] + Neo4j
+                     → context string (sort tier 1→4, cap 6000 tokens, build_prompt() w/ TEMPORAL #4 rule)
 
-answer_generator.py  ← nhận context + câu hỏi gốc
-                     → trả về {answer: str, citations: List[dict]}
+answer_generator.py  ← context + question + Anthropic client + cache_dir
+                     → {answer, citations, context_used, cache_hit}
+                     → parse_citations() w/ dedupe (commit 023bb64)
+
+src/utils/llm_config.py — make_anthropic_client() factory với max_retries=8
+
+Phase 4 — Evaluation:
+src/evaluation/run_evaluation.py — orchestrator CLI
+                                   --systems graphrag,baseline
+                                   --faithfulness-tier 0|1|2
+
+src/evaluation/metrics.py        — citation_score (F1 cấp Khoản/Điều), norm_recall, negative_correct
+                                   cit_matches() là single source of truth cho semantic match
+
+src/evaluation/faithfulness.py   — Tier 1 (existence, $0) + Tier 2 (LLM judge Haiku)
+
+src/evaluation/report_builder.py — auto sinh REPORT_<timestamp>.md per-Q detail
+
+src/evaluation/compare_runs.py   — A/B diff giữa 2 results JSON
+
+src/evaluation/build_ablation_matrix.py — table cumulative impact 4 fix layers
+src/evaluation/build_reproducibility_report.py — N=3 study mean ± σ
+src/evaluation/instrument_retrieval.py  — debug Stage 1/2/3 (API-free)
+
+Demo:
+src/demo.py        — Rich CLI cho weekly meeting (panels + Markdown render + spinner + Tree trace)
+                   python -m src.demo "câu hỏi" [--trace] [--jurisdiction] [--bypass-completeness]
+
+Baseline:
+src/baseline/naive_rag.py — chunked retrieval (512 chars, overlap 50) cho A/B comparison
 ```
 
 ---
@@ -411,7 +456,7 @@ Bốn task sau là "cổng" bắt buộc. Phase sau **không được bắt đ�
 | TASK-02 (Integration Verification) | Phase 1 | Script `connection_check.py` chạy "✅ PASS" cả Neo4j và Qdrant |
 | TASK-05 (Cross-check Phase 1) | Phase 2 | `review_log.md` có sign-off của cả 2 thành viên; `validate_metadata.py` không báo lỗi |
 | TASK-09 (Phase 2 Verification) | Phase 3 | `phase2_report.md` có đủ count checks và sign-off |
-| TASK-14 (Integration E2E) | Phase 4 | Notebook `phase3_e2e_test.ipynb` chạy được 12+ câu hỏi |
+| TASK-14 (Integration E2E) | Phase 4 | `python -m src.evaluation.run_evaluation --test-set data/evaluation/test_set_dat_dai.json --systems graphrag,baseline` chạy được 26+ câu hỏi không crash |
 
 ---
 
@@ -436,6 +481,23 @@ python src/utils/connection_check.py
 # Chạy ingestion (Phase 2) — chỉ sau khi Phase 1 done
 python src/ingestion/graph_builder.py
 python src/ingestion/vectorizer.py
+
+# Demo CLI (Phase 3) — input câu hỏi → output answer + citations
+python -m src.demo "Hạn mức giao đất ở TP.HCM tối đa bao nhiêu?" --jurisdiction tp-hcm --bypass-completeness
+python -m src.demo "..." --trace            # hiện pipeline trace chi tiết (Tree view)
+
+# Evaluation (Phase 4) — đo F1/NormR/Faithfulness vs Baseline
+python -m src.evaluation.run_evaluation --test-set data/evaluation/test_set_dat_dai.json \
+       --systems graphrag,baseline --no-llm-cache --faithfulness-tier 2
+
+# A/B diff 2 results JSON
+python -m src.evaluation.compare_runs results_old.json results_new.json
+
+# Ablation matrix cumulative
+python -m src.evaluation.build_ablation_matrix
+
+# Reproducibility report N=3
+python -m src.evaluation.build_reproducibility_report run1.json run2.json run3.json
 ```
 
 **Biến môi trường cần có trong `.env`:**
