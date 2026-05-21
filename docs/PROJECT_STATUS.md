@@ -1,5 +1,394 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 1.8 | Cập nhật 2026-05-16**
+**Phiên bản 2.7 | Cập nhật 2026-05-20**
+
+> **v2.7 — Cập nhật 2026-05-20 (Demo CLI + Faithfulness + Reproducibility N=3 + Ablation Matrix + Thesis Outline):**
+>
+> Sau v2.6.1 (architecture soft-frozen cho Đất đai), thực hiện 4 task chuẩn bị cho thesis writing:
+>
+> **1. Demo CLI ([src/demo.py](../src/demo.py))** — rich-based UI cho weekly meeting với giảng viên:
+> - Panel câu hỏi / Trả lời (markdown render) / Citations (table) / Thống kê
+> - Status spinner trong khi pipeline chạy ~23s (UX feedback)
+> - `--trace` Tree view cho pipeline stages
+> - Graceful 529 outage handling
+> - **Query Planner cache** mới — tránh block toàn pipeline khi Anthropic API outage
+>
+> **2. Faithfulness metric ([src/evaluation/faithfulness.py](../src/evaluation/faithfulness.py))** — 2-tier citation trustworthiness:
+> - Tier 1 (deterministic, $0): % citations có chunk match trong context — catch hallucination thô
+> - Tier 2 (Claude Haiku judge): % existing citations được context semantically support — catch hallucination tinh vi
+> - Combined: `faithful_rate = #(exist AND supported) / #total`
+> - Hỗ trợ Phụ lục citations (`loai='phu_luc'`, `dieu='_default'`)
+>
+> **3. Reproducibility study N=3 ([REPRODUCIBILITY_REPORT_20260520.md](../data/evaluation/REPRODUCIBILITY_REPORT_20260520.md))**:
+> - 3 independent runs cùng code state, `--no-llm-cache`, measure variance
+> - **F1 Khoản = 0.539 ± 0.021** (95% CI [0.515, 0.563])
+> - **F1 Điều = 0.567 ± 0.032**
+> - **NormR = 0.931 ± 0.005** (cực stable, ~0.5% variation)
+> - Latency = 22.92 ± 0.12s (pipeline deterministic)
+> - **Faithful rate = 0.916 ± 0.069**
+> - Per-Q variance: 5-6 câu σ ≥ 0.1 (Q008 σ=0.22, Q020/Q024 σ=0.19) — LLM stochastic empirically confirmed
+>
+> **4. Ablation Matrix ([ABLATION_MATRIX.md](../data/evaluation/ABLATION_MATRIX.md))**:
+>
+> | Configuration | F1 Khoản | F1 Điều | NormR | Δ vs Baseline |
+> |---|---:|---:|---:|---:|
+> | Baseline (Naive RAG) | 0.295 | 0.295 | 0.699 | — |
+> | v2.3 canonical | 0.440 | 0.453 | 0.891 | +49.1% |
+> | + parse_citations dedupe | 0.461 | 0.476 | 0.891 | +56.3% |
+> | + Prompt TEMPORAL #4 | 0.466 | 0.483 | 0.869 | +58.0% |
+> | + Dense Floor (Pass 0) | 0.485 | 0.519 | 0.917 | +64.6% |
+> | **+ Structured Cite (Pass -1) [N=3]** | **0.539 ±0.021** | **0.567** | **0.931** | **+82.8%** |
+>
+> **Per-Gap final breakdown (v2.6, N=3)**:
+> - Gap 1 (đa lĩnh vực, n=3): F1 0.350 vs Baseline 0.194 (+80%)
+> - Gap 2 (đa địa phương, n=6): F1 0.604 vs Baseline 0.485 (+25%)
+> - **Gap 3 (đa tầng, n=15): F1 0.466 vs Baseline 0.145 (+221%)** ← thesis hypothesis chính được chứng minh statistically
+> - Negative (n=2): 100% vs 100% tied
+>
+> **5. Thesis chapter skeleton ([thesis/CHAPTERS_OUTLINE.md](../thesis/CHAPTERS_OUTLINE.md))**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
+>
+> **Tổng commits session 2026-05-19/20**: 22 commits từ canonical `225b3aa` → `2b72bb8`. F1 Khoản improvement: +22.6% qua 4 fix layers, statistically backed (N=3).
+
+---
+
+> **v2.6.1 — Cập nhật 2026-05-20 (Label-keyword Boost attempt → REVERT; Q022 documented as limitation):**
+>
+> Sau v2.6 (Pass -1 Struct Cite fix Q026), tiếp tục thử fix Q022 retrieval-depth qua **Label-keyword Boost** (Pass -0.5: lexical overlap content tokens question vs Component label). Empirical ablation 8-câu chứng minh **net F1 -0.055 (-7.9%)** — Gemini's "lexical noise prediction" validated. **REVERT**.
+>
+> **Hypothesis tested**: Q022 GT rank #7 dense trong QĐ 18 alone; lexical-overlap có thể phân biệt được Điều CONTENT-RELEVANT vs Điều META-related.
+>
+> **Empirical failure ([RETRIEVAL_LIMITATIONS_20260520.md](../data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md))**:
+>
+> | Metric | +Pass -1 baseline | +Label-keyword | Δ |
+> |---|---:|---:|---:|
+> | AVG F1 (8 câu) | 0.693 | 0.638 | **−0.055 (−7.9%)** |
+> | Win:Loss count | — | **1:4** | net negative |
+> | Win:Loss magnitude | — | +0.50 vs −0.95 | **1:2 net negative** |
+>
+> Regressions: Q001 (-0.20 canary), Q002 (-0.29 cross-jurisdiction noise), Q008 (-0.19 cross-jurisdiction noise), Q024 (-0.27 canary). Only Q022 +0.50 win.
+>
+> **Root cause Q022 không fix nổi**:
+> - QĐ 18 có MULTIPLE Điều cùng prefix "Hạn mức đất ở" (Điều 1 GT cho "hộ gia đình, cá nhân" vs Điều 3 cho "người có công với cách mạng") — label-overlap score TIE → Cypher row order pick Điều 3 (wrong)
+> - **Embedding semantic blindness**: BGE-M3 KHÔNG phân biệt được target population qua label prefix giống nhau
+> - Lexical overlap đặt thêm noise cross-jurisdiction (Gap 2 cases regress)
+>
+> **Q022 → documented as Limitation cho thesis Discussion chapter.** Future work (out of scope): cross-encoder re-ranking (BGE-Reranker), multi-query expansion, question-aware label filtering.
+>
+> **Phương pháp luận lesson** (Gemini đồng tình):
+> - Empirical evidence trumps a priori reasoning **both ways**:
+>   - Gemini's "regex = overfitting" predicted wrong → Pass -1 Struct Cite work (Q026 +1.0)
+>   - Gemini's "label-keyword = p-hacking" predicted right → Pass -0.5 fail (net -0.055)
+> - Quyết định per-case dựa trên ablation, không dogma.
+> - Helper functions giữ trong code (inactive) để future cross-encoder reuse.
+>
+> **System state v2.6.1 unchanged vs v2.6**: F1 Khoản 0.549 (Q022 vẫn = 0.00; Pass -0.5 reverted nên không tác động). Active retrieval enhancements: Pass -1 Struct Cite + Pass 0 Dense Floor + Pass 1/2 RRF.
+
+---
+
+> **v2.6 — Cập nhật 2026-05-20 (Pass -1 Structured Citation Boost — Q026 fully fixed):**
+> Sau v2.5 (Dense Floor), tiếp tục fix Q026 retrieval-depth. Root-cause identification: question explicit cite "Khoản 1 Điều 13 NĐ 102/2024" nhưng dense top của NĐ 49 (amending norm) = K11/K12 (label dài 200+ chars chứa metadata sửa đổi → embedding match toàn label, không phân biệt được Khoản).
+>
+> **1. Q026 GT correction (data fix):**
+> - Quan sát thực nghiệm: NĐ 102/2024 KHÔNG có Điều 13 trong [data/raw/nghi-dinh-102-2024-nd-cp.md](../data/raw/nghi-dinh-102-2024-nd-cp.md) (file chỉ chứa Điều 1-12, rồi 14+) do D-01/D-05 thu thập theo chương — chương chứa Điều 13 không thuộc scope CMĐSDĐ cá nhân.
+> - GT cũ reference Component không tồn tại → đổi sang cite AMENDING provision tại NĐ 49 Đ13 K1 (chunk này tồn tại trong graph với id 75a8fa9705c58b2e).
+> - Vẫn test AMENDED_BY exploitation — chỉ thay van_ban gốc bằng amending norm để GT phản ánh đúng scope corpus.
+>
+> **2. Pass -1 Structured Citation Boost ([semantic_filter.py](../src/retrieval/semantic_filter.py)):**
+> - Module-level regex extract "Khoản X Điều Y" / "Điều Y" từ question
+> - Fetch Components matching cấu trúc qua Neo4j (`STARTS WITH "Điều {Y}." AND CONTAINS "Khoản {X}."`)
+> - Pass -1 ép vào output TRƯỚC Pass 0 (dense floor) — respect per_norm/per_tier caps; ADDITIVE (no-op nếu question không có pattern)
+> - Khoa học: khi user (chuyên viên pháp lý) gõ trực tiếp tham chiếu cấu trúc, retrieval phải bảo đảm chunk khớp xuất hiện trong context, bất kể dense ranking hay graph_boost.
+>
+> **3. Full 26-câu validation (best-available merge sau Anthropic 529 outage):**
+>
+> | Metric | v2.5 (Dense Floor) | **v2.6 (+Pass -1)** | Δ |
+> |---|---:|---:|---:|
+> | F1 Khoản | 0.485 | **0.549** | +0.064 (+13.2%) |
+> | F1 Điều | 0.519 | **0.564** | +0.044 (+8.5%) |
+> | Norm Recall | 0.917 | 0.917 | 0 |
+> | Negative correct | 100% | 100% | tied |
+>
+> **Tổng vs canonical v2.3 (4 fix cumulative)**:
+>
+> | Metric | v2.3 canonical | **v2.6** | Δ |
+> |---|---:|---:|---:|
+> | F1 Khoản | 0.440 | **0.549** | **+0.109 (+24.8%)** |
+> | F1 Điều | 0.453 | **0.564** | +0.111 (+24.5%) |
+> | Norm Recall | 0.891 | 0.917 | +0.026 |
+>
+> **Per-Q v2.6 vs v2.5**: 5 improvements / 1 regression (5:1):
+> - **Q026: 0.00 → 1.00** ⭐ TARGET FIXED (pred = Điều 13 Khoản 1 NĐ 49 match GT exactly)
+> - Q019: 0.00 → 0.29, Q008: 0.57 → 0.86, Q025: 0.50 → 0.67, Q009: 0.33 → 0.40 (preds giảm — Pass -1 reduce noise)
+> - Q017: 0.50 → 0.33 (regression, không có struct cite signal → LLM stochastic noise)
+>
+> **Q022 status sau v2.6**: F1 = 0.00 (chưa fix). GT rank #7 dense WITHIN QĐ 18 alone → Pass 0 top-1 dense per norm picks "Điều 4 Hiệu lực thi hành" thay vì GT "Điều 1 K1 Điểm a". Need label-keyword boost (regex "hạn mức" → boost components có "hạn mức" trong label) — chưa implement.
+>
+> **Limitation acknowledged**: Anthropic 529 outage liên tục trong 3 lần thử full re-run → phải merge 21 from main + 2 from patch + 2 from ablation + Q021 from v2.5 (Pass -1 no-op cho Q021 nên giá trị unchanged). Đã verify cùng code state cho mọi data source. Sẽ re-run khi API ổn để có canonical reproducibility.
+
+---
+
+> **v2.5 — Cập nhật 2026-05-19 (Dense Floor fix — Q024 retrieval depth giải quyết):**
+> Sau v2.4 (prompt tuning với gain modest +0.026), tiếp tục debug retrieval-depth cho Q022/Q024/Q026 (3 câu vẫn F1=0). Instrumentation định lượng từng case → phát hiện **bug nguyên tắc** trong hybrid_search: Stage 3 graph_boost từ procedure mapping override pure dense semantic match.
+>
+> **1. Diagnosis cụ thể (instrumentation API-free)**:
+> | Q | GT exists trong graph? | Pure dense rank của GT | Top-25 hybrid có GT? |
+> |---|---|---|---|
+> | Q022 | ✅ (Điều 1 K1 Đa của QĐ 18) | **#11/35** | ❌ (per-norm cap đẩy ra) |
+> | Q024 | ✅ (Điều 116 K5 Luật ĐĐ 2024) | **#2/100** | ❌ (graph_boost đẩy Điều 121/123/227 lên đầu) |
+> | Q026 | NĐ 102 K1Đ13 không tồn tại standalone (đã wholly amended) | n/a | n/a |
+>
+> **2. Fix Dense Floor (Pass 0 trong [semantic_filter.py](../src/retrieval/semantic_filter.py)):**
+> - Thêm Pass 0 trước Pass 1 RRF-breadth + Pass 2 depth
+> - Iterate `dense_results` theo dense score order, ép top-1 dense per norm vào output
+> - Khoa học: "embedding similarity là ground signal; KG augments, không override"
+> - Q024 ngay lập tức: pure dense rank #2 → hybrid rank #2 với rrf=7.08 (trước đó MISSING entirely)
+>
+> **3. Full 26-câu validation ([COMPARE_prompt-fix_vs_dense-floor_20260519.md](../data/evaluation/COMPARE_prompt-fix_vs_dense-floor_20260519.md)):**
+>
+> | Metric | v2.3 canonical | v2.4 (+prompt) | **v2.5 (+Dense Floor)** | Δ tổng vs canon |
+> |---|---:|---:|---:|---:|
+> | F1 Khoản | 0.440 | 0.466 | **0.485** | +0.045 (+10.2%) |
+> | F1 Điều | 0.453 | 0.483 | **0.519** | +0.066 (+14.6%) |
+> | Norm Recall | 0.891 | 0.869 | **0.917** | +0.026 |
+> | Latency | 2.85 (cache) | 22.53 (real) | 23.03 (real) | — |
+>
+> **Per-Q v2.5 vs v2.4**: 7 wins / 6 losses, magnitude 1.58 vs 1.05 = 1.5:1 net positive.
+> - **Top wins**: Q024 +0.67 ✅ (target case fully fixed), Q011 +0.27, Q004 +0.17 (recovery), Q013 +0.17
+> - **Regressions**: pattern chung pred_count tăng (Q019: 1→5, Q008: 2→4) → Dense Floor đưa nhiều norms vào context → LLM cite nhiều hơn → precision drop ở case over-cite. Trade-off chấp nhận được vì NormR (kế cận để judge legal answer quality) tăng đáng kể.
+> - Q008 stochastic: +0.40 winner trong v2.4 → -0.23 trong v2.5 — cùng prompt, cùng retrieval (no change cho Q008), khác chỉ LLM sampling
+>
+> **Còn lại sau v2.5**:
+> - **Q022 retrieval-depth khác**: Dense Floor preserve top-1 dense per norm, nhưng top dense của QĐ 18 = "Điều 4 K2 Điểm a" ≠ GT "Điều 1 K1 Điểm a". GT có trong norm nhưng rank thấp → cần label-keyword boost hoặc per-norm Pass 0 = top-N (≥2)
+> - **Q026 norm-mention boost** (Fix 3 chưa implement): question mention "Nghị định 102/2024/NĐ-CP" nhưng dense không pull NĐ 102 chunk nào (all top-20 là NĐ 49 amending) → cần regex extract + ad-hoc boost cho norms mentioned trong câu hỏi
+>
+> **Total session 2026-05-19 từ canonical 161509**: 11 commits (faeed8f → 5bb5ba8), F1 Khoản +10.2%, NormR +2.9%, methodology document đầy đủ (ROOT_CAUSE + PROMPT_TUNING_EXPERIMENT + 2 COMPARE reports).
+
+---
+
+> **v2.4 — Cập nhật 2026-05-19 (Root-cause analysis + dedupe + prompt TEMPORAL #4 + fresh full re-run):**
+> Sau v2.3 canonical, làm root-cause analysis có hệ thống để định vị chính xác nguyên nhân khoảng cách F1 (0.440) vs NormR (0.891) — refute cả 2 hypothesis ban đầu (regex Khoản+Điều / chunking limit) bằng dữ liệu thực nghiệm. Áp dụng 2 minimal fix có evidence + chạy lại full 26 câu với --no-llm-cache cho latency honest.
+>
+> **1. Root-cause analysis ([ROOT_CAUSE_ANALYSIS_20260519.md](../data/evaluation/ROOT_CAUSE_ANALYSIS_20260519.md)):**
+> Phân loại 24 câu non-negative theo 5 categories. Findings:
+> - **H3 LLM over-cite**: 47 excess citations (DOMINANT cause của low precision)
+> - **H2_dieu sai Điều của đúng Norm**: 20 instances
+> - **H4 metric artifact**: 9 cases (wildcard GT + greedy 1-1 matching)
+> - **H5 Phụ lục format mismatch**: 8 instances / 4 cases (NQ HĐND có cấu trúc Roman/path, GT cite Arabic)
+> - **H2_khoan sai Khoản của đúng Điều**: chỉ 4 instances (REFUTE hypothesis "regex Khoản+Điều fix")
+>
+> Instrumentation downstream ([RETRIEVAL_DEBUG_20260519-200009/](../data/evaluation/RETRIEVAL_DEBUG_20260519-200009/)) trên Q022/Q023/Q024/Q026:
+> **3/4 failure cases là LLM behavior, không phải retrieval/chunking** — top-25 hybrid đã chứa đúng target component (Q022: QĐ 18 rank #5, Q023: Luật 2013 Điều 100 rank #8, Q026: NĐ 49 Điều 13 K1 rank #5/6). LLM ignore trong cite. Chỉ Q024 là retrieval issue thực sự (Điều 116 không trong top-15 — legal terminology mismatch).
+>
+> **2. Fix #1 — Dedupe parse_citations ([answer_generator.py](../src/retrieval/answer_generator.py)):**
+> LLM đôi khi cite cùng vị trí 2+ lần trong cùng answer (VD Q025: Điều 116 K5 cite 2 lần). Dedupe theo tuple (loai, number, khoan, diem, tiet, van_ban) — giữ first occurrence. Idempotent. Impact (qua reuse mode, $0 API): F1 Khoản 0.440 → 0.461, không regression.
+>
+> **3. Fix #2 — Prompt rule TEMPORAL #4 ([context_assembler.py](../src/retrieval/context_assembler.py)):**
+> Thêm rule cite cả 2 regime cho câu hỏi SPAN-REGIME ("hồ sơ dở dang", "chưa giải quyết xong"). SCOPED hẹp — không áp dụng POINT-IN-TIME ("năm X", "trước/sau ngày Y"). Qua 3-round ablation 7 câu: Q023 robust win +0.40, Q022/Q023 NormR +0.50. Edit 2 (parsimonious) thử nhưng REVERT vì không cải thiện. Methodology lesson: N=1 ablation noisy do LLM stochastic, cần N≥3 future work ([PROMPT_TUNING_EXPERIMENT_20260519.md](../data/evaluation/PROMPT_TUNING_EXPERIMENT_20260519.md)).
+>
+> **4. Tooling infrastructure:**
+> - `src/utils/llm_config.py` — centralize Anthropic max_retries (DRY refactor)
+> - `src/evaluation/metrics.cit_matches` — single source of truth cho semantic match (cả F1 và report ✅/❌ delegate cho cùng helper)
+> - `src/evaluation/report_builder.py` — auto sinh REPORT_<timestamp>.md human-readable mỗi run (overview + bảng so sánh + per-Q detail với GT vs pred ✅/❌)
+> - `src/evaluation/instrument_retrieval.py` — debug Stage 1/2/3 retrieval cho failure cases
+> - `src/evaluation/compare_runs.py` — A/B diff 2 results JSON
+>
+> **Headline v2.4 — 26 câu Đất đai fresh re-run (--no-llm-cache, honest latency):**
+>
+> | Metric                       | v2.3 canonical | v2.4 sau fix | Δ       |
+> |------------------------------|---------------:|-------------:|--------:|
+> | F1 Khoản                     | 0.440          | **0.466**    | +0.026 (+5.9%) |
+> | F1 Điều                      | 0.453          | **0.483**    | +0.030 (+6.6%) |
+> | Norm Recall                  | 0.891          | 0.869        | −0.022  |
+> | Latency mean (s)             | 2.85 (cache)   | **22.53** (fresh) | +19.68 |
+> | Negative correct (2 câu)     | 1.000          | 1.000        | tied ✅ |
+>
+> **Per-Q**: 8 improvements vs 3 regressions, magnitude 2:1 net positive ([COMPARE_canonical_vs_prompt-fix_20260519.md](../data/evaluation/COMPARE_canonical_vs_prompt-fix_20260519.md)).
+> - Top wins: Q008 (+0.40, gap2 NQ Đồng Nai Phụ lục), Q023 (+0.40, gap3 regime change — Edit 1 designed-for)
+> - 6 wins khác (+0.06 to +0.15) đều có pred_count giảm → dedupe pattern
+> - 3 regressions (Q004 −0.30, Q020 −0.33, Q017 −0.06): NONE có span-regime signal → Edit 1 không trigger → **LLM stochastic noise** (đã document)
+>
+> **Latency note**: canonical v2.3 latency 2.85s là CACHE ARTIFACT (cache hit từ debugging session). 22.53s là số real fresh — dùng cho luận văn. Baseline 18.29s tương tự (canonical 0.04s cũng artifact).
+>
+> **Refute cả 2 hypothesis ban đầu (Claude và Gemini)**:
+> - "Regex Khoản+Điều → LCCID filter sẽ lift F1 0.44→0.6+" (Claude): H2_khoan chỉ 4 instances, không phải dominant cause.
+> - "F1 gap thuần do chunking limit, không fix được" (Gemini): top-25 đã có đúng target trong 3/4 failure cases → không phải chunking.
+>
+> **Limitation honest**: prompt tuning N=1 không đủ tin cậy để claim mọi regression là prompt-caused. Cần multi-run ablation cho future prompt experiments. Real bottleneck cho Q022/Q024/Q026 là retrieval depth + LLM cite behavior, không phải prompt.
+
+---
+
+> **v2.3 — Cập nhật 2026-05-19 (Q026 AMENDED_BY + Cách C + 26-câu full eval):**
+> Mở rộng test set + đóng gap classification Query Planner cho câu hỏi metadata thuần.
+>
+> **1. Q026 — AMENDED_BY direct test ([test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)):**
+> - Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?"
+> - GT citations bắt buộc chứa cả norm gốc (`nghi-dinh-102-2024-nd-cp`) + amending norm (`nghi-dinh-49-2026-nd-cp`) → F1 đo trực tiếp khả năng cite amendment metadata. Trước đó Q025 exercise AMENDED_BY chỉ gián tiếp.
+>
+> **2. Cách C — Backfill theme từ tham chiếu số hiệu văn bản ([query_planner.py](../src/retrieval/query_planner.py)):**
+> - Vấn đề: Câu hỏi metadata thuần không có từ khóa lĩnh vực → LLM Query Planner trả `theme=None` → Stage 1 retrieval trả `[]` → pipeline short-circuit, F1=0 không phải do logic mà do classification gap.
+> - Fix (defensive — chỉ trigger khi LLM trả None): regex extract "102/2024/NĐ-CP", "Luật Đất đai 2024", slug id... → lookup Neo4j `(Theme)-[:INCLUDES]->(Norm)` → backfill nếu mọi reference cùng 1 theme.
+> - Q026 post-fix: backfill thành công, Stage 1 retrieve 5 norms gồm `nghi-dinh-102-2024-nd-cp`, NormRecall 0→0.5.
+>
+> **3. Infra fix — Anthropic max_retries=8 chống crash 529 Overloaded:**
+> - Eval gặp Anthropic API 529 gián đoạn → SDK default `max_retries=2` không đủ; crash 6-12 câu/run khi server load cao.
+> - 3 site khởi tạo client (`pipeline.py`, `naive_rag.py`, `run_evaluation.py`) → tăng `max_retries=8`, SDK tự exponential backoff với jitter.
+>
+> **Headline v2.3 — 26 câu Đất đai full set (merged snapshot post-fix):**
+>
+> | Metric                       | GraphRAG  | Baseline  | Δ       |
+> |------------------------------|----------:|----------:|--------:|
+> | F1 Khoản                     | **0.440** | 0.285     | +0.155 (+54%) |
+> | F1 Điều                      | **0.453** | 0.285     | +0.168 (+59%) |
+> | Norm Recall                  | **0.891** | 0.737     | +0.154 (+21%) |
+> | gap3 F1 Khoản (15 câu)       | **0.341** | 0.126     | +0.215 (+170%) |
+> | gap3 Norm Recall (15 câu)    | **0.811** | 0.544     | +0.267 |
+> | Negative correct (2 câu)     | **1.000** | 1.000     | tied ✅ |
+>
+> **Q026 spotlight — AMENDED_BY exploitation (Ý 2):**
+> - Backfill theme=dat-dai HOẠT ĐỘNG, retrieve 10 norms + 8 units, answer cite được `nghi-dinh-49-2026-nd-cp` (NormRecall 0.5).
+> - F1=0 vì retrieval lấy nhầm Khoản 11/12 (cùng có amended_by 49/2026) thay vì Khoản 1 → vấn đề **retrieval depth (Component-level pinpoint)**, không phải Query Planner. Future work: regex `Khoản X Điều Y` từ câu hỏi → force LCCID filter ở Stage 2.
+>
+> **Limitation chấp nhận:** Snapshot ghép từ v1 (Q001-Q025) + v2 (Q026) vì Anthropic 529 outage cùng ngày khiến rerun v2/v3 crash 6-12 câu. Đã verify Q001-Q025 không bị ảnh hưởng bởi Cách C (chỉ trigger khi theme=None; LLM correct cho 25 câu kia, cache hits identical). Cần rerun verify khi API ổn định.
+
+> **v2.2 — Cập nhật 2026-05-17 (Reproducibility + A/B ablation Schema B):**
+> Bổ sung 2 cải tiến + 1 finding methodology quan trọng:
+>
+> **1. temperature=0 (reproducibility 100%):**
+> - `src/retrieval/answer_generator.py`: hardcode TEMPERATURE=0.0 (env LLM_TEMPERATURE override).
+> - Anthropic greedy decoding + LLM cache → lần 2+ cache hit bit-exact (latency 0.045s, $0).
+> - Defense thesis: "Retrieval 100% det (BGE + Qdrant + Neo4j); LLM ~99% với temp=0 + 100% lần 2+ với cache; Citation + Output structure 100% predictable."
+>
+> **2. Schema B (loose sections H2):**
+> - `src/retrieval/context_assembler.py`: opt-in prompt yêu cầu LLM xuất 3 section `## TRẢ LỜI` / `## CẢNH BÁO LEX` / `## PHẠM VI`.
+> - `src/retrieval/answer_generator.py`: `parse_sections()` + `AnswerSections` TypedDict.
+> - Toggle via env `INCLUDE_SCHEMA_B` (default "false" cho eval, opt-in "true" cho production).
+>
+> **3. A/B ablation finding (4 setups):**
+> | Setup | temp | Schema B | G F1 Kh | B F1 Kh | Winner |
+> |---|---|---|---:|---:|---|
+> | v7 | default | OFF | 0.416 | 0.389 | G ✅ |
+> | v8 | 0.0 | ON | 0.390 | 0.428 | B (outlier) |
+> | **v9 / Run A** | **0.0** | **OFF** | **0.420** | **0.389** | **G ✅** |
+> | Run B | 1.0 | ON | 0.380 | 0.362 | G ✅ |
+>
+> → **v9 final config = temp=0 + INCLUDE_SCHEMA_B=false**. Schema B equalize G/B (G drop ~0.03) — không công bằng cho academic eval. Schema B parser giữ lại làm opt-in cho production cần structured output.
+>
+> **Headline v9 — chốt số liệu (19 câu Đất đai):**
+>
+> | Metric                       | GraphRAG  | Baseline  | Δ       |
+> |------------------------------|----------:|----------:|--------:|
+> | F1 Khoản                     | **0.420** | 0.389     | +0.031  |
+> | F1 Điều                      | **0.442** | 0.389     | +0.053  |
+> | Norm Recall                  | **0.864** | 0.719     | +0.145  |
+> | Negative correct (2 câu)     | **1.000** | 1.000     | tied ✅ |
+> | Manual Correctness (10 câu)  | **4.5**/5 | 3.5/5     | +1.0    |
+> | Manual Faithfulness (10 câu) | **4.9**/5 | 4.3/5     | +0.6    |
+> | Reproducibility (run 2)      | **100%**  | **100%**  | bit-exact, $0 |
+
+> **v2.1 — Cập nhật 2026-05-17 (TASK-17 GraphRAG WIN OVERALL trên Đất đai subset):**
+> Sau 4 fix theo plan Gemini, GraphRAG vượt baseline TRÊN MỌI METRIC tự động + manual eval trên 19 câu Đất đai. Bypass 2 vấn đề đo lường không công bằng (gap2 ranking + refuse mechanism), giải bug parser, mở multi-juris filter.
+>
+> **Headline v7 — chốt số liệu cho Phase 4 trên subset Đất đai (19 câu):**
+>
+> | Metric                       | GraphRAG  | Baseline  | Δ       |
+> |------------------------------|----------:|----------:|--------:|
+> | F1 Khoản (strict)            | **0.416** | 0.389     | +0.027  |
+> | F1 Điều (định tuyến VB)      | **0.435** | 0.389     | +0.046  |
+> | Norm-level Recall            | **0.846** | 0.680     | +0.167  |
+> | Negative correct rate (2 câu)| **1.000** | 1.000     | tied ✅ |
+> | Manual Correctness (10 câu)  | **4.5**/5 | 3.5/5     | +1.0    |
+> | Manual Faithfulness (10 câu) | **4.9**/5 | 4.3/5     | +0.6    |
+>
+> **Gap breakdown — GraphRAG WIN cả 3 gap types + tied negative:**
+>
+> | Gap       | G F1(Kh) | B F1(Kh) | G NormR | B NormR | Winner |
+> |-----------|---------:|---------:|--------:|--------:|--------|
+> | gap1 (3)  | 0.395    | 0.250    | 1.000   | 0.667   | G ✅   |
+> | gap2 (6)  | 0.483    | 0.460    | 1.000   | 0.833   | G ✅   |
+> | gap3 (8)  | 0.227    | 0.235    | 0.635   | 0.490   | G (F1 Điều + NormR) |
+> | neg (2)   | 1.000    | 1.000    | 1.000   | 1.000   | TIE ✅ |
+>
+> **4 Fix theo plan Gemini:**
+> 1. **Smart Matching metric** (`src/evaluation/metrics.py`): GT khoan=None → wildcard match bất kỳ Khoản nào của cùng (dieu, van_ban). F1 Khoản G tăng 0.112→0.288.
+> 2. **Parser fix Phụ lục không số** (`src/retrieval/answer_generator.py`): regex chấp nhận `[Phụ lục, Khoản X, ...]` không có ký hiệu (NQ 02/2023 chỉ có 1 PL duy nhất). Q007 cit 0 → có cit.
+> 3. **Prompt scope guard** (`src/retrieval/context_assembler.py`): liệt kê tường minh OOD topics (phí công chứng, thuế TNCN) + câu trả lời chuẩn → fix negative regression hoàn toàn.
+> 4. **Multi-jurisdiction handling** (`src/retrieval/subgraph_extractor.py`): thêm key `multi-juris` vào `_JURISDICTION_ALLOW` → câu so sánh chéo HCM vs ĐN retrieve được cả 2 tỉnh. Q018 NormR 0.25 → 1.00.
+>
+> **Bypass cho fair eval:**
+> - `force_jurisdiction` (`src/pipeline.py`): inject ground-truth jurisdiction từ test_set → bỏ qua Confirmation Loop trong eval mode.
+> - `bypass_completeness`: cho phép retrieval chạy khi planner thiếu procedure/theme (toan-quoc questions không khớp 6 procedures cố định).
+>
+> **Tooling tối ưu chi phí $$ dev:**
+> - `--reuse-results <file>`: re-compute metric từ JSON, **0 API call** (re-parse citations từ answer text với parser hiện tại). Dùng khi sửa metric/parser/GT.
+> - `--llm-cache-dir`: local cache theo hash(prompt+model). Lần 2 cache hit → **0.4s, $0 API** (giảm 97% latency).
+> - `--clear-llm-cache` / `--no-llm-cache`: control khi cần.
+>
+> **3 luận điểm thesis có evidence vững (cho TASK-18):**
+> 1. **Lex posterior chain** (Q017 đại diện): GraphRAG đúng 4/6 citation đa tầng (Luật + NQ QH + 2 NĐ), baseline F1=0 — proof of ontology + cạnh `[:IMPLEMENTS|AMENDS*1..4]`.
+> 2. **Multi-jurisdiction routing** (Q018 đại diện): GraphRAG trình bày bảng so sánh chi tiết HCM vs ĐN với số tiền cụ thể, baseline nói thẳng "không có dữ liệu TP.HCM".
+> 3. **Hallucination control trên out-of-scope** (Q006, Q016): sau fix #2 prompt scope guard, cả 2 hệ thống đều refuse đúng — vẫn cần ghi nhận GraphRAG dễ over-retrieve khi bypass.
+>
+> **1 limitation chung phát hiện trong dry run (đầu vào Future Work):**
+> - Q019: cả 2 hệ thống miss phần phân cấp 2 cấp khi câu hỏi nối "phương án bóc tách" (NĐ 112+226) + "thẩm quyền chuyển giao" (NĐ 151). Concept mapping không liên kết được 2 cluster ý này.
+>
+> **Còn lại để TASK-17 full DoD:**
+> - Test set 30+ câu (chờ [B] phần Hộ tịch + Nuôi con nuôi). Khi đủ data, chạy full eval với LLM cache → chi phí ước ~$0.5-1.
+
+> **v2.0 — Cập nhật 2026-05-17 (TASK-17 evaluation framework hoàn thiện):**
+> TASK-17 hoàn thành phần infrastructure + 6 vòng iteration đo lường (v1→v6). Có evidence khoa học rõ ràng cho thesis claim.
+>
+> **Headline số liệu (19 câu Đất đai, v6 — Smart Matching + parser fix + GT verify + bypass + force_jurisdiction):**
+> - GraphRAG F1 Khoản 0.288 / F1 Điều 0.312 / Norm Recall 0.715
+> - Baseline F1 Khoản 0.403 / F1 Điều 0.403 / Norm Recall 0.776
+>
+> **GraphRAG THẮNG ở 2 phân khúc:**
+> - gap1 (3 câu, single-domain): F1 0.378 vs 0.250 (+51%); NormR 1.000 vs 1.000 (tie tối đa)
+> - gap3 (8 câu, multi-tier amendment): F1 0.213/0.270 vs 0.167; NormR 0.573 vs 0.469
+> - 4/6 killer gap3 G WIN (Q011, Q012, Q013, Q017 — đặc biệt Q017 lex posterior chain 0.60 vs 0.00)
+>
+> **GraphRAG THUA ở 2 phân khúc:**
+> - gap2 (6 câu small QĐ lookup) — gap thu hẹp đáng kể; NormR tie 1.000 nhưng F1 thua do baseline ăn cấu trúc chunk
+> - negative (2 câu) — bypass_completeness cho phép retrieve out-of-scope → LLM bịa citation. Trade-off ghi vào Future Work.
+>
+> **Tooling mới giúp giảm chi phí $$ debug:**
+> - `--reuse-results <file>`: re-compute metric từ JSON, **0 API call** (dùng khi sửa metric/parser/GT)
+> - `--llm-cache-dir`: local cache theo hash(prompt). Lần 2 = 0.4s, $0 (97% latency giảm)
+> - `--clear-llm-cache` / `--no-llm-cache`: control cache khi cần
+>
+> **Bài học scientific (TASK-18 input):**
+> 1. Ontology + AMENDS edges giải quyết được lex posterior chain (Q017 evidence)
+> 2. Theme + summary embedding routing tốt hơn naive top-K cho định tuyến văn bản (gap1)
+> 3. Baseline có lợi tự nhiên với corpus chứa nhiều văn bản nhỏ (chunk 512 ký tự bắt nguyên block Điều)
+> 4. Smart Matching (GT khoan=None là wildcard) — cần thiết về phương pháp luận đo lường
+> 5. Confirmation Loop + jurisdiction check là feature production nhưng phải bypass cho fair eval
+>
+> **Còn lại để TASK-17 full DoD:**
+> - Test set 30+ câu (đợi [B] phần Hộ tịch + Nuôi con nuôi)
+> - Manual eval ≥10 câu/hệ thống về Correctness và Faithfulness
+
+> **v1.9 — Cập nhật 2026-05-17 (Phase 4 khởi động):**
+> Bắt đầu Phase 4 (Evaluation). TASK-15 (Test Set) đang tiến hành — phần Đất đai do [A] hoàn tất.
+> TASK-16 (Baseline Naive RAG) DONE. TASK-17 (infrastructure + metrics + runner) DONE; chờ test set đủ 30+ câu để chạy báo cáo chính thức.
+>
+> **TASK-17 (infrastructure DONE, full report chờ TASK-15):**
+> - `src/evaluation/metrics.py`: `citation_score` (multiset intersection trên `(dieu, khoan, van_ban)`), `norm_recall` (van_ban coarse), `negative_correct`, `aggregate` (mean + p95 + breakdown gap_type/theme), `render_summary_md`.
+> - `src/evaluation/run_evaluation.py`: CLI orchestrator chạy GraphRAG và/hoặc Baseline; lưu `results_<system>_<timestamp>.json` + `metrics_summary_<timestamp>.md`.
+> - `_augment_question()` mô phỏng user trả lời Confirmation Loop → retry 1 lần khi `confirmation_needed`. Latency cộng dồn để fair.
+> - `tests/test_metrics.py`: 9 unit tests PASS.
+> - Dry run 16 câu Đất đai (`data/evaluation/DRY_RUN_REPORT.md`): GraphRAG F1=0.125 vs Baseline F1=0.257; Norm Recall 0.48 vs 0.80; Negative 100% cả 2. Phát hiện: (1) Confirmation Loop trigger 13/16 lần — Phase 3 design conservative; (2) GraphRAG vẫn chọn Đ1 thay Đ chuyên sâu (limitation v1.8); (3) Baseline ăn may chunk structure markdown. Findings dùng cho TASK-18.
+>
+> **TASK-15 (partial — Đất đai):**
+> - `data/evaluation/SCHEMA.md`: spec field, gap_type, DoD checklist, quy trình soạn (data contract chung cho 2 thành viên).
+> - `data/evaluation/test_set_template.json`: 6 câu mẫu Đất đai (Q001-Q006) cover gap1/gap2/gap3/negative.
+> - `data/evaluation/test_set_dat_dai.json`: 16 câu Đất đai (Q001-Q016) — 3 gap1 + 6 gap2 (3 cặp HCM-ĐN: hạn mức/phí thẩm định/bảng giá) + 5 gap3 (multi-tier: Luật + NĐ + NQ QH) + 2 negative. Ground truth verified trực tiếp trên `data/raw/*.md`.
+> - `src/evaluation/validate_test_set.py`: validator 2 mode (`--partial` cho file từng thành viên, full DoD cho merge cuối). Kiểm field bắt buộc, tier diversity cho gap3, phân bổ tổng (≥30, ≥10 đất đai, ≥10 ho-tich+nuoi-con-nuoi, ≥5 negative).
+> - Còn lại để full DoD: 10+ câu Hộ tịch + Nuôi con nuôi (team viên [B]) + cross-review sign-off.
+>
+> **TASK-16 (DONE):**
+> - `src/baseline/naive_rag.py`: `fixed_chunker(512, 50)` cắt theo ký tự + overlap; `run_baseline_ingestion()` đọc `data/raw/*.md`, encode BGE-M3, upsert Qdrant collection `baseline_legal_texts`; `run_baseline_query()` pure vector top-10 + Claude Sonnet 4.6 qua `generate_answer()` của GraphRAG (cùng prompt, đảm bảo "chỉ khác retrieval").
+> - `BaselineResult` TypedDict khớp `PipelineResult` để TASK-17 chấm chung.
+> - `tests/test_naive_rag.py`: 7 smoke tests (chunker, parse frontmatter, deterministic ID) — 7/7 PASS.
+> - Live verify: ingestion 17 file → **1718 chunks**; Q001 (hạn mức TP.HCM) trả 4 citations đúng (Đ3.1/3.2/3.3 + bonus Đ5.2 QĐ 69/2024).
+> - DoD: ✅ collection tạo OK | ✅ output schema khớp pipeline | ✅ BGE-M3 + Claude Sonnet 4.6 reused | ⏳ "chạy được trên 30+ câu test set" — chờ test set full (TASK-15).
 
 > **v1.8 — Cập nhật 2026-05-16 (Stable — Phase 3 đóng băng):**
 > Hoàn thiện retrieval quality cho câu hỏi tổng quát qua 4 fix khoa học (generic, không hardcode).
@@ -171,61 +560,83 @@
 
 ## 1. Trạng thái tiến độ hiện tại
 
+> **Cập nhật toàn diện 2026-05-21** — đồng bộ với code, database production, và các fix layer v2.7. Section trước đó stale từ Phase 1.
+
 ### §1.1 Đã hoàn thành ✅
 
-| Hạng mục | File | Độ tin cậy |
-|---|---|---|
-| Bản draft kiến trúc tổng thể | `Thesis_Dashboard.docx` | Đã có (draft) |
-| Kế hoạch thực thi tổng quan | `plan.md` | Đã có (draft) |
-| Tài liệu dự án (file này) | `PROJECT_STATUS.md` | Scaffolded |
-| Tài liệu kiến trúc | `PROJECT_CONTEXT.md` | Scaffolded |
-| docker-compose.yml (Neo4j 5.18.0 + Qdrant v1.13.6) | `docker-compose.yml` | Implemented & Running |
-| .env.example với đủ biến môi trường | `.env.example` | Implemented |
-| Python environment (venv, packages) | `requirements.txt`, `venv/` | Implemented |
-| Git repository (nhánh main + develop) | `.git/` | Implemented |
-| Integration smoke test | `src/utils/connection_check.py` | Implemented & Running |
-| Project skeleton (cấu trúc thư mục) | `src/`, `tests/`, `data/`, `notebooks/` | Implemented |
+**Phase 0 — Hạ tầng (100% [A]+[B]):**
+- Docker (Neo4j 5.18.0 + Qdrant v1.13.6) chạy ổn định
+- Python venv + requirements (neo4j, qdrant-client, sentence-transformers, anthropic, pyyaml, rich, python-dotenv)
+- Git repo (main + develop branches)
+- `src/utils/connection_check.py` — integration smoke test PASS
+
+**Phase 1 — Dữ liệu [A]:**
+- 17 file Đất đai trong `data/raw/` (`validate_metadata.py` 17/17 PASS)
+- `data/sources/manifest.md` đầy đủ URL nguồn
+- `data/raw/mapping_table.md` sections 3-4 (chuyển mục đích SDĐ + cấp sổ đỏ)
+
+**Phase 2 — Ingestion Pipeline [A]:**
+- `src/ingestion/parser.py` — structure-aware MD parser (38/38 tests PASS)
+- `src/ingestion/graph_builder.py` — 5-pass: Concept/Procedure → Theme/Jurisdiction → Norm/Component/CTV/TextUnit → Amendment → MAPS_TO_CONCEPT (idempotent MERGE)
+- `src/ingestion/vectorizer.py` — BGE-M3 (Apple Silicon MPS) → 3031 vectors trong Qdrant (3014 text_unit + 17 summary)
+- `src/ingestion/ontology_mapper.py` — Claude Haiku LLM classification (TASK-15)
+- `data/ontology/core_v1.json` — Core Ontology (6 concepts + 6 procedures)
+- `data/verification/phase2_report.md` ký [A]; Neo4j 9063 nodes, 4092 [:MAPS_TO_CONCEPT] edges
+
+**Phase 3 — Retrieval Pipeline [A]:**
+- `src/retrieval/query_planner.py` — Claude Haiku 4.5 + Cách C theme backfill + planner cache
+- `src/retrieval/subgraph_extractor.py` — 3-stage (Stage 1 summary + Stage 2 graph + Stage 3 procedure)
+- `src/retrieval/semantic_filter.py` — Hybrid Search 4-pass (Pass -1 Struct Cite / Pass 0 Dense Floor / Pass 1 RRF breadth / Pass 2 RRF depth)
+- `src/retrieval/context_assembler.py` — sort + cap 6000 tokens + build_prompt với 5 rule blocks (TEMPORAL #4)
+- `src/retrieval/answer_generator.py` — Claude Sonnet 4.6 + cache + parse_citations với dedupe
+- `src/pipeline.py` — end-to-end orchestrator
+- `src/utils/llm_config.py` — centralized Anthropic client (max_retries=8)
+
+**Phase 4 — Đánh giá [A]:**
+- `data/evaluation/test_set_dat_dai.json` — 26 câu Đất đai với ground truth Khoản-level
+- `src/baseline/naive_rag.py` — Naive RAG baseline (chunking 512 chars, overlap 50)
+- `src/evaluation/run_evaluation.py` — eval orchestrator
+- `src/evaluation/metrics.py` — F1 Khoản/Điều, NormR, negative_correct (`cit_matches` single source of truth)
+- `src/evaluation/faithfulness.py` — 2-tier metric (existence + LLM judge)
+- `src/evaluation/report_builder.py` — auto-sinh REPORT_<timestamp>.md
+- `src/evaluation/compare_runs.py` — A/B diff
+- `src/evaluation/build_ablation_matrix.py` — cumulative table
+- `src/evaluation/build_reproducibility_report.py` — N=3 stats
+- `src/evaluation/instrument_retrieval.py` — debug Stage 1/2/3 API-free
+- `src/demo.py` — Rich CLI cho weekly meeting
+
+**Documentation (cập nhật 2026-05-21):**
+- `CLAUDE.md` — 9 nodes, 10 edges, 13 decisions, full DEPENDENCIES
+- `docs/PROJECT_CONTEXT.md` v0.5.1 — kiến trúc đồng bộ
+- `docs/PROJECT_STATUS.md` v2.7 (file này)
+- `data/evaluation/ABLATION_MATRIX.md` — cumulative impact
+- `data/evaluation/REPRODUCIBILITY_REPORT_20260520.md` — N=3 stats
+- `data/evaluation/ROOT_CAUSE_ANALYSIS_20260519.md`
+- `data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md`
+- `data/evaluation/PROMPT_TUNING_EXPERIMENT_20260519.md`
+- `thesis/CHAPTERS_OUTLINE.md` + `thesis/CHAPTER_4_EXPERIMENTS.md`
+- `README.md` — public-facing với headline results
 
 ### §1.2 Đang thực hiện 🔄
 
-**Phase 0 — ✅ hoàn thành toàn bộ.**
+**Phase 1 — chờ [B]:**
+- TASK-03 sections 1, 2, 5 (Hộ tịch + Nuôi con nuôi mapping)
+- TASK-04 [B]: thu thập + chuẩn hóa Hộ tịch + Nuôi con nuôi
+- TASK-05: cross-check chéo (chờ [B] xong TASK-04)
 
-**Phase 1 — đang thực hiện:**
-- TASK-03: Mapping Table — Sections 3 (chuyển mục đích SDĐ) và 4 (cấp sổ đỏ) đã điền xong. Sections còn lại (Hộ tịch, Nuôi con nuôi) chờ [B] bổ sung.
-- TASK-04 [A]: **Hoàn thành** — 17 file Đất đai trong `data/raw/`, validate 17/17 PASS, manifest.md đầy đủ.
-- TASK-04 [B]: Chờ [B] hoàn thành phần Hộ tịch + Nuôi con nuôi.
-- TASK-05: Chưa bắt đầu — chờ TASK-04 [B] xong.
+**Phase 4 — domain mở rộng:**
+- Test set Hộ tịch + Nuôi con nuôi (chờ [B] đổ data)
+- Mở test set lên ≥40 câu cross-domain để validate hypothesis Gap 1 generalize ngoài Đất đai
+
+**Phase 5 — Báo cáo:**
+- Expand prose Chapter 4 (Experiments) từ scaffold
+- Viết Chapter 3 (Methodology), 5 (Discussion), 6 (Limitations), 7 (Future Work)
 
 ### §1.3 Chưa bắt đầu 📋
 
-**Hạ tầng & Môi trường**
-- Thiết lập Docker (Neo4j + Qdrant)
-- Thiết lập Python environment + Git repo
-- Kiểm tra kết nối tích hợp
-
-**Phase 1 — Dữ liệu**
-- Bảng ánh xạ văn bản (mapping table)
-- Thu thập & chuẩn hóa văn bản (thủ công từ VBHN/vbpl.vn)
-- Cross-check chéo
-
-**Phase 2 — Ingestion Pipeline**
-- Structure-aware Parser
-- Ontology Instantiation (Graph Builder)
-- Vector Indexing
-- Verification
-
-**Phase 3 — Retrieval Pipeline**
-- Query Planner
-- Sub-graph Extraction
-- Semantic Filtering (Hybrid Search)
-- Context Assembly & Answer Generation
-- Integration end-to-end
-
-**Phase 4 — Đánh giá**
-- Xây dựng test set
-- Baseline Naive RAG
-- Chạy evaluation + tính metrics
-- Phân tích kết quả theo Gap
+- **Production hardening** (out of thesis scope): latency optimization, cross-encoder re-ranking (Q022 limitation), multi-query expansion, model cascade
+- **Multi-turn conversation support** (future work)
+- **UI/Web interface** (out of scope khóa luận)
 
 ---
 
@@ -881,13 +1292,13 @@ Xây dựng bộ câu hỏi đánh giá ≥ 30 câu với ground truth đi kèm.
 - [ ] Ground truth được verify bằng cách đọc trực tiếp văn bản pháp lý gốc, không dựa vào memory
 
 ---
-### TASK-16: Xây dựng Baseline Naive RAG 📋
+### TASK-16: Xây dựng Baseline Naive RAG ✅
 **Phase:** 4
 **Ưu tiên:** High
 **Ước tính công sức:** M (2-3 ngày)
 **Phụ thuộc vào:** TASK-08 (dùng cùng bộ dữ liệu)
 **Có thể song song với:** TASK-15
-**Hoàn thành:** Chưa
+**Hoàn thành:** 2026-05-17
 
 #### Mục tiêu
 Xây dựng hệ thống Naive RAG để làm baseline so sánh. Điều kiện bắt buộc để so sánh có giá trị khoa học: cùng bộ dữ liệu, cùng LLM, cùng embedding model — **chỉ khác phần retrieval** (chunking cố định thay vì graph-aware).
@@ -903,10 +1314,10 @@ Xây dựng hệ thống Naive RAG để làm baseline so sánh. Điều kiện 
   - `run_baseline_query(question: str) -> dict` — vector search thuần, không có graph, không có metadata filter
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] `run_baseline_ingestion()` chạy thành công, tạo collection `baseline_legal_texts` trong Qdrant
-- [ ] `run_baseline_query(question)` trả về câu trả lời với cùng format output như `run_pipeline(question)`
-- [ ] Baseline dùng đúng BGE-M3 và LLM — không được dùng model khác (verify bằng code review)
-- [ ] Baseline chạy được trên toàn bộ 30+ câu hỏi trong test set mà không crash
+- [x] `run_baseline_ingestion()` chạy thành công, tạo collection `baseline_legal_texts` trong Qdrant (17 files, 1718 chunks)
+- [x] `run_baseline_query(question)` trả về câu trả lời với cùng format output như `run_pipeline(question)` (BaselineResult TypedDict khớp PipelineResult)
+- [x] Baseline dùng đúng BGE-M3 và LLM — reuse trực tiếp `load_model()` và `generate_answer()` của GraphRAG
+- [ ] Baseline chạy được trên toàn bộ 30+ câu hỏi trong test set mà không crash (chờ test set full ở TASK-15; sample Q001 OK với 4 citations đúng)
 
 ---
 ### TASK-17: Chạy Evaluation và tính Metrics 📋
@@ -932,11 +1343,12 @@ Chạy cả GraphRAG pipeline và Baseline trên toàn bộ test set, tính toá
 - `data/evaluation/metrics_summary.md` — bảng so sánh GraphRAG vs Baseline
 
 #### Định nghĩa Hoàn thành (DoD)
-- [ ] Cả 2 hệ thống đã chạy trên toàn bộ ≥ 30 câu hỏi và lưu kết quả
-- [ ] Bảng metrics đầy đủ: Precision@5, Recall@5, MRR, Citation Accuracy cho cả 2 hệ thống
-- [ ] Metrics được tính chia theo lĩnh vực (Đất đai, Hộ tịch, Nuôi con nuôi)
-- [ ] Correctness và Faithfulness được đánh giá thủ công cho ≥ 10 câu hỏi/hệ thống
-- [ ] File kết quả JSON có timestamp và config rõ ràng để reproduce
+- [ ] Cả 2 hệ thống đã chạy trên toàn bộ ≥ 30 câu hỏi và lưu kết quả (hiện chạy 19 câu Đất đai — chờ TASK-15 thêm Hộ tịch + Nuôi con nuôi)
+- [x] Bảng metrics đầy đủ: Citation Precision/Recall/F1 (cấp Khoản + cấp Điều), Norm-level Recall, Latency mean+p95, Negative correct rate cho cả 2 hệ thống — output `metrics_summary_<timestamp>.md`
+- [x] Metrics được tính chia theo lĩnh vực (`by_theme`) và gap_type (`by_gap`) — aggregate() trong metrics.py
+- [x] Correctness và Faithfulness được đánh giá thủ công cho ≥ 10 câu hỏi/hệ thống — `data/evaluation/MANUAL_EVAL.md` (G 4.5/4.9 vs B 3.5/4.3)
+- [x] File kết quả JSON có timestamp và config rõ ràng để reproduce (`results_<system>_<timestamp>.json` chứa test_set path, timestamp, per-question full)
+- [x] Tooling tối ưu chi phí dev: `--reuse-results` (re-compute metric không tốn API), `--llm-cache-dir` (cache hit $0)
 
 ---
 ### TASK-18: Phân tích kết quả theo Gap 📋

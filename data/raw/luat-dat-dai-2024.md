@@ -1577,6 +1577,10 @@ Thành phố trực thuộc trung ương đã có quy hoạch chung được ph�
 
 Trường hợp quy hoạch chung được phê duyệt sau khi phê duyệt quy hoạch sử dụng đất cấp tỉnh mà làm thay đổi chỉ tiêu sử dụng đất trong quy hoạch sử dụng đất cấp tỉnh thì không phải thực hiện điều chỉnh quy hoạch sử dụng đất cấp tỉnh mà căn cứ quy hoạch chung để lập kế hoạch sử dụng đất cấp tỉnh.
 <!-- amended_by: 47/2024/QH15, điểm a khoản 2 Điều 57, hiệu lực: 01/07/2025, nội dung: thay "pháp luật về quy hoạch đô thị" bằng "pháp luật về quy hoạch đô thị và nông thôn" -->
+<!-- original_v_2024-08-01:
+Thành phố trực thuộc Trung ương đã có quy hoạch chung được phê duyệt theo quy định của pháp luật về quy hoạch đô thị thì không phải lập quy hoạch sử dụng đất cấp tỉnh mà căn cứ quy hoạch chung để lập kế hoạch sử dụng đất cấp tỉnh.
+
+Trường hợp quy hoạch chung được phê duyệt sau khi phê duyệt quy hoạch sử dụng đất cấp tỉnh mà làm thay đổi chỉ tiêu sử dụng đất trong quy hoạch sử dụng đất cấp tỉnh thì không phải thực hiện điều chỉnh quy hoạch sử dụng đất cấp tỉnh mà căn cứ quy hoạch chung để lập kế hoạch sử dụng đất cấp tỉnh. -->
 
 ### Khoản 6.
 
@@ -2195,6 +2199,13 @@ Trường hợp quyết định, chấp thuận chủ trương đầu tư dự �
 
 Căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở hoặc chuyển mục đích sử dụng các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia đình, cá nhân là quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị và nông thôn đã được cơ quan có thẩm quyền phê duyệt.
 <!-- amended_by: 47/2024/QH15, điểm a khoản 2 Điều 57, hiệu lực: 01/07/2025, nội dung: Cụm từ “pháp luật về quy hoạch đô thị” được thay thế bằng cụm từ “pháp luật về quy hoạch đô thị và nông thôn” -->
+<!-- original_v_2024-08-01: 
+Căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân
+cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở hoặc chuyển mục đích
+sử dụng các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia
+đình, cá nhân là quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy
+hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị đã được cơ quan
+có thẩm quyền phê duyệt -->
 
 ### Khoản 6.
 

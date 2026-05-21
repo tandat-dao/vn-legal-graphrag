@@ -1,0 +1,261 @@
+{
+  "system": "graphrag",
+  "test_set": "data/evaluation/test_set_crashed_5.json",
+  "timestamp": "20260520-134913",
+  "total_elapsed_s": 283.63,
+  "results": [
+    {
+      "id": "Q020",
+      "question": "Năm 2020, hạn mức giao đất ở cho cá nhân tại Quận 1 TP.HCM được quy định ở văn bản nào và mức bao nhiêu m²?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "<<ERROR: Error code: 529 - {'type': 'error', 'error': {'type': 'overloaded_error', 'message': 'Overloaded'}, 'request_id': 'req_011CbDNncKksbQgJ67G6g6Xe'}>>",
+      "pred_citations": [],
+      "ground_truth_citations": [
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "a",
+          "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "norm_recall": 0.0,
+      "negative_correct": null,
+      "elapsed_seconds": 0.0,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": false,
+      "top_k_count": 0
+    },
+    {
+      "id": "Q021",
+      "question": "So sánh hạn mức giao đất ở cho cá nhân tại các quận nội thành TP.HCM theo Quyết định 18/2016 (cũ) và Quyết định 69/2024 (hiện hành) có gì khác nhau?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "medium",
+      "system": "graphrag",
+      "answer": "<<ERROR: Error code: 529 - {'type': 'error', 'error': {'type': 'overloaded_error', 'message': 'Overloaded'}, 'request_id': 'req_011CbDNrjJovSxREyyDYgiim'}>>",
+      "pred_citations": [],
+      "ground_truth_citations": [
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "a",
+          "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+        },
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 2,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 2,
+        "match_count": 0
+      },
+      "norm_recall": 0.0,
+      "negative_correct": null,
+      "elapsed_seconds": 0.0,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": false,
+      "top_k_count": 0
+    },
+    {
+      "id": "Q023",
+      "question": "Hồ sơ cấp Giấy chứng nhận quyền sử dụng đất nộp năm 2023 nhưng chưa giải quyết xong, hiện áp dụng Luật Đất đai 2013 hay Luật Đất đai 2024?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Câu hỏi SPAN-REGIME: Hồ sơ nộp năm 2023, chưa giải quyết xong — áp dụng luật nào?\n\nĐây là câu hỏi điển hình về **hồ sơ dở dang** (nộp dưới Luật Đất đai 2013, chưa có quyết định cuối cùng khi Luật Đất đai 2024 có hiệu lực). Cần trình bày cả hai regime.\n\n---\n\n### 1. Bối cảnh hai văn bản\n\n| | Luật Đất đai 2013 | Luật Đất đai 2024 |\n|---|---|---|\n| **Hiệu lực** | 01/07/2014 | 01/08/2024 |\n| **Hết hiệu lực** | 01/01/2025 (HẾT HIỆU LỰC) | Đang có hiệu lực |\n| **Quy định cấp GCN có giấy tờ (giao đất từ 15/10/1993)** | [Điều 100, Khoản 4, Văn bản luat-dat-dai-2013] | [Điều 137, Khoản 4, Văn bản luat-dat-dai-2024] |\n\n> **Lưu ý:** Quy định tại [Điều 100, Khoản 4, Văn bản luat-dat-dai-2013] đã được sửa đổi/thay thế bởi [Điều 137, Khoản 4, Văn bản luat-dat-dai-2024], có hiệu lực từ 01/08/2024.\n\n---\n\n### 2. Nguyên tắc xử lý hồ sơ dở dang\n\n**CONTEXT không cung cấp điều khoản chuyển tiếp cụ thể** cho trường hợp hồ sơ cấp Giấy chứng nhận đã nộp trước 01/08/2024 nhưng chưa giải quyết xong. Do đó, áp dụng **nguyên tắc pháp luật không hồi tố (cắt ngang)**:\n\n- **Hồ sơ đã có quyết định cuối cùng trước 01/08/2024** → áp dụng **Luật Đất đai 2013**.\n- **Hồ sơ chưa có quyết định cuối cùng tính đến 01/08/2024** → áp dụng **Luật Đất đai 2024** (nguyên tắc cắt ngang thời điểm luật mới có hiệu lực).\n\nVì hồ sơ của bạn **nộp năm 2023 nhưng chưa giải quyết xong** (tức chưa có quyết định/Giấy chứng nhận được cấp), thì **tại thời điểm hiện nay sẽ áp dụng Luật Đất đai 2024** và các văn bản hướng dẫn thi hành (như Nghị định 101/2024/NĐ-CP, Nghị định 102/2024/NĐ-CP...).\n\n---\n\n### 3. Lưu ý thực tiễn\n\nVề **nội dung thực chất**, hai luật có quy định tương đồng đối với trường hợp được Nhà nước giao đất/cho thuê đất từ 15/10/1993 đến trước ngày luật có hiệu lực mà chưa được cấp GCN:\n\n- **Luật 2013:** Được cấp GCN; chưa thực hiện nghĩa vụ tài chính thì phải thực hiện theo quy định. [Điều 100, Khoản 4, Văn bản luat-dat-dai-2013]\n- **Luật 2024:** Được cấp GCN; trường hợp chưa nộp tiền sử dụng đất thì phải nộp theo quy định. [Điều 137, Khoản 4, Văn bản luat-dat-dai-2024]\n\n---\n\n### 4. Khuyến nghị\n\nĐể xác định chính xác, cần làm rõ thêm:\n1. **Hồ sơ đã được cơ quan có thẩm quyền ra thông báo/quyết định nào chưa** (thông báo nộp tiền, quyết định cấp GCN...)?\n2. **Loại đất và nguồn gốc sử dụng đất** (có giấy tờ hay không có giấy tờ, đất ở hay đất nông nghiệp...)?\n3. **Cơ quan tiếp nhận hồ sơ** đang xử lý theo trình tự nào?\n\nNếu bạn cung cấp thêm thông tin, tôi có thể tư vấn cụ thể hơn.",
+      "pred_citations": [
+        {
+          "dieu": "100",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2013",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "137",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "139",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "100",
+          "van_ban": "luat-dat-dai-2013"
+        },
+        {
+          "dieu": "99",
+          "van_ban": "luat-dat-dai-2013"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4,
+        "pred_count": 2,
+        "gt_count": 3,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4,
+        "pred_count": 2,
+        "gt_count": 3,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 28.98,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 16
+    },
+    {
+      "id": "Q025",
+      "question": "Hiện nay năm 2026, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì? Có gì khác so với bản gốc không?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Căn cứ cho phép chuyển mục đích sử dụng đất theo Luật Đất đai 2024 (tại thời điểm 2026)\n\n### 1. Quy định hiện hành (đã được sửa đổi)\n\nTheo **Điều 116, Khoản 5, Luật Đất đai 2024**, căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở, hoặc chuyển mục đích sử dụng các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia đình, cá nhân là:\n\n> **Quy hoạch sử dụng đất cấp huyện** hoặc **quy hoạch chung** hoặc **quy hoạch phân khu** theo quy định của pháp luật về **quy hoạch đô thị và nông thôn** đã được cơ quan có thẩm quyền phê duyệt.\n\n[Điều 116, Khoản 5, Văn bản luat-dat-dai-2024]\n\n---\n\n### 2. Điểm khác so với bản gốc\n\n**Có sự thay đổi về cụm từ:**\n\n- **Bản gốc Luật Đất đai 2024** sử dụng cụm từ: *\"pháp luật về **quy hoạch đô thị**\"*\n- **Sau khi sửa đổi** bởi Luật số 47/2024/QH15 (hiệu lực từ **01/07/2025**): cụm từ trên được thay thế bằng *\"pháp luật về **quy hoạch đô thị và nông thôn**\"*\n\n> **Lưu ý:** Nội dung tại Điều 116, Khoản 5 đã được sửa đổi bởi **Luật 47/2024/QH15** (điểm a khoản 2 Điều 57), có hiệu lực từ ngày **01/07/2025**, bổ sung thêm cụm từ \"và nông thôn\" vào phạm vi áp dụng quy hoạch.\n\n[Điều 116, Khoản 5, Văn bản luat-dat-dai-2024] (được sửa đổi bởi điểm a khoản 2 Điều 57, Văn bản 47/2024/QH15, hiệu lực 01/07/2025)\n\n---\n\n### 3. Quy định bổ sung tại cấp Nghị định (từ 15/08/2025)\n\nNgoài ra, đối với trường hợp **không thuộc diện chấp thuận chủ trương đầu tư**, căn cứ giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất là **quy hoạch sử dụng đất cấp xã** hoặc quy hoạch theo pháp luật về quy hoạch đô thị và nông thôn đã được phê duyệt.\n\n[Điều 44, Văn bản nghi-dinh-102-2024-nd-cp] (được bổ sung bởi khoản 6 Điều 4, Nghị định 226/2025/NĐ-CP, hiệu lực 15/08/2025)\n\n---\n\n### Tóm tắt sự thay đổi\n\n| Nội dung | Bản gốc (trước 01/07/2025) | Hiện hành (từ 01/07/2025) |\n|---|---|---|\n| Phạm vi quy hoạch áp dụng | Pháp luật về quy hoạch **đô thị** | Pháp luật về quy hoạch **đô thị và nông thôn** |\n\nSự thay đổi này mở rộng phạm vi áp dụng, bao gồm cả quy hoạch nông thôn, phù hợp hơn với thực tiễn chuyển mục đích sử dụng đất tại các khu vực nông thôn.",
+      "pred_citations": [
+        {
+          "dieu": "116",
+          "khoan": "5",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "44",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "116",
+          "khoan": "5",
+          "van_ban": "luat-dat-dai-2024"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "pred_count": 2,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "pred_count": 2,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 82.29,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 16
+    },
+    {
+      "id": "Q026",
+      "question": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "<<ERROR: Error code: 529 - {'type': 'error', 'error': {'type': 'overloaded_error', 'message': 'Overloaded'}, 'request_id': 'req_011CbDP5HwvqsDVTpBM6uYST'}>>",
+      "pred_citations": [],
+      "ground_truth_citations": [
+        {
+          "dieu": "13",
+          "khoan": "1",
+          "van_ban": "nghi-dinh-49-2026-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "norm_recall": 0.0,
+      "negative_correct": null,
+      "elapsed_seconds": 0.0,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": false,
+      "top_k_count": 0
+    }
+  ]
+}

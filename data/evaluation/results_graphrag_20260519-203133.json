@@ -1,0 +1,417 @@
+{
+  "system": "graphrag",
+  "test_set": "data/evaluation/test_set_ablation_prompt.json",
+  "timestamp": "20260519-203133",
+  "total_elapsed_s": 126.07,
+  "results": [
+    {
+      "id": "Q001",
+      "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu m²?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "easy",
+      "system": "graphrag",
+      "answer": "## Hạn mức giao đất ở cho cá nhân tại TP.HCM\n\nTheo **Quyết định 69/2024/QĐ-UBND TP.HCM** (có hiệu lực từ 30/09/2024), hạn mức giao đất ở cho **cá nhân** được quy định theo từng khu vực như sau:\n\n### 1. Khu vực nội thành và TP. Thủ Đức\n**Không quá 160 m²/cá nhân**, áp dụng cho các quận:\n- Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12\n- Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân\n- Thành phố Thủ Đức\n\n[Điều 3, Khoản 1, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n### 2. Thị trấn các huyện và khu vực đô thị mới\n**Không quá 200 m²/cá nhân**, áp dụng cho:\n- Thị trấn các huyện\n- Khu vực đã thực hiện dự án xây dựng đô thị mới theo quy hoạch tại các huyện **Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ**\n\n[Điều 3, Khoản 2, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n### 3. Các xã thuộc huyện ngoại thành\n**Không quá 250 m²/cá nhân** *(mức cao nhất)*, áp dụng cho:\n- Các **xã** thuộc huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ\n\n[Điều 3, Khoản 3, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n---\n\n> **Lưu ý:** Quy định tại Quyết định 18/2016/QĐ-UBND TP.HCM (hiệu lực 26/05/2016) đã **hết hiệu lực từ ngày 30/09/2024** và được thay thế hoàn toàn bởi Quyết định 69/2024/QĐ-UBND nêu trên. Ngoài ra, quy định mới áp dụng cho **cá nhân** (thay vì **hộ gia đình** như quy định cũ), phù hợp với Luật Đất đai 2024.",
+      "pred_citations": [
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        },
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 3,
+        "gt_count": 3,
+        "match_count": 3
+      },
+      "citation_score_dieu": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 3,
+        "gt_count": 3,
+        "match_count": 3
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 16.67,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 17
+    },
+    {
+      "id": "Q006",
+      "question": "Mức phí công chứng hợp đồng chuyển nhượng quyền sử dụng đất hiện nay là bao nhiêu?",
+      "gap_type": "negative",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "easy",
+      "system": "graphrag",
+      "answer": "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp luật chuyên ngành tương ứng.\n\nCụ thể, phí công chứng hợp đồng chuyển nhượng quyền sử dụng đất được quy định trong **Luật Công chứng** và **Luật Phí, lệ phí** cùng các văn bản hướng dẫn thi hành — những văn bản này nằm ngoài phạm vi corpus của hệ thống.\n\nBạn có thể tra cứu tại các nguồn như Cổng thông tin pháp luật quốc gia (vbpl.vn) hoặc liên hệ trực tiếp tổ chức hành nghề công chứng để được tư vấn chính xác.",
+      "pred_citations": [],
+      "ground_truth_citations": [],
+      "citation_score": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 0,
+        "gt_count": 0,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 0,
+        "gt_count": 0,
+        "match_count": 0
+      },
+      "norm_recall": 1.0,
+      "negative_correct": true,
+      "elapsed_seconds": 9.84,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 14
+    },
+    {
+      "id": "Q020",
+      "question": "Năm 2020, hạn mức giao đất ở cho cá nhân tại Quận 1 TP.HCM được quy định ở văn bản nào và mức bao nhiêu m²?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Hạn mức giao đất ở cho cá nhân tại Quận 1, TP.HCM năm 2020\n\n### Văn bản áp dụng\n\nNăm 2020, vấn đề hạn mức giao đất ở cho hộ gia đình, cá nhân tại TP.HCM được điều chỉnh bởi **Quyết định 18/2016/QĐ-UBND của UBND TP.HCM** (có hiệu lực từ 26/05/2016 đến 30/09/2024), trong đó quy định hạn mức đất ở đối với hộ gia đình, cá nhân và mục đích áp dụng hạn mức.\n\n[Điều 1, Khoản 2, Điểm b, Văn bản quyet-dinh-18-2016-qd-ubnd-tp-hcm]\n\n### Về mức cụ thể (m²)\n\n**CONTEXT được cung cấp không chứa thông tin về con số hạn mức cụ thể** (số m²) áp dụng tại Quận 1 hay các quận/huyện khác của TP.HCM. Các đoạn trích trong CONTEXT chỉ đề cập đến **mục đích áp dụng hạn mức** (xác định nghĩa vụ tài chính, giao đất, chuyển mục đích sử dụng đất, cấp Giấy chứng nhận...) mà không nêu con số hạn mức cụ thể.\n\n### Khuyến nghị\n\nĐể biết mức hạn mức giao đất ở cụ thể (m²) tại Quận 1 năm 2020, bạn cần tra cứu **toàn văn Quyết định 18/2016/QĐ-UBND** (phần quy định hạn mức theo từng khu vực quận/huyện), hoặc liên hệ **Sở Tài nguyên và Môi trường TP.HCM** hoặc **UBND Quận 1** để được cung cấp thông tin chính xác.\n\n> **Lưu ý:** Quyết định 18/2016/QĐ-UBND đã hết hiệu lực từ ngày 30/09/2024 và được thay thế bởi văn bản mới. Tuy nhiên, tại thời điểm năm 2020, đây là văn bản còn hiệu lực và được áp dụng.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": "2",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "a",
+          "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 1,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 15.37,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 9
+    },
+    {
+      "id": "Q022",
+      "question": "Hồ sơ giao đất ở của tôi nộp tháng 6/2024 nhưng đến nay (tháng 10/2024) vẫn chưa có quyết định cuối cùng, áp dụng hạn mức theo Quyết định 18/2016 hay Quyết định 69/2024?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Trả lời: Áp dụng hạn mức theo văn bản nào?\n\nĐây là câu hỏi **SPAN-REGIME** (hồ sơ dở dang, nộp trước khi văn bản mới có hiệu lực nhưng chưa có quyết định cuối cùng). Dưới đây là phân tích đầy đủ cả hai chế độ pháp lý.\n\n---\n\n### 1. Hai văn bản liên quan\n\n| | Quyết định 18/2016/QĐ-UBND TP.HCM | Quyết định 69/2024/QĐ-UBND TP.HCM |\n|---|---|---|\n| **Hiệu lực** | 26/05/2016 | 30/09/2024 |\n| **Tình trạng** | **HẾT HIỆU LỰC** từ 30/09/2024 | **Đang có hiệu lực** |\n| **Nội dung** | Quy định hạn mức đất ở cũ tại TP.HCM | Quy định hạn mức giao đất ở mới tại TP.HCM theo Luật Đất đai 2024 |\n\n> **Lưu ý:** Quyết định 18/2016/QĐ-UBND TP.HCM đã hết hiệu lực kể từ ngày 30/09/2024, được thay thế bởi Quyết định 69/2024/QĐ-UBND TP.HCM.\n> [Điều 1, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm] | [Điều 1, Khoản 2, Điểm b, Văn bản quyet-dinh-18-2016-qd-ubnd-tp-hcm]\n\n---\n\n### 2. Xác định văn bản áp dụng\n\n**Thời điểm then chốt:**\n- Bạn **nộp hồ sơ tháng 6/2024** → lúc đó QĐ 18/2016 còn hiệu lực\n- Đến **tháng 10/2024** vẫn chưa có quyết định cuối cùng → QĐ 69/2024 đã có hiệu lực từ 30/09/2024\n\n**Nguyên tắc áp dụng:**\n\nVì CONTEXT **không có điều khoản chuyển tiếp** cụ thể điều chỉnh trường hợp hồ sơ giao đất đang dở dang giữa hai quyết định này, nguyên tắc chung được áp dụng là:\n\n> **Hồ sơ chưa có quyết định cuối cùng → áp dụng pháp luật hiện hành tại thời điểm ra quyết định (luật mới cắt ngang).**\n\nDo đó, tại thời điểm tháng 10/2024, khi cơ quan có thẩm quyền ra quyết định giao đất, **hạn mức giao đất ở sẽ được xác định theo Quyết định 69/2024/QĐ-UBND TP.HCM** (đã có hiệu lực từ 30/09/2024), không còn áp dụng Quyết định 18/2016 nữa.\n\n[Điều 1, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n---\n\n### 3. Khuyến nghị\n\nĐể có câu trả lời chắc chắn, bạn nên làm rõ thêm:\n\n1. **Hồ sơ của bạn thuộc loại giao đất nào?** (giao đất mới, công nhận quyền sử dụng đất, hay chuyển mục đích?) — vì mỗi loại có thể có quy định chuyển tiếp riêng.\n2. **Cơ quan tiếp nhận hồ sơ** có thông báo gì về việc áp dụng văn bản nào không?\n3. Nếu có tranh chấp về hạn mức áp dụng, bạn có thể **yêu cầu cơ quan thụ lý hồ sơ giải thích bằng văn bản** căn cứ pháp lý họ sử dụng.\n\n---\n\n> ⚠️ **Lưu ý quan trọng:** CONTEXT hiện tại không cung cấp nội dung cụ thể về **mức hạn mức số** trong QĐ 69/2024 (chỉ có phạm vi điều chỉnh). Để biết con số hạn mức cụ thể áp dụng cho khu vực của bạn (nông thôn hay đô thị tại TP.HCM), bạn cần tra cứu trực tiếp nội dung Quyết định 69/2024/QĐ-UBND TP.HCM.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "1",
+          "khoan": "2",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "3",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        },
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "a",
+          "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 2,
+        "gt_count": 2,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "pred_count": 2,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 32.45,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 24
+    },
+    {
+      "id": "Q023",
+      "question": "Hồ sơ cấp Giấy chứng nhận quyền sử dụng đất nộp năm 2023 nhưng chưa giải quyết xong, hiện áp dụng Luật Đất đai 2013 hay Luật Đất đai 2024?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Câu hỏi về hồ sơ cấp Giấy chứng nhận nộp năm 2023, chưa giải quyết xong\n\nĐây là câu hỏi **SPAN-REGIME** — hồ sơ nộp dưới thời Luật Đất đai 2013 nhưng chưa có quyết định cuối cùng khi Luật Đất đai 2024 có hiệu lực. Cần trình bày cả hai chế độ pháp lý.\n\n---\n\n### 1. Bối cảnh hai văn bản\n\n| | Luật Đất đai 2013 | Luật Đất đai 2024 |\n|---|---|---|\n| **Hiệu lực** | 01/07/2014 | 01/08/2024 |\n| **Hết hiệu lực** | 01/01/2025 (HẾT HIỆU LỰC) | Đang có hiệu lực |\n\nVí dụ về quy định cấp GCN cho hộ gia đình, cá nhân được Nhà nước giao đất/cho thuê đất từ 15/10/1993 đến trước ngày Luật có hiệu lực mà chưa được cấp GCN:\n- **Luật cũ**: được cấp GCN; chưa thực hiện nghĩa vụ tài chính thì phải thực hiện [Điều 100, Khoản 4, Văn bản luat-dat-dai-2013]\n- **Luật mới**: được cấp GCN; chưa nộp tiền sử dụng đất thì phải nộp theo quy định [Điều 137, Khoản 4, Văn bản luat-dat-dai-2024]\n\n---\n\n### 2. Nguyên tắc áp dụng pháp luật chuyển tiếp\n\n**CONTEXT được cung cấp không chứa điều khoản chuyển tiếp cụ thể** điều chỉnh trường hợp hồ sơ cấp GCN đã nộp trước 01/08/2024 nhưng chưa giải quyết xong.\n\nTheo **nguyên tắc pháp luật không hồi tố** và thông lệ xử lý chuyển tiếp trong pháp luật Việt Nam:\n\n> **Hồ sơ đã nộp nhưng chưa có quyết định cuối cùng** tại thời điểm Luật Đất đai 2024 có hiệu lực (01/08/2024) → **áp dụng Luật Đất đai 2024** (nguyên tắc \"cắt ngang\" — luật mới điều chỉnh từ thời điểm có hiệu lực trở đi đối với các quan hệ chưa được giải quyết xong).\n\n---\n\n### 3. Lưu ý quan trọng\n\n> **Lưu ý:** Quy định tại [Điều 100, Khoản 4, Văn bản luat-dat-dai-2013] đã được sửa đổi/thay thế bởi [Điều 137, Khoản 4, Văn bản luat-dat-dai-2024] kể từ ngày 01/08/2024. Luật Đất đai 2013 hết hiệu lực từ 01/01/2025.\n\n---\n\n### 4. Khuyến nghị — Cần làm rõ thêm\n\nĐể xác định chính xác, tôi cần biết thêm:\n\n1. **Loại hồ sơ cụ thể** là gì? (Đất không có giấy tờ? Đất được giao không đúng thẩm quyền? Đất có nguồn gốc nông/lâm trường?)\n2. **Thời điểm sử dụng đất** (trước 15/10/1993, từ 15/10/1993–01/07/2014, hay sau 01/07/2014)?\n3. **Hồ sơ đã được thụ lý chưa**, hay mới nộp mà chưa có phiếu tiếp nhận?\n4. **Cơ quan có thẩm quyền đã ra văn bản trung gian nào chưa** (thông báo bổ sung hồ sơ, thông báo nộp tiền...)?\n\nNhững thông tin này sẽ giúp xác định điều khoản cụ thể nào của Luật Đất đai 2024 áp dụng cho trường hợp của bạn.",
+      "pred_citations": [
+        {
+          "dieu": "100",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2013",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "137",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "139",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "100",
+          "van_ban": "luat-dat-dai-2013"
+        },
+        {
+          "dieu": "99",
+          "van_ban": "luat-dat-dai-2013"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4,
+        "pred_count": 2,
+        "gt_count": 3,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.5,
+        "recall": 0.3333333333333333,
+        "f1": 0.4,
+        "pred_count": 2,
+        "gt_count": 3,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 24.7,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 16
+    },
+    {
+      "id": "Q024",
+      "question": "Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Căn cứ cho phép chuyển mục đích sử dụng đất theo Luật Đất đai 2024\n\nDựa trên thông tin trong CONTEXT, có thể cung cấp thông tin như sau:\n\n### 1. Căn cứ đối với trường hợp không thuộc diện chấp thuận chủ trương đầu tư\n\nĐối với trường hợp **không thuộc diện chấp thuận chủ trương đầu tư, chấp thuận nhà đầu tư** theo pháp luật về đầu tư, căn cứ để cho phép chuyển mục đích sử dụng đất là:\n\n> **Quy hoạch sử dụng đất cấp xã** hoặc **quy hoạch được lập theo quy định của pháp luật về quy hoạch đô thị và nông thôn** đã được cơ quan có thẩm quyền phê duyệt.\n\n[Điều 44, Văn bản nghi-dinh-102-2024-nd-cp]\n\n### 2. Trình tự, thủ tục\n\nCác trường hợp chuyển mục đích sử dụng đất phải được cơ quan nhà nước có thẩm quyền cho phép được thực hiện theo trình tự, thủ tục quy định tại Luật Đất đai 2024.\n\n[Điều 227, Văn bản luat-dat-dai-2024]\n\n---\n\n**Lưu ý quan trọng:** Nội dung tại Điều 44 Nghị định 102/2024/NĐ-CP **sẽ được bổ sung, sửa đổi bởi Nghị định 226/2025/NĐ-CP (khoản 6 Điều 4)**, có hiệu lực từ ngày **15/08/2025**. Tại thời điểm năm 2024, phiên bản hiện hành nêu trên vẫn đang áp dụng.\n\n---\n\n⚠️ **Lưu ý giới hạn thông tin:** CONTEXT được cung cấp chưa bao gồm đầy đủ toàn bộ các căn cứ cho phép chuyển mục đích sử dụng đất theo Luật Đất đai 2024 (ví dụ: căn cứ đối với trường hợp thuộc diện chấp thuận chủ trương đầu tư). Để có thông tin toàn diện, bạn nên tham khảo trực tiếp Luật Đất đai 2024 và Nghị định 102/2024/NĐ-CP.",
+      "pred_citations": [
+        {
+          "dieu": "44",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "227",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "116",
+          "khoan": "5",
+          "van_ban": "luat-dat-dai-2024"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 2,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 2,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 16.26,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 14
+    },
+    {
+      "id": "Q026",
+      "question": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "graphrag",
+      "answer": "## Trả lời\n\nDựa trên CONTEXT được cung cấp, **không có thông tin** về việc Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được văn bản nào sửa đổi hay ngày hiệu lực cụ thể.\n\nCONTEXT hiện tại chỉ đề cập đến:\n- **Điều 13 của Nghị định 49/2026/NĐ-CP** (có hiệu lực từ 31/01/2026) sửa đổi, bổ sung một số điều của Nghị định 102/2024/NĐ-CP, cụ thể là **Khoản 11** (sửa đổi Điều 87) và **Khoản 12** (sửa đổi Điều 99) — nhưng **không đề cập đến Khoản 1 Điều 13** của Nghị định 102/2024/NĐ-CP [Điều 13, Khoản 11, Văn bản nghi-dinh-49-2026-nd-cp]; [Điều 13, Khoản 12, Văn bản nghi-dinh-49-2026-nd-cp].\n\n**Kết luận:** Hệ thống không có đủ thông tin để trả lời câu hỏi này. Để biết chính xác Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được sửa đổi bởi văn bản nào và từ ngày nào, bạn nên tra cứu trực tiếp tại **Cơ sở dữ liệu quốc gia về pháp luật** (vbpl.vn) hoặc Cổng thông tin điện tử Chính phủ.",
+      "pred_citations": [
+        {
+          "dieu": "13",
+          "khoan": "11",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-49-2026-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "13",
+          "khoan": "12",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-49-2026-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "13",
+          "khoan": "1",
+          "van_ban": "nghi-dinh-102-2024-nd-cp"
+        },
+        {
+          "van_ban": "nghi-dinh-49-2026-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 2,
+        "gt_count": 2,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 2,
+        "gt_count": 2,
+        "match_count": 0
+      },
+      "norm_recall": 0.5,
+      "negative_correct": null,
+      "elapsed_seconds": 10.77,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 8
+    }
+  ]
+}

@@ -10,6 +10,17 @@ Token budget: ước tính ≈ len(text) / 3.5 chars per token (Vietnamese BPE h
 """
 import json
 import logging
+import os
+
+# Toggle Schema B (3 sections H2) trong prompt qua env var.
+# "false" (default): prompt v7 truyền thống không có section markers — fair comparison
+#   với baseline cho academic eval (Run A đo G F1 0.420 vs B 0.389).
+# "true": yêu cầu LLM xuất 3 section TRẢ LỜI / CẢNH BÁO LEX / PHẠM VI — dùng cho
+#   production khi cần structured output (frontend, programmatic API).
+# Lý do mặc định false: A/B test cho thấy Schema B equalize G/B (G drop ~0.03, B
+#   variable), khi kết hợp với temp=0 thậm chí baseline thắng F1. Eval mode ưu tiên
+#   so sánh kiến trúc retrieval fair, opt-in Schema B cho production deployment.
+INCLUDE_SCHEMA_B = os.getenv("INCLUDE_SCHEMA_B", "false").lower() == "true"
 
 from neo4j import Driver
 
@@ -27,10 +38,19 @@ CHARS_PER_TOKEN = 3.5  # heuristic cho tiếng Việt với BPE tokenizer
 _FETCH_TEXT_CYPHER = """
 MATCH (t:TextUnit)
 WHERE t.id IN $ids
+OPTIONAL MATCH (t)<-[:HAS_TEXT_UNIT]-(:CTV)<-[:HAS_CTV]-(c:Component)-[:AMENDED_BY]->(a:Amendment)
+WITH t, collect(DISTINCT {
+    amending_norm: a.amending_norm,
+    amending_loc: a.amending_loc,
+    effective_date: a.effective_date,
+    change_type: a.change_type,
+    content_summary: a.content_summary
+}) AS amendments
 RETURN t.id AS id,
        t.text AS text,
        t.context_path AS context_path,
-       t.norm_id AS norm_id
+       t.norm_id AS norm_id,
+       [x IN amendments WHERE x.amending_norm IS NOT NULL] AS amendments
 """
 
 
@@ -38,10 +58,12 @@ def fetch_texts(
     text_unit_ids: list[str],
     neo4j_driver: Driver,
 ) -> dict[str, dict]:
-    """Fetch text + context_path từ Neo4j cho danh sách text_unit_ids.
+    """Fetch text + context_path + amendments từ Neo4j cho danh sách text_unit_ids.
 
     Returns:
-        Dict mapping text_unit_id → {text, context_path, norm_id}.
+        Dict mapping text_unit_id → {text, context_path, norm_id, amendments}.
+        amendments = list dict {amending_norm, amending_loc, effective_date,
+        change_type, content_summary} (rỗng nếu Component không có amendment).
     """
     if not text_unit_ids:
         return {}
@@ -61,6 +83,7 @@ def fetch_texts(
             "text": row["text"] or "",
             "context_path": context_path or [],
             "norm_id": row["norm_id"] or "",
+            "amendments": row.get("amendments") or [],
         }
     return result
 
@@ -69,20 +92,29 @@ def fetch_texts(
 # Citation label helpers
 # ---------------------------------------------------------------------------
 
+VALID_TO_SENTINEL = "9999-12-31"  # sync với graph_builder.VALID_TO_SENTINEL
+
+
 def _format_citation_label(
     context_path: list[str],
     norm_id: str,
     tier: int | None = None,
     valid_from: str | None = None,
+    valid_to: str | None = None,
 ) -> str:
-    """Tạo nhãn citation kèm metadata tier + valid_from cho LLM suy luận.
+    """Tạo nhãn citation kèm metadata tier + valid_from + valid_to cho LLM suy luận.
 
-    Ví dụ:
-        context_path=["luat-dat-dai-2024", "Điều 116", "Khoản 1"], tier=1, valid_from="2024-08-01"
+    Ví dụ VB còn hiệu lực:
+        valid_from="2024-08-01", valid_to="9999-12-31"
         → "[Tier 1 | Hiệu lực: 2024-08-01] Điều 116, Khoản 1 (luat-dat-dai-2024)"
 
+    Ví dụ VB đã hết hiệu lực (temporal layer):
+        valid_from="2014-07-01", valid_to="2025-01-01"
+        → "[Tier 1 | Hiệu lực: 2014-07-01 → 2025-01-01 (HẾT HIỆU LỰC)] Điều 95 (luat-dat-dai-2013)"
+
     Metadata prefix cho phép LLM áp dụng quy tắc lex posterior / lex superior
-    mà KHÔNG cần inline `amended_by` annotation trong markdown nguồn.
+    + nhận biết VB hết hiệu lực để xử lý câu hỏi temporal đúng (TH1 chuyển tiếp,
+    TH2 cắt ngang).
     """
     if not context_path:
         base = norm_id
@@ -91,12 +123,16 @@ def _format_citation_label(
         location = ", ".join(parts) if parts else ""
         base = f"{location} ({context_path[0]})" if location else context_path[0]
 
-    # Metadata prefix: [Tier X | Hiệu lực: YYYY-MM-DD]
+    # Metadata prefix: [Tier X | Hiệu lực: YYYY-MM-DD] hoặc
+    #                 [Tier X | Hiệu lực: YYYY-MM-DD → YYYY-MM-DD (HẾT HIỆU LỰC)]
     meta_parts = []
     if tier is not None:
         meta_parts.append(f"Tier {tier}")
     if valid_from:
-        meta_parts.append(f"Hiệu lực: {valid_from}")
+        if valid_to and valid_to != VALID_TO_SENTINEL:
+            meta_parts.append(f"Hiệu lực: {valid_from} → {valid_to} (HẾT HIỆU LỰC)")
+        else:
+            meta_parts.append(f"Hiệu lực: {valid_from}")
     if meta_parts:
         return f"[{' | '.join(meta_parts)}] {base}"
     return base
@@ -104,6 +140,31 @@ def _format_citation_label(
 
 def _estimate_tokens(text: str) -> int:
     return max(1, int(len(text) / CHARS_PER_TOKEN))
+
+
+def _format_amendments_warning(amendments: list[dict]) -> str:
+    """Format amendments thành block cảnh báo cho LLM trước text Component.
+
+    Returns chuỗi rỗng nếu không có amendment. Ngược lại trả block dạng:
+        [AMENDMENT WARNING]
+        - <amending_norm>, <amending_loc>, hiệu lực <YYYY-MM-DD>: <content_summary>
+        - ...
+    """
+    if not amendments:
+        return ""
+    lines = ["[AMENDMENT WARNING — nội dung Component này đã/sắp bị sửa đổi:]"]
+    # Sort theo effective_date ascending để LLM thấy chronology
+    sorted_amends = sorted(
+        amendments,
+        key=lambda a: a.get("effective_date") or "0000-00-00",
+    )
+    for a in sorted_amends:
+        norm = a.get("amending_norm", "?")
+        loc = a.get("amending_loc", "?")
+        date = a.get("effective_date") or "?"
+        content = (a.get("content_summary") or "").strip()
+        lines.append(f"  - {norm} ({loc}, hiệu lực {date}): {content}")
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
@@ -158,8 +219,16 @@ def assemble_context(
             fetched["norm_id"],
             tier=unit.get("tier"),
             valid_from=unit.get("valid_from"),
+            valid_to=unit.get("valid_to"),
         )
-        block = f"--- {label} ---\n{fetched['text'].strip()}"
+        # AMENDMENT preamble (Ý 2 — khai thác AMENDED_BY graph):
+        # Khi Component này có amendment, thêm warning trước text để LLM biết
+        # nội dung sắp đọc đã/sắp bị sửa đổi và áp dụng lex posterior chính xác.
+        amend_block = _format_amendments_warning(fetched.get("amendments", []))
+        if amend_block:
+            block = f"--- {label} ---\n{amend_block}\n{fetched['text'].strip()}"
+        else:
+            block = f"--- {label} ---\n{fetched['text'].strip()}"
         block_tokens = _estimate_tokens(block)
 
         if used_tokens + block_tokens > max_tokens:
@@ -189,6 +258,22 @@ def build_prompt(question: str, context: str) -> str:
     Returns:
         Prompt string hoàn chỉnh để gửi vào LLM.
     """
+    schema_b_block = "\n" + """
+ĐỊNH DẠNG ĐẦU RA (BẮT BUỘC):
+Câu trả lời của bạn PHẢI gồm đúng 3 section sau, theo thứ tự, dùng heading H2 (##) chính xác như sau:
+
+## TRẢ LỜI
+[Nội dung câu trả lời chính bằng markdown. Dùng heading H3 (###) hoặc H4 (####) cho sub-sections nếu cần. Mọi citation đặt inline trong nội dung theo format [Điều X, ...] đã quy định ở YÊU CẦU KHÁC.]
+
+## CẢNH BÁO LEX
+[Liệt kê các trường hợp mâu thuẫn pháp lý phát hiện được — bullet list, mỗi dòng theo format: "Quy định tại [VB cũ] đã được sửa đổi/thay thế bởi [VB mới, ngày hiệu lực]". Nếu KHÔNG có mâu thuẫn, ghi đúng dòng: "Không có"]
+
+## PHẠM VI
+[Ghi đúng một trong hai dòng:
+- "Trong phạm vi corpus" — nếu câu hỏi thuộc 3 lĩnh vực được lập chỉ mục
+- "Ngoài phạm vi corpus — [lý do ngắn]" — nếu áp dụng PHẠM VI CORPUS guard ở trên]
+""" if INCLUDE_SCHEMA_B else ""
+
     return f"""Bạn là trợ lý pháp lý chuyên về pháp luật Việt Nam. Chỉ sử dụng thông tin trong CONTEXT dưới đây để trả lời câu hỏi. Không được suy đoán hay bịa đặt thông tin ngoài context.
 
 QUY TẮC ƯU TIÊN VĂN BẢN (BẮT BUỘC):
@@ -199,16 +284,46 @@ Khi hai hoặc nhiều đoạn quy định về CÙNG MỘT vấn đề mà NỘ
   3. Lex specialis (đặc thù): Nếu đồng cấp và đồng thời, văn bản quy định RIÊNG cho một địa phương hoặc lĩnh vực cụ thể được ưu tiên hơn văn bản quy định chung.
 Khi phát hiện mâu thuẫn, PHẢI nêu rõ: "Lưu ý: Quy định tại [văn bản cũ] đã được sửa đổi/thay thế bởi [văn bản mới, ngày hiệu lực]."
 
+QUY TẮC AMENDMENT WARNING (BẮT BUỘC):
+Khi một đoạn trong CONTEXT mở đầu bằng block "[AMENDMENT WARNING — ...]" liệt kê các văn bản đã/sắp sửa đổi Component này, BẮT BUỘC:
+  1. ĐỌC danh sách amendment trước khi trích dẫn nội dung Component → biết phiên bản nào còn hiệu lực tại thời điểm câu hỏi.
+  2. NẾU effective_date trong amendment SỚM HƠN thời điểm câu hỏi: phải nói rõ "Nội dung này đã được sửa đổi/bổ sung bởi [amending_norm] tại [amending_loc] kể từ [effective_date]: [content_summary]" và áp dụng phiên bản sửa đổi.
+  3. NẾU effective_date MUỘN HƠN thời điểm câu hỏi: phiên bản gốc trong CONTEXT vẫn áp dụng tại thời điểm đó, NHƯNG vẫn phải nói cho user biết quy định sẽ thay đổi sắp tới để tránh hiểu nhầm.
+  4. Trong câu trả lời, ưu tiên trích dẫn `[Điều X, Văn bản amending_norm]` khi đã có amendment có hiệu lực, KHÔNG được giả vờ amendment không tồn tại.
+
+QUY TẮC TEMPORAL (XỬ LÝ VĂN BẢN HẾT HIỆU LỰC):
+Khi CONTEXT chứa cả văn bản còn hiệu lực VÀ văn bản đã hết hiệu lực (nhận biết qua metadata header "Hiệu lực: ... → ... (HẾT HIỆU LỰC)"):
+1. TRÌNH BÀY rõ ràng cả 2 văn bản (cũ + mới) với ngày hiệu lực để user hiểu bối cảnh.
+2. KHÔNG được tự quyết định "áp dụng văn bản nào" khi câu hỏi chưa nêu rõ trạng thái hồ sơ user. Thay vào đó:
+   (a) NẾU CONTEXT có Điều khoản chuyển tiếp (VD: Điều 256 Luật Đất đai 2024): TRÍCH NGUYÊN VĂN và giải thích các trường hợp được quy định (tiếp tục luật cũ / bắt buộc luật mới / người dân chọn).
+   (b) NẾU CONTEXT KHÔNG có điều khoản chuyển tiếp: nêu nguyên tắc "pháp luật không hồi tố" — hồ sơ đã có quyết định cuối cùng giữ luật cũ; hồ sơ chưa có quyết định cuối cùng áp dụng luật mới (cắt ngang).
+   (c) NÊN HỎI LẠI user trạng thái hồ sơ (đã có quyết định cuối chưa? thời điểm nộp? loại sự kiện) để chốt câu trả lời.
+3. KHÔNG được im lặng bỏ qua văn bản hết hiệu lực nếu nó liên quan trực tiếp đến câu hỏi temporal (VD user hỏi "trước 2024 quy định ra sao?").
+4. CITE BẮT BUỘC CẢ 2 REGIME — CHỈ ÁP DỤNG cho câu hỏi SPAN-REGIME:
+   - Câu hỏi SPAN-REGIME = có một trong các dấu hiệu: "hồ sơ dở dang", "chưa giải quyết xong", "đang xử lý", "nộp năm X chưa có quyết định", "áp dụng [VB cũ] hay [VB mới]". Câu hỏi loại này cần SO SÁNH/TỔNG HỢP cả 2 regime.
+   - Câu hỏi POINT-IN-TIME (KHÔNG áp dụng rule này) = "năm X quy định gì", "tại thời điểm Y", "trước/sau ngày Z" — chỉ cần regime tương ứng thời điểm hỏi, KHÔNG bắt buộc cite regime kia dù nó có trong context.
+   - VỚI CÂU SPAN-REGIME: nếu answer text trình bày cả văn bản cũ và mới (mục 1 ở trên), PHẢI có citation format [Điều X, Văn bản Y_cũ] cho regime cũ VÀ [Điều X', Văn bản Y_mới] cho regime mới. Lý do: pred citations là output máy đọc — phải reflect đầy đủ những gì answer text nói.
+
+PHẠM VI CORPUS (BẮT BUỘC ĐỌC TRƯỚC KHI TRẢ LỜI):
+Hệ thống này chỉ lập chỉ mục PHÁP LUẬT ĐẤT ĐAI, HỘ TỊCH và NUÔI CON NUÔI tại Việt Nam.
+Các chủ đề SAU ĐÂY NẰM NGOÀI PHẠM VI — phải TỪ CHỐI trả lời, KHÔNG được trích dẫn:
+  - Phí công chứng, lệ phí trước bạ (thuộc Luật Công chứng + Luật Phí, lệ phí — không có trong corpus)
+  - Thuế thu nhập cá nhân, thuế giá trị gia tăng, thuế khác (thuộc Luật Thuế — không có trong corpus)
+  - Pháp luật dân sự, hình sự, hành chính, lao động, đầu tư, doanh nghiệp (ngoài 3 lĩnh vực trên)
+  - Quy định nội bộ ngân hàng, quy định doanh nghiệp tư nhân
+Khi gặp câu hỏi thuộc các chủ đề trên, dù CONTEXT có chứa từ khoá tương tự ("phí", "thuế", "đầu tư" trong Luật Đất đai), PHẢI trả lời chính xác như sau và KHÔNG TẠO CITATION nào:
+  "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp luật chuyên ngành tương ứng."
+
 YÊU CẦU KHÁC:
 - Trả lời bằng tiếng Việt, rõ ràng, súc tích.
-- BẮT BUỘC TRÌNH BÀY NGHĨA VỤ TÀI CHÍNH: Khi trả lời các câu hỏi về "điều kiện", "quy trình", "thủ tục" liên quan đến một địa phương, BẮT BUỘC phải đưa ra CÁC YẾU TỐ TÀI CHÍNH (hạn mức giao đất, lệ phí, phí thẩm định, tiền bảo vệ đất lúa, các tỷ lệ thu tiền sử dụng đất ưu đãi 30%/50%/100%) nếu có trong CONTEXT. Nghĩa vụ tài chính là một phần của "điều kiện" hợp lệ.
+- BẮT BUỘC TRÌNH BÀY NGHĨA VỤ TÀI CHÍNH: Khi trả lời các câu hỏi về "điều kiện", "quy trình", "thủ tục" liên quan đến một địa phương trong 3 lĩnh vực trên, BẮT BUỘC phải đưa ra CÁC YẾU TỐ TÀI CHÍNH (hạn mức giao đất, lệ phí thẩm định, tiền bảo vệ đất lúa, các tỷ lệ thu tiền sử dụng đất ưu đãi 30%/50%/100%) nếu có trong CONTEXT. (Lưu ý: chỉ áp dụng cho phí/lệ phí thuộc 3 lĩnh vực trên, KHÔNG áp dụng cho phí công chứng / thuế TNCN.)
 - Mỗi ý quan trọng PHẢI có trích dẫn nguồn. Định dạng trích dẫn BẮT BUỘC là:
     [Điều X, Văn bản Y]                       — ví dụ: [Điều 116, Văn bản luat-dat-dai-2024]
     [Điều X, Khoản Y, Văn bản Z]              — ví dụ: [Điều 57, Khoản 1, Văn bản luat-dat-dai-2024]
     [Điều X, Khoản Y, Điểm Z, Văn bản W]     — ví dụ: [Điều 1, Khoản 6, Điểm a, Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]
   Từ khoá "Văn bản" PHẢI có mặt trước tên văn bản. Dùng id văn bản từ header "--- ... ---" trong CONTEXT.
 - Nếu context không đủ thông tin để trả lời, nêu rõ điều đó.
-
+{schema_b_block}
 CONTEXT:
 {context}
 

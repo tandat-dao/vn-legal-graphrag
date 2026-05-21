@@ -1,0 +1,63 @@
+[
+  {
+    "id": "Q020",
+    "question": "Năm 2020, hạn mức giao đất ở cho cá nhân tại Quận 1 TP.HCM được quy định ở văn bản nào và mức bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Năm 2020, hạn mức giao đất ở tại Quận 1 TP.HCM được quy định bởi Quyết định 18/2016/QĐ-UBND (hiệu lực từ 26/5/2016 đến 29/9/2024). Theo Điều 1 khoản 1 điểm a, hạn mức là KHÔNG QUÁ 160m²/hộ. Đây là văn bản đã hết hiệu lực và được thay thế bởi Quyết định 69/2024/QĐ-UBND TP.HCM từ ngày 30/9/2024.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #1 — TƯỜNG MINH THỜI ĐIỂM (năm 2020). temporal_intent.has_temporal_context=True, temporal_anchor='2020', case_status=null. Pipeline phải retrieve QĐ 18/2016 (active 2016-2024) và LLM cite đúng. Test khả năng phân biệt văn bản còn/hết hiệu lực qua metadata header '[... HẾT HIỆU LỰC]'."
+  },
+  {
+    "id": "Q021",
+    "question": "So sánh hạn mức giao đất ở cho cá nhân tại các quận nội thành TP.HCM theo Quyết định 18/2016 (cũ) và Quyết định 69/2024 (hiện hành) có gì khác nhau?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "difficulty": "medium",
+    "ground_truth_answer": "Cả hai Quyết định đều quy định 160m² cho các quận nội thành, nhưng khác về DANH SÁCH QUẬN cụ thể: (1) QĐ 18/2016 Điều 1 khoản 1 điểm a liệt kê: Quận 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú (KHÔNG có Quận 2, 7, 9, 12, Bình Tân, Thủ Đức); (2) QĐ 69/2024 Điều 3 khoản 1 mở rộng nhóm 160m² gồm Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và TP Thủ Đức.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #2 — SO SÁNH 2 PHIÊN BẢN. has_temporal_context=True, temporal_anchor='unspecified_past' (so sánh cũ-mới). Pipeline phải retrieve cả 2 QĐ + LLM trình bày bảng so sánh, làm rõ khác biệt phân loại quận."
+  },
+  {
+    "id": "Q026",
+    "question": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP đã được văn bản nào sửa đổi và hiệu lực từ ngày nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Khoản 1 Điều 13 Nghị định 102/2024/NĐ-CP (quy định khái niệm đất ở: đất làm nhà ở và các mục đích khác phục vụ cho đời sống trong cùng một thửa đất, gồm đất ở tại nông thôn và đất ở tại đô thị) đã được Nghị định 49/2026/NĐ-CP sửa đổi, bổ sung. Hiệu lực sửa đổi từ ngày 31/01/2026.",
+    "ground_truth_citations": [
+      {
+        "dieu": "13",
+        "khoan": "1",
+        "van_ban": "nghi-dinh-49-2026-nd-cp"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "AMENDED_BY direct test — đo trực tiếp Ý 2 (AMENDED_BY exploitation). GT FIX 2026-05-20: nghi-dinh-102-2024-nd-cp KHÔNG có Điều 13 trong scope corpus hiện tại (data/raw/ chỉ có Điều 1-12, rồi 14+), do D-01/D-05 thu thập theo chương — chương chứa Điều 13 không thuộc scope CMĐSDĐ cá nhân. Vì vậy GT chỉ có thể reference AMENDING provision tại NĐ 49 Điều 13 Khoản 1 (chunk này tồn tại trong graph với id 75a8fa9705c58b2e, chứa text sửa đổi). Pipeline phải: (a) detect explicit reference 'Khoản 1 Điều 13 NĐ 102/2024' trong câu hỏi; (b) qua AMENDED_BY edge trỏ tới NĐ 49 Đ13 K1; (c) cite chính xác Khoản 1 Điều 13 NĐ 49 (không phải Khoản 11/12 dù cũng được sửa bởi NĐ 49). F1 cấp Khoản đo retrieval-depth chính xác."
+  }
+]

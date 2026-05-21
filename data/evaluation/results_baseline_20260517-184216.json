@@ -1,0 +1,1422 @@
+{
+  "system": "baseline",
+  "test_set": "data/evaluation/test_set_dat_dai.json",
+  "timestamp": "20260517-184216",
+  "total_elapsed_s": 322.97,
+  "results": [
+    {
+      "id": "Q001",
+      "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu m²?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "easy",
+      "system": "baseline",
+      "answer": "## Hạn mức giao đất ở cho cá nhân tại TP.HCM\n\nTheo Quyết định số 69/2024/QĐ-UBND của UBND TP.HCM, hạn mức giao đất ở cho cá nhân được quy định theo từng khu vực như sau:\n\n### 1. Khu vực nội thành và TP. Thủ Đức\nCác Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và thành phố Thủ Đức: **không quá 160 m²/cá nhân**.\n[Điều 3, Khoản 1, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n### 2. Thị trấn và khu đô thị mới tại các huyện\nThị trấn các huyện và khu vực đã thực hiện dự án xây dựng đô thị mới theo quy hoạch tại các huyện **Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ**: **không quá 200 m²/cá nhân**.\n[Điều 3, Khoản 2, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n### 3. Các xã thuộc các huyện ngoại thành\nCác xã của các huyện **Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ**: **không quá 250 m²/cá nhân**.\n[Điều 3, Khoản 3, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]\n\n---\n> **Lưu ý:** Quyết định 69/2024/QĐ-UBND đã **thay thế** Quyết định số 18/2016/QĐ-UBND ngày 16/5/2016 về hạn mức đất ở trên địa bàn TP.HCM.\n> [Điều 5, Khoản 2, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm]",
+      "pred_citations": [
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        },
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.8571428571428571,
+        "pred_count": 4,
+        "gt_count": 3,
+        "match_count": 3
+      },
+      "citation_score_dieu": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.8571428571428571,
+        "pred_count": 4,
+        "gt_count": 3,
+        "match_count": 3
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 10.54,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q002",
+      "question": "Hạn mức giao đất ở cho cá nhân tại tỉnh Đồng Nai tối đa là bao nhiêu m²?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "dong-nai",
+      "difficulty": "easy",
+      "system": "baseline",
+      "answer": "## Hạn mức giao đất ở cho cá nhân tại tỉnh Đồng Nai\n\nTheo Quyết định số 92/2025/QĐ-UBND của UBND tỉnh Đồng Nai, hạn mức giao đất ở cho cá nhân được quy định như sau:\n\n---\n\n### 1. Tại đô thị\n\n- **Không quá 200 m²**: Áp dụng cho các phường: Biên Hòa, Trấn Biên, Tam Hiệp, Long Bình, Trảng Dài, Hố Nai, Long Hưng, Tam Phước, Phước Tân, Bình Lộc, Bảo Vinh, Xuân Lập, Long Khánh, Hàng Gòn và phường Tân Triều.\n[Điều 3, Khoản 1, Điểm a, Văn bản quyet-dinh-92-2025-qd-ubnd-dong-nai]\n\n- **Không quá 300 m²**: Áp dụng cho các phường: Minh Hưng, Chơn Thành, Bình Long, An Lộc, Phước Bình, Phước Long, Đồng Xoài và phường Bình Phước.\n[Điều 3, Khoản 1, Điểm b, Văn bản quyet-dinh-92-2025-qd-ubnd-dong-nai]\n\n---\n\n### 2. Tại nông thôn\n\nThông tin chi tiết về hạn mức tại nông thôn được đề cập tại Khoản 2, Điều 3 (các xã: Đại Phước, Nhơn Trạch, Phước An...) nhưng **nội dung cụ thể không đủ trong phần context được cung cấp**. Vui lòng tham khảo trực tiếp Quyết định số 92/2025/QĐ-UBND để biết đầy đủ.\n[Điều 3, Khoản 2, Văn bản quyet-dinh-92-2025-qd-ubnd-dong-nai]\n\n---\n\n> **Lưu ý:** Quyết định số 42/2024/QĐ-UBND ngày 25/9/2024 của UBND tỉnh Đồng Nai về hạn mức giao đất ở cho cá nhân đã được **thay thế bởi** Quyết định số 92/2025/QĐ-UBND.\n> [Điều 4, Khoản 1, Văn bản quyet-dinh-92-2025-qd-ubnd-dong-nai]",
+      "pred_citations": [
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "4",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": "a",
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+        },
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": "b",
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "diem": "a",
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "diem": "b",
+          "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.75,
+        "recall": 0.75,
+        "f1": 0.75,
+        "pred_count": 4,
+        "gt_count": 4,
+        "match_count": 3
+      },
+      "citation_score_dieu": {
+        "precision": 0.75,
+        "recall": 0.75,
+        "f1": 0.75,
+        "pred_count": 4,
+        "gt_count": 4,
+        "match_count": 3
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 13.0,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q003",
+      "question": "Cá nhân muốn chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở thì cần đáp ứng điều kiện gì theo pháp luật hiện hành?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "# Điều kiện chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở\n\n## 1. Yêu cầu phải được cơ quan nhà nước có thẩm quyền cho phép\n\nViệc chuyển đất nông nghiệp sang đất phi nông nghiệp (bao gồm đất ở) **bắt buộc phải được cơ quan nhà nước có thẩm quyền cho phép** — không được tự ý chuyển đổi.\n\n[Điều 121, Khoản 1, Điểm b, Văn bản luat-dat-dai-2024]\n\n---\n\n## 2. Điều kiện về quy hoạch\n\nCăn cứ để được phép chuyển mục đích sử dụng đất **phi nông nghiệp không phải là đất ở sang đất ở** (áp dụng tương tự đối với hộ gia đình, cá nhân) là phải **phù hợp với**:\n- Quy hoạch sử dụng đất cấp huyện, **hoặc**\n- Quy hoạch chung hoặc quy hoạch phân khu theo **pháp luật về quy hoạch đô thị và nông thôn** đã được cơ quan có thẩm quyền phê duyệt.\n\n[Điều 116, Khoản 5(?), Văn bản luat-dat-dai-2024, chunk 211]\n\n> **Lưu ý:** Cụm từ \"pháp luật về quy hoạch đô thị\" đã được sửa đổi thành \"pháp luật về quy hoạch đô thị và nông thôn\" bởi Luật số 47/2024/QH15, có hiệu lực từ ngày **01/07/2025**.\n\n---\n\n## 3. Trường hợp đặc thù: Chuyển đất trong cùng thửa có đất ở (đất vườn, ao gắn liền đất ở)\n\nĐối với hộ gia đình, cá nhân đã được cơ quan có thẩm quyền **cho phép chuyển mục đích từ đất vườn, ao, đất nông nghiệp trong cùng thửa đất có đất ở** (hoặc đất có nguồn gốc vườn ao gắn liền đất ở) sang đất ở trong giai đoạn từ ngày **01/8/2024 đến trước ngày Nghị quyết 254/2025/QH15 có hiệu lực** thì được áp dụng quy định chuyển tiếp riêng.\n\n[Văn bản nghi-quyet-254-2025-qh15, chunk 39]\n\n---\n\n## 4. Điều kiện về tiêu chí kỹ thuật (đối với đất trồng lúa, đất rừng từ 02 ha trở lên)\n\nNếu diện tích đất nông nghiệp cần chuyển mục đích **từ 02 ha trở lên** đối với đất trồng lúa, đất rừng phòng hộ, đất rừng đặc dụng, đất rừng sản xuất, phải đáp ứng các **tiêu chí, điều kiện bổ sung** theo quy định (trong đó có yêu cầu về phương án trồng rừng thay thế và các điều kiện liên quan).\n\n[Điều 46, Khoản 1, Văn bản nghi-dinh-102-2024-nd-cp]\n\n---\n\n## 5. Nghĩa vụ tài chính\n\nTheo quy định, khi chuyển mục đích sử dụng đất sang đất ở:\n- Người sử dụng đất được **miễn tiền sử dụng đất** đối với **diện tích trong hạn mức giao đất ở** theo quy định của UBND cấp tỉnh (áp dụng trong trường hợp thiếu đất ở so với hạn mức).\n- Phần diện tích **vượt hạn mức** sẽ phải nộp tiền sử dụng đất theo quy định.\n\n[Văn bản nghi-dinh-102-2024-nd-cp, chunk 53]\n\n---\n\n## Tóm tắt điều kiện cơ bản\n\n| Điều kiện | Nội dung |\n|---|---|\n| Pháp lý | Phải được cơ quan nhà nước có thẩm quyền cho phép |\n| Quy hoạch | Phù hợp quy hoạch sử dụng đất cấp huyện hoặc quy hoạch đô thị và nông thôn |\n| Diện tích lớn | Nếu ≥ 02 ha đất lúa/rừng: cần đáp ứng thêm tiêu chí kỹ thuật |\n| Tài chính | Miễn tiền sử dụng đất trong hạn mức; nộp tiền với phần vượt hạn mức |\n\n> ⚠️ **Lưu ý:** Context hiện có chưa cung cấp đầy đủ toàn bộ các điều kiện cụ thể tại Điều 122 Luật Đất đai 2024 (về điều kiện chuyển mục đích nói chung). Bạn nên tham khảo trực tiếp **Điều 122 Luật Đất đai 2024** và **Điều 46 Nghị định 102/2024/NĐ-CP** để có thông tin đầy đủ nhất.",
+      "pred_citations": [
+        {
+          "dieu": "121",
+          "khoan": "1",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "116",
+          "khoan": "5(?)",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024, chunk 211",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "46",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "121",
+          "khoan": "1",
+          "diem": "b",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "4",
+          "van_ban": "nghi-quyet-254-2025-qh15"
+        },
+        {
+          "dieu": "44a",
+          "van_ban": "nghi-dinh-102-2024-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333,
+        "f1": 0.3333333333333333,
+        "pred_count": 3,
+        "gt_count": 3,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333,
+        "f1": 0.3333333333333333,
+        "pred_count": 3,
+        "gt_count": 3,
+        "match_count": 1
+      },
+      "norm_recall": 0.6666666666666666,
+      "negative_correct": null,
+      "elapsed_seconds": 28.53,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q004",
+      "question": "Hộ gia đình, cá nhân sử dụng đất do lấn chiếm hoặc sử dụng sai mục đích trước ngày 01/7/2014 thì được cấp Giấy chứng nhận quyền sử dụng đất theo điều kiện nào?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "# Điều kiện cấp Giấy chứng nhận quyền sử dụng đất đối với trường hợp lấn chiếm hoặc sử dụng sai mục đích trước ngày 01/7/2014\n\n## 1. Trường hợp lấn đất, chiếm đất sử dụng vào mục đích sản xuất nông nghiệp hoặc làm nhà ở\n\nNgười đang sử dụng đất do lấn đất, chiếm đất vào mục đích **sản xuất nông nghiệp hoặc làm nhà ở** từ **trước ngày 01/7/2014** được xem xét cấp Giấy chứng nhận nếu đáp ứng **đồng thời** các điều kiện sau:\n\n- Sử dụng đất từ trước ngày 01/7/2014;\n- **Không thuộc** quy hoạch lâm nghiệp đối với rừng đặc dụng, rừng phòng hộ;\n- **Không thuộc** quy hoạch sử dụng đất cho mục đích xây dựng công trình hạ tầng công cộng.\n\n[Điều 139, Khoản 1, Điểm c, Văn bản luat-dat-dai-2024]\n\n---\n\n## 2. Trường hợp sử dụng đất sai mục đích (sử dụng đất vi phạm pháp luật)\n\nNgười sử dụng đất do **lấn đất, chiếm đất** (theo định nghĩa tại khoản 9 và khoản 31 Điều 3 Luật Đất đai) hoặc **sử dụng đất không đúng mục đích** được giao, cho thuê, công nhận quyền sử dụng đất **trước ngày 01/7/2014** thì được thực hiện cấp Giấy chứng nhận theo quy định tương ứng.\n\n[Văn bản nghi-dinh-101-2024-nd-cp, chunk 103]\n\n---\n\n## 3. Giới hạn quan trọng: Trường hợp KHÔNG được cấp Giấy chứng nhận\n\n> Trường hợp hộ gia đình, cá nhân có vi phạm pháp luật đất đai **kể từ ngày 01/7/2014 trở về sau** thì **Nhà nước không cấp** Giấy chứng nhận và xử lý theo quy định pháp luật.\n\n[Điều 139, Khoản 5, Văn bản luat-dat-dai-2024]\n\n---\n\n## Lưu ý bổ sung\n\n- Chính phủ được giao quy định chi tiết về điều kiện, trình tự, thủ tục cụ thể [Điều 139, Khoản 6, Văn bản luat-dat-dai-2024], cụ thể hóa tại **Nghị định 101/2024/NĐ-CP**.\n- Context hiện tại chưa cung cấp đầy đủ nội dung chi tiết về toàn bộ các khoản của Điều 139 (đặc biệt các điều kiện về nghĩa vụ tài chính kèm theo). Người dùng nên tham khảo trực tiếp Điều 139 Luật Đất đai 2024 và Nghị định 101/2024/NĐ-CP để có thông tin đầy đủ.",
+      "pred_citations": [
+        {
+          "dieu": "139",
+          "khoan": "1",
+          "diem": "c",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "139",
+          "khoan": "5",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "139",
+          "khoan": "6",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "139",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "25",
+          "van_ban": "nghi-dinh-101-2024-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "pred_count": 3,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "pred_count": 3,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "norm_recall": 0.5,
+      "negative_correct": null,
+      "elapsed_seconds": 19.09,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q005",
+      "question": "Những trường hợp đăng ký biến động đất đai nào phải cấp mới Giấy chứng nhận quyền sử dụng đất?",
+      "gap_type": "gap1",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "## Các trường hợp đăng ký biến động đất đai phải cấp mới Giấy chứng nhận quyền sử dụng đất\n\nDựa trên thông tin trong CONTEXT, các trường hợp đăng ký biến động đất đai phải cấp mới Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất bao gồm:\n\n### 1. Các trường hợp quy định tại Nghị định 101/2024/NĐ-CP\n\n**Điều 23** của Nghị định này quy định rõ các trường hợp phải cấp mới, bao gồm:\n\n- **Hợp thửa đất hoặc tách thửa đất** [Điều 23, Khoản 1, Văn bản nghi-dinh-101-2024-nd-cp]\n- **Người thuê, thuê lại quyền sử dụng đất của nhà đầu tư** (trong khu công nghiệp, khu chế xuất...) [Điều 23, Khoản 2, Văn bản nghi-dinh-101-2024-nd-cp]\n\n### 2. Các trường hợp quy định tại Luật Đất đai 2024\n\nNgười sử dụng đất đăng ký biến động mà phải cấp mới Giấy chứng nhận trong các trường hợp sau [Điều 133, Văn bản luat-dat-dai-2024]:\n\n- Người sử dụng đất **đăng ký biến động đất đai, tài sản gắn liền với đất mà phải cấp mới Giấy chứng nhận** [Điểm c, Văn bản luat-dat-dai-2024]\n- Giấy chứng nhận đã cấp **không đúng thẩm quyền, không đúng đối tượng sử dụng đất, không đúng diện tích đất, không đủ điều kiện được cấp, không đúng mục đích sử dụng đất hoặc thời hạn sử dụng đất** [Điểm d, Văn bản luat-dat-dai-2024]\n\n### 3. Lưu ý quan trọng\n\n> ⚠️ **Lưu ý:** Theo [Văn bản nghi-dinh-101-2024-nd-cp], **Điều 22 đã bị bãi bỏ** bởi Nghị định 151/2025/NĐ-CP (hiệu lực: 01/07/2025). Đồng thời, **Khoản 3 và Khoản 4 của một số điều** cũng bị bãi bỏ bởi Nghị định 49/2026/NĐ-CP (hiệu lực: 31/01/2026). [Văn bản nghi-dinh-101-2024-nd-cp, chunk 208]\n\n### 4. Trường hợp **không** phải cấp mới\n\nTheo Nghị quyết 254/2025/QH15, trường hợp **thay đổi tài sản gắn liền với đất** theo điểm p khoản 1 Điều 133 Luật Đất đai thì chỉ cần **cập nhật biến động vào cơ sở dữ liệu đất đai mà không phải xác nhận trên Giấy chứng nhận đã cấp** [Điểm b, Văn bản nghi-quyet-254-2025-qh15].\n\n---\n\n**Lưu ý:** CONTEXT hiện tại chỉ cung cấp một phần nội dung Điều 23 của Nghị định 101/2024/NĐ-CP. Để có danh sách đầy đủ tất cả các trường hợp, cần tham khảo toàn văn Điều 23 Nghị định 101/2024/NĐ-CP và các văn bản sửa đổi liên quan (Nghị định 151/2025/NĐ-CP, Nghị định 49/2026/NĐ-CP).",
+      "pred_citations": [
+        {
+          "dieu": "23",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-101-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "23",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-101-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "133",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "23",
+          "van_ban": "nghi-dinh-101-2024-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
+        "pred_count": 3,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
+        "pred_count": 3,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 19.76,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q006",
+      "question": "Mức phí công chứng hợp đồng chuyển nhượng quyền sử dụng đất hiện nay là bao nhiêu?",
+      "gap_type": "negative",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "easy",
+      "system": "baseline",
+      "answer": "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp luật chuyên ngành tương ứng.",
+      "pred_citations": [],
+      "ground_truth_citations": [],
+      "citation_score": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 0,
+        "gt_count": 0,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 0,
+        "gt_count": 0,
+        "match_count": 0
+      },
+      "norm_recall": 1.0,
+      "negative_correct": true,
+      "elapsed_seconds": 3.65,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q007",
+      "question": "Mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại TP.HCM được quy định như thế nào?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "## Mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại TP.HCM\n\nCăn cứ theo Nghị quyết số 02/2023/NQ-HĐND của HĐND TP.HCM (có hiệu lực từ ngày 01/06/2023), mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất trên địa bàn TP.HCM được quy định như sau:\n\n---\n\n### 1. Phạm vi và đối tượng áp dụng\n\nÁp dụng đối với các trường hợp **giao, cho thuê đất** và **đăng ký cấp Giấy chứng nhận** quyền sử dụng đất, quyền sở hữu nhà ở và tài sản gắn liền với đất trên địa bàn TP.HCM, bao gồm các cơ quan, tổ chức, cơ sở tôn giáo, hộ gia đình, cá nhân, cộng đồng dân cư.\n[Điều 1, Khoản 1, Điểm a, Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm]\n[Điều 1, Khoản 1, Điểm b, Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm]\n\n---\n\n### 2. Mức phí thẩm định — Trường hợp giao đất, cho thuê đất\n\n#### a) Đối với hộ gia đình, cá nhân, cộng đồng dân cư:\n\n| Quy mô diện tích | Tại quận | Tại huyện |\n|---|---|---|\n| Nhỏ hơn 500 m² | 50.000 đồng | 25.000 đồng |\n| Từ 500 m² trở lên | 500.000 đồng | 250.000 đồng |\n\n[Điều 1, Khoản 1, Điểm a, Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm] *(Phụ lục, Khoản 1, Điểm a)*\n\n#### b) Đối với tổ chức, cơ sở tôn giáo:\n\n| Quy mô diện tích | Mức thu |\n|---|---|\n| Nhỏ hơn 10.000 m² | 2.000.000 đồng *(theo dữ liệu một phần trong context)* |\n\n> ⚠️ *Lưu ý: Context chỉ cung cấp một phần bảng phí đối với tổ chức, cơ sở tôn giáo. Để biết đầy đủ mức phí theo từng mức diện tích lớn hơn, cần tham khảo trực tiếp Phụ lục của Nghị quyết số 02/2023/NQ-HĐND.*\n\n[Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm] *(Phụ lục, Khoản 1, Điểm b)*\n\n---\n\n### 3. Lưu ý về hiệu lực văn bản\n\n> **Lưu ý:** Quy định tại Nghị quyết số 17/2017/NQ-HĐND ngày 07/12/2017 của HĐND TP.HCM về mức thu phí thẩm định cấp Giấy chứng nhận quyền sử dụng đất **đã được thay thế bởi** Nghị quyết số 02/2023/NQ-HĐND, có hiệu lực từ ngày **01/06/2023**.\n\n[Văn bản nghi-quyet-02-2023-nq-hdnd-tp-hcm, chunk 9]\n\n---\n\n> 📌 **Lưu ý thêm:** Đối với **lệ phí cấp Giấy chứng nhận** (khác với phí thẩm định hồ sơ), có thể tham khảo thêm Quyết định số 52/2016/QĐ-UBND ngày 10/12/2016 của UBND TP.HCM. Tuy nhiên, cần xác minh xem văn bản này còn hiệu lực hay đã được thay thế, do context không cung cấp đầy đủ thông tin về tình trạng hiệu lực hiện tại của văn bản này.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "1",
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm"
+        },
+        {
+          "dieu": "_default",
+          "khoan": "2",
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+          "loai": "phu_luc"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "pred_count": 3,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.3333333333333333,
+        "recall": 0.5,
+        "f1": 0.4,
+        "pred_count": 3,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 21.71,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q008",
+      "question": "Mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại tỉnh Đồng Nai được quy định như thế nào?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "dong-nai",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp luật chuyên ngành tương ứng.\n\n**Giải thích:** Mặc dù CONTEXT có chứa thông tin về phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất tại Đồng Nai (Nghị quyết 22/2024/NQ-HĐND), đây là **phí công chứng/lệ phí hành chính** thuộc lĩnh vực **Luật Phí và Lệ phí** — nằm ngoài phạm vi 3 lĩnh vực mà hệ thống lập chỉ mục (đất đai về quyền sử dụng đất, hộ tịch, nuôi con nuôi). Theo quy tắc hệ thống, câu hỏi về **phí công chứng, lệ phí thẩm định** phải được từ chối trả lời.\n\nVui lòng tham khảo trực tiếp **Nghị quyết số 22/2024/NQ-HĐND ngày 29/11/2024 của HĐND tỉnh Đồng Nai** và các văn bản hướng dẫn thi hành Luật Phí và Lệ phí để có thông tin chính xác.",
+      "pred_citations": [],
+      "ground_truth_citations": [
+        {
+          "dieu": "1",
+          "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai"
+        },
+        {
+          "dieu": "I",
+          "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+          "loai": "phu_luc"
+        },
+        {
+          "dieu": "II",
+          "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+          "loai": "phu_luc"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 3,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 0,
+        "gt_count": 3,
+        "match_count": 0
+      },
+      "norm_recall": 0.0,
+      "negative_correct": null,
+      "elapsed_seconds": 9.01,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q009",
+      "question": "Bảng giá đất phi nông nghiệp (đặc biệt đất ở) tại TP.HCM giai đoạn 2026 được quy định ở văn bản nào và phân loại ra sao?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "## Bảng giá đất phi nông nghiệp (đất ở) tại TP.HCM từ năm 2026\n\n### 1. Văn bản quy định\n\nBảng giá đất phi nông nghiệp (bao gồm đất ở) tại TP.HCM áp dụng từ ngày **01/01/2026** được quy định tại **Nghị quyết số 87/2025/NQ-HĐND** của Hội đồng nhân dân Thành phố Hồ Chí Minh, ban hành ngày 26/12/2025.\n\nNghị quyết này được xây dựng căn cứ theo:\n- Khoản 3 Điều 159 Luật Đất đai số 31/2024/QH15\n- Khoản 3 Điều 7 Nghị quyết số 254/2025/QH15 của Quốc hội\n\n[Điều 1, Văn bản nghi-quyet-87-2025-nq-hdnd-tp-hcm]\n\n---\n\n### 2. Phân loại bảng giá đất ở\n\n#### a. Phân theo vị trí\n\n**Vị trí 1:** Giá đất ở vị trí 1 được quy định cụ thể tại các Phụ lục đính kèm, gồm:\n- Phụ lục II\n- Phụ lục III\n- Phụ lục IV\n- Phụ lục V\n\n**Các vị trí còn lại:** Được xác định theo hệ số nhân từ giá vị trí 1 (chi tiết quy định tại Phụ lục I về các vị trí khác đối với đất phi nông nghiệp).\n\n[Điều 6, Khoản 1, Văn bản nghi-quyet-87-2025-nq-hdnd-tp-hcm]\n\n#### b. Nguyên tắc xác định vị trí mặt tiền đường\n\nKhu đất, thửa đất được xác định là **vị trí mặt tiền đường** khi có **ít nhất một mặt giáp với lề đường** (đường có tên trong Bảng giá đất ở). Việc xác định vị trí căn cứ vào **thực tế**, không phụ thuộc vào số liệu hành chính.\n\n[Phụ lục I, Khoản 1, Văn bản nghi-quyet-87-2025-nq-hdnd-tp-hcm]\n\n---\n\n### 3. Lưu ý\n\n- Context hiện tại chỉ cung cấp **cấu trúc phân loại** và **nguyên tắc xác định vị trí** của bảng giá đất ở tại TP.HCM. **Mức giá cụ thể** cho từng tuyến đường, khu vực được quy định chi tiết tại các **Phụ lục II, III, IV, V** đính kèm Nghị quyết 87/2025/NQ-HĐND, nhưng nội dung các phụ lục này không có đầy đủ trong context được cung cấp.\n- Để tra cứu mức giá cụ thể cho từng tuyến đường/khu vực, cần tham khảo trực tiếp văn bản đầy đủ của Nghị quyết số 87/2025/NQ-HĐND ngày 26/12/2025.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "I",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+          "loai": "phu_luc"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "6",
+          "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
+        "pred_count": 3,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.3333333333333333,
+        "recall": 1.0,
+        "f1": 0.5,
+        "pred_count": 3,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 13.91,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q010",
+      "question": "Bảng giá đất phi nông nghiệp tại tỉnh Đồng Nai giai đoạn 2026 được quy định ở văn bản nào và phân loại ra sao?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "dong-nai",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "## Bảng giá đất phi nông nghiệp tại tỉnh Đồng Nai năm 2026\n\n### 1. Văn bản quy định\n\nBảng giá đất phi nông nghiệp tại tỉnh Đồng Nai năm 2026 được quy định tại **Nghị quyết số 28/2025/NQ-HĐND của Hội đồng Nhân dân tỉnh Đồng Nai** (Văn bản: nghi-quyet-28-2025-nq-hdnd-dong-nai). Đây là Bảng giá đất **lần đầu** ban hành theo quy định tại khoản 3 Điều 159 Luật Đất đai số 31/2024/QH15 (đã được sửa đổi, bổ sung bởi nhiều luật liên quan). [Điều 1, Khoản 1, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n---\n\n### 2. Phân loại giá đất phi nông nghiệp\n\nTheo Điều 6 của Nghị quyết, giá đất phi nông nghiệp được phân loại và xác định như sau:\n\n#### a) Nhóm đất chính (áp dụng Phụ lục III)\nBao gồm các loại đất:\n- Đất ở\n- Đất thương mại, dịch vụ\n- Đất cơ sở sản xuất phi nông nghiệp\n- Đất sử dụng cho hoạt động khoáng sản\n\nGiá đất **vị trí 1** được quy định tại Phụ lục III, trong đó **Phạm vi 1** tính từ mốc hành lang an toàn đường bộ đến hết mét thứ 50. [Điều 6, Khoản 1, Điểm a, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n#### b) Giá đất trong khu tái định cư\n- Bảng giá **đất ở** tại khu tái định cư: quy định tại **Phụ lục VI**\n- Giá các loại **đất phi nông nghiệp khác** trong khu tái định cư được xác định theo hệ số nhân với giá đất ở cùng khu vực:\n  - Đất thương mại, dịch vụ = giá đất ở × **0,7**\n  - Đất sản xuất, kinh doanh phi nông nghiệp không phải đất thương mại, dịch vụ = giá đất ở × **0,6**\n\n[Điều 6, Khoản 7, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n#### c) Giá đất trong Khu công nghệ cao công nghệ sinh học Đồng Nai\nQuy định tại **Phụ lục V**. Các loại đất còn lại trong khu này (đất xây dựng cơ sở khoa học và công nghệ, đất sử dụng vào mục đích công cộng) được xác định căn cứ theo khoản 3, khoản 4 Điều 6. [Điều 6, Khoản 8, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n#### d) Giá đất tại Cảng hàng không quốc tế Long Thành\n- Đất thương mại, dịch vụ: **2.760.000 đồng/m²**\n- Đất sản xuất, kinh doanh phi nông nghiệp không phải đất thương mại, dịch vụ: **2.520.000 đồng/m²**\n\n[Điều 6, Khoản 9, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n#### e) Giá đất tại các đảo, cù lao\nÁp dụng chung vị trí và mức giá quy định tại **Phụ lục II**. [Điều 6, Khoản 10, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n---\n\n### 3. Nguyên tắc xác định khu vực, vị trí\n\nKhu vực, vị trí, phạm vi đất áp dụng theo quy định tại **Nghị quyết riêng về tiêu chí xác định khu vực, vị trí đất trong bảng giá đất** trên địa bàn tỉnh Đồng Nai. [Điều 6, Khoản 11, Văn bản nghi-quyet-28-2025-nq-hdnd-dong-nai]\n\n---\n\n> **Lưu ý:** Context hiện có không cung cấp đầy đủ chi tiết các Phụ lục (I, II, III, V, VI) kèm theo Nghị quyết. Để tra cứu mức giá cụ thể theo từng tuyến đường/khu vực, cần tham khảo trực tiếp các Phụ lục đính kèm của Nghị quyết 28/2025/NQ-HĐND.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "1",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "7",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "8",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "9",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "10",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "6",
+          "khoan": "11",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "6",
+          "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.14285714285714285,
+        "recall": 1.0,
+        "f1": 0.25,
+        "pred_count": 7,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.14285714285714285,
+        "recall": 1.0,
+        "f1": 0.25,
+        "pred_count": 7,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 19.63,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q011",
+      "question": "Khi cá nhân được giao đất, cho thuê đất để sử dụng vào mục đích phi nông nghiệp từ đất chuyên trồng lúa thì có những nghĩa vụ tài chính và nghĩa vụ kỹ thuật gì (bao gồm nộp tiền bổ sung và bóc tách tầng đất mặt)?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "# Nghĩa vụ khi được giao đất/cho thuê đất từ đất chuyên trồng lúa sang mục đích phi nông nghiệp\n\nCá nhân được Nhà nước giao đất hoặc cho thuê đất để sử dụng vào mục đích phi nông nghiệp từ đất chuyên trồng lúa phải thực hiện **hai nhóm nghĩa vụ** sau:\n\n---\n\n## I. Nghĩa vụ tài chính — Nộp tiền bổ sung đất trồng lúa\n\nNgười được giao đất, cho thuê đất để sử dụng vào mục đích phi nông nghiệp từ đất chuyên trồng lúa **phải nộp một khoản tiền** để Nhà nước bổ sung diện tích đất chuyên trồng lúa bị mất hoặc tăng hiệu quả sử dụng đất trồng lúa. [Điều 12, Khoản 1, Văn bản nghi-dinh-112-2024-nd-cp]\n\n**Trình tự thực hiện:**\n- Trong vòng **07 ngày** kể từ ngày nhận quyết định giao đất/cho thuê đất của cơ quan nhà nước có thẩm quyền, người được giao đất phải gửi **Bản kê khai diện tích đất chuyên trồng lúa** đến cơ quan có thẩm quyền. [Điều 13, Khoản 1, Văn bản nghi-dinh-112-2024-nd-cp]\n- Việc nộp tiền được thực hiện **sau khi có quyết định giao đất, cho thuê đất** của cơ quan nhà nước có thẩm quyền. [Điều 12, Văn bản nghi-dinh-112-2024-nd-cp]\n\n> **Lưu ý ngoại lệ:** Các công trình, dự án sử dụng **vốn đầu tư công hoặc vốn nhà nước** được miễn trừ nghĩa vụ này. [Điều 12, Khoản 1, Văn bản nghi-dinh-112-2024-nd-cp]\n\n---\n\n## II. Nghĩa vụ kỹ thuật — Bóc tách và sử dụng tầng đất mặt\n\nKhi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng lúa sang mục đích phi nông nghiệp, người được giao đất/cho thuê đất phải thực hiện:\n\n### 1. Lập phương án sử dụng tầng đất mặt\nPhải có **phương án sử dụng tầng đất mặt** được lập theo quy định. [Điều 10, Khoản 1, Văn bản nghi-dinh-226-2025-nd-cp]\n\n### 2. Nội dung phương án bao gồm:\n- Thông tin của người được Nhà nước giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất;\n- Thông tin về diện tích đất chuyên trồng lúa đề nghị chuyển đổi;\n- Khối lượng tầng đất mặt sau khi bóc tách;\n- Phương án, vị trí và mục đích sử dụng khối lượng đất mặt được bóc tách.\n\n[Điều 10, Khoản 2, Văn bản nghi-dinh-226-2025-nd-cp]\n\n### 3. Độ sâu bóc tách\nTầng đất mặt phải bóc tách **tối thiểu 20 cm** tính từ mặt ruộng. [Điều 10, Khoản 3, Văn bản nghi-dinh-226-2025-nd-cp]\n\n### 4. Vị trí của phương án trong hồ sơ\nPhương án sử dụng tầng đất mặt là **thành phần hồ sơ** giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất trồng lúa sang mục đích phi nông nghiệp. [Điều 10, Khoản 4, Văn bản nghi-dinh-226-2025-nd-cp]\n\n---\n\n> **Lưu ý:** Quy định tại Điều 10, Khoản 2 và Khoản 4 của Văn bản **nghi-dinh-112-2024-nd-cp** (quy định nội dung phương án và phương án được \"chấp thuận\" là thành phần hồ sơ) đã được **sửa đổi, thay thế** bởi Văn bản **nghi-dinh-226-2025-nd-cp** với nội dung cập nhật mở rộng thêm trường hợp \"cho phép chuyển mục đích sử dụng đất\" và thay cụm từ \"được chấp thuận\" thành \"được lập theo quy định\".",
+      "pred_citations": [
+        {
+          "dieu": "12",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-112-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "13",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-112-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "12",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-112-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "12",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-112-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "10",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "10",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "10",
+          "khoan": "3",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "10",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "182",
+          "khoan": "4",
+          "diem": "b",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "10",
+          "van_ban": "nghi-dinh-112-2024-nd-cp"
+        },
+        {
+          "dieu": "5",
+          "van_ban": "nghi-dinh-226-2025-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 8,
+        "gt_count": 3,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 8,
+        "gt_count": 3,
+        "match_count": 0
+      },
+      "norm_recall": 0.6666666666666666,
+      "negative_correct": null,
+      "elapsed_seconds": 16.87,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q012",
+      "question": "Cách tính tiền sử dụng đất khi hộ gia đình, cá nhân chuyển mục đích sử dụng đất từ đất vườn, ao, đất nông nghiệp sang đất ở được quy định như thế nào?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "# Cách tính tiền sử dụng đất khi chuyển mục đích từ đất vườn, ao, đất nông nghiệp sang đất ở\n\n## 1. Nguyên tắc áp dụng một lần\n\nViệc tính tiền sử dụng đất theo chính sách ưu đãi (theo điểm c khoản 2 Điều 10 Nghị quyết số 254/2025/QH15) **chỉ được áp dụng một lần** cho một hộ gia đình, cá nhân và được tính trên **01 thửa đất do hộ gia đình, cá nhân lựa chọn**.\n\n[Điều này, Khoản 1, Văn bản nghi-dinh-50-2026-nd-cp]\n\n## 2. Trường hợp chuyển mục đích lần sau hoặc thửa đất khác\n\nNếu chuyển mục đích **lần sau trên chính thửa đất đó**, hoặc **chuyển mục đích thửa đất khác**, thì tính tiền sử dụng đất bằng **100% chênh lệch** giữa:\n- Tiền sử dụng đất tính theo **giá đất ở**, và\n- Tiền sử dụng đất tính theo **giá đất nông nghiệp**\n\ntại thời điểm có quyết định cho phép chuyển mục đích sử dụng đất của cơ quan nhà nước có thẩm quyền.\n\n[Khoản 1, Văn bản nghi-dinh-50-2026-nd-cp]\n\n## 3. Trường hợp có nhiều thửa đất\n\nHộ gia đình, cá nhân có **nhiều thửa đất** (kể cả ở nhiều tỉnh, thành phố khác nhau) chỉ được **lựa chọn 01 thửa đất** để áp dụng chính sách tính tiền sử dụng đất ưu đãi. Hộ gia đình, cá nhân phải **cam kết** nội dung này tại đơn đề nghị chuyển mục đích sử dụng đất và tự chịu trách nhiệm về cam kết của mình.\n\n[Khoản 2, Văn bản nghi-dinh-50-2026-nd-cp]\n\n> ⚠️ Nếu cơ quan có thẩm quyền phát hiện hộ gia đình, cá nhân đã được hưởng chính sách này nhưng vẫn tiếp tục đề nghị áp dụng, thì sẽ bị chuyển thông tin vi phạm đến cơ quan thuế theo pháp luật về quản lý thuế. [Khoản 2 & Khoản 3, Văn bản nghi-dinh-50-2026-nd-cp]\n\n## 4. Giá đất để tính tiền sử dụng đất\n\nGiá đất ở và giá đất nông nghiệp dùng để tính tiền sử dụng đất là **giá đất trên bảng giá đất** theo quy định tại **Điều 8 Nghị định hướng dẫn Nghị quyết số 254/2025/QH15**, áp dụng tại **thời điểm có quyết định** của cơ quan nhà nước có thẩm quyền cho phép chuyển mục đích sử dụng đất.\n\n[Khoản 4, Văn bản nghi-dinh-50-2026-nd-cp]\n\n## 5. Hạn mức giao đất ở để tính tiền sử dụng đất\n\nHạn mức giao đất ở được xác định theo quy định của pháp luật về đất đai, **áp dụng tại thời điểm có quyết định cho phép chuyển mục đích**, và được xác định **cho từng hộ gia đình, cá nhân**, không phụ thuộc vào số thành viên trong hộ có chung quyền sử dụng đất.\n\n[Khoản 5, Điểm a & Khoản 6, Văn bản nghi-dinh-50-2026-nd-cp]\n\n## 6. Mốc thời gian áp dụng\n\nViệc tính số lần chuyển mục đích sử dụng đất, xác định hạn mức giao đất ở, lựa chọn thửa đất được tính **từ ngày 01 tháng 8 năm 2024**.\n\n[Khoản 3, Văn bản nghi-dinh-50-2026-nd-cp]\n\n## 7. Thủ tục thu nộp\n\nViệc thu, nộp, kiểm tra, quản lý tiền sử dụng đất thực hiện theo quy định tại **Nghị định số 103/2024/NĐ-CP** (đã được sửa đổi, bổ sung tại **Nghị định số 291/2025/NĐ-CP**).\n\n[Khoản 7, Văn bản nghi-dinh-50-2026-nd-cp]\n\n---\n*Lưu ý: Các trường hợp cụ thể về đất vườn, ao trong cùng thửa đất có đất ở hoặc đất có nguồn gốc vườn, ao gắn liền đất ở còn được điều chỉnh chi tiết tại điểm c khoản 2 Điều 10 Nghị quyết số 254/2025/QH15 và các quy định liên quan.*",
+      "pred_citations": [
+        {
+          "dieu": "này",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-50-2026-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "156",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "10",
+          "khoan": "2",
+          "diem": "c",
+          "van_ban": "nghi-quyet-254-2025-qh15"
+        },
+        {
+          "dieu": "6",
+          "van_ban": "nghi-dinh-50-2026-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 3,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 3,
+        "match_count": 0
+      },
+      "norm_recall": 0.3333333333333333,
+      "negative_correct": null,
+      "elapsed_seconds": 23.77,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q013",
+      "question": "Tranh chấp đất đai giữa hộ gia đình, cá nhân do Chủ tịch Ủy ban nhân dân cấp nào giải quyết, và quyền khiếu nại / khởi kiện được quy định ra sao?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "# Giải quyết tranh chấp đất đai giữa hộ gia đình, cá nhân\n\n## 1. Thẩm quyền giải quyết\n\nTranh chấp đất đai giữa hộ gia đình, cá nhân, cộng đồng dân cư với nhau do **Chủ tịch Ủy ban nhân dân cấp huyện** giải quyết (khi các bên lựa chọn giải quyết tại UBND). [Điều 236, Khoản 3, Điểm a, Văn bản luat-dat-dai-2024]\n\nNgoài ra, thẩm quyền giải quyết tranh chấp này cũng được giao cho Chủ tịch UBND cấp huyện thông qua quy định về phân cấp, bao gồm cả việc ban hành quyết định giải quyết tranh chấp và quyết định cưỡng chế thực hiện quyết định giải quyết tranh chấp đất đai. [Điều 236, Khoản 4, Văn bản luat-dat-dai-2024]; [Khoản 2, Điểm g, Văn bản nghi-dinh-151-2025-nd-cp]\n\n---\n\n## 2. Bước bắt buộc trước khi giải quyết: Hòa giải tại UBND cấp xã\n\nTrước khi yêu cầu cơ quan nhà nước có thẩm quyền giải quyết, **các bên tranh chấp bắt buộc phải thực hiện hòa giải tại UBND cấp xã** nơi có đất tranh chấp. [Điều 235, Khoản 2, Văn bản luat-dat-dai-2024]\n\nQuy trình hòa giải tại UBND cấp xã:\n- Trong **03 ngày làm việc** kể từ ngày nhận được đơn, UBND cấp xã phải thông báo bằng văn bản cho các bên tranh chấp và Văn phòng đăng ký đất đai về việc thụ lý đơn (hoặc nêu rõ lý do không thụ lý). [Điểm a, Văn bản nghi-dinh-102-2024-nd-cp, chunk 103]\n- Chủ tịch UBND cấp xã thành lập **Hội đồng hòa giải tranh chấp đất đai**, gồm: Chủ tịch/Phó Chủ tịch UBND cấp xã (Chủ tịch Hội đồng), đại diện Ủy ban MTTQ Việt Nam cấp xã, công chức địa chính, người sinh sống lâu năm biết rõ nguồn gốc thửa đất (nếu có). [Điều 235, Khoản 2, Điểm b, Văn bản luat-dat-dai-2024]\n\n---\n\n## 3. Quyền khiếu nại / khởi kiện sau khi có quyết định giải quyết\n\nSau khi Chủ tịch UBND cấp huyện ban hành quyết định giải quyết tranh chấp, các bên có **30 ngày** kể từ ngày nhận được quyết định để thực hiện một trong các quyền sau: [Điều 236, Khoản 3, Điểm a, Văn bản luat-dat-dai-2024]\n\n| Lựa chọn | Nội dung |\n|---|---|\n| **Khiếu nại** | Khiếu nại đến Chủ tịch UBND cấp tỉnh |\n| **Khởi kiện** | Khởi kiện tại Tòa án có thẩm quyền theo quy định pháp luật về tố tụng dân sự |\n\nQuyết định giải quyết tranh chấp có hiệu lực thi hành **phải được các bên nghiêm chỉnh chấp hành**. [Điều 236, Khoản 4, Văn bản luat-dat-dai-2024]\n\n---\n\n> **Lưu ý:** Theo thông tin trong context, Nghị định 226/2025/NĐ-CP (hiệu lực 15/08/2025) có sửa đổi một số quy định liên quan đến nơi nộp đơn yêu cầu thi hành quyết định giải quyết tranh chấp (thay \"cấp huyện\" bằng \"cấp xã\"). Tuy nhiên, quy định này sau đó đã bị bãi bỏ bởi Nghị định 49/2026/NĐ-CP (hiệu lực 31/01/2026). [Văn bản nghi-dinh-102-2024-nd-cp, chunk 113]",
+      "pred_citations": [
+        {
+          "dieu": "236",
+          "khoan": "3",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "236",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "235",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "235",
+          "khoan": "2",
+          "diem": "b",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "236",
+          "khoan": "3",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "236",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "236",
+          "khoan": "3",
+          "diem": "a",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "van_ban": "nghi-dinh-151-2025-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.16666666666666666,
+        "recall": 0.5,
+        "f1": 0.25,
+        "pred_count": 6,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.16666666666666666,
+        "recall": 0.5,
+        "f1": 0.25,
+        "pred_count": 6,
+        "gt_count": 2,
+        "match_count": 1
+      },
+      "norm_recall": 0.5,
+      "negative_correct": null,
+      "elapsed_seconds": 19.05,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q014",
+      "question": "Theo pháp luật đất đai hiện hành, ai được coi là cá nhân trực tiếp sản xuất nông nghiệp?",
+      "gap_type": "gap1",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "easy",
+      "system": "baseline",
+      "answer": "## Cá nhân trực tiếp sản xuất nông nghiệp theo pháp luật đất đai hiện hành\n\n### Định nghĩa chung\n\nTheo pháp luật đất đai hiện hành, **cá nhân trực tiếp sản xuất nông nghiệp** là cá nhân đáp ứng đồng thời các điều kiện sau:\n\n- Đã được Nhà nước **giao đất, cho thuê đất, công nhận quyền sử dụng đất nông nghiệp**; hoặc **nhận chuyển quyền sử dụng đất nông nghiệp**; **và**\n- Có **thu nhập từ sản xuất nông nghiệp** trên đất đó.\n\n[Điều 3, Khoản 6, Văn bản luat-dat-dai-2024]; [Điều 3, Văn bản nghi-dinh-102-2024-nd-cp]\n\n---\n\n### Các trường hợp NGOẠI LỆ (không được coi là cá nhân trực tiếp sản xuất nông nghiệp)\n\nDù có thu nhập từ sản xuất nông nghiệp, các đối tượng sau đây **không được coi** là cá nhân trực tiếp sản xuất nông nghiệp:\n\n1. **Cán bộ, công chức, viên chức, sĩ quan tại ngũ, quân nhân chuyên nghiệp, công chức quốc phòng, công nhân và viên chức quốc phòng, sĩ quan, hạ sĩ quan, công nhân công an, người làm công tác cơ yếu** và người làm công tác khác trong tổ chức cơ yếu **hưởng lương từ ngân sách nhà nước**;\n2. **Người hưởng lương hưu**;\n3. **Người nghỉ mất sức lao động, thôi việc được hưởng trợ cấp bảo hiểm xã hội**.\n\n[Điều 3, Khoản 1, Văn bản nghi-dinh-102-2024-nd-cp]; [Điều 3, Khoản 2, Văn bản nghi-dinh-102-2024-nd-cp]; [Điều 3, Khoản 3, Văn bản nghi-dinh-102-2024-nd-cp]\n\n---\n\n### Ý nghĩa thực tiễn\n\nViệc xác định đúng tư cách \"cá nhân trực tiếp sản xuất nông nghiệp\" có ý nghĩa quan trọng, vì đối tượng này được hưởng các quyền lợi đặc thù như:\n- Được **giao đất nông nghiệp trong hạn mức không thu tiền sử dụng đất** [Điều 118, Khoản 1, Văn bản luat-dat-dai-2024];\n- Được **giao đất rừng sản xuất không thu tiền sử dụng đất** trong hạn mức đối với cá nhân thường trú trên địa bàn cấp xã nơi có đất [Điều 184, Khoản 1, Điểm a, Văn bản luat-dat-dai-2024].",
+      "pred_citations": [
+        {
+          "dieu": "3",
+          "khoan": "6",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": null,
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-102-2024-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "118",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "184",
+          "khoan": "1",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "luat-dat-dai-2024",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "3",
+          "van_ban": "nghi-dinh-102-2024-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.14285714285714285,
+        "recall": 1.0,
+        "f1": 0.25,
+        "pred_count": 7,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 0.14285714285714285,
+        "recall": 1.0,
+        "f1": 0.25,
+        "pred_count": 7,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "elapsed_seconds": 17.2,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q015",
+      "question": "Hộ gia đình, cá nhân đang sử dụng đất có nguồn gốc từ nông trường, lâm trường được cấp Giấy chứng nhận quyền sử dụng đất theo trình tự nào?",
+      "gap_type": "gap1",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "# Cấp Giấy chứng nhận quyền sử dụng đất đối với đất có nguồn gốc nông, lâm trường\n\nCăn cứ theo các quy định hiện hành, việc cấp Giấy chứng nhận quyền sử dụng đất (GCN) cho hộ gia đình, cá nhân đang sử dụng đất có nguồn gốc nông, lâm trường được thực hiện như sau:\n\n---\n\n## 1. Căn cứ xét cấp GCN\n\nViệc cấp GCN phải **căn cứ vào phương án sử dụng đất đã được cấp có thẩm quyền phê duyệt** [Văn bản nghi-dinh-101-2024-nd-cp, chunk 116].\n\n---\n\n## 2. Trường hợp có giấy tờ về quyền sử dụng đất\n\nHộ gia đình, cá nhân đang sử dụng đất **có giấy tờ** về quyền sử dụng đất theo quy định tại khoản 2 Điều 137 Luật Đất đai thì diện tích, mục đích sử dụng đất khi cấp GCN được xác định theo giấy tờ đó [Điều 1, Khoản 1, Văn bản nghi-dinh-101-2024-nd-cp, chunk 116].\n\nĐặc biệt, trường hợp **có giấy tờ của nông, lâm trường quốc doanh về việc giao đất để làm nhà ở hoặc làm nhà ở kết hợp với sản xuất nông, lâm nghiệp trước ngày 01/7/2004** thì được cấp GCN theo quy định tại khoản 2 Điều 137 Luật Đất đai [Văn bản luat-dat-dai-2024, chunk 555].\n\n---\n\n## 3. Trường hợp đất lấn, chiếm trong khu vực không có ban quản lý rừng\n\nHộ gia đình, cá nhân đang sử dụng đất trong khu vực lấn, chiếm **mà không có ban quản lý rừng** thì được cấp GCN để sử dụng vào mục đích **bảo vệ, phát triển rừng phòng hộ** với các điều kiện:\n- Theo **hạn mức giao đất** quy định tại điểm a khoản 3 Điều 176 Luật Đất đai;\n- Hình thức: **giao đất không thu tiền sử dụng đất**;\n- Thời hạn sử dụng đất theo quy định tương ứng.\n\n[Khoản 3, Văn bản nghi-dinh-101-2024-nd-cp, chunk 128]\n\n---\n\n## 4. Trường hợp nông, lâm trường đã giải thể hoặc phá sản\n\nĐối với đất có nguồn gốc nông, lâm trường mà **nông, lâm trường hoặc công ty nông, lâm nghiệp đã giải thể hoặc phá sản**, không còn trực tiếp quản lý, sử dụng đất, thì:\n\n> **Ủy ban nhân dân cấp tỉnh** có trách nhiệm **chỉ đạo** việc:\n> 1. Đo đạc, lập hồ sơ địa chính;\n> 2. Đăng ký đất đai;\n> 3. Cấp GCN cho các đối tượng đủ điều kiện theo quy định tại Điều 138 Luật Đất đai.\n\n[Khoản 5, Văn bản nghi-dinh-101-2024-nd-cp, chunk 130]\n\n---\n\n## Lưu ý\n\nContext hiện có cung cấp thông tin về **các trường hợp được cấp GCN** và **cơ quan có trách nhiệm thực hiện**, nhưng **không đủ thông tin chi tiết về trình tự, hồ sơ cụ thể từng bước** (ví dụ: mẫu đơn, thời hạn giải quyết, cơ quan tiếp nhận hồ sơ) liên quan riêng đến nhóm đất có nguồn gốc nông, lâm trường. Để biết đầy đủ trình tự thủ tục hành chính, bạn nên tra cứu thêm các điều khoản chi tiết của Nghị định 101/2024/NĐ-CP hoặc liên hệ cơ quan đăng ký đất đai tại địa phương.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-101-2024-nd-cp, chunk 116",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "26",
+          "van_ban": "nghi-dinh-101-2024-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 1,
+        "match_count": 0
+      },
+      "norm_recall": 0.0,
+      "negative_correct": null,
+      "elapsed_seconds": 20.12,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q016",
+      "question": "Khi chuyển nhượng quyền sử dụng đất, cá nhân phải nộp thuế thu nhập cá nhân với mức thuế suất bao nhiêu phần trăm?",
+      "gap_type": "negative",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "medium",
+      "system": "baseline",
+      "answer": "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp luật chuyên ngành tương ứng.",
+      "pred_citations": [],
+      "ground_truth_citations": [],
+      "citation_score": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 0,
+        "gt_count": 0,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 0,
+        "gt_count": 0,
+        "match_count": 0
+      },
+      "norm_recall": 1.0,
+      "negative_correct": true,
+      "elapsed_seconds": 5.39,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q017",
+      "question": "Cá nhân chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở từ năm 2026 trở đi cần áp dụng những quy định nào về thẩm quyền cho phép và cách tính tiền sử dụng đất (kể cả cơ chế ưu đãi nếu có)?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "# Quy định về chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở (từ năm 2026 trở đi)\n\n## 1. Căn cứ pháp lý áp dụng\n\nDựa trên CONTEXT được cung cấp, các quy định chính áp dụng bao gồm:\n- Nghị quyết số 254/2025/QH15\n- Nghị định 50/2026/NĐ-CP\n- Luật Đất đai 2024\n\n---\n\n## 2. Căn cứ cho phép chuyển mục đích sử dụng đất\n\nCăn cứ để giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất **từ đất phi nông nghiệp không phải đất ở sang đất ở** đối với hộ gia đình, cá nhân là **quy hoạch sử dụng đất cấp huyện** hoặc **quy hoạch chung** hoặc **quy hoạch phân khu** theo pháp luật về quy hoạch đô thị và nông thôn đã được cơ quan có thẩm quyền phê duyệt. [Điều 57, Khoản 6 (có nội dung sửa đổi theo điểm a khoản 2 Điều 57 Luật 47/2024/QH15, hiệu lực 01/07/2025), Văn bản luat-dat-dai-2024]\n\n---\n\n## 3. Cách tính tiền sử dụng đất\n\n### 3.1. Nguyên tắc chung (áp dụng ưu đãi một lần)\n\n- Chính sách ưu đãi được **áp dụng một lần cho một hộ gia đình, cá nhân** và chỉ tính trên **01 thửa đất do hộ gia đình, cá nhân lựa chọn**. [Điều (tương ứng), Khoản 1, Văn bản nghi-dinh-50-2026-nd-cp]\n\n- **Lần chuyển mục đích đầu tiên** (trong hạn mức): được hưởng mức ưu đãi (thấp hơn 100% chênh lệch — xem mục 3.2 bên dưới).\n\n- **Lần chuyển mục đích sau** trên thửa đất đó **hoặc** chuyển mục đích của **thửa đất khác**: tính tiền sử dụng đất bằng **100% chênh lệch** giữa tiền sử dụng đất tính theo giá đất ở và tiền sử dụng đất tính theo giá đất nông nghiệp tại thời điểm có quyết định cho phép chuyển mục đích. [Khoản 1, Văn bản nghi-dinh-50-2026-nd-cp]\n\n### 3.2. Trường hợp có nhiều thửa đất (nhiều tỉnh/thành)\n\nTrường hợp hộ gia đình, cá nhân có **nhiều thửa đất** (kể cả ở nhiều tỉnh, thành phố trực thuộc trung ương) được phép chuyển mục đích thì **được lựa chọn 01 thửa đất** để áp dụng tính tiền sử dụng đất theo cơ chế ưu đãi. [Khoản 2, Văn bản nghi-dinh-50-2026-nd-cp]\n\n### 3.3. Giá đất để tính tiền sử dụng đất\n\nGiá đất ở và giá đất nông nghiệp để tính tiền sử dụng đất là **giá đất trên bảng giá đất** theo quy định tại Điều 8 Nghị định hướng dẫn Nghị quyết số 254/2025/QH15, **tại thời điểm có quyết định của cơ quan nhà nước có thẩm quyền cho phép chuyển mục đích sử dụng đất**. [Khoản 4, Văn bản nghi-dinh-50-2026-nd-cp]\n\n### 3.4. Hạn mức giao đất ở\n\nHạn mức giao đất ở để tính tiền sử dụng đất khi chuyển mục đích sử dụng đất được quy định riêng (nội dung cụ thể tại Khoản 5 Nghị định 50/2026/NĐ-CP — **CONTEXT không cung cấp đủ nội dung khoản này**). [Khoản 5, Văn bản nghi-dinh-50-2026-nd-cp]\n\n### 3.5. Miễn tiền sử dụng đất trong trường hợp đặc thù\n\nĐối với trường hợp thiếu đất ở so với hạn mức giao đất ở, người sử dụng đất được chuyển mục đích từ loại đất khác sang đất ở và **được miễn tiền sử dụng đất đối với diện tích trong hạn mức giao đất ở**. [Văn bản nghi-dinh-102-2024-nd-cp]\n\n---\n\n## 4. Thời điểm tính số lần chuyển mục đích\n\nViệc tính số lần chuyển mục đích sử dụng đất, xác định hạn mức giao đất ở, lựa chọn thửa đất để áp dụng chính sách **được tính từ ngày 01 tháng 8 năm 2024**. [Khoản 3, Văn bản nghi-dinh-50-2026-nd-cp]\n\n---\n\n## 5. Lưu ý quan trọng về xử lý vi phạm\n\nTrường hợp hộ gia đình, cá nhân **không còn đủ điều kiện** hưởng chính sách ưu đãi, cơ quan có thẩm quyền sẽ chuyển thông tin đến **cơ quan thuế** để tính lại tiền sử dụng đất bằng mức **100% chênh lệch**; đồng thời hộ gia đình, cá nhân phải nộp khoản tiền **tương đương mức chậm nộp** tính từ thời điểm có quyết định chuyển mục đích sử dụng đất. [Khoản (tương ứng), Văn bản nghi-dinh-50-2026-nd-cp]\n\n---\n\n> ⚠️ **Lưu ý giới hạn thông tin**: CONTEXT được cung cấp chưa đầy đủ về **tỷ lệ ưu đãi cụ thể** (30%/50%/100%) trong lần chuyển mục đích đầu tiên trong hạn mức, cũng như nội dung chi tiết Khoản 5 về hạn mức giao đất ở. Để có thông tin đầy đủ, cần tham chiếu trực tiếp **Nghị định 50/2026/NĐ-CP** (toàn văn) và **Nghị quyết 254/2025/QH15**.",
+      "pred_citations": [
+        {
+          "dieu": "(tương ứng)",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-50-2026-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "121",
+          "khoan": "1",
+          "diem": "b",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "156",
+          "khoan": "1",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "4",
+          "van_ban": "nghi-quyet-254-2025-qh15"
+        },
+        {
+          "dieu": "10",
+          "khoan": "2",
+          "diem": "c",
+          "van_ban": "nghi-quyet-254-2025-qh15"
+        },
+        {
+          "dieu": "44a",
+          "van_ban": "nghi-dinh-102-2024-nd-cp"
+        },
+        {
+          "dieu": "6",
+          "van_ban": "nghi-dinh-50-2026-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 6,
+        "match_count": 0
+      },
+      "citation_score_dieu": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "pred_count": 1,
+        "gt_count": 6,
+        "match_count": 0
+      },
+      "norm_recall": 0.25,
+      "negative_correct": null,
+      "elapsed_seconds": 27.56,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q018",
+      "question": "Cá nhân tại TP.HCM và cá nhân tại Đồng Nai cùng làm hồ sơ cấp Giấy chứng nhận quyền sử dụng đất lần đầu thì các nghĩa vụ tài chính (phí thẩm định hồ sơ, lệ phí cấp GCN) khác nhau ở những điểm nào?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "multi-juris",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "## So sánh nghĩa vụ tài chính khi cấp GCN lần đầu: TP.HCM vs Đồng Nai\n\n### Về phạm vi thông tin trong hệ thống\n\nContext hiện tại **chỉ có thông tin về tỉnh Đồng Nai**, cụ thể:\n- **Lệ phí cấp GCN** tại Đồng Nai: theo Nghị quyết số 21/2024/NQ-HĐND ngày 29/11/2024 [Văn bản nghi-quyet-21-2024-nq-hdnd-dong-nai]\n- **Phí thẩm định hồ sơ cấp GCN** tại Đồng Nai: theo Nghị quyết số 22/2024/NQ-HĐND ngày 29/11/2024 [Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]\n\nHệ thống **không có dữ liệu về quy định của TP.HCM** (phí thẩm định hồ sơ và lệ phí cấp GCN tại TP.HCM), do đó **không thể thực hiện so sánh** giữa hai địa phương này.\n\n---\n\n### Thông tin hiện có về Đồng Nai\n\n**1. Phí thẩm định hồ sơ cấp GCN** (áp dụng cho hồ sơ cấp lần đầu):\n- Đối tượng áp dụng: tổ chức, cá nhân nộp hồ sơ cấp GCN quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất [Điều 1, Khoản 2, Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]\n- Đối tượng **miễn nộp phí**: hộ nghèo, cận nghèo; người cao tuổi; người khuyết tật; người có công với cách mạng [Điều 1, Khoản 4, Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]\n\n**2. Lệ phí cấp GCN**:\n- Đối tượng nộp: tổ chức, hộ gia đình, cá nhân được cơ quan nhà nước có thẩm quyền cấp GCN [Điều 1, Khoản 3, Văn bản nghi-quyet-21-2024-nq-hdnd-dong-nai]\n- Đối tượng **miễn lệ phí**: hộ nghèo, cận nghèo theo chuẩn nghèo của tỉnh Đồng Nai [Điều 1, Khoản 4, Điểm a, Văn bản nghi-quyet-21-2024-nq-hdnd-dong-nai]\n\n*(Mức phí cụ thể theo bảng biểu đính kèm hai Nghị quyết trên, tuy nhiên nội dung bảng số liệu chi tiết chưa được trích dẫn đầy đủ trong context.)*\n\n---\n\n### Kết luận\n\n> ⚠️ **Hệ thống không có dữ liệu về TP.HCM**, do đó không thể trả lời câu hỏi so sánh giữa hai địa phương. Để biết mức phí tại TP.HCM, vui lòng tham khảo các Nghị quyết của HĐND TP.HCM về phí thẩm định hồ sơ và lệ phí cấp GCN quyền sử dụng đất hiện hành.",
+      "pred_citations": [
+        {
+          "dieu": "1",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "1",
+          "khoan": "4",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "1",
+          "khoan": "3",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "1",
+          "khoan": "4",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "153",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "1",
+          "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm"
+        },
+        {
+          "dieu": "1",
+          "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai"
+        },
+        {
+          "dieu": "1",
+          "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "pred_count": 4,
+        "gt_count": 4,
+        "match_count": 2
+      },
+      "citation_score_dieu": {
+        "precision": 0.5,
+        "recall": 0.5,
+        "f1": 0.5,
+        "pred_count": 4,
+        "gt_count": 4,
+        "match_count": 2
+      },
+      "norm_recall": 0.5,
+      "negative_correct": null,
+      "elapsed_seconds": 17.38,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    },
+    {
+      "id": "Q019",
+      "question": "Khi cá nhân được giao đất từ đất chuyên trồng lúa sang xây dựng nhà ở, phương án bóc tách tầng đất mặt cần được cấp nào phê duyệt và theo trình tự nào theo quy định hiện hành?",
+      "gap_type": "gap3",
+      "theme": "dat-dai",
+      "jurisdiction": "toan-quoc",
+      "difficulty": "hard",
+      "system": "baseline",
+      "answer": "## Phương án bóc tách tầng đất mặt khi chuyển đất chuyên trồng lúa sang xây dựng nhà ở\n\n### 1. Quy định hiện hành áp dụng\n\n**Lưu ý:** Quy định tại Điều 10, Nghị định 112/2024/NĐ-CP đã được sửa đổi, thay thế bởi Điều 5, Nghị định 226/2025/NĐ-CP (hiệu lực mới hơn). Nội dung dưới đây áp dụng theo quy định mới nhất.\n\n---\n\n### 2. Nghĩa vụ lập phương án\n\nNgười được Nhà nước **giao đất, cho thuê đất, hoặc cho phép chuyển mục đích sử dụng đất** khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng lúa sang đất phi nông nghiệp **phải có phương án sử dụng tầng đất mặt** được lập theo quy định.\n\n[Điều 5, Khoản 2, Văn bản nghi-dinh-226-2025-nd-cp]\n\n---\n\n### 3. Nội dung phương án bóc tách tầng đất mặt\n\nPhương án phải bao gồm các nội dung sau:\n\n- **(a)** Thông tin của người được Nhà nước giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất;\n- **(b)** Thông tin về diện tích đất chuyên trồng lúa đề nghị chuyển đổi;\n- **(c)** Khối lượng tầng đất mặt sau khi bóc tách;\n- **(d)** Phương án, vị trí và mục đích sử dụng khối lượng đất mặt được bóc tách.\n\n[Điều 5, Khoản 2, Văn bản nghi-dinh-226-2025-nd-cp]\n\n---\n\n### 4. Yêu cầu kỹ thuật\n\nĐộ sâu tầng đất mặt phải bóc tách **tối thiểu từ 20 cm** tính từ mặt ruộng.\n\n[Điều 5, Khoản 2, Văn bản nghi-dinh-226-2025-nd-cp]\n\n---\n\n### 5. Vị trí phương án trong hồ sơ\n\nPhương án sử dụng tầng đất mặt là **thành phần hồ sơ** giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất trồng lúa sang mục đích phi nông nghiệp.\n\n[Điều 5, Khoản 2, Văn bản nghi-dinh-226-2025-nd-cp]\n\n---\n\n### 6. Cấp phê duyệt và trình tự thẩm định\n\nTheo quy định tại Nghị định 112/2024/NĐ-CP (phần về trình tự thẩm định chưa bị sửa đổi bởi Nghị định 226/2025/NĐ-CP), hồ sơ được gửi đến:\n\n- **Ủy ban nhân dân cấp huyện**: đối với trường hợp thông thường;\n- **Ủy ban nhân dân cấp tỉnh**: đối với công trình có diện tích đất chuyên trồng lúa **trên địa bàn 2 huyện trở lên**.\n\nHồ sơ gồm:\n- Đơn đề nghị thẩm định phương án sử dụng tầng đất mặt (theo mẫu tại Phụ lục VII);\n- Phương án sử dụng tầng đất mặt (theo mẫu tại Phụ lục VIII);\n- Sơ đồ mô tả vị trí sử dụng khối lượng đất mặt sau khi bóc tách.\n\n[Điều 11, Khoản 1, Văn bản nghi-dinh-112-2024-nd-cp]\n\n> **Lưu ý về thời hạn thẩm định:** Context chỉ cung cấp thông tin về thời hạn một phần (\"Trong thời hạn 15 ngày kể từ ngày nhận được hồ sơ hợp lệ, Ủy ban...\"), nhưng phần nội dung tiếp theo bị cắt. Để biết đầy đủ trình tự sau khi nộp hồ sơ, cần tham khảo trực tiếp Điều 11 Nghị định 112/2024/NĐ-CP.",
+      "pred_citations": [
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-226-2025-nd-cp",
+          "loai": "dieu"
+        },
+        {
+          "dieu": "11",
+          "khoan": "1",
+          "diem": null,
+          "tiet": null,
+          "van_ban": "nghi-dinh-112-2024-nd-cp",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "182",
+          "khoan": "4",
+          "diem": "b",
+          "van_ban": "luat-dat-dai-2024"
+        },
+        {
+          "dieu": "10",
+          "van_ban": "nghi-dinh-112-2024-nd-cp"
+        },
+        {
+          "dieu": "11",
+          "van_ban": "nghi-dinh-112-2024-nd-cp"
+        },
+        {
+          "dieu": "5",
+          "van_ban": "nghi-dinh-226-2025-nd-cp"
+        },
+        {
+          "dieu": "5",
+          "khoan": "2",
+          "van_ban": "nghi-dinh-151-2025-nd-cp"
+        }
+      ],
+      "citation_score": {
+        "precision": 0.4,
+        "recall": 0.4,
+        "f1": 0.4000000000000001,
+        "pred_count": 5,
+        "gt_count": 5,
+        "match_count": 2
+      },
+      "citation_score_dieu": {
+        "precision": 0.4,
+        "recall": 0.4,
+        "f1": 0.4000000000000001,
+        "pred_count": 5,
+        "gt_count": 5,
+        "match_count": 2
+      },
+      "norm_recall": 0.5,
+      "negative_correct": null,
+      "elapsed_seconds": 16.79,
+      "confirmation_needed": false,
+      "confirmation_retried": false,
+      "context_used": true,
+      "top_k_count": 10
+    }
+  ]
+}
