@@ -560,61 +560,83 @@
 
 ## 1. Trạng thái tiến độ hiện tại
 
+> **Cập nhật toàn diện 2026-05-21** — đồng bộ với code, database production, và các fix layer v2.7. Section trước đó stale từ Phase 1.
+
 ### §1.1 Đã hoàn thành ✅
 
-| Hạng mục | File | Độ tin cậy |
-|---|---|---|
-| Bản draft kiến trúc tổng thể | `Thesis_Dashboard.docx` | Đã có (draft) |
-| Kế hoạch thực thi tổng quan | `plan.md` | Đã có (draft) |
-| Tài liệu dự án (file này) | `PROJECT_STATUS.md` | Scaffolded |
-| Tài liệu kiến trúc | `PROJECT_CONTEXT.md` | Scaffolded |
-| docker-compose.yml (Neo4j 5.18.0 + Qdrant v1.13.6) | `docker-compose.yml` | Implemented & Running |
-| .env.example với đủ biến môi trường | `.env.example` | Implemented |
-| Python environment (venv, packages) | `requirements.txt`, `venv/` | Implemented |
-| Git repository (nhánh main + develop) | `.git/` | Implemented |
-| Integration smoke test | `src/utils/connection_check.py` | Implemented & Running |
-| Project skeleton (cấu trúc thư mục) | `src/`, `tests/`, `data/`, `notebooks/` | Implemented |
+**Phase 0 — Hạ tầng (100% [A]+[B]):**
+- Docker (Neo4j 5.18.0 + Qdrant v1.13.6) chạy ổn định
+- Python venv + requirements (neo4j, qdrant-client, sentence-transformers, anthropic, pyyaml, rich, python-dotenv)
+- Git repo (main + develop branches)
+- `src/utils/connection_check.py` — integration smoke test PASS
+
+**Phase 1 — Dữ liệu [A]:**
+- 17 file Đất đai trong `data/raw/` (`validate_metadata.py` 17/17 PASS)
+- `data/sources/manifest.md` đầy đủ URL nguồn
+- `data/raw/mapping_table.md` sections 3-4 (chuyển mục đích SDĐ + cấp sổ đỏ)
+
+**Phase 2 — Ingestion Pipeline [A]:**
+- `src/ingestion/parser.py` — structure-aware MD parser (38/38 tests PASS)
+- `src/ingestion/graph_builder.py` — 5-pass: Concept/Procedure → Theme/Jurisdiction → Norm/Component/CTV/TextUnit → Amendment → MAPS_TO_CONCEPT (idempotent MERGE)
+- `src/ingestion/vectorizer.py` — BGE-M3 (Apple Silicon MPS) → 3031 vectors trong Qdrant (3014 text_unit + 17 summary)
+- `src/ingestion/ontology_mapper.py` — Claude Haiku LLM classification (TASK-15)
+- `data/ontology/core_v1.json` — Core Ontology (6 concepts + 6 procedures)
+- `data/verification/phase2_report.md` ký [A]; Neo4j 9063 nodes, 4092 [:MAPS_TO_CONCEPT] edges
+
+**Phase 3 — Retrieval Pipeline [A]:**
+- `src/retrieval/query_planner.py` — Claude Haiku 4.5 + Cách C theme backfill + planner cache
+- `src/retrieval/subgraph_extractor.py` — 3-stage (Stage 1 summary + Stage 2 graph + Stage 3 procedure)
+- `src/retrieval/semantic_filter.py` — Hybrid Search 4-pass (Pass -1 Struct Cite / Pass 0 Dense Floor / Pass 1 RRF breadth / Pass 2 RRF depth)
+- `src/retrieval/context_assembler.py` — sort + cap 6000 tokens + build_prompt với 5 rule blocks (TEMPORAL #4)
+- `src/retrieval/answer_generator.py` — Claude Sonnet 4.6 + cache + parse_citations với dedupe
+- `src/pipeline.py` — end-to-end orchestrator
+- `src/utils/llm_config.py` — centralized Anthropic client (max_retries=8)
+
+**Phase 4 — Đánh giá [A]:**
+- `data/evaluation/test_set_dat_dai.json` — 26 câu Đất đai với ground truth Khoản-level
+- `src/baseline/naive_rag.py` — Naive RAG baseline (chunking 512 chars, overlap 50)
+- `src/evaluation/run_evaluation.py` — eval orchestrator
+- `src/evaluation/metrics.py` — F1 Khoản/Điều, NormR, negative_correct (`cit_matches` single source of truth)
+- `src/evaluation/faithfulness.py` — 2-tier metric (existence + LLM judge)
+- `src/evaluation/report_builder.py` — auto-sinh REPORT_<timestamp>.md
+- `src/evaluation/compare_runs.py` — A/B diff
+- `src/evaluation/build_ablation_matrix.py` — cumulative table
+- `src/evaluation/build_reproducibility_report.py` — N=3 stats
+- `src/evaluation/instrument_retrieval.py` — debug Stage 1/2/3 API-free
+- `src/demo.py` — Rich CLI cho weekly meeting
+
+**Documentation (cập nhật 2026-05-21):**
+- `CLAUDE.md` — 9 nodes, 10 edges, 13 decisions, full DEPENDENCIES
+- `docs/PROJECT_CONTEXT.md` v0.5.1 — kiến trúc đồng bộ
+- `docs/PROJECT_STATUS.md` v2.7 (file này)
+- `data/evaluation/ABLATION_MATRIX.md` — cumulative impact
+- `data/evaluation/REPRODUCIBILITY_REPORT_20260520.md` — N=3 stats
+- `data/evaluation/ROOT_CAUSE_ANALYSIS_20260519.md`
+- `data/evaluation/RETRIEVAL_LIMITATIONS_20260520.md`
+- `data/evaluation/PROMPT_TUNING_EXPERIMENT_20260519.md`
+- `thesis/CHAPTERS_OUTLINE.md` + `thesis/CHAPTER_4_EXPERIMENTS.md`
+- `README.md` — public-facing với headline results
 
 ### §1.2 Đang thực hiện 🔄
 
-**Phase 0 — ✅ hoàn thành toàn bộ.**
+**Phase 1 — chờ [B]:**
+- TASK-03 sections 1, 2, 5 (Hộ tịch + Nuôi con nuôi mapping)
+- TASK-04 [B]: thu thập + chuẩn hóa Hộ tịch + Nuôi con nuôi
+- TASK-05: cross-check chéo (chờ [B] xong TASK-04)
 
-**Phase 1 — đang thực hiện:**
-- TASK-03: Mapping Table — Sections 3 (chuyển mục đích SDĐ) và 4 (cấp sổ đỏ) đã điền xong. Sections còn lại (Hộ tịch, Nuôi con nuôi) chờ [B] bổ sung.
-- TASK-04 [A]: **Hoàn thành** — 17 file Đất đai trong `data/raw/`, validate 17/17 PASS, manifest.md đầy đủ.
-- TASK-04 [B]: Chờ [B] hoàn thành phần Hộ tịch + Nuôi con nuôi.
-- TASK-05: Chưa bắt đầu — chờ TASK-04 [B] xong.
+**Phase 4 — domain mở rộng:**
+- Test set Hộ tịch + Nuôi con nuôi (chờ [B] đổ data)
+- Mở test set lên ≥40 câu cross-domain để validate hypothesis Gap 1 generalize ngoài Đất đai
+
+**Phase 5 — Báo cáo:**
+- Expand prose Chapter 4 (Experiments) từ scaffold
+- Viết Chapter 3 (Methodology), 5 (Discussion), 6 (Limitations), 7 (Future Work)
 
 ### §1.3 Chưa bắt đầu 📋
 
-**Hạ tầng & Môi trường**
-- Thiết lập Docker (Neo4j + Qdrant)
-- Thiết lập Python environment + Git repo
-- Kiểm tra kết nối tích hợp
-
-**Phase 1 — Dữ liệu**
-- Bảng ánh xạ văn bản (mapping table)
-- Thu thập & chuẩn hóa văn bản (thủ công từ VBHN/vbpl.vn)
-- Cross-check chéo
-
-**Phase 2 — Ingestion Pipeline**
-- Structure-aware Parser
-- Ontology Instantiation (Graph Builder)
-- Vector Indexing
-- Verification
-
-**Phase 3 — Retrieval Pipeline**
-- Query Planner
-- Sub-graph Extraction
-- Semantic Filtering (Hybrid Search)
-- Context Assembly & Answer Generation
-- Integration end-to-end
-
-**Phase 4 — Đánh giá**
-- Xây dựng test set
-- Baseline Naive RAG
-- Chạy evaluation + tính metrics
-- Phân tích kết quả theo Gap
+- **Production hardening** (out of thesis scope): latency optimization, cross-encoder re-ranking (Q022 limitation), multi-query expansion, model cascade
+- **Multi-turn conversation support** (future work)
+- **UI/Web interface** (out of scope khóa luận)
 
 ---
 
