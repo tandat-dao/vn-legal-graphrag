@@ -3,8 +3,8 @@
 **Trạng thái:** Dàn ý + luận điểm định tính cố định + bảng định lượng RỖNG chờ data full (sau khi [B] nộp Hộ tịch + Nuôi con nuôi).
 
 **Nguồn evidence hiện có:**
-- 19 câu Đất đai (Q001-Q019) — [test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)
-- Kết quả v7: [results_graphrag_20260517-184216.json](../data/evaluation/results_graphrag_20260517-184216.json), [results_baseline_20260517-184216.json](../data/evaluation/results_baseline_20260517-184216.json)
+- 26 câu Đất đai (Q001-Q026) — [test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)
+- Kết quả v2.8: [results_graphrag_20260520-211930.json](../data/evaluation/results_graphrag_20260520-211930.json) (hoặc kết quả chạy mới nhất)
 - Manual eval 10 câu: [MANUAL_EVAL.md](../data/evaluation/MANUAL_EVAL.md)
 - Dry run report: [DRY_RUN_REPORT.md](../data/evaluation/DRY_RUN_REPORT.md)
 
@@ -35,33 +35,33 @@ Cùng dữ liệu (`data/raw/*.md`), cùng embedding (BGE-M3), cùng LLM (Claude
 | Latency p95 (s) | — | — | — | — |
 | Negative correct rate | — | — | — | — |
 
-**Subset Đất đai 19 câu (v7 — đã có):**
+**Subset Đất đai 26 câu (v2.8 — đã có):**
 
 | Metric | GraphRAG | Baseline | Δ |
 |---|---:|---:|---:|
-| F1 Khoản | 0.416 | 0.389 | **+0.027** ✅ |
-| F1 Điều | 0.435 | 0.389 | **+0.046** ✅ |
-| Norm Recall | 0.846 | 0.680 | **+0.167** ✅ |
+| F1 Khoản | 0.539 ±0.021 | 0.333 | **+0.206 (+61.8%)** ✅ |
+| F1 Điều | 0.567 ±0.032 | 0.333 | **+0.234 (+70.3%)** ✅ |
+| Norm Recall | 0.931 ±0.005 | 0.718 | **+0.213 (+29.7%)** ✅ |
 | Negative correct | 1.000 | 1.000 | tied ✅ |
-| Manual Correctness | 4.5/5 | 3.5/5 | **+1.0** ✅ |
-| Manual Faithfulness | 4.9/5 | 4.3/5 | **+0.6** ✅ |
+| Faithful rate | 0.916 ±0.069 | — | — |
 
 ### 1.3 Bảng theo lĩnh vực (chờ điền)
 
 | Theme | N | G F1(Kh) | B F1(Kh) | G NormR | B NormR |
 |---|---:|---:|---:|---:|---:|
-| dat-dai | 19 | 0.416 | 0.389 | 0.846 | 0.680 |
+| dat-dai | 26 | 0.539 | 0.333 | 0.931 | 0.718 |
 | ho-tich | — | — | — | — | — |
 | nuoi-con-nuoi | — | — | — | — | — |
 
-### 1.4 Bảng theo gap_type (chờ điền)
+### 1.4 Bảng theo gap_type (v2.8, GT v2.8, Q024 ∈ gap4)
 
 | Gap | N | G F1(Kh) | B F1(Kh) | G F1(Đ) | B F1(Đ) | G NormR | B NormR |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| gap1 (đa lĩnh vực) | — | — | — | — | — | — | — |
-| gap2 (đa địa phương) | — | — | — | — | — | — | — |
-| gap3 (đa tầng VB) | — | — | — | — | — | — | — |
-| negative (ngoài scope) | — | — | — | — | — | — | — |
+| gap1 (đa lĩnh vực) | 3 | 0.343 | 0.194 | 0.343 | 0.194 | 1.000 | 0.667 |
+| gap2 (đa địa phương) | 6 | 0.618 | 0.485 | 0.618 | 0.485 | 1.000 | 1.000 |
+| gap3 (đa tầng VB) | 8 | 0.412 | 0.209 | 0.461 | 0.209 | 0.795 | 0.583 |
+| gap4 (đa phiên bản) | 7 | 0.568 | 0.214 | 0.616 | 0.214 | 0.976 | 0.571 |
+| negative (ngoài scope) | 2 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
 
 ---
 

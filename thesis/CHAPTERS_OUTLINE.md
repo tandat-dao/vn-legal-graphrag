@@ -9,10 +9,10 @@
 ## Chapter 3 — Phương pháp luận (Methodology)
 
 ### 3.1 Kiến trúc tổng thể
-- **Schema ontology** (6 node types + 7 edge types): [CLAUDE.md](../CLAUDE.md) section "SCHEMA ONTOLOGY"
+- **Schema ontology** (9 node types + 10 edge types): [CLAUDE.md](../CLAUDE.md) section "SCHEMA ONTOLOGY"
 - **Tier mapping 1-4**: Luật/Bộ luật → NĐ/PL → TT → QĐ địa phương
-- **3 Gap targeted**: đa lĩnh vực, đa địa phương, đa tầng → motivation
-- **Quyết định thiết kế** (D-01 đến D-08): xem Decision Log trong CLAUDE.md
+- **4 Gap targeted**: đa lĩnh vực, đa địa phương, đa tầng, **đa phiên bản** → motivation
+- **Quyết định thiết kế** (D-01 đến D-13): xem Decision Log trong CLAUDE.md
 
 ### 3.2 Phase 1 — Thu thập và chuẩn hoá dữ liệu
 - Thu thập **thủ công** từ vbpl.vn (KHÔNG dùng OCR pipeline) — D-01
@@ -57,7 +57,7 @@
 
 ### 3.5 Phase 4 — Evaluation framework
 - **Test set** ([data/evaluation/test_set_dat_dai.json](../data/evaluation/test_set_dat_dai.json)): 26 câu Đất đai
-  - 3 gap1, 6 gap2, 15 gap3, 2 negative
+  - 3 gap1, 6 gap2, 8 gap3, 7 gap4, 2 negative
   - Mỗi câu có `ground_truth_citations` Khoản-level
 - **Metrics**:
   - F1 Khoản (strict), F1 Điều (loose)
@@ -82,23 +82,24 @@
 **Sử dụng [ABLATION_MATRIX.md](../data/evaluation/ABLATION_MATRIX.md)** — copy/paste table này trực tiếp vào thesis.
 
 Key takeaways từ matrix:
-- Baseline → v2.6: F1 Khoản **+86%** (0.295 → 0.549)
-- v2.3 canonical → v2.6 (4 fix cumulative): **+24.8%** (0.440 → 0.549)
+- Baseline → v2.8: F1 Khoản **+61.8%** (0.333 → 0.539 ± 0.021)
+- v2.3 canonical → v2.8 (4 fix cumulative): **+22.6%** (0.440 → 0.539)
 - Negative correctness 100% giữ qua mọi config
 
 ### 4.3 Per-Gap breakdown — chứng minh hypothesis chính
 Lấy table Per-Gap từ ABLATION_MATRIX.md.
 
-**Hypothesis chính**: ontology + graph traversal mang lại lợi thế lớn nhất ở Gap 3 (đa tầng văn bản).
+**Hypothesis chính**: ontology + graph traversal mang lại lợi thế lớn nhất ở Gap 3 (đa tầng văn bản) và Gap 4 (đa phiên bản).
 
-| Gap | Baseline F1 | GraphRAG v2.6 F1 | Δ % |
+| Gap | Baseline F1 | GraphRAG v2.8 F1 (N=3) | Δ % |
 |---|---:|---:|---:|
-| Gap 1 (đa lĩnh vực, n=3) | 0.194 | 0.350 | +80% |
-| Gap 2 (đa địa phương, n=6) | 0.485 | 0.658 | +36% |
-| **Gap 3 (đa tầng, n=15)** | **0.145** | **0.485** | **+234%** |
+| Gap 1 (đa lĩnh vực, n=3) | 0.194 | 0.343 ±0.013 | +76.8% |
+| Gap 2 (đa địa phương, n=6) | 0.485 | 0.618 ±0.041 | +27.4% |
+| **Gap 3 (đa tầng, n=8)** | 0.209 | 0.412 ±0.013 | **+97.1%** |
+| **Gap 4 (đa phiên bản, n=7)** | 0.214 | 0.568 ±0.031 | **+165.4%** |
 | Negative (n=2) | 1.000 | 1.000 | tied |
 
-→ Gap 3 thắng vượt trội (3.3×) — đúng narrative thesis về Knowledge Graph traversal cho cross-tier relationships.
+→ Gap 3 và Gap 4 thắng vượt trội — đúng narrative thesis về Knowledge Graph cho cross-tier + temporal. Lưu ý: Q026 baseline F1=1.0 là evaluation artifact (citation match từ refusal answer); loại bỏ artifact → Gap 4 baseline = 0.071, improvement = **+700%** (xem §4.7 Q026 Evaluation Artifact).
 
 ### 4.4 Case studies (deep dive)
 4 cases để minh hoạ từng fix:
@@ -136,8 +137,9 @@ Lấy table Per-Gap từ ABLATION_MATRIX.md.
 ## Chapter 5 — Thảo luận (Discussion)
 
 ### 5.1 Khi nào GraphRAG vượt trội?
-- **Gap 3 (đa tầng) là sweet spot**: KG traversal `[:IMPLEMENTS|AMENDS]` cho phép retrieve toàn bộ chuỗi Luật → NĐ → TT → QĐ khi câu hỏi cần tổng hợp đa tầng. Baseline (chunked) không có signal về tier → 0.145 vs 0.485 (3.3×)
-- **Gap 1 (đa lĩnh vực)**: theme filter giúp định tuyến → +80%
+- **Gap 3 (đa tầng) là sweet spot**: KG traversal `[:IMPLEMENTS|AMENDS]` cho phép retrieve toàn bộ chuỗi Luật → NĐ → TT → QĐ khi câu hỏi cần tổng hợp đa tầng. Baseline (chunked) không có signal về tier.
+- **Gap 4 (đa phiên bản) là differentiator mạnh nhất**: CTV versioning + `[:AMENDS]` + `[:AMENDED_BY]` + TemporalIntent cho phép xử lý câu hỏi span-regime, amendment tracking, point-in-time retrieval — baseline hoàn toàn blind với temporal.
+- **Gap 1 (đa lĩnh vực)**: theme filter giúp định tuyến
 - **Negative refusal**: cả 2 đều 100% — không phải differentiator (prompt rule đủ mạnh cho cả 2)
 
 ### 5.2 Khi nào GraphRAG KHÔNG vượt trội đáng kể? (Honest)

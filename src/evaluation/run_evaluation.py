@@ -361,6 +361,12 @@ def main() -> int:
                 nc = negative_correct(pred_cits, item["gap_type"]) if item["gap_type"] == "negative" else None
                 new_results.append({
                     **old,
+                    # Force-refresh metadata từ test_set hiện tại (Q024 đổi gap_type, GT đổi, v.v.)
+                    "gap_type": item["gap_type"],
+                    "theme": item.get("theme", old.get("theme")),
+                    "jurisdiction": item.get("jurisdiction", old.get("jurisdiction")),
+                    "difficulty": item.get("difficulty", old.get("difficulty")),
+                    "ground_truth_citations": gt_cits,
                     "pred_citations": pred_cits,  # re-parsed với parser hiện tại
                     "citation_score": cs_khoan,
                     "citation_score_dieu": cs_dieu,

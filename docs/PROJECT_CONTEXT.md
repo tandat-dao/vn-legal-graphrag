@@ -85,11 +85,12 @@ Mọi câu trả lời đều đi kèm trích dẫn bắt buộc đến Điều,
 
 ### Đóng góp khoa học
 
-Khóa luận kiểm chứng khả năng của kiến trúc Ontology-Driven GraphRAG trong việc giải quyết đồng thời 3 gap chưa được xử lý trong các công trình hiện tại:
+Khóa luận kiểm chứng khả năng của kiến trúc Ontology-Driven GraphRAG trong việc giải quyết đồng thời 4 gap chưa được xử lý trong các công trình hiện tại:
 
 - **Gap 1 — Đa lĩnh vực:** Chứng minh một kiến trúc KG + RAG duy nhất có thể duy trì độ chính xác ổn định khi xử lý các lĩnh vực pháp luật có cấu trúc điều khoản và từ vựng chuyên ngành dị cấu trúc (Đất đai vs. Hộ tịch vs. HN&GĐ).
 - **Gap 2 — Đa địa phương:** Chứng minh graph routing qua `[:APPLIES_TO]` và Jurisdiction nodes ngăn chặn được tình trạng retrieval nhầm lẫn giữa quy định của 2 địa phương có ngữ nghĩa gần giống nhau (TP.HCM vs. Đồng Nai).
 - **Gap 3 — Đa tầng:** Chứng minh quan hệ `[:IMPLEMENTS]` giúp tăng Recall trên các câu hỏi đòi hỏi tổng hợp từ nhiều tầng văn bản mà flat RAG không thu thập được.
+- **Gap 4 — Đa phiên bản (Temporal Versioning):** Chứng minh CTV versioning, `[:AMENDS]`, `[:AMENDED_BY]` và TemporalIntent cho phép hệ thống phân biệt văn bản còn/hết hiệu lực, xử lý hồ sơ dở dang qua regime change, và tracking amendment — những năng lực mà flat RAG hoàn toàn thiếu.
 
 Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512 tokens, vector search thuần) trên cùng bộ dữ liệu, cùng LLM, cùng embedding model.
 
@@ -233,23 +234,23 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 
 **Tổng cộng 9 node types + 10 edge types active.** Phân thành 2 nhóm chức năng:
 
-**Bảng Edge — Retrieval cốt lõi cho Gap 1/2/3 (7 loại):**
+**Bảng Edge — Retrieval cốt lõi cho Gap 1/2/3/4 (8 loại):**
 
 | Edge | Từ | Đến | Vai trò chiến lược |
 |---|---|---|---|
 | `[:INCLUDES]` | Theme | Norm | **Xương sống Gap 1** — Phân nhóm văn bản theo lĩnh vực |
 | `[:IMPLEMENTS]` | Norm | Norm | **Xương sống Gap 3** — duyệt chuỗi Luật→NĐ→TT→QĐ (hướng dẫn thi hành) |
-| `[:AMENDS]` | Norm | Norm | **Sửa đổi/bổ sung** — VD: NQ 254/2025 AMENDS Luật ĐĐ 2024. Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
+| `[:AMENDS]` | Norm | Norm | **Xương sống Gap 4** — Sửa đổi/bổ sung (VD: NQ 254/2025 AMENDS Luật ĐĐ 2024). Cùng `[:IMPLEMENTS]` tạo derivation closure cho Stage 2 traversal (D-09) |
 | `[:HAS_COMPONENT]` | Norm | Component | Phân rã văn bản thành đơn vị cấu trúc |
-| `[:HAS_CTV]` | Component | CTV | Quản lý phiên bản theo thời gian |
+| `[:HAS_CTV]` | Component | CTV | **Gap 4** — Quản lý phiên bản theo thời gian (valid_from/valid_to) |
 | `[:HAS_TEXT_UNIT]` | CTV | TextUnit | Liên kết phiên bản trừu tượng → nội dung vật lý |
 | `[:APPLIES_TO]` | Norm | Jurisdiction | **Xương sống Gap 2** — hard-filter theo địa phương |
+| `[:AMENDED_BY]` | Component | Amendment | **Gap 4** — Metadata sửa đổi điều khoản (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt). Parse từ `<!-- amended_by: ... -->` HTML comment annotations |
 
-**Bảng Edge — Metadata + concept scoring (3 loại — Phase 4 thêm):**
+**Edge cho concept scoring (2 loại):**
 
 | Edge | Từ | Đến | Vai trò |
 |---|---|---|---|
-| `[:AMENDED_BY]` | Component | Amendment | Metadata sửa đổi điều khoản (số hiệu VB sửa, vị trí, hiệu lực, tóm tắt). Parse từ `<!-- amended_by: ... -->` HTML comment annotations |
 | `[:MAPS_TO_CONCEPT]` | Component | Concept | **Bottom-up LLM classification** (TASK-15 — `ontology_mapper.py`) — Claude Haiku gán concept_ids cho mỗi Điều/Khoản dựa trên label. Dùng trong `hybrid_search._compute_rarity` để boost components giàu concept hiếm |
 | `[:REQUIRES_CONCEPT]` | Procedure | Concept | **Top-down mapping** — load từ `data/ontology/core_v1.json`. Identify concept thiết yếu cho mỗi thủ tục → boost components có MAPS_TO_CONCEPT trùng |
 
@@ -370,7 +371,7 @@ data/raw/*.md
 ### §2.6 Data Flow — Online Retrieval (Phase 3)
 
 Pipeline retrieval qua 3 stages + Hybrid Search 4-pass + Context Assembly + Answer Generation.
-Kiến trúc dưới đây phản ánh hệ thống v2.7 (sau 4 fix layers session 2026-05-19/20).
+Kiến trúc dưới đây phản ánh hệ thống v2.8 (sau 4 fix layers session 2026-05-19/20 + Gap 4 split 2026-05-21).
 
 ```
 Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào sửa đổi?"
@@ -527,7 +528,7 @@ Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào s�
 | Metric — **Negative correctness**: refusal rate cho câu ngoài phạm vi | 4 | Core | ✅ |
 | Metric — **Faithfulness 2-tier** (Tier 1 existence $0, Tier 2 LLM judge) | 4 | Enhancement | ✅ Hoàn tất |
 | Metric — **Latency mean/P95** | 4 | Core | ✅ |
-| Gap analysis (Gap 1, 2, 3 + Negative) | 4 | Core | ✅ |
+| Gap analysis (Gap 1, 2, 3, 4 + Negative) | 4 | Core | ✅ |
 | Failure case analysis (Q022/Q024/Q026 case studies) | 4 | Core | ✅ |
 | Limitations documentation (RETRIEVAL_LIMITATIONS_20260520.md) | 4 | Core | ✅ |
 | Ablation Matrix (cumulative impact fix layers) | 4 | Enhancement | ✅ |
@@ -587,7 +588,7 @@ BGE-M3 chạy local trên máy 8GB RAM có thể gặp bottleneck về tốc đ�
 
 1. **Scope hiện tại không có văn bản đa-theme.** Ba lĩnh vực (Đất đai, Hộ tịch, Nuôi con nuôi) sử dụng các bộ luật **riêng biệt** — không có văn bản nào xuất hiện ở 2 Theme cùng lúc. Do đó, routing qua `Norm → [:INCLUDES] → Theme` đã đủ chính xác.
 2. **Effort gán nhãn thủ công rất cao.** Mỗi Component (Điều/Khoản) cần được đọc nội dung và gán Theme thủ công — không thể tự động hóa đáng tin cậy.
-3. **Không giải quyết gap nghiên cứu nào.** Ba gap (đa lĩnh vực, đa địa phương, đa tầng) đều đã được xử lý bởi các edge khác (`[:INCLUDES]`, `[:APPLIES_TO]`, `[:IMPLEMENTS]`).
+3. **Không giải quyết gap nghiên cứu nào.** Bốn gap (đa lĩnh vực, đa địa phương, đa tầng, đa phiên bản) đều đã được xử lý bởi các edge khác (`[:INCLUDES]`, `[:APPLIES_TO]`, `[:IMPLEMENTS]`, `[:AMENDS]`, `[:HAS_CTV]`).
 
 **Limitation chấp nhận:** Nếu sau này mở rộng scope bao gồm văn bản đa-theme (ví dụ: Bộ luật Dân sự), các Component liên quan đến đất đai trong văn bản đó sẽ không được routing đúng.
 

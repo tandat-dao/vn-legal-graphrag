@@ -18,7 +18,7 @@ from pathlib import Path
 
 VALID_THEMES = {"dat-dai", "ho-tich", "nuoi-con-nuoi"}
 VALID_JURISDICTIONS = {"toan-quoc", "tp-hcm", "dong-nai", "multi-juris"}
-VALID_GAPS = {"gap1", "gap2", "gap3", "negative"}
+VALID_GAPS = {"gap1", "gap2", "gap3", "gap4", "negative"}
 VALID_DIFFICULTY = {"easy", "medium", "hard"}
 
 REQUIRED_FIELDS = {
@@ -134,6 +134,11 @@ def validate_distribution(items: list[dict]) -> list[str]:
                 f"id={it['id']} (gap3) chỉ có {len(tiers)} tier khác nhau "
                 f"(tiers={sorted(tiers)}, unknown_prefix={unknown}), cần ≥ 2"
             )
+
+    # Gap 4 (đa phiên bản): cần ≥ 3 câu
+    gap4 = [it for it in items if it["gap_type"] == "gap4"]
+    if len(gap4) < 3:
+        errors.append(f"gap_type=gap4 có {len(gap4)} câu, cần ≥ 3")
 
     return errors
 
