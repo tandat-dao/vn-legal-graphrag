@@ -1,5 +1,48 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.9 | Cập nhật 2026-05-28**
+**Phiên bản 2.10 | Cập nhật 2026-05-28**
+
+> **v2.10 — Cập nhật 2026-05-28 (Defense-in-Depth chống Thuật ngữ Giả: Prompt Sanitization B1 + Term Validator B2):**
+>
+> **Bối cảnh**: Sau v2.9 (fix hallucination L1), demo CLI một câu hỏi span-regime phát hiện LLM tự tạo cụm **"(nguyên tắc cắt ngang)"** — thuật ngữ pháp lý GIẢ, không có trong văn bản pháp luật Việt Nam thật, nguồn gốc từ shortcut nội bộ `(cắt ngang)` trong prompt template. Phân tích cho thấy đây là 1 case của class bug lớn hơn: **bất kỳ shorthand/label nào tôi viết trong prompt đều có thể bị LLM promote thành thuật ngữ giả**. Sửa từng case không scalable.
+>
+> **Cách tiếp cận khoa học (3-layer defense-in-depth)**:
+>
+> **B1 — Prompt sanitization (chặn nguồn leak structural)** ([context_assembler.py:248](../src/retrieval/context_assembler.py#L248)):
+> - Loại bỏ TẤT CẢ parenthetical shortcut/label khỏi prompt: `(lex superior)`, `(lex posterior)`, `(lex specialis)`, `(cắt ngang)` → thay bằng mô tả tiếng Việt đầy đủ.
+> - Thêm meta-rule mạnh: *"TUYỆT ĐỐI KHÔNG tự tạo tên gọi/nhãn riêng cho nguyên tắc, học thuyết, quy tắc, khái niệm pháp lý. Nếu CONTEXT không gọi tên một nguyên tắc bằng cụm cụ thể, hãy MÔ TẢ bằng câu văn đầy đủ, KHÔNG rút gọn thành 'nguyên tắc X', '(X)', hay đặt cụm vào ngoặc kép như một thuật ngữ định danh."*
+> - Cấm cụm tiếng La-tinh xuất hiện trong output: "lex superior/posterior/specialis/lex…" — diễn đạt bằng tiếng Việt mô tả.
+>
+> **B2 — Term grounding validator (auto-detect post-generation)** ([src/evaluation/term_validator.py](../src/evaluation/term_validator.py)):
+> - Module độc lập extract candidate "thuật ngữ giả" từ câu trả lời LLM bằng 4 pattern:
+>   - `named_principle` (high-precision): "nguyên tắc/quy tắc/học thuyết X" — signature mạnh, không filter
+>   - `quoted` (heuristic): cụm trong `"..."` — apply `_looks_like_term` filter
+>   - `parenthetical` (heuristic): cụm trong `(...)` — apply filter
+>   - `bold` (heuristic): cụm `**X**` — apply filter
+> - `_looks_like_term` heuristic: loại các cụm có số (measurement), function word prefix ("không", "có", "tại"...), descriptive words ("phù hợp", "bắt buộc"), >5 từ.
+> - Mỗi candidate được validate bằng substring lookup vào (1) CONTEXT retrieve được, (2) corpus `data/raw/*.md`.
+> - Metric `grounding_rate = #grounded / #candidates_total` — analogue của citation existence_rate nhưng cho thuật ngữ.
+> - CLI: `python -m src.evaluation.term_validator results_*.json --corpus data/raw`.
+>
+> **B3 — Faithfulness metric extension** (chưa làm, để dành sau): tích hợp `terminology_grounding_rate` vào `faithfulness.py` để báo cáo cùng `citation_existence_rate`.
+>
+> **Validation kết quả**:
+> - Demo câu hỏi span-regime gốc: 0 candidate ungrounded (vs 1 trong v2.9). Câu trả lời không còn "(nguyên tắc cắt ngang)" — diễn đạt thay bằng "thời điểm cơ quan có thẩm quyền ra quyết định sẽ quyết định văn bản nào được áp dụng".
+> - 8 câu subset (Q008, Q011, Q019, Q022, Q023, Q024, Q025, Q026): **15 candidate terms / 0 ungrounded / 100% grounding rate**.
+> - Validator chạy trên run cũ 20260520-211930 (canonical N=3): phát hiện **16 ungrounded terms / 26 câu**, bao gồm tất cả các leak đã biết (SPAN-REGIME, cắt ngang, Quy định dẫn chiếu, chuyển giao thẩm quyền…) — chứng minh recall của detector.
+>
+> **F1 trade-off (8-câu subset)**: 0.586 (v2.9 iter2) → 0.569 (v2.10 B1) = −0.017, nằm trong nhiễu (Q008 σ=0.22 documented trong REPRODUCIBILITY_REPORT). Term grounding gain >> F1 marginal loss.
+>
+> **Tại sao tổng quát hơn từng-case-patch**:
+> - Câu hỏi mới thêm vào: validator tự động chạy, không cần audit thủ công
+> - Thuật ngữ mới LLM bịa: detector pattern catch (`named_principle` đặc biệt high-recall)
+> - Reproducibility cho thesis: có metric quantitative `grounding_rate` thay vì anecdotal "đã sửa Q022"
+> - Decision Log: D-16 (B1 prompt sanitization), D-17 (B2 term validator)
+>
+> **Files thay đổi**:
+> - `src/retrieval/context_assembler.py`: B1 prompt sanitization
+> - `src/evaluation/term_validator.py` (mới): B2 detector module
+> - `CLAUDE.md`: D-16, D-17
+> - `data/evaluation/results_graphrag_20260528-152726.json`: 8-câu B1 evidence
 
 > **v2.9 — Cập nhật 2026-05-28 (Hallucination Fix L1 + Anthropic Prompt Caching):**
 >
