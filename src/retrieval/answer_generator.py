@@ -18,7 +18,7 @@ from typing import TypedDict
 
 import anthropic
 
-from src.retrieval.context_assembler import build_prompt
+from src.retrieval.context_assembler import build_messages
 
 
 # ---------------------------------------------------------------------------
@@ -206,8 +206,9 @@ def generate_answer(
     if not context.strip():
         logger.warning("generate_answer: context rỗng — LLM sẽ trả lời không có nguồn")
 
-    prompt = build_prompt(question, context)
-    cache_key = _prompt_hash(prompt, MODEL)
+    system_prompt, user_prompt = build_messages(question, context)
+    # Cache key hash trên cả system + user để cache invalidate đúng khi prompt template đổi
+    cache_key = _prompt_hash(system_prompt + "\n\n" + user_prompt, MODEL)
     cached = _cache_get(cache_dir, cache_key)
     if cached is not None:
         logger.info(f"generate_answer: cache HIT ({cache_key}) — $0 API")
@@ -222,11 +223,21 @@ def generate_answer(
             "cache_hit": True,
         }
 
+    # Anthropic prompt caching: đánh dấu system_prompt ephemeral → cache hit giảm 90%
+    # input cost. TTL ~5 phút, đủ cho 1 batch eval. User message KHÔNG cache (thay đổi
+    # mỗi câu hỏi). Yêu cầu: system_prompt phải có >=1024 tokens để cache có hiệu lực.
     message = llm_client.messages.create(
         model=MODEL,
         max_tokens=MAX_ANSWER_TOKENS,
         temperature=TEMPERATURE,
-        messages=[{"role": "user", "content": prompt}],
+        system=[
+            {
+                "type": "text",
+                "text": system_prompt,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ],
+        messages=[{"role": "user", "content": user_prompt}],
     )
 
     raw_answer = message.content[0].text.strip()
