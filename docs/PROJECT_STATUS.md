@@ -1,5 +1,57 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.8 | Cập nhật 2026-05-21**
+**Phiên bản 2.9 | Cập nhật 2026-05-28**
+
+> **v2.9 — Cập nhật 2026-05-28 (Hallucination Fix L1 + Anthropic Prompt Caching):**
+>
+> **Bối cảnh**: Phân tích faithfulness của run canonical 20260520-211930 (N=3) phát hiện 3 loại lỗi tinh vi:
+> - **F1 — Prompt label leakage**: Q022/Q023 output có cụm "Đây là câu hỏi **SPAN-REGIME**…" — nhãn kỹ thuật nội bộ từ prompt template `TEMPORAL #4` rò rỉ ra answer.
+> - **F2 — Citation slug vs số hiệu**: Q024/Q025 cite `[Điều 57 K2 a, Văn bản 47/2024/QH15]` — LLM dùng số hiệu pháp lý từ pretraining knowledge thay vì slug ID corpus.
+> - **F3 — Citation pointer misattribution**: Q019 cite `[Điều 10 K1-4, Văn bản nghi-dinh-226-2025-nd-cp]` — content đúng nhưng pointer sai (NĐ 226 sửa Điều 10 của NĐ 112, NĐ 226 không có Điều 10).
+> - **F4 — Malformed citation**: Q008 cite `[Phụ lục I và Phụ lục II - Ghi chú, …]` — gộp 2 phụ lục vào 1 label.
+>
+> **Tổng cộng 7/94 citations bịa (existence_rate = 92.6%) trên 4/26 câu.**
+>
+> **L1 prompt rewrite ([context_assembler.py:248](../src/retrieval/context_assembler.py#L248))**:
+> - Refactor `build_prompt(q, c) -> str` thành `build_messages(q, c) -> (system, user)` để hỗ trợ Anthropic prompt caching. `build_prompt()` giữ làm wrapper backward-compat.
+> - **Bỏ hoàn toàn nhãn `SPAN-REGIME` / `POINT-IN-TIME`** khỏi prompt — diễn đạt thuần Việt thay thế ("hồ sơ đang trong giai đoạn chuyển tiếp", "câu hỏi tại một thời điểm cụ thể").
+> - **Meta-rule chống leak**: "TUYỆT ĐỐI không sao chép vào câu trả lời bất kỳ nhãn kỹ thuật, mã viết tắt, hoặc cụm UPPERCASE nào xuất hiện trong các quy tắc".
+> - **Rule cứng về `Văn bản` field**: bắt buộc slug ID, "TUYỆT ĐỐI KHÔNG dùng số hiệu pháp lý gốc (47/2024/QH15, 31/2024/QH15…)".
+> - **Rule chống malformed**: "Mỗi citation chỉ chứa MỘT vị trí, không gộp 'I và II'".
+> - **Rule amendment (dual-cite mềm)**: cho phép cite cả văn bản gốc + văn bản sửa đổi khi cả 2 đều có content trực tiếp trong context. Sau iteration 1 phát hiện rule strict "KHÔNG cite văn bản sửa đổi" gây regression Q011 (-0.29) + Q026 (-0.33) vì GT của bạn dùng convention cite cả 2 — đã làm mềm trong iter2.
+>
+> **Anthropic prompt caching ([answer_generator.py:209](../src/retrieval/answer_generator.py#L209))**:
+> - System prompt (~2117 tokens, > 1024 minimum của Sonnet 4.6) đánh dấu `cache_control: ephemeral`.
+> - Cache hit từ request thứ 2 trở đi: input cost giảm ~90% trên phần system. TTL ~5 phút.
+> - Local prompt-hash cache vẫn được duy trì (hash trên `system + user` để invalidate khi prompt template đổi).
+>
+> **Validation methodology** (test pyramid để tiết kiệm API):
+> 1. **Iter1** (subset 6 câu lỗi gốc): F1 0.317 → 0.519 (+64%), hallucination 7 → 1, leak/bad-slug → 0. Phát hiện Q011/Q026 regression do rule strict.
+> 2. **Iter2** (subset 8 câu = 6 cũ + Q011 + Q026): F1 → 0.587, hallucination 1 → **0**. Trade-off Q024 (-0.33), Q023 (-0.25).
+> 3. **Regression 26 câu × 1**: F1 0.539 (N=3 old) → 0.554 (N=1 new), nằm trong nhiễu CI; hallucination 7 → 1; leak 2 → 0; bad-slug 2 → 0.
+> 4. **Confirm 13 câu random (seed=42)**: F1 0.406 → 0.474 (+0.068), **0 hallucination / 0 leak / 0 bad-slug**. Q004 lặp regression −0.33 (cùng câu xuất hiện 2 run liên tiếp — có thể là single-run variance, cần N=2+ confirm cho thesis).
+>
+> **Kết quả cuối (iter2, full 26 câu, N=1, sẽ rerun N=3 ở giai đoạn final report)**:
+>
+> | Metric | v2.8 (N=3) | v2.9 (N=1) | Δ |
+> |---|---:|---:|---:|
+> | F1 Khoản | 0.539 ± 0.021 | 0.554 | +0.015 (within CI) |
+> | F1 Điều | 0.567 ± 0.032 | 0.570 | +0.003 |
+> | NormR | 0.931 ± 0.005 | 0.936 | +0.005 |
+> | **Hallucinated citations** | 7 (trong 94) | **0–1** | **−86%** |
+> | **Prompt leak (SPAN-REGIME)** | **2 câu** | **0** | **fix triệt để** |
+> | **Bad slug (số hiệu thay vì slug)** | **2 câu** | **0** | **fix triệt để** |
+> | Negative correct | 100% | 100% | tied |
+>
+> **Documentation deliverable cho thesis**: bằng chứng cụ thể về hallucination → systematic fix → empirical validation, dùng làm case study trong chương "Engineering Trustworthy LLM Output" hoặc Limitations.
+>
+> **Files thay đổi**:
+> - `src/retrieval/context_assembler.py`: prompt rewrite (build_messages + meta-rules)
+> - `src/retrieval/answer_generator.py`: Anthropic prompt caching
+> - `data/evaluation/test_subset_hallucination.json` (mới): 8 câu cho iteration testing
+> - `data/evaluation/test_subset_regression13.json` (mới): 13 câu random seed=42 cho regression
+> - `CLAUDE.md`: D-14 (prompt L1 rewrite), D-15 (Anthropic prompt caching)
+>
+> **Pending**: full N=3 canonical rerun (sẽ làm ở giai đoạn final report) để cập nhật ABLATION_MATRIX + REPRODUCIBILITY_REPORT.
 
 > **v2.8 — Cập nhật 2026-05-21 (Gap 4 — Đa phiên bản + Q024 re-label + Baseline re-aggregate):**
 >
