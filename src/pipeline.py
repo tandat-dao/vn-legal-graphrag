@@ -88,6 +88,7 @@ def _resolve_temporal_anchor(anchor: str | None) -> str | None:
 class PipelineResult(TypedDict):
     question: str
     query_plan: QueryPlan
+    response_mode: str           # mode đã resolve cho answer generation
     confirmation_needed: bool
     confirmation_prompt: str | None
     lccids_count: int
@@ -135,6 +136,7 @@ def run_pipeline(
     force_jurisdiction: str | None = None,
     bypass_completeness: bool = False,
     llm_cache_dir: Path | None = None,
+    response_mode: str | None = None,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -166,6 +168,10 @@ def run_pipeline(
             f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']} "
             f"complete={query_plan['is_complete']}"
         )
+
+        # Resolve answer mode: explicit override > planner auto-detect > "general".
+        resolved_mode = response_mode or query_plan.get("response_mode") or "general"
+        logger.info(f"run_pipeline: response_mode='{resolved_mode}'")
 
         # Bypass Confirmation Loop cho evaluation: inject jurisdiction từ ground truth
         # nếu được cung cấp. Chỉ unblock khi jurisdiction là field thiếu duy nhất.
@@ -199,6 +205,7 @@ def run_pipeline(
             return PipelineResult(
                 question=question,
                 query_plan=query_plan,
+                response_mode=resolved_mode,
                 confirmation_needed=True,
                 confirmation_prompt=confirmation_prompt,
                 lccids_count=0,
@@ -247,6 +254,7 @@ def run_pipeline(
             return PipelineResult(
                 question=question,
                 query_plan=query_plan,
+                response_mode=resolved_mode,
                 confirmation_needed=False,
                 confirmation_prompt=None,
                 lccids_count=0,
@@ -280,7 +288,9 @@ def run_pipeline(
 
         # --- TASK-13b: Answer Generation ---
         logger.info("run_pipeline: generate_answer")
-        result = generate_answer(question, context, anthropic_client, cache_dir=llm_cache_dir)
+        result = generate_answer(
+            question, context, anthropic_client, cache_dir=llm_cache_dir, mode=resolved_mode
+        )
 
         elapsed = time.perf_counter() - t_start
         logger.info(
@@ -291,6 +301,7 @@ def run_pipeline(
         return PipelineResult(
             question=question,
             query_plan=query_plan,
+            response_mode=resolved_mode,
             confirmation_needed=False,
             confirmation_prompt=None,
             lccids_count=len(norm_ids),

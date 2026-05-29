@@ -186,6 +186,7 @@ def generate_answer(
     context: str,
     llm_client: anthropic.Anthropic,
     cache_dir: Path | None = None,
+    mode: str = "general",
 ) -> dict:
     """Gửi prompt vào Claude Sonnet 4.6, trả về answer + citations.
 
@@ -206,8 +207,9 @@ def generate_answer(
     if not context.strip():
         logger.warning("generate_answer: context rỗng — LLM sẽ trả lời không có nguồn")
 
-    system_prompt, user_prompt = build_messages(question, context)
-    # Cache key hash trên cả system + user để cache invalidate đúng khi prompt template đổi
+    system_prompt, user_prompt = build_messages(question, context, mode)
+    # Cache key hash trên cả system + user; system đã khác nhau theo mode → cache
+    # tự phân biệt general vs irac, không cần thêm mode vào key.
     cache_key = _prompt_hash(system_prompt + "\n\n" + user_prompt, MODEL)
     cached = _cache_get(cache_dir, cache_key)
     if cached is not None:
