@@ -1,6 +1,7 @@
 ---
 id: "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
 title: "Quyết định 18/2016/QĐ-UBND quy định về hạn mức đất ở trên địa bàn Thành phố Hồ Chí Minh"
+so_hieu: "18/2016/QĐ-UBND"
 tier: 4
 theme: "dat-dai"
 jurisdiction: "tp-hcm"
