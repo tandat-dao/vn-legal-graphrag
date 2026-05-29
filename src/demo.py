@@ -228,6 +228,9 @@ def main() -> int:
                         help="Tắt LLM cache (luôn gọi API)")
     parser.add_argument("--llm-cache-dir", default="data/evaluation/.llm_cache/",
                         help="Thư mục cache LLM")
+    parser.add_argument("--mode", choices=["auto", "general", "irac"], default="auto",
+                        help="Chế độ trả lời: auto (planner tự chọn), general (gọn), "
+                             "irac (tư vấn chi tiết). Mặc định auto.")
     args = parser.parse_args()
 
     # Setup logging
@@ -259,6 +262,7 @@ def main() -> int:
                 force_jurisdiction=args.jurisdiction,
                 bypass_completeness=args.bypass_completeness,
                 llm_cache_dir=cache_dir,
+                response_mode=None if args.mode == "auto" else args.mode,
             )
         except _anthropic.OverloadedError as e:
             elapsed = time.perf_counter() - t_start
