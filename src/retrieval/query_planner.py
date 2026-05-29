@@ -46,12 +46,13 @@ MODEL = "claude-haiku-4-5-20251001"
 _SYSTEM_PROMPT = """\
 Bạn là bộ phân loại câu hỏi pháp lý Việt Nam. Nhiệm vụ: extract 5 trường từ câu hỏi người dùng.
 
-Trả về JSON với đúng 5 trường (không có trường nào khác):
+Trả về JSON với đúng 6 trường (không có trường nào khác):
 {
   "theme": <"dat-dai" | "ho-tich" | "nuoi-con-nuoi" | null>,
   "procedure": <một trong các giá trị dưới đây | null>,
   "jurisdiction": <"toan-quoc" | "tp-hcm" | "dong-nai" | null>,
   "temporal": <chuỗi ngày "YYYY-MM-DD" nếu câu hỏi đề cập thời điểm cụ thể | null>,
+  "response_mode": <"general" | "irac">,
   "temporal_intent": {
     "has_temporal_context": <true | false>,
     "temporal_anchor": <"YYYY-MM-DD" | "trước-YYYY-MM-DD" | "luat-cu" | "unspecified_past" | null>,
@@ -98,6 +99,13 @@ Quy tắc temporal_intent (PHÂN BIỆT QUÁ KHỨ VÀ HIỆN TẠI):
 
 9. reasoning — 1 câu giải thích ngắn (≤ 30 từ) phát hiện temporal.
 
+Quy tắc response_mode (PHÂN BIỆT CÂU HỎI TRA CỨU CHUNG VS TÌNH HUỐNG CỤ THỂ):
+10. response_mode = "irac" KHI câu hỏi MÔ TẢ MỘT TÌNH HUỐNG/SỰ VIỆC CỤ THỂ của người hỏi cần áp dụng luật vào tình tiết để ra kết luận. Dấu hiệu:
+    - Có chủ thể + tình tiết cụ thể: "Tôi có 500m² đất...", "Gia đình tôi...", "Bên mua đặt cọc 200 triệu...", "Trường hợp của tôi..."
+    - Hỏi "tôi có được... không?", "tôi phải làm gì?", "ai đúng/sai?", "có hợp pháp không?" gắn với sự việc đã/đang xảy ra.
+    response_mode = "general" KHI câu hỏi TRA CỨU QUY ĐỊNH CHUNG, không gắn tình tiết cá nhân: "Điều kiện X là gì?", "Hạn mức Y bao nhiêu?", "Thủ tục Z gồm những bước nào?", "Văn bản nào sửa đổi...?".
+    Khi không chắc → "general".
+
 VÍ DỤ:
 Q: "Hạn mức giao đất ở TP.HCM tối đa bao nhiêu m²?"
 → temporal_intent: {"has_temporal_context": false, "temporal_anchor": null, "case_status": null, "reasoning": "Câu hỏi về quy định hiện hành, không có yếu tố thời gian"}
@@ -110,6 +118,12 @@ Q: "Đất nhà tôi mua từ hồi luật cũ chưa sửa, giờ muốn cấp s
 
 Q: "Hồ sơ tôi nộp tháng trước nhưng xã ngâm đến nay chưa có quyết định"
 → temporal_intent: {"has_temporal_context": true, "temporal_anchor": "unspecified_past", "case_status": "do-dang", "reasoning": "Hồ sơ chưa có quyết định cuối — có thể bị áp dụng luật mới nếu không có chuyển tiếp"}
+
+VÍ DỤ response_mode:
+Q: "Hạn mức giao đất ở tại TP.HCM tối đa bao nhiêu m²?"
+→ "response_mode": "general"   (tra cứu quy định chung, không có tình tiết cá nhân)
+Q: "Tôi có 500m² đất nông nghiệp ở Quận 9 mua năm 2010, muốn chuyển 200m² sang đất ở thì có được không?"
+→ "response_mode": "irac"      (tình huống cụ thể của người hỏi, cần áp dụng luật vào tình tiết)
 
 Chỉ trả về JSON thuần — không có markdown, không có giải thích ngoài JSON.
 """
@@ -145,12 +159,16 @@ _DEFAULT_TEMPORAL_INTENT: TemporalIntent = {
 _VALID_CASE_STATUS = {"hoan-tat", "do-dang", "moi"}
 
 
+VALID_RESPONSE_MODES = ("general", "irac")
+
+
 class QueryPlan(TypedDict):
     theme: str | None
     procedure: str | None
     jurisdiction: str | None
     temporal: str | None
     temporal_intent: TemporalIntent
+    response_mode: str          # "general" (gọn) | "irac" (tư vấn chi tiết)
     is_complete: bool
     missing_fields: list[str]
 
@@ -267,6 +285,7 @@ def _validate_and_clean(raw: dict) -> dict:
     procedure = raw.get("procedure")
     jurisdiction = raw.get("jurisdiction")
     temporal = raw.get("temporal")
+    response_mode = raw.get("response_mode")
     temporal_intent = _validate_temporal_intent(raw.get("temporal_intent"))
 
     if theme not in VALID_THEMES:
@@ -277,12 +296,15 @@ def _validate_and_clean(raw: dict) -> dict:
         jurisdiction = None
     if not isinstance(temporal, str):
         temporal = None
+    if response_mode not in VALID_RESPONSE_MODES:
+        response_mode = "general"  # default an toàn khi LLM bỏ trống/sai
 
     return {
         "theme": theme,
         "procedure": procedure,
         "jurisdiction": jurisdiction,
         "temporal": temporal,
+        "response_mode": response_mode,
         "temporal_intent": temporal_intent,
     }
 
@@ -416,6 +438,7 @@ def plan_query(
         jurisdiction=fields["jurisdiction"],
         temporal=fields["temporal"],
         temporal_intent=fields["temporal_intent"],
+        response_mode=fields["response_mode"],
         is_complete=is_complete,
         missing_fields=missing,
     )
