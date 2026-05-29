@@ -245,21 +245,64 @@ def assemble_context(
     return "\n\n".join(blocks)
 
 
-def build_messages(question: str, context: str) -> tuple[str, str]:
+# ---------------------------------------------------------------------------
+# Mode-specific answer-style blocks (2-mode: general | irac)
+# ---------------------------------------------------------------------------
+# Đặt SAU phần CORE rules trong system prompt. CORE giống nhau cho mọi mode
+# (vẫn cache được); block mode nhỏ, thay đổi theo đối tượng người dùng:
+#   - general: người dân — câu trả lời gọn, đi thẳng đáp án.
+#   - irac: người làm luật / câu hỏi có tình huống cụ thể — cấu trúc IRAC đầy đủ.
+VALID_RESPONSE_MODES = ("general", "irac")
+
+_MODE_BLOCK_GENERAL = """
+PHONG CÁCH TRẢ LỜI — CHẾ ĐỘ NGẮN GỌN (câu hỏi tra cứu chung):
+- Đi thẳng vào đáp án. Câu mở đầu PHẢI là câu trả lời trực tiếp cho câu hỏi.
+- Chỉ trình bày thông tin câu hỏi yêu cầu. KHÔNG liệt kê thêm quy định/số liệu chỉ vì chúng có trong CONTEXT.
+- Nếu mỗi địa phương quy định khác nhau mà câu hỏi không nêu địa phương: nêu NGẮN GỌN sự khác biệt kèm 1-2 ví dụ tiêu biểu, rồi gợi ý người dùng cung cấp địa phương để có câu trả lời chính xác.
+- Vẫn giữ trích dẫn cho mỗi khẳng định pháp lý chính, nhưng CHỈ trích điều khoản là NGUỒN TRỰC TIẾP của đáp án — tránh trích tràn lan."""
+
+_MODE_BLOCK_IRAC = """
+PHONG CÁCH TRẢ LỜI — CHẾ ĐỘ TƯ VẤN CHI TIẾT (câu hỏi có tình huống cụ thể):
+Trình bày theo đúng 4 phần, dùng heading H3 (###) chính xác như sau:
+
+### Vấn đề
+[Tóm tắt câu hỏi pháp lý cốt lõi rút ra từ tình huống — 1-2 câu.]
+
+### Căn cứ pháp lý
+[Trích dẫn điều khoản liên quan TỪ CONTEXT, nêu nội dung quy định quan trọng nhất kèm citation [Điều X, ...]. CHỈ trích văn bản có trong CONTEXT — nếu CONTEXT thiếu căn cứ cần thiết, áp dụng QUY TẮC KHI THIẾU CĂN CỨ ở trên.]
+
+### Phân tích
+[Áp dụng quy định vào CÁC TÌNH TIẾT cụ thể mà câu hỏi nêu. Lập luận từng bước tình huống rơi vào trường hợp nào của quy định.]
+
+### Kết luận
+[Câu trả lời dứt khoát, ngắn gọn, rõ ràng cho người hỏi.]
+
+Nếu câu hỏi KHÔNG cung cấp đủ tình tiết để phân tích: KHÔNG bịa tình tiết — chuyển sang trình bày quy định chung và nêu rõ cần thêm thông tin gì để tư vấn cụ thể."""
+
+_MODE_BLOCKS = {
+    "general": _MODE_BLOCK_GENERAL,
+    "irac": _MODE_BLOCK_IRAC,
+}
+
+
+def build_messages(question: str, context: str, mode: str = "general") -> tuple[str, str]:
     """Tạo (system_prompt, user_prompt) để gọi LLM với Anthropic prompt caching.
 
     Tách static rules (system) khỏi dynamic context + question (user) giúp:
     - Cache hit cho system_prompt giảm input cost ~90% (cache_control ephemeral).
-    - Cache TTL ~5 phút — đủ cho 1 eval batch 26 câu.
+    - Cache TTL ~5 phút — đủ cho 1 eval batch.
 
     Args:
         question: Câu hỏi tiếng Việt của người dùng.
         context: Context string từ assemble_context().
+        mode: "general" (gọn, mặc định) hoặc "irac" (tư vấn chi tiết theo IRAC).
+              Giá trị ngoài VALID_RESPONSE_MODES fallback về "general".
 
     Returns:
-        (system_prompt, user_prompt): system chứa toàn bộ rules; user chứa
-        CONTEXT + CÂU HỎI + chỉ dẫn "TRẢ LỜI:".
+        (system_prompt, user_prompt): system chứa CORE rules + block theo mode;
+        user chứa CONTEXT + CÂU HỎI + chỉ dẫn "TRẢ LỜI:".
     """
+    mode_block = _MODE_BLOCKS.get(mode, _MODE_BLOCK_GENERAL)
     schema_b_block = "\n" + """
 ĐỊNH DẠNG ĐẦU RA (BẮT BUỘC):
 Câu trả lời của bạn PHẢI gồm đúng 3 section sau, theo thứ tự, dùng heading H2 (##) chính xác như sau:
@@ -359,6 +402,7 @@ QUY TẮC VỀ CITATION KHI CONTENT BỊ SỬA ĐỔI (CỰC KỲ QUAN TRỌNG):
   • NẾU CÂU HỎI hỏi đồng thời về cả nội dung lẫn sửa đổi (ví dụ "quy định hiện hành về X là gì?" trong khi X đã bị sửa đổi), NÊN cite CẢ HAI: vị trí Điều X tại văn bản gốc VÀ vị trí thực hiện sửa đổi tại văn bản sửa đổi.
   • KHÔNG được bịa: chỉ cite Điều/Khoản nào THỰC SỰ tồn tại trong context. Ví dụ KHÔNG cite `[Điều 10, Văn bản nghi-dinh-226-2025-nd-cp]` nếu NĐ 226 không có Điều 10 (NĐ 226 chỉ chứa Điều 5 thực hiện sửa đổi Điều 10 NĐ 112).
   • TRÁNH OVER-CITE: nếu câu hỏi chỉ hỏi 1 khía cạnh (chỉ nội dung HOẶC chỉ sửa đổi), không cần cite cả hai.
+{mode_block}
 {schema_b_block}"""
 
     user_prompt = f"""CONTEXT:
@@ -371,11 +415,11 @@ TRẢ LỜI:"""
     return system_prompt, user_prompt
 
 
-def build_prompt(question: str, context: str) -> str:
+def build_prompt(question: str, context: str, mode: str = "general") -> str:
     """Backward-compatible wrapper: trả về full prompt string (system + user nối liền).
 
     Dùng cho code path cũ không hỗ trợ system/user split. Code mới nên dùng
     `build_messages()` để tận dụng Anthropic prompt caching.
     """
-    system_prompt, user_prompt = build_messages(question, context)
+    system_prompt, user_prompt = build_messages(question, context, mode)
     return system_prompt + "\n\n" + user_prompt
