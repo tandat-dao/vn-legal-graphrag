@@ -7,7 +7,7 @@ Stage 1 — Qdrant semantic search:
     filter content_type="summary" + theme → top-N seed norm_ids
 
 Stage 2 — Neo4j graph traversal:
-    Từ seed norm_ids, mở rộng qua [:IMPLEMENTS] (BIDIRECTIONAL)
+    Từ seed norm_ids, mở rộng qua [:IMPLEMENTS|AMENDS*1..4] (undirected)
     Lọc cứng theo jurisdiction qua [:APPLIES_TO]
     Lọc temporal theo CTV.valid_from / CTV.valid_to
     → trả về DISTINCT norm_ids (dùng làm Qdrant filter cho Stage 3)
@@ -163,8 +163,8 @@ def stage2_component_ids(
 ) -> LCCIDs:
     """Stage 2: từ seed norm_ids, duyệt graph → Component IDs.
 
-    Chiến lược bidirectional: đi cả lên (seed → luật cha) và xuống (NĐ/NQ con → seed)
-    qua [:IMPLEMENTS*1..4].
+    Chiến lược undirected traversal: mở rộng qua bao đóng {IMPLEMENTS, AMENDS}
+    qua [:IMPLEMENTS|AMENDS*1..4], depth tối đa 4 hop.
     Lọc cứng theo jurisdiction và temporal.
 
     Args:
