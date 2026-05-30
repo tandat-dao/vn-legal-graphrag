@@ -106,38 +106,35 @@ def _cache_put(cache_dir: Path | None, key: str, data: dict) -> None:
         json.dumps(data, ensure_ascii=False), encoding="utf-8"
     )
 
-# Regex bắt citation đa dạng định dạng:
-#   [Điều X, Văn bản Z]
-#   [Điều X, Khoản Y, Văn bản Z]
-#   [Điều X, Khoản Y, Điểm Z, Văn bản W]
+# Citation parsing — ORDER-INDEPENDENT (commit 2-mode):
+# Trước đây dùng 1 regex cố định thứ tự [Điều→Khoản→Điểm→Tiết→Văn bản]. IRAC mode
+# khiến LLM đảo thứ tự (VD "[Điểm đ, Khoản 2, Phụ lục, Văn bản ...]") → regex fail
+# → trả [] dù answer đúng (Q007: F1 0.50→0.00 giả). Fix: bắt mọi block [...] có
+# "Văn bản", split theo dấu phẩy, phân loại từng phần theo prefix — KHÔNG phụ thuộc
+# thứ tự. Tương đương parse_sections() đã robust với thứ tự section (Schema B).
+#
+# Các định dạng hỗ trợ (mọi hoán vị thứ tự thành phần đều hợp lệ):
+#   [Điều X, Văn bản Z]                         [Phụ lục X, Văn bản Z]
+#   [Điều X, Khoản Y, Văn bản Z]                [Phụ lục, Khoản Y, Văn bản Z]
 #   [Điều X, Khoản Y, Điểm Z, Tiết K, Văn bản W]
-#   [Phụ lục X, Văn bản Z]
-#   [Phụ lục X, Khoản Y, Văn bản Z]
-#   [Phụ lục, Khoản Y, Văn bản Z]  (Phụ lục KHÔNG có số — văn bản chỉ 1 Phụ lục duy nhất)
-# Group 1: loại đầu (Điều | Phụ lục), Group 2: số/ký hiệu (optional cho Phụ lục)
-# Group 3: Khoản (optional), Group 4: Điểm (optional), Group 5: Tiết (optional)
-# Group 6: Văn bản id
-_CITATION_RE = re.compile(
-    r"\[(Điều|Phụ lục)"
-    r"(?:\s+([^,\]]+))?"  # số/ký hiệu optional (cần thiết cho Phụ lục duy nhất, VD NQ 02/2023)
-    r"(?:,\s*Khoản\s+([^,\]]+))?"
-    r"(?:,\s*Điểm\s+([^,\]]+))?"
-    r"(?:,\s*Tiết\s+([^,\]]+))?"
-    r",\s*Văn bản\s+([^\]]+)\]",
+#   [Điểm Z, Khoản Y, Điều X, Văn bản W]        ← đảo thứ tự vẫn parse được
+_CITATION_BLOCK_RE = re.compile(r"\[([^\[\]]+)\]")
+# Mỗi phần (sau split dấu phẩy): "Điều 121" / "Phụ lục II" / "Khoản 2" / "Văn bản ..."
+_CITATION_PART_RE = re.compile(
+    r"^(Điều|Phụ\s*lục|Khoản|Điểm|Tiết|Văn\s*bản)\s*(.*)$",
     re.IGNORECASE,
 )
 
 
 def parse_citations(raw_answer: str) -> list[dict]:
-    """Extract citations từ câu trả lời LLM.
+    """Extract citations từ câu trả lời LLM (order-independent).
 
-    Hỗ trợ các định dạng:
-        [Điều X, Văn bản Z]
-        [Điều X, Khoản Y, Văn bản Z]
+    Bắt mọi block `[...]` chứa "Văn bản", tách theo dấu phẩy, phân loại từng phần
+    theo prefix (Điều/Phụ lục/Khoản/Điểm/Tiết/Văn bản) bất kể thứ tự xuất hiện.
+
+    Hỗ trợ mọi hoán vị, VD:
         [Điều X, Khoản Y, Điểm Z, Văn bản W]
-        [Điều X, Khoản Y, Điểm Z, Tiết K, Văn bản W]
-        [Phụ lục X, Văn bản Z]
-        [Phụ lục X, Khoản Y, Văn bản Z]
+        [Điểm Z, Khoản Y, Phụ lục, Văn bản W]   ← thứ tự đảo vẫn hợp lệ
 
     Returns:
         List dict với keys: dieu, khoan, diem (optional), tiet (optional),
@@ -150,34 +147,51 @@ def parse_citations(raw_answer: str) -> list[dict]:
     # 2 lần liên tiếp). Trùng lặp hạ precision oan trong metric F1. Giữ duy nhất bản
     # đầu tiên — đây là idempotent fix, không thay đổi semantics câu trả lời.
     seen: set[tuple] = set()
-    for match in _CITATION_RE.finditer(raw_answer):
-        loai_raw = match.group(1).strip().lower()
-        loai = "phu_luc" if loai_raw.startswith("phụ") else "dieu"
-        # Group 2 (số/ký hiệu) optional cho Phụ lục duy nhất; Điều bắt buộc có
-        raw_number = match.group(2)
-        if raw_number is None:
-            if loai == "dieu":
-                continue  # "Điều" không có số là format không hợp lệ
-            number = "_default"  # Phụ lục duy nhất → sentinel
-        else:
-            number = raw_number.strip()
-        khoan = match.group(3).strip() if match.group(3) else None
-        diem = match.group(4).strip() if match.group(4) else None
-        tiet = match.group(5).strip() if match.group(5) else None
-        van_ban = match.group(6).strip()
+    for block in _CITATION_BLOCK_RE.finditer(raw_answer):
+        content = block.group(1)
+        loai: str | None = None
+        number: str | None = None
+        khoan = diem = tiet = van_ban = None
+
+        for part in content.split(","):
+            pm = _CITATION_PART_RE.match(part.strip())
+            if not pm:
+                continue
+            kind = pm.group(1).lower().replace(" ", "")  # "phụ lục"→"phụlục", "văn bản"→"vănbản"
+            val = pm.group(2).strip()
+            if kind == "điều":
+                loai = "dieu"
+                number = val or None
+            elif kind == "phụlục":
+                loai = "phu_luc"
+                number = val if val else "_default"
+            elif kind == "khoản":
+                khoan = val or None
+            elif kind == "điểm":
+                diem = val or None
+            elif kind == "tiết":
+                tiet = val or None
+            elif kind == "vănbản":
+                van_ban = val or None
+
+        # Validation: phải có Văn bản + loại (Điều/Phụ lục); Điều bắt buộc có số.
+        if van_ban is None or loai is None:
+            continue
+        if loai == "dieu" and not number:
+            continue
+
         key = (loai, number, khoan, diem, tiet, van_ban)
         if key in seen:
             continue
         seen.add(key)
-        c = {
+        citations.append({
             "dieu": number,
             "khoan": khoan,
             "diem": diem,
             "tiet": tiet,
             "van_ban": van_ban,
             "loai": loai,
-        }
-        citations.append(c)
+        })
     return citations
 
 
