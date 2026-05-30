@@ -63,7 +63,8 @@ def _augment_question(question: str, jurisdiction: str) -> str:
     return f"{base} {suffix}?"
 
 
-def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) -> dict:
+def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
+                      response_mode: str = "auto") -> dict:
     """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
 
     Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
@@ -73,6 +74,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) ->
     from src.pipeline import run_pipeline
     neo4j_driver, qdrant_client, anthropic_client, model = clients
 
+    resolved_mode = None if response_mode == "auto" else response_mode
     res = run_pipeline(
         item["question"],
         neo4j_driver=neo4j_driver,
@@ -82,6 +84,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) ->
         force_jurisdiction=item["jurisdiction"],
         bypass_completeness=True,  # Eval mode: chạy retrieval ngay cả khi planner thiếu procedure/theme
         llm_cache_dir=llm_cache_dir,
+        response_mode=resolved_mode,
     )
 
     # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
@@ -100,6 +103,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) ->
                 force_jurisdiction=item["jurisdiction"],
                 bypass_completeness=True,
                 llm_cache_dir=llm_cache_dir,
+                response_mode=resolved_mode,
             )
             res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
             res = res2
@@ -114,18 +118,22 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) ->
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
         "context": res.get("context", ""),  # needed cho faithfulness eval
+        "response_mode": res.get("response_mode", response_mode),
     }
 
 
-def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None) -> dict:
+def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None,
+                      response_mode: str = "auto") -> dict:
     from src.baseline.naive_rag import run_baseline_query
     _, qdrant_client, anthropic_client, model = clients
+    resolved_mode = "general" if response_mode == "auto" else response_mode
     res = run_baseline_query(
         item["question"],
         qdrant_client=qdrant_client,
         anthropic_client=anthropic_client,
         model=model,
         llm_cache_dir=llm_cache_dir,
+        mode=resolved_mode,
     )
     return {
         "answer": res["answer"],
@@ -173,6 +181,7 @@ def run_system_on_test_set(
     clients,
     llm_cache_dir: Path | None = None,
     faithfulness_tier: int = 0,  # 0=skip, 1=existence only, 2=existence+LLM judge
+    response_mode: str = "auto",
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -198,7 +207,7 @@ def run_system_on_test_set(
         qid = item["id"]
         logger.info(f"[{system}] {i}/{len(test_set)} {qid}: {item['question'][:60]}...")
         try:
-            sys_out = runner(item, clients, llm_cache_dir=llm_cache_dir)
+            sys_out = runner(item, clients, llm_cache_dir=llm_cache_dir, response_mode=response_mode)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
             sys_out = {
@@ -312,10 +321,17 @@ def main() -> int:
         help="Xóa toàn bộ cache trước khi chạy. Dùng khi thay đổi prompt template.",
     )
     parser.add_argument(
+        "--response-mode",
+        default="auto",
+        choices=["auto", "general", "irac"],
+        help="Chế độ trả lời: auto (planner tự chọn), general (gọn), irac (tư vấn IRAC). "
+             "Mặc định auto. Dùng general/irac để so sánh A/B 2 mode.",
+    )
+    parser.add_argument(
         "--faithfulness-tier",
         type=int, default=0, choices=[0, 1, 2],
         help="Faithfulness metric tier: 0=skip (default), 1=existence-only ($0), "
-             "2=existence+LLM-judge (~1 Haiku call per citation). Đo % citation "
+             "2=existence+LLM-judge (~1 Haiku call per citation). Đo %% citation "
              "có chunk match context (Tier 1) và semantic support (Tier 2).",
     )
     args = parser.parse_args()
@@ -441,6 +457,7 @@ def main() -> int:
                 test_set, system, clients,
                 llm_cache_dir=llm_cache_dir,
                 faithfulness_tier=args.faithfulness_tier,
+                response_mode=args.response_mode,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
