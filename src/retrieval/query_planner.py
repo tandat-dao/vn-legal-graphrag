@@ -444,6 +444,38 @@ def plan_query(
     )
 
 
+# Nhãn hiển thị tiếng Việt cho theme — id lấy từ VALID_THEMES (danh sách đóng),
+# nhãn chỉ phục vụ trình bày cho người dùng.
+_THEME_LABELS = {
+    "dat-dai": "Đất đai",
+    "ho-tich": "Hộ tịch",
+    "nuoi-con-nuoi": "Nuôi con nuôi",
+}
+
+
+def build_question_framework() -> str:
+    """Khung hướng dẫn cách hỏi khi không xác định được lĩnh vực (theme=None).
+
+    Thay vì hỏi cụt ("Bạn muốn tra cứu lĩnh vực nào?"), cung cấp cho người dùng
+    công thức câu hỏi tốt + vài ví dụ mẫu để họ hỏi lại theo cách giúp hệ thống
+    định tuyến và trả lời chính xác nhất.
+
+    Returns:
+        Text markdown gọn (3-4 dòng + ví dụ).
+    """
+    linh_vuc = ", ".join(_THEME_LABELS[t] for t in VALID_THEMES if t in _THEME_LABELS)
+    return (
+        "Mình chưa xác định được câu hỏi của bạn thuộc lĩnh vực nào.\n"
+        f"Hệ thống hiện hỗ trợ tra cứu: **{linh_vuc}**.\n\n"
+        "Để được trả lời chính xác nhất, bạn hãy nêu câu hỏi theo khung:\n"
+        "**[Thủ tục cần hỏi] + [địa phương — nếu là đất đai] + [tình huống/thời điểm nếu có]**\n\n"
+        "Ví dụ:\n"
+        "- \"Hạn mức giao đất ở cho cá nhân tại TP.HCM là bao nhiêu?\"\n"
+        "- \"Hồ sơ đăng ký khai sinh gồm những giấy tờ gì?\"\n"
+        "- \"Điều kiện đăng ký nuôi con nuôi trong nước là gì?\""
+    )
+
+
 def build_confirmation_prompt(missing_fields: list[str]) -> str:
     """Tạo câu hỏi ngược lại người dùng khi thiếu thông tin.
 
@@ -453,13 +485,13 @@ def build_confirmation_prompt(missing_fields: list[str]) -> str:
     Returns:
         Câu hỏi tiếng Việt yêu cầu người dùng bổ sung thông tin.
     """
+    # theme là blocker lớn nhất: không có lĩnh vực thì hệ thống không định tuyến
+    # được. Trả về khung hướng dẫn cách hỏi (công thức + ví dụ) thay vì câu hỏi cụt.
+    if "theme" in missing_fields:
+        return build_question_framework()
+
     parts: list[str] = []
 
-    if "theme" in missing_fields:
-        parts.append(
-            "Bạn muốn tra cứu thủ tục thuộc lĩnh vực nào? "
-            "(Đất đai / Hộ tịch / Nuôi con nuôi)"
-        )
     if "procedure" in missing_fields:
         parts.append("Bạn muốn tra cứu thủ tục hành chính cụ thể nào?")
     if "jurisdiction" in missing_fields:

@@ -158,11 +158,12 @@ def _render_result(question: str, result: dict, total_time: float,
         expand=False,
     ))
 
-    # Confirmation needed case
+    # Confirmation needed case — render markdown để khung hướng dẫn (bullet/ví dụ)
+    # hiển thị gọn gàng.
     if result.get("confirmation_needed"):
         console.print()
         console.print(Panel(
-            Text(result.get("confirmation_prompt", "(không có prompt)"), style="yellow"),
+            Markdown(result.get("confirmation_prompt", "(không có prompt)")),
             title="⚠️  [bold yellow]HỆ THỐNG YÊU CẦU XÁC NHẬN[/bold yellow]",
             border_style="yellow",
         ))

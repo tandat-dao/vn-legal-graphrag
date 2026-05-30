@@ -16,6 +16,7 @@ from src.retrieval.query_planner import (
     _validate_and_clean,
     _validate_temporal_intent,
     build_confirmation_prompt,
+    build_question_framework,
     plan_query,
 )
 
@@ -155,13 +156,32 @@ class TestBuildConfirmationPrompt:
         prompt = build_confirmation_prompt(["jurisdiction"])
         assert "tỉnh" in prompt or "thành phố" in prompt or "địa phương" in prompt.lower()
 
-    def test_missing_theme(self):
+    def test_missing_theme_returns_framework(self):
+        """theme=None → trả khung hướng dẫn cách hỏi (công thức + ví dụ + 3 lĩnh vực)."""
         prompt = build_confirmation_prompt(["theme"])
         assert "lĩnh vực" in prompt
+        assert "khung" in prompt.lower()
+        # 3 lĩnh vực hiển thị
+        assert "Đất đai" in prompt and "Hộ tịch" in prompt and "Nuôi con nuôi" in prompt
+        # có ít nhất 1 ví dụ mẫu
+        assert "Ví dụ" in prompt
+        # ngang với build_question_framework()
+        assert prompt == build_question_framework()
+
+    def test_missing_theme_priority_over_other_fields(self):
+        """Khi thiếu cả theme + field khác → vẫn ưu tiên trả khung (theme là blocker)."""
+        prompt = build_confirmation_prompt(["theme", "jurisdiction", "procedure"])
+        assert prompt == build_question_framework()
 
     def test_missing_procedure(self):
         prompt = build_confirmation_prompt(["procedure"])
         assert "thủ tục" in prompt
+
+    def test_missing_jurisdiction_keeps_targeted(self):
+        """Thiếu jurisdiction (theme đã có) → giữ câu hỏi targeted cũ, KHÔNG trả khung."""
+        prompt = build_confirmation_prompt(["jurisdiction"])
+        assert prompt != build_question_framework()
+        assert "tỉnh" in prompt or "thành phố" in prompt
 
     def test_empty_missing(self):
         prompt = build_confirmation_prompt([])
@@ -170,6 +190,14 @@ class TestBuildConfirmationPrompt:
     def test_multiple_missing(self):
         prompt = build_confirmation_prompt(["theme", "jurisdiction"])
         assert len(prompt) > 0
+
+
+class TestBuildQuestionFramework:
+    def test_framework_content(self):
+        fw = build_question_framework()
+        assert "Đất đai" in fw and "Hộ tịch" in fw and "Nuôi con nuôi" in fw
+        assert "[Thủ tục cần hỏi]" in fw
+        assert fw.count("- \"") >= 2  # ít nhất 2 ví dụ mẫu
 
 
 # ---------------------------------------------------------------------------
