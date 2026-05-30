@@ -1,5 +1,44 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.10 | Cập nhật 2026-05-28**
+**Phiên bản 2.11 | Cập nhật 2026-05-30**
+
+> **v2.11 — Cập nhật 2026-05-30 (2-mode trả lời: General gọn vs IRAC tư vấn + order-independent citation parser):**
+>
+> **Bối cảnh**: Hệ thống hướng tới 2 đối tượng — người dân (cần đáp án trực tiếp, gọn) và người làm luật / câu hỏi có tình huống cụ thể (cần phân tích chi tiết). Áp một phong cách trả lời cho mọi câu vừa hao token vừa kém UX: quan sát thấy câu "giá cấp sổ đỏ HCM?" bị LLM nhồi hết hạn mức/lệ phí/tỷ lệ 30-50-100% thay vì đi thẳng vào phí được hỏi.
+>
+> **1. Prompt directness + abstention** ([context_assembler.py](../src/retrieval/context_assembler.py)):
+> - Thêm "NGUYÊN TẮC TRẢ LỜI ĐÚNG TRỌNG TÂM" ưu tiên cao nhất, vô hiệu hóa các rule "BẮT BUỘC..." khi không liên quan câu hỏi.
+> - Làm mềm rule nghĩa vụ tài chính: trả lời trọng tâm khoản được hỏi thay vì liệt kê mọi con số trong CONTEXT.
+> - Nâng abstention thành rule cứng: thiếu căn cứ → câu chuẩn "Tôi không đủ thông tin để cung cấp câu trả lời chính xác cho bạn." (không dùng kiến thức LLM chế câu trả lời); partial → trình bày phần có + nêu rõ phần thiếu.
+>
+> **2. 2-mode response style** (`build_messages(q, c, mode)`):
+> - `general` (mặc định): câu trả lời gọn, đi thẳng đáp án, cite nguồn trực tiếp.
+> - `irac`: cấu trúc Vấn đề / Căn cứ pháp lý / Phân tích / Kết luận cho câu hỏi có tình huống cụ thể; Rule chỉ trích từ CONTEXT (không bịa), fallback general khi thiếu fact.
+> - CORE rules đặt trước, mode block đặt sau → CORE vẫn cache chung (giữ D-15 prompt caching).
+>
+> **3. Auto-detect mode** ([query_planner.py](../src/retrieval/query_planner.py)):
+> - Thêm field `response_mode` vào QueryPlan: phân biệt câu tra cứu chung (general) vs câu mô tả tình huống cá nhân (irac). Resolve: explicit override > planner auto-detect > "general".
+> - Demo `--mode {auto,general,irac}`; eval `--response-mode {auto,general,irac}`.
+> - Verify auto-detect 4/4 đúng trên câu demo; câu khiếu nại gốc ("giá sổ đỏ") đã đi thẳng vào phí, IRAC chạy đúng 4 heading + dùng abstention partial khi thiếu căn cứ.
+>
+> **4. Khung hướng dẫn cách hỏi khi theme=None** ([query_planner.py](../src/retrieval/query_planner.py)):
+> - `build_question_framework()`: khi không xác định được lĩnh vực, thay câu hỏi cụt bằng công thức `[thủ tục]+[địa phương]+[tình huống]` + 3 ví dụ mẫu. Demo panel confirmation render Markdown.
+>
+> **5. A/B eval 2-mode** (12 câu / 4 gap, [test_subset_2mode.json](../data/evaluation/test_subset_2mode.json) + [notebooks/phase4_2mode_eval.ipynb](../notebooks/phase4_2mode_eval.ipynb)):
+> - General F1 Khoản 0.466 vs IRAC 0.439 (Δ −0.027, trong nhiễu) — **2 mode tương đương F1**, khác ở phong cách. Win/Loss/Tie = 2/2/8.
+> - IRAC trội ở câu đa tầng phức tạp (Q011 NormR 0.33→1.0); ép IRAC cho câu tra cứu đơn có thể hại (Q007) → củng cố thiết kế auto-detect (mỗi loại câu một mode).
+>
+> **6. Order-independent citation parser** ([answer_generator.py](../src/retrieval/answer_generator.py)):
+> - Điều tra Q007 (IRAC F1 0.50→0.00) phát hiện **metric artifact**: answer đúng (bảng phí đầy đủ) nhưng cite `[Điểm đ, Khoản 2, Phụ lục, ...]` (đảo thứ tự) → regex cũ cố định thứ tự fail → trả [].
+> - Fix: `parse_citations` split block `[...]` theo dấu phẩy, phân loại từng phần theo prefix — bất kể thứ tự. Tương tự `parse_sections` đã robust.
+> - Verify: 13 unit case + 17 pytest pass; re-parse 26 câu canonical (run 20260520-211930) **0 regress**, Q008 ▲0.33→0.57 (cùng pattern Phụ lục đảo được cứu), aggregate F1 +0.0099. → F1 cũ bị đánh giá thấp nhẹ ở vài câu Phụ lục NQ HĐND do format-order, không phải lỗi retrieval.
+>
+> **Eval impact**: `run_evaluation` mặc định `--response-mode auto` (= general cho câu tra cứu); 26-câu canonical metric **không đổi về bản chất** (chỉ Q008 +0.24 nhờ parser fix). Số thesis ổn định.
+>
+> **Files thay đổi**: `context_assembler.py`, `query_planner.py`, `answer_generator.py`, `pipeline.py`, `baseline/naive_rag.py`, `demo.py`, `run_evaluation.py`, `test_subset_2mode.json` (mới), `notebooks/phase4_2mode_eval.ipynb` (mới), `tests/test_query_planner.py`.
+>
+> **Pending**: re-run notebook 2-mode với parser mới (Q007 IRAC sẽ về ~0.5); cân nhắc N=3 canonical rerun với parser order-independent để cập nhật ABLATION_MATRIX.
+
+
 
 > **v2.10 — Cập nhật 2026-05-28 (Defense-in-Depth chống Thuật ngữ Giả: Prompt Sanitization B1 + Term Validator B2):**
 >
