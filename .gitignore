@@ -44,3 +44,7 @@ data/evaluation/.llm_cache/
 
 # Query planner cache (sinh ra khi chạy demo CLI / pipeline — runtime only)
 data/evaluation/.planner_cache/
+
+# Rác sinh do relative path khi chạy notebook từ thư mục notebooks/
+# (query_planner dùng Path("data/...") → tạo notebooks/data/.planner_cache/)
+notebooks/data/
