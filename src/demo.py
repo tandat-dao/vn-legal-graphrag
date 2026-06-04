@@ -265,12 +265,12 @@ def main() -> int:
                 llm_cache_dir=cache_dir,
                 response_mode=None if args.mode == "auto" else args.mode,
             )
-        except _anthropic.OverloadedError as e:
+        except _anthropic.APIStatusError as e:
             elapsed = time.perf_counter() - t_start
             console.print()
             console.print(Panel(
                 Text.from_markup(
-                    f"[bold red]Anthropic API 529 Overloaded[/bold red]\n\n"
+                    f"[bold red]Anthropic API Lỗi ({e.status_code})[/bold red]\n\n"
                     f"Lỗi: {e}\n\n"
                     f"[dim]Gợi ý: thử lại sau vài phút. Cache đã được populate cho\n"
                     f"các câu hỏi đã chạy trước đây — chỉ câu mới phụ thuộc API live.[/dim]\n\n"
