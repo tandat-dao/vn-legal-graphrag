@@ -2,8 +2,9 @@
 Answer Generator — TASK-13 (phần 2)
 Gửi prompt vào Claude Sonnet 4.6, parse citations từ raw output.
 
-Citation format trong câu trả lời: [Điều X, Khoản Y, Văn bản Z]
-parse_citations() extract thành list[dict] với keys: dieu, khoan, van_ban.
+Citation format trong câu trả lời: [Điều X, Khoản Y, Điểm Z, Tiết K, Văn bản W]
+(và biến thể Phụ lục). parse_citations() là ORDER-INDEPENDENT, extract thành
+list[dict] với keys: dieu, khoan, diem, tiet, van_ban, loai ("dieu" | "phu_luc").
 
 Optional LLM cache: nếu `cache_dir` được truyền, kết quả được lưu/đọc theo
 hash(prompt) — repeat call cùng prompt sẽ trả cache hit (tiết kiệm $ API).

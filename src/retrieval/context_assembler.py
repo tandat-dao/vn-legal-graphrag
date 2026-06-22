@@ -174,7 +174,7 @@ def _format_amendments_warning(amendments: list[dict]) -> str:
 def assemble_context(
     scored_text_units: list[ScoredTextUnit],
     neo4j_driver: Driver,
-    max_tokens: int = 3000,
+    max_tokens: int = 6000,
 ) -> str:
     """Sắp xếp TextUnit theo tier, fetch text, cắt tỉa theo token budget.
 
