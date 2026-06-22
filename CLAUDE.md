@@ -170,7 +170,7 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-12 | Label-keyword Boost (Pass -0.5) — REJECTED sau ablation | Empirical net F1 −0.055 trên 8-câu (Q022 +0.5 nhưng Q001/Q002/Q008/Q024 regress vì label keyword overlap đa Điều cùng tier). Documented as embedding limitation, future work cross-encoder | 2026-05-20 |
 | D-13 | Giữ `Procedure` node + thêm `Concept` node (TASK-15) cho concept rarity scoring | D-07 xóa `[:SPECIFIED_IN]` (manual mapping không scalable) nhưng node `Procedure` được REPURPOSED: kết hợp `Concept` node (Core Ontology) + `[:MAPS_TO_CONCEPT]` (Component → Concept) + `[:REQUIRES_CONCEPT]` (Procedure → Concept) → `hybrid_search` boost components giàu concept hiếm thuộc procedure quan tâm. Ontology Mapping bottom-up qua LLM Haiku (`src/ingestion/ontology_mapper.py`) | Phase 4 |
 | D-14 | Prompt L1 rewrite chống hallucination (no-leak + slug enforcement + amendment dual-cite mềm) | Faithfulness analysis run 20260520-211930 phát hiện 4 nhóm lỗi: F1 prompt leak (`SPAN-REGIME` UPPERCASE label rò rỉ vào output Q022/Q023), F2 citation slug vs số hiệu (`47/2024/QH15` thay vì slug ở Q024/Q025), F3 pointer misattribution (NĐ 226 K10 không tồn tại — phải là NĐ 112 K10 sửa bởi NĐ 226 Đ5 ở Q019), F4 malformed (`Phụ lục I và Phụ lục II` gộp ở Q008). Fix: bỏ hoàn toàn nhãn nội bộ khỏi prompt + meta-rule chống leak + rule cứng slug + rule dual-cite mềm cho amendment. Iter2: hallucination 7→0, leak 2→0, F1 0.539→0.554 (+0.015 N=1 vs N=3 cũ). Refactor `build_prompt()` → `build_messages()` để hỗ trợ prompt caching | 2026-05-28 |
-| D-15 | Anthropic prompt caching cho system prompt (~2117 tokens, `cache_control: ephemeral`) | System rules giống nhau cho mọi câu hỏi → trả tiền lặp lại 78 lần (N=3 × 26 câu) cho cùng nội dung. Caching giảm ~90% input cost trên phần system từ request thứ 2 trở đi, TTL ~5 phút (đủ 1 batch eval). Yêu cầu: tách `build_messages(q,c) -> (system, user)`, system ≥1024 tokens (Sonnet 4.6 minimum). Local prompt-hash cache vẫn được giữ độc lập | 2026-05-28 |
+| D-15 | Anthropic prompt caching cho system prompt (~2117 tokens, `cache_control: ephemeral`) | System rules giống nhau cho mọi câu hỏi → trả tiền lặp lại 78 lần (N=3 × 26 câu) cho cùng nội dung. Caching giảm ~90% input cost trên phần system từ request thứ 2 trở đi, TTL ~5 phút (đủ 1 batch eval). Yêu cầu: tách `build_messages(q,c) -> (system, user)`, system phải ≥ **2048 tokens** — ngưỡng cache tối thiểu thực tế của Sonnet 4.6 (KHÔNG phải 1024; nếu prompt bị cắt xuống dưới 2048 thì cache im lặng ngừng hoạt động, không báo lỗi). Local prompt-hash cache vẫn được giữ độc lập | 2026-05-28 |
 | D-16 | Prompt sanitization B1 — loại bỏ MỌI shorthand/label trong prompt, cấm coin thuật ngữ | Demo span-regime sau v2.9 phát hiện LLM tự promote `(cắt ngang)` thành **"(nguyên tắc cắt ngang)"** trong output — thuật ngữ pháp lý GIẢ. Class bug lớn hơn: bất kỳ shorthand `(X)` / Latin label `(lex superior)` nào trong prompt đều có thể leak. Fix: xóa hết parenthetical shortcuts khỏi prompt + meta-rule mạnh cấm "tự tạo tên gọi/nhãn cho nguyên tắc". Loại bỏ `(lex superior/posterior/specialis)` (Latin), `(cắt ngang)` (rút gọn). Pair với D-17 (auto-detect) tạo defense-in-depth chống thuật ngữ giả | 2026-05-28 |
 | D-17 | Term grounding validator B2 — module `src/evaluation/term_validator.py` auto-detect thuật ngữ giả | Sửa từng case không scalable; câu hỏi mới có thể sinh thuật ngữ giả mới. Approach khoa học: extract candidate "term-like" phrases bằng 4 regex pattern (`named_principle`, `quoted`, `parenthetical`, `bold`) + heuristic `_looks_like_term` (loại measurement/function-word/descriptive), validate qua substring lookup vào CONTEXT + corpus `data/raw/*.md`. Metric `grounding_rate = #grounded / #candidates_total` — analogue của citation existence_rate cho thuật ngữ. Validation: trên 8-câu subset post-B1 đạt **100% grounding rate** (15 candidates / 0 ungrounded); trên run cũ canonical bắt được tất cả leak đã biết (SPAN-REGIME, cắt ngang, chuyển giao thẩm quyền…) | 2026-05-28 |
 
@@ -365,9 +365,10 @@ MAX_PER_NORM = 3                  # _MAX_PER_NORM trong semantic_filter.py — c
 ANTHROPIC_MAX_RETRIES = 8         # src/utils/llm_config.py — chống 529 Overloaded
 VALID_TO_SENTINEL = "9999-12-31"  # CTV.valid_to khi vẫn còn hiệu lực (thay null per ac516ad)
 
-# Neo4j schema: 7 edge types
+# Neo4j schema: 9 node types + 10 edge types (8 retrieval core + 2 concept scoring)
 # IMPLEMENTS: hướng dẫn thi hành (NĐ -> Luật)
 # AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [D-09]
+# MAPS_TO_CONCEPT / REQUIRES_CONCEPT: concept rarity scoring (D-13)
 ```
 
 ---
@@ -539,9 +540,11 @@ NEO4J_PASSWORD=<password>
 QDRANT_HOST=localhost
 QDRANT_PORT=6333
 EMBEDDING_MODEL=BAAI/bge-m3
-LLM_PROVIDER=<openai|anthropic|local>
-LLM_MODEL=<model-name>
-LLM_API_KEY=<key>
+LLM_PROVIDER=anthropic
+LLM_MODEL_PLANNER=claude-haiku-4-5-20251001     # Query Planner + Faithfulness judge + Ontology mapper
+LLM_MODEL_GENERATOR=claude-sonnet-4-6           # Answer Generator
+ANTHROPIC_API_KEY=<key>                         # SDK đọc trực tiếp biến này (make_anthropic_client)
+LLM_API_KEY=<key>                               # alias giữ tương thích
 ```
 
 ---

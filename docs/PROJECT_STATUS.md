@@ -773,6 +773,8 @@
 - `src/evaluation/run_evaluation.py` — eval orchestrator
 - `src/evaluation/metrics.py` — F1 Khoản/Điều, NormR, negative_correct (`cit_matches` single source of truth)
 - `src/evaluation/faithfulness.py` — 2-tier metric (existence + LLM judge)
+- `src/evaluation/term_validator.py` — B2 phát hiện thuật ngữ giả (grounding_rate, D-17)
+- `src/evaluation/validate_test_set.py` — validator test set (gap diversity, phân bổ DoD)
 - `src/evaluation/report_builder.py` — auto-sinh REPORT_<timestamp>.md
 - `src/evaluation/compare_runs.py` — A/B diff
 - `src/evaluation/build_ablation_matrix.py` — cumulative table
@@ -1355,7 +1357,7 @@ Nhận LCCIDs từ TASK-11 và câu hỏi gốc, thực hiện hybrid search (De
 #### Đầu ra
 - `src/retrieval/semantic_filter.py` — module với:
   - `hybrid_search(question: str, lccids: LCCIDs, qdrant_client, model, top_k: int = 10) -> list[TextUnit]`
-  - Cơ chế: Dense search (BGE-M3) + Sparse search (BM25) → RRF fusion
+  - Cơ chế: Dense search (BGE-M3) + Keyword search (slug-overlap) → RRF fusion (BM25 trong spec gốc đã thay bằng slug-overlap khi triển khai — xem semantic_filter.py)
   - Payload filter: `content_type="text_unit" AND component_id IN lccids`
 
 #### Định nghĩa Hoàn thành (DoD)
