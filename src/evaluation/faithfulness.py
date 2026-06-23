@@ -160,16 +160,33 @@ def _extract_chunk_for_citation(citation: dict, context: str) -> str | None:
 
 
 def _extract_answer_snippet(citation: dict, answer: str, window: int = 200) -> str:
-    """Lấy snippet quanh nơi citation xuất hiện trong answer text."""
-    # Citation format: [Điều X, ...] hoặc [Phụ lục X, ...]
-    dieu = citation.get("dieu", "")
+    """Lấy snippet quanh nơi citation xuất hiện trong answer text.
+
+    Hỗ trợ cả citation Điều ([Điều X, Khoản Y, ...]) lẫn Phụ lục ([Phụ lục I, ...]
+    / [Phụ lục, Khoản 2, ...]). Trước đây chỉ bắt regex `Điều` → citation Phụ lục
+    luôn rơi vào fallback (400 ký tự đầu answer) → judge nhìn sai ngữ cảnh → flag
+    oan (quan sát Q008 chạy Tier 2). Dispatch theo `loai` để fix.
+    """
+    dieu = citation.get("dieu", "") or ""
     khoan = citation.get("khoan", "")
     vb = citation.get("van_ban", "")
-    # Tìm vị trí citation pattern trong answer
-    patterns = []
-    if khoan:
-        patterns.append(rf"\[Điều\s+{re.escape(dieu)},\s*Khoản\s+{re.escape(khoan)}[^\]]*{re.escape(vb)}\]")
-    patterns.append(rf"\[Điều\s+{re.escape(dieu)}[^\]]*{re.escape(vb)}\]")
+    loai = citation.get("loai")
+    vb_esc = re.escape(vb)
+
+    patterns: list[str] = []
+    if loai == "phu_luc":
+        # [Phụ lục I, ...] hoặc [Phụ lục, ...] (dieu='_default' khi Phụ lục không số)
+        head = r"\[Phụ\s*lục"
+        if dieu and dieu != "_default":
+            head += rf"\s+{re.escape(dieu)}"
+        if khoan:
+            patterns.append(head + rf"[^\]]*Khoản\s+{re.escape(khoan)}[^\]]*{vb_esc}\]")
+        patterns.append(head + rf"[^\]]*{vb_esc}\]")
+    else:
+        if khoan:
+            patterns.append(rf"\[Điều\s+{re.escape(dieu)},\s*Khoản\s+{re.escape(khoan)}[^\]]*{vb_esc}\]")
+        patterns.append(rf"\[Điều\s+{re.escape(dieu)}[^\]]*{vb_esc}\]")
+
     for pat in patterns:
         m = re.search(pat, answer, re.IGNORECASE)
         if m:
