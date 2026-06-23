@@ -141,6 +141,7 @@ def run_pipeline(
     response_mode: str | None = None,
     verify: bool = False,
     verify_tier: int = 1,
+    rerank: bool = False,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -284,6 +285,7 @@ def run_pipeline(
             graph_component_ids=graph_comp_ids,
             neo4j_driver=neo4j_driver,
             procedure_id=query_plan.get("procedure"),
+            rerank=rerank,
         )
         logger.info(f"run_pipeline: {len(scored_units)} scored units")
 

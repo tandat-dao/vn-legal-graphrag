@@ -65,7 +65,8 @@ def _augment_question(question: str, jurisdiction: str) -> str:
 
 def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                       response_mode: str = "auto",
-                      verify: bool = False, verify_tier: int = 1) -> dict:
+                      verify: bool = False, verify_tier: int = 1,
+                      rerank: bool = False) -> dict:
     """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
 
     Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
@@ -90,6 +91,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         response_mode=resolved_mode,
         verify=verify,
         verify_tier=verify_tier,
+        rerank=rerank,
     )
 
     # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
@@ -111,6 +113,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                 response_mode=resolved_mode,
                 verify=verify,
                 verify_tier=verify_tier,
+                rerank=rerank,
             )
             res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
             res = res2
@@ -192,6 +195,7 @@ def run_system_on_test_set(
     response_mode: str = "auto",
     verify: bool = False,
     verify_tier: int = 1,
+    rerank: bool = False,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -219,8 +223,8 @@ def run_system_on_test_set(
         try:
             runner_kwargs = dict(llm_cache_dir=llm_cache_dir, response_mode=response_mode)
             if system == "graphrag":
-                # Verifier chỉ áp dụng cho GraphRAG (component của hệ thống ta).
-                runner_kwargs.update(verify=verify, verify_tier=verify_tier)
+                # Verifier + Rerank chỉ áp dụng cho GraphRAG (component của hệ thống ta).
+                runner_kwargs.update(verify=verify, verify_tier=verify_tier, rerank=rerank)
             sys_out = runner(item, clients, **runner_kwargs)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
@@ -361,6 +365,12 @@ def main() -> int:
         help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
              "2=grounding + LLM support judge (TỐN ~1 Haiku call per citation).",
     )
+    parser.add_argument(
+        "--rerank",
+        action="store_true",
+        help="Bật cross-encoder Rerank Floor cho GraphRAG (ablation ±rerank). "
+             "$0 API (local), tải model ~600MB lần đầu. Mặc định TẮT.",
+    )
     args = parser.parse_args()
 
     if not args.test_set.exists():
@@ -487,6 +497,7 @@ def main() -> int:
                 response_mode=args.response_mode,
                 verify=args.verify,
                 verify_tier=args.verify_tier,
+                rerank=args.rerank,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
