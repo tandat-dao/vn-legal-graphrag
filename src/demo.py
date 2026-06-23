@@ -232,6 +232,11 @@ def main() -> int:
     parser.add_argument("--mode", choices=["auto", "general", "irac"], default="auto",
                         help="Chế độ trả lời: auto (planner tự chọn), general (gọn), "
                              "irac (tư vấn chi tiết). Mặc định auto.")
+    parser.add_argument("--verify", action="store_true",
+                        help="Bật Verifier agent lọc citation (mặc định tắt).")
+    parser.add_argument("--verify-tier", type=int, default=1, choices=[0, 1, 2],
+                        help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
+                             "2=grounding + LLM support judge (TỐN Haiku API).")
     args = parser.parse_args()
 
     # Setup logging
@@ -264,6 +269,8 @@ def main() -> int:
                 bypass_completeness=args.bypass_completeness,
                 llm_cache_dir=cache_dir,
                 response_mode=None if args.mode == "auto" else args.mode,
+                verify=args.verify,
+                verify_tier=args.verify_tier,
             )
         except _anthropic.APIStatusError as e:
             elapsed = time.perf_counter() - t_start
