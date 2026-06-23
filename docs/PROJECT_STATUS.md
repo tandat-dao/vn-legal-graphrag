@@ -1,5 +1,19 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.12 | Cập nhật 2026-06-23**
+**Phiên bản 2.13 | Cập nhật 2026-06-23**
+
+> **v2.13 — Cập nhật 2026-06-23 (Đo Verifier: Tier 1 thắng / Tier 2 reject + fix bug snippet Phụ lục):**
+>
+> **Tier 1 (grounding, $0) — kết quả dương:** ablation offline trên run canonical 20260520-211930 (26 câu, $0 vì tái dùng answer+context đã lưu): **F1 Khoản 0.524 → 0.547 (+0.023)**, F1 Điều +0.023, NormR −0.010. Bỏ đúng **7 citation bịa** (ungrounded) ở 4/26 câu (Q008/Q024/Q025 ▲, Q019 =). Wiring live xác nhận trên 3 câu random.
+>
+> **Tier 2 (LLM support-judge) — REJECT làm bộ lọc drop (D-19):** thử live trên 3 câu over-cite (Q004/Q008/Q019):
+> - Q004 (over-cite thật 3 vs GT 2): judge giữ cả 3 — citation thừa vẫn grounded + được chunk khẳng định → **support-judge KHÔNG bắt được over-cite** ("support" ≠ "đáp án GT tối thiểu").
+> - Q008: flag cả 2 citation **GT đúng** (mismatch cấu trúc Phụ lục); Q019: flag citation mà metric tính match → **hard-drop sẽ REGRESS F1** (over-prune).
+> - Phần lớn "over-cite" là **metric/GT artifact** (Q004 citation thừa thực ra đúng, GT thiếu) → drop = tối ưu theo thước đo lỗi.
+> - Kết luận: **giữ Tier 1, reject Tier 2-support** (giống D-12). Future work: relevance/necessity-judge + GT completeness + Tier 2 flag-only-for-reporting.
+>
+> **Bug fix:** `faithfulness._extract_answer_snippet` chỉ bắt regex `Điều`, bỏ sót `[Phụ lục ...]` → fallback 400 ký tự đầu → judge nhìn sai ngữ cảnh → flag oan (chính là Q008). Đã fix dispatch theo `loai` (cải thiện cả faithfulness Tier 2 metric lẫn verifier). `tests/test_faithfulness.py` (5 case, $0 mock). Toàn suite 203 pass.
+>
+> **Tiếp theo:** sang nhánh **cross-encoder rerank** (direction 2 — retrieval precision, $0 local).
 
 > **v2.12 — Cập nhật 2026-06-23 (Verifier agent — tầng multi-agent Generator → Verifier → prune):**
 >
