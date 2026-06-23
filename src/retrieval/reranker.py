@@ -32,19 +32,19 @@ _RERANKER: Any | None = None
 def load_reranker(model_name: str | None = None):
     """Lazy-load CrossEncoder (local). Tải model ~600MB ở lần gọi đầu.
 
-    Dùng MPS (Apple Silicon) > CUDA > CPU, đồng bộ với pipeline BGE-M3.
+    Device: CUDA nếu có, ngược lại CPU. **TRÁNH MPS** — bge-reranker-v2-m3 treo
+    vô hạn trên Apple Silicon MPS (đã xác nhận hang 3.5h). CPU chạy ổn (load ~50s
+    một lần/process, predict ~2.5s/2 cặp). Override bằng env `RERANKER_DEVICE`.
     """
     global _RERANKER
     if _RERANKER is None:
+        import os
         from sentence_transformers import CrossEncoder
         import torch
 
-        if torch.backends.mps.is_available():
-            device = "mps"
-        elif torch.cuda.is_available():
-            device = "cuda"
-        else:
-            device = "cpu"
+        device = os.getenv("RERANKER_DEVICE")
+        if not device:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
         name = model_name or RERANKER_MODEL
         logger.info(f"load_reranker: tải CrossEncoder '{name}' trên {device} (lần đầu ~600MB)")
         _RERANKER = CrossEncoder(name, device=device)
