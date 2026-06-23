@@ -434,6 +434,13 @@ Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào s�
   Input: prompt, temperature=0, max_retries=8, cache_dir=.llm_cache/
   Output: raw answer text → parse_citations() (regex + dedupe) →
           {answer, citations: [{dieu, khoan, diem, tiet, van_ban, loai}]}
+
+[Verifier Agent — tùy chọn, mặc định OFF] (verifier.py, D-18)  ◄── tầng multi-agent
+  Khi verify=True: lọc citations của đáp án nháp trước khi trả ra.
+  Tier 1 grounding ($0): drop citation không có trong CONTEXT (chống over-citation,
+    nguyên nhân DOMINANT của precision thấp — NormR 0.93 nhưng F1 0.54).
+  Tier 2 (Haiku, tùy chọn): judge support; UNSUPPORTED → flag (bảo thủ) hoặc drop.
+  Tái dùng faithfulness.py (metric → filter inline). Cờ --verify cho ablation.
 ```
 
 ---

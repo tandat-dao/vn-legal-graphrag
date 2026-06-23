@@ -173,6 +173,7 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-15 | Anthropic prompt caching cho system prompt (~2117 tokens, `cache_control: ephemeral`) | System rules giống nhau cho mọi câu hỏi → trả tiền lặp lại 78 lần (N=3 × 26 câu) cho cùng nội dung. Caching giảm ~90% input cost trên phần system từ request thứ 2 trở đi, TTL ~5 phút (đủ 1 batch eval). Yêu cầu: tách `build_messages(q,c) -> (system, user)`, system phải ≥ **2048 tokens** — ngưỡng cache tối thiểu thực tế của Sonnet 4.6 (KHÔNG phải 1024; nếu prompt bị cắt xuống dưới 2048 thì cache im lặng ngừng hoạt động, không báo lỗi). Local prompt-hash cache vẫn được giữ độc lập | 2026-05-28 |
 | D-16 | Prompt sanitization B1 — loại bỏ MỌI shorthand/label trong prompt, cấm coin thuật ngữ | Demo span-regime sau v2.9 phát hiện LLM tự promote `(cắt ngang)` thành **"(nguyên tắc cắt ngang)"** trong output — thuật ngữ pháp lý GIẢ. Class bug lớn hơn: bất kỳ shorthand `(X)` / Latin label `(lex superior)` nào trong prompt đều có thể leak. Fix: xóa hết parenthetical shortcuts khỏi prompt + meta-rule mạnh cấm "tự tạo tên gọi/nhãn cho nguyên tắc". Loại bỏ `(lex superior/posterior/specialis)` (Latin), `(cắt ngang)` (rút gọn). Pair với D-17 (auto-detect) tạo defense-in-depth chống thuật ngữ giả | 2026-05-28 |
 | D-17 | Term grounding validator B2 — module `src/evaluation/term_validator.py` auto-detect thuật ngữ giả | Sửa từng case không scalable; câu hỏi mới có thể sinh thuật ngữ giả mới. Approach khoa học: extract candidate "term-like" phrases bằng 4 regex pattern (`named_principle`, `quoted`, `parenthetical`, `bold`) + heuristic `_looks_like_term` (loại measurement/function-word/descriptive), validate qua substring lookup vào CONTEXT + corpus `data/raw/*.md`. Metric `grounding_rate = #grounded / #candidates_total` — analogue của citation existence_rate cho thuật ngữ. Validation: trên 8-câu subset post-B1 đạt **100% grounding rate** (15 candidates / 0 ungrounded); trên run cũ canonical bắt được tất cả leak đã biết (SPAN-REGIME, cắt ngang, chuyển giao thẩm quyền…) | 2026-05-28 |
+| D-18 | Verifier agent (tầng multi-agent: Generator → Verifier → prune) — `src/retrieval/verifier.py` | Nút thắt F1 không phải retrieval (NormR đã 0.93) mà là **over-citation**: ROOT_CAUSE_ANALYSIS cho thấy 47 citation dư là nguyên nhân DOMINANT của precision thấp. Pipeline gốc một lượt Generator, không ai kiểm lại. Verifier = mẫu Self-Refine/CRITIC, **tái dùng hạ tầng `faithfulness.py`** (faithfulness metric → filter inline, không circular import). Tier 1 grounding ($0 deterministic) drop citation không có trong context (bắt hallucination); Tier 2 (Haiku, tùy chọn) judge support, mặc định UNSUPPORTED→flag (bảo thủ, tránh over-prune), `drop_unsupported` để prune cứng. Mặc định `verify=False` → hành vi pipeline cũ KHÔNG đổi; cờ `--verify`/`--verify-tier` cho ablation ±verifier (demo + run_evaluation). Hiệu quả thực nghiệm CHƯA đo (cần chạy eval — tốn API). | 2026-06-23 |
 
 ---
 
@@ -363,6 +364,7 @@ CONTEXT_MAX_TOKENS = 6000
 DEFAULT_TOP_K = 25
 MAX_PER_NORM = 3                  # _MAX_PER_NORM trong semantic_filter.py — cap top-k diversity
 ANTHROPIC_MAX_RETRIES = 8         # src/utils/llm_config.py — chống 529 Overloaded
+VALID_VERIFY_TIERS = (0, 1, 2)    # verifier.py — 0=no-op, 1=grounding $0, 2=+LLM judge
 VALID_TO_SENTINEL = "9999-12-31"  # CTV.valid_to khi vẫn còn hiệu lực (thay null per ac516ad)
 
 # Neo4j schema: 9 node types + 10 edge types (8 retrieval core + 2 concept scoring)
@@ -424,6 +426,12 @@ context_assembler.py ← List[ScoredTextUnit] + Neo4j
 answer_generator.py  ← context + question + Anthropic client + cache_dir
                      → {answer, citations, context_used, cache_hit}
                      → parse_citations() w/ dedupe (commit 023bb64)
+
+verifier.py          ← question + context + answer + citations (tầng multi-agent, D-18)
+                     → VerifierResult {filtered_citations, verdicts, n_dropped, ...}
+                     → verify_citations(tier=0/1/2): Tier 1 grounding ($0) + Tier 2
+                       LLM support judge (Haiku, tùy chọn). Tái dùng faithfulness.py.
+                     → pipeline.run_pipeline(verify=, verify_tier=) — mặc định OFF
 
 src/utils/llm_config.py — make_anthropic_client() factory với max_retries=8
 

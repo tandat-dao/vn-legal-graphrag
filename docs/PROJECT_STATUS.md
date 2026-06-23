@@ -1,5 +1,20 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.11 | Cập nhật 2026-05-30**
+**Phiên bản 2.12 | Cập nhật 2026-06-23**
+
+> **v2.12 — Cập nhật 2026-06-23 (Verifier agent — tầng multi-agent Generator → Verifier → prune):**
+>
+> **Bối cảnh**: Phân tích lại bottleneck — Norm Recall đã 0.93 nhưng F1 Khoản chỉ 0.539; root-cause (ROOT_CAUSE_ANALYSIS) chỉ ra **over-citation là nguyên nhân DOMINANT** của precision thấp (47 citation dư). Tức retrieval gần như xong, phần mất điểm nằm ở việc Generator cite quá tay / sai Điều mà không ai kiểm lại. Đây là khởi đầu hướng nghiên cứu **multi-agent** (do [A] đảm nhận, cùng nhánh retrieval-precision cross-encoder → finetune embedding).
+>
+> **1. Verifier agent** ([src/retrieval/verifier.py](../src/retrieval/verifier.py)) — mẫu Self-Refine/CRITIC, đặt sau Generator:
+> - **Tier 1 — grounding (deterministic, $0)**: drop citation không có header tương ứng trong CONTEXT (bắt hallucination thô). Tái dùng `faithfulness._citation_in_context`.
+> - **Tier 2 — support (Haiku, tùy chọn)**: judge chunk có thực sự khẳng định claim không; mặc định UNSUPPORTED → "flag" (giữ, bảo thủ chống over-prune), `drop_unsupported=True` để prune cứng. Tái dùng `faithfulness._judge_citation`.
+> - Thiết kế = "faithfulness metric nâng thành filter inline" — không circular import (faithfulness chỉ phụ thuộc anthropic/stdlib).
+>
+> **2. Tích hợp** ([pipeline.py](../src/pipeline.py)): tham số `verify` / `verify_tier`, **mặc định `verify=False` → hành vi pipeline cũ KHÔNG đổi**. Cờ `--verify` / `--verify-tier {0,1,2}` cho [demo.py](../src/demo.py) + [run_evaluation.py](../src/evaluation/run_evaluation.py) → ablation ±verifier. Verifier chỉ áp dụng GraphRAG (không baseline). `PipelineResult` thêm field `verifier`.
+>
+> **3. Test**: `tests/test_verifier.py` — 13 case **mock hoàn toàn** ($0 API). Toàn suite 198 pass (185 cũ + 13). Import sạch, không circular.
+>
+> **Pending (cần API — chờ duyệt chi phí)**: chạy ablation ±verifier trên test set (N≥3) để đo F1/precision delta thực tế. Hiệu quả định lượng CHƯA đo. Quyết định D-18.
 
 > **v2.11 — Cập nhật 2026-05-30 (2-mode trả lời: General gọn vs IRAC tư vấn + order-independent citation parser):**
 >
@@ -764,7 +779,8 @@
 - `src/retrieval/semantic_filter.py` — Hybrid Search 4-pass (Pass -1 Struct Cite / Pass 0 Dense Floor / Pass 1 RRF breadth / Pass 2 RRF depth)
 - `src/retrieval/context_assembler.py` — sort + cap 6000 tokens + build_prompt với 5 rule blocks (TEMPORAL #4)
 - `src/retrieval/answer_generator.py` — Claude Sonnet 4.6 + cache + parse_citations với dedupe
-- `src/pipeline.py` — end-to-end orchestrator
+- `src/retrieval/verifier.py` — Verifier agent (multi-agent, D-18): Tier 1 grounding $0 + Tier 2 LLM judge; `verify=False` mặc định
+- `src/pipeline.py` — end-to-end orchestrator (+ tham số verify/verify_tier)
 - `src/utils/llm_config.py` — centralized Anthropic client (max_retries=8)
 
 **Phase 4 — Đánh giá [A]:**
@@ -804,6 +820,12 @@
 **Phase 4 — domain mở rộng:**
 - Test set Hộ tịch + Nuôi con nuôi (chờ [B] đổ data)
 - Mở test set lên ≥40 câu cross-domain để validate hypothesis Gap 1 generalize ngoài Đất đai
+
+**Hướng nghiên cứu nâng cao [A] (precision in / precision out):**
+- **Multi-agent — Verifier agent**: code xong (v2.12, D-18), `verify=False` mặc định; CHƯA đo ablation ±verifier (cần API).
+- **Cross-encoder rerank** (vá disambiguation cấp Điều, Q022) — phép thử $0 trước khi finetune; đồng thời là "teacher" sinh hard-negative.
+- **Finetune embedding BGE-M3** (distill từ cross-encoder) — sau khi cross-encoder xác nhận giả thuyết.
+- Phụ thuộc: **harness đo lường + baseline dense-no-KG (#4) phải có sớm** để đo được 3 hướng trên (N≥3).
 
 **Phase 5 — Báo cáo:**
 - Expand prose Chapter 4 (Experiments) từ scaffold
