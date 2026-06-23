@@ -1,5 +1,38 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.16 | Cập nhật 2026-06-23**
+**Phiên bản 2.17 | Cập nhật 2026-06-23**
+
+> **v2.17 — Cập nhật 2026-06-23 (Evaluation Tier 0: mở rộng thang đo $0 — significance + citation behavior; Tier 1 ablation HOÃN tới khi corpus đủ):**
+>
+> **Bối cảnh:** 2 hướng thuật toán (multi-agent verifier, cross-encoder/finetune embedding) đã đi qua, phần lớn cho negative result. Giá trị biên cao nhất giờ ở **đo lường** (thêm thang đo, chứng minh ưu/nhược kiến trúc) chứ không thêm cơ chế. Chia 2 tier theo chi phí: **Tier 0 = $0 offline** (tái dùng results JSON đã chạy), **Tier 1 = ablation tốn API** (chạy qua mọi câu).
+>
+> **Phát hiện trước khi code:** `metrics.aggregate` ĐÃ có per-gap/per-theme/precision-recall/latency → KHÔNG dựng lại; chỉ bổ sung 3 thứ còn thiếu.
+>
+> **1. Module [src/evaluation/expanded_eval.py](../src/evaluation/expanded_eval.py)** ($0, đọc 2 results JSON sẵn, KHÔNG API/DB):
+> - **Significance** — paired bootstrap 95% CI (10000 resamples, seed=42 deterministic) + Wilcoxon signed-rank + win/loss/tie. Trả lời "N=26 nhỏ → +Δ có thật không".
+> - **Citation behavior** — over-citation rate, mean pred/gt count, precision–recall gap (chẩn đoán cite thừa vs bỏ sót).
+> - **Per-gap + per-jurisdiction breakdown** tái dùng `cit_matches`; **report tiếng Anh hợp nhất** cho luận văn.
+> - **Fix alignment quan trọng:** nhãn `gap_type` đồng bộ theo `test_set_dat_dai.json` HIỆN TẠI theo `id` — baseline run 05-19 gộp gap4 vào gap3 *trước* khi relabel; nếu đọc nhãn lưu trong run sẽ lệch grouping (gap4 baseline = N/A). Lấy nhãn từ test set = single source of truth.
+>
+> **2. Kết quả canonical** (graphrag `20260528-142757` vs baseline `20260519-204426`, N=26, [EXPANDED_EVAL_20260528.md](../data/evaluation/EXPANDED_EVAL_20260528.md)):
+>
+> | Metric | Δ (G−B) | 95% CI | Wilcoxon p | Win/Loss/Tie |
+> |---|---:|---|---:|---:|
+> | F1 Khoản | **+0.281** | [0.154, 0.417] | 0.001 *** | 18/3/3 |
+> | F1 Điều | +0.298 | [0.174, 0.430] | <0.001 *** | 18/3/3 |
+> | Norm Recall | +0.257 | [0.108, 0.424] | 0.007 ** | 10/1/13 |
+>
+> - **Ưu thế KG có ý nghĩa thống kê** (CI loại trừ 0) — chống phản biện "26 câu may rủi".
+> - **Per-gap:** Gap4 phiên bản **Δ +0.522** (lớn nhất; baseline 0.071 — KG temporal/CTV/AMENDS quyết định); Gap2 địa phương mạnh nhất tuyệt đối (0.726, hard-filter jurisdiction).
+> - **Nhược điểm trung thực:** câu `multi-juris` GraphRAG **thua** baseline (Δ −0.244) → ghi vào Limitations.
+> - **Citation behavior:** baseline over-cite nhiều hơn (0.958 vs 0.792); cả hai recall > precision (xu hướng cite thừa — chừa đất Verifier Tier 1 đã KEEP ở D-18).
+>
+> **3. Test:** `tests/test_expanded_eval.py` — 10 case deterministic ($0 mock). Toàn suite **230 pass**. Quyết định **D-21**.
+>
+> **Caveat:** cặp canonical lệch ngày (graphrag post prompt-v2.9 05-28 vs baseline 05-19); GT + test set cố định nên so sánh hợp lệ, nhưng muốn sạch tuyệt đối phải chạy lại cùng phiên (thuộc Tier 1).
+>
+> **HOÃN Tier 1 (ablation suite):** formalize `dense-no-KG` + BM25 + tắt từng thành phần KG (jurisdiction / temporal / graph-traversal / hybrid off) thành system trong `run_evaluation`, chạy qua mọi câu → **tốn API**. Chỉ chạy khi **thành viên B nạp đủ corpus multi-domain** (hộ tịch + nuôi con nuôi) — ablation full-run chỉ có nghĩa khi corpus hoàn chỉnh, tránh chạy lại. Prototype dense-no-KG (10 câu) phiên trước đã cho GraphRAG ≈ gấp đôi F1 (0.618 vs 0.302) → tín hiệu mạnh, chờ corpus để chạy chuẩn full 26.
+>
+> **Tiếp theo (khi corpus B sẵn sàng):** (a) formalize dense-no-KG + BM25 baseline; (b) ablation từng thành phần KG; (c) chạy lại cặp graphrag+baseline cùng phiên để bỏ confound lệch ngày.
 
 > **v2.16 — Cập nhật 2026-06-23 (Retrieval-metric harness $0 + go/no-go finetune embedding):**
 >
