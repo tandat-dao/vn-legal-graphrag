@@ -1,17 +1,19 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.14 | Cập nhật 2026-06-23**
+**Phiên bản 2.15 | Cập nhật 2026-06-23**
 
-> **v2.14 — Cập nhật 2026-06-23 (Cross-encoder Rerank Floor — direction 2, opt-in; ablation chưa chạy):**
+> **v2.15 — Cập nhật 2026-06-23 (Cross-encoder retrieval modifier: ablate → REJECT → gỡ integration; giữ module làm teacher):**
 >
-> **Bối cảnh:** direction 2 (retrieval precision) vá embedding semantic blindness ở disambiguation cấp Điều (P-08/Q022 — bi-encoder chọn "Điều 4 Hiệu lực" thay vì "Điều 1 hạn mức").
+> **Bối cảnh:** direction 2 (retrieval precision) — cross-encoder `bge-reranker-v2-m3` (LOCAL $0) vá embedding blindness disambiguation cấp Điều (P-08/Q022: bi-encoder chọn "Điều 4 Hiệu lực" thay "Điều 1 hạn mức").
 >
-> **1. Module + tích hợp:** [src/retrieval/reranker.py](../src/retrieval/reranker.py) (cross-encoder `bge-reranker-v2-m3`, LOCAL **$0**, lazy-load). Option A — **Rerank Floor**: khi `rerank=True`, xếp lại pool dense (~50) theo cross-encoder → Pass 0 trong `hybrid_search` dùng thứ tự này thay Dense Floor. Cờ `--rerank` (demo + run_evaluation), **mặc định OFF** → hành vi cũ KHÔNG đổi. 19 test mock ($0), tổng suite **211 pass**.
+> **Thử 2 cách tích hợp + ablation 7-câu** (subset thiên vị: Q022/Q021/Q020/Q003/Q025/Q024 headroom + Q001 canary; base cache vs rerank fresh):
+> - **(A) Rerank Floor** (thay Dense Floor ở Pass 0): F1 Khoản **+0.019** NHƯNG **regression Q021** (1.00→0.80).
+> - **(B) Blend** (cộng `rerank_rank` thành tín hiệu RRF thứ 3, GIỮ Dense Floor): F1 Khoản **+0.048** (chữa Q021) NHƯNG **NormR −0.071 + F1 Điều −0.050** — cross-encoder kéo chunk lexically-relevant nhưng SAI norm lên (Q022 NormR 1.00→0.50, Q003 F1 Điều 0.29→0.00).
 >
-> **2. Sự cố MPS (D-20):** `bge-reranker-v2-m3` **treo vô hạn trên Apple Silicon MPS** (xác nhận hang 3.5h). Fix: ép **CPU** (env `RERANKER_DEVICE` override). CPU ổn (load ~50s/process, predict ~2.5s/2 cặp).
+> **Kết luận:** cả 2 là **đánh đổi, không thắng sạch** (đặc biệt B hi sinh NormR — metric quan trọng cho QA pháp lý). Giống **D-12** → **REJECT làm default + GỠ integration** khỏi `hybrid_search`/`pipeline`/`demo`/`run_evaluation` (giữ D-10: dense là ground signal). `semantic_filter.py` restore về bản sạch (pre-rerank).
 >
-> **3. Q022 N=1 (mixed):** cơ chế **đúng** — cross-encoder chấm "Điều 1 hạn mức"=0.926 >> "Điều 4 hiệu lực"=0.002 → loại đúng Điều 4 spurious (F1 Điều 0.40→0.50). NHƯNG **F1 Khoản vẫn 0.00** vì Q022 còn lỗi sâu cấp Khoản/Điểm (cite Đ1 K2Đb thay vì GT Đ1 K1Đa; cite Đ1 QĐ69 thay vì Đ3) — rerank cấp norm không chạm tới.
+> **GIỮ `src/retrieval/reranker.py`** (+ test, LOCAL $0, **CPU** vì MPS treo 3.5h) — REPURPOSE làm **teacher** sinh hard-negative/soft-label cho **finetune embedding** (bước direction-2 kế tiếp). Quyết định D-20. Tổng suite **210 pass**.
 >
-> **Pending (cần API):** **full ablation 26 câu ±rerank** để quyết "tốt thì chốt" — Q022 đơn lẻ không đủ kết luận. Vai trò kép của cross-encoder: lớp rerank + "teacher" sinh hard-negative cho finetune embedding (bước sau).
+> **Lưu ý phương pháp:** ablation trên subset thiên vị + confound (base cache vs rerank fresh) → kết quả định hướng, không phải tác động trung bình. Nhưng đủ rõ để không bật mặc định.
 
 > **v2.13 — Cập nhật 2026-06-23 (Đo Verifier: Tier 1 thắng / Tier 2 reject + fix bug snippet Phụ lục):**
 >
