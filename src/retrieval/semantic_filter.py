@@ -512,6 +512,22 @@ def _qdrant_id_to_hex(qdrant_id: int) -> str:
     return format(qdrant_id, "016x")
 
 
+_RERANK_TEXT_CYPHER = "MATCH (t:TextUnit) WHERE t.id IN $ids RETURN t.id AS id, t.text AS text"
+
+
+def _fetch_texts_for_rerank(text_unit_ids: list[str], neo4j_driver) -> dict[str, str]:
+    """Fetch text cho cross-encoder rerank (text nằm ở Neo4j, không có trong Qdrant payload).
+
+    Helper tối thiểu — KHÔNG import context_assembler để tránh circular import
+    (context_assembler import ScoredTextUnit từ module này).
+    """
+    if not text_unit_ids:
+        return {}
+    with neo4j_driver.session() as session:
+        rows = session.run(_RERANK_TEXT_CYPHER, ids=text_unit_ids).data()
+    return {r["id"]: (r.get("text") or "") for r in rows}
+
+
 # ---------------------------------------------------------------------------
 # Core function
 # ---------------------------------------------------------------------------
@@ -551,6 +567,8 @@ def hybrid_search(
     graph_component_ids: list[str] = None,
     neo4j_driver=None,
     procedure_id: str | None = None,
+    rerank: bool = False,
+    reranker_model=None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -739,7 +757,27 @@ def hybrid_search(
 
     scored.sort(key=lambda x: x[0], reverse=True)
 
-    # --- Build output: 3-pass allocation (dense-floor + RRF-breadth + RRF-depth) ---
+    # --- Cross-encoder Rerank Floor (direction 2, optional, MẶC ĐỊNH OFF) ---
+    # Khi rerank=True: xếp lại pool dense theo điểm cross-encoder (query, chunk) →
+    # Pass 0 dùng thứ tự NÀY thay cho dense score. Vá disambiguation cấp Điều (P-08,
+    # Q022): bi-encoder chọn sai Điều trong cùng norm (vd "Điều 4 Hiệu lực" thay vì
+    # "Điều 1 hạn mức"), cross-encoder mã hóa chung (q, chunk) phân biệt được.
+    # LOCAL $0 inference. Lazy: chỉ tải model + fetch text khi rerank=True.
+    floor_order = dense_results  # mặc định: theo dense score (Dense Floor)
+    if rerank and dense_results and neo4j_driver is not None:
+        from src.retrieval.reranker import rerank as _rerank_fn
+        _ids = [_qdrant_id_to_hex(p.id) for p in dense_results]
+        _text_map = _fetch_texts_for_rerank(_ids, neo4j_driver)
+        _cands = [{"point": p, "text": _text_map.get(_qdrant_id_to_hex(p.id), "")}
+                  for p in dense_results]
+        _reranked = _rerank_fn(question, _cands, model=reranker_model)
+        floor_order = [c["point"] for c in _reranked]
+        logger.info(
+            f"hybrid_search: RERANK FLOOR active — cross-encoder xếp lại "
+            f"{len(dense_results)} dense candidates"
+        )
+
+    # --- Build output: 3-pass allocation (dense/rerank-floor + RRF-breadth + RRF-depth) ---
     #
     # Pass 0 (DENSE FLOOR — added 2026-05-19): top-1 per norm theo DENSE RANK.
     #   Lý do: bảo toàn pure semantic match — embedding similarity là ground
@@ -858,9 +896,10 @@ def hybrid_search(
                 seen_norms_in_pass_neg05.add(nid)
                 pass_neg05_count += 1
 
-    # Pass 0 (DENSE FLOOR): top-1 per norm theo DENSE RANK
+    # Pass 0 (DENSE/RERANK FLOOR): top-1 per norm theo thứ tự floor_order
+    # (dense score mặc định; cross-encoder rerank nếu rerank=True)
     seen_norms_in_pass0: set = set()
-    for point in dense_results:  # already sorted by dense score desc
+    for point in floor_order:  # dense score desc, hoặc cross-encoder order nếu rerank
         if len(results) >= top_k:
             break
         nid = point.payload.get("norm_id", "")
