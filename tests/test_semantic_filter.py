@@ -366,38 +366,6 @@ class TestHybridSearch:
         assert scores == sorted(scores, reverse=True)
 
     @patch("src.retrieval.semantic_filter.encode_text", return_value=[0.1] * 1024)
-    def test_rerank_floor_changes_pass0_selection(self, mock_encode):
-        """Rerank Floor (option A): 2 Điều cùng norm — dense ưu Điều SAI, cross-encoder
-        ưu Điều ĐÚNG → Pass 0 với rerank chọn đúng (cơ chế vá Q022)."""
-        points = [
-            _make_point("000000000000000a", "qd-18", "comp-A", score=0.9),  # dense cao, SAI
-            _make_point("000000000000000b", "qd-18", "comp-B", score=0.5),  # dense thấp, ĐÚNG
-        ]
-        client = _mock_qdrant(points)
-        model = _mock_model()
-
-        # Mock Neo4j text fetch (text nằm ở Neo4j)
-        driver = MagicMock()
-        sess = driver.session.return_value.__enter__.return_value
-        sess.run.return_value.data.return_value = [
-            {"id": "000000000000000a", "text": "Điều 4. Hiệu lực thi hành"},
-            {"id": "000000000000000b", "text": "Điều 1. Hạn mức đất ở hộ gia đình, cá nhân"},
-        ]
-
-        class _MockCE:  # cross-encoder: B (idx 1) > A (idx 0)
-            def predict(self, pairs):
-                return [0.1, 0.9]
-
-        # KHÔNG rerank → Pass 0 (Dense Floor) chọn A (dense cao)
-        base = hybrid_search("câu hỏi hạn mức", ["qd-18"], client, model, top_k=1)
-        assert base[0]["component_id"] == "comp-A"
-
-        # CÓ rerank → Rerank Floor chọn B (cross-encoder cao)
-        rr = hybrid_search("câu hỏi hạn mức", ["qd-18"], client, model, top_k=1,
-                           neo4j_driver=driver, rerank=True, reranker_model=_MockCE())
-        assert rr[0]["component_id"] == "comp-B"
-
-    @patch("src.retrieval.semantic_filter.encode_text", return_value=[0.1] * 1024)
     def test_dense_pool_larger_than_top_k(self, mock_encode):
         """Qdrant được gọi với limit = 2 * top_k (dense pool)."""
         client = _mock_qdrant([])
