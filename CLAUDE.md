@@ -460,6 +460,7 @@ src/evaluation/compare_runs.py   — A/B diff giữa 2 results JSON
 src/evaluation/build_ablation_matrix.py — table cumulative impact 4 fix layers
 src/evaluation/build_reproducibility_report.py — N=3 study mean ± σ
 src/evaluation/instrument_retrieval.py  — debug Stage 1/2/3 (API-free)
+src/evaluation/retrieval_eval.py — Recall@k/MRR cấp Điều/Khoản, dense vs cross-encoder ($0, không generation) — go/no-go finetune embedding + harness #4
 
 Demo:
 src/demo.py        — Rich CLI cho weekly meeting (panels + Markdown render + spinner + Tree trace)

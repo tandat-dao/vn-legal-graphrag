@@ -1,5 +1,25 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.15 | Cập nhật 2026-06-23**
+**Phiên bản 2.16 | Cập nhật 2026-06-23**
+
+> **v2.16 — Cập nhật 2026-06-23 (Retrieval-metric harness $0 + go/no-go finetune embedding):**
+>
+> **Bối cảnh:** trước khi đổ công finetune embedding (corpus nhỏ → rủi ro), cần xác nhận có "đích" để distill. Dựng [src/evaluation/retrieval_eval.py](../src/evaluation/retrieval_eval.py) đo **retrieval thuần (KHÔNG generation → $0)**: Recall@k + MRR cấp Điều/Khoản, so DENSE (BGE-M3) vs CROSS-ENCODER rerank trên cùng pool. (Planner cached ~$0, dense+CE local. Cũng là phần harness #4.)
+>
+> **Kết quả go/no-go (24 câu non-negative, $0):**
+>
+> | Metric | DENSE | RERANK | Δ |
+> |---|---:|---:|---:|
+> | MRR Điều | 0.625 | **0.758** | **+0.132** |
+> | MRR Khoản | 0.591 | 0.656 | +0.065 |
+> | Recall Điều@5 | 0.642 | 0.675 | +0.033 |
+> | Recall Khoản@5 | 0.555 | 0.609 | +0.054 |
+> | Recall Điều@10 | 0.700 | 0.714 | +0.014 |
+>
+> **→ GO (đủ điều kiện):** cross-encoder **nâng MRR rõ (+0.13 cấp Điều)** — xếp đúng chunk lên cao khi nó có trong pool (đúng tín hiệu disambiguation Q021 MRR 0.50→1.00, Q022 0.20→1.00, Q025/Q026 0.50→1.00). **Có đích thật để distill** vào BGE-M3.
+>
+> **Nuance trung thực:** gain chủ yếu ở **ranking (MRR)**, Recall@10 gần phẳng → đây là lý do ablation F1 trước net-trung tính (LLM đọc cả top-25 nên xếp lại không đổi context). Finetune embedding để có ích cần (a) context nhỏ hơn để ranking quan trọng, HOẶC (b) cải thiện cả Recall. Q024 normR=0 (Stage-1 miss norm) → lỗi upstream, finetune không chữa được.
+>
+> **Tiếp theo:** pipeline finetune — mine hard-negative qua graph (cùng Norm/tier) + cross-encoder soft-label → distill BGE-M3, đo bằng harness này ($0 gate) trước khi tốn generation.
 
 > **v2.15 — Cập nhật 2026-06-23 (Cross-encoder retrieval modifier: ablate → REJECT → gỡ integration; giữ module làm teacher):**
 >
