@@ -64,12 +64,15 @@ def _augment_question(question: str, jurisdiction: str) -> str:
 
 
 def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
-                      response_mode: str = "auto") -> dict:
+                      response_mode: str = "auto",
+                      verify: bool = False, verify_tier: int = 1) -> dict:
     """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
 
     Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
     Mục tiêu là đo retrieval + generation, không đo UX Confirmation Loop.
     Vẫn giữ augment+retry như fallback cho trường hợp pipeline thiếu field khác.
+
+    verify/verify_tier: bật Verifier agent (ablation ±verifier). Mặc định off.
     """
     from src.pipeline import run_pipeline
     neo4j_driver, qdrant_client, anthropic_client, model = clients
@@ -85,6 +88,8 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         bypass_completeness=True,  # Eval mode: chạy retrieval ngay cả khi planner thiếu procedure/theme
         llm_cache_dir=llm_cache_dir,
         response_mode=resolved_mode,
+        verify=verify,
+        verify_tier=verify_tier,
     )
 
     # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
@@ -104,6 +109,8 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                 bypass_completeness=True,
                 llm_cache_dir=llm_cache_dir,
                 response_mode=resolved_mode,
+                verify=verify,
+                verify_tier=verify_tier,
             )
             res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
             res = res2
@@ -119,6 +126,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         "top_k_count": res["top_k_count"],
         "context": res.get("context", ""),  # needed cho faithfulness eval
         "response_mode": res.get("response_mode", response_mode),
+        "verifier": res.get("verifier"),  # thống kê verifier (None nếu verify=False)
     }
 
 
@@ -182,6 +190,8 @@ def run_system_on_test_set(
     llm_cache_dir: Path | None = None,
     faithfulness_tier: int = 0,  # 0=skip, 1=existence only, 2=existence+LLM judge
     response_mode: str = "auto",
+    verify: bool = False,
+    verify_tier: int = 1,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -207,7 +217,11 @@ def run_system_on_test_set(
         qid = item["id"]
         logger.info(f"[{system}] {i}/{len(test_set)} {qid}: {item['question'][:60]}...")
         try:
-            sys_out = runner(item, clients, llm_cache_dir=llm_cache_dir, response_mode=response_mode)
+            runner_kwargs = dict(llm_cache_dir=llm_cache_dir, response_mode=response_mode)
+            if system == "graphrag":
+                # Verifier chỉ áp dụng cho GraphRAG (component của hệ thống ta).
+                runner_kwargs.update(verify=verify, verify_tier=verify_tier)
+            sys_out = runner(item, clients, **runner_kwargs)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
             sys_out = {
@@ -261,6 +275,7 @@ def run_system_on_test_set(
             "context_used": sys_out["context_used"],
             "top_k_count": sys_out["top_k_count"],
             "context": sys_out.get("context", ""),  # save cho future faithfulness re-eval
+            "verifier": sys_out.get("verifier"),    # thống kê verifier (None nếu off)
         }
         results.append(result)
 
@@ -333,6 +348,18 @@ def main() -> int:
         help="Faithfulness metric tier: 0=skip (default), 1=existence-only ($0), "
              "2=existence+LLM-judge (~1 Haiku call per citation). Đo %% citation "
              "có chunk match context (Tier 1) và semantic support (Tier 2).",
+    )
+    parser.add_argument(
+        "--verify",
+        action="store_true",
+        help="Bật Verifier agent lọc citation cho GraphRAG (ablation ±verifier). "
+             "Mặc định TẮT (= hành vi cũ).",
+    )
+    parser.add_argument(
+        "--verify-tier",
+        type=int, default=1, choices=[0, 1, 2],
+        help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
+             "2=grounding + LLM support judge (TỐN ~1 Haiku call per citation).",
     )
     args = parser.parse_args()
 
@@ -458,6 +485,8 @@ def main() -> int:
                 llm_cache_dir=llm_cache_dir,
                 faithfulness_tier=args.faithfulness_tier,
                 response_mode=args.response_mode,
+                verify=args.verify,
+                verify_tier=args.verify_tier,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0

@@ -31,6 +31,7 @@ from src.retrieval.context_assembler import assemble_context
 from src.retrieval.query_planner import QueryPlan, build_confirmation_prompt, plan_query
 from src.retrieval.semantic_filter import hybrid_search
 from src.retrieval.subgraph_extractor import extract_subgraph
+from src.retrieval.verifier import verify_citations
 
 load_dotenv()
 
@@ -99,6 +100,7 @@ class PipelineResult(TypedDict):
     citations: list[dict]
     context_used: bool
     elapsed_seconds: float
+    verifier: dict | None        # thống kê Verifier agent (None nếu verify=False)
 
 
 # ---------------------------------------------------------------------------
@@ -137,6 +139,8 @@ def run_pipeline(
     bypass_completeness: bool = False,
     llm_cache_dir: Path | None = None,
     response_mode: str | None = None,
+    verify: bool = False,
+    verify_tier: int = 1,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -216,6 +220,7 @@ def run_pipeline(
                 citations=[],
                 context_used=False,
                 elapsed_seconds=round(elapsed, 2),
+                verifier=None,
             )
 
         # --- TEMPORAL LAYER (Option C Phần 2) ---
@@ -265,6 +270,7 @@ def run_pipeline(
                 citations=[],
                 context_used=False,
                 elapsed_seconds=round(elapsed, 2),
+                verifier=None,
             )
 
         # --- TASK-12: Hybrid Search ---
@@ -292,10 +298,32 @@ def run_pipeline(
             question, context, anthropic_client, cache_dir=llm_cache_dir, mode=resolved_mode
         )
 
+        # --- Verifier agent (tầng multi-agent, tùy chọn) ---
+        # Mặc định verify=False → hành vi pipeline gốc KHÔNG đổi. Khi bật: lọc
+        # citation theo grounding (tier 1, $0) hoặc + LLM support judge (tier 2, API).
+        citations = result["citations"]
+        verifier_info = None
+        if verify:
+            vr = verify_citations(
+                question, context, result["answer"], citations,
+                tier=verify_tier, llm_client=anthropic_client,
+            )
+            citations = vr["filtered_citations"]
+            verifier_info = {
+                "n_input": vr["n_input"], "n_kept": vr["n_kept"],
+                "n_dropped": vr["n_dropped"], "n_flagged": vr["n_flagged"],
+                "tier": vr["tier"], "verdicts": vr["verdicts"],
+            }
+            logger.info(
+                f"run_pipeline: verifier tier={vr['tier']} "
+                f"{vr['n_input']}→{vr['n_kept']} citations "
+                f"(drop {vr['n_dropped']}, flag {vr['n_flagged']})"
+            )
+
         elapsed = time.perf_counter() - t_start
         logger.info(
             f"run_pipeline: hoàn thành trong {elapsed:.1f}s — "
-            f"{len(result['citations'])} citations"
+            f"{len(citations)} citations"
         )
 
         return PipelineResult(
@@ -309,9 +337,10 @@ def run_pipeline(
             context_tokens=context_tokens,
             context=context,
             answer=result["answer"],
-            citations=result["citations"],
+            citations=citations,
             context_used=result["context_used"],
             elapsed_seconds=round(elapsed, 2),
+            verifier=verifier_info,
         )
 
     finally:

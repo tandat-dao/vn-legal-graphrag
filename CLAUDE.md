@@ -170,9 +170,13 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-12 | Label-keyword Boost (Pass -0.5) — REJECTED sau ablation | Empirical net F1 −0.055 trên 8-câu (Q022 +0.5 nhưng Q001/Q002/Q008/Q024 regress vì label keyword overlap đa Điều cùng tier). Documented as embedding limitation, future work cross-encoder | 2026-05-20 |
 | D-13 | Giữ `Procedure` node + thêm `Concept` node (TASK-15) cho concept rarity scoring | D-07 xóa `[:SPECIFIED_IN]` (manual mapping không scalable) nhưng node `Procedure` được REPURPOSED: kết hợp `Concept` node (Core Ontology) + `[:MAPS_TO_CONCEPT]` (Component → Concept) + `[:REQUIRES_CONCEPT]` (Procedure → Concept) → `hybrid_search` boost components giàu concept hiếm thuộc procedure quan tâm. Ontology Mapping bottom-up qua LLM Haiku (`src/ingestion/ontology_mapper.py`) | Phase 4 |
 | D-14 | Prompt L1 rewrite chống hallucination (no-leak + slug enforcement + amendment dual-cite mềm) | Faithfulness analysis run 20260520-211930 phát hiện 4 nhóm lỗi: F1 prompt leak (`SPAN-REGIME` UPPERCASE label rò rỉ vào output Q022/Q023), F2 citation slug vs số hiệu (`47/2024/QH15` thay vì slug ở Q024/Q025), F3 pointer misattribution (NĐ 226 K10 không tồn tại — phải là NĐ 112 K10 sửa bởi NĐ 226 Đ5 ở Q019), F4 malformed (`Phụ lục I và Phụ lục II` gộp ở Q008). Fix: bỏ hoàn toàn nhãn nội bộ khỏi prompt + meta-rule chống leak + rule cứng slug + rule dual-cite mềm cho amendment. Iter2: hallucination 7→0, leak 2→0, F1 0.539→0.554 (+0.015 N=1 vs N=3 cũ). Refactor `build_prompt()` → `build_messages()` để hỗ trợ prompt caching | 2026-05-28 |
-| D-15 | Anthropic prompt caching cho system prompt (~2117 tokens, `cache_control: ephemeral`) | System rules giống nhau cho mọi câu hỏi → trả tiền lặp lại 78 lần (N=3 × 26 câu) cho cùng nội dung. Caching giảm ~90% input cost trên phần system từ request thứ 2 trở đi, TTL ~5 phút (đủ 1 batch eval). Yêu cầu: tách `build_messages(q,c) -> (system, user)`, system ≥1024 tokens (Sonnet 4.6 minimum). Local prompt-hash cache vẫn được giữ độc lập | 2026-05-28 |
+| D-15 | Anthropic prompt caching cho system prompt (~2117 tokens, `cache_control: ephemeral`) | System rules giống nhau cho mọi câu hỏi → trả tiền lặp lại 78 lần (N=3 × 26 câu) cho cùng nội dung. Caching giảm ~90% input cost trên phần system từ request thứ 2 trở đi, TTL ~5 phút (đủ 1 batch eval). Yêu cầu: tách `build_messages(q,c) -> (system, user)`, system phải ≥ **2048 tokens** — ngưỡng cache tối thiểu thực tế của Sonnet 4.6 (KHÔNG phải 1024; nếu prompt bị cắt xuống dưới 2048 thì cache im lặng ngừng hoạt động, không báo lỗi). Local prompt-hash cache vẫn được giữ độc lập | 2026-05-28 |
 | D-16 | Prompt sanitization B1 — loại bỏ MỌI shorthand/label trong prompt, cấm coin thuật ngữ | Demo span-regime sau v2.9 phát hiện LLM tự promote `(cắt ngang)` thành **"(nguyên tắc cắt ngang)"** trong output — thuật ngữ pháp lý GIẢ. Class bug lớn hơn: bất kỳ shorthand `(X)` / Latin label `(lex superior)` nào trong prompt đều có thể leak. Fix: xóa hết parenthetical shortcuts khỏi prompt + meta-rule mạnh cấm "tự tạo tên gọi/nhãn cho nguyên tắc". Loại bỏ `(lex superior/posterior/specialis)` (Latin), `(cắt ngang)` (rút gọn). Pair với D-17 (auto-detect) tạo defense-in-depth chống thuật ngữ giả | 2026-05-28 |
 | D-17 | Term grounding validator B2 — module `src/evaluation/term_validator.py` auto-detect thuật ngữ giả | Sửa từng case không scalable; câu hỏi mới có thể sinh thuật ngữ giả mới. Approach khoa học: extract candidate "term-like" phrases bằng 4 regex pattern (`named_principle`, `quoted`, `parenthetical`, `bold`) + heuristic `_looks_like_term` (loại measurement/function-word/descriptive), validate qua substring lookup vào CONTEXT + corpus `data/raw/*.md`. Metric `grounding_rate = #grounded / #candidates_total` — analogue của citation existence_rate cho thuật ngữ. Validation: trên 8-câu subset post-B1 đạt **100% grounding rate** (15 candidates / 0 ungrounded); trên run cũ canonical bắt được tất cả leak đã biết (SPAN-REGIME, cắt ngang, chuyển giao thẩm quyền…) | 2026-05-28 |
+| D-18 | Verifier agent (tầng multi-agent: Generator → Verifier → prune) — `src/retrieval/verifier.py` | Nút thắt F1 không phải retrieval (NormR đã 0.93) mà là **over-citation**: ROOT_CAUSE_ANALYSIS cho thấy 47 citation dư là nguyên nhân DOMINANT của precision thấp. Pipeline gốc một lượt Generator, không ai kiểm lại. Verifier = mẫu Self-Refine/CRITIC, **tái dùng hạ tầng `faithfulness.py`** (faithfulness metric → filter inline, không circular import). Tier 1 grounding ($0 deterministic) drop citation không có trong context (bắt hallucination); Tier 2 (Haiku, tùy chọn) judge support, mặc định UNSUPPORTED→flag (bảo thủ, tránh over-prune), `drop_unsupported` để prune cứng. Mặc định `verify=False` → hành vi pipeline cũ KHÔNG đổi; cờ `--verify`/`--verify-tier` cho ablation ±verifier (demo + run_evaluation). Hiệu quả thực nghiệm: **Tier 1 +0.023 F1 Khoản** (offline $0, 26 câu canonical, bỏ 7 citation bịa); wiring live xác nhận. | 2026-06-23 |
+| D-19 | Verifier Tier 2 (LLM support-judge) — REJECTED làm bộ lọc DROP; sửa bug snippet Phụ lục | Thử Tier 2 live trên 3 câu over-cite (Q004/Q008/Q019): (1) **không bắt được over-cite thật** — Q004 (3 vs GT 2) judge giữ cả 3 vì citation thừa vẫn grounded + được chunk khẳng định ("support" ≠ "là đáp án GT tối thiểu"); (2) **over-flag citation ĐÚNG** — Q008 flag cả 2 citation GT (mismatch cấu trúc Phụ lục), Q019 flag citation mà metric tính match → hard-drop sẽ REGRESS F1; (3) phần lớn "over-cite" đo được là **metric/GT artifact** (H4 9 ca + H5 8 ca — Q004 citation thừa thực ra ĐÚNG, GT thiếu) → drop = tối ưu theo thước đo lỗi. Quyết định: **giữ Tier 1, reject Tier 2-support cho mục đích drop** (giống D-12). Phát hiện kèm: bug `faithfulness._extract_answer_snippet` chỉ bắt regex `Điều`, bỏ sót `[Phụ lục ...]` → fallback 400 ký tự → flag oan; đã fix (dispatch theo `loai`, ảnh hưởng cả faithfulness Tier 2 metric). **Future work**: relevance/necessity-judge (thay support-judge) + GT completeness + Tier 2 dạng flag-only-for-reporting (không drop). | 2026-06-23 |
+| D-20 | Cross-encoder (`bge-reranker-v2-m3`) làm **retrieval modifier** — REJECTED sau ablation; `reranker.py` GIỮ làm teacher | Direction 2: vá embedding blindness disambiguation cấp Điều (P-08/Q022). Thử 2 cách tích hợp vào `hybrid_search`, ablation 7-câu (subset thiên vị, base cache vs rerank fresh): **(A) Rerank Floor** (thay Dense Floor ở Pass 0): F1 Khoản +0.019 NHƯNG regression Q021 (1.00→0.80). **(B) Blend** (cộng `rerank_rank` thành tín hiệu RRF thứ 3, giữ Dense Floor): F1 Khoản +0.048 (chữa được Q021) NHƯNG **NormR −0.071 + F1 Điều −0.050** (cross-encoder kéo chunk lexically-relevant nhưng sai norm lên — Q022/Q003). Cả 2 là **đánh đổi, không thắng sạch** → **REJECT làm default + GỠ integration** khỏi `hybrid_search`/`pipeline`/CLI (giữ D-10: dense là ground signal, không để feature không-ăn-thua trong core path). Giống D-12. **GIỮ `src/retrieval/reranker.py`** (module độc lập, LOCAL $0, **CPU** vì MPS treo 3.5h — env `RERANKER_DEVICE`) — REPURPOSE làm **teacher** sinh hard-negative/soft-label cho finetune embedding (bước direction-2 kế tiếp). | 2026-06-23 |
+| D-21 | Evaluation Tier 0 — mở rộng thang đo $0 (significance + citation behavior + per-gap/juris), KHÔNG gọi API | Sau khi 2 hướng thuật toán (verifier, rerank/finetune) phần lớn cho negative result, giá trị biên cao nhất ở **đo lường** chứ không thêm cơ chế. `metrics.aggregate` đã có per-gap/per-theme/PR/latency → KHÔNG dựng lại; chỉ bổ sung cái còn thiếu: **(1)** paired bootstrap 95% CI (10000 resamples, seed=42 deterministic) + Wilcoxon signed-rank — trả lời "N=26 nhỏ, +Δ có thật không"; **(2)** citation behavior (over-cite rate, P–R gap); **(3)** report tiếng Anh hợp nhất. Module `src/evaluation/expanded_eval.py` đọc 2 results JSON SẴN ($0). **Fix alignment quan trọng**: nhãn `gap_type` đồng bộ theo `test_set_dat_dai.json` HIỆN TẠI theo id (baseline run 05-19 gộp gap4 vào gap3 trước relabel → nếu đọc nhãn lưu trong run sẽ lệch). **Kết quả** (graphrag 0528-142757 vs baseline 0519-204426): F1 Khoản Δ **+0.281, CI [0.154, 0.417], p=0.001 *** (win/loss/tie 18/3/3)** → ưu thế KG **có ý nghĩa thống kê**; per-gap: **Gap4 Δ +0.522** (lớn nhất, baseline 0.071 — KG temporal quyết định), Gap2 mạnh nhất tuyệt đối (0.726); **nhược điểm thật**: `multi-juris` Δ −0.244 (1 câu thua → Limitations). Đủ "thật sự có cải tiến" để cân nhắc Tier 1 (ablation suite). | 2026-06-23 |
 
 ---
 
@@ -363,11 +367,13 @@ CONTEXT_MAX_TOKENS = 6000
 DEFAULT_TOP_K = 25
 MAX_PER_NORM = 3                  # _MAX_PER_NORM trong semantic_filter.py — cap top-k diversity
 ANTHROPIC_MAX_RETRIES = 8         # src/utils/llm_config.py — chống 529 Overloaded
+VALID_VERIFY_TIERS = (0, 1, 2)    # verifier.py — 0=no-op, 1=grounding $0, 2=+LLM judge
 VALID_TO_SENTINEL = "9999-12-31"  # CTV.valid_to khi vẫn còn hiệu lực (thay null per ac516ad)
 
-# Neo4j schema: 7 edge types
+# Neo4j schema: 9 node types + 10 edge types (8 retrieval core + 2 concept scoring)
 # IMPLEMENTS: hướng dẫn thi hành (NĐ -> Luật)
 # AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [D-09]
+# MAPS_TO_CONCEPT / REQUIRES_CONCEPT: concept rarity scoring (D-13)
 ```
 
 ---
@@ -424,6 +430,18 @@ answer_generator.py  ← context + question + Anthropic client + cache_dir
                      → {answer, citations, context_used, cache_hit}
                      → parse_citations() w/ dedupe (commit 023bb64)
 
+verifier.py          ← question + context + answer + citations (tầng multi-agent, D-18)
+                     → VerifierResult {filtered_citations, verdicts, n_dropped, ...}
+                     → verify_citations(tier=0/1/2): Tier 1 grounding ($0) + Tier 2
+                       LLM support judge (Haiku, tùy chọn). Tái dùng faithfulness.py.
+                     → pipeline.run_pipeline(verify=, verify_tier=) — mặc định OFF
+
+reranker.py          ← question + candidates [{text}] (cross-encoder, direction 2, D-20)
+                     → rerank(query, candidates, model=) → sorted theo rerank_score
+                     → bge-reranker-v2-m3 LOCAL $0 (CPU — MPS treo); load_reranker() lazy
+                     → KHÔNG wire vào retrieval (integration REJECTED, D-20). Dùng làm
+                       TEACHER sinh hard-negative/soft-label cho finetune embedding (bước sau)
+
 src/utils/llm_config.py — make_anthropic_client() factory với max_retries=8
 
 Phase 4 — Evaluation:
@@ -443,6 +461,8 @@ src/evaluation/compare_runs.py   — A/B diff giữa 2 results JSON
 src/evaluation/build_ablation_matrix.py — table cumulative impact 4 fix layers
 src/evaluation/build_reproducibility_report.py — N=3 study mean ± σ
 src/evaluation/instrument_retrieval.py  — debug Stage 1/2/3 (API-free)
+src/evaluation/retrieval_eval.py — Recall@k/MRR cấp Điều/Khoản, dense vs cross-encoder ($0, không generation) — go/no-go finetune embedding + harness #4
+src/evaluation/expanded_eval.py  — Tier 0 metric expansion ($0, offline): đọc 2 results JSON sẵn → paired bootstrap 95% CI + Wilcoxon significance, citation behavior (over-cite/PR-gap), per-gap/per-juris breakdown, report tiếng Anh. Đồng bộ nhãn gap_type theo test set hiện tại (D-21)
 
 Demo:
 src/demo.py        — Rich CLI cho weekly meeting (panels + Markdown render + spinner + Tree trace)
@@ -539,9 +559,11 @@ NEO4J_PASSWORD=<password>
 QDRANT_HOST=localhost
 QDRANT_PORT=6333
 EMBEDDING_MODEL=BAAI/bge-m3
-LLM_PROVIDER=<openai|anthropic|local>
-LLM_MODEL=<model-name>
-LLM_API_KEY=<key>
+LLM_PROVIDER=anthropic
+LLM_MODEL_PLANNER=claude-haiku-4-5-20251001     # Query Planner + Faithfulness judge + Ontology mapper
+LLM_MODEL_GENERATOR=claude-sonnet-4-6           # Answer Generator
+ANTHROPIC_API_KEY=<key>                         # SDK đọc trực tiếp biến này (make_anthropic_client)
+LLM_API_KEY=<key>                               # alias giữ tương thích
 ```
 
 ---

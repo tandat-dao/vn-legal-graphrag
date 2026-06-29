@@ -894,6 +894,13 @@ def hybrid_search(
             continue
         _try_add(rrf_score_val, point)
 
+    # Sắp xếp output cuối cùng theo rrf_score giảm dần — khớp docstring + đúng thứ tự
+    # mà assemble_context() dùng. Các pass -1/0/1/2 ở trên chỉ quyết định CHỌN point
+    # nào vào top_k (đa dạng norm/tier + bảo toàn struct-cite/dense-floor); thứ tự
+    # trả về thì theo rrf_score để consumer và test thấy ranking nhất quán. Eval-neutral:
+    # assemble_context() vốn đã re-sort theo rrf_score nên không đổi context/metric.
+    results.sort(key=lambda u: -u["rrf_score"])
+
     if results:
         norm_dist = {n: c for n, c in norm_count.items()}
         tier_dist = {t: c for t, c in sorted(tier_count.items(), key=lambda x: (x[0] is None, x[0]))}

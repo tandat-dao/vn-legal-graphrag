@@ -1,5 +1,101 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.11 | Cập nhật 2026-05-30**
+**Phiên bản 2.17 | Cập nhật 2026-06-23**
+
+> **v2.17 — Cập nhật 2026-06-23 (Evaluation Tier 0: mở rộng thang đo $0 — significance + citation behavior; Tier 1 ablation HOÃN tới khi corpus đủ):**
+>
+> **Bối cảnh:** 2 hướng thuật toán (multi-agent verifier, cross-encoder/finetune embedding) đã đi qua, phần lớn cho negative result. Giá trị biên cao nhất giờ ở **đo lường** (thêm thang đo, chứng minh ưu/nhược kiến trúc) chứ không thêm cơ chế. Chia 2 tier theo chi phí: **Tier 0 = $0 offline** (tái dùng results JSON đã chạy), **Tier 1 = ablation tốn API** (chạy qua mọi câu).
+>
+> **Phát hiện trước khi code:** `metrics.aggregate` ĐÃ có per-gap/per-theme/precision-recall/latency → KHÔNG dựng lại; chỉ bổ sung 3 thứ còn thiếu.
+>
+> **1. Module [src/evaluation/expanded_eval.py](../src/evaluation/expanded_eval.py)** ($0, đọc 2 results JSON sẵn, KHÔNG API/DB):
+> - **Significance** — paired bootstrap 95% CI (10000 resamples, seed=42 deterministic) + Wilcoxon signed-rank + win/loss/tie. Trả lời "N=26 nhỏ → +Δ có thật không".
+> - **Citation behavior** — over-citation rate, mean pred/gt count, precision–recall gap (chẩn đoán cite thừa vs bỏ sót).
+> - **Per-gap + per-jurisdiction breakdown** tái dùng `cit_matches`; **report tiếng Anh hợp nhất** cho luận văn.
+> - **Fix alignment quan trọng:** nhãn `gap_type` đồng bộ theo `test_set_dat_dai.json` HIỆN TẠI theo `id` — baseline run 05-19 gộp gap4 vào gap3 *trước* khi relabel; nếu đọc nhãn lưu trong run sẽ lệch grouping (gap4 baseline = N/A). Lấy nhãn từ test set = single source of truth.
+>
+> **2. Kết quả canonical** (graphrag `20260528-142757` vs baseline `20260519-204426`, N=26, [EXPANDED_EVAL_20260528.md](../data/evaluation/EXPANDED_EVAL_20260528.md)):
+>
+> | Metric | Δ (G−B) | 95% CI | Wilcoxon p | Win/Loss/Tie |
+> |---|---:|---|---:|---:|
+> | F1 Khoản | **+0.281** | [0.154, 0.417] | 0.001 *** | 18/3/3 |
+> | F1 Điều | +0.298 | [0.174, 0.430] | <0.001 *** | 18/3/3 |
+> | Norm Recall | +0.257 | [0.108, 0.424] | 0.007 ** | 10/1/13 |
+>
+> - **Ưu thế KG có ý nghĩa thống kê** (CI loại trừ 0) — chống phản biện "26 câu may rủi".
+> - **Per-gap:** Gap4 phiên bản **Δ +0.522** (lớn nhất; baseline 0.071 — KG temporal/CTV/AMENDS quyết định); Gap2 địa phương mạnh nhất tuyệt đối (0.726, hard-filter jurisdiction).
+> - **Nhược điểm trung thực:** câu `multi-juris` GraphRAG **thua** baseline (Δ −0.244) → ghi vào Limitations.
+> - **Citation behavior:** baseline over-cite nhiều hơn (0.958 vs 0.792); cả hai recall > precision (xu hướng cite thừa — chừa đất Verifier Tier 1 đã KEEP ở D-18).
+>
+> **3. Test:** `tests/test_expanded_eval.py` — 10 case deterministic ($0 mock). Toàn suite **230 pass**. Quyết định **D-21**.
+>
+> **Caveat:** cặp canonical lệch ngày (graphrag post prompt-v2.9 05-28 vs baseline 05-19); GT + test set cố định nên so sánh hợp lệ, nhưng muốn sạch tuyệt đối phải chạy lại cùng phiên (thuộc Tier 1).
+>
+> **HOÃN Tier 1 (ablation suite):** formalize `dense-no-KG` + BM25 + tắt từng thành phần KG (jurisdiction / temporal / graph-traversal / hybrid off) thành system trong `run_evaluation`, chạy qua mọi câu → **tốn API**. Chỉ chạy khi **thành viên B nạp đủ corpus multi-domain** (hộ tịch + nuôi con nuôi) — ablation full-run chỉ có nghĩa khi corpus hoàn chỉnh, tránh chạy lại. Prototype dense-no-KG (10 câu) phiên trước đã cho GraphRAG ≈ gấp đôi F1 (0.618 vs 0.302) → tín hiệu mạnh, chờ corpus để chạy chuẩn full 26.
+>
+> **Tiếp theo (khi corpus B sẵn sàng):** (a) formalize dense-no-KG + BM25 baseline; (b) ablation từng thành phần KG; (c) chạy lại cặp graphrag+baseline cùng phiên để bỏ confound lệch ngày.
+
+> **v2.16 — Cập nhật 2026-06-23 (Retrieval-metric harness $0 + go/no-go finetune embedding):**
+>
+> **Bối cảnh:** trước khi đổ công finetune embedding (corpus nhỏ → rủi ro), cần xác nhận có "đích" để distill. Dựng [src/evaluation/retrieval_eval.py](../src/evaluation/retrieval_eval.py) đo **retrieval thuần (KHÔNG generation → $0)**: Recall@k + MRR cấp Điều/Khoản, so DENSE (BGE-M3) vs CROSS-ENCODER rerank trên cùng pool. (Planner cached ~$0, dense+CE local. Cũng là phần harness #4.)
+>
+> **Kết quả go/no-go (24 câu non-negative, $0):**
+>
+> | Metric | DENSE | RERANK | Δ |
+> |---|---:|---:|---:|
+> | MRR Điều | 0.625 | **0.758** | **+0.132** |
+> | MRR Khoản | 0.591 | 0.656 | +0.065 |
+> | Recall Điều@5 | 0.642 | 0.675 | +0.033 |
+> | Recall Khoản@5 | 0.555 | 0.609 | +0.054 |
+> | Recall Điều@10 | 0.700 | 0.714 | +0.014 |
+>
+> **→ GO (đủ điều kiện):** cross-encoder **nâng MRR rõ (+0.13 cấp Điều)** — xếp đúng chunk lên cao khi nó có trong pool (đúng tín hiệu disambiguation Q021 MRR 0.50→1.00, Q022 0.20→1.00, Q025/Q026 0.50→1.00). **Có đích thật để distill** vào BGE-M3.
+>
+> **Nuance trung thực:** gain chủ yếu ở **ranking (MRR)**, Recall@10 gần phẳng → đây là lý do ablation F1 trước net-trung tính (LLM đọc cả top-25 nên xếp lại không đổi context). Finetune embedding để có ích cần (a) context nhỏ hơn để ranking quan trọng, HOẶC (b) cải thiện cả Recall. Q024 normR=0 (Stage-1 miss norm) → lỗi upstream, finetune không chữa được.
+>
+> **Tiếp theo:** pipeline finetune — mine hard-negative qua graph (cùng Norm/tier) + cross-encoder soft-label → distill BGE-M3, đo bằng harness này ($0 gate) trước khi tốn generation.
+
+> **v2.15 — Cập nhật 2026-06-23 (Cross-encoder retrieval modifier: ablate → REJECT → gỡ integration; giữ module làm teacher):**
+>
+> **Bối cảnh:** direction 2 (retrieval precision) — cross-encoder `bge-reranker-v2-m3` (LOCAL $0) vá embedding blindness disambiguation cấp Điều (P-08/Q022: bi-encoder chọn "Điều 4 Hiệu lực" thay "Điều 1 hạn mức").
+>
+> **Thử 2 cách tích hợp + ablation 7-câu** (subset thiên vị: Q022/Q021/Q020/Q003/Q025/Q024 headroom + Q001 canary; base cache vs rerank fresh):
+> - **(A) Rerank Floor** (thay Dense Floor ở Pass 0): F1 Khoản **+0.019** NHƯNG **regression Q021** (1.00→0.80).
+> - **(B) Blend** (cộng `rerank_rank` thành tín hiệu RRF thứ 3, GIỮ Dense Floor): F1 Khoản **+0.048** (chữa Q021) NHƯNG **NormR −0.071 + F1 Điều −0.050** — cross-encoder kéo chunk lexically-relevant nhưng SAI norm lên (Q022 NormR 1.00→0.50, Q003 F1 Điều 0.29→0.00).
+>
+> **Kết luận:** cả 2 là **đánh đổi, không thắng sạch** (đặc biệt B hi sinh NormR — metric quan trọng cho QA pháp lý). Giống **D-12** → **REJECT làm default + GỠ integration** khỏi `hybrid_search`/`pipeline`/`demo`/`run_evaluation` (giữ D-10: dense là ground signal). `semantic_filter.py` restore về bản sạch (pre-rerank).
+>
+> **GIỮ `src/retrieval/reranker.py`** (+ test, LOCAL $0, **CPU** vì MPS treo 3.5h) — REPURPOSE làm **teacher** sinh hard-negative/soft-label cho **finetune embedding** (bước direction-2 kế tiếp). Quyết định D-20. Tổng suite **210 pass**.
+>
+> **Lưu ý phương pháp:** ablation trên subset thiên vị + confound (base cache vs rerank fresh) → kết quả định hướng, không phải tác động trung bình. Nhưng đủ rõ để không bật mặc định.
+
+> **v2.13 — Cập nhật 2026-06-23 (Đo Verifier: Tier 1 thắng / Tier 2 reject + fix bug snippet Phụ lục):**
+>
+> **Tier 1 (grounding, $0) — kết quả dương:** ablation offline trên run canonical 20260520-211930 (26 câu, $0 vì tái dùng answer+context đã lưu): **F1 Khoản 0.524 → 0.547 (+0.023)**, F1 Điều +0.023, NormR −0.010. Bỏ đúng **7 citation bịa** (ungrounded) ở 4/26 câu (Q008/Q024/Q025 ▲, Q019 =). Wiring live xác nhận trên 3 câu random.
+>
+> **Tier 2 (LLM support-judge) — REJECT làm bộ lọc drop (D-19):** thử live trên 3 câu over-cite (Q004/Q008/Q019):
+> - Q004 (over-cite thật 3 vs GT 2): judge giữ cả 3 — citation thừa vẫn grounded + được chunk khẳng định → **support-judge KHÔNG bắt được over-cite** ("support" ≠ "đáp án GT tối thiểu").
+> - Q008: flag cả 2 citation **GT đúng** (mismatch cấu trúc Phụ lục); Q019: flag citation mà metric tính match → **hard-drop sẽ REGRESS F1** (over-prune).
+> - Phần lớn "over-cite" là **metric/GT artifact** (Q004 citation thừa thực ra đúng, GT thiếu) → drop = tối ưu theo thước đo lỗi.
+> - Kết luận: **giữ Tier 1, reject Tier 2-support** (giống D-12). Future work: relevance/necessity-judge + GT completeness + Tier 2 flag-only-for-reporting.
+>
+> **Bug fix:** `faithfulness._extract_answer_snippet` chỉ bắt regex `Điều`, bỏ sót `[Phụ lục ...]` → fallback 400 ký tự đầu → judge nhìn sai ngữ cảnh → flag oan (chính là Q008). Đã fix dispatch theo `loai` (cải thiện cả faithfulness Tier 2 metric lẫn verifier). `tests/test_faithfulness.py` (5 case, $0 mock). Toàn suite 203 pass.
+>
+> **Tiếp theo:** sang nhánh **cross-encoder rerank** (direction 2 — retrieval precision, $0 local).
+
+> **v2.12 — Cập nhật 2026-06-23 (Verifier agent — tầng multi-agent Generator → Verifier → prune):**
+>
+> **Bối cảnh**: Phân tích lại bottleneck — Norm Recall đã 0.93 nhưng F1 Khoản chỉ 0.539; root-cause (ROOT_CAUSE_ANALYSIS) chỉ ra **over-citation là nguyên nhân DOMINANT** của precision thấp (47 citation dư). Tức retrieval gần như xong, phần mất điểm nằm ở việc Generator cite quá tay / sai Điều mà không ai kiểm lại. Đây là khởi đầu hướng nghiên cứu **multi-agent** (do [A] đảm nhận, cùng nhánh retrieval-precision cross-encoder → finetune embedding).
+>
+> **1. Verifier agent** ([src/retrieval/verifier.py](../src/retrieval/verifier.py)) — mẫu Self-Refine/CRITIC, đặt sau Generator:
+> - **Tier 1 — grounding (deterministic, $0)**: drop citation không có header tương ứng trong CONTEXT (bắt hallucination thô). Tái dùng `faithfulness._citation_in_context`.
+> - **Tier 2 — support (Haiku, tùy chọn)**: judge chunk có thực sự khẳng định claim không; mặc định UNSUPPORTED → "flag" (giữ, bảo thủ chống over-prune), `drop_unsupported=True` để prune cứng. Tái dùng `faithfulness._judge_citation`.
+> - Thiết kế = "faithfulness metric nâng thành filter inline" — không circular import (faithfulness chỉ phụ thuộc anthropic/stdlib).
+>
+> **2. Tích hợp** ([pipeline.py](../src/pipeline.py)): tham số `verify` / `verify_tier`, **mặc định `verify=False` → hành vi pipeline cũ KHÔNG đổi**. Cờ `--verify` / `--verify-tier {0,1,2}` cho [demo.py](../src/demo.py) + [run_evaluation.py](../src/evaluation/run_evaluation.py) → ablation ±verifier. Verifier chỉ áp dụng GraphRAG (không baseline). `PipelineResult` thêm field `verifier`.
+>
+> **3. Test**: `tests/test_verifier.py` — 13 case **mock hoàn toàn** ($0 API). Toàn suite 198 pass (185 cũ + 13). Import sạch, không circular.
+>
+> **Pending (cần API — chờ duyệt chi phí)**: chạy ablation ±verifier trên test set (N≥3) để đo F1/precision delta thực tế. Hiệu quả định lượng CHƯA đo. Quyết định D-18.
 
 > **v2.11 — Cập nhật 2026-05-30 (2-mode trả lời: General gọn vs IRAC tư vấn + order-independent citation parser):**
 >
@@ -764,7 +860,8 @@
 - `src/retrieval/semantic_filter.py` — Hybrid Search 4-pass (Pass -1 Struct Cite / Pass 0 Dense Floor / Pass 1 RRF breadth / Pass 2 RRF depth)
 - `src/retrieval/context_assembler.py` — sort + cap 6000 tokens + build_prompt với 5 rule blocks (TEMPORAL #4)
 - `src/retrieval/answer_generator.py` — Claude Sonnet 4.6 + cache + parse_citations với dedupe
-- `src/pipeline.py` — end-to-end orchestrator
+- `src/retrieval/verifier.py` — Verifier agent (multi-agent, D-18): Tier 1 grounding $0 + Tier 2 LLM judge; `verify=False` mặc định
+- `src/pipeline.py` — end-to-end orchestrator (+ tham số verify/verify_tier)
 - `src/utils/llm_config.py` — centralized Anthropic client (max_retries=8)
 
 **Phase 4 — Đánh giá [A]:**
@@ -773,6 +870,8 @@
 - `src/evaluation/run_evaluation.py` — eval orchestrator
 - `src/evaluation/metrics.py` — F1 Khoản/Điều, NormR, negative_correct (`cit_matches` single source of truth)
 - `src/evaluation/faithfulness.py` — 2-tier metric (existence + LLM judge)
+- `src/evaluation/term_validator.py` — B2 phát hiện thuật ngữ giả (grounding_rate, D-17)
+- `src/evaluation/validate_test_set.py` — validator test set (gap diversity, phân bổ DoD)
 - `src/evaluation/report_builder.py` — auto-sinh REPORT_<timestamp>.md
 - `src/evaluation/compare_runs.py` — A/B diff
 - `src/evaluation/build_ablation_matrix.py` — cumulative table
@@ -802,6 +901,12 @@
 **Phase 4 — domain mở rộng:**
 - Test set Hộ tịch + Nuôi con nuôi (chờ [B] đổ data)
 - Mở test set lên ≥40 câu cross-domain để validate hypothesis Gap 1 generalize ngoài Đất đai
+
+**Hướng nghiên cứu nâng cao [A] (precision in / precision out):**
+- **Multi-agent — Verifier agent**: code xong (v2.12, D-18), `verify=False` mặc định; CHƯA đo ablation ±verifier (cần API).
+- **Cross-encoder rerank** (vá disambiguation cấp Điều, Q022) — phép thử $0 trước khi finetune; đồng thời là "teacher" sinh hard-negative.
+- **Finetune embedding BGE-M3** (distill từ cross-encoder) — sau khi cross-encoder xác nhận giả thuyết.
+- Phụ thuộc: **harness đo lường + baseline dense-no-KG (#4) phải có sớm** để đo được 3 hướng trên (N≥3).
 
 **Phase 5 — Báo cáo:**
 - Expand prose Chapter 4 (Experiments) từ scaffold
@@ -1355,7 +1460,7 @@ Nhận LCCIDs từ TASK-11 và câu hỏi gốc, thực hiện hybrid search (De
 #### Đầu ra
 - `src/retrieval/semantic_filter.py` — module với:
   - `hybrid_search(question: str, lccids: LCCIDs, qdrant_client, model, top_k: int = 10) -> list[TextUnit]`
-  - Cơ chế: Dense search (BGE-M3) + Sparse search (BM25) → RRF fusion
+  - Cơ chế: Dense search (BGE-M3) + Keyword search (slug-overlap) → RRF fusion (BM25 trong spec gốc đã thay bằng slug-overlap khi triển khai — xem semantic_filter.py)
   - Payload filter: `content_type="text_unit" AND component_id IN lccids`
 
 #### Định nghĩa Hoàn thành (DoD)
