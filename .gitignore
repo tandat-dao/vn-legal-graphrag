@@ -48,3 +48,9 @@ data/evaluation/.planner_cache/
 # Rác sinh do relative path khi chạy notebook từ thư mục notebooks/
 # (query_planner dùng Path("data/...") → tạo notebooks/data/.planner_cache/)
 notebooks/data/
+
+# Output thử nghiệm eval nháp (sanity/bake-off/subset — số liệu đã ghi Decision Log)
+# Kết quả canonical (vd gemini_full26/) vẫn được commit tường minh.
+data/evaluation/_sub*
+data/evaluation/sanity_*
+data/evaluation/bakeoff/
