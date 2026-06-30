@@ -176,10 +176,12 @@ def _gemini_complete(gemini_client, *, model, system_text, user_text,
 
     gem_model = _gemini_model_for(model)
     # Gemini 2.5/3.x là "thinking" model: thinking tiêu token TRONG max_output_tokens.
-    # max_tokens nhỏ (Claude-tuned: 128 ontology, 256 planner) → thinking ăn hết →
-    # output thật bị CẮT CỤT → JSON/answer hỏng. Đặt SÀN để chừa chỗ cho thinking.
-    _MIN_OUT = 2048
-    mot = max(max_tokens or _MIN_OUT, _MIN_OUT)
+    # Nếu chỉ truyền max_tokens Claude-tuned (128 ontology, 256 planner, 3000 generator),
+    # thinking ăn vào → output thật bị CẮT CỤT (vd IRAC dài + thinking > 3000 → cụt giữa
+    # citation → mất citation). Fix: cộng HEADROOM cho thinking TRÊN độ dài answer mong muốn.
+    _ANSWER_FLOOR = 2048   # answer tối thiểu (kể cả call budget nhỏ)
+    _THINK_HEADROOM = 4096  # chừa cho thinking
+    mot = max(max_tokens or 0, _ANSWER_FLOOR) + _THINK_HEADROOM
     logger.info("Gemini call: model=%s max_out=%d", gem_model, mot)
     response = gemini_client.models.generate_content(
         model=gem_model,
