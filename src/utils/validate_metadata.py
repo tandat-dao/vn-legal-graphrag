@@ -146,6 +146,27 @@ def check_frontmatter(meta: dict, filename: str) -> list[str]:
             f"— chỉ nhận {sorted(VALID_JURISDICTIONS)}"
         )
 
+    # 6b. implements — null, string, hoặc list of string (đa cha — D-23)
+    #     Một văn bản có thể hướng dẫn thi hành đồng thời nhiều văn bản cha
+    #     (VD: TT 04/2020 implements cả NĐ 123/2015 lẫn Luật Hộ tịch 2014).
+    implements = meta.get("implements")
+    if implements is not None:
+        if isinstance(implements, list):
+            if len(implements) == 0:
+                errors.append(
+                    "[Frontmatter] `implements` là list rỗng — dùng null nếu không có văn bản cha"
+                )
+            for item in implements:
+                if not isinstance(item, str):
+                    errors.append(
+                        f"[Frontmatter] `implements` chứa giá trị không phải string: {item!r}"
+                    )
+        elif not isinstance(implements, str):
+            errors.append(
+                "[Frontmatter] `implements` phải là string, list string, hoặc null "
+                f"(hiện tại là {type(implements).__name__}: {implements!r})"
+            )
+
     # 7. valid_from — bắt buộc phải có và đúng format
     valid_from = meta.get("valid_from")
     if valid_from is not None:
@@ -313,13 +334,17 @@ def check_global(all_meta: dict[str, dict]) -> list[tuple[str, str]]:
             for fname in files:
                 errors.append((fname, f"[Global] `id` trùng lặp: '{id_val}' xuất hiện trong {files}"))
 
-    # Kiểm tra implements trỏ đúng id tồn tại
+    # Kiểm tra implements trỏ đúng id tồn tại (hỗ trợ đa cha — D-23)
     for fname, meta in all_meta.items():
         impl = meta.get("implements")
-        if impl is not None and impl not in all_ids:
-            errors.append(
-                (fname, f"[Global] `implements: '{impl}'` không khớp id nào trong tập file")
-            )
+        if impl is None:
+            continue
+        impl_list = impl if isinstance(impl, list) else [impl]
+        for parent in impl_list:
+            if isinstance(parent, str) and parent not in all_ids:
+                errors.append(
+                    (fname, f"[Global] `implements: '{parent}'` không khớp id nào trong tập file")
+                )
 
     # amended_by_norms: chỉ kiểm tra format (list of string), không yêu cầu
     # các id tham chiếu phải có trong tập file hiện tại vì các văn bản sửa đổi

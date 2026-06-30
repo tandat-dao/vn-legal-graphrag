@@ -231,7 +231,7 @@ def create_edges(
     norm_id: str,
     theme_name: str,
     jurisdiction: str,
-    implements: str | None,
+    implements: str | list[str] | None,
     component_id: str,
     ctv_id: str,
     text_unit_id: str,
@@ -257,13 +257,16 @@ def create_edges(
         jur=jurisdiction,
     )
     # Norm -[:IMPLEMENTS]-> Norm  (chỉ tạo nếu target đã tồn tại)
+    # Hỗ trợ đa cha (D-23): implements có thể là string hoặc list string.
     if implements:
-        tx.run(
-            "MATCH (n:Norm {id: $norm_id}), (p:Norm {id: $parent}) "
-            "MERGE (n)-[:IMPLEMENTS]->(p)",
-            norm_id=norm_id,
-            parent=implements,
-        )
+        parents = implements if isinstance(implements, list) else [implements]
+        for parent in parents:
+            tx.run(
+                "MATCH (n:Norm {id: $norm_id}), (p:Norm {id: $parent}) "
+                "MERGE (n)-[:IMPLEMENTS]->(p)",
+                norm_id=norm_id,
+                parent=parent,
+            )
     # Norm -[:HAS_COMPONENT]-> Component
     tx.run(
         "MATCH (n:Norm {id: $norm_id}), (c:Component {id: $comp_id}) "
@@ -446,14 +449,17 @@ def run_ingestion(data_dir: str) -> None:
             with session.begin_transaction() as tx:
                 for result in all_results:
                     meta = result["metadata"]
-                    if meta.get("implements"):
-                        tx.run(
-                            "MATCH (n:Norm {id: $id}) MATCH (p:Norm {id: $parent}) "
-                            "MERGE (n)-[:IMPLEMENTS]->(p)",
-                            id=meta["id"],
-                            parent=meta["implements"],
-                        )
-                        implements_count += 1
+                    impl = meta.get("implements")
+                    if impl:
+                        parents = impl if isinstance(impl, list) else [impl]
+                        for parent in parents:
+                            tx.run(
+                                "MATCH (n:Norm {id: $id}) MATCH (p:Norm {id: $parent}) "
+                                "MERGE (n)-[:IMPLEMENTS]->(p)",
+                                id=meta["id"],
+                                parent=parent,
+                            )
+                            implements_count += 1
                 tx.commit()
             logger.info(f"Pass 2 — {implements_count} [:IMPLEMENTS] edges đã xử lý.")
 
