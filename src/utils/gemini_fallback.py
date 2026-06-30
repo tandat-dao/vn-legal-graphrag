@@ -151,7 +151,20 @@ class FallbackLLMClient:
         from google.genai import types
 
         if self._gemini_client is None:
-            self._gemini_client = genai.Client(api_key=self._gemini_api_key)
+            # GEMINI_USE_VERTEX=true → Vertex AI qua ADC (project+location, KHÔNG api_key).
+            # Vertex (aiplatform.googleapis.com) KHÔNG nhận API key — đòi OAuth2/ADC
+            # (`gcloud auth application-default login`). Dùng khi vùng không có free tier
+            # Developer API nhưng có credit Cloud/Vertex ($300 trial).
+            # Mặc định false → Developer API (generativelanguage) bằng api_key.
+            use_vertex = os.getenv("GEMINI_USE_VERTEX", "false").lower() == "true"
+            if use_vertex:
+                self._gemini_client = genai.Client(
+                    vertexai=True,
+                    project=os.getenv("GEMINI_VERTEX_PROJECT"),
+                    location=os.getenv("GEMINI_VERTEX_LOCATION", "us-central1"),
+                )
+            else:
+                self._gemini_client = genai.Client(api_key=self._gemini_api_key)
 
         gem_model = _gemini_model_for(model)
         logger.info("Gemini fallback: model=%s", gem_model)
