@@ -159,12 +159,12 @@ def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None,
 # Shared client factory (tránh load model nhiều lần)
 # ---------------------------------------------------------------------------
 
-def _build_shared_clients():
+def _build_shared_clients(llm_mode: str = "claude"):
     from neo4j import GraphDatabase
     from qdrant_client import QdrantClient
 
     from src.ingestion.vectorizer import load_model
-    from src.utils.llm_config import make_anthropic_client
+    from src.utils.llm_config import make_llm_client
 
     neo4j_driver = GraphDatabase.driver(
         os.getenv("NEO4J_URI", "bolt://localhost:7687"),
@@ -174,7 +174,8 @@ def _build_shared_clients():
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = make_anthropic_client()
+    # Client HỆ THỐNG (GraphRAG + Baseline) theo llm_mode. Judge dựng riêng (Claude cố định).
+    anthropic_client = make_llm_client(mode=llm_mode)
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
@@ -210,7 +211,10 @@ def run_system_on_test_set(
     if faithfulness_tier >= 1:
         from src.evaluation.faithfulness import evaluate_faithfulness
         if faithfulness_tier >= 2:
-            _, _, judge_client, _ = clients  # reuse anthropic_client làm judge
+            # Judge CỐ ĐỊNH Claude — thước đo độc lập với mode hệ thống (tránh
+            # Gemini tự chấm Gemini khi mode=gemini). Xem bàn về judge.
+            from src.utils.llm_config import make_anthropic_client
+            judge_client = make_anthropic_client()
 
     results = []
     for i, item in enumerate(test_set, 1):
@@ -361,6 +365,16 @@ def main() -> int:
         help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
              "2=grounding + LLM support judge (TỐN ~1 Haiku call per citation).",
     )
+    parser.add_argument(
+        "--llm-mode", choices=["claude", "claude-fallback", "gemini"], default="claude",
+        help="LLM cho HỆ THỐNG (GraphRAG + Baseline): claude (mặc định, reproducible) | "
+             "claude-fallback | gemini end-to-end. Judge giữ Claude cố định (thước đo).",
+    )
+    parser.add_argument(
+        "--sample", type=int, default=0,
+        help="Chọn NGẪU NHIÊN N câu (0=không). Khác --limit (N câu đầu). Dùng với --seed.",
+    )
+    parser.add_argument("--seed", type=int, default=42, help="Seed cho --sample.")
     args = parser.parse_args()
 
     if not args.test_set.exists():
@@ -368,6 +382,12 @@ def main() -> int:
         return 2
 
     test_set = json.loads(args.test_set.read_text(encoding="utf-8"))
+    if args.sample > 0:
+        import random
+        rng = random.Random(args.seed)
+        test_set = rng.sample(test_set, min(args.sample, len(test_set)))
+        logger.info(f"SAMPLE {len(test_set)} câu ngẫu nhiên (seed={args.seed}): "
+                    f"{[it['id'] for it in test_set]}")
     if args.limit > 0:
         test_set = test_set[: args.limit]
 
@@ -472,8 +492,8 @@ def main() -> int:
     else:
         logger.info("LLM cache DISABLED — sẽ tốn API cho mọi câu")
 
-    logger.info(f"Build shared clients (Neo4j + Qdrant + Anthropic + BGE-M3)...")
-    clients = _build_shared_clients()
+    logger.info(f"Build shared clients (Neo4j + Qdrant + LLM[{args.llm_mode}] + BGE-M3)...")
+    clients = _build_shared_clients(llm_mode=args.llm_mode)
 
     all_aggs = {}
     all_results: dict[str, list[dict]] = {}
