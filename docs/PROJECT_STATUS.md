@@ -1,5 +1,17 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.18 | Cập nhật 2026-06-29**
+**Phiên bản 2.19 | Cập nhật 2026-06-30**
+
+> **v2.19 — Cập nhật 2026-06-30 (Corpus B re-ingest đa-domain + Multi-LLM mode + Gemini-only validated):**
+>
+> **1. Corpus B vào graph (D-23):** pull + làm sạch 13 file Hộ tịch/Nuôi con nuôi của [B] (sửa NQ 124 đa-theme hướng A, `amended_by_norms`, heading typo, comment template, spacing). Hỗ trợ `implements` đa-cha (string\|list\|null). **Re-ingest** → graph đa-domain: **32 Norm (dat-dai 20, ho-tich 8, nuoi-con-nuoi 4)**, 4548 Component, 6394 MAPS_TO_CONCEPT. D-23 verify data thật: NĐ 120 → [Luật Hộ tịch, Luật NCN]; TT 04 → [NĐ 123, Luật Hộ tịch].
+>
+> **2. Multi-LLM provider (D-24):** 3 mode `claude` \| `claude-fallback` \| `gemini` cho cả demo lẫn eval (`--llm-mode`). Gemini chạy **Vertex AI qua ADC** ($300 Cloud credit; vùng VN không free tier Developer API). Wrapper trong suốt; mặc định `claude` → eval reproducible. Judge giữ Claude Haiku cố định. Fix bug truncation (sàn `max_output_tokens=2048` cho thinking model). Bake-off: generator `gemini-2.5-pro` (≈ Claude), planner/ontology `gemini-2.5-flash`; model 3.x mới hơn lại KÉM hơn.
+>
+> **3. Gemini-only validated** (full 26): GraphRAG-Gemini **F1 0.549 / NormR 0.766** vs Baseline-Gemini 0.356/0.554 → **Δ kiến trúc +0.193 F1** (≈ Δ Claude +0.206) = ưu thế kiến trúc LLM-agnostic. 2 negative result tune NormR (prompt provider-aware; structural backfill) đều đánh đổi F1 → REJECT, chấp nhận NormR 0.766 (đặc tính Gemini).
+>
+> **4. Demo resilience:** Lớp 1 pre-cache (`precache_demo.py`) + Lớp 2 Gemini fallback. 266 test pass.
+>
+> **Chờ [B]:** sign-off cross-check (TASK-05) + test set Hộ tịch/Nuôi con nuôi → mở Gap 1 + E1 ablation đầy đủ.
 
 > **v2.18 — Cập nhật 2026-06-29 (Kiến trúc Đánh giá E0–E3 — design spec, chưa triển khai):**
 >
