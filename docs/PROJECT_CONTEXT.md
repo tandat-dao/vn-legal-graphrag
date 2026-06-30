@@ -329,7 +329,7 @@ Nội dung điểm a.
 | `tier` | int | Chỉ nhận 1 trong 4 giá trị: 1=Luật/Bộ luật/NQ Quốc hội, 2=Nghị định/Pháp lệnh, 3=Thông tư/Thông tư liên tịch, 4=Quyết định UBND tỉnh/NQ HĐND tỉnh |
 | `theme` | string | Chỉ nhận: `dat-dai`, `ho-tich`, `nuoi-con-nuoi` |
 | `jurisdiction` | string | Chỉ nhận: `toan-quoc`, `tp-hcm`, `dong-nai` |
-| `implements` | string\|null | Phải trỏ đúng `id` tồn tại trong tập file. null nếu là Luật gốc |
+| `implements` | string\|list\|null | Trỏ đúng `id` tồn tại trong tập file. null nếu là Luật gốc; **list** nếu hướng dẫn thi hành nhiều cha (D-23) |
 | `valid_from` | string | Format `YYYY-MM-DD` bắt buộc |
 | `valid_to` | string\|null | Format `YYYY-MM-DD` hoặc `null` nếu vẫn còn hiệu lực |
 | `source_vbhn` | string\|null | **Optional.** Số hiệu VBHN dùng làm nguồn nội dung, VD: `"44/VBHN-VPQH"`. null nếu lấy từ văn bản gốc |
