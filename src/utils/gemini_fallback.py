@@ -1,0 +1,167 @@
+"""Gemini fallback — dự phòng khi Anthropic API sập (chủ yếu cho DEMO bảo vệ).
+
+Vấn đề: demo lúc bảo vệ phụ thuộc Claude API. Nếu Anthropic outage đúng giờ →
+demo chết. Lớp này bọc Anthropic client bằng một wrapper TRONG SUỐT: gọi Claude
+trước; nếu lỗi API (529/timeout/connection) SAU khi đã hết 8 retry → tự dịch
+request sang Gemini và trả về response GIẢ DẠNG Anthropic (`.content[0].text`).
+
+Nguyên tắc thiết kế:
+  • TRONG SUỐT: call site vẫn gọi `client.messages.create(...)` như cũ — không
+    đổi một dòng nào ở answer_generator / query_planner.
+  • OPT-IN, mặc định TẮT: eval LUÔN chạy thuần Claude. Nếu Claude chớp tắt giữa
+    eval mà tự đổi Gemini → CORRUPT số liệu luận văn. Chỉ demo path bật fallback.
+  • CHỈ fallback khi lỗi hạ tầng (5xx/429/connection), KHÔNG fallback lỗi logic
+    (400 BadRequest = bug của ta, Gemini không cứu được) → re-raise.
+  • LOG TO khi fallback nổ → lúc demo biết đã chuyển provider.
+
+Khi Claude chạy bình thường (mọi eval run), hành vi GIỐNG HỆT không có lớp này.
+Gemini chỉ kích hoạt khi Claude thật sự sập → đúng tinh thần "dự phòng", không
+đụng vào hệ thống đã đánh giá.
+"""
+from __future__ import annotations
+
+import logging
+import os
+from types import SimpleNamespace
+from typing import Any
+
+import anthropic
+
+logger = logging.getLogger(__name__)
+
+# Model Gemini mặc định (free tier). Có thể override qua env. Tên model thay đổi
+# theo thời gian → để cấu hình được thay vì hardcode cứng trong logic.
+_DEFAULT_GEMINI_MODEL = "gemini-2.0-flash"
+
+
+def _gemini_model_for(anthropic_model: str) -> str:
+    """Ánh xạ model Claude → model Gemini tương ứng (planner nhẹ vs generator mạnh)."""
+    if "haiku" in (anthropic_model or "").lower():
+        return os.getenv("GEMINI_MODEL_PLANNER", _DEFAULT_GEMINI_MODEL)
+    return os.getenv("GEMINI_MODEL_GENERATOR", _DEFAULT_GEMINI_MODEL)
+
+
+def _extract_system_text(system: Any) -> str:
+    """Lấy text hệ thống từ kwarg `system` — chấp nhận str hoặc list[dict] (dạng
+    Anthropic có cache_control). Bỏ qua cache_control (đặc thù Anthropic)."""
+    if system is None:
+        return ""
+    if isinstance(system, str):
+        return system
+    if isinstance(system, list):
+        parts = []
+        for block in system:
+            if isinstance(block, dict):
+                parts.append(block.get("text", ""))
+            elif isinstance(block, str):
+                parts.append(block)
+        return "\n".join(p for p in parts if p)
+    return str(system)
+
+
+def _extract_user_text(messages: Any) -> str:
+    """Gộp nội dung các message role=user thành 1 chuỗi cho Gemini."""
+    if not messages:
+        return ""
+    parts = []
+    for m in messages:
+        if not isinstance(m, dict) or m.get("role") != "user":
+            continue
+        content = m.get("content", "")
+        if isinstance(content, str):
+            parts.append(content)
+        elif isinstance(content, list):
+            for block in content:
+                if isinstance(block, dict):
+                    parts.append(block.get("text", ""))
+                elif isinstance(block, str):
+                    parts.append(block)
+    return "\n".join(p for p in parts if p)
+
+
+def _should_fallback(err: anthropic.APIError) -> bool:
+    """True nếu lỗi là hạ tầng (đáng fallback); False nếu lỗi logic (re-raise).
+
+    Fallback: connection error, rate limit (429), server error (5xx, kể cả 529).
+    KHÔNG fallback: 4xx client error khác (400 bad request = bug của ta).
+    """
+    if isinstance(err, anthropic.APIConnectionError):
+        return True
+    status = getattr(err, "status_code", None)
+    if status is None:
+        # APIError không rõ status → bảo thủ, vẫn thử fallback cho demo
+        return True
+    return status == 429 or status >= 500
+
+
+class _Messages:
+    """Giả lập namespace `client.messages` với method `.create()`."""
+
+    def __init__(self, parent: "FallbackLLMClient") -> None:
+        self._parent = parent
+
+    def create(self, **kwargs: Any) -> Any:
+        return self._parent._create(**kwargs)
+
+
+class FallbackLLMClient:
+    """Wrapper trong suốt: thử Anthropic, lỗi hạ tầng → Gemini.
+
+    Dùng được ở mọi chỗ đang nhận `anthropic.Anthropic` vì expose cùng interface
+    `client.messages.create(...)` và trả về object có `.content[0].text`.
+    """
+
+    def __init__(self, anthropic_client: anthropic.Anthropic, gemini_api_key: str) -> None:
+        self._anthropic = anthropic_client
+        self._gemini_api_key = gemini_api_key
+        self._gemini_client = None  # lazy init khi fallback nổ
+        self.messages = _Messages(self)
+
+    def _create(self, **kwargs: Any) -> Any:
+        try:
+            return self._anthropic.messages.create(**kwargs)
+        except anthropic.APIError as err:
+            if not _should_fallback(err):
+                logger.error("Claude lỗi logic (không fallback): %s", err)
+                raise
+            logger.warning(
+                "⚠️  Claude API thất bại (%s) → CHUYỂN SANG GEMINI fallback", err
+            )
+            text = self._call_gemini(
+                model=kwargs.get("model", ""),
+                system_text=_extract_system_text(kwargs.get("system")),
+                user_text=_extract_user_text(kwargs.get("messages")),
+                max_tokens=kwargs.get("max_tokens"),
+                temperature=kwargs.get("temperature", 0.0),
+            )
+            # Mimic shape response Anthropic để call site đọc message.content[0].text
+            return SimpleNamespace(content=[SimpleNamespace(text=text)])
+
+    def _call_gemini(
+        self,
+        *,
+        model: str,
+        system_text: str,
+        user_text: str,
+        max_tokens: int | None,
+        temperature: float,
+    ) -> str:
+        """Gọi Gemini qua google-genai (import lazy). Tách method để test mock dễ."""
+        from google import genai
+        from google.genai import types
+
+        if self._gemini_client is None:
+            self._gemini_client = genai.Client(api_key=self._gemini_api_key)
+
+        gem_model = _gemini_model_for(model)
+        logger.info("Gemini fallback: model=%s", gem_model)
+        response = self._gemini_client.models.generate_content(
+            model=gem_model,
+            contents=user_text,
+            config=types.GenerateContentConfig(
+                system_instruction=system_text or None,
+                temperature=temperature or 0.0,
+                max_output_tokens=max_tokens,
+            ),
+        )
+        return (response.text or "").strip()

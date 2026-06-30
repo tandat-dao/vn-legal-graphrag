@@ -25,7 +25,7 @@ from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
 
 from src.ingestion.vectorizer import load_model
-from src.utils.llm_config import make_anthropic_client
+from src.utils.llm_config import make_anthropic_client, make_llm_client
 from src.retrieval.answer_generator import generate_answer
 from src.retrieval.context_assembler import assemble_context
 from src.retrieval.query_planner import QueryPlan, build_confirmation_prompt, plan_query
@@ -107,8 +107,11 @@ class PipelineResult(TypedDict):
 # Clients factory
 # ---------------------------------------------------------------------------
 
-def _build_clients() -> tuple:
-    """Khởi tạo Neo4j driver, Qdrant client, Anthropic client, embedding model từ .env."""
+def _build_clients(llm_fallback: bool = False) -> tuple:
+    """Khởi tạo Neo4j driver, Qdrant client, LLM client, embedding model từ .env.
+
+    llm_fallback=True → bọc Gemini fallback (chỉ DEMO; eval để False = thuần Claude).
+    """
     neo4j_driver = GraphDatabase.driver(
         os.getenv("NEO4J_URI", "bolt://localhost:7687"),
         auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
@@ -117,7 +120,7 @@ def _build_clients() -> tuple:
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = make_anthropic_client()
+    anthropic_client = make_llm_client(enable_fallback=llm_fallback)
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
@@ -141,6 +144,7 @@ def run_pipeline(
     response_mode: str | None = None,
     verify: bool = False,
     verify_tier: int = 1,
+    llm_fallback: bool = False,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -162,7 +166,7 @@ def run_pipeline(
     # Lazy init clients
     _own_clients = neo4j_driver is None
     if _own_clients:
-        neo4j_driver, qdrant_client, anthropic_client, model = _build_clients()
+        neo4j_driver, qdrant_client, anthropic_client, model = _build_clients(llm_fallback)
 
     try:
         # --- TASK-10: Query Planning ---
