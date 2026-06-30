@@ -137,44 +137,78 @@ class FallbackLLMClient:
             # Mimic shape response Anthropic để call site đọc message.content[0].text
             return SimpleNamespace(content=[SimpleNamespace(text=text)])
 
-    def _call_gemini(
-        self,
-        *,
-        model: str,
-        system_text: str,
-        user_text: str,
-        max_tokens: int | None,
-        temperature: float,
-    ) -> str:
-        """Gọi Gemini qua google-genai (import lazy). Tách method để test mock dễ."""
-        from google import genai
-        from google.genai import types
-
+    def _call_gemini(self, *, model, system_text, user_text, max_tokens, temperature) -> str:
+        """Gọi Gemini (lazy-init client). Tách method để test mock dễ."""
         if self._gemini_client is None:
-            # GEMINI_USE_VERTEX=true → Vertex AI qua ADC (project+location, KHÔNG api_key).
-            # Vertex (aiplatform.googleapis.com) KHÔNG nhận API key — đòi OAuth2/ADC
-            # (`gcloud auth application-default login`). Dùng khi vùng không có free tier
-            # Developer API nhưng có credit Cloud/Vertex ($300 trial).
-            # Mặc định false → Developer API (generativelanguage) bằng api_key.
-            use_vertex = os.getenv("GEMINI_USE_VERTEX", "false").lower() == "true"
-            if use_vertex:
-                self._gemini_client = genai.Client(
-                    vertexai=True,
-                    project=os.getenv("GEMINI_VERTEX_PROJECT"),
-                    location=os.getenv("GEMINI_VERTEX_LOCATION", "us-central1"),
-                )
-            else:
-                self._gemini_client = genai.Client(api_key=self._gemini_api_key)
-
-        gem_model = _gemini_model_for(model)
-        logger.info("Gemini fallback: model=%s", gem_model)
-        response = self._gemini_client.models.generate_content(
-            model=gem_model,
-            contents=user_text,
-            config=types.GenerateContentConfig(
-                system_instruction=system_text or None,
-                temperature=temperature or 0.0,
-                max_output_tokens=max_tokens,
-            ),
+            self._gemini_client = _build_gemini_client(self._gemini_api_key)
+        return _gemini_complete(
+            self._gemini_client, model=model, system_text=system_text,
+            user_text=user_text, max_tokens=max_tokens, temperature=temperature,
         )
-        return (response.text or "").strip()
+
+
+# ---------------------------------------------------------------------------
+# Lõi gọi Gemini — dùng chung cho fallback (Claude→Gemini) và Gemini-only
+# ---------------------------------------------------------------------------
+
+def _build_gemini_client(api_key: str | None):
+    """Khởi tạo google-genai client (import lazy). Vertex (ADC) hoặc Developer (api_key).
+
+    GEMINI_USE_VERTEX=true → Vertex AI qua ADC (project+location, KHÔNG api_key — Vertex
+    đòi OAuth2/ADC qua `gcloud auth application-default login`; dùng credit Cloud/$300).
+    Mặc định false → Developer API (generativelanguage) bằng api_key.
+    """
+    from google import genai
+
+    if os.getenv("GEMINI_USE_VERTEX", "false").lower() == "true":
+        return genai.Client(
+            vertexai=True,
+            project=os.getenv("GEMINI_VERTEX_PROJECT"),
+            location=os.getenv("GEMINI_VERTEX_LOCATION", "us-central1"),
+        )
+    return genai.Client(api_key=api_key)
+
+
+def _gemini_complete(gemini_client, *, model, system_text, user_text,
+                     max_tokens, temperature) -> str:
+    """Một lượt generate qua google-genai, trả về text."""
+    from google.genai import types
+
+    gem_model = _gemini_model_for(model)
+    logger.info("Gemini call: model=%s", gem_model)
+    response = gemini_client.models.generate_content(
+        model=gem_model,
+        contents=user_text,
+        config=types.GenerateContentConfig(
+            system_instruction=system_text or None,
+            temperature=temperature or 0.0,
+            max_output_tokens=max_tokens,
+        ),
+    )
+    return (response.text or "").strip()
+
+
+class GeminiClient:
+    """Client Gemini-only — luôn gọi Gemini (KHÔNG đụng Claude). Mode "gemini" end-to-end.
+
+    Expose cùng interface `client.messages.create(...)` → object có `.content[0].text`,
+    nên thay được `anthropic.Anthropic` ở mọi call site (planner + generator).
+    """
+
+    def __init__(self, gemini_api_key: str | None = None) -> None:
+        self._gemini_api_key = gemini_api_key
+        self._gemini_client = None  # lazy
+        self.messages = _Messages(self)
+
+    def _create(self, **kwargs: Any) -> Any:
+        if self._gemini_client is None:
+            self._gemini_client = _build_gemini_client(self._gemini_api_key)
+        text = _gemini_complete(
+            self._gemini_client,
+            model=kwargs.get("model", ""),
+            system_text=_extract_system_text(kwargs.get("system")),
+            user_text=_extract_user_text(kwargs.get("messages")),
+            max_tokens=kwargs.get("max_tokens"),
+            temperature=kwargs.get("temperature", 0.0),
+        )
+        return SimpleNamespace(content=[SimpleNamespace(text=text)])

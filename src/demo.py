@@ -237,11 +237,12 @@ def main() -> int:
     parser.add_argument("--verify-tier", type=int, default=1, choices=[0, 1, 2],
                         help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
                              "2=grounding + LLM support judge (TỐN Haiku API).")
-    parser.add_argument("--llm-fallback", action=argparse.BooleanOptionalAction,
-                        default=True,
-                        help="Dự phòng Gemini khi Claude API sập (mặc định BẬT cho demo; "
-                             "tự degrade về Claude nếu thiếu GEMINI_API_KEY). "
-                             "Dùng --no-llm-fallback để tắt.")
+    parser.add_argument("--llm-mode",
+                        choices=["claude", "claude-fallback", "gemini"],
+                        default="claude-fallback",
+                        help="Mode LLM: 'claude' thuần | 'claude-fallback' Claude + Gemini "
+                             "khi drop (mặc định demo) | 'gemini' end-to-end. "
+                             "Fallback tự degrade về Claude nếu thiếu cấu hình Gemini.")
     args = parser.parse_args()
 
     # Setup logging
@@ -276,7 +277,7 @@ def main() -> int:
                 response_mode=None if args.mode == "auto" else args.mode,
                 verify=args.verify,
                 verify_tier=args.verify_tier,
-                llm_fallback=args.llm_fallback,
+                llm_mode=args.llm_mode,
             )
         except _anthropic.APIStatusError as e:
             elapsed = time.perf_counter() - t_start

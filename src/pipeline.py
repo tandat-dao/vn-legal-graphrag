@@ -107,10 +107,11 @@ class PipelineResult(TypedDict):
 # Clients factory
 # ---------------------------------------------------------------------------
 
-def _build_clients(llm_fallback: bool = False) -> tuple:
+def _build_clients(llm_mode: str = "claude") -> tuple:
     """Khởi tạo Neo4j driver, Qdrant client, LLM client, embedding model từ .env.
 
-    llm_fallback=True → bọc Gemini fallback (chỉ DEMO; eval để False = thuần Claude).
+    llm_mode: "claude" (eval, thuần) | "claude-fallback" (Claude+Gemini drop) |
+    "gemini" (end-to-end). Mặc định "claude" → eval reproducible.
     """
     neo4j_driver = GraphDatabase.driver(
         os.getenv("NEO4J_URI", "bolt://localhost:7687"),
@@ -120,7 +121,7 @@ def _build_clients(llm_fallback: bool = False) -> tuple:
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = make_llm_client(enable_fallback=llm_fallback)
+    anthropic_client = make_llm_client(mode=llm_mode)
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
@@ -144,7 +145,7 @@ def run_pipeline(
     response_mode: str | None = None,
     verify: bool = False,
     verify_tier: int = 1,
-    llm_fallback: bool = False,
+    llm_mode: str = "claude",
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -166,7 +167,7 @@ def run_pipeline(
     # Lazy init clients
     _own_clients = neo4j_driver is None
     if _own_clients:
-        neo4j_driver, qdrant_client, anthropic_client, model = _build_clients(llm_fallback)
+        neo4j_driver, qdrant_client, anthropic_client, model = _build_clients(llm_mode)
 
     try:
         # --- TASK-10: Query Planning ---

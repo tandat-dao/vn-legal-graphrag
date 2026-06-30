@@ -31,31 +31,48 @@ def make_anthropic_client(api_key: str | None = None) -> anthropic.Anthropic:
     )
 
 
-def make_llm_client(api_key: str | None = None, *, enable_fallback: bool | None = None):
-    """Client LLM cho retrieval/demo path — Anthropic thuần hoặc bọc Gemini fallback.
+VALID_LLM_MODES = ("claude", "claude-fallback", "gemini")
 
-    enable_fallback:
-      - None (mặc định): đọc env `LLM_FALLBACK_ENABLED` (mặc định "false").
-      - True/False: override tường minh.
 
-    QUAN TRỌNG: mặc định TẮT để EVAL luôn thuần Claude (reproducible). Chỉ DEMO
-    bật fallback. Thiếu `GEMINI_API_KEY` → tự degrade về Anthropic thuần + cảnh báo.
+def make_llm_client(api_key: str | None = None, *, mode: str | None = None):
+    """Client LLM cho retrieval/demo path — chọn 1 trong 3 mode.
+
+    mode:
+      - "claude" (MẶC ĐỊNH): thuần Claude, KHÔNG fallback. Dùng cho EVAL → reproducible.
+      - "claude-fallback": Claude chính + Gemini khi Claude drop (lỗi hạ tầng).
+      - "gemini": Gemini end-to-end (planner + generator chạy Gemini, KHÔNG đụng Claude).
+      - None → đọc env `LLM_MODE` (mặc định "claude").
+
+    QUAN TRỌNG: mặc định "claude" để EVAL luôn thuần Claude. Demo chọn mode khác.
+    Thiếu cấu hình Gemini (không key + không vertex) → claude-fallback tự degrade về
+    Claude thuần + cảnh báo.
     """
-    anthropic_client = make_anthropic_client(api_key)
-
-    if enable_fallback is None:
-        enable_fallback = os.getenv("LLM_FALLBACK_ENABLED", "false").lower() == "true"
-    if not enable_fallback:
-        return anthropic_client
+    if mode is None:
+        mode = os.getenv("LLM_MODE", "claude").lower()
+    if mode not in VALID_LLM_MODES:
+        logger.warning(f"make_llm_client: mode={mode!r} không hợp lệ → dùng 'claude'")
+        mode = "claude"
 
     gemini_key = os.getenv("GEMINI_API_KEY")
-    if not gemini_key:
-        logger.warning(
-            "LLM_FALLBACK_ENABLED bật nhưng thiếu GEMINI_API_KEY → chạy Anthropic thuần"
-        )
+    use_vertex = os.getenv("GEMINI_USE_VERTEX", "false").lower() == "true"
+    gemini_ready = bool(gemini_key) or use_vertex  # vertex dùng ADC, không cần api_key
+
+    if mode == "gemini":
+        from src.utils.gemini_fallback import GeminiClient
+        logger.info("LLM client: GEMINI end-to-end")
+        return GeminiClient(gemini_key)
+
+    anthropic_client = make_anthropic_client(api_key)
+    if mode == "claude":
         return anthropic_client
 
+    # claude-fallback
+    if not gemini_ready:
+        logger.warning(
+            "mode=claude-fallback nhưng thiếu cấu hình Gemini (GEMINI_API_KEY/Vertex) "
+            "→ chạy Anthropic thuần"
+        )
+        return anthropic_client
     from src.utils.gemini_fallback import FallbackLLMClient
-
-    logger.info("LLM client: BẬT Gemini fallback (dự phòng khi Claude sập)")
+    logger.info("LLM client: Claude + Gemini fallback (dự phòng khi Claude sập)")
     return FallbackLLMClient(anthropic_client, gemini_key)

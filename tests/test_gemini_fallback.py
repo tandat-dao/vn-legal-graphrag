@@ -12,6 +12,7 @@ import pytest
 
 from src.utils.gemini_fallback import (
     FallbackLLMClient,
+    GeminiClient,
     _extract_system_text,
     _extract_user_text,
     _gemini_model_for,
@@ -101,25 +102,56 @@ def test_should_fallback_connection_error():
 
 # --- Factory gate ---------------------------------------------------------
 
-def test_factory_fallback_off_tra_anthropic_thuan(monkeypatch):
+def test_factory_mode_claude_tra_anthropic_thuan(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
-    client = make_llm_client(enable_fallback=False)
+    client = make_llm_client(mode="claude")
     assert isinstance(client, anthropic.Anthropic)
     assert not isinstance(client, FallbackLLMClient)
 
 
-def test_factory_fallback_on_thieu_gemini_key_degrade(monkeypatch):
+def test_factory_mode_fallback_thieu_gemini_degrade(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-    client = make_llm_client(enable_fallback=True)
+    monkeypatch.delenv("GEMINI_USE_VERTEX", raising=False)
+    client = make_llm_client(mode="claude-fallback")
     assert isinstance(client, anthropic.Anthropic)   # degrade về Claude thuần
 
 
-def test_factory_fallback_on_co_gemini_key(monkeypatch):
+def test_factory_mode_fallback_co_gemini_key(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     monkeypatch.setenv("GEMINI_API_KEY", "gem-key")
-    client = make_llm_client(enable_fallback=True)
+    client = make_llm_client(mode="claude-fallback")
     assert isinstance(client, FallbackLLMClient)
+
+
+def test_factory_mode_fallback_vertex_khong_can_key(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.setenv("GEMINI_USE_VERTEX", "true")   # vertex dùng ADC, không cần api_key
+    client = make_llm_client(mode="claude-fallback")
+    assert isinstance(client, FallbackLLMClient)
+
+
+def test_factory_mode_gemini_end_to_end(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "gem-key")
+    client = make_llm_client(mode="gemini")
+    assert isinstance(client, GeminiClient)
+
+
+def test_factory_mode_invalid_fallback_claude(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    client = make_llm_client(mode="khong-hop-le")
+    assert isinstance(client, anthropic.Anthropic)
+
+
+def test_gemini_client_always_gemini(monkeypatch):
+    """GeminiClient.messages.create luôn gọi Gemini (mock _gemini_complete)."""
+    import src.utils.gemini_fallback as gf
+    monkeypatch.setattr(gf, "_build_gemini_client", lambda key: object())
+    monkeypatch.setattr(gf, "_gemini_complete", lambda c, **kw: "GEMINI_E2E")
+    client = GeminiClient("gem-key")
+    resp = client.messages.create(model="m", messages=[{"role": "user", "content": "u"}])
+    assert resp.content[0].text == "GEMINI_E2E"
 
 
 # --- Helpers dịch request -------------------------------------------------
