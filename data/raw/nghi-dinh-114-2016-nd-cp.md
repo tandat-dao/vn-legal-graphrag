@@ -14,14 +14,6 @@ amended_by_norms: null
 summary: "Nghị định 114/2016/NĐ-CP (tier 2, toàn quốc, hiệu lực từ 01/01/2017) quy định lệ phí đăng ký nuôi con nuôi và lệ phí cấp giấy phép hoạt động của tổ chức con nuôi nước ngoài tại Việt Nam. Mức thu: lệ phí nuôi con nuôi trong nước 400.000 đồng/trường hợp; nuôi con nuôi nước ngoài (người Việt định cư hoặc người nước ngoài thường trú ở nước ngoài) 9.000.000 đồng/trường hợp; người nước ngoài thường trú ở Việt Nam 4.500.000 đồng/trường hợp; tại Cơ quan đại diện 150 USD/trường hợp; cấp giấy phép tổ chức con nuôi nước ngoài lần đầu 65.000.000 đồng, gia hạn 35.000.000 đồng. Miễn lệ phí cho cha dượng/mẹ kế, cô/cậu/dì/chú/bác nhận cháu, người nhận trẻ khuyết tật/HIV/bệnh hiểm nghèo và người có công cách mạng. Nghị định này thay thế các quy định về lệ phí trong NĐ 19/2011/NĐ-CP."
 ---
 
-<!-- NỘI DUNG CẦN ĐIỀN - Xem format tại data/raw/luat-dat-dai-2024.md -->
-<!-- Heading convention bắt buộc:
-     ## Điều X. [Tên điều]
-     ### Khoản N.
-     #### Điểm a.
-     ##### Tiết 1.
--->
-
 ## Điều 1. Phạm vi điều chỉnh
 
 Nghị định này quy định người nộp, cơ quan thu lệ phí đăng ký nuôi con nuôi, lệ phí cấp giấy phép hoạt động của tổ chức nuôi con nuôi nước ngoài; miễn, giảm lệ phí đăng ký nuôi con nuôi; mức thu, chế độ thu, nộp, quản lý lệ phí; kinh phí thực hiện giải quyết việc nuôi con nuôi và cấp giấy phép hoạt động của tổ chức con nuôi nước ngoài tại Việt Nam.

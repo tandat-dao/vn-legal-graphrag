@@ -14,14 +14,6 @@ amended_by_norms: null
 summary: "Luật Nuôi con nuôi 52/2010/QH12 (tier 1, toàn quốc, hiệu lực từ 01/01/2011) là văn bản gốc quy định toàn diện về nuôi con nuôi tại Việt Nam, bao gồm: điều kiện đối với người được nhận làm con nuôi (dưới 16 tuổi, hoặc 16-18 tuổi nếu được cha dượng/mẹ kế/cô/cậu/dì/chú/bác nhận) và điều kiện đối với người nhận con nuôi (hơn con nuôi từ 20 tuổi, có năng lực hành vi dân sự, có điều kiện kinh tế sức khỏe); thẩm quyền đăng ký nuôi con nuôi trong nước (UBND cấp xã) và có yếu tố nước ngoài (UBND cấp tỉnh, Sở Tư pháp); trình tự thủ tục giải quyết từng trường hợp; quyền nghĩa vụ của cha mẹ nuôi, con nuôi và cha mẹ đẻ; quy định về tổ chức con nuôi nước ngoài hoạt động tại Việt Nam; và điều khoản chuyển tiếp cho việc đăng ký lại nuôi con nuôi phát sinh trước ngày Luật có hiệu lực."
 ---
 
-<!-- NỘI DUNG CẦN ĐIỀN - Xem format tại data/raw/luat-dat-dai-2024.md -->
-<!-- Heading convention bắt buộc:
-     ## Điều X. [Tên điều]
-     ### Khoản N.
-     #### Điểm a.
-     ##### Tiết 1.
--->
-
 ## Điều 1. Phạm vi điều chỉnh 
 
 Luật này quy định nguyên tắc, điều kiện nuôi con nuôi; thẩm quyền, trình tự, thủ tục giải quyết việc nuôi con nuôi; quyền, nghĩa vụ của cha mẹ nuôi, con nuôi và cha mẹ đẻ; trách nhiệm của cơ quan, tổ chức trong việc nuôi con nuôi. 
@@ -739,6 +731,7 @@ Sau khi hoàn tất các thủ tục nhận trẻ em nước ngoài làm con nu�
 ## Điều 41. Người nước ngoài thường trú ở Việt Nam nhận con nuôi 
 
 ### Khoản 1. 
+
 Quy định tại các Điều 14, 15, 16, 17, 18, 21, 23, 24, 25, 26 và 27 của Luật này được áp dụng đối với người nước ngoài thường trú ở Việt Nam nhận con nuôi ở Việt Nam.
 
 ### Khoản 2. 

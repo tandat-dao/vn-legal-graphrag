@@ -1,5 +1,5 @@
 ---
-id: "nghi-quyet-124-2016-nq-hdnd-tp-hcm"
+id: "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai"
 title: "Nghị quyết 124/2016/NQ-HĐND TP.HCM"
 so_hieu: "124/2016/NQ-HĐND"
 tier: 4

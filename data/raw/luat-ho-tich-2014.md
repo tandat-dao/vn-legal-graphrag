@@ -14,14 +14,6 @@ amended_by_norms: null
 summary: "Luật Hộ tịch 60/2014/QH13 (tier 1, toàn quốc, hiệu lực từ 01/01/2016) là văn bản gốc quy định toàn diện về hộ tịch tại Việt Nam, bao gồm: nội dung các sự kiện hộ tịch cần đăng ký (khai sinh, kết hôn, giám hộ, nhận cha mẹ con, thay đổi cải chính hộ tịch, khai tử); thẩm quyền đăng ký theo 3 cấp (UBND cấp xã, UBND cấp huyện, Cơ quan đại diện); trình tự thủ tục đăng ký từng loại việc hộ tịch; quản lý Cơ sở dữ liệu hộ tịch điện tử; cấp bản sao trích lục hộ tịch và giấy xác nhận tình trạng hôn nhân. Đây là văn bản Tier 1 được tất cả các Nghị định và Thông tư về hộ tịch implement."
 ---
 
-<!-- NỘI DUNG CẦN ĐIỀN - Xem format tại data/raw/luat-dat-dai-2024.md -->
-<!-- Heading convention bắt buộc:
-     ## Điều X. [Tên điều]
-     ### Khoản N.
-     #### Điểm a.
-     ##### Tiết 1.
--->
-
 ## Điều 1. Phạm vi điều chỉnh
 
 ### Khoản 1.
@@ -39,6 +31,7 @@ Thẩm quyền, thủ tục giải quyết các việc về quốc tịch, nuôi
 Hộ tịch là những sự kiện được quy định tại Điều 3 của Luật này, xác định tình trạng nhân thân của cá nhân từ khi sinh ra đến khi chết.
 
 ### Khoản 2. 
+
 Đăng ký hộ tịch là việc cơ quan nhà nước có thẩm quyền xác nhận hoặc ghi vào Sổ hộ tịch các sự kiện hộ tịch của cá nhân, tạo cơ sở pháp lý để Nhà nước bảo hộ quyền, lợi ích hợp pháp của cá nhân, thực hiện quản lý về dân cư.
 
 ## Điều 3. Nội dung đăng ký hộ tịch
@@ -196,7 +189,7 @@ Người chưa thành niên, người đã thành niên mất năng lực hành 
 
 Thực hiện các việc hộ tịch theo quy định tại khoản 2 và khoản 4 Điều 3 của Luật này;
 
-#### ĐIểm d. 
+#### Điểm d. 
 
 Đăng ký khai sinh cho trẻ em sinh ra tại Việt Nam có cha hoặc mẹ là công dân Việt Nam thường trú tại khu vực biên giới, còn người kia là công dân của nước láng giềng thường trú tại khu vực biên giới với Việt Nam; kết hôn, nhận cha, mẹ, con của công dân Việt Nam thường trú ở khu vực biên giới với công dân của nước láng giềng thường trú ở khu vực biên giới với Việt Nam; khai tử cho người nước ngoài cư trú ổn định lâu dài tại khu vực biên giới của Việt Nam.
 
@@ -235,7 +228,7 @@ Nhà nước có chính sách, biện pháp đồng bộ, tạo điều kiện �
 Nhà nước bảo đảm ngân sách, cơ sở vật chất, nguồn nhân lực, đầu tư phát triển công nghệ thông tin cho hoạt động đăng ký và quản lý hộ tịch.
 
 ## Điều 9. Phương thức yêu cầu và tiếp nhận yêu cầu đăng ký hộ tịch
-### Khoản1. 
+### Khoản 1. 
 
 Khi yêu cầu đăng ký hộ tịch, cấp bản sao trích lục hộ tịch, cá nhân nộp hồ sơ trực tiếp cho cơ quan đăng ký hộ tịch hoặc gửi hồ sơ qua hệ thống bưu chính hoặc gửi qua hệ thống đăng ký hộ tịch trực tuyến.
 
@@ -285,7 +278,7 @@ Cung cấp thông tin, tài liệu sai sự thật; làm hoặc sử dụng gi�
 
 Đe dọa, cưỡng ép, cản trở việc thực hiện quyền, nghĩa vụ đăng ký hộ tịch;
 
-#### ĐIểm c. 
+#### Điểm c. 
 
 Can thiệp trái pháp luật vào hoạt động đăng ký hộ tịch;
 
@@ -332,15 +325,15 @@ Trường hợp cán bộ, công chức vi phạm quy định tại khoản 1 Đ
 
 Nội dung đăng ký khai sinh gồm:
 
-#### Điều a. 
+#### Điểm a. 
 
 Thông tin của người được đăng ký khai sinh: Họ, chữ đệm và tên; giới tính; ngày, tháng, năm sinh; nơi sinh; quê quán; dân tộc; quốc tịch;
 
-#### Điều b. 
+#### Điểm b. 
 
 Thông tin của cha, mẹ người được đăng ký khai sinh: Họ, chữ đệm và tên; năm sinh; dân tộc; quốc tịch; nơi cư trú;
 
-#### Điều c. 
+#### Điểm c. 
 
 Số định danh cá nhân của người được đăng ký khai sinh.
 
@@ -578,7 +571,7 @@ Trẻ em được sinh ra ở nước ngoài chưa được đăng ký khai sinh
 
 Có cha và mẹ là công dân Việt Nam;
 
-#### b. 
+#### Điểm b. 
 
 Có cha hoặc mẹ là công dân Việt Nam.
 
@@ -901,6 +894,7 @@ Thanh tra, kiểm tra, giải quyết khiếu nại, tố cáo và xử lý vi p
 Thống kê hộ tịch;
 
 #### Điểm đ. 
+
 Hợp tác quốc tế về hộ tịch.
 
 ## Điều 66. Trách nhiệm của Bộ Tư pháp
@@ -933,7 +927,7 @@ Bộ Ngoại giao phối hợp với Bộ Tư pháp thực hiện quản lý nh�
 
 Quy định, hướng dẫn, chỉ đạo, kiểm tra, thanh tra công tác đăng ký và quản lý hộ tịch tại các Cơ quan đại diện;
 
-#### ĐIểm b. 
+#### Điểm b. 
 
 Tổ chức việc bồi dưỡng nghiệp vụ hộ tịch cho viên chức ngoại giao, lãnh sự;
 

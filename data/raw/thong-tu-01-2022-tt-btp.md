@@ -10,9 +10,8 @@ valid_from: "2022-02-18"
 valid_to: null
 source_url: "https://vbpl.vn/van-ban/chi-tiet/thong-tu-so-01-2022-tt-btp-quy-dinh-chi-tiet-mot-so-dieu-va-bien-phap-thi-hanh-nghi-dinh-so-87-2020-nd-cp-ngay-28-thang-7-nam-2020-cua-chinh-phu-quy-dinh-ve-co-so-du-lieu-ho-tich-dien-tu-dang-ky-ho-tich-truc-tuyen--152812?tabs=toan-van"
 source_vbhn: null
-amended_by_norms: null
+amended_by_norms:
   - "thong-tu-03-2023-tt-btp"
-  
 summary: "Thông tư 01/2022/TT-BTP (tier 3, toàn quốc) quy định chi tiết thi hành NĐ 87/2020/NĐ-CP về: kết nối chia sẻ thông tin giữa Cơ sở dữ liệu hộ tịch điện tử với Cơ sở dữ liệu quốc gia về dân cư và các hệ thống khác; quy trình nộp, tiếp nhận, trả kết quả đăng ký hộ tịch trực tuyến; cấp bản sao trích lục hộ tịch; xác nhận thông tin hộ tịch; số hóa Sổ hộ tịch; tạo lập bản ghi dữ liệu hộ tịch điện tử cá nhân; điều chỉnh và xóa dữ liệu hộ tịch điện tử."
 ---
 

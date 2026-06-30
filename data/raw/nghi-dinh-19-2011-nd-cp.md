@@ -17,14 +17,6 @@ amended_by_norms:
 summary: "Nghị định 19/2011/NĐ-CP (tier 2, toàn quốc) quy định chi tiết thi hành Luật Nuôi con nuôi về: thẩm quyền và trình tự thủ tục đăng ký nuôi con nuôi trong nước (UBND cấp xã), nuôi con nuôi có yếu tố nước ngoài (UBND cấp tỉnh quyết định, Sở Tư pháp đăng ký), và nuôi con nuôi tại Cơ quan đại diện; danh mục trẻ em khuyết tật và mắc bệnh hiểm nghèo được nhận đích danh làm con nuôi nước ngoài (miễn thủ tục giới thiệu); tiếp nhận và quản lý hỗ trợ nhân đạo cho cơ sở nuôi dưỡng; mức thu và phân bổ chi phí giải quyết nuôi con nuôi nước ngoài (50 triệu đồng/trường hợp, Bộ Tư pháp thu, 95% chuyển về ngân sách tỉnh); thủ tục cấp giấy phép hoạt động cho tổ chức con nuôi nước ngoài tại Việt Nam; và thủ tục đăng ký lại nuôi con nuôi phát sinh trước 01/01/2011 chưa đăng ký. Đã được sửa đổi bởi NĐ 114/2016, NĐ 24/2019 và NĐ 06/2025."
 ---
 
-<!-- NỘI DUNG CẦN ĐIỀN - Xem format tại data/raw/luat-dat-dai-2024.md -->
-<!-- Heading convention bắt buộc:
-     ## Điều X. [Tên điều]
-     ### Khoản N.
-     #### Điểm a.
-     ##### Tiết 1.
--->
-
 ## Điều 1. Phạm vi điều chỉnh
 
 ### Khoản 1.
@@ -251,9 +243,11 @@ Trường hợp cha, mẹ nuôi thay đổi nơi thường trú khi chưa hết 
 <!-- amended_by: 06/2025/NĐ-CP, khoản 6 Điều 1, hiệu lực: 08/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ## Điều 11. (được bãi bỏ)
+
 <!-- amended_by: 24/2019/NĐ-CP, khoản 3 Điều 2, hiệu lực: 25/04/2019, nội dung: bãi bỏ điều này -->
 
 ## Điều 12. (được bãi bỏ)
+
 <!-- amended_by: 24/2019/NĐ-CP, khoản 3 Điều 2, hiệu lực: 25/04/2019, nội dung: bãi bỏ điều này -->
 
 ## Điều 13. Hồ sơ của người nhận con nuôi
@@ -388,6 +382,7 @@ Khi thẩm định hồ sơ, nếu thấy cần thiết, Bộ Tư pháp lấy ý
 <!-- amended_by: 06/2025/NĐ-CP, điểm a khoản 1 Điều 2, hiệu lực: 08/01/2025, nội dung: Cụm từ "Cục Con nuôi" được thay thế bởi cụm từ "Bộ Tư pháp" -->
 
 ### Khoản 3. 
+
 Hồ sơ của người nhận con nuôi được chấp thuận nếu đáp ứng các yêu cầu quy định tại khoản 1 và khoản 2 Điều này; trường hợp không chấp thuận, Bộ Tư pháp trả lại hồ sơ và nêu rõ lý do bằng văn bản.
 <!-- amended_by: 06/2025/NĐ-CP, điểm a khoản 1 Điều 2, hiệu lực: 08/01/2025, nội dung: Cụm từ "Cục Con nuôi" được thay thế bởi cụm từ "Bộ Tư pháp" -->
 
@@ -420,6 +415,7 @@ Sau khi giới thiệu trẻ em làm con nuôi, Sở Tư pháp báo cáo Ủy ba
 <!-- amended_by: 06/2025/NĐ-CP, điểm a khoản 1 Điều 2, hiệu lực: 08/01/2025, nội dung: Cụm từ "Cục Con nuôi" được thay thế bởi cụm từ "Bộ Tư pháp" -->
 
 ### Khoản 3.
+
 Trong khi kiểm tra kết quả giải quyết việc nuôi con nuôi nước ngoài theo quy định tại khoản 2 Điều 28 và khoản 2 Điều 36 của Luật Nuôi con nuôi, Bộ Tư pháp lấy ý kiến của chuyên gia tâm lý, y tế, gia đình, xã hội trong trường hợp cần thiết. Nếu trẻ em có đủ điều kiện để cho làm con nuôi ở nước ngoài, việc giải quyết cho trẻ em làm con nuôi bảo đảm đúng trình tự, thủ tục quy định và đáp ứng lợi ích tốt nhất của trẻ em, Bộ Tư pháp thông báo bằng văn bản cho người nhận con nuôi, Cơ quan Trung ương về nuôi con nuôi của nước nơi người nhận con nuôi thường trú kèm theo các văn bản, giấy tờ sau:
 
 #### Điểm a. 
@@ -439,9 +435,11 @@ Quyết định tiếp nhận đối với trẻ em ở cơ sở nuôi dưỡng;
 Giấy khám sức khoẻ của trẻ em;
 
 #### Điểm đ.
+
 Văn bản lấy ý kiến của cha, mẹ đẻ hoặc người giám hộ, ý kiến của trẻ em đủ 09 tuổi trở lên về việc cho trẻ em làm con nuôi; văn bản thể hiện ý kiến của Giám đốc cơ sở nuôi dưỡng về việc cho trẻ em làm con nuôi đối với trường hợp trẻ em sống tại cơ sở nuôi dưỡng. 
 
 #### Điểm e.
+
 Trường hợp trẻ em không đủ điều kiện để cho làm con nuôi, việc giải quyết cho trẻ em làm con nuôi không bảo đảm đúng trình tự, thủ tục theo quy định hoặc không đáp ứng lợi ích tốt nhất của trẻ em, Bộ Tư pháp thông báo cho Sở Tư pháp.
 <!-- amended_by: 06/2025/NĐ-CP, khoản 12 Điều 1, hiệu lực: 08/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 <!-- amended_by: 24/2019/NĐ-CP, khoản 8 Điều 1, hiệu lực: 25/04/2019, nội dung: sửa đổi, bổ sung khoản này -->
@@ -676,9 +674,11 @@ Bản sao giấy phép do cơ quan có thẩm quyền của nước nơi tổ ch
 Báo cáo tình hình hoạt động trong lĩnh vực con nuôi quốc tế trong 03 năm gần nhất, bao gồm cả tình hình thu, chi tài chính về con nuôi quốc tế, không vi phạm pháp luật và được cơ quan có thẩm quyền của nước nơi tổ chức được thành lập xác nhận; trường hợp đã hoạt động trong lĩnh vực nuôi con nuôi nước ngoài tại Việt Nam, thì phải có báo cáo về tình hình hoạt động tại Việt Nam;
 
 #### Điểm đ. (được bãi bỏ)
+
 <!-- amended_by: 24/2019/NĐ-CP, khoản 3 Điều 2, hiệu lực: 25/04/2019, nội dung: bãi bỏ điểm này -->
 
 #### Điểm e. (được bãi bỏ)
+
 <!-- amended_by: 24/2019/NĐ-CP, khoản 3 Điều 2, hiệu lực: 25/04/2019, nội dung: bãi bỏ điểm này -->
 
 #### Điểm g. 
@@ -693,7 +693,7 @@ Giấy tờ quy định tại khoản 1 Điều này được lập thành 02 b�
 
 ## Điều 32. Tiêu chuẩn của người đứng đầu Văn phòng con nuôi nước ngoài tại Việt Nam
 
-### KHoản 1. 
+### Khoản 1. 
 
 Người đứng đầu Văn phòng con nuôi nước ngoài tại Việt Nam phải đáp ứng đủ các tiêu chuẩn sau đây:
 
@@ -719,7 +719,7 @@ Một người chỉ được đứng đầu một Văn phòng con nuôi nước
 
 ## Điều 33. Trình tự cấp giấy phép cho tổ chức con nuôi nước ngoài hoạt động tại Việt Nam
 
-### KHoản 1.
+### Khoản 1.
 
 Trong thời hạn 60 ngày, kể từ ngày nhận đủ hồ sơ hợp lệ, Bộ Tư pháp kiểm tra, thẩm định hồ sơ; phỏng vấn để kiểm tra, đánh giá về tiêu chuẩn của người dự kiến đứng đầu Văn phòng con nuôi nước ngoài tại Việt Nam; kiểm tra, đánh giá về điều kiện, năng lực chuyên môn của tổ chức và đội ngũ nhân viên của tổ chức con nuôi nước ngoài; đề nghị Bộ Công an cho ý kiến.
 <!-- amended_by: 06/2025/NĐ-CP, điểm a khoản 17 Điều 1, hiệu lực: 08/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
@@ -786,9 +786,11 @@ Tổ chức con nuôi nước ngoài bị thu hồi Giấy phép hoạt động 
 
 Tổ chức con nuôi nước ngoài đã chấm dứt hoạt động tại nước nơi tổ chức đó được thành lập;
 #### Điểm b. 
+
 Cơ quan có thẩm quyền của nước ngoài không cho phép tổ chức tiếp tục hoạt động tại Việt Nam;
 
 #### Điểm c. 
+
 Tổ chức con nuôi nước ngoài đề nghị chấm dứt hoạt động tại Việt Nam trước thời hạn ghi trong Giấy phép do Bộ Tư pháp cấp;
 
 #### Điểm d. 
@@ -822,6 +824,7 @@ Bộ Tư pháp chủ trì, phối hợp với Bộ Công an và các Bộ, ngàn
 ## Điều 38. Nguyên tắc thu, nộp, quản lý và sử dụng 
 
 ### Khoản 1. (được bãi bỏ)
+
 <!-- amended_by: 114/2016/NĐ-CP, khoản 2 Điều 10, hiệu lực: 01/01/2017, nội dung: bãi bỏ khoản này -->
 
 ### Khoản 2. 

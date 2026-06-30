@@ -16,14 +16,6 @@ amended_by_norms: null
 summary: "Nghị định 120/2025/NĐ-CP (tier 2, toàn quốc, hiệu lực từ 01/07/2025) quy định việc phân định thẩm quyền của chính quyền địa phương theo mô hình 2 cấp (bỏ cấp huyện) trong lĩnh vực quản lý nhà nước của Bộ Tư pháp. Về hộ tịch: toàn bộ thẩm quyền đăng ký hộ tịch trước đây của UBND cấp huyện và Phòng Tư pháp được chuyển giao về UBND cấp xã; người dân có quyền lựa chọn nộp hồ sơ tại nơi cư trú và không cần có mặt ký Sổ hộ tịch đối với hầu hết các việc hộ tịch. Về nuôi con nuôi: UBND cấp xã tiếp nhận hồ sơ và xác nhận đủ điều kiện nhận trẻ em nước láng giềng làm con nuôi. Nghị định cũng quy định trình tự chuyển tiếp xử lý hồ sơ còn dở dang từ cấp huyện sang cấp xã và cấp tỉnh kể từ ngày 01/07/2025."
 ---
 
-<!-- NỘI DUNG CẦN ĐIỀN - Xem format tại data/raw/luat-dat-dai-2024.md -->
-<!-- Heading convention bắt buộc:
-     ## Điều X. [Tên điều]
-     ### Khoản N.
-     #### Điểm a.
-     ##### Tiết 1.
--->
-
 ## Điều 1. Phạm vi điều chỉnh
 
 Nghị định này quy định về việc phân định thẩm quyền của chính quyền địa phương theo mô hình tổ chức chính quyền địa phương 02 cấp trong lĩnh vực quản lý nhà nước của Bộ Tư pháp; trình tự, thủ tục thực hiện các thủ tục hành chính khi phân định thẩm quyền từ thẩm quyền của cấp huyện cho cấp xã hoặc cấp tỉnh.
@@ -316,6 +308,7 @@ Thời hạn giải quyết thủ tục đăng ký nhận cha, mẹ, con là 10 
 Thời hạn xác minh, niêm yết việc nhận cha, mẹ, con tại trụ sở Ủy ban nhân dân cấp xã nơi có thẩm quyền giải quyết là 05 ngày làm việc. Thời hạn niêm yết tại trụ sở của Ủy ban nhân dân cấp xã nơi thường trú của người được nhận là cha, mẹ, con là 05 ngày làm việc.
 
 #### Điểm d. 
+
 Thời hạn giải quyết thủ tục ghi vào sổ hộ tịch việc kết hôn, ly hôn, hủy việc kết hôn của công dân Việt Nam đã được giải quyết tại cơ quan có thẩm quyền nước ngoài là 05 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ; trường hợp phải xác minh thì thời hạn kéo dài nhưng không quá 08 ngày làm việc.
 
 ### Khoản 2. Trong trình tự, thủ tục thực hiện tại các quy định nêu tại khoản 1 Mục này, các nhiệm vụ của Ủy ban nhân dân cấp huyện, Chủ tịch Ủy ban nhân dân cấp huyện sẽ được chuyển giao tương ứng cho Ủy ban nhân dân cấp xã, Chủ tịch Ủy ban nhân dân cấp xã; các nhiệm vụ của Phòng Tư pháp, Trưởng phòng Tư pháp, công chức làm công tác hộ tịch cấp huyện sẽ được chuyển giao cho công chức tư pháp - hộ tịch cấp xã.
@@ -370,6 +363,6 @@ Bản chính hoặc bản sao có chứng thực hoặc bản sao kèm theo bả
 
 Hòa giải viên hoặc gia đình hòa giải viên trong trường hợp hòa giải viên bị thiệt hại về tính mạng nộp hồ sơ đề nghị hỗ trợ theo quy định tại khoản 1 Mục này trực tiếp hoặc qua dịch vụ bưu chính đến Ủy ban nhân dân cấp xã nơi đã ra quyết định công nhận hòa giải viên hoặc trực tuyến trên Cổng dịch vụ công quốc gia.
 
-### KHoản 3. 
+### Khoản 3. 
 
 Trong thời hạn 07 ngày làm việc kể từ ngày nhận đủ hồ sơ hợp lệ, Ủy ban nhân dân cấp xã xem xét, ra quyết định hỗ trợ và thực hiện việc chi tiền hỗ trợ. Trường hợp không hỗ trợ thì phải trả lời bằng văn bản và nêu rõ lý do.

@@ -17,13 +17,6 @@ amended_by_norms:
 
 summary: "Nghị định 123/2015/NĐ-CP (tier 2, toàn quốc, hiệu lực từ 01/01/2016) quy định chi tiết thi hành Luật Hộ tịch về: hồ sơ, trình tự đăng ký khai sinh (bao gồm trẻ bị bỏ rơi, trẻ chưa xác định cha mẹ, trẻ sinh ra do mang thai hộ, trẻ sinh ở nước ngoài về cư trú); đăng ký kết hôn (trong nước và có yếu tố nước ngoài tại UBND cấp huyện); cấp Giấy xác nhận tình trạng hôn nhân; đăng ký khai sinh, kết hôn, nhận cha mẹ con, khai tử tại khu vực biên giới; ghi vào Sổ hộ tịch việc kết hôn, ly hôn, hủy hôn nhân đã được giải quyết tại cơ quan nước ngoài; đăng ký lại khai sinh, kết hôn, khai tử; điều kiện thay đổi cải chính hộ tịch; quản lý và sử dụng Sổ hộ tịch trong giai đoạn chuyển tiếp. Đã được sửa đổi bởi NĐ 87/2020, NĐ 104/2022 và NĐ 07/2025."
 ---
-<!-- NỘI DUNG CẦN ĐIỀN - Xem format tại data/raw/luat-dat-dai-2024.md -->
-<!-- Heading convention bắt buộc:
-     ## Điều X. [Tên điều]
-     ### Khoản N.
-     #### Điểm a.
-     ##### Tiết 1.
--->
 
 ## Điều 1. Phạm vi điều chỉnh
 
@@ -43,7 +36,6 @@ Người yêu cầu đăng ký hộ tịch, cấp bản sao trích lục hộ t�
 Người yêu cầu đăng ký khai sinh phải nộp Giấy chứng sinh hoặc giấy tờ thay Giấy chứng sinh theo quy định tại khoản 1 Điều 16 của Luật Hộ tịch; người yêu cầu đăng ký khai tử phải nộp Giấy báo tử hoặc giấy tờ thay Giấy báo tử theo quy định tại khoản 1 Điều 34 của Luật Hộ tịch và tại khoản 2 Điều 4 của Nghị định này.
 Trường hợp người yêu cầu đã nộp bản điện tử Giấy chứng sinh, Giấy báo tử hoặc cơ quan đăng ký hộ tịch đã khai thác được dữ liệu điện tử có ký số của Giấy chứng sinh, Giấy báo tử thì không phải nộp bản giấy.
 <!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
-
 
 ### Khoản 3. 
 
@@ -208,6 +200,7 @@ Người yêu cầu đăng ký khai sinh xuất trình giấy tờ theo quy đ�
 Người yêu cầu đăng ký kết hôn xuất trình giấy tờ theo quy định tại khoản 1 Điều 2 của Nghị định này, nộp giấy tờ theo quy định tại khoản 1 Điều 18 của Luật hộ tịch khi đăng ký kết hôn tại Ủy ban nhân dân cấp xã hoặc giấy tờ theo quy định tại khoản 1 Điều 38 của Luật hộ tịch khi đăng ký kết hôn tại Ủy ban nhân dân cấp huyện và nộp bản chính Giấy xác nhận tình trạng hôn nhân theo quy định sau:
 
 ### Khoản 1. (được bãi bỏ)
+
 <!-- amended_by: 07/2025/NĐ-CP, khoản 10 Điều 2, hiệu lực: 09/01/2019, nội dung: bãi bỏ khoản này -->
 
 ### Khoản 2. 
@@ -232,10 +225,11 @@ Trước ngày 05 tháng 01 của năm sau, công chức làm công tác hộ t�
 ## Điều 12. Lưu trữ Sổ hộ tịch
 
 ### Khoản 1. (được bãi bỏ)
+
 <!-- amended_by: 87/2020/NĐ-CP, khoản 2 Điều 25, hiệu lực: 15/09/2020, nội dung: bãi bỏ khoản này -->
 
-
 ### Khoản 2. (được bãi bỏ)
+
 <!-- amended_by: 87/2020/NĐ-CP, khoản 2 Điều 25, hiệu lực: 15/09/2020, nội dung: bãi bỏ khoản này -->
 
 ### Khoản 3. 
@@ -449,7 +443,6 @@ Nội dung Giấy xác nhận tình trạng hôn nhân phải ghi đúng tình t
 Trường hợp người yêu cầu xác nhận tình trạng hôn nhân đã từng đăng ký thường trú tại nhiều nơi khác nhau, người yêu cầu cung cấp các giấy tờ chứng minh tình trạng hôn nhân tại nơi thường trú trước đây (nếu có). Trên cơ sở các thông tin được cung cấp, cơ quan đăng ký hộ tịch tra cứu thông tin về tình trạng hôn nhân của người yêu cầu xác nhận tình trạng hôn nhân trên Hệ thống thông tin giải quyết thủ tục hành chính cấp tỉnh thông qua kết nối với Cơ sở dữ liệu hộ tịch điện tử, Cơ sở dữ liệu quốc gia về dân cư. Trường hợp không tra cứu được do chưa có thông tin trong Cơ sở dữ liệu thì cơ quan đăng ký hộ tịch phối hợp với các cơ quan có liên quan thực hiện việc xác minh. Thời hạn, phương thức gửi yêu cầu xác minh thực hiện theo quy định tại khoản 5 Điều 3 của Nghị định này.
 <!-- amended_by: 07/2025/NĐ-CP, khoản 6 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 
-
 ### Khoản 5. 
 
 Ngay trong ngày nhận được văn bản trả lời, nếu thấy đủ cơ sở, Uỷ ban nhân dân cấp xã cấp Giấy xác nhận tình trạng hôn nhân cho người yêu cầu theo quy định tại khoản 3 Điều này.
@@ -650,6 +643,7 @@ Văn bản thỏa thuận của cha mẹ lựa chọn quốc tịch cho con theo
 Trường hợp không có giấy tờ quy định tại điểm b khoản 2 Điều này thì thực hiện việc đăng ký khai sinh cho trẻ em theo thủ tục quy định tại khoản 5 Điều 15 của Nghị định này.
 
 ### Khoản 4. 
+
 Ngay trong ngày tiếp nhận yêu cầu, Phòng Tư pháp kiểm tra hồ sơ. Nếu thấy hồ sơ đầy đủ, chính xác và đúng quy định pháp luật thì đăng ký theo trình tự, thủ tục quy định tại khoản 2 Điều 36 của Luật hộ tịch. Nội dung khai sinh được xác định theo quy định tại khoản 1 Điều 4 của Nghị định này.
 
 ## Điều 30. Hồ sơ đăng ký kết hôn
