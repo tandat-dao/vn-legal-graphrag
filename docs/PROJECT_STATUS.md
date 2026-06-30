@@ -1,5 +1,19 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.17 | Cập nhật 2026-06-23**
+**Phiên bản 2.18 | Cập nhật 2026-06-29**
+
+> **v2.18 — Cập nhật 2026-06-29 (Kiến trúc Đánh giá E0–E3 — design spec, chưa triển khai):**
+>
+> **Bối cảnh:** session bàn sâu về phương pháp luận đánh giá. Kết luận: evaluation hiện tại (Full GraphRAG vs Naive RAG) chứng minh hệ thống *tốt*, nhưng chưa chứng minh nó tốt *vì đúng những lý do luận văn claim* (từng thành phần KG giải đúng từng gap). Thiết kế lại toàn bộ khâu đánh giá thành kiến trúc 4 khối, lưu vào **[docs/EVALUATION_ARCHITECTURE.md](EVALUATION_ARCHITECTURE.md)** (design spec để các session sau dựa theo). Quyết định **D-22**.
+>
+> **4 khối (triết lý "Claim → Evidence"):**
+> - **E0 — Tiền đề:** độ tin cậy phép đo. Reproducibility N=3 ✅ + significance (bootstrap CI + Wilcoxon) ✅ đã có; **cần VIẾT** GT provenance + metric validity (làm được ngay, không cần API/corpus).
+> - **E1 — Cơ chế (phần thiếu, quan trọng nhất):** ablation leave-one-out với **double dissociation** — `no-theme`/`no-jurisdiction`/`no-traversal`/`no-temporal` phải sụp ĐÚNG gap tương ứng VÀ ổn định ở gap khác. Build `ablation_config.py` (cờ tắt thành phần trong `run_pipeline`).
+> - **E2 — Hệ thống:** (2a) baseline ladder đa-**trục** — thêm **closed-book** ("có cần retrieval?"), **auto-GraphRAG** ("có cần ontology?" — killer học thuật), **oracle** (trần); (2b) consistency per-domain = mảnh chính Gap 1; (2c) **bỏ BERTScore → người chấm + máy chấm** (chủ-tớ, validated qua kappa).
+> - **E3 — Giới hạn:** failure taxonomy ✅ + negative results (D-12/19/20) ✅ giữ làm mục chính thức + error severity (tham vọng).
+>
+> **Mỗi gap có gói bằng chứng đa nguồn** (ablation + so sánh + bổ trợ). Phân biệt cứng: baseline (thắng) ≠ ablation (sụp) ≠ upper bound (tiến gần).
+>
+> **Trạng thái:** đây là **design spec, CHƯA code**. Làm được ngay (không chờ B): viết E0 methodology, thiết kế `ablation_config.py` + `human_eval.py` rubric, BM25/closed-book/oracle baseline. **Blocker chờ corpus [B]:** chạy ablation suite E1 + E2b consistency + auto-GraphRAG. Đồng bộ với `project_eval_tier1_deferred`.
 
 > **v2.17 — Cập nhật 2026-06-23 (Evaluation Tier 0: mở rộng thang đo $0 — significance + citation behavior; Tier 1 ablation HOÃN tới khi corpus đủ):**
 >
@@ -901,6 +915,7 @@
 **Phase 4 — domain mở rộng:**
 - Test set Hộ tịch + Nuôi con nuôi (chờ [B] đổ data)
 - Mở test set lên ≥40 câu cross-domain để validate hypothesis Gap 1 generalize ngoài Đất đai
+- **Kiến trúc đánh giá E0–E3** ([docs/EVALUATION_ARCHITECTURE.md](EVALUATION_ARCHITECTURE.md), D-22) — design spec hoàn chỉnh; phần làm được ngay: E0 methodology + `ablation_config.py` + rubric `human_eval.py`; phần chờ B: ablation suite E1 + E2b consistency + auto-GraphRAG
 
 **Hướng nghiên cứu nâng cao [A] (precision in / precision out):**
 - **Multi-agent — Verifier agent**: code xong (v2.12, D-18), `verify=False` mặc định; CHƯA đo ablation ±verifier (cần API).
