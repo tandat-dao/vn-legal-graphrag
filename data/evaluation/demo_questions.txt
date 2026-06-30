@@ -1,0 +1,13 @@
+# Danh sách câu hỏi demo cho buổi bảo vệ — Lớp 1 pre-cache.
+# Mỗi dòng 1 câu. Dòng bắt đầu bằng # hoặc trống sẽ bị bỏ qua.
+#
+# QUY TRÌNH:
+#   1. Điền các câu bạn sẽ trình trong buổi bảo vệ vào đây.
+#   2. CHẠY SAU khi re-ingest graph đa-domain (graph cuối cùng).
+#   3. python -m src.precache_demo data/evaluation/demo_questions.txt
+#      (thêm --jurisdiction / --mode nếu lúc demo sẽ dùng — phải KHỚP).
+#   4. Lúc demo chạy đúng câu + đúng flag → cache_hit ($0, không cần API).
+#
+# Ví dụ (thay bằng câu thật của bạn):
+Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu m²?
+Điều kiện chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở tại TP.HCM là gì?
