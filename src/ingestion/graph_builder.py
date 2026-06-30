@@ -486,11 +486,14 @@ def run_ingestion(data_dir: str) -> None:
             logger.info(f"Pass 3 — {amends_count} [:AMENDS] edges đã xử lý.")
 
             # Pass 4: Ontology Mapping (Bottom-up LLM Classification)
-            # Dùng Claude Haiku để gán nhãn từng Component vào các Concept có sẵn.
+            # LLM client theo INGEST_LLM_MODE (mặc định LLM_MODE, fallback "claude").
+            # Gemini-only: INGEST_LLM_MODE=gemini → ontology mapper chạy gemini-2.5-flash.
             ontology_path = Path("data/ontology/core_v1.json")
             if ontology_path.exists():
-                logger.info("Pass 4 — Bắt đầu Ontology Mapping (LLM Classification)...")
-                anthropic_client = __import__("anthropic").Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+                from src.utils.llm_config import make_llm_client
+                _ingest_mode = os.getenv("INGEST_LLM_MODE", os.getenv("LLM_MODE", "claude"))
+                logger.info(f"Pass 4 — Ontology Mapping (LLM Classification, mode={_ingest_mode})...")
+                anthropic_client = make_llm_client(mode=_ingest_mode)
                 with open(ontology_path, "r", encoding="utf-8") as f:
                     core_data = json.load(f)
                 

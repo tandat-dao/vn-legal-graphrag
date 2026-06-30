@@ -175,14 +175,19 @@ def _gemini_complete(gemini_client, *, model, system_text, user_text,
     from google.genai import types
 
     gem_model = _gemini_model_for(model)
-    logger.info("Gemini call: model=%s", gem_model)
+    # Gemini 2.5/3.x là "thinking" model: thinking tiêu token TRONG max_output_tokens.
+    # max_tokens nhỏ (Claude-tuned: 128 ontology, 256 planner) → thinking ăn hết →
+    # output thật bị CẮT CỤT → JSON/answer hỏng. Đặt SÀN để chừa chỗ cho thinking.
+    _MIN_OUT = 2048
+    mot = max(max_tokens or _MIN_OUT, _MIN_OUT)
+    logger.info("Gemini call: model=%s max_out=%d", gem_model, mot)
     response = gemini_client.models.generate_content(
         model=gem_model,
         contents=user_text,
         config=types.GenerateContentConfig(
             system_instruction=system_text or None,
             temperature=temperature or 0.0,
-            max_output_tokens=max_tokens,
+            max_output_tokens=mot,
         ),
     )
     return (response.text or "").strip()
