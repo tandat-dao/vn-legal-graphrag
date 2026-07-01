@@ -857,7 +857,32 @@
 
 ## 1. Trạng thái tiến độ hiện tại
 
-> **Cập nhật toàn diện 2026-05-21** — đồng bộ với code, database production, và các fix layer v2.7. Section trước đó stale từ Phase 1.
+### §1.0 CẬP NHẬT MỚI NHẤT — 2026-06-30 (ĐỌC TRƯỚC — điểm neo cho phiên làm việc mới)
+
+> Block này là **single source of truth** về "đang ở đâu + làm gì tiếp". §1.1–1.3 bên dưới là tham chiếu chi tiết nhưng **một phần lỗi thời từ 2026-05-21** (ghi 17 file/3031 vector/Phase 1 chờ B — đã cũ). Chi tiết diễn biến: xem changelog v2.19 ở đầu file + Decision Log D-23/D-24 trong CLAUDE.md.
+
+**ĐÃ XONG (toàn bộ đã commit + push lên `origin/develop`):**
+- **Corpus B đã ingest** (D-23): 13 file Hộ tịch + Nuôi con nuôi của [B] đã pull/làm sạch/validate. **Graph đa-domain**: `32 Norm` (dat-dai 20, ho-tich 8, nuoi-con-nuoi 4), 4548 Component, 6394 MAPS_TO_CONCEPT. Qdrant `legal_texts` = **4582 vector** (4550 text_unit + 32 summary). `implements` hỗ trợ str|list|null (đa-cha). **TASK-05 cross-check** đã sign-off mức [A]+Claude (`data/raw/review_log.md`); [B] hậu kiểm 2 quyết định (NQ124 tách 2 Norm, thong-tu-01 amended_by) khi có thời gian.
+- **Multi-LLM 3-mode** (D-24): `--llm-mode {claude|claude-fallback|gemini}` cho demo + eval. Gemini chạy **Vertex AI qua ADC** ($300 Cloud credit; vùng VN không free tier Developer API). Mặc định `claude` → eval reproducible. Judge Claude Haiku cố định. Files mới: `src/utils/gemini_fallback.py`, `src/precache_demo.py`.
+- **Gemini-only validated** (full 26, graph đa-domain): GraphRAG-Gemini **F1 0.549 / NormR 0.766** vs Baseline-Gemini 0.356/0.554 → **Δ kiến trúc +0.193 F1** (≈ Δ Claude +0.206) = LLM-agnostic. Lineup Gemini: generator `gemini-2.5-pro`, planner+ontology `gemini-2.5-flash`. 2 negative result tune NormR (prompt provider-aware; structural backfill) → REJECT, chấp nhận NormR 0.766 (đặc tính Gemini). Kết quả canonical: `data/evaluation/gemini_full26/`.
+- **Demo Gemini chạy được**: `python -m src.demo "..." --llm-mode gemini --mode {general|irac}`. Bug truncation đã fix (headroom thinking cho Gemini `max_output_tokens`).
+
+**VIỆC TIẾP THEO (ưu tiên):**
+1. **E1 ablation Gap 2/3/4** ★ — build `src/evaluation/ablation_config.py` (cờ tắt no-jurisdiction/no-traversal/no-temporal), chạy double-dissociation trên đất đai + Gemini. **Làm được ngay, không chờ B.** Đây là bằng chứng kiến trúc mạnh nhất (chứng minh TỪNG cơ chế KG giải đúng gap của nó).
+2. **E2 baselines** (closed-book "có cần retrieval?" + BM25 + oracle trần) + **E0 docs** (GT provenance + metric validity). Làm được ngay.
+3. **Viết Chương 1-3** (Intro/Background/Methodology) — song song, tư liệu đầy đủ.
+4. **Chờ [B]**: test set Hộ tịch/NCN → mở khóa Gap 1 (E1 no-theme) + E2b consistency per-domain.
+5. **Demo prep** (gần ngày bảo vệ): Lớp 1 pre-cache câu demo thật + quay video + rotate key.
+
+**GOTCHAS MÔI TRƯỜNG (quan trọng cho phiên sau):**
+- **Python interpreter:** cài gcloud (cho Vertex ADC) đã đổi `python`/`python3` sang Homebrew python THIẾU deps dự án. Deps đầy đủ ở **`/Library/Frameworks/Python.framework/Versions/3.12/bin/python3`** — DÙNG path này để chạy demo/eval/pytest. Nếu lỗi `ModuleNotFoundError: dotenv` là do gọi nhầm python.
+- **Gemini = Vertex ADC:** cần `gcloud auth application-default login` (đã login) + `.env` có `GEMINI_USE_VERTEX=true`, `GEMINI_VERTEX_PROJECT=vn-legal-graphrag`, `GEMINI_VERTEX_LOCATION=global`, `GEMINI_MODEL_GENERATOR=gemini-2.5-pro`, `GEMINI_MODEL_PLANNER=gemini-2.5-flash`. KHÔNG dùng api_key cho Vertex.
+- **Cache:** demo/eval cache answer theo hash(prompt), KHÔNG phân biệt provider → khi so Claude vs Gemini phải `--no-llm-cache`.
+- **BẢO MẬT:** vài Gemini key + 1 Anthropic key đã lộ trong chat lịch sử → rotate sau bảo vệ.
+
+---
+
+> **Cập nhật toàn diện 2026-05-21** (PHẦN DƯỚI PARTIAL STALE — xem §1.0 ở trên cho trạng thái mới nhất) — đồng bộ với code, database production, và các fix layer v2.7. Section trước đó stale từ Phase 1.
 
 ### §1.1 Đã hoàn thành ✅
 

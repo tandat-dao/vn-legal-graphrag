@@ -15,14 +15,18 @@
 
 ---
 
-## TRẠNG THÁI HIỆN TẠI
+## TRẠNG THÁI HIỆN TẠI (cập nhật 2026-06-30)
 
-Phase 0 (Môi trường) và Phase 1 (Dữ liệu) — xem `docs/PROJECT_STATUS.md` để biết task nào đang active.
+**Phase 0-4 đã hoàn tất cơ bản.** Corpus đa-domain (Đất đai + Hộ tịch + Nuôi con nuôi, 32 Norm) đã ingest; multi-LLM (Claude + Gemini via Vertex ADC) hoạt động; hệ thống đã đánh giá (GraphRAG > Baseline có ý nghĩa thống kê trên cả 2 LLM). **Việc đang làm: xây dựng lại pha đánh giá E0-E3** (đặc biệt E1 ablation) + viết luận văn.
 
-**Trước khi bắt đầu bất kỳ task nào:**
-1. Đọc `docs/PROJECT_STATUS.md` — xác định TASK-ID cần làm, đọc kỹ phần Inputs / Outputs / DoD
-2. Đọc `docs/PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
-3. Đọc toàn bộ file code có liên quan được liệt kê trong phần Inputs của task card
+**Trước khi bắt đầu bất kỳ task nào — ĐỌC 3 file này:**
+1. `docs/PROJECT_STATUS.md` — **đọc §1.0 "CẬP NHẬT MỚI NHẤT" TRƯỚC** (trạng thái + việc tiếp theo), rồi changelog v2.19 ở đầu file
+2. `docs/PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
+3. Decision Log trong file này (D-01…D-24) — đặc biệt D-23 (implements đa-cha), D-24 (multi-LLM + Gemini-only)
+
+**⚠️ Gotchas môi trường (đọc trước khi chạy code):**
+- **Python:** cài gcloud đã đổi `python` sang bản thiếu deps → dùng `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3` cho MỌI lệnh demo/eval/pytest.
+- **Gemini** = Vertex AI qua ADC (`gcloud auth application-default login` đã setup); config trong `.env` (`GEMINI_USE_VERTEX=true`, project/location/model). Chạy `--llm-mode gemini`.
 
 ---
 
@@ -61,14 +65,19 @@ graphrag-vn-law/
 │   │   ├── subgraph_extractor.py← TASK-11
 │   │   ├── semantic_filter.py   ← TASK-12
 │   │   ├── context_assembler.py ← TASK-13
-│   │   └── answer_generator.py  ← TASK-13
+│   │   ├── answer_generator.py  ← TASK-13
+│   │   └── verifier.py          ← Verifier agent (D-18)
 │   ├── baseline/                ← Phase 4
 │   │   └── naive_rag.py         ← TASK-16
 │   ├── evaluation/              ← Phase 4
-│   │   └── metrics.py           ← TASK-17
+│   │   └── metrics.py           ← TASK-17 (+ run_evaluation, faithfulness, expanded_eval…)
+│   ├── demo.py                  ← Rich CLI demo (--llm-mode, --mode)
+│   ├── precache_demo.py         ← Lớp 1 pre-cache câu demo (D-24)
 │   └── utils/
 │       ├── connection_check.py  ← TASK-02
-│       └── validate_metadata.py ← TASK-04
+│       ├── validate_metadata.py ← TASK-04
+│       ├── llm_config.py        ← make_llm_client(mode=) — 3 LLM mode (D-24)
+│       └── gemini_fallback.py   ← Gemini wrapper (Vertex ADC), FallbackLLMClient/GeminiClient (D-24)
 ├── tests/
 │   ├── test_parser.py
 │   └── test_query_planner.py
@@ -515,9 +524,18 @@ Bốn task sau là "cổng" bắt buộc. Phase sau **không được bắt đ�
 
 ## MÔI TRƯỜNG PHÁT TRIỂN
 
+> **⚠️ PYTHON:** cài gcloud (Vertex ADC) đã đổi `python` sang bản thiếu deps. Dùng
+> `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3` cho mọi lệnh bên dưới
+> (thay `python`/`pytest`). Ví dụ: `.../python3 -m pytest tests/ -q`. Alias `pyt` cho gọn.
+> Ingestion chạy dạng module (`python -m src.ingestion.graph_builder`), không chạy file trực tiếp.
+
 ```bash
 # Khởi động databases
 docker compose up -d
+
+# Demo Gemini (multi-LLM, D-24) — nhớ --no-llm-cache khi muốn gọi tươi
+# python -m src.demo "câu hỏi" --llm-mode gemini --mode general --jurisdiction tp-hcm --bypass-completeness --no-llm-cache
+# Eval trên Gemini: python -m src.evaluation.run_evaluation --test-set ... --systems graphrag,baseline --llm-mode gemini --no-llm-cache
 
 # Kiểm tra databases đang chạy
 docker compose ps
@@ -567,7 +585,17 @@ LLM_MODEL_PLANNER=claude-haiku-4-5-20251001     # Query Planner + Faithfulness j
 LLM_MODEL_GENERATOR=claude-sonnet-4-6           # Answer Generator
 ANTHROPIC_API_KEY=<key>                         # SDK đọc trực tiếp biến này (make_anthropic_client)
 LLM_API_KEY=<key>                               # alias giữ tương thích
+
+# Multi-LLM (D-24) — Gemini qua Vertex AI + ADC. Mặc định mode=claude (eval reproducible).
+LLM_MODE=claude                                 # claude | claude-fallback | gemini (make_llm_client)
+GEMINI_USE_VERTEX=true                           # Vertex ADC (KHÔNG api_key); cần `gcloud auth application-default login`
+GEMINI_VERTEX_PROJECT=vn-legal-graphrag          # GCP project ($300 credit)
+GEMINI_VERTEX_LOCATION=global                    # region Vertex (2.5-pro/flash có ở global)
+GEMINI_MODEL_GENERATOR=gemini-2.5-pro            # generator (≈ Claude Sonnet); thắng bake-off
+GEMINI_MODEL_PLANNER=gemini-2.5-flash            # planner + ontology mapper (rẻ)
 ```
+
+> **Multi-LLM (D-24):** `make_llm_client(mode=)` trả wrapper trong suốt (`.messages.create` y hệt). Demo `--llm-mode {claude|claude-fallback|gemini}`; eval `--llm-mode` + `--sample N --seed S`. Vertex đòi OAuth/ADC (không api_key); vùng VN không có free tier Developer API. Gemini là thinking model → `gemini_fallback._gemini_complete` cộng headroom vào `max_output_tokens` (tránh cụt output). Judge (faithfulness) giữ Claude Haiku CỐ ĐỊNH — thước đo độc lập với mode hệ thống.
 
 ---
 
