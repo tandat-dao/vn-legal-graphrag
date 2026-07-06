@@ -30,15 +30,15 @@
 | Nhóm | Số câu | gap_type | subtype | Ghi chú |
 |---|:---:|---|---|---|
 | Gap 1 — archetype song song | 25 | `gap1` | `archetype:<tên>` | ~8 archetype × 3 domain |
-| Gap 2 — đa địa phương | 25 | `gap2` | — | đất đai nặng; có minimal-pair HCM↔ĐN |
+| Gap 2 — đa địa phương | 26 | `gap2` | — | đất đai nặng; minimal-pair HCM↔ĐN (dư 1 so kế hoạch: cặp đảo cận-nghèo hộ tịch đáng giữ) |
 | Gap 3 — đa tầng | 25 | `gap3` | — | cả 3 domain, chuỗi Luật→NĐ→TT |
 | Gap 4 — đa phiên bản | 25 | `gap4` | — | bám amendment thật trong corpus |
 | Negative hiển nhiên | 8 | `negative` | `obvious` | ngoài 3 domain → phải từ chối |
 | Negative-gài (ngoài scope) | 6 | `negative` | `trap` | trong lĩnh vực nhưng ngoài scope (D-05) |
 | Thiếu-info (best-effort) | 8 | gap chính | `underspecified` | bảo vệ D-25 — không nêu jurisdiction |
 | Hợp-thành đa-gap | 8 | gap chính | `composite` | câu người dùng thật, trộn ≥2 gap |
-| Biến thể register (khẩu ngữ) | 20 | gap của cặp | `register` + `pair_id` | minimal-pair đổi văn phong |
-| **Tổng** | **150** | | | |
+| Biến thể register (khẩu ngữ) | 19 | gap của cặp | `register` + `pair_id` | minimal-pair đổi văn phong (bớt 1 bù gap2) |
+| **Tổng** | **150** | | | ✅ CHỐT 2026-07-06, verify --final PASS |
 
 **Tag chồng (không đếm riêng):**
 - `difficulty`: mỗi gap 25 câu phải có phổ ~8 easy / 10 medium / 7 hard.

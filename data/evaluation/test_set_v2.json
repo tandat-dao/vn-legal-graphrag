@@ -2433,5 +2433,343 @@
     "relevant_component_ids": [],
     "notes": "COMPOSITE LIÊN LĨNH VỰC (NCN + hộ tịch — 2 theme) — trái tim Gap 1: câu thật của người dân vắt qua 2 domain, đòi retrieval KHÔNG bị khóa cứng trong 1 theme. Đây là câu đo giới hạn của Theme hard-filter. Gaps phụ: 3. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V133",
+    "question": "Nhà tui ở xã Phú Lý trên Đồng Nai, nghe nói nhà nước chỉ cho mỗi người chừng đó đất thổ cư thôi — vậy tối đa tui được giao bao nhiêu mét vuông đất ở?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": "register",
+    "pair_id": "V002",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 3 Khoản 2 Điểm a Quyết định 92/2025/QĐ-UBND tỉnh Đồng Nai, xã Phú Lý thuộc danh sách các xã khu vực nông thôn có hạn mức giao đất ở cho cá nhân không quá 300 m².",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "2", "diem": "a", "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V002: 'đất thổ cư', 'tui', câu kể lể — đo bền vững register. Citations giữ nguyên V002.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V134",
+    "question": "Em sắp cưới chồng người Hàn, nghe nói phải đăng ký kết hôn trên quận/huyện ở TP.HCM — vậy đóng hết bao nhiêu tiền lệ phí?",
+    "theme": "ho-tich",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": "register",
+    "pair_id": "V009",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục 1B Khoản 2 Nghị quyết 124/2016/NQ-HĐND TP.HCM, lệ phí đăng ký kết hôn tại UBND cấp huyện là 1.000.000 đồng/trường hợp. (Kết hôn của công dân Việt Nam cư trú trong nước — đăng ký tại cấp xã — thuộc diện miễn lệ phí.)",
+    "ground_truth_citations": [
+      { "dieu": "1B", "khoan": "2", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V009: tình huống hóa (chồng Hàn = yếu tố nước ngoài → cấp huyện) — hệ phải tự suy 'lấy chồng nước ngoài' → thẩm quyền huyện. Citations giữ nguyên V009.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V135",
+    "question": "Làm sổ đất ở Đồng Nai mà gửi hồ sơ qua mạng thì có phải đóng tiền lệ phí cấp sổ không ta?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": "register",
+    "pair_id": "V013",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 1 Khoản 6 Điểm b Nghị quyết 21/2024/NQ-HĐND tỉnh Đồng Nai, mức thu lệ phí đối với hồ sơ nộp trực tuyến bằng 0% mức thu trực tiếp — tức là không phải nộp lệ phí cấp Giấy chứng nhận khi nộp hồ sơ trực tuyến.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "6", "diem": "b", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V013: 'làm sổ đất', 'gửi qua mạng', 'không ta'. Citations giữ nguyên V013.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V136",
+    "question": "Ông nội em sinh năm 1950, hồi xưa có khai sinh đàng hoàng mà giờ giấy tờ mất sạch, sổ ở xã cũng không còn. Giờ làm lại giấy khai sinh cho ông được không, làm ở đâu, cần đem theo gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "register",
+    "pair_id": "V023",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Được. (1) Điều kiện: theo Điều 24 Khoản 1 Nghị định 123/2015/NĐ-CP, việc khai sinh đã đăng ký tại cơ quan có thẩm quyền của Việt Nam trước ngày 01/01/2016 mà cả Sổ hộ tịch và bản chính giấy tờ hộ tịch đều bị mất thì được đăng ký lại; lưu ý người yêu cầu phải còn sống vào thời điểm tiếp nhận hồ sơ (Khoản 3). (2) Thẩm quyền: UBND cấp xã nơi đã đăng ký khai sinh trước đây hoặc UBND cấp xã nơi người yêu cầu thường trú (Điều 25 Khoản 1). (3) Hồ sơ: tờ khai theo mẫu có cam đoan về việc đã đăng ký khai sinh nhưng không lưu giữ được bản chính, và bản sao toàn bộ hồ sơ, giấy tờ có thông tin liên quan đến nội dung khai sinh (Điều 26 Khoản 1); giấy tờ, tài liệu làm cơ sở đăng ký lại được Thông tư 04/2020/TT-BTP Điều 9 quy định chi tiết (bản sao Giấy khai sinh hợp lệ; giấy tờ thay thế cấp trước 1945 ở miền Bắc/trước 1975 ở miền Nam; nếu không có thì CMND/CCCD/hộ chiếu, giấy tờ cư trú, bằng cấp, học bạ...).",
+    "ground_truth_citations": [
+      { "dieu": "24", "khoan": "1", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "25", "khoan": "1", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "26", "khoan": "1", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "9", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V023 (gap3 synthesis): kể chuyện gia đình, 'giấy tờ mất sạch'. Citations giữ nguyên V023.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V137",
+    "question": "Vợ chồng em tính xin một bé về nuôi, cho hỏi đăng ký nhận nuôi thì đóng phí bao nhiêu, ai là người phải đóng?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "register",
+    "pair_id": "V026",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 12 Khoản 1 Luật Nuôi con nuôi 2010, NGƯỜI NHẬN CON NUÔI phải nộp lệ phí đăng ký nuôi con nuôi. Mức thu cụ thể do Chính phủ quy định: theo Điều 6 Khoản 1 Điểm a Nghị định 114/2016/NĐ-CP, lệ phí đăng ký nuôi con nuôi trong nước là 400.000 đồng/trường hợp.",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "6", "khoan": "1", "diem": "a", "van_ban": "nghi-dinh-114-2016-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V026: 'xin một bé về nuôi' — khẩu ngữ đặc trưng NCN. Citations giữ nguyên V026.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V138",
+    "question": "Cái giấy xác nhận độc thân xài được bao lâu thì hết hạn vậy?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "register",
+    "pair_id": "V034",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 23 Khoản 1 Nghị định 123/2015/NĐ-CP, Giấy xác nhận tình trạng hôn nhân có giá trị 6 tháng kể từ ngày cấp. Tuy nhiên, Điều 12 Khoản 2 Thông tư 04/2020/TT-BTP hướng dẫn chi tiết hơn: Giấy có giá trị ĐẾN THỜI ĐIỂM THAY ĐỔI TÌNH TRẠNG HÔN NHÂN hoặc 06 tháng kể từ ngày cấp, TÙY THEO THỜI ĐIỂM NÀO ĐẾN TRƯỚC (ví dụ: cấp ngày 03/02 nhưng ngày 10/02 người đó kết hôn thì Giấy chỉ có giá trị đến ngày 10/02). Ngoài ra, Giấy không có giá trị khi dùng vào mục đích khác với mục đích ghi trong Giấy (Điều 23 Khoản 3 Nghị định 123).",
+    "ground_truth_citations": [
+      { "dieu": "23", "khoan": "1", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "23", "khoan": "3", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "12", "khoan": "2", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V034: 'giấy xác nhận độc thân' = tên dân gian chuẩn của GXNTTHN — cú test register kinh điển. Citations giữ nguyên V034.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V139",
+    "question": "Giờ đi làm lại khai sinh người ta còn đòi sổ hộ khẩu nữa không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "register",
+    "pair_id": "V040",
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Không còn. Theo Điều 9 Khoản 3 Điểm b Thông tư 04/2020/TT-BTP, giấy tờ làm cơ sở đăng ký lại khai sinh gồm 'giấy tờ chứng minh về nơi cư trú' — cụm từ 'Sổ hộ khẩu, Sổ tạm trú' trước đây trong điểm này ĐÃ BỊ BÃI BỎ bởi Thông tư 09/2022/TT-BTP, hiệu lực từ 01/01/2023 (đồng bộ với việc bỏ sổ hộ khẩu giấy). Hiện nay dùng các giấy tờ chứng minh nơi cư trú khác theo quy định.",
+    "ground_truth_citations": [
+      { "dieu": "9", "khoan": "3", "diem": "b", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V040 (gap4): 'người ta còn đòi... nữa không'. Citations giữ nguyên V040.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V140",
+    "question": "Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250? Người ta đổi quy định hồi nào vậy?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "subtype": "register",
+    "pair_id": "V044",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Khác cả về đơn vị tính lẫn phân nhóm khu vực. QUY ĐỊNH CŨ — Điều 1 Khoản 1 Quyết định 18/2016/QĐ-UBND: hạn mức tính theo HỘ, chia 4 nhóm: các quận trung tâm không quá 160 m²/hộ; các quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện không quá 200 m²/hộ; khu quy hoạch phát triển đô thị không quá 250 m²/hộ; huyện Cần Giờ và khu dân cư nông thôn các xã không quá 300 m²/hộ. QUY ĐỊNH HIỆN HÀNH — Điều 3 Quyết định 69/2024/QĐ-UBND: hạn mức tính theo CÁ NHÂN, chia 3 nhóm: các quận và TP Thủ Đức không quá 160 m²; thị trấn và khu đô thị mới 5 huyện không quá 200 m²; các xã của 5 huyện không quá 250 m². Quyết định 69/2024 thay thế Quyết định 18/2016 (Điều 5 Khoản 2), hiệu lực từ ngày ký 30/09/2024.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "1", "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm" },
+      { "dieu": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" },
+      { "dieu": "5", "khoan": "2", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V044 (gap4 regime-diff): câu hỏi kiểu 'nghe nói' — mang theo con số cũ 300 làm mồi temporal. Citations giữ nguyên V044.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V141",
+    "question": "Em nộp hồ sơ xin sổ đỏ cho miếng đất không có giấy tờ từ cuối năm 2024, tới giờ chưa thấy trả kết quả mà luật mới ra rồi — vậy hồ sơ của em người ta xét theo luật cũ hay luật mới?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "register",
+    "pair_id": "V051",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Đây là hồ sơ DỞ DANG vắt qua hai thời kỳ luật, nên cần trình bày cả hai khung: (1) Tại thời điểm nộp (cuối 2024), việc cấp Giấy chứng nhận cho hộ gia đình, cá nhân sử dụng đất KHÔNG có giấy tờ thuộc Điều 101 Luật Đất đai 2013 (điều kiện chính: sử dụng ổn định trước 01/7/2004, không vi phạm, được UBND xã xác nhận không tranh chấp, phù hợp quy hoạch — Khoản 2). (2) Từ 01/01/2025, Luật Đất đai 2024 có hiệu lực, trường hợp tương ứng quy định tại Điều 138 (hộ gia đình, cá nhân sử dụng đất không giấy tờ, không vi phạm, không thuộc diện giao sai thẩm quyền). Việc hồ sơ dở dang áp dụng khung nào phụ thuộc điều khoản chuyển tiếp và quyết định của cơ quan giải quyết — người dân nên đối chiếu cả hai quy định và hỏi rõ cơ quan tiếp nhận.",
+    "ground_truth_citations": [
+      { "dieu": "101", "van_ban": "luat-dat-dai-2013" },
+      { "dieu": "138", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V051 (gap4 span-regime): 'sổ đỏ', 'miếng đất', 'người ta xét'. Citations giữ nguyên V051.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V142",
+    "question": "Đất vườn muốn lên thổ cư thì tiền sử dụng đất người ta tính kiểu gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "register",
+    "pair_id": "V069",
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Nguyên tắc: theo Điều 121 Khoản 2 Luật Đất đai 2024, khi chuyển mục đích sử dụng đất (chuyển đất nông nghiệp sang đất phi nông nghiệp thuộc điểm b Khoản 1 — diện phải xin phép), người sử dụng đất phải thực hiện nghĩa vụ tài chính theo quy định. Cách tính cụ thể theo Điều 10 Khoản 2 Điểm a Nghị quyết 254/2025/QH15 (văn bản sửa đổi Luật Đất đai): nộp tiền sử dụng đất dựa trên MỨC CHÊNH LỆCH giữa tiền sử dụng đất của loại đất SAU khi chuyển mục đích (đất ở) và tiền sử dụng đất của loại đất TRƯỚC khi chuyển (đất nông nghiệp) cho thời gian sử dụng đất còn lại.",
+    "ground_truth_citations": [
+      { "dieu": "121", "khoan": "2", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "10", "khoan": "2", "van_ban": "nghi-quyet-254-2025-qh15" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V069: 'lên thổ cư' — khẩu ngữ vàng của CMĐSDĐ (dân nói 100%, luật viết 0%). Citations giữ nguyên V069.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V143",
+    "question": "Em sinh ở quê ngoài Bắc nhưng đang làm việc trong Sài Gòn, giờ cần bản sao trích lục khai sinh gấp — xin ở trong này luôn được không hay phải bay về quê?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "register",
+    "pair_id": "V075",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Được. Theo Điều 13 Khoản 1 Nghị định 87/2020/NĐ-CP (bản sửa đổi bởi Nghị định 07/2025/NĐ-CP, hiệu lực 09/01/2025): cơ quan có thẩm quyền cấp bản sao trích lục hộ tịch từ Cơ sở dữ liệu hộ tịch điện tử theo yêu cầu của cá nhân, KHÔNG PHỤ THUỘC vào nơi đã đăng ký việc hộ tịch và nơi cư trú của người có yêu cầu — tức có thể xin cấp bản sao trích lục khai sinh tại nơi đang sinh sống nhờ dữ liệu hộ tịch điện tử.",
+    "ground_truth_citations": [
+      { "dieu": "13", "khoan": "1", "van_ban": "nghi-dinh-87-2020-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V075: tình huống hóa Bắc-Nam, 'bay về quê'. Citations giữ nguyên V075.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V144",
+    "question": "Muốn xin con nuôi thì người ta xét mình những cái gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "register",
+    "pair_id": "V081",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 14 Khoản 1 Luật Nuôi con nuôi 2010, người nhận con nuôi phải có đủ các điều kiện: (a) có năng lực hành vi dân sự đầy đủ; (b) hơn con nuôi từ 20 tuổi trở lên; (c) có điều kiện về sức khỏe, kinh tế, chỗ ở bảo đảm việc chăm sóc, nuôi dưỡng, giáo dục con nuôi; (d) có tư cách đạo đức tốt.",
+    "ground_truth_citations": [
+      { "dieu": "14", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V081 (gap1 archetype dieu-kien): 'người ta xét mình những cái gì'. Citations giữ nguyên V081.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V145",
+    "question": "Sinh em bé xong thì trong bao lâu phải đi làm giấy khai sinh cho bé vậy mọi người?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "register",
+    "pair_id": "V084",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 15 Khoản 1 Luật Hộ tịch 2014: trong thời hạn 60 NGÀY kể từ ngày sinh con, cha hoặc mẹ có trách nhiệm đăng ký khai sinh cho con; nếu cha mẹ không thể thì ông, bà, người thân thích khác hoặc cá nhân, tổ chức đang nuôi dưỡng trẻ có trách nhiệm đăng ký khai sinh.",
+    "ground_truth_citations": [
+      { "dieu": "15", "khoan": "1", "van_ban": "luat-ho-tich-2014" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V084: giọng hỏi nhóm/diễn đàn ('vậy mọi người'). Citations giữ nguyên V084.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V146",
+    "question": "Xã không chịu cho tui đăng ký nhận con nuôi — họ im luôn được hả, hay phải trả lời cho tui biết lý do?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "register",
+    "pair_id": "V094",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 22 Khoản 2 Luật Nuôi con nuôi 2010: trường hợp UBND cấp xã từ chối đăng ký thì phải TRẢ LỜI BẰNG VĂN BẢN cho người nhận con nuôi, cha mẹ đẻ hoặc người giám hộ hoặc đại diện cơ sở nuôi dưỡng và NÊU RÕ LÝ DO trong thời hạn 10 NGÀY kể từ ngày có ý kiến của những người liên quan quy định tại Điều 21.",
+    "ground_truth_citations": [
+      { "dieu": "22", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V094 (gap1 archetype tu-choi): giọng bức xúc 'im luôn được hả'. Citations giữ nguyên V094.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V147",
+    "question": "Miếng đất nhà tui có lấn ra lề đường một khúc, giờ làm sổ cho phần đó được không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "register",
+    "pair_id": "V101",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Về nguyên tắc là KHÔNG. Theo Điều 139 Khoản 1 Luật Đất đai 2024: đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng sau khi Nhà nước đã công bố, cắm mốc; lấn chiếm lòng đường, lề đường, vỉa hè sau khi đã công bố chỉ giới xây dựng; hoặc lấn chiếm đất dùng cho trụ sở cơ quan, công trình sự nghiệp, công trình công cộng khác — thì Nhà nước THU HỒI đất để trả lại cho công trình, KHÔNG cấp Giấy chứng nhận cho diện tích đã lấn chiếm. Ngoại lệ: nếu quy hoạch đã điều chỉnh và diện tích đó không còn thuộc hành lang bảo vệ/chỉ giới xây dựng thì được XEM XÉT cấp và phải thực hiện nghĩa vụ tài chính.",
+    "ground_truth_citations": [
+      { "dieu": "139", "khoan": "1", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V101: 'lấn ra lề đường một khúc', 'làm sổ'. Citations giữ nguyên V101.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V148",
+    "question": "Làm sổ đất lần đầu ở phường trên Biên Hòa thì đóng tiền cấp sổ hết nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": "register",
+    "pair_id": "V012",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 21/2024/NQ-HĐND tỉnh Đồng Nai (mục I.2), hộ gia đình, cá nhân có đất thuộc các phường của thành phố Long Khánh và Biên Hòa nộp lệ phí cấp Giấy chứng nhận quyền sử dụng đất là 30.000 đồng/giấy (nếu giấy gồm cả quyền sở hữu tài sản gắn liền với đất là 120.000 đồng/giấy).",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V012: 'làm sổ đất', 'hết nhiêu'. Citations giữ nguyên V012.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V149",
+    "question": "Vợ em người Nhật, tụi em muốn cho con mang quốc tịch Nhật lúc làm khai sinh ở Việt Nam thì phải nộp giấy gì? Lỡ bên Nhật không chịu xác nhận thì tính sao?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "register",
+    "pair_id": "V036",
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 36 Khoản 1 Luật Hộ tịch 2014, khi cha hoặc mẹ là người nước ngoài phải nộp văn bản thỏa thuận của cha, mẹ về việc chọn quốc tịch cho con; nếu chọn quốc tịch nước ngoài thì văn bản thỏa thuận phải có xác nhận của cơ quan nhà nước có thẩm quyền của nước mà người đó là công dân. Thông tư 04/2020/TT-BTP Điều 7 Khoản 2 hướng dẫn thêm: ngoài văn bản thỏa thuận còn phải có xác nhận của cơ quan có thẩm quyền của nước mà trẻ được chọn mang quốc tịch về việc trẻ có quốc tịch phù hợp pháp luật nước đó; nếu cơ quan nước ngoài KHÔNG xác nhận thì cơ quan đăng ký hộ tịch vẫn đăng ký khai sinh cho trẻ nhưng ĐỂ TRỐNG phần ghi quốc tịch trong Giấy khai sinh và Sổ đăng ký khai sinh.",
+    "ground_truth_citations": [
+      { "dieu": "36", "khoan": "1", "van_ban": "luat-ho-tich-2014" },
+      { "dieu": "7", "khoan": "2", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V036 (gap3): 'tụi em', 'lỡ... tính sao'. Citations giữ nguyên V036.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V150",
+    "question": "Người nước ngoài ở hẳn bên nước họ mà muốn xin con nuôi Việt Nam thì phải tốn những khoản tiền nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "register",
+    "pair_id": "V028",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Gồm hai khoản theo Điều 12 Luật Nuôi con nuôi 2010: (1) LỆ PHÍ đăng ký nuôi con nuôi (Khoản 1) — mức cụ thể theo Điều 6 Khoản 1 Điểm b Nghị định 114/2016/NĐ-CP là 9.000.000 đồng/trường hợp đối với người Việt Nam định cư ở nước ngoài, người nước ngoài thường trú ở nước ngoài nhận con nuôi là công dân Việt Nam; (2) CHI PHÍ giải quyết nuôi con nuôi nước ngoài (Khoản 2) — khoản tiền bù đắp một phần chi phí gồm: nuôi dưỡng, chăm sóc, giáo dục trẻ từ khi được giới thiệu làm con nuôi đến khi hoàn thành thủ tục giao nhận, xác minh nguồn gốc, giao nhận con nuôi và thù lao hợp lý cho nhân viên cơ sở nuôi dưỡng. Ngoài hai khoản này, tổ chức, cá nhân không được đặt ra bất kỳ khoản thu nào khác (Khoản 4).",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "12", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "12", "khoan": "4", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "6", "khoan": "1", "diem": "b", "van_ban": "nghi-dinh-114-2016-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V028 (gap3 synthesis): 'ở hẳn bên nước họ', 'tốn những khoản nào'. Citations giữ nguyên V028.",
+    "review": { "verified_by": null, "date": null }
   }
 ]

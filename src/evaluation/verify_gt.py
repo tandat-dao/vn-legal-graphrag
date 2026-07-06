@@ -39,11 +39,13 @@ REQUIRED_FIELDS = {
 # File trong data/raw/ không phải văn bản QPPL (không parse)
 _NON_NORM_FILES = {"mapping_table.md", "crossref_decisions.md", "review_log.md"}
 
-# Phân bổ mục tiêu theo guide §1 (chỉ enforce khi --final)
+# Phân bổ CHỐT theo guide §1 (enforce khi --final).
+# Lưu ý: gap2=26 (dư 1 so kế hoạch — cặp đảo cận-nghèo hộ tịch đáng giữ),
+# bù bằng register=19 để tổng đúng 150.
 _TARGET = {
-    "gap1": 25, "gap2": 25, "gap3": 25, "gap4": 25,
+    "gap1": 25, "gap2": 26, "gap3": 25, "gap4": 25,
     "negative/obvious": 8, "negative/trap": 6,
-    "underspecified": 8, "composite": 8, "register": 20,
+    "underspecified": 8, "composite": 8, "register": 19,
     "total": 150,
 }
 
