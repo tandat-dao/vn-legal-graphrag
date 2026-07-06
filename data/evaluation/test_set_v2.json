@@ -877,5 +877,81 @@
     "relevant_component_ids": [],
     "notes": "GAP4: nội dung hiện hành + truy vết NĐ 226/2025 sửa NĐ101 (annotation trong corpus ghi rõ cụm cũ→mới, hiệu lực 15/08/2025). Chuỗi NĐ-sửa-NĐ (không phải Luật sửa Luật). Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V048",
+    "question": "Việc xác định lại diện tích đất ở và cấp Giấy chứng nhận theo khoản 6 Điều 141 Luật Đất đai hiện nay thuộc thẩm quyền của cơ quan nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Thuộc CHỦ TỊCH ỦY BAN NHÂN DÂN CẤP XÃ. Theo Điều 5 Khoản 1 Điểm i Nghị định 151/2025/NĐ-CP (phân định thẩm quyền theo mô hình chính quyền địa phương 2 cấp), thẩm quyền 'xác định lại diện tích đất ở và cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất quy định tại khoản 6 Điều 141 Luật Đất đai' — vốn của UBND cấp huyện theo Luật Đất đai — được CHUYỂN GIAO cho Chủ tịch UBND cấp xã thực hiện.",
+    "ground_truth_citations": [
+      { "dieu": "5", "khoan": "1", "diem": "i", "van_ban": "nghi-dinh-151-2025-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 CHUYỂN GIAO THẨM QUYỀN theo mô hình 2 cấp (NĐ151/2025): trả lời theo Luật gốc ('UBND huyện') là SAI theo quy định hiện hành. Điểm i là điểm CÒN HIỆU LỰC hiếm hoi của Đ5 K1 (đa số điểm khác bị NĐ49/2026 bãi bỏ). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V049",
+    "question": "Danh mục thẩm quyền của UBND cấp huyện chuyển giao cho Chủ tịch UBND cấp xã tại Điều 5 Khoản 1 Nghị định 151/2025/NĐ-CP hiện nay còn hiệu lực đến đâu sau Nghị định 49/2026/NĐ-CP?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Phần lớn danh mục đã BỊ BÃI BỎ. Nghị định 49/2026/NĐ-CP (tiết đ2 điểm đ khoản 3 Điều 16, hiệu lực 31/01/2026) bãi bỏ hàng loạt điểm của Điều 5 Khoản 1 Nghị định 151/2025/NĐ-CP (các điểm a, b, c, d, đ, e, g, h, k, l, m, n, o...). Nội dung còn hiệu lực đáng chú ý là Điểm i: chuyển giao thẩm quyền xác định lại diện tích đất ở và cấp Giấy chứng nhận theo khoản 6 Điều 141 Luật Đất đai cho Chủ tịch UBND cấp xã.",
+    "ground_truth_citations": [
+      { "dieu": "5", "khoan": "1", "van_ban": "nghi-dinh-151-2025-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 ĐIỂM-CHẾT-HÀNG-LOẠT: đo khả năng hệ KHÔNG trích các điểm đã bãi bỏ như còn hiệu lực (corpus đánh dấu '(được bãi bỏ)' + annotation NĐ49/2026 cho từng điểm). Câu meta hơn các câu khác — [A] cân nhắc giữ/bỏ khi review. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V050",
+    "question": "Thẩm quyền cấp Giấy chứng nhận cho hộ gia đình, cá nhân theo Luật Đất đai 2013 và Luật Đất đai 2024 khác nhau thế nào, đặc biệt với trường hợp đăng ký biến động?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "CẤP LẦN ĐẦU: về cơ bản giữ nguyên — Luật 2013 (Điều 105 Khoản 2): UBND cấp huyện cấp cho hộ gia đình, cá nhân, cộng đồng dân cư; Luật 2024 (Điều 136 Khoản 1 Điểm b): UBND cấp huyện cấp cho người sử dụng đất quy định tại khoản 3 và 4 Điều 4 (gồm cá nhân). KHÁC BIỆT CHÍNH ở đăng ký biến động/cấp đổi: Luật 2013 (Điều 105 Khoản 3) giao CƠ QUAN TÀI NGUYÊN VÀ MÔI TRƯỜNG thực hiện theo quy định Chính phủ; Luật 2024 (Điều 136 Khoản 2 Điểm b) giao TỔ CHỨC ĐĂNG KÝ ĐẤT ĐAI hoặc CHI NHÁNH của tổ chức đăng ký đất đai thực hiện cho cá nhân, cộng đồng dân cư — và các tổ chức này được dùng con dấu của mình để cấp giấy (Điểm c).",
+    "ground_truth_citations": [
+      { "dieu": "105", "khoan": "2", "van_ban": "luat-dat-dai-2013" },
+      { "dieu": "105", "khoan": "3", "van_ban": "luat-dat-dai-2013" },
+      { "dieu": "136", "khoan": "1", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "136", "khoan": "2", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 REGIME-DIFF cấp Luật (2013 hết hiệu lực 01/01/2025 vs 2024 hiện hành): đòi kéo CẢ văn bản hết hiệu lực (temporal broad) + so sánh cơ chế. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V051",
+    "question": "Gia đình tôi nộp hồ sơ xin cấp Giấy chứng nhận cho đất không có giấy tờ từ cuối năm 2024 nhưng đến nay vẫn chưa được giải quyết. Trường hợp của tôi được xét theo quy định nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Đây là hồ sơ DỞ DANG vắt qua hai thời kỳ luật, nên cần trình bày cả hai khung: (1) Tại thời điểm nộp (cuối 2024), việc cấp Giấy chứng nhận cho hộ gia đình, cá nhân sử dụng đất KHÔNG có giấy tờ thuộc Điều 101 Luật Đất đai 2013 (điều kiện chính: sử dụng ổn định trước 01/7/2004, không vi phạm, được UBND xã xác nhận không tranh chấp, phù hợp quy hoạch — Khoản 2). (2) Từ 01/01/2025, Luật Đất đai 2024 có hiệu lực, trường hợp tương ứng quy định tại Điều 138 (hộ gia đình, cá nhân sử dụng đất không giấy tờ, không vi phạm, không thuộc diện giao sai thẩm quyền). Việc hồ sơ dở dang áp dụng khung nào phụ thuộc điều khoản chuyển tiếp và quyết định của cơ quan giải quyết — người dân nên đối chiếu cả hai quy định và hỏi rõ cơ quan tiếp nhận.",
+    "ground_truth_citations": [
+      { "dieu": "101", "van_ban": "luat-dat-dai-2013" },
+      { "dieu": "138", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 SPAN-REGIME (case_status do-dang): đúng thiết kế temporal của hệ — broad retrieve kéo CẢ 2 văn bản, trình 2 khung, KHÔNG tự quyết áp khung nào (prompt rule TEMPORAL). GT không khẳng định khung áp dụng vì corpus không chứa điều khoản chuyển tiếp — [A] review câu chữ. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
