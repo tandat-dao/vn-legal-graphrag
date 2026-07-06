@@ -5,7 +5,7 @@ so_hieu: "123/2015/NĐ-CP"
 tier: 2
 theme: "ho-tich"
 jurisdiction: "toan-quoc"
-implements: null
+implements: "luat-ho-tich-2014"
 valid_from: "2016-01-01"
 valid_to: null
 source_url: "https://vbpl.vn/van-ban/chi-tiet/nghi-dinh-so-104-2022-nd-cp-sua-doi-bo-sung-mot-so-dieu-cua-cac-nghi-dinh-lien-quan-den-viec-nop-xuat-trinh-so-ho-khau-so-tam-tru-giay-khi-thuc-hien-thu-tuc-hanh-chinh-cung-cap-dich-vu-cong--167220"
