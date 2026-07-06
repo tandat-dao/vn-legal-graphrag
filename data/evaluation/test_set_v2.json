@@ -1600,5 +1600,298 @@
     "relevant_component_ids": [],
     "notes": "GAP1 archetype LỆ PHÍ — bản NCN (chọn lệ phí giấy phép tổ chức thay vì lệ phí đăng ký để tránh trùng V026). Bộ ba le-phi hoàn thiện ở batch sau (đất: trích lục bản đồ; hộ tịch: xác nhận hộ tịch). Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V087",
+    "question": "Hồ sơ của người nhận con nuôi trong nước gồm những giấy tờ gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:ho-so",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 17 Luật Nuôi con nuôi 2010, hồ sơ của người nhận con nuôi gồm: (1) Đơn xin nhận con nuôi; (2) bản sao Hộ chiếu, Giấy CMND hoặc giấy tờ có giá trị thay thế; (3) Phiếu lý lịch tư pháp; (4) văn bản xác nhận tình trạng hôn nhân; (5) giấy khám sức khỏe do cơ quan y tế cấp huyện trở lên cấp và văn bản xác nhận hoàn cảnh gia đình, tình trạng chỗ ở, điều kiện kinh tế do UBND cấp xã nơi thường trú cấp (trừ trường hợp quy định tại khoản 3 Điều 14).",
+    "ground_truth_citations": [
+      { "dieu": "17", "van_ban": "luat-nuoi-con-nuoi-2010" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype HỒ SƠ — bản NCN (bộ ba V087/V088/V089). Khác V037 (V037 hỏi cách nộp + loại Phiếu LLTP; câu này liệt kê danh mục). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V088",
+    "question": "Đăng ký khai sinh cho con thì phải nộp những giấy tờ gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:ho-so",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 16 Khoản 1 Luật Hộ tịch 2014: người đi đăng ký khai sinh nộp TỜ KHAI theo mẫu và GIẤY CHỨNG SINH cho cơ quan đăng ký hộ tịch. Không có giấy chứng sinh thì nộp văn bản của người làm chứng xác nhận về việc sinh; không có người làm chứng thì phải có giấy cam đoan về việc sinh; trẻ bị bỏ rơi phải có biên bản xác nhận do cơ quan có thẩm quyền lập; trẻ sinh ra do mang thai hộ phải có văn bản chứng minh việc mang thai hộ.",
+    "ground_truth_citations": [
+      { "dieu": "16", "khoan": "1", "van_ban": "luat-ho-tich-2014" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype HỒ SƠ — bản hộ tịch. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V089",
+    "question": "Khi đăng ký đất đai lần đầu thì phải kê khai những nội dung gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:ho-so",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 18 Khoản 1 Nghị định 101/2024/NĐ-CP, nội dung đăng ký đất đai, tài sản gắn liền với đất lần đầu gồm: (a) thông tin về người sử dụng đất, chủ sở hữu tài sản, người được giao quản lý đất (tên, giấy tờ nhân thân/pháp nhân, địa chỉ); (b) thông tin về thửa đất (số hiệu thửa đất, địa chỉ, diện tích, loại đất, hình thức sử dụng, nguồn gốc...) và về tài sản gắn liền với đất (loại tài sản, diện tích xây dựng/sàn/sử dụng, hình thức và thời hạn sở hữu...); (c) yêu cầu về đăng ký quyền hoặc cấp Giấy chứng nhận; (d) các yêu cầu khác phù hợp quy định pháp luật đất đai.",
+    "ground_truth_citations": [
+      { "dieu": "18", "khoan": "1", "van_ban": "nghi-dinh-101-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype HỒ SƠ — bản đất đai, khép bộ ba ho-so. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V090",
+    "question": "Xin trích lục bản đồ địa chính một thửa đất ở Đồng Nai thì hộ gia đình, cá nhân phải nộp phí bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap1",
+    "subtype": "archetype:le-phi",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 21/2024/NQ-HĐND tỉnh Đồng Nai (mục III — trích lục bản đồ địa chính, văn bản, số liệu hồ sơ địa chính): hộ gia đình, cá nhân nộp 18.000 đồng/lần; tổ chức nộp 36.000 đồng/lần.",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype LỆ PHÍ — bản đất đai (bộ ba với V086/V091). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V091",
+    "question": "Xin xác nhận hộ tịch tại Sở Tư pháp tỉnh Đồng Nai thì lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap1",
+    "subtype": "archetype:le-phi",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục c — lĩnh vực xác nhận hộ tịch tại Sở Tư pháp): lệ phí xác nhận hộ tịch là 20.000 đồng. (Đăng ký trực tuyến thuộc thẩm quyền Sở Tư pháp được giảm 50% theo mục d.)",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype LỆ PHÍ — bản hộ tịch, khép bộ ba le-phi. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V092",
+    "question": "Các bước đăng ký hộ tịch trực tuyến được thực hiện như thế nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:trinh-tu",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Theo Điều 12 Nghị định 87/2020/NĐ-CP: (1) truy cập Cổng dịch vụ công quốc gia hoặc Cổng dịch vụ công cấp tỉnh, đăng ký tài khoản và xác thực người dùng; (2) cung cấp thông tin theo biểu mẫu điện tử tương tác, đính kèm bản chụp hoặc bản sao điện tử giấy tờ; nộp phí, lệ phí qua thanh toán trực tuyến (Khoản 1); (3) sau khi nộp, được cấp 01 MÃ SỐ HỒ SƠ để theo dõi tiến độ — có trách nhiệm giữ bí mật mã này (Khoản 2); (4) ngay trong ngày làm việc, cơ quan đăng ký kiểm tra hồ sơ: chưa đầy đủ thì yêu cầu bổ sung, đầy đủ thì tiếp nhận và gửi Phiếu hẹn trả kết quả qua email hoặc tin nhắn (Khoản 3).",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "1", "van_ban": "nghi-dinh-87-2020-nd-cp" },
+      { "dieu": "12", "khoan": "2", "van_ban": "nghi-dinh-87-2020-nd-cp" },
+      { "dieu": "12", "khoan": "3", "van_ban": "nghi-dinh-87-2020-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype TRÌNH TỰ — bản hộ tịch (bộ trinh-tu chỉ 2 domain: đất đai TRỐNG vì trình tự CMĐSDĐ trong corpus (PL I NĐ151) đã bị NĐ49/2026 bãi bỏ hàng loạt — ghi Limitations). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V093",
+    "question": "Thủ tục đăng ký lại việc nuôi con nuôi thực hiện như thế nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:trinh-tu",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Theo Điều 29 Nghị định 19/2011/NĐ-CP (bản sửa đổi): (1) nộp TỜ KHAI đăng ký lại việc nuôi con nuôi tại UBND cấp xã nơi cha mẹ nuôi và con nuôi thường trú hoặc nơi đã đăng ký trước đây (Khoản 2) — nộp trực tiếp, qua bưu chính hoặc trực tuyến; tờ khai phải có CAM ĐOAN về tính trung thực của việc đăng ký trước đó và chữ ký của ÍT NHẤT HAI NGƯỜI LÀM CHỨNG (Khoản 3); (2) cơ quan giải thích rõ trách nhiệm, hệ quả của cam đoan không đúng sự thật — nếu có cơ sở xác định cam đoan sai thì từ chối hoặc đề nghị hủy kết quả (Khoản 3); (3) trong 05 ngày làm việc kể từ khi nhận đủ giấy tờ hợp lệ, Chủ tịch UBND cấp xã ký Giấy chứng nhận nuôi con nuôi trong nước (Khoản 4).",
+    "ground_truth_citations": [
+      { "dieu": "29", "khoan": "2", "van_ban": "nghi-dinh-19-2011-nd-cp" },
+      { "dieu": "29", "khoan": "3", "van_ban": "nghi-dinh-19-2011-nd-cp" },
+      { "dieu": "29", "khoan": "4", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype TRÌNH TỰ — bản NCN (thủ tục dang-ky-lai-nuoi-con-nuoi thuộc VALID_PROCEDURES). Trùng điều với V085 nhưng V085 chỉ hỏi thời hạn+người ký; câu này full flow. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V094",
+    "question": "Nếu UBND cấp xã từ chối đăng ký việc nuôi con nuôi thì họ phải làm gì và trong thời hạn bao lâu?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:tu-choi",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 22 Khoản 2 Luật Nuôi con nuôi 2010: trường hợp UBND cấp xã từ chối đăng ký thì phải TRẢ LỜI BẰNG VĂN BẢN cho người nhận con nuôi, cha mẹ đẻ hoặc người giám hộ hoặc đại diện cơ sở nuôi dưỡng và NÊU RÕ LÝ DO trong thời hạn 10 NGÀY kể từ ngày có ý kiến của những người liên quan quy định tại Điều 21.",
+    "ground_truth_citations": [
+      { "dieu": "22", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype TỪ CHỐI — bản NCN (bộ ba V094/V095/V096). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V095",
+    "question": "Trường hợp nào yêu cầu cấp Giấy xác nhận tình trạng hôn nhân bị từ chối giải quyết?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:tu-choi",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 12 Khoản 5 Thông tư 04/2020/TT-BTP: trường hợp yêu cầu cấp Giấy xác nhận tình trạng hôn nhân để KẾT HÔN VỚI NGƯỜI CÙNG GIỚI TÍNH hoặc kết hôn với người nước ngoài tại Cơ quan đại diện nước ngoài tại Việt Nam thì cơ quan đăng ký hộ tịch TỪ CHỐI giải quyết.",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "5", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype TỪ CHỐI — bản hộ tịch. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V096",
+    "question": "Cơ quan tiếp nhận có thể từ chối tiếp nhận hoặc dừng giải quyết hồ sơ đăng ký đất đai trong những trường hợp nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:tu-choi",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Theo Điều 19 Khoản 2 Nghị định 101/2024/NĐ-CP, cơ quan tiếp nhận/giải quyết không tiếp nhận hồ sơ hoặc dừng giải quyết thủ tục đăng ký đất đai và trả hồ sơ (trừ đăng ký lần đầu mà không cấp Giấy chứng nhận) trong các trường hợp: (a) không thuộc thẩm quyền tiếp nhận, hồ sơ không đầy đủ thành phần, không bảo đảm tính thống nhất nội dung giữa các giấy tờ, hoặc kê khai không đầy đủ thông tin; (b) nhận được văn bản của cơ quan thi hành án dân sự hoặc cơ quan/người có thẩm quyền tố tụng yêu cầu tạm dừng hoặc dừng việc đăng ký, cấp Giấy chứng nhận đối với tài sản của người phải thi hành án; (c) nhận được văn bản thông báo về việc kê biên tài sản thi hành án.",
+    "ground_truth_citations": [
+      { "dieu": "19", "khoan": "2", "van_ban": "nghi-dinh-101-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype TỪ CHỐI — bản đất đai, khép bộ ba tu-choi. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V097",
+    "question": "Muốn đăng ký hộ tịch qua mạng thì vào đâu để nộp hồ sơ?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:noi-nop",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 12 Khoản 1 Nghị định 87/2020/NĐ-CP: người có yêu cầu đăng ký hộ tịch trực tuyến truy cập CỔNG DỊCH VỤ CÔNG QUỐC GIA hoặc CỔNG DỊCH VỤ CÔNG CẤP TỈNH để đăng ký tài khoản, xác thực người dùng, rồi cung cấp thông tin theo biểu mẫu điện tử tương tác và đính kèm bản chụp/bản sao điện tử giấy tờ.",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "1", "van_ban": "nghi-dinh-87-2020-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype NƠI NỘP/HÌNH THỨC — bản hộ tịch (bộ ba V097/V098/V099). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V098",
+    "question": "Người nước ngoài nhận con nuôi đích danh trẻ em Việt Nam thì nộp hồ sơ ở cơ quan nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:noi-nop",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 13 Nghị định 19/2011/NĐ-CP: người Việt Nam định cư ở nước ngoài, người nước ngoài thường trú ở nước ngoài nhận con nuôi đích danh (theo khoản 2 Điều 28 Luật Nuôi con nuôi) nộp hồ sơ tại BỘ TƯ PHÁP — gồm hồ sơ của người nhận (theo khoản 1 Điều 31 của Luật), 01 bộ hồ sơ của người được nhận làm con nuôi và giấy tờ chứng minh thuộc trường hợp đích danh tương ứng.",
+    "ground_truth_citations": [
+      { "dieu": "13", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype NƠI NỘP — bản NCN (nộp Bộ Tư pháp — khác hẳn UBND xã của đăng ký trong nước, đo phân biệt trong/ngoài nước). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V099",
+    "question": "Ở Đồng Nai có nộp hồ sơ xin cấp Giấy chứng nhận quyền sử dụng đất qua mạng được không, và có lợi gì về chi phí?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap1",
+    "subtype": "archetype:noi-nop",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Được, và có lợi rõ về chi phí. Theo Điều 1 Khoản 6 Điểm b Nghị quyết 21/2024/NQ-HĐND tỉnh Đồng Nai, hồ sơ nộp TRỰC TUYẾN có mức thu lệ phí cấp Giấy chứng nhận bằng 0% (không mất lệ phí); đồng thời theo Phụ lục I Nghị quyết 22/2024/NQ-HĐND, phí thẩm định hồ sơ nộp trực tuyến cũng thấp hơn nộp trực tiếp (ví dụ hồ sơ cấp lần đầu về quyền sử dụng đất của hộ gia đình: 836.000 đồng so với 880.000 đồng).",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "6", "diem": "b", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai" },
+      { "dieu": "I", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype NƠI NỘP/HÌNH THỨC — bản đất đai (online + ưu đãi phí; tổng hợp V013+V016 dưới khuôn archetype). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V100",
+    "question": "Cơ quan nào cấp Giấy chứng nhận quyền sử dụng đất lần đầu cho cá nhân?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:tham-quyen",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 136 Khoản 1 Điểm b Luật Đất đai 2024: ỦY BAN NHÂN DÂN CẤP HUYỆN cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất lần đầu cho người sử dụng đất quy định tại khoản 3 và khoản 4 Điều 4 của Luật (gồm cá nhân). (Với đăng ký biến động về sau: tổ chức đăng ký đất đai hoặc chi nhánh thực hiện — Khoản 2.)",
+    "ground_truth_citations": [
+      { "dieu": "136", "khoan": "1", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype THẨM QUYỀN — câu BÙ thứ 1 (đất đai có 2 thủ tục nên có 2 câu thẩm quyền: V078 CMĐSDĐ + V100 cấp GCN). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V101",
+    "question": "Đất lấn chiếm hành lang bảo vệ an toàn công trình công cộng có được cấp Giấy chứng nhận không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:tu-choi",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Về nguyên tắc là KHÔNG. Theo Điều 139 Khoản 1 Luật Đất đai 2024: đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng sau khi Nhà nước đã công bố, cắm mốc; lấn chiếm lòng đường, lề đường, vỉa hè sau khi đã công bố chỉ giới xây dựng; hoặc lấn chiếm đất dùng cho trụ sở cơ quan, công trình sự nghiệp, công trình công cộng khác — thì Nhà nước THU HỒI đất để trả lại cho công trình, KHÔNG cấp Giấy chứng nhận cho diện tích đã lấn chiếm. Ngoại lệ: nếu quy hoạch đã điều chỉnh và diện tích đó không còn thuộc hành lang bảo vệ/chỉ giới xây dựng thì được XEM XÉT cấp và phải thực hiện nghĩa vụ tài chính.",
+    "ground_truth_citations": [
+      { "dieu": "139", "khoan": "1", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype TỪ CHỐI — câu BÙ thứ 2 (đất đai 2 câu tu-choi: V096 từ chối tiếp nhận hồ sơ + V101 không cấp GCN đất vi phạm). Cùng khoản với V031 (gap3) nhưng góc archetype đơn giản. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V102",
+    "question": "Việc nuôi con nuôi được giải quyết trong thời hạn bao lâu kể từ khi nộp đủ hồ sơ hợp lệ?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "archetype:thoi-han",
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 19 Khoản 2 Luật Nuôi con nuôi 2010: thời hạn giải quyết việc nuôi con nuôi là 30 NGÀY, kể từ ngày Ủy ban nhân dân cấp xã nhận đủ hồ sơ hợp lệ.",
+    "ground_truth_citations": [
+      { "dieu": "19", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP1 archetype THỜI HẠN — câu BÙ thứ 3 (NCN có 2 câu thoi-han: V085 đăng ký lại 5 ngày + V102 đăng ký mới 30 ngày). Câu ngắn 1-fact, khác V039 (hỏi kép hình thức+thời hạn). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
