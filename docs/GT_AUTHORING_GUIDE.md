@@ -79,13 +79,18 @@ domain khác trong cùng gap, ghi lý do vào mục Limitations.
   "synthesis": false,
   "ground_truth_answer": "…bám chữ văn bản, đủ giàu nếu synthesis=true…",
   "ground_truth_citations": [
-    { "dieu": "3", "khoan": "1", "van_ban": "id-van-ban-trong-corpus" }
+    { "dieu": "3", "khoan": "1", "van_ban": "id-van-ban-trong-corpus" },
+    { "dieu": "1B", "khoan": "1", "van_ban": "…", "loai": "phu_luc" }
   ],
   "relevant_component_ids": [],
   "notes": "vị trí đáp án + Verify OK <ngày> + reviewer",
   "review": { "verified_by": null, "date": null }
 }
 ```
+
+Quy ước citation Phụ lục (khớp `parse_citations` của harness): `loai: "phu_luc"`,
+`dieu` = ký hiệu phụ lục ("1B", "I") hoặc `"_default"` nếu phụ lục không có ký hiệu;
+`khoan` optional (gt.khoan=null là wildcard theo `cit_matches`).
 
 Quy ước: id mới prefix **V** (V001–V150) để không đụng Q001–Q026 của dev set. `gap_type`
 giữ đúng 5 giá trị cũ → harness (`metrics.aggregate`, `negative_correct`) không cần sửa;

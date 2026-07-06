@@ -90,5 +90,313 @@
     "relevant_component_ids": [],
     "notes": "NEGATIVE-TRAP theo D-05 (scope loại đất lâm nghiệp có chủ đích). NUANCE cho reviewer: corpus CÓ mention rải rác 'đất rừng sản xuất' trong Luật ĐĐ Đ121/122 (điều kiện chung) nhưng KHÔNG có Luật Lâm nghiệp/NĐ 156 → không thể dựng thủ tục đúng. Hành vi mong muốn: từ chối/cảnh báo ngoài scope; trích Đ121/122 rồi tư vấn trọn quy trình = hành vi nguy hiểm cần bắt. [A] quyết định giữ/bỏ khi review.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V006",
+    "question": "Tôi đăng ký khai sinh quá hạn cho con tại UBND cấp xã ở TP.HCM thì phải nộp lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục 1B Khoản 1 Nghị quyết 124/2016/NQ-HĐND TP.HCM, lệ phí đăng ký khai sinh tại UBND cấp xã là 5.000 đồng/trường hợp. Lưu ý: đăng ký khai sinh ĐÚNG HẠN thuộc diện miễn thu lệ phí, nên mức 5.000 đồng áp dụng cho trường hợp quá hạn/đăng ký lại như câu hỏi.",
+    "ground_truth_citations": [
+      { "dieu": "1B", "khoan": "1", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap2 trong domain HỘ TỊCH (hiếm — lệ phí hộ tịch do HĐND tỉnh quy định). Câu này stress giả định 'hộ tịch = toàn quốc' của planner (_apply_jurisdiction_rules auto toan-quoc) trong khi văn bản là tp-hcm → expected khó cho hệ, là finding thật nếu fail. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V007",
+    "question": "Tôi đăng ký khai sinh quá hạn cho con tại UBND cấp xã ở Đồng Nai thì phải nộp lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V006",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục a — đăng ký hộ tịch tại UBND cấp xã), lệ phí khai sinh đăng ký không đúng hạn/đăng ký lại là 10.000 đồng. Đăng ký đúng hạn được miễn; nếu nộp hồ sơ trực tuyến thuộc thẩm quyền cấp xã thì được miễn 100% lệ phí.",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR với V006 (đổi đúng jurisdiction): cùng việc khai sinh quá hạn cấp xã, HCM 5.000đ vs ĐN 10.000đ — khác cả văn bản lẫn con số. Phụ lục NQ11 không ký hiệu → dieu '_default', mục a) là text không phải Khoản heading → khoan null (wildcard). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V008",
+    "question": "Nộp hồ sơ đăng ký hộ tịch trực tuyến thuộc thẩm quyền UBND cấp xã ở Đồng Nai có mất lệ phí không?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Không. Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục d — trường hợp đăng ký hộ tịch trực tuyến), đăng ký hộ tịch thuộc thẩm quyền của UBND cấp xã qua hình thức trực tuyến được MIỄN 100% lệ phí. (Thuộc thẩm quyền cấp huyện và Sở Tư pháp thì thu 50% mức trực tiếp.)",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Quy định ĐẶC THÙ Đồng Nai (HCM không có quy định online tương tự trong corpus) → đo khả năng bắt tín hiệu địa phương riêng biệt. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V009",
+    "question": "Lệ phí đăng ký kết hôn tại UBND cấp huyện ở TP.HCM là bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục 1B Khoản 2 Nghị quyết 124/2016/NQ-HĐND TP.HCM, lệ phí đăng ký kết hôn tại UBND cấp huyện là 1.000.000 đồng/trường hợp. (Kết hôn của công dân Việt Nam cư trú trong nước — đăng ký tại cấp xã — thuộc diện miễn lệ phí.)",
+    "ground_truth_citations": [
+      { "dieu": "1B", "khoan": "2", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Kết hôn cấp huyện (thường có yếu tố nước ngoài) 1.000.000đ — số lớn, dễ đối chiếu. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V010",
+    "question": "Lệ phí đăng ký kết hôn tại UBND cấp huyện ở Đồng Nai là bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V009",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục b — đăng ký hộ tịch tại UBND cấp huyện), lệ phí đăng ký kết hôn tại UBND cấp huyện là 1.500.000 đồng.",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR với V009 (đổi đúng jurisdiction): kết hôn cấp huyện HCM 1.000.000đ vs ĐN 1.500.000đ. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V011",
+    "question": "Hộ gia đình ở phường tại TP.HCM đăng ký, cấp Giấy chứng nhận quyền sử dụng đất lần đầu đồng loạt thì phí thẩm định hồ sơ đất là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 02/2023/NQ-HĐND TP.HCM, Khoản 2 Điểm b (đăng ký, cấp giấy chứng nhận lần đầu đồng loạt đối với hộ gia đình, cá nhân ở phường): phí thẩm định hồ sơ Đất là 850.000 đồng/hồ sơ. (Ở xã, thị trấn mức này là 420.000 đồng/hồ sơ — Điểm a.)",
+    "ground_truth_citations": [
+      { "dieu": "_default", "khoan": "2", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Distractor nội văn bản: Điểm a (xã/thị trấn 420.000) vs Điểm b (phường 850.000) — phải pinpoint đúng loại địa bàn. Citation cấp khoản (giống format Q007 dev set). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V012",
+    "question": "Cá nhân có đất thuộc một phường của thành phố Biên Hòa, Đồng Nai xin cấp Giấy chứng nhận quyền sử dụng đất (nộp hồ sơ trực tiếp) thì lệ phí cấp giấy là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 21/2024/NQ-HĐND tỉnh Đồng Nai (mục I.2), hộ gia đình, cá nhân có đất thuộc các phường của thành phố Long Khánh và Biên Hòa nộp lệ phí cấp Giấy chứng nhận quyền sử dụng đất là 30.000 đồng/giấy (nếu giấy gồm cả quyền sở hữu tài sản gắn liền với đất là 120.000 đồng/giấy).",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Distractor nội văn bản: mục I.2 (phường Biên Hòa/Long Khánh 30.000) vs I.3 (xã/thị trấn 15.000) — phân theo khu vực trong tỉnh. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V013",
+    "question": "Nếu tôi nộp hồ sơ trực tuyến xin cấp Giấy chứng nhận quyền sử dụng đất ở Đồng Nai thì lệ phí tính như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 1 Khoản 6 Điểm b Nghị quyết 21/2024/NQ-HĐND tỉnh Đồng Nai, mức thu lệ phí đối với hồ sơ nộp trực tuyến bằng 0% mức thu trực tiếp — tức là không phải nộp lệ phí cấp Giấy chứng nhận khi nộp hồ sơ trực tuyến.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "6", "diem": "b", "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Chính sách khuyến khích trực tuyến đặc thù Đồng Nai (0%). Citation cấp Điểm — verify tới dieu_khoan_diem. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V014",
+    "question": "Hộ gia đình, cá nhân ở TP.HCM được cấp Giấy chứng nhận quyền sử dụng đất lần đầu (chỉ có quyền sử dụng đất) thì lệ phí cấp giấy là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V012",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục 1C Nghị quyết 124/2016/NQ-HĐND TP.HCM (mục a — cấp Giấy chứng nhận lần đầu), lệ phí cấp GCN quyền sử dụng đất cho cá nhân, hộ gia đình tại QUẬN là 25.000 đồng/giấy; tại HUYỆN là 0 đồng (không thu).",
+    "ground_truth_citations": [
+      { "dieu": "1C", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "PAIR liên tỉnh với V012 (ĐN: phường Biên Hòa/LK 30.000, xã 15.000): cùng việc lệ phí cấp GCN lần đầu chỉ QSDĐ. Điểm nhấn: HCM tại huyện = 0 ĐỒNG — con số bất ngờ, dễ bị hệ bỏ qua. Mục a) là text không phải Khoản heading → citation cấp Phụ lục. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V015",
+    "question": "Hộ gia đình, cá nhân ở Đồng Nai nộp hồ sơ trực tiếp xin cấp Giấy chứng nhận quyền sử dụng đất lần đầu (chỉ đất) thì phí thẩm định hồ sơ là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V011",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục I Nghị quyết 22/2024/NQ-HĐND tỉnh Đồng Nai (biểu mức thu phí thẩm định hồ sơ cấp lần đầu), hộ gia đình, cá nhân nộp hồ sơ trực tiếp xin cấp giấy chứng nhận về quyền sử dụng đất chịu phí thẩm định 880.000 đồng/hồ sơ (nộp trực tuyến là 836.000 đồng; nếu cấp cho cả đất và tài sản gắn liền với đất là 1.250.000 đồng).",
+    "ground_truth_citations": [
+      { "dieu": "I", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "PAIR liên tỉnh với V011 (HCM 850.000/hồ sơ đất ở phường). NUANCE cho reviewer: HCM tính theo loại hình 'đồng loạt' phân xã/phường, ĐN tính phẳng theo loại hồ sơ + hình thức nộp — cấu trúc biểu phí 2 tỉnh KHÁC NHAU, đó chính là tín hiệu Gap 2. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V016",
+    "question": "Ở Đồng Nai, nộp hồ sơ trực tuyến xin cấp Giấy chứng nhận lần đầu thì phí thẩm định có rẻ hơn nộp trực tiếp không?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Có. Theo Phụ lục I Nghị quyết 22/2024/NQ-HĐND tỉnh Đồng Nai, mức phí thẩm định hồ sơ trực tuyến thấp hơn trực tiếp: với hộ gia đình, cá nhân, hồ sơ cấp giấy chứng nhận về quyền sử dụng đất là 836.000 đồng (trực tuyến) so với 880.000 đồng (trực tiếp); cả đất và tài sản là 1.187.500 đồng so với 1.250.000 đồng.",
+    "ground_truth_citations": [
+      { "dieu": "I", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Chính sách ưu đãi trực tuyến đặc thù ĐN (giảm ~5% phí thẩm định) — cùng họ với V013 (lệ phí 0%) nhưng khác loại phí, khác văn bản. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V017",
+    "question": "Gia đình tôi thuộc diện hộ cận nghèo ở TP.HCM, khi làm hồ sơ cấp Giấy chứng nhận quyền sử dụng đất thì có được miễn phí thẩm định hồ sơ không?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không. Theo Điều 1 Khoản 4 Nghị quyết 02/2023/NQ-HĐND TP.HCM, đối tượng được miễn phí thẩm định gồm: trẻ em, hộ nghèo, người cao tuổi, người khuyết tật, người có công với cách mạng, đồng bào dân tộc thiểu số ở các xã có điều kiện kinh tế - xã hội đặc biệt khó khăn — danh sách này KHÔNG bao gồm hộ cận nghèo, nên hộ cận nghèo tại TP.HCM không thuộc diện miễn.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "4", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Câu trả lời PHỦ ĐỊNH dựa trên danh sách đóng của K4 (cận nghèo không có trong danh sách miễn của HCM). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V018",
+    "question": "Gia đình tôi thuộc diện hộ cận nghèo ở Đồng Nai, khi làm hồ sơ cấp Giấy chứng nhận quyền sử dụng đất thì có được miễn phí thẩm định hồ sơ không?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V017",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Có. Theo Điều 1 Khoản 4 Điểm a Nghị quyết 22/2024/NQ-HĐND tỉnh Đồng Nai, các hộ nghèo VÀ hộ cận nghèo theo chuẩn nghèo của tỉnh Đồng Nai thuộc đối tượng được miễn nộp phí thẩm định hồ sơ cấp Giấy chứng nhận.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "4", "diem": "a", "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR với V017 — ĐÁP ÁN ĐẢO NGƯỢC theo jurisdiction (HCM: không miễn cận nghèo / ĐN: miễn). Cặp mạnh nhất của Gap 2: cùng câu hỏi, chỉ đổi tỉnh, câu trả lời lật từ Không sang Có. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V019",
+    "question": "Người cao tuổi có được miễn lệ phí hộ tịch khi làm thủ tục tại Đồng Nai không, và ngoài ra những ai cũng được miễn?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Có. Theo Điều 1 Khoản 2 Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (điểm b), đối tượng miễn lệ phí hộ tịch gồm: trẻ em; người cao tuổi; người khuyết tật; người có công với cách mạng và thân nhân; người dân tộc thiểu số tại các xã khu vực I vùng đồng bào dân tộc thiểu số và miền núi; trẻ em mồ côi cả cha mẹ không nơi nương tựa; người thuộc hộ nghèo, hộ cận nghèo theo chuẩn nghèo đa chiều của tỉnh; người mắc bệnh hiểm nghèo, bệnh nan y, người nhiễm HIV/AIDS, người nhiễm chất độc hóa học; và công dân Việt Nam cư trú trong nước đăng ký khai sinh, khai tử đúng hạn, giám hộ, kết hôn.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "2", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "SYNTHESIS câu (đáp án liệt kê dài — nhiên liệu E2c). Danh sách miễn của ĐN rộng hơn HCM đáng kể (thêm cận nghèo, bệnh hiểm nghèo, HIV, chất độc hóa học, DTTS khu vực I...) — chất liệu so sánh gap2. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V020",
+    "question": "Theo bảng giá đất mới của TP.HCM, đất nông nghiệp được phân thành mấy khu vực, và đất nông nghiệp tại xã Củ Chi thuộc khu vực nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 3 Khoản 1 Nghị quyết 87/2025/NQ-HĐND TP.HCM (Bảng giá đất), đất nông nghiệp được phân thành 04 khu vực. Xã Củ Chi nằm trong danh sách Khu vực III (Điểm c) cùng các xã Tân An Hội, Thái Mỹ, An Nhơn Tây, Nhuận Đức, Phú Hòa Đông, Bình Mỹ...",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "1", "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm" },
+      { "dieu": "3", "khoan": "1", "diem": "c", "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Bảng giá đất HCM (hiệu lực 01/01/2026): phân 4 khu vực theo DANH SÁCH ĐỊA BÀN — pinpoint xã Củ Chi trong list dài Điểm c. Lưu ý danh sách dùng đơn vị hành chính sau sáp nhập ('xã Củ Chi'). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V021",
+    "question": "Ở Đồng Nai, thửa đất trồng cây lâu năm ở vị trí 1 nhưng nằm cách mốc hành lang an toàn đường bộ 150 mét thì giá đất được tính như thế nào theo bảng giá đất mới?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 5 Khoản 1 Điểm a Nghị quyết 28/2025/NQ-HĐND tỉnh Đồng Nai, vị trí 1 chia theo phạm vi khoảng cách từ mốc hành lang an toàn đường bộ: khoảng cách 150 mét thuộc Phạm vi 2 (trên 100 mét đến hết mét thứ 200) nên giá đất tính bằng 80% giá đất nông nghiệp vị trí 1, nhưng không được thấp hơn giá đất tối thiểu theo từng địa bàn xã, phường quy định tại Phụ lục VIII.",
+    "ground_truth_citations": [
+      { "dieu": "5", "khoan": "1", "diem": "a", "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "HARD: đòi suy luận khoảng (150m → phạm vi 2 → 80%) từ quy tắc 3 phạm vi (100%/80%/60%). Phương pháp ĐN (vị trí + phạm vi mét) khác hẳn HCM (khu vực địa bàn) — tín hiệu Gap 2 cấp phương pháp luận. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V022",
+    "question": "Cách xác định giá đất nông nghiệp trong bảng giá đất của TP.HCM và của Đồng Nai khác nhau như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Hai địa phương dùng phương pháp khác nhau. TP.HCM (Điều 3 Khoản 1 Nghị quyết 87/2025/NQ-HĐND): phân đất nông nghiệp thành 04 khu vực theo DANH SÁCH địa bàn phường/xã cụ thể (Khu vực I ở trung tâm đến Khu vực IV xa trung tâm). Đồng Nai (Điều 5 Khoản 1 Nghị quyết 28/2025/NQ-HĐND): định giá theo VỊ TRÍ so với tuyến đường giao thông — vị trí 1 chia 3 phạm vi khoảng cách từ hành lang an toàn đường bộ (đến 100m: 100%; trên 100–200m: 80%; trên 200m: 60% giá vị trí 1), vị trí 2 tính 30% giá vị trí 1, kèm sàn/trần giá theo địa bàn tại các Phụ lục.",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "1", "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm" },
+      { "dieu": "5", "khoan": "1", "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MULTI-JURIS SYNTHESIS (jurisdiction=toan-quoc vì câu so sánh 2 tỉnh) — đúng dạng yếu đã biết của hệ (D-21: multi-juris Δ −0.244). Đòi kéo VĂN BẢN CẢ 2 TỈNH cùng lúc và tổng hợp tương phản. Nhiên liệu E2c + error analysis. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]

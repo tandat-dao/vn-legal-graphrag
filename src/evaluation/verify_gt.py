@@ -74,12 +74,14 @@ def build_corpus_index(raw_dir: Path) -> dict:
             "dieu": set(), "dieu_khoan": set(),
             "dieu_khoan_diem": set(), "phu_luc": set(),
         })
+        entry.setdefault("phu_luc_khoan", set())
         for node in parsed["nodes"]:
-            # context_path = [norm_id, "Điều X. ...", "Khoản Y.", "Điểm z.", ...]
-            dieu = khoan = diem = None
+            # context_path = [norm_id, "Điều X. ..."|"Phụ lục ...", "Khoản Y.", ...]
+            dieu = khoan = diem = pl = None
             for seg in node["context_path"][1:]:
                 if seg.startswith("Phụ lục"):
-                    entry["phu_luc"].add(_norm_text(seg))
+                    pl = _norm_text(seg)
+                    entry["phu_luc"].add(pl)
                     continue
                 m = _DIEU_RE.match(seg)
                 if m:
@@ -88,6 +90,8 @@ def build_corpus_index(raw_dir: Path) -> dict:
                 m = _KHOAN_RE.match(seg)
                 if m:
                     khoan = m.group(1)
+                    if pl:
+                        entry["phu_luc_khoan"].add((pl, khoan))
                     continue
                 m = _DIEM_RE.match(seg)
                 if m:
@@ -111,12 +115,24 @@ def verify_citation(cit: dict, index: dict) -> str | None:
     if not dieu:
         return "citation thiếu 'dieu'"
 
-    # Citation Phụ lục: khớp prefix theo label chuẩn hóa
-    if dieu.lower().startswith("phụ lục"):
-        target = _norm_text(dieu)
-        if not any(pl.startswith(target) or target.startswith(pl)
-                   for pl in entry["phu_luc"]):
-            return f"'{dieu}' không khớp Phụ lục nào trong {vb}"
+    # Citation Phụ lục (format harness: loai="phu_luc", dieu=ký hiệu "1B"|"I"|"_default")
+    if cit.get("loai") == "phu_luc" or dieu.lower().startswith("phụ lục"):
+        if not entry["phu_luc"]:
+            return f"{vb} không có Phụ lục nào"
+        if dieu == "_default":
+            matched = set(entry["phu_luc"])  # norm chỉ có phụ lục không ký hiệu
+        else:
+            target = _norm_text(dieu if dieu.lower().startswith("phụ lục")
+                                else f"phụ lục {dieu}")
+            matched = {pl for pl in entry["phu_luc"]
+                       if pl.startswith(target) or target.startswith(pl)}
+            if not matched:
+                return f"Phụ lục '{dieu}' không khớp Phụ lục nào trong {vb}"
+        khoan = cit.get("khoan")
+        if khoan is not None:
+            khoan = str(khoan).strip()
+            if not any((pl, khoan) in entry["phu_luc_khoan"] for pl in matched):
+                return f"Phụ lục '{dieu}' Khoản {khoan} không tồn tại trong {vb}"
         return None
 
     if dieu not in entry["dieu"]:
