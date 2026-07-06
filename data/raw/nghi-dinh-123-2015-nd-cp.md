@@ -21,21 +21,21 @@ summary: "Nghị định 123/2015/NĐ-CP (tier 2, toàn quốc, hiệu lực t�
 ## Điều 1. Phạm vi điều chỉnh
 
 Nghị định này quy định chi tiết một số điều của Luật Hộ tịch về đăng ký khai sinh, kết hôn, quản lý và sử dụng Sổ hộ tịch trong giai đoạn Cơ sở dữ liệu hộ tịch điện tử và Cơ sở dữ liệu quốc gia về dân cư chưa được vận hành thống nhất trên cả nước (sau đây gọi là giai đoạn chuyển tiếp); đăng ký khai sinh cho trẻ em bị bỏ rơi, trẻ em chưa xác định được cha, mẹ, trẻ em sinh ra do mang thai hộ; khai sinh, kết hôn, nhận cha, mẹ, con, khai tử tại khu vực biên giới; cấp Giấy xác nhận tình trạng hôn nhân; đăng ký giám sát việc giám hộ, đăng ký chấm dứt giám sát việc giám hộ; đăng ký khai sinh cho trẻ em sinh ra ở nước ngoài chưa được đăng ký khai sinh về cư trú tại Việt Nam; đăng ký kết hôn có yếu tố nước ngoài tại Ủy ban nhân dân cấp huyện; ghi vào Sổ hộ tịch việc kết hôn, ly hôn, hủy việc kết hôn của công dân Việt Nam đã được giải quyết tại cơ quan có thẩm quyền nước ngoài; đăng ký lại khai sinh, kết hôn, khai tử; việc bố trí công chức tư pháp - hộ tịch làm công tác hộ tịch chuyên trách và một số biện pháp thi hành Luật Hộ tịch.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 1 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 1 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ## Điều 2. Quy định về xuất trình, nộp giấy tờ khi đăng ký hộ tịch, cấp bản sao trích lục hộ tịch
 
 ### Khoản 1.
 
 Người yêu cầu đăng ký hộ tịch, cấp bản sao trích lục hộ tịch xuất trình bản chính một trong các giấy tờ là hộ chiếu, chứng minh nhân dân, Thẻ căn cước công dân, Thẻ căn cước, Căn cước điện tử, Giấy chứng nhận căn cước hoặc giấy tờ khác có dán ảnh và thông tin cá nhân do cơ quan có thẩm quyền cấp, còn giá trị sử dụng (sau đây gọi là giấy tờ tùy thân) để chứng minh về nhân thân.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 <!-- amended_by: 104/2022/NĐ-CP, khoản 2 Điều 13, hiệu lực: 01/01/2023, nội dung: bãi bỏ Cụm từ “Trong giai đoạn chuyển tiếp, người yêu cầu đăng ký hộ tịch phải xuất trình giấy tờ chứng minh nơi cư trú” -->
 
 ### Khoản 2.
 
 Người yêu cầu đăng ký khai sinh phải nộp Giấy chứng sinh hoặc giấy tờ thay Giấy chứng sinh theo quy định tại khoản 1 Điều 16 của Luật Hộ tịch; người yêu cầu đăng ký khai tử phải nộp Giấy báo tử hoặc giấy tờ thay Giấy báo tử theo quy định tại khoản 1 Điều 34 của Luật Hộ tịch và tại khoản 2 Điều 4 của Nghị định này.
 Trường hợp người yêu cầu đã nộp bản điện tử Giấy chứng sinh, Giấy báo tử hoặc cơ quan đăng ký hộ tịch đã khai thác được dữ liệu điện tử có ký số của Giấy chứng sinh, Giấy báo tử thì không phải nộp bản giấy.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 
 ### Khoản 3. 
 
@@ -55,7 +55,7 @@ Bản sao giấy tờ trong hồ sơ đăng ký hộ tịch là bản sao đư�
 
 Người yêu cầu đăng ký hộ tịch có thể nộp hồ sơ trực tiếp tại cơ quan đăng ký hộ tịch, gửi hồ sơ qua hệ thống bưu chính hoặc đăng ký trực tuyến theo quy định pháp luật về đăng ký hộ tịch trực tuyến.
 Hồ sơ đăng ký hộ tịch lập thành 01 (một) bộ.
-<!-- amended_by: 07/2025/NĐ-CP, điểm b khoản 3 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, điểm b khoản 3 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 
 ### Khoản 2. 
 
@@ -78,8 +78,8 @@ Trường hợp người yêu cầu gửi hồ sơ qua hệ thống bưu chính 
 Đối với yêu cầu đăng ký kết hôn, cơ quan đăng ký hộ tịch tra cứu thông tin về tình trạng hôn nhân của người yêu cầu đăng ký kết hôn trên Hệ thống thông tin giải quyết thủ tục hành chính cấp tỉnh thông qua kết nối với Cơ sở dữ liệu hộ tịch điện tử, Cơ sở dữ liệu quốc gia về dân cư.
 Kết quả tra cứu được lưu trữ dưới dạng điện tử hoặc bản giấy, phản ánh đầy đủ, chính xác thông tin tại thời điểm tra cứu và đính kèm hồ sơ của người đăng ký.
 Trường hợp không tra cứu được tình trạng hôn nhân do chưa có thông tin trong Cơ sở dữ liệu hộ tịch điện tử, Cơ sở dữ liệu quốc gia về dân cư, thì cơ quan đăng ký hộ tịch đề nghị Ủy ban nhân dân cấp xã nơi người yêu cầu thường trú/nơi đã đăng ký kết hôn xác minh, cung cấp thông tin. Trong thời hạn 03 ngày làm việc kể từ ngày nhận được yêu cầu xác minh, Ủy ban nhân dân cấp xã nơi nhận được đề nghị xác minh có trách nhiệm kiểm tra, xác minh và gửi kết quả về tình trạng hôn nhân của người đó.
-<!-- amended_by: 07/2025/NĐ-CP, điểm c khoản 3 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
-<!-- amended_by: 07/2025/NĐ-CP, điểm a khoản 3 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung tên điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, điểm c khoản 3 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, điểm a khoản 3 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung tên điều này -->
 
 ## Điều 4. Xác định nội dung đăng ký khai sinh, khai tử
 
@@ -98,7 +98,7 @@ Quốc tịch của trẻ em được xác định theo quy định của pháp 
 #### Điểm c.[9] 
 
 Số định danh cá nhân của người được đăng ký khai sinh được cấp khi đăng ký khai sinh. Việc cấp Số định danh cá nhân được thực hiện theo quy định của Luật Căn cước và các văn bản quy định chi tiết thi hành, trên cơ sở bảo đảm đồng bộ với Luật Hộ tịch và Nghị định này;
-<!-- amended_by: 07/2025/NĐ-CP, khoản 4 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 4 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 
 #### Điểm d. 
 
@@ -193,7 +193,7 @@ Người yêu cầu đăng ký khai sinh nộp các giấy tờ theo quy định
 ### Khoản 2.
 
 Người yêu cầu đăng ký khai sinh xuất trình giấy tờ theo quy định tại khoản 1 Điều 2 của Nghị định này.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 5 Điều 2, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 5 Điều 2, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung khoản này -->
 
 ## Điều 10. Giấy tờ nộp và xuất trình khi đăng ký kết hôn
 
@@ -201,7 +201,7 @@ Người yêu cầu đăng ký kết hôn xuất trình giấy tờ theo quy đ�
 
 ### Khoản 1. (được bãi bỏ)
 
-<!-- amended_by: 07/2025/NĐ-CP, khoản 10 Điều 2, hiệu lực: 09/01/2019, nội dung: bãi bỏ khoản này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 10 Điều 2, hiệu lực: 09/01/2025, nội dung: bãi bỏ khoản này -->
 
 ### Khoản 2. 
 
