@@ -1362,5 +1362,79 @@
     "relevant_component_ids": [],
     "notes": "GAP4 trên component 2-CTV THỨ HAI của graph (Đ65 K5 — cùng cặp với V046/Đ116 K5): bản gốc 2024-08-01 vs bản sửa 01/07/2025. Phủ đủ CẢ 2 component có chuỗi CTV thật. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V074",
+    "question": "Hạn mức giao đất ở cho cá nhân tại Đồng Nai được quy định trong văn bản nào, và văn bản đó được ban hành theo thẩm quyền nào của Luật Đất đai?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": "V033",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 195 Khoản 2 và Điều 196 Khoản 2 Luật Đất đai 2024, UBND cấp tỉnh căn cứ quỹ đất và tình hình thực tế địa phương quy định hạn mức giao đất ở cho cá nhân tại nông thôn và đô thị. Tại Đồng Nai, UBND tỉnh ban hành Quyết định 92/2025/QĐ-UBND: Điều 3 quy định hạn mức tại đô thị không quá 200–300 m² và tại nông thôn không quá 300–400 m² tùy nhóm địa bàn phường/xã (hiệu lực từ 11/01/2026, thay thế Quyết định 42/2024/QĐ-UBND).",
+    "ground_truth_citations": [
+      { "dieu": "195", "khoan": "2", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "196", "khoan": "2", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "3", "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 chuỗi tier1→tier4 — MIRROR của V033 phía Đồng Nai (pair_id V033): cùng dạng chuỗi ủy quyền, đích khác văn bản → cặp đo tính đối xứng của traversal giữa 2 tỉnh. QĐ92 Đ1 tự trích 'khoản 2 Điều 195 và khoản 2 Điều 196'. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V075",
+    "question": "Tôi đăng ký khai sinh ở quê nhưng nay sống ở thành phố khác — tôi có thể xin cấp bản sao trích lục khai sinh tại nơi đang sống không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Được. Theo Điều 13 Khoản 1 Nghị định 87/2020/NĐ-CP (bản sửa đổi bởi Nghị định 07/2025/NĐ-CP, hiệu lực 09/01/2025): cơ quan có thẩm quyền cấp bản sao trích lục hộ tịch từ Cơ sở dữ liệu hộ tịch điện tử theo yêu cầu của cá nhân, KHÔNG PHỤ THUỘC vào nơi đã đăng ký việc hộ tịch và nơi cư trú của người có yêu cầu — tức có thể xin cấp bản sao trích lục khai sinh tại nơi đang sinh sống nhờ dữ liệu hộ tịch điện tử.",
+    "ground_truth_citations": [
+      { "dieu": "13", "khoan": "1", "van_ban": "nghi-dinh-87-2020-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: quyền 'phi địa giới' nhờ CSDL điện tử — nội dung theo bản sửa NĐ 07/2025. Câu người dân hỏi cực kỳ thường gặp. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V076",
+    "question": "Nghị quyết 02/2023/NQ-HĐND TP.HCM về phí thẩm định hồ sơ cấp Giấy chứng nhận có hiệu lực từ khi nào và thay thế văn bản nào trước đó?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 3 Khoản 2 Nghị quyết 02/2023/NQ-HĐND TP.HCM: Nghị quyết được HĐND Thành phố khóa X, kỳ họp thứ chín thông qua ngày 18/4/2023, có hiệu lực từ ngày 01/6/2023, và THAY THẾ Nghị quyết số 17/2017/NQ-HĐND ngày 07/12/2017 về mức thu phí thẩm định cấp giấy chứng nhận quyền sử dụng đất trên địa bàn TP.HCM.",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "2", "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 hiệu-lực + thay-thế ở cấp NQ HĐND (tier 4) — văn bản bị thay (NQ 17/2017) NGOÀI corpus nên GT chỉ cite điều khoản thay thế trong NQ02 (không đòi hệ mô tả nội dung NQ17). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V077",
+    "question": "Sau khi tôi nộp hồ sơ đăng ký hộ tịch trực tuyến, trong bao lâu cơ quan đăng ký phải kiểm tra hồ sơ và phản hồi?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "NGAY TRONG NGÀY LÀM VIỆC. Theo Điều 12 Khoản 3 Nghị định 87/2020/NĐ-CP (khoản này đã được sửa đổi, bổ sung bởi Nghị định 07/2025/NĐ-CP, hiệu lực 09/01/2025): khi nhận được hồ sơ đăng ký hộ tịch trực tuyến, cơ quan đăng ký hộ tịch có thẩm quyền kiểm tra tính đầy đủ, phù hợp của hồ sơ ngay trong ngày làm việc — nếu hồ sơ chưa đầy đủ thì yêu cầu bổ sung, hoàn thiện (điểm a); nếu đầy đủ, phù hợp thì tiếp nhận và gửi ngay Phiếu hẹn trả kết quả qua thư điện tử hoặc tin nhắn điện thoại (điểm b).",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "3", "van_ban": "nghi-dinh-87-2020-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: SLA xử lý trực tuyến 'trong ngày' — nội dung theo bản sửa NĐ 07/2025. Cùng họ hiện-đại-hóa với V075. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
