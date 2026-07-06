@@ -1,5 +1,13 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.20 | Cập nhật 2026-07-06**
+**Phiên bản 2.21 | Cập nhật 2026-07-06**
+
+> **v2.21 — Cập nhật 2026-07-06 (EVAL SET V2 HOÀN THÀNH — 150 câu, verify --final PASS):**
+>
+> **1. Bộ GT eval set v2 soạn xong 150/150 câu** (`data/evaluation/test_set_v2.json`), theo `docs/GT_AUTHORING_GUIDE.md`. Phân bổ: gap1 25 (7 bộ archetype song song 3 domain), gap2 26 (6 minimal-pair liên tỉnh, 2 cặp ĐẢO đáp án Có/Không), gap3 25 (chuỗi ủy quyền/tinh-chỉnh/AMENDS, dài nhất 3 văn bản), gap4 25 (regime-diff 2013/2024, 2 component CTV-kép, span-regime, mô hình 2 cấp), negative 14 (8 obvious + 6 trap verified-absent), underspecified 8 (bảo vệ D-25, có bản bất-đối-xứng), composite 8 (có câu 4-gap + liên-lĩnh-vực NCN+hộ tịch), register 19 (khẩu ngữ, citation giữ nguyên câu gốc). Theme: dat-dai 61/ho-tich 52/ncn 29/null 8; difficulty: easy 40/medium 59/hard 51. **Mọi citation verify cơ khí ngược corpus** (`python -m src.evaluation.verify_gt --final` PASS).
+>
+> **2. Sửa 3 lỗi data corpus B phát hiện khi soạn** (commit riêng từng lỗi): NĐ123 `implements: null` → `luat-ho-tich-2014` (thiếu cạnh IMPLEMENTS trực tiếp — Gap 3); 9+6 annotation NĐ 07/2025 ghi nhầm hiệu lực 09/01/**2019** → 09/01/**2025** (NĐ123 + NĐ87 — đầu độc Gap 4); đã re-ingest, graph xác nhận 18/18 Amendment đúng date, cạnh NĐ123→Luật HT có. **Việc B hậu kiểm:** 3 fix trên + source_url NĐ123 (trỏ nhầm NĐ104) + typo '4.500.000 triệu đồng' NĐ114 Đ6.
+>
+> **3. Việc tiếp theo cho GT:** [A] + [B] REVIEW CHÉO từng câu (guide §8; [B] duyệt đất đai của [A], [A] duyệt hộ tịch/NCN của [B]) → sửa nếu cần → chạy lại verify → **FREEZE + pre-register (commit hash vào E0) TRƯỚC khi chạy bất kỳ eval nào trên bộ này**. Dev set 26 câu cũ (`test_set_dat_dai.json`) chính thức là DEV SET (contaminated D-10/D-11), không dùng báo số cuối. Lưu ý harness: nhóm underspecified (jurisdiction=null) eval KHÔNG bơm force_jurisdiction — cần sửa `run_evaluation` skip inject khi item.jurisdiction=null (chưa làm).
 
 > **v2.20 — Cập nhật 2026-07-06 (Gỡ Confirmation Loop — D-25):**
 >
