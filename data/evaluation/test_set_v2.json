@@ -802,5 +802,80 @@
     "relevant_component_ids": [],
     "notes": "GAP4 dạng ĐIỀU BỔ SUNG MỚI (added_by) — đúng mẫu D-06: Điều 44a thuộc Norm gốc NĐ102, truy vết nguồn gốc qua annotation (NĐ 49/2026, hiệu lực 31/01/2026). Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V044",
+    "question": "Hạn mức đất ở tại TP.HCM theo quy định cũ (Quyết định 18/2016) và quy định hiện hành (Quyết định 69/2024) khác nhau như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Khác cả về đơn vị tính lẫn phân nhóm khu vực. QUY ĐỊNH CŨ — Điều 1 Khoản 1 Quyết định 18/2016/QĐ-UBND: hạn mức tính theo HỘ, chia 4 nhóm: các quận trung tâm không quá 160 m²/hộ; các quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện không quá 200 m²/hộ; khu quy hoạch phát triển đô thị không quá 250 m²/hộ; huyện Cần Giờ và khu dân cư nông thôn các xã không quá 300 m²/hộ. QUY ĐỊNH HIỆN HÀNH — Điều 3 Quyết định 69/2024/QĐ-UBND: hạn mức tính theo CÁ NHÂN, chia 3 nhóm: các quận và TP Thủ Đức không quá 160 m²; thị trấn và khu đô thị mới 5 huyện không quá 200 m²; các xã của 5 huyện không quá 250 m². Quyết định 69/2024 thay thế Quyết định 18/2016 (Điều 5 Khoản 2), hiệu lực từ ngày ký 30/09/2024.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "1", "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm" },
+      { "dieu": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" },
+      { "dieu": "5", "khoan": "2", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 SO SÁNH 2 REGIME cùng địa phương (thay thế văn bản trọn vẹn): đổi đơn vị hộ→cá nhân, đổi số nhóm 4→3, bỏ mức 300m². Đòi kéo CẢ văn bản hết hiệu lực lẫn hiện hành. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V045",
+    "question": "Quyết định 18/2016/QĐ-UBND về hạn mức đất ở tại TP.HCM hiện nay còn hiệu lực áp dụng không?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Không còn. Theo Điều 5 Khoản 2 Quyết định 69/2024/QĐ-UBND TP.HCM, Quyết định 69/2024 THAY THẾ Quyết định số 18/2016/QĐ-UBND ngày 16/5/2016 quy định về hạn mức đất ở trên địa bàn TP.HCM; Quyết định 69/2024 có hiệu lực thi hành kể từ ngày ký (30/09/2024) — từ thời điểm đó hạn mức đất ở tại TP.HCM áp dụng theo Quyết định 69/2024.",
+    "ground_truth_citations": [
+      { "dieu": "5", "khoan": "1", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" },
+      { "dieu": "5", "khoan": "2", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 câu hiệu-lực trực diện: hệ phải phân biệt văn bản còn/hết hiệu lực (QĐ18 status expired trong graph) và trích đúng điều khoản thay thế. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V046",
+    "question": "Hộ gia đình muốn chuyển đất nông nghiệp trong khu dân cư sang đất ở thì căn cứ cho phép là quy hoạch nào, và quy định này có thay đổi gì từ ngày 01/07/2025?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 116 Khoản 5 Luật Đất đai 2024 (bản hiện hành), căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở đối với hộ gia đình, cá nhân là: quy hoạch sử dụng đất cấp huyện HOẶC quy hoạch chung HOẶC quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị VÀ NÔNG THÔN đã được phê duyệt. Về thay đổi: từ 01/07/2025, Luật số 47/2024/QH15 (điểm a khoản 2 Điều 57) thay cụm từ 'pháp luật về quy hoạch đô thị' bằng 'pháp luật về quy hoạch đô thị và nông thôn' trong khoản này — mở rộng phạm vi loại quy hoạch làm căn cứ.",
+    "ground_truth_citations": [
+      { "dieu": "116", "khoan": "5", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 trên Component có CHUỖI CTV THẬT (Đ116 K5 — 1 trong 2 component 2-CTV của graph): bản gốc 2024-08-01 vs bản sửa từ 01/07/2025 (Luật 47/2024). Câu 2 vế: nội dung hiện hành + diff giữa 2 phiên bản. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V047",
+    "question": "Phần đất còn lại sau khi xác định diện tích đất ở (với đất lấn chiếm trước 2014) nếu muốn công nhận vào mục đích phi nông nghiệp thì phải phù hợp quy hoạch nào? Quy định này có được sửa đổi gần đây không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 25 Khoản 3 Nghị định 101/2024/NĐ-CP (bản hiện hành): phần diện tích còn lại có hiện trạng là đất nông nghiệp, nếu người sử dụng đất có nhu cầu công nhận vào mục đích phi nông nghiệp thì phải phù hợp với quy hoạch sử dụng đất cấp huyện HOẶC quy hoạch sử dụng đất cấp xã HOẶC một trong các quy hoạch theo quy định của pháp luật về quy hoạch đô thị và nông thôn, và phải nộp tiền sử dụng đất. Về sửa đổi: khoản này ĐÃ được sửa bởi Nghị định 226/2025/NĐ-CP (điểm a khoản 3 Điều 7, hiệu lực 15/08/2025) — thay danh sách quy hoạch cũ ('quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu hoặc quy hoạch xây dựng hoặc quy hoạch nông thôn') bằng danh sách hiện hành nêu trên.",
+    "ground_truth_citations": [
+      { "dieu": "25", "khoan": "3", "van_ban": "nghi-dinh-101-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: nội dung hiện hành + truy vết NĐ 226/2025 sửa NĐ101 (annotation trong corpus ghi rõ cụm cũ→mới, hiệu lực 15/08/2025). Chuỗi NĐ-sửa-NĐ (không phải Luật sửa Luật). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
