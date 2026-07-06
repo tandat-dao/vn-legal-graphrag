@@ -58,8 +58,6 @@ class BaselineResult(TypedDict):
     elapsed_seconds: float
     # Các field GraphRAG không có trong baseline (để None nhằm giữ schema chung)
     query_plan: None
-    confirmation_needed: bool
-    confirmation_prompt: None
     lccids_count: int
 
 
@@ -339,8 +337,6 @@ def run_baseline_query(
                 context="",
                 elapsed_seconds=round(elapsed, 2),
                 query_plan=None,
-                confirmation_needed=False,
-                confirmation_prompt=None,
                 lccids_count=0,
             )
 
@@ -363,8 +359,6 @@ def run_baseline_query(
             context=context,
             elapsed_seconds=round(elapsed, 2),
             query_plan=None,
-            confirmation_needed=False,
-            confirmation_prompt=None,
             lccids_count=0,
         )
 

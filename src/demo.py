@@ -158,17 +158,6 @@ def _render_result(question: str, result: dict, total_time: float,
         expand=False,
     ))
 
-    # Confirmation needed case — render markdown để khung hướng dẫn (bullet/ví dụ)
-    # hiển thị gọn gàng.
-    if result.get("confirmation_needed"):
-        console.print()
-        console.print(Panel(
-            Markdown(result.get("confirmation_prompt", "(không có prompt)")),
-            title="⚠️  [bold yellow]HỆ THỐNG YÊU CẦU XÁC NHẬN[/bold yellow]",
-            border_style="yellow",
-        ))
-        return
-
     # Trace tree (optional)
     if show_trace and trace_records:
         console.print()
@@ -222,9 +211,7 @@ def main() -> int:
     parser.add_argument("--trace", action="store_true",
                         help="Hiện chi tiết pipeline trace (Tree view)")
     parser.add_argument("--jurisdiction", choices=["toan-quoc", "tp-hcm", "dong-nai"],
-                        help="Force jurisdiction (bypass Confirmation Loop)")
-    parser.add_argument("--bypass-completeness", action="store_true",
-                        help="Bypass kiểm tra đầy đủ field")
+                        help="Ép jurisdiction khi câu hỏi không nêu địa phương")
     parser.add_argument("--no-llm-cache", action="store_true",
                         help="Tắt LLM cache (luôn gọi API)")
     parser.add_argument("--llm-cache-dir", default="data/evaluation/.llm_cache/",
@@ -272,7 +259,6 @@ def main() -> int:
             result = run_pipeline(
                 args.question,
                 force_jurisdiction=args.jurisdiction,
-                bypass_completeness=args.bypass_completeness,
                 llm_cache_dir=cache_dir,
                 response_mode=None if args.mode == "auto" else args.mode,
                 verify=args.verify,

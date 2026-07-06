@@ -29,15 +29,12 @@ def _make_plan(
     procedure="chuyen-muc-dich-su-dung-dat",
     jurisdiction="tp-hcm",
     temporal=None,
-    is_complete=True,
 ) -> QueryPlan:
     return QueryPlan(
         theme=theme,
         procedure=procedure,
         jurisdiction=jurisdiction,
         temporal=temporal,
-        is_complete=is_complete,
-        missing_fields=[],
     )
 
 
@@ -136,7 +133,7 @@ class TestStage1NormIds:
     def test_none_theme_returns_empty(self, mock_encode):
         client = _mock_qdrant([])
         model = _mock_model()
-        plan = _make_plan(theme=None, is_complete=False)
+        plan = _make_plan(theme=None)
 
         result = stage1_norm_ids("câu hỏi không rõ lĩnh vực", plan, client, model)
 
@@ -346,7 +343,7 @@ class TestExtractSubgraph:
         client = _mock_qdrant([])
         driver = _mock_neo4j([])
         model = _mock_model()
-        plan = _make_plan(theme=None, is_complete=False)
+        plan = _make_plan(theme=None)
 
         norm_ids, graph_comp_ids = extract_subgraph(
             "câu hỏi không rõ", plan, driver, client, model

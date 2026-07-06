@@ -114,8 +114,8 @@ def build_table() -> str:
     lines.append("")
     lines.append("Bảng tổng hợp impact của từng fix layer, đo trên cùng test set"
                  " (`test_set_dat_dai.json`), cùng embedding (BGE-M3), cùng LLM"
-                 " (Claude Sonnet 4.6), cùng eval-mode (force_jurisdiction +"
-                 " bypass_completeness). **Chỉ khác retrieval/parsing logic**.")
+                 " (Claude Sonnet 4.6), cùng eval-mode (force_jurisdiction)."
+                 " **Chỉ khác retrieval/parsing logic**.")
     lines.append("")
     lines.append("**Reproducibility note**: v2.6 final config có N=3 runs cùng"
                  " code state với `--no-llm-cache` để measure variance. Các config"

@@ -136,7 +136,6 @@ def run(test_set: list[dict], do_rerank: bool = True, pool: int = 50, ks=(5, 10)
             plan = plan_query(q, anthropic_client, neo4j_driver=neo4j)
             plan = dict(plan)
             plan["jurisdiction"] = item.get("jurisdiction") or plan.get("jurisdiction")
-            plan["is_complete"] = True
             norm_ids, _ = extract_subgraph(q, plan, neo4j, qdrant, model)
             gt_norms = {g.get("van_ban") for g in gt}
             norm_hit = 1.0 if gt_norms & set(norm_ids) else 0.0

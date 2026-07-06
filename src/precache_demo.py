@@ -54,7 +54,6 @@ def main() -> None:
     parser.add_argument("--jurisdiction", choices=["toan-quoc", "tp-hcm", "dong-nai"],
                         help="PHẢI khớp flag sẽ dùng lúc demo (nếu có).")
     parser.add_argument("--mode", choices=["auto", "general", "irac"], default="auto")
-    parser.add_argument("--bypass-completeness", action="store_true")
     parser.add_argument("--cache-dir", default=_DEFAULT_CACHE_DIR,
                         help=f"Thư mục LLM cache (mặc định {_DEFAULT_CACHE_DIR}).")
     args = parser.parse_args()
@@ -80,10 +79,9 @@ def main() -> None:
             result = run_pipeline(
                 q,
                 force_jurisdiction=args.jurisdiction,
-                bypass_completeness=args.bypass_completeness,
                 llm_cache_dir=cache_dir,
                 response_mode=None if args.mode == "auto" else args.mode,
-                llm_fallback=False,   # pre-cache dùng Claude THẬT để cache đúng
+                llm_mode="claude",   # pre-cache dùng Claude THẬT để cache đúng
             )
             dt = time.perf_counter() - t0
             hit = result.get("cache_hit")

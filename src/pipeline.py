@@ -5,7 +5,6 @@ Kết nối TASK-10 → TASK-11 → TASK-12 → TASK-13 thành một hàm duy nh
 Flow:
   question
     → plan_query()           [TASK-10] QueryPlan
-    → (nếu thiếu field)      → trả về confirmation_needed
     → extract_subgraph()     [TASK-11] LCCIDs
     → hybrid_search()        [TASK-12] Top-k ScoredTextUnit
     → assemble_context()     [TASK-13] context string
@@ -28,7 +27,7 @@ from src.ingestion.vectorizer import load_model
 from src.utils.llm_config import make_anthropic_client, make_llm_client
 from src.retrieval.answer_generator import generate_answer
 from src.retrieval.context_assembler import assemble_context
-from src.retrieval.query_planner import QueryPlan, build_confirmation_prompt, plan_query
+from src.retrieval.query_planner import QueryPlan, plan_query
 from src.retrieval.semantic_filter import hybrid_search
 from src.retrieval.subgraph_extractor import extract_subgraph
 from src.retrieval.verifier import verify_citations
@@ -90,8 +89,6 @@ class PipelineResult(TypedDict):
     question: str
     query_plan: QueryPlan
     response_mode: str           # mode đã resolve cho answer generation
-    confirmation_needed: bool
-    confirmation_prompt: str | None
     lccids_count: int
     top_k_count: int
     context_tokens: int
@@ -140,7 +137,6 @@ def run_pipeline(
     top_k: int = DEFAULT_TOP_K,
     max_tokens: int = CONTEXT_MAX_TOKENS,
     force_jurisdiction: str | None = None,
-    bypass_completeness: bool = False,
     llm_cache_dir: Path | None = None,
     response_mode: str | None = None,
     verify: bool = False,
@@ -159,8 +155,8 @@ def run_pipeline(
         max_tokens: Token budget tối đa cho context.
 
     Returns:
-        PipelineResult với đầy đủ thông tin pipeline.
-        Nếu câu hỏi thiếu thông tin → confirmation_needed=True, answer="".
+        PipelineResult với đầy đủ thông tin pipeline. Retrieval luôn chạy
+        best-effort kể cả khi query_plan thiếu field (không còn Confirmation Loop).
     """
     t_start = time.perf_counter()
 
@@ -174,58 +170,20 @@ def run_pipeline(
         logger.info(f"run_pipeline: plan_query cho '{question[:60]}...'")
         query_plan = plan_query(question, anthropic_client, neo4j_driver=neo4j_driver)
         logger.info(
-            f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']} "
-            f"complete={query_plan['is_complete']}"
+            f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']}"
         )
 
         # Resolve answer mode: explicit override > planner auto-detect > "general".
         resolved_mode = response_mode or query_plan.get("response_mode") or "general"
         logger.info(f"run_pipeline: response_mode='{resolved_mode}'")
 
-        # Bypass Confirmation Loop cho evaluation: inject jurisdiction từ ground truth
-        # nếu được cung cấp. Chỉ unblock khi jurisdiction là field thiếu duy nhất.
-        if force_jurisdiction and not query_plan["is_complete"]:
-            if "jurisdiction" in query_plan["missing_fields"]:
-                query_plan["jurisdiction"] = force_jurisdiction
-                query_plan["missing_fields"] = [
-                    f for f in query_plan["missing_fields"] if f != "jurisdiction"
-                ]
-                if not query_plan["missing_fields"]:
-                    query_plan["is_complete"] = True
-                logger.info(
-                    f"run_pipeline: force_jurisdiction='{force_jurisdiction}' áp dụng, "
-                    f"is_complete={query_plan['is_complete']}"
-                )
-
-        # Bypass toàn diện cho evaluation: chấp nhận query_plan thiếu field (procedure,
-        # theme...) và chạy retrieval với best-effort. Dùng cho TASK-17 để đo retrieval
-        # + generation thuần, không đo cơ chế Confirmation Loop. KHÔNG dùng trong production.
-        if bypass_completeness and not query_plan["is_complete"]:
+        # Inject jurisdiction từ ground truth (eval): áp dụng khi câu hỏi KHÔNG nêu
+        # địa phương (jurisdiction=None). Tương đương điều kiện cũ "missing jurisdiction"
+        # nhưng không phụ thuộc Confirmation Loop (đã gỡ). Hệ 1Q-1A luôn chạy best-effort.
+        if force_jurisdiction and query_plan["jurisdiction"] is None:
+            query_plan["jurisdiction"] = force_jurisdiction
             logger.info(
-                f"run_pipeline: bypass_completeness=True — bỏ qua missing={query_plan['missing_fields']}, "
-                f"tiếp tục retrieval với best-effort"
-            )
-            query_plan["is_complete"] = True
-
-        # Thiếu thông tin → yêu cầu xác nhận
-        if not query_plan["is_complete"]:
-            confirmation_prompt = build_confirmation_prompt(query_plan["missing_fields"])
-            elapsed = time.perf_counter() - t_start
-            return PipelineResult(
-                question=question,
-                query_plan=query_plan,
-                response_mode=resolved_mode,
-                confirmation_needed=True,
-                confirmation_prompt=confirmation_prompt,
-                lccids_count=0,
-                top_k_count=0,
-                context_tokens=0,
-                context="",
-                answer="",
-                citations=[],
-                context_used=False,
-                elapsed_seconds=round(elapsed, 2),
-                verifier=None,
+                f"run_pipeline: force_jurisdiction='{force_jurisdiction}' áp dụng"
             )
 
         # --- TEMPORAL LAYER (Option C Phần 2) ---
@@ -265,8 +223,6 @@ def run_pipeline(
                 question=question,
                 query_plan=query_plan,
                 response_mode=resolved_mode,
-                confirmation_needed=False,
-                confirmation_prompt=None,
                 lccids_count=0,
                 top_k_count=0,
                 context_tokens=0,
@@ -335,8 +291,6 @@ def run_pipeline(
             question=question,
             query_plan=query_plan,
             response_mode=resolved_mode,
-            confirmation_needed=False,
-            confirmation_prompt=None,
             lccids_count=len(norm_ids),
             top_k_count=len(scored_units),
             context_tokens=context_tokens,

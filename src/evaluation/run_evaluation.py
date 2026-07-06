@@ -43,34 +43,14 @@ logger = logging.getLogger(__name__)
 # Per-system runners
 # ---------------------------------------------------------------------------
 
-_JURIS_SUFFIX = {
-    "toan-quoc": "trên cả nước Việt Nam",
-    "tp-hcm": "tại Thành phố Hồ Chí Minh",
-    "dong-nai": "tại tỉnh Đồng Nai",
-}
-
-
-def _augment_question(question: str, jurisdiction: str) -> str:
-    """Phụ trợ jurisdiction vào câu hỏi khi pipeline yêu cầu confirmation.
-
-    Mô phỏng user trả lời confirmation prompt với jurisdiction lấy từ test_set.
-    Chỉ append nếu suffix chưa xuất hiện trong câu.
-    """
-    suffix = _JURIS_SUFFIX.get(jurisdiction, "")
-    if not suffix or suffix.lower() in question.lower():
-        return question
-    base = question.rstrip("?.! ")
-    return f"{base} {suffix}?"
-
-
 def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                       response_mode: str = "auto",
                       verify: bool = False, verify_tier: int = 1) -> dict:
-    """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
+    """Chạy GraphRAG, inject ground-truth jurisdiction từ test_set.
 
-    Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
-    Mục tiêu là đo retrieval + generation, không đo UX Confirmation Loop.
-    Vẫn giữ augment+retry như fallback cho trường hợp pipeline thiếu field khác.
+    Eval mode: `force_jurisdiction` bơm jurisdiction từ test_set khi câu hỏi không
+    nêu địa phương. Đo retrieval + generation. Hệ 1Q-1A luôn chạy best-effort
+    (không còn Confirmation Loop).
 
     verify/verify_tier: bật Verifier agent (ablation ±verifier). Mặc định off.
     """
@@ -85,43 +65,16 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         anthropic_client=anthropic_client,
         model=model,
         force_jurisdiction=item["jurisdiction"],
-        bypass_completeness=True,  # Eval mode: chạy retrieval ngay cả khi planner thiếu procedure/theme
         llm_cache_dir=llm_cache_dir,
         response_mode=resolved_mode,
         verify=verify,
         verify_tier=verify_tier,
     )
 
-    # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
-    # Giữ retry như defensive fallback cho trường hợp bất thường.
-    retried = False
-    if res["confirmation_needed"]:
-        aug_q = _augment_question(item["question"], item["jurisdiction"])
-        if aug_q != item["question"]:
-            logger.info(f"  [retry] confirmation_needed bất thường → augment: '{aug_q[:80]}...'")
-            res2 = run_pipeline(
-                aug_q,
-                neo4j_driver=neo4j_driver,
-                qdrant_client=qdrant_client,
-                anthropic_client=anthropic_client,
-                model=model,
-                force_jurisdiction=item["jurisdiction"],
-                bypass_completeness=True,
-                llm_cache_dir=llm_cache_dir,
-                response_mode=resolved_mode,
-                verify=verify,
-                verify_tier=verify_tier,
-            )
-            res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
-            res = res2
-            retried = True
-
     return {
         "answer": res["answer"],
         "citations": res["citations"],
         "elapsed_seconds": res["elapsed_seconds"],
-        "confirmation_needed": res["confirmation_needed"],
-        "confirmation_retried": retried,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
         "context": res.get("context", ""),  # needed cho faithfulness eval
@@ -147,8 +100,6 @@ def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None,
         "answer": res["answer"],
         "citations": res["citations"],
         "elapsed_seconds": res["elapsed_seconds"],
-        "confirmation_needed": False,
-        "confirmation_retried": False,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
         "context": res.get("context", ""),
@@ -232,8 +183,6 @@ def run_system_on_test_set(
                 "answer": f"<<ERROR: {e}>>",
                 "citations": [],
                 "elapsed_seconds": 0.0,
-                "confirmation_needed": False,
-                "confirmation_retried": False,
                 "context_used": False,
                 "top_k_count": 0,
                 "context": "",
@@ -274,8 +223,6 @@ def run_system_on_test_set(
             "negative_correct": nc,
             "faithfulness": faithfulness,
             "elapsed_seconds": sys_out["elapsed_seconds"],
-            "confirmation_needed": sys_out["confirmation_needed"],
-            "confirmation_retried": sys_out["confirmation_retried"],
             "context_used": sys_out["context_used"],
             "top_k_count": sys_out["top_k_count"],
             "context": sys_out.get("context", ""),  # save cho future faithfulness re-eval
@@ -556,8 +503,7 @@ def main() -> int:
             run_config = {
                 "systems": ",".join(systems),
                 "limit": args.limit or "full",
-                "force_jurisdiction": "ground-truth (eval-mode bypass Confirmation Loop)",
-                "bypass_completeness": True,
+                "force_jurisdiction": "ground-truth (bơm khi câu hỏi không nêu địa phương)",
                 "llm_cache": "ON" if llm_cache_dir else "OFF",
                 "anthropic_max_retries": ANTHROPIC_MAX_RETRIES,
             }

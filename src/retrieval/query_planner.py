@@ -5,8 +5,9 @@ Nhận câu hỏi tiếng Việt, dùng Claude Haiku 4.5 để extract:
 Trả về QueryPlan TypedDict.
 
 Quy tắc tự động:
-  - Hộ tịch và Nuôi con nuôi luôn gán jurisdiction = "toan-quoc" (không hỏi lại)
-  - Đất đai không có jurisdiction → is_complete = False, missing_fields = ["jurisdiction"]
+  - Hộ tịch và Nuôi con nuôi luôn gán jurisdiction = "toan-quoc"
+  - Đất đai giữ jurisdiction=None nếu câu hỏi không nêu; retrieval chạy best-effort
+    (eval bơm jurisdiction từ ground-truth qua force_jurisdiction ở pipeline)
 """
 import hashlib
 import json
@@ -169,8 +170,6 @@ class QueryPlan(TypedDict):
     temporal: str | None
     temporal_intent: TemporalIntent
     response_mode: str          # "general" (gọn) | "irac" (tư vấn chi tiết)
-    is_complete: bool
-    missing_fields: list[str]
 
 
 # ---------------------------------------------------------------------------
@@ -318,25 +317,6 @@ def _apply_jurisdiction_rules(fields: dict) -> dict:
     return fields
 
 
-def _compute_completeness(fields: dict) -> tuple[bool, list[str]]:
-    """Xác định is_complete và missing_fields.
-
-    Đất đai bắt buộc có jurisdiction vì quy định khác nhau giữa địa phương.
-    Hộ tịch + Nuôi con nuôi luôn toan-quoc nên không bao giờ missing jurisdiction.
-    """
-    missing: list[str] = []
-    if fields["theme"] is None:
-        missing.append("theme")
-    if fields["procedure"] is None:
-        missing.append("procedure")
-
-    theme = fields["theme"]
-    if theme == "dat-dai" and fields["jurisdiction"] is None:
-        missing.append("jurisdiction")
-
-    return (len(missing) == 0, missing)
-
-
 # ---------------------------------------------------------------------------
 # Backfill theme từ tham chiếu số hiệu văn bản trong câu hỏi
 # ---------------------------------------------------------------------------
@@ -423,12 +403,10 @@ def plan_query(
             fields["theme"] = backfilled
 
     fields = _apply_jurisdiction_rules(fields)
-    is_complete, missing = _compute_completeness(fields)
 
     logger.info(
         f"plan_query | theme={fields['theme']} procedure={fields['procedure']} "
         f"jurisdiction={fields['jurisdiction']} temporal={fields['temporal']} "
-        f"is_complete={is_complete} missing={missing} "
         f"temporal_ctx={fields['temporal_intent']['has_temporal_context']}"
     )
 
@@ -439,71 +417,7 @@ def plan_query(
         temporal=fields["temporal"],
         temporal_intent=fields["temporal_intent"],
         response_mode=fields["response_mode"],
-        is_complete=is_complete,
-        missing_fields=missing,
     )
-
-
-# Nhãn hiển thị tiếng Việt cho theme — id lấy từ VALID_THEMES (danh sách đóng),
-# nhãn chỉ phục vụ trình bày cho người dùng.
-_THEME_LABELS = {
-    "dat-dai": "Đất đai",
-    "ho-tich": "Hộ tịch",
-    "nuoi-con-nuoi": "Nuôi con nuôi",
-}
-
-
-def build_question_framework() -> str:
-    """Khung hướng dẫn cách hỏi khi không xác định được lĩnh vực (theme=None).
-
-    Thay vì hỏi cụt ("Bạn muốn tra cứu lĩnh vực nào?"), cung cấp cho người dùng
-    công thức câu hỏi tốt + vài ví dụ mẫu để họ hỏi lại theo cách giúp hệ thống
-    định tuyến và trả lời chính xác nhất.
-
-    Returns:
-        Text markdown gọn (3-4 dòng + ví dụ).
-    """
-    linh_vuc = ", ".join(_THEME_LABELS[t] for t in VALID_THEMES if t in _THEME_LABELS)
-    return (
-        "Mình chưa xác định được câu hỏi của bạn thuộc lĩnh vực nào.\n"
-        f"Hệ thống hiện hỗ trợ tra cứu: **{linh_vuc}**.\n\n"
-        "Để được trả lời chính xác nhất, bạn hãy nêu câu hỏi theo khung:\n"
-        "**[Thủ tục cần hỏi] + [địa phương — nếu là đất đai] + [tình huống/thời điểm nếu có]**\n\n"
-        "Ví dụ:\n"
-        "- \"Hạn mức giao đất ở cho cá nhân tại TP.HCM là bao nhiêu?\"\n"
-        "- \"Hồ sơ đăng ký khai sinh gồm những giấy tờ gì?\"\n"
-        "- \"Điều kiện đăng ký nuôi con nuôi trong nước là gì?\""
-    )
-
-
-def build_confirmation_prompt(missing_fields: list[str]) -> str:
-    """Tạo câu hỏi ngược lại người dùng khi thiếu thông tin.
-
-    Args:
-        missing_fields: Danh sách trường còn thiếu từ QueryPlan.
-
-    Returns:
-        Câu hỏi tiếng Việt yêu cầu người dùng bổ sung thông tin.
-    """
-    # theme là blocker lớn nhất: không có lĩnh vực thì hệ thống không định tuyến
-    # được. Trả về khung hướng dẫn cách hỏi (công thức + ví dụ) thay vì câu hỏi cụt.
-    if "theme" in missing_fields:
-        return build_question_framework()
-
-    parts: list[str] = []
-
-    if "procedure" in missing_fields:
-        parts.append("Bạn muốn tra cứu thủ tục hành chính cụ thể nào?")
-    if "jurisdiction" in missing_fields:
-        parts.append(
-            "Bất động sản / đất đai của bạn thuộc tỉnh/thành phố nào? "
-            "(TP. Hồ Chí Minh / Đồng Nai / địa phương khác)"
-        )
-
-    if not parts:
-        return "Vui lòng cung cấp thêm thông tin để tôi có thể hỗ trợ chính xác hơn."
-
-    return " ".join(parts)
 
 
 # ---------------------------------------------------------------------------
@@ -533,10 +447,6 @@ if __name__ == "__main__":
 
     for q in test_questions:
         plan = plan_query(q, client)
-        status = "✅" if plan["is_complete"] else f"❌ thiếu {plan['missing_fields']}"
         print(f"\nQ: {q}")
         print(f"   theme={plan['theme']} procedure={plan['procedure']} "
               f"jurisdiction={plan['jurisdiction']} temporal={plan['temporal']}")
-        print(f"   {status}")
-        if not plan["is_complete"]:
-            print(f"   → {build_confirmation_prompt(plan['missing_fields'])}")
