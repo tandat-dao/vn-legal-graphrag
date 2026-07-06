@@ -1046,5 +1046,78 @@
     "relevant_component_ids": [],
     "notes": "GAP4: cơ chế bản điện tử/ký số là nội dung được NĐ 07/2025 bổ sung — bản gốc 2015 không có. Câu ngắn, đo đúng 1 fact hiện đại hóa. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V057",
+    "question": "Bản điện tử giấy tờ hộ tịch có giá trị pháp lý như thế nào — có dùng thay bản giấy được không, và mã QR trên đó có ý nghĩa gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Giá trị pháp lý của bản điện tử giấy tờ hộ tịch thực hiện theo khung tại Điều 12 Nghị định 87/2020/NĐ-CP và được Thông tư 01/2022/TT-BTP Điều 9 Khoản 2 hướng dẫn cụ thể: (a) bản điện tử giấy tờ hộ tịch có giá trị sử dụng NHƯ giấy tờ hộ tịch bản giấy trong các giao dịch, thủ tục hành chính thực hiện trực tuyến; và có giá trị THAY THẾ giấy tờ hộ tịch bản giấy khi làm thủ tục đăng ký hộ tịch trực tiếp tại cơ quan đăng ký hộ tịch; (b) mã QR trên bản điện tử là địa chỉ Internet dẫn tới dữ liệu, định dạng hình ảnh của giấy tờ hộ tịch tương ứng trong Cơ sở dữ liệu hộ tịch điện tử, dùng để cung cấp thông tin về tính chính xác, hợp lệ và chi tiết của giấy tờ.",
+    "ground_truth_citations": [
+      { "dieu": "9", "khoan": "2", "van_ban": "thong-tu-01-2022-tt-btp" },
+      { "dieu": "12", "van_ban": "nghi-dinh-87-2020-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 chuỗi hộ tịch ĐIỆN TỬ (Luật HT → NĐ87 → TT01; TT01 Đ9 K2 tự trích 'Khoản 6 Điều 12 NĐ 87/2020'). Chuỗi 3 tầng thứ 2 của domain hộ tịch, chủ đề hiện đại. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V058",
+    "question": "Các biểu mẫu hộ tịch điện tử (mẫu xác nhận thông tin hộ tịch, giấy báo tử, bản điện tử giấy tờ hộ tịch) được ban hành kèm văn bản nào, và có được sửa đổi gì không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 9 Khoản 1 Thông tư 01/2022/TT-BTP, ban hành kèm Thông tư này: (a) các mẫu Xác nhận thông tin hộ tịch, Tờ khai đề nghị xác nhận thông tin hộ tịch, Giấy báo tử (Phụ lục 1); (b) nội dung các mẫu hộ tịch điện tử tương tác phục vụ đăng ký hộ tịch trực tuyến (Phụ lục 2); (c) mẫu Bản điện tử các giấy tờ hộ tịch (Phụ lục 3). Khoản này ĐÃ ĐƯỢC SỬA ĐỔI, BỔ SUNG bởi Thông tư 03/2023/TT-BTP (khoản 1 Điều 1), hiệu lực từ ngày 02/08/2023.",
+    "ground_truth_citations": [
+      { "dieu": "9", "khoan": "1", "van_ban": "thong-tu-01-2022-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 tầng THÔNG TƯ sửa THÔNG TƯ (TT 03/2023 sửa TT 01/2022) — bổ sung dạng sửa đổi cấp tier 3 (các câu gap4 khác đều NĐ/Luật). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V059",
+    "question": "Xin cấp Giấy xác nhận tình trạng hôn nhân tại UBND cấp xã ở TP.HCM thì lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục 1B Khoản 1 Nghị quyết 124/2016/NQ-HĐND TP.HCM (mức thu tại UBND cấp xã), lệ phí cấp giấy xác nhận tình trạng hôn nhân là 3.000 đồng/trường hợp.",
+    "ground_truth_citations": [
+      { "dieu": "1B", "khoan": "1", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Cặp với V060 (ĐN 15.000đ — chênh 5 lần). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V060",
+    "question": "Xin cấp Giấy xác nhận tình trạng hôn nhân tại UBND cấp xã ở Đồng Nai thì lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V059",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục a — đăng ký hộ tịch tại UBND cấp xã), lệ phí cấp giấy xác nhận tình trạng hôn nhân là 15.000 đồng. (Nộp hồ sơ trực tuyến thuộc thẩm quyền cấp xã được miễn 100%.)",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR với V059: cùng việc, HCM 3.000đ vs ĐN 15.000đ — chênh 5 LẦN giữa 2 địa phương, minh họa mạnh cho Gap 2 (lệ phí hộ tịch là thẩm quyền HĐND tỉnh). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
