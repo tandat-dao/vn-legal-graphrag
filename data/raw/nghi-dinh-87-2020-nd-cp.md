@@ -37,7 +37,7 @@ Cơ sở dữ liệu hộ tịch điện tử là Cơ sở dữ liệu được 
 Phần mềm đăng ký, quản lý hộ tịch điện tử dùng chung là nền tảng của Cơ sở dữ liệu hộ tịch điện tử, bao gồm phần mềm đăng ký, quản lý hộ tịch và các phần mềm ứng dụng, dịch vụ do Bộ Tư pháp xây dựng, thiết kế, cung cấp cho các cơ quan đăng ký, quản lý hộ tịch để thực hiện nghiệp vụ đăng ký hộ tịch, xây dựng, cập nhật, số hóa, chuẩn hóa và quản lý các dữ liệu hộ tịch, khai thác, sử dụng Cơ sở dữ liệu hộ tịch điện tử.
 
 Phần mềm đăng ký, quản lý hộ tịch điện tử dùng chung được kết nối, tích hợp với Cổng dịch vụ công quốc gia, Hệ thống thông tin giải quyết thủ tục hành chính Bộ Tư pháp, Bộ Ngoại giao, Hệ thống thông tin giải quyết thủ tục hành chính cấp tỉnh để hỗ trợ tiếp nhận, giải quyết, theo dõi tình hình tiếp nhận, giải quyết và kết quả giải quyết các thủ tục hành chính trong lĩnh vực hộ tịch.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 1 Điều 3, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 1 Điều 3, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ### Khoản 3.
 
@@ -171,7 +171,7 @@ Cơ quan đăng ký hộ tịch khai thác, sử dụng Cơ sở dữ liệu h�
 ### Khoản 2.
 
 Bộ Tư pháp triển khai việc kết nối, chia sẻ dữ liệu giữa Cơ sở dữ liệu hộ tịch điện tử với các cơ sở dữ liệu khác của bộ, ngành, địa phương; khai thác, sử dụng Cơ sở dữ liệu hộ tịch điện tử để thực hiện các hoạt động quản lý nhà nước trong lĩnh vực hộ tịch theo quy định pháp luật.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 3, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 2 Điều 3, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ### Khoản 3.
 
@@ -296,7 +296,7 @@ Trường hợp hồ sơ đầy đủ, phù hợp quy định pháp luật thì 
 Hồ sơ đăng ký hộ tịch chỉ được tiếp nhận chính thức để xử lý trên phần mềm đăng ký, quản lý hộ tịch điện tử dùng chung sau khi đã được hoàn thiện, bổ sung, bảo đảm đầy đủ, phù hợp quy định pháp luật.
 
 Thời hạn giải quyết thủ tục hành chính được tính từ thời điểm hồ sơ được tiếp nhận chính thức;
-<!-- amended_by: 07/2025/NĐ-CP, khoản 3 Điều 3, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 3 Điều 3, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 #### Điểm d.
 
@@ -341,12 +341,12 @@ Biểu mẫu điện tử giấy tờ hộ tịch do Bộ Tư pháp ban hành, c
 ### Khoản 1.
 
 Cơ quan có thẩm quyền theo quy định tại khoản 1, khoản 3, khoản 4 Điều 8 của Nghị định này cấp bản sao trích lục hộ tịch theo yêu cầu của cá nhân, không phụ thuộc vào nơi đã đăng ký việc hộ tịch và nơi cư trú của người có yêu cầu.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 4 Điều 3, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 4 Điều 3, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ### Khoản 2.
 
 Cơ quan có thẩm quyền theo quy định tại khoản 3, khoản 4 Điều 8 của Nghị định này cấp xác nhận thông tin hộ tịch đối với trường hợp cá nhân có yêu cầu khai thác thông tin từ nhiều việc đăng ký hộ tịch, xác nhận các thông tin hộ tịch khác nhau của mình; cơ quan, tổ chức có yêu cầu khai thác nhiều thông tin hộ tịch của một cá nhân hoặc khai thác thông tin hộ tịch của nhiều người.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 4 Điều 3, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 4 Điều 3, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ### Khoản 3.
 
@@ -477,7 +477,7 @@ Thực hiện việc kết nối, chia sẻ dữ liệu số giữa Cơ sở d�
 ### Khoản 7.
 
 Có văn bản chỉ đạo, điều hành, hướng dẫn giải quyết kịp thời các vướng mắc liên quan đến việc khai thác, sử dụng Cơ sở dữ liệu hộ tịch điện tử để đăng ký hộ tịch trên phạm vi toàn quốc.
-<!-- amended_by: 07/2025/NĐ-CP, khoản 5 Điều 3, hiệu lực: 09/01/2019, nội dung: sửa đổi, bổ sung điều này -->
+<!-- amended_by: 07/2025/NĐ-CP, khoản 5 Điều 3, hiệu lực: 09/01/2025, nội dung: sửa đổi, bổ sung điều này -->
 
 ### Khoản 8.
 
