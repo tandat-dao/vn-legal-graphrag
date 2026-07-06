@@ -1248,5 +1248,119 @@
     "relevant_component_ids": [],
     "notes": "Gap2 + phân tầng nguồn quy định (tỉnh mở rộng vs khung Luật) — vế 'của tỉnh hay của Luật' đo attribution đúng nguồn. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V068",
+    "question": "Sau khi những người liên quan đã đồng ý cho trẻ làm con nuôi, trong bao lâu UBND cấp xã phải tổ chức đăng ký, và lễ giao nhận con nuôi diễn ra như thế nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Theo Điều 22 Khoản 1 Luật Nuôi con nuôi 2010: khi xét thấy hai bên đủ điều kiện, UBND cấp xã tổ chức đăng ký nuôi con nuôi, trao Giấy chứng nhận nuôi con nuôi, tổ chức giao nhận con nuôi và ghi vào sổ hộ tịch TRONG THỜI HẠN 20 NGÀY kể từ ngày có ý kiến đồng ý của những người quy định tại Điều 21. (Nếu từ chối đăng ký, phải trả lời bằng văn bản nêu rõ lý do trong 10 ngày — Khoản 2.) Chi tiết lễ giao nhận theo Điều 10 Khoản 1 Nghị định 19/2011/NĐ-CP: tổ chức tại trụ sở UBND cấp xã nơi đăng ký, với sự có mặt của cha mẹ nuôi, cha mẹ đẻ hoặc người giám hộ/đại diện cơ sở nuôi dưỡng và người được nhận làm con nuôi; bên vắng mặt vì lý do khách quan phải ủy quyền; việc giao nhận lập thành biên bản có chữ ký hoặc điểm chỉ của các bên và đại diện UBND xã.",
+    "ground_truth_citations": [
+      { "dieu": "22", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "22", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "10", "khoan": "1", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng: thời hạn 20 ngày + khung ở Luật Đ22, chi tiết nghi thức giao nhận ở NĐ19 Đ10 K1 (NĐ tự trích 'Điều 22 của Luật'). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V069",
+    "question": "Khi được phép chuyển mục đích sử dụng đất nông nghiệp sang đất ở, tôi phải nộp tiền sử dụng đất tính như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Nguyên tắc: theo Điều 121 Khoản 2 Luật Đất đai 2024, khi chuyển mục đích sử dụng đất (chuyển đất nông nghiệp sang đất phi nông nghiệp thuộc điểm b Khoản 1 — diện phải xin phép), người sử dụng đất phải thực hiện nghĩa vụ tài chính theo quy định. Cách tính cụ thể theo Điều 10 Khoản 2 Điểm a Nghị quyết 254/2025/QH15 (văn bản sửa đổi Luật Đất đai): nộp tiền sử dụng đất dựa trên MỨC CHÊNH LỆCH giữa tiền sử dụng đất của loại đất SAU khi chuyển mục đích (đất ở) và tiền sử dụng đất của loại đất TRƯỚC khi chuyển (đất nông nghiệp) cho thời gian sử dụng đất còn lại.",
+    "ground_truth_citations": [
+      { "dieu": "121", "khoan": "2", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "10", "khoan": "2", "van_ban": "nghi-quyet-254-2025-qh15" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 chuỗi qua cạnh AMENDS (Luật ← NQ254; NQ254 Đ10 K2 tự trích 'khoản 1 Điều 121 của Luật Đất đai') — đúng derivation closure D-09 [:IMPLEMENTS|AMENDS]. Câu tài chính thực tế nhất của CMĐSDĐ. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V070",
+    "question": "Trường hợp tôi thuộc diện được miễn tiền sử dụng đất thì có còn phải làm thủ tục xác định giá đất và thủ tục đề nghị miễn không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không. Theo Điều 10 Khoản 1 Nghị quyết 254/2025/QH15 (văn bản sửa đổi, bổ sung Luật Đất đai, quy định mới từ 2025): trường hợp được MIỄN tiền sử dụng đất, tiền thuê đất thì KHÔNG phải thực hiện thủ tục xác định giá đất, tính tiền sử dụng đất, tiền thuê đất và KHÔNG phải thực hiện thủ tục đề nghị miễn — TRỪ trường hợp chỉ được miễn một số năm. (Trường hợp giảm tiền thuê đất hằng năm theo quy định của Chính phủ trong điều hành kinh tế - xã hội thì cũng không phải làm thủ tục đề nghị giảm.)",
+    "ground_truth_citations": [
+      { "dieu": "10", "khoan": "1", "van_ban": "nghi-quyet-254-2025-qh15" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: chính sách ĐƠN GIẢN HÓA THỦ TỤC mới của NQ254 (2025) — nội dung chỉ tồn tại ở tầng văn-bản-sửa-đổi, không có trong Luật gốc; hệ mù temporal sẽ không tìm thấy. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V071",
+    "question": "Ông cụ hàng xóm mất đã hơn chục năm nhưng gia đình chưa từng khai tử, nay không còn Giấy báo tử. Có đăng ký khai tử được không và cần gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Có thể, nhưng phải có chứng cứ. Theo Điều 13 Khoản 1 Thông tư 04/2020/TT-BTP: trường hợp đăng ký khai tử cho người CHẾT ĐÃ LÂU, không có Giấy báo tử hoặc giấy tờ thay thế Giấy báo tử (loại giấy tờ thay thế này quy định tại khoản 2 Điều 4 Nghị định 123/2015/NĐ-CP), người yêu cầu phải cung cấp được giấy tờ, tài liệu, chứng cứ do cơ quan, tổ chức có thẩm quyền cấp hoặc xác nhận hợp lệ CHỨNG MINH SỰ KIỆN CHẾT. Nếu không có hoặc chứng cứ không hợp lệ, không bảo đảm giá trị chứng minh thì cơ quan đăng ký hộ tịch TỪ CHỐI đăng ký khai tử (Khoản 2).",
+    "ground_truth_citations": [
+      { "dieu": "13", "khoan": "1", "van_ban": "thong-tu-04-2020-tt-btp" },
+      { "dieu": "13", "khoan": "2", "van_ban": "thong-tu-04-2020-tt-btp" },
+      { "dieu": "4", "van_ban": "nghi-dinh-123-2015-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng: case 'chết đã lâu' chỉ được xử lý ở TT04 Đ13 (TT tự trích 'khoản 2 Điều 4 NĐ123'); Luật/NĐ không có lời giải trực tiếp. Kèm nhánh TỪ CHỐI (K2). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V072",
+    "question": "Người Việt Nam định cư ở nước ngoài muốn nhận đích danh cháu ruột (con của em gái) ở Việt Nam làm con nuôi thì hồ sơ của người nhận gồm những gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Hai lớp giấy tờ. (1) Lớp cơ bản: hồ sơ của người Việt Nam định cư ở nước ngoài nhận trẻ em Việt Nam làm con nuôi phải có các giấy tờ quy định tại Khoản 1 Điều 31 Luật Nuôi con nuôi 2010. (2) Lớp bổ sung cho nhận ĐÍCH DANH: theo Điều 13 Nghị định 19/2011/NĐ-CP, khi nộp hồ sơ tại Bộ Tư pháp, người nhận con nuôi đích danh (khoản 2 Điều 28 Luật) còn phải nộp 01 bộ hồ sơ của người được nhận làm con nuôi và giấy tờ tương ứng với trường hợp của mình — với trường hợp cô, cậu, dì, chú, bác ruột nhận cháu: giấy tờ, tài liệu CHỨNG MINH QUAN HỆ cô/cậu/dì/chú/bác ruột với người được nhận làm con nuôi (Khoản 2 Điều 13).",
+    "ground_truth_citations": [
+      { "dieu": "31", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "13", "khoan": "2", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng NCN NƯỚC NGOÀI (mảng chưa phủ): danh mục nền ở Luật Đ31 K1, giấy tờ bổ sung theo case đích danh ở NĐ19 Đ13 (tự trích Đ31 K1 + Đ28 K2 Luật). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V073",
+    "question": "Thành phố trực thuộc trung ương đã có quy hoạch chung được phê duyệt thì có phải lập quy hoạch sử dụng đất cấp tỉnh nữa không? Quy định này có thay đổi gì từ ngày 01/07/2025?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Không phải lập. Theo Điều 65 Khoản 5 Luật Đất đai 2024 (bản hiện hành): thành phố trực thuộc trung ương đã có quy hoạch chung được phê duyệt theo pháp luật về quy hoạch đô thị VÀ NÔNG THÔN thì không phải lập quy hoạch sử dụng đất cấp tỉnh, mà căn cứ quy hoạch chung để lập kế hoạch sử dụng đất cấp tỉnh; nếu quy hoạch chung được phê duyệt sau và làm thay đổi chỉ tiêu thì cũng không phải điều chỉnh quy hoạch sử dụng đất cấp tỉnh. Về thay đổi: từ 01/07/2025, Luật 47/2024/QH15 (điểm a khoản 2 Điều 57) thay cụm từ 'pháp luật về quy hoạch đô thị' bằng 'pháp luật về quy hoạch đô thị và nông thôn' trong khoản này.",
+    "ground_truth_citations": [
+      { "dieu": "65", "khoan": "5", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 trên component 2-CTV THỨ HAI của graph (Đ65 K5 — cùng cặp với V046/Đ116 K5): bản gốc 2024-08-01 vs bản sửa 01/07/2025. Phủ đủ CẢ 2 component có chuỗi CTV thật. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
