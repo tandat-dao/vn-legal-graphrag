@@ -201,8 +201,12 @@ def validate_item(item: dict, idx: int, index: dict, all_ids: set) -> list[str]:
         pid = item.get("pair_id")
         if not pid or pid not in all_ids:
             errors.append(f"{pre}: register cần pair_id trỏ về câu gốc tồn tại")
-    if item["gap_type"] == "gap1" and not (sub and str(sub).startswith("archetype:")):
-        errors.append(f"{pre}: gap1 phải có subtype 'archetype:<slug>'")
+    # gap1 thuần phải gắn archetype; các subtype hành vi (composite/register/
+    # underspecified) được phép lấy gap1 làm gap chính mà không cần archetype
+    if (item["gap_type"] == "gap1"
+            and sub not in ("composite", "register", "underspecified")
+            and not (sub and str(sub).startswith("archetype:"))):
+        errors.append(f"{pre}: gap1 thuần phải có subtype 'archetype:<slug>'")
 
     return errors
 
