@@ -157,7 +157,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 │      ▼                                                            │
 │  [Query Planner / LLM]                                           │
 │  Extract: Theme, Procedure, Jurisdiction, Temporal               │
-│  → Nếu thiếu: Confirmation Loop                                  │
+│  → Thiếu field: chạy best-effort (1Q-1A, không hỏi lại — D-25)   │
 │      │                                                            │
 │      ▼                                                            │
 │  [Sub-graph Extraction] ──► Neo4j Graph Traversal                │
@@ -510,7 +510,7 @@ Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào s�
 | Tính năng | Phase | Loại |
 |---|---|---|
 | Query Planner (LLM + structured extraction) | 3 | Core |
-| Confirmation Loop khi thiếu Jurisdiction | 3 | Core |
+| ~~Confirmation Loop khi thiếu Jurisdiction~~ (GỠ — D-25, hệ 1Q-1A) | 3 | Removed |
 | Sub-graph Extraction via Cypher | 3 | Core |
 | Temporal filtering (CTV valid_from/to) | 3 | Core |
 | Qdrant payload filtering | 3 | Core |

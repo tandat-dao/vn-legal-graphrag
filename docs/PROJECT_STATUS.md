@@ -1,5 +1,9 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.19 | Cập nhật 2026-06-30**
+**Phiên bản 2.20 | Cập nhật 2026-07-06**
+
+> **v2.20 — Cập nhật 2026-07-06 (Gỡ Confirmation Loop — D-25):**
+>
+> **Gỡ bỏ Confirmation Loop** khỏi toàn hệ thống. Lý do: hệ là **1Q-1A (không đa lượt)** → "hỏi lại khi thiếu field" chỉ dừng ở **ngõ cụt** (không nhận được câu trả lời tiếp), lại **không đóng góp khoa học** và eval **luôn bypass** nó. Gỡ: `query_planner` (`is_complete`/`missing_fields`/`_compute_completeness`/`build_confirmation_prompt`/`build_question_framework`), `pipeline` (nhánh dừng-hỏi + field `confirmation_needed`/`confirmation_prompt` + param `bypass_completeness`), `demo`/`run_evaluation`/`naive_rag` (bỏ truyền bypass + key confirmation trong results). **Bảo toàn kết quả canonical**: `force_jurisdiction` đổi điều kiện sang `jurisdiction is None` (tương đương → eval Gemini/Claude KHÔNG xê dịch). Demo giờ luôn best-effort. Refactor 12 file, xóa 12 test tính năng gỡ → **254 test pass**. Side-fix: `precache_demo` param stale `llm_fallback=`→`llm_mode="claude"`. **Ảnh hưởng GT plan:** bỏ dạng câu "thiếu-field→hỏi-lại". *(Chương 3 luận văn + outline 5.3 cần bỏ Confirmation Loop khỏi phần Limitations/UX khi viết.)*
 
 > **v2.19 — Cập nhật 2026-06-30 (Corpus B re-ingest đa-domain + Multi-LLM mode + Gemini-only validated):**
 >
