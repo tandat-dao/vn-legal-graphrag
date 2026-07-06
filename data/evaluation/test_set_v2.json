@@ -613,5 +613,194 @@
     "relevant_component_ids": [],
     "notes": "GAP3 chuỗi VƯỢT TẦNG tier1→tier4 (Luật ủy quyền UBND tỉnh → QĐ 69; QĐ69 Đ1 tự trích 'khoản 2 Điều 195 và khoản 2 Điều 196'). Đồng thời chạm gap2 (văn bản địa phương) — gap chính là 3 vì câu hỏi về CHUỖI thẩm quyền ban hành. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V034",
+    "question": "Giấy xác nhận tình trạng hôn nhân có giá trị sử dụng trong bao lâu?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 23 Khoản 1 Nghị định 123/2015/NĐ-CP, Giấy xác nhận tình trạng hôn nhân có giá trị 6 tháng kể từ ngày cấp. Tuy nhiên, Điều 12 Khoản 2 Thông tư 04/2020/TT-BTP hướng dẫn chi tiết hơn: Giấy có giá trị ĐẾN THỜI ĐIỂM THAY ĐỔI TÌNH TRẠNG HÔN NHÂN hoặc 06 tháng kể từ ngày cấp, TÙY THEO THỜI ĐIỂM NÀO ĐẾN TRƯỚC (ví dụ: cấp ngày 03/02 nhưng ngày 10/02 người đó kết hôn thì Giấy chỉ có giá trị đến ngày 10/02). Ngoài ra, Giấy không có giá trị khi dùng vào mục đích khác với mục đích ghi trong Giấy (Điều 23 Khoản 3 Nghị định 123).",
+    "ground_truth_citations": [
+      { "dieu": "23", "khoan": "1", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "23", "khoan": "3", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "12", "khoan": "2", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 dạng TT TINH CHỈNH NĐ: chỉ đọc NĐ trả lời '6 tháng' là THIẾU — TT04 Đ12 K2 thêm điều kiện 'tùy thời điểm nào đến trước'. Bẫy đơn-tầng kinh điển. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V035",
+    "question": "Con tôi sinh ra ở nước ngoài, chưa đăng ký khai sinh ở đâu, nay cả nhà về Việt Nam cư trú. Khi đăng ký khai sinh cho cháu tại Việt Nam thì cần giấy tờ gì để chứng minh việc cháu đã nhập cảnh và cư trú hợp pháp?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Việc đăng ký khai sinh cho trẻ em sinh ra ở nước ngoài, chưa được đăng ký khai sinh, về cư trú tại Việt Nam thực hiện theo Điều 29 Nghị định 123/2015/NĐ-CP. Về giấy tờ chứng minh nhập cảnh và cư trú, Điều 7 Khoản 1 Điểm a Thông tư 04/2020/TT-BTP hướng dẫn cụ thể gồm: (1) giấy tờ chứng minh việc trẻ em đã nhập cảnh hợp pháp vào Việt Nam (như hộ chiếu, giấy tờ có giá trị đi lại quốc tế có dấu xác nhận nhập cảnh của cơ quan quản lý xuất, nhập cảnh) và (2) văn bản xác nhận của cơ quan công an có thẩm quyền về việc trẻ em đang cư trú tại Việt Nam.",
+    "ground_truth_citations": [
+      { "dieu": "29", "van_ban": "nghi-dinh-123-2015-nd-cp" },
+      { "dieu": "7", "khoan": "1", "diem": "a", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng: khung thủ tục NĐ123 Đ29, danh mục giấy tờ cụ thể chỉ có ở TT04 Đ7 K1a (TT tự trích 'khoản 2 Điều 29 NĐ 123'). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V036",
+    "question": "Vợ tôi là người nước ngoài, chúng tôi muốn chọn quốc tịch nước ngoài cho con khi đăng ký khai sinh tại Việt Nam. Cần văn bản gì, và nếu cơ quan nước ngoài không chịu xác nhận thì sao?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 36 Khoản 1 Luật Hộ tịch 2014, khi cha hoặc mẹ là người nước ngoài phải nộp văn bản thỏa thuận của cha, mẹ về việc chọn quốc tịch cho con; nếu chọn quốc tịch nước ngoài thì văn bản thỏa thuận phải có xác nhận của cơ quan nhà nước có thẩm quyền của nước mà người đó là công dân. Thông tư 04/2020/TT-BTP Điều 7 Khoản 2 hướng dẫn thêm: ngoài văn bản thỏa thuận còn phải có xác nhận của cơ quan có thẩm quyền của nước mà trẻ được chọn mang quốc tịch về việc trẻ có quốc tịch phù hợp pháp luật nước đó; nếu cơ quan nước ngoài KHÔNG xác nhận thì cơ quan đăng ký hộ tịch vẫn đăng ký khai sinh cho trẻ nhưng ĐỂ TRỐNG phần ghi quốc tịch trong Giấy khai sinh và Sổ đăng ký khai sinh.",
+    "ground_truth_citations": [
+      { "dieu": "36", "khoan": "1", "van_ban": "luat-ho-tich-2014" },
+      { "dieu": "7", "khoan": "2", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng Luật→TT: đáp án vế 2 ('để trống quốc tịch') CHỈ có ở TT04 Đ7 K2 — Luật không nói gì về trường hợp nước ngoài từ chối xác nhận. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V037",
+    "question": "Hồ sơ của người nhận con nuôi trong nước nộp ở đâu, bằng hình thức nào, và Phiếu lý lịch tư pháp phải nộp loại nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Hồ sơ của người nhận con nuôi trong nước gồm các giấy tờ quy định tại Điều 17 Luật Nuôi con nuôi 2010, lập thành 01 bộ. Theo Điều 7 Khoản 1 Nghị định 19/2011/NĐ-CP (sửa đổi): nộp cho UBND cấp xã nơi có thẩm quyền giải quyết việc nuôi con nuôi, qua một trong ba hình thức — nộp trực tiếp, gửi qua hệ thống bưu chính, hoặc nộp trực tuyến theo quy định về thủ tục hành chính trên môi trường điện tử. Về Phiếu lý lịch tư pháp (quy định tại khoản 3 Điều 17 của Luật), người nhận con nuôi nộp PHIẾU LÝ LỊCH TƯ PHÁP SỐ 1; nếu nộp Phiếu điện tử và UBND xã tra cứu được thông tin từ Cơ sở dữ liệu quốc gia về dân cư thì không phải nộp bản giấy một số giấy tờ (Khoản 2).",
+    "ground_truth_citations": [
+      { "dieu": "17", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "7", "khoan": "1", "van_ban": "nghi-dinh-19-2011-nd-cp" },
+      { "dieu": "7", "khoan": "2", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng: danh mục hồ sơ ở Luật Đ17, cách nộp + chi tiết 'Phiếu số 1' + cơ chế miễn bản giấy chỉ có ở NĐ19 Đ7 (NĐ tự trích 'Điều 17 của Luật'). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V038",
+    "question": "Quyết định cho phép chuyển mục đích sử dụng đất đã được cấp thì trong những trường hợp nào có thể bị điều chỉnh?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 44a Khoản 1 Nghị định 102/2024/NĐ-CP (điều được bổ sung bởi Nghị định 49/2026/NĐ-CP), việc điều chỉnh quyết định giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất thực hiện trong hai trường hợp: (a) khi có văn bản của cơ quan nhà nước có thẩm quyền làm THAY ĐỔI CĂN CỨ của quyết định — các căn cứ này quy định tại các khoản 1–5 Điều 116 Luật Đất đai 2024; (b) khi có SAI SÓT về ranh giới, vị trí, diện tích, mục đích sử dụng giữa bản đồ quy hoạch, bản đồ địa chính, quyết định và số liệu bàn giao đất trên thực địa.",
+    "ground_truth_citations": [
+      { "dieu": "44a", "khoan": "1", "van_ban": "nghi-dinh-102-2024-nd-cp" },
+      { "dieu": "116", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 (Đ44a điểm a tự trích 'các khoản 1-5 Điều 116 của Luật') + chạm gap4 (Đ44a là điều BỔ SUNG bởi NĐ 49/2026 — đúng mẫu D-06 'Điều 44a thuộc Norm gốc'). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V039",
+    "question": "Hồ sơ nhận con nuôi trong nước có thể nộp bằng những hình thức nào, và sau khi nộp đủ thì bao lâu được giải quyết?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Về nơi nộp và thời hạn: theo Điều 19 Luật Nuôi con nuôi 2010, hồ sơ nộp tại UBND cấp xã nơi người được giới thiệu làm con nuôi thường trú hoặc nơi người nhận con nuôi thường trú (Khoản 1); thời hạn giải quyết việc nuôi con nuôi là 30 NGÀY kể từ ngày UBND cấp xã nhận đủ hồ sơ hợp lệ (Khoản 2). Về hình thức nộp: theo Điều 7 Khoản 1 Nghị định 19/2011/NĐ-CP (sửa đổi), có thể nộp trực tiếp, gửi qua hệ thống bưu chính, hoặc nộp trực tuyến theo quy định về thủ tục hành chính trên môi trường điện tử.",
+    "ground_truth_citations": [
+      { "dieu": "19", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "19", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "7", "khoan": "1", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng: nơi nộp + thời hạn 30 ngày ở Luật, 3 hình thức nộp (kể cả trực tuyến) chỉ có ở NĐ19 Đ7 K1 bản sửa đổi. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V040",
+    "question": "Sổ hộ khẩu có còn được dùng làm giấy tờ chứng minh nơi cư trú khi làm thủ tục đăng ký lại khai sinh không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Không còn. Theo Điều 9 Khoản 3 Điểm b Thông tư 04/2020/TT-BTP, giấy tờ làm cơ sở đăng ký lại khai sinh gồm 'giấy tờ chứng minh về nơi cư trú' — cụm từ 'Sổ hộ khẩu, Sổ tạm trú' trước đây trong điểm này ĐÃ BỊ BÃI BỎ bởi Thông tư 09/2022/TT-BTP, hiệu lực từ 01/01/2023 (đồng bộ với việc bỏ sổ hộ khẩu giấy). Hiện nay dùng các giấy tờ chứng minh nơi cư trú khác theo quy định.",
+    "ground_truth_citations": [
+      { "dieu": "9", "khoan": "3", "diem": "b", "van_ban": "thong-tu-04-2020-tt-btp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 temporal: đáp án đúng đòi biết amendment (TT 09/2022 bãi bỏ cụm 'Sổ hộ khẩu, Sổ tạm trú', hiệu lực 01/01/2023 — annotation amended_by trong corpus). Hệ chỉ đọc text hiện hành sẽ trả lời đúng phần 'giấy tờ cư trú' nhưng thiếu phần 'sổ hộ khẩu đã bị loại'. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V041",
+    "question": "Quy định về mục đích sử dụng của Giấy xác nhận tình trạng hôn nhân trong Nghị định 123/2015/NĐ-CP có bị sửa đổi gì gần đây không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Có. Điều 23 Khoản 2 Nghị định 123/2015/NĐ-CP (quy định Giấy xác nhận tình trạng hôn nhân được sử dụng để kết hôn tại Cơ quan đại diện Việt Nam ở nước ngoài, cơ quan có thẩm quyền của nước ngoài hoặc sử dụng vào mục đích khác) đã được SỬA ĐỔI, BỔ SUNG bởi Nghị định 07/2025/NĐ-CP (khoản 7 Điều 2), hiệu lực từ ngày 09/01/2025.",
+    "ground_truth_citations": [
+      { "dieu": "23", "khoan": "2", "van_ban": "nghi-dinh-123-2015-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 amendment-tracking thuần: câu hỏi trực diện về việc sửa đổi — đáp án nằm ở annotation amended_by (NĐ 07/2025, hiệu lực 09/01/2025) gắn với Đ23 K2. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V042",
+    "question": "Hiện nay tôi có thể nộp Tờ khai đăng ký lại việc nuôi con nuôi qua mạng được không? Quy định cho phép điều này có từ bao giờ?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Được. Theo Điều 29 Khoản 3 Nghị định 19/2011/NĐ-CP (bản hiện hành), người yêu cầu đăng ký lại việc nuôi con nuôi được lựa chọn nộp Tờ khai trực tiếp, gửi qua hệ thống bưu chính HOẶC NỘP TRỰC TUYẾN theo quy định về thủ tục hành chính trên môi trường điện tử; Tờ khai phải có cam đoan về tính trung thực của việc đăng ký nuôi con nuôi trước đó và chữ ký của ít nhất hai người làm chứng. Khoản này được sửa đổi, bổ sung bởi Nghị định 06/2025/NĐ-CP (khoản 16 Điều 1), hiệu lực từ ngày 08/01/2025 — tức phương thức trực tuyến áp dụng theo bản sửa đổi này.",
+    "ground_truth_citations": [
+      { "dieu": "29", "khoan": "3", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: nội dung hiện hành + truy vết nguồn sửa đổi (NĐ 06/2025 hiệu lực 08/01/2025, annotation trong corpus). Câu 2 vế: 'được không' (text hiện hành) + 'từ bao giờ' (amendment metadata). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V043",
+    "question": "Nghe nói Nghị định 102/2024/NĐ-CP mới được bổ sung một điều về việc giao đất, cho thuê đất, điều chỉnh quyết định giao đất. Điều đó là điều nào, được bổ sung bởi văn bản nào và có hiệu lực từ khi nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Đó là Điều 44a Nghị định 102/2024/NĐ-CP — 'Việc giao đất, cho thuê đất, điều chỉnh quyết định giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất'. Điều này được BỔ SUNG bởi Nghị định 49/2026/NĐ-CP (khoản 4 Điều 13), có hiệu lực từ ngày 31/01/2026. Nội dung chính: quy định các trường hợp điều chỉnh quyết định (thay đổi căn cứ theo Điều 116 Luật Đất đai; sai sót ranh giới, vị trí, diện tích, mục đích sử dụng).",
+    "ground_truth_citations": [
+      { "dieu": "44a", "van_ban": "nghi-dinh-102-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 dạng ĐIỀU BỔ SUNG MỚI (added_by) — đúng mẫu D-06: Điều 44a thuộc Norm gốc NĐ102, truy vết nguồn gốc qua annotation (NĐ 49/2026, hiệu lực 31/01/2026). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
