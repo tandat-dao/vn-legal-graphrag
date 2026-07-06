@@ -1,0 +1,94 @@
+[
+  {
+    "id": "V001",
+    "question": "Gia đình tôi sống tại một xã thuộc huyện Củ Chi, TP.HCM. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 3 Khoản 3 Quyết định 69/2024/QĐ-UBND TP.HCM, hạn mức giao đất ở cho cá nhân tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ là không quá 250 m²/cá nhân. Xã thuộc huyện Củ Chi nằm trong nhóm này nên hạn mức tối đa là 250 m².",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Đáp án Đ3 K3 QĐ69 (xã 5 huyện ngoại thành = 250 m²). Pinpoint đúng KHOẢN theo khu vực — K1 (quận, 160) và K2 (thị trấn, 200) là distractor nội văn bản. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V002",
+    "question": "Gia đình tôi sống tại xã Phú Lý, tỉnh Đồng Nai. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V001",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 3 Khoản 2 Điểm a Quyết định 92/2025/QĐ-UBND tỉnh Đồng Nai, xã Phú Lý thuộc danh sách các xã khu vực nông thôn có hạn mức giao đất ở cho cá nhân không quá 300 m².",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "2", "diem": "a", "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR với V001 (đổi đúng 1 biến: jurisdiction TP.HCM→Đồng Nai; cùng dạng câu 'xã + hạn mức'). Đáp án khác hẳn (250→300, khác văn bản) → đo cơ chế [:APPLIES_TO]. Phú Lý nằm trong danh sách Đ3 K2 Điểm a. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V003",
+    "question": "Hạn mức giao đất ở cho cá nhân tối đa là bao nhiêu mét vuông?",
+    "theme": "dat-dai",
+    "jurisdiction": null,
+    "gap_type": "gap2",
+    "subtype": "underspecified",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Hạn mức giao đất ở cho cá nhân do UBND cấp tỉnh quy định, KHÁC NHAU theo từng địa phương — câu trả lời đúng phải nêu sự phụ thuộc này thay vì đưa một con số duy nhất. Trong phạm vi dữ liệu: tại TP.HCM (Quyết định 69/2024/QĐ-UBND, Điều 3) hạn mức là không quá 160 m² tại các quận và TP Thủ Đức, 200 m² tại thị trấn/khu đô thị mới 5 huyện, 250 m² tại các xã; tại Đồng Nai (Quyết định 92/2025/QĐ-UBND, Điều 3) là không quá 200–300 m² tại đô thị và 300–400 m² tại nông thôn tùy địa bàn.",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "1", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" },
+      { "dieu": "3", "khoan": "2", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" },
+      { "dieu": "3", "khoan": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" },
+      { "dieu": "3", "khoan": "1", "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai" },
+      { "dieu": "3", "khoan": "2", "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "UNDERSPECIFIED (D-25): cố tình không nêu địa phương; eval KHÔNG bơm force_jurisdiction cho câu này. Hành vi mong muốn: nêu 'tùy địa phương' + khung 2 tỉnh, KHÔNG đoán bừa một tỉnh. Chấm behavioral là chính; F1 phụ. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V004",
+    "question": "Nhà tôi ở một xã của huyện Củ Chi trên TP.HCM, nghe nói nhà nước giới hạn diện tích đất thổ cư được cấp, cho hỏi tối đa tôi được giao bao nhiêu mét vuông đất ở?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": "register",
+    "pair_id": "V001",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 3 Khoản 3 Quyết định 69/2024/QĐ-UBND TP.HCM, hạn mức giao đất ở cho cá nhân tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ là không quá 250 m²/cá nhân. Xã thuộc huyện Củ Chi nằm trong nhóm này nên hạn mức tối đa là 250 m².",
+    "ground_truth_citations": [
+      { "dieu": "3", "khoan": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "REGISTER-PAIR của V001: cùng nội dung hỏi, đổi văn phong khẩu ngữ ('đất thổ cư', 'được cấp', câu dài kể lể) — đo bền vững từ vựng dân nói vs luật viết. Citations GIỮ NGUYÊN theo V001. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V005",
+    "question": "Tôi muốn chuyển 2 hecta đất rừng sản xuất của mình sang đất ở tại Đồng Nai, thủ tục thực hiện như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "negative",
+    "subtype": "trap",
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Hệ thống phải TỪ CHỐI tư vấn thủ tục hoặc cảnh báo rõ đây là trường hợp ngoài phạm vi hỗ trợ: chuyển mục đích đất RỪNG SẢN XUẤT (đất lâm nghiệp) chịu điều chỉnh của pháp luật lâm nghiệp (chuyển mục đích sử dụng rừng phải thực hiện trước/song song theo Luật Lâm nghiệp) — nhóm văn bản này không thuộc phạm vi dữ liệu. Trả lời quy trình đầy đủ chỉ dựa trên các quy định chung của Luật Đất đai là thiếu căn cứ pháp lý chuyên ngành.",
+    "ground_truth_citations": [],
+    "relevant_component_ids": [],
+    "notes": "NEGATIVE-TRAP theo D-05 (scope loại đất lâm nghiệp có chủ đích). NUANCE cho reviewer: corpus CÓ mention rải rác 'đất rừng sản xuất' trong Luật ĐĐ Đ121/122 (điều kiện chung) nhưng KHÔNG có Luật Lâm nghiệp/NĐ 156 → không thể dựng thủ tục đúng. Hành vi mong muốn: từ chối/cảnh báo ngoài scope; trích Đ121/122 rồi tư vấn trọn quy trình = hành vi nguy hiểm cần bắt. [A] quyết định giữ/bỏ khi review.",
+    "review": { "verified_by": null, "date": null }
+  }
+]
