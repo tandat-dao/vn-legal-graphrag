@@ -458,5 +458,160 @@
     "relevant_component_ids": [],
     "notes": "GAP3 2 tầng ĐẢO CHIỀU (danh sách giấy tờ ở TT tier3, quy tắc xử lý xung đột ở NĐ tier2) — câu hỏi 2 vế buộc đi cả 2 tầng theo 2 hướng. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V026",
+    "question": "Nhận nuôi con nuôi trong nước thì ai phải nộp lệ phí đăng ký và mức lệ phí là bao nhiêu?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 12 Khoản 1 Luật Nuôi con nuôi 2010, NGƯỜI NHẬN CON NUÔI phải nộp lệ phí đăng ký nuôi con nuôi. Mức thu cụ thể do Chính phủ quy định: theo Điều 6 Khoản 1 Điểm a Nghị định 114/2016/NĐ-CP, lệ phí đăng ký nuôi con nuôi trong nước là 400.000 đồng/trường hợp.",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "6", "khoan": "1", "diem": "a", "van_ban": "nghi-dinh-114-2016-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng: nghĩa vụ nộp ở Luật (tier 1), MỨC THU chỉ có ở NĐ 114 (tier 2) — thiếu tầng NĐ là không trả lời được con số. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V027",
+    "question": "Cô ruột nhận cháu làm con nuôi trong nước thì có được miễn lệ phí đăng ký nuôi con nuôi không, và việc miễn này căn cứ vào đâu?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Có. Điều 12 Khoản 3 Luật Nuôi con nuôi 2010 giao Chính phủ quy định chi tiết việc miễn, giảm lệ phí đăng ký nuôi con nuôi. Trên cơ sở đó, Điều 4 Khoản 1 Điểm a Nghị định 114/2016/NĐ-CP quy định miễn lệ phí đăng ký nuôi con nuôi trong nước cho trường hợp: cha dượng hoặc mẹ kế nhận con riêng của vợ/chồng làm con nuôi; CÔ, cậu, dì, chú, bác RUỘT nhận cháu làm con nuôi. Cô ruột nhận cháu thuộc diện này nên được miễn.",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "3", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "4", "khoan": "1", "diem": "a", "van_ban": "nghi-dinh-114-2016-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng dạng ỦY QUYỀN LẬP PHÁP (Luật giao CP → NĐ quy định cụ thể) — câu hỏi 'căn cứ vào đâu' ép hệ trình cả chuỗi. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V028",
+    "question": "Người nước ngoài thường trú ở nước ngoài muốn nhận trẻ em Việt Nam làm con nuôi thì phải nộp những khoản tiền nào theo quy định?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Gồm hai khoản theo Điều 12 Luật Nuôi con nuôi 2010: (1) LỆ PHÍ đăng ký nuôi con nuôi (Khoản 1) — mức cụ thể theo Điều 6 Khoản 1 Điểm b Nghị định 114/2016/NĐ-CP là 9.000.000 đồng/trường hợp đối với người Việt Nam định cư ở nước ngoài, người nước ngoài thường trú ở nước ngoài nhận con nuôi là công dân Việt Nam; (2) CHI PHÍ giải quyết nuôi con nuôi nước ngoài (Khoản 2) — khoản tiền bù đắp một phần chi phí gồm: nuôi dưỡng, chăm sóc, giáo dục trẻ từ khi được giới thiệu làm con nuôi đến khi hoàn thành thủ tục giao nhận, xác minh nguồn gốc, giao nhận con nuôi và thù lao hợp lý cho nhân viên cơ sở nuôi dưỡng. Ngoài hai khoản này, tổ chức, cá nhân không được đặt ra bất kỳ khoản thu nào khác (Khoản 4).",
+    "ground_truth_citations": [
+      { "dieu": "12", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "12", "khoan": "2", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "12", "khoan": "4", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "6", "khoan": "1", "diem": "b", "van_ban": "nghi-dinh-114-2016-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 SYNTHESIS: khung khoản thu ở Luật (3 khoản của Đ12), con số ở NĐ114. K4 ('không khoản nào khác') là chi tiết bảo vệ người dân dễ bị bỏ sót. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V029",
+    "question": "Trẻ em đang sống ở cơ sở nuôi dưỡng được nhận làm con nuôi trong nước thì đăng ký việc nuôi con nuôi tại UBND cấp xã nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Nguyên tắc chung theo Điều 9 Khoản 1 Luật Nuôi con nuôi 2010: UBND cấp xã nơi thường trú của người được giới thiệu làm con nuôi hoặc của người nhận con nuôi đăng ký việc nuôi con nuôi trong nước. Với trường hợp cụ thể trẻ em ở CƠ SỞ NUÔI DƯỠNG, Điều 2 Khoản 1 Nghị định 19/2011/NĐ-CP quy định chi tiết: UBND cấp xã NƠI CÓ TRỤ SỞ của cơ sở nuôi dưỡng thực hiện đăng ký việc nuôi con nuôi.",
+    "ground_truth_citations": [
+      { "dieu": "9", "khoan": "1", "van_ban": "luat-nuoi-con-nuoi-2010" },
+      { "dieu": "2", "khoan": "1", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 2 tầng dạng QUY TẮC CHUNG → NGOẠI LỆ CỤ THỂ (Luật Đ9 nguyên tắc, NĐ19 Đ2 K1 case cơ sở nuôi dưỡng; NĐ19 Đ2 mở đầu tự trích 'theo Điều 9 của Luật'). Chỉ trả lời theo Luật sẽ SAI cho case này. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V030",
+    "question": "Muốn chuyển 3 ha đất trồng lúa sang mục đích khác thì cần đáp ứng những điều kiện và tiêu chí gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Hai tầng điều kiện. (1) Theo Điều 122 Khoản 1 Luật Đất đai 2024: cơ quan nhà nước có thẩm quyền chỉ được quyết định cho phép chuyển mục đích sử dụng đất trồng lúa sang mục đích khác SAU KHI có Nghị quyết của Hội đồng nhân dân cấp tỉnh và đáp ứng các căn cứ tại Điều 116 (trừ các trường hợp dự án thuộc thẩm quyền Quốc hội/Thủ tướng chấp thuận chủ trương đầu tư); việc chuyển còn phải tuân theo tiêu chí, điều kiện do Chính phủ quy định. (2) Tiêu chí của Chính phủ: theo Điều 46 Khoản 1 Nghị định 102/2024/NĐ-CP, chuyển mục đích sử dụng từ 02 ha trở lên đối với đất trồng lúa (trường hợp 3 ha thuộc diện này) phải có: (a) phương án trồng rừng thay thế hoặc văn bản hoàn thành trách nhiệm nộp tiền trồng rừng thay thế; (b) phương án sử dụng tầng đất mặt theo pháp luật về trồng trọt; (c) đánh giá sơ bộ tác động môi trường hoặc đánh giá tác động môi trường.",
+    "ground_truth_citations": [
+      { "dieu": "122", "khoan": "1", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "46", "khoan": "1", "van_ban": "nghi-dinh-102-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 ỦY QUYỀN: Luật Đ122 K1 nói 'tuân theo tiêu chí, điều kiện do Chính phủ quy định' → NĐ102 Đ46 K1 là câu trả lời cụ thể (ngưỡng 2 ha). Thiếu tầng NĐ = trả lời rỗng. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V031",
+    "question": "Gia đình tôi lỡ lấn một phần đất thuộc hành lang bảo vệ công trình công cộng từ năm 2010, nay quy hoạch đã điều chỉnh và phần đất đó không còn thuộc hành lang bảo vệ nữa. Chúng tôi có được cấp Giấy chứng nhận cho phần đất này không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Có thể được xem xét cấp. Theo Điều 139 Khoản 1 Luật Đất đai 2024 (xử lý vi phạm pháp luật đất đai trước ngày 01/7/2014): nguyên tắc chung là đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng bị thu hồi và không cấp Giấy chứng nhận; NHƯNG nếu đã có điều chỉnh quy hoạch được phê duyệt mà diện tích lấn, chiếm không còn thuộc hành lang bảo vệ, không thuộc chỉ giới xây dựng, không dùng cho trụ sở/công trình công cộng thì người đang sử dụng đất ĐƯỢC XEM XÉT cấp Giấy chứng nhận và phải thực hiện nghĩa vụ tài chính. Trình tự và cách xác định diện tích đất ở khi cấp được quy định chi tiết tại Điều 25 Nghị định 101/2024/NĐ-CP (xác định theo thời điểm bắt đầu sử dụng đất — trước 15/10/1993 hay từ 15/10/1993 đến trước 01/7/2014).",
+    "ground_truth_citations": [
+      { "dieu": "139", "khoan": "1", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "25", "van_ban": "nghi-dinh-101-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3: quy tắc + ngoại lệ ở Luật Đ139 K1, cơ chế thi hành ở NĐ101 Đ25 (title NĐ tự trích 'khoản 1 và khoản 3 Điều 139 của Luật'). Case 'lỡ lấn 2010' = trước mốc 01/7/2014. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V032",
+    "question": "Đất lấn chiếm nhưng đã sử dụng ổn định từ năm 1990 và hiện có nhà ở, khi được cấp Giấy chứng nhận thì diện tích đất ở được công nhận tính như thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Trường hợp sử dụng đất trước ngày 15/10/1993 (năm 1990 thuộc diện này), theo Điều 25 Khoản 1 Nghị định 101/2024/NĐ-CP: diện tích đất ở được công nhận bằng HẠN MỨC CÔNG NHẬN đất ở áp dụng cho giai đoạn 18/12/1980 đến trước 15/10/1993 (theo khoản 5 Điều 141 Luật Đất đai) nếu thửa đất bằng hoặc lớn hơn hạn mức đó; nếu diện tích đã xây nhà ở và công trình phục vụ đời sống LỚN HƠN diện tích được công nhận thì công nhận theo DIỆN TÍCH THỰC TẾ đã xây dựng; nếu thửa đất NHỎ HƠN hạn mức thì đất ở được xác định là TOÀN BỘ thửa đất. Việc cấp giấy cho đất vi phạm trước 01/7/2014 thực hiện theo khung của Điều 139 Luật Đất đai 2024.",
+    "ground_truth_citations": [
+      { "dieu": "25", "khoan": "1", "van_ban": "nghi-dinh-101-2024-nd-cp" },
+      { "dieu": "139", "khoan": "1", "van_ban": "luat-dat-dai-2024" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 hard: logic 3 nhánh so sánh diện tích (≥ hạn mức / xây lớn hơn / thửa nhỏ hơn) nằm TRỌN ở NĐ101 Đ25 K1, khung pháp lý ở Luật Đ139. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V033",
+    "question": "Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 195 Khoản 2 và Điều 196 Khoản 2 Luật Đất đai 2024, ỦY BAN NHÂN DÂN CẤP TỈNH căn cứ quỹ đất và tình hình thực tế của địa phương để quy định hạn mức giao đất ở cho cá nhân tại nông thôn và tại đô thị. Trên cơ sở đó, tại TP.HCM, UBND Thành phố ban hành Quyết định 69/2024/QĐ-UBND: Điều 3 quy định hạn mức không quá 160 m² tại các quận và TP Thủ Đức, 200 m² tại thị trấn và khu đô thị mới của 5 huyện, 250 m² tại các xã.",
+    "ground_truth_citations": [
+      { "dieu": "195", "khoan": "2", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "196", "khoan": "2", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "3", "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 chuỗi VƯỢT TẦNG tier1→tier4 (Luật ủy quyền UBND tỉnh → QĐ 69; QĐ69 Đ1 tự trích 'khoản 2 Điều 195 và khoản 2 Điều 196'). Đồng thời chạm gap2 (văn bản địa phương) — gap chính là 3 vì câu hỏi về CHUỖI thẩm quyền ban hành. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
