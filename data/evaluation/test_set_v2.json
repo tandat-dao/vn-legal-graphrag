@@ -1119,5 +1119,134 @@
     "relevant_component_ids": [],
     "notes": "MINIMAL-PAIR với V059: cùng việc, HCM 3.000đ vs ĐN 15.000đ — chênh 5 LẦN giữa 2 địa phương, minh họa mạnh cho Gap 2 (lệ phí hộ tịch là thẩm quyền HĐND tỉnh). Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V061",
+    "question": "Gia đình tôi thuộc diện hộ cận nghèo ở Đồng Nai, khi làm thủ tục hộ tịch có được miễn lệ phí không? Luật Hộ tịch có quy định miễn cho hộ cận nghèo không?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Có được miễn tại Đồng Nai. Khung của Luật: Điều 11 Khoản 1 Luật Hộ tịch 2014 chỉ quy định miễn lệ phí cho người thuộc gia đình có công, người thuộc HỘ NGHÈO, người khuyết tật (điểm a) và các việc đăng ký đúng hạn (điểm b) — KHÔNG nhắc đến hộ cận nghèo. Tuy nhiên, tại Đồng Nai, Điều 1 Khoản 2 Nghị quyết 11/2023/NQ-HĐND (điểm b) MỞ RỘNG diện miễn: bao gồm cả người thuộc hộ nghèo VÀ HỘ CẬN NGHÈO theo chuẩn nghèo đa chiều của tỉnh — nên hộ cận nghèo ở Đồng Nai được miễn lệ phí hộ tịch.",
+    "ground_truth_citations": [
+      { "dieu": "11", "khoan": "1", "van_ban": "luat-ho-tich-2014" },
+      { "dieu": "1", "khoan": "2", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 chuỗi tier1→tier4 dạng ĐỊA PHƯƠNG MỞ RỘNG khung Luật (Luật miễn tối thiểu, NQ HĐND cho thêm). Chạm gap2. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V062",
+    "question": "Gia đình tôi thuộc diện hộ cận nghèo ở TP.HCM, khi làm thủ tục hộ tịch có được miễn lệ phí không?",
+    "theme": "ho-tich",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V061",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không. Danh sách đối tượng miễn thu lệ phí hộ tịch tại TP.HCM theo Phụ lục 1B Nghị quyết 124/2016/NQ-HĐND gồm: trẻ em, người thuộc hộ nghèo, người cao tuổi, người khuyết tật, người thuộc gia đình có công với cách mạng, và các việc đăng ký khai sinh/khai tử đúng hạn, giám hộ, kết hôn của công dân Việt Nam cư trú trong nước — KHÔNG bao gồm hộ cận nghèo. Luật Hộ tịch (Điều 11 Khoản 1) cũng chỉ quy định miễn cho hộ nghèo. Vì vậy hộ cận nghèo tại TP.HCM không thuộc diện miễn lệ phí hộ tịch.",
+    "ground_truth_citations": [
+      { "dieu": "1B", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich", "loai": "phu_luc" },
+      { "dieu": "11", "khoan": "1", "van_ban": "luat-ho-tich-2014" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR ĐẢO ĐÁP ÁN thứ 2 (với V061): cận nghèo ĐN=miễn / HCM=không — cùng mẫu V017↔V018 nhưng ở domain hộ tịch. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V063",
+    "question": "Tôi đăng ký khai tử quá hạn cho người thân tại UBND cấp xã ở TP.HCM thì lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục 1B Khoản 1 Nghị quyết 124/2016/NQ-HĐND TP.HCM, lệ phí khai tử tại UBND cấp xã là 5.000 đồng/trường hợp. Lưu ý: đăng ký khai tử ĐÚNG HẠN được miễn lệ phí, nên mức này áp dụng cho trường hợp quá hạn/đăng ký lại.",
+    "ground_truth_citations": [
+      { "dieu": "1B", "khoan": "1", "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Cặp với V064 (ĐN 10.000đ). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V064",
+    "question": "Tôi đăng ký khai tử quá hạn cho người thân tại UBND cấp xã ở Đồng Nai thì lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": "V063",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục a — đăng ký hộ tịch tại UBND cấp xã), lệ phí khai tử (đăng ký không đúng hạn, đăng ký lại) là 10.000 đồng. Đăng ký đúng hạn được miễn; nộp trực tuyến thuộc thẩm quyền cấp xã được miễn 100%.",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "MINIMAL-PAIR với V063 (khai tử quá hạn xã: HCM 5.000 vs ĐN 10.000). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V065",
+    "question": "Đăng ký nhận cha, mẹ, con tại UBND cấp xã ở Đồng Nai thì phải nộp lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai (mục a — đăng ký hộ tịch tại UBND cấp xã), lệ phí đăng ký nhận cha, mẹ, con là 30.000 đồng. (Tại UBND cấp huyện — trường hợp có yếu tố nước ngoài — mức này là 1.500.000 đồng theo mục b.)",
+    "ground_truth_citations": [
+      { "dieu": "_default", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai", "loai": "phu_luc" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap2 đơn (không pair): nhận cha mẹ con ĐN xã 30.000 (HCM là 10.000 — chênh 3 lần, để dành cho reviewer đối chiếu). Distractor nội văn bản: mức cấp huyện 1.500.000. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V066",
+    "question": "Cha dượng muốn nhận con riêng của vợ làm con nuôi thì đăng ký việc nuôi con nuôi tại UBND cấp xã nào? Quy định này có được sửa đổi so với ban đầu không?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 2 Khoản 1 Nghị định 19/2011/NĐ-CP (bản hiện hành): trường hợp cha dượng hoặc mẹ kế nhận con riêng của vợ/chồng làm con nuôi (và cô, cậu, dì, chú, bác ruột nhận cháu), UBND cấp xã NƠI CƯ TRÚ CỦA NGƯỜI NHẬN CON NUÔI hoặc CỦA NGƯỜI ĐƯỢC NHẬN LÀM CON NUÔI thực hiện đăng ký. Khoản này đã được SỬA ĐỔI, BỔ SUNG bởi Nghị định 24/2019/NĐ-CP (khoản 1 Điều 1), hiệu lực từ 25/04/2019 — quy định hiện hành là bản sau sửa đổi.",
+    "ground_truth_citations": [
+      { "dieu": "2", "khoan": "1", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: nội dung hiện hành (nơi CƯ TRÚ — linh hoạt hơn thường trú) + truy vết NĐ 24/2019. Cùng khoản với V029 nhưng góc hỏi khác (case đích danh + amendment). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V067",
+    "question": "Người dân tộc thiểu số ở các xã khu vực I có được miễn lệ phí hộ tịch tại Đồng Nai không, và đây là quy định của tỉnh hay của Luật?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Có được miễn tại Đồng Nai, và đây là quy định MỞ RỘNG của tỉnh. Điều 1 Khoản 2 Điểm b Nghị quyết 11/2023/NQ-HĐND Đồng Nai đưa 'người dân tộc thiểu số tại các xã khu vực I thuộc vùng đồng bào dân tộc thiểu số và miền núi theo quy định của Thủ tướng Chính phủ' vào diện miễn lệ phí hộ tịch. Luật Hộ tịch (Điều 11 Khoản 1) không quy định diện miễn này — khung của Luật chỉ gồm gia đình có công, hộ nghèo, người khuyết tật và các việc đăng ký đúng hạn.",
+    "ground_truth_citations": [
+      { "dieu": "1", "khoan": "2", "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai" },
+      { "dieu": "11", "khoan": "1", "van_ban": "luat-ho-tich-2014" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap2 + phân tầng nguồn quy định (tỉnh mở rộng vs khung Luật) — vế 'của tỉnh hay của Luật' đo attribution đúng nguồn. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
