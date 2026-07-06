@@ -953,5 +953,98 @@
     "relevant_component_ids": [],
     "notes": "GAP4 SPAN-REGIME (case_status do-dang): đúng thiết kế temporal của hệ — broad retrieve kéo CẢ 2 văn bản, trình 2 khung, KHÔNG tự quyết áp khung nào (prompt rule TEMPORAL). GT không khẳng định khung áp dụng vì corpus không chứa điều khoản chuyển tiếp — [A] review câu chữ. Verify OK 2026-07-06.",
     "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V052",
+    "question": "Sau khi nhận con nuôi, cha mẹ nuôi muốn thay đổi họ tên cho con thì cần điều kiện gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 10 Khoản 2 Nghị định 19/2011/NĐ-CP (bản sửa đổi bởi Nghị định 24/2019/NĐ-CP, hiệu lực 25/04/2019): căn cứ vào Giấy chứng nhận nuôi con nuôi, theo YÊU CẦU của cha mẹ nuôi và SỰ ĐỒNG Ý của con nuôi TỪ ĐỦ CHÍN TUỔI trở lên, cơ quan đăng ký hộ tịch có thẩm quyền thực hiện việc thay đổi họ, chữ đệm và tên của con nuôi theo quy định của pháp luật dân sự và pháp luật về hộ tịch.",
+    "ground_truth_citations": [
+      { "dieu": "10", "khoan": "2", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 (nội dung hiện hành theo bản sửa 24/2019) + điều kiện then chốt 'con ≥9 tuổi phải đồng ý' dễ bị bỏ sót. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V053",
+    "question": "Lễ giao nhận con nuôi được tổ chức ở đâu, cần những ai có mặt, và Giấy chứng nhận nuôi con nuôi có bản điện tử không?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Theo Điều 10 Khoản 1 Nghị định 19/2011/NĐ-CP (bản sửa đổi bởi Nghị định 06/2025/NĐ-CP, hiệu lực 08/01/2025): trong 05 ngày làm việc kể từ khi kết thúc thời hạn thay đổi ý kiến, UBND cấp xã tiến hành đăng ký nuôi con nuôi và tổ chức giao nhận TẠI TRỤ SỞ UBND CẤP XÃ nơi đăng ký, với sự có mặt của cha mẹ nuôi, cha mẹ đẻ, người giám hộ hoặc đại diện cơ sở nuôi dưỡng và người được nhận làm con nuôi (một trong hai bên vắng mặt vì lý do khách quan thì phải ủy quyền cho người kia). CÓ bản điện tử: Giấy chứng nhận nuôi con nuôi trong nước bản điện tử được gửi qua Kho quản lý dữ liệu điện tử của cá nhân hoặc hộp thư điện tử cá nhân — quy định bản điện tử này được bổ sung bởi Nghị định 06/2025. Việc giao nhận phải lập biên bản có chữ ký/điểm chỉ các bên.",
+    "ground_truth_citations": [
+      { "dieu": "10", "khoan": "1", "van_ban": "nghi-dinh-19-2011-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: nội dung hiện hành + vế 'bản điện tử từ bao giờ' đòi amendment metadata (NĐ 06/2025, 08/01/2025). Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V054",
+    "question": "Khi chuyển đất chuyên trồng lúa sang mục đích phi nông nghiệp, yêu cầu về tầng đất mặt được quy định thế nào và phương án sử dụng tầng đất mặt phải có những nội dung gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Chuỗi quy định 3 văn bản. (1) Điều 122 Khoản 1 Luật Đất đai 2024: việc chuyển mục đích sử dụng đất trồng lúa phải tuân theo tiêu chí, điều kiện do Chính phủ quy định. (2) Điều 46 Khoản 1 Điểm b Nghị định 102/2024/NĐ-CP: một trong các tiêu chí (với diện tích từ 02 ha trở lên) là có PHƯƠNG ÁN SỬ DỤNG TẦNG ĐẤT MẶT theo quy định của pháp luật về trồng trọt. (3) Điều 10 Nghị định 112/2024/NĐ-CP quy định chi tiết: người được giao đất, cho thuê đất khi xây dựng công trình trên đất chuyển đổi từ đất chuyên trồng lúa phải có phương án sử dụng tầng đất mặt được cơ quan có thẩm quyền chấp thuận (Khoản 1); nội dung phương án gồm: thông tin người đề nghị chuyển mục đích; thông tin diện tích đất chuyên trồng lúa đề nghị chuyển đổi; khối lượng tầng đất mặt sau khi bóc tách; phương án, vị trí và mục đích sử dụng khối lượng đất mặt được bóc tách (Khoản 2).",
+    "ground_truth_citations": [
+      { "dieu": "122", "khoan": "1", "van_ban": "luat-dat-dai-2024" },
+      { "dieu": "46", "khoan": "1", "van_ban": "nghi-dinh-102-2024-nd-cp" },
+      { "dieu": "10", "khoan": "1", "van_ban": "nghi-dinh-112-2024-nd-cp" },
+      { "dieu": "10", "khoan": "2", "van_ban": "nghi-dinh-112-2024-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP3 CHUỖI 3 VĂN BẢN (Luật → NĐ102 tiêu chí → NĐ112 nội dung phương án) — chuỗi dài nhất bộ GT; mỗi tầng thêm một lớp chi tiết. NĐ112 Đ10 cũng là điều bị NĐ226/2025 sửa (case Q019 dev set) — góc hỏi ở đây khác. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V055",
+    "question": "Khi đi đăng ký hộ tịch hiện nay tôi cần xuất trình giấy tờ tùy thân gì, và có còn phải xuất trình giấy tờ chứng minh nơi cư trú như trước không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 2 Khoản 1 Nghị định 123/2015/NĐ-CP (bản hiện hành, sửa đổi bởi Nghị định 07/2025/NĐ-CP hiệu lực 09/01/2025): người yêu cầu đăng ký hộ tịch xuất trình bản chính MỘT trong các giấy tờ tùy thân — hộ chiếu, chứng minh nhân dân, Thẻ căn cước công dân, Thẻ căn cước, Căn cước điện tử, Giấy chứng nhận căn cước hoặc giấy tờ khác có dán ảnh và thông tin cá nhân còn giá trị sử dụng. KHÔNG còn phải xuất trình giấy tờ chứng minh nơi cư trú: yêu cầu này (trong giai đoạn chuyển tiếp) đã bị BÃI BỎ bởi Nghị định 104/2022/NĐ-CP, hiệu lực 01/01/2023, đồng bộ với việc bỏ sổ hộ khẩu giấy.",
+    "ground_truth_citations": [
+      { "dieu": "2", "khoan": "1", "van_ban": "nghi-dinh-123-2015-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4 KÉP trên 1 khoản: (a) danh sách giấy tờ hiện đại hóa bởi NĐ 07/2025 (Thẻ căn cước, Căn cước điện tử...); (b) NĐ 104/2022 bãi bỏ yêu cầu giấy tờ cư trú (01/01/2023). LƯU Ý REVIEWER: 9 annotation NĐ 07/2025 trong file này vừa được sửa hiệu lực 09/01/2019→09/01/2025 (lỗi năm hệ thống của file gốc) — B xác nhận lại ngày đúng. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
+  },
+  {
+    "id": "V056",
+    "question": "Giấy chứng sinh bản điện tử có được chấp nhận khi đăng ký khai sinh không?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": null,
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Được. Theo Điều 2 Khoản 2 Nghị định 123/2015/NĐ-CP (bản sửa đổi bởi Nghị định 07/2025/NĐ-CP, hiệu lực 09/01/2025): người yêu cầu đăng ký khai sinh nộp Giấy chứng sinh hoặc giấy tờ thay thế; trường hợp đã nộp BẢN ĐIỆN TỬ Giấy chứng sinh, hoặc cơ quan đăng ký hộ tịch đã khai thác được dữ liệu điện tử có ký số của Giấy chứng sinh, thì KHÔNG phải nộp bản giấy.",
+    "ground_truth_citations": [
+      { "dieu": "2", "khoan": "2", "van_ban": "nghi-dinh-123-2015-nd-cp" }
+    ],
+    "relevant_component_ids": [],
+    "notes": "GAP4: cơ chế bản điện tử/ký số là nội dung được NĐ 07/2025 bổ sung — bản gốc 2015 không có. Câu ngắn, đo đúng 1 fact hiện đại hóa. Verify OK 2026-07-06.",
+    "review": { "verified_by": null, "date": null }
   }
 ]
