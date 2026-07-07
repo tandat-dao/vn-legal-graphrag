@@ -128,6 +128,16 @@ def _run_one_oracle(item: dict, clients, llm_cache_dir: Path | None = None,
                             text_index, anthropic_client, llm_cache_dir, mode)
 
 
+def _run_one_bm25(item: dict, clients, llm_cache_dir: Path | None = None,
+                  response_mode: str = "auto") -> dict:
+    """BM25 baseline (E2a): retrieval LEXICAL thay dense (lazy-build corpus 1 lần)."""
+    from src.baseline.bm25_rag import run_bm25_query
+    _, _, anthropic_client, _ = clients
+    mode = "general" if response_mode == "auto" else response_mode
+    return run_bm25_query(item["question"], anthropic_client,
+                          cache_dir=llm_cache_dir, mode=mode)
+
+
 # ---------------------------------------------------------------------------
 # Shared client factory (tránh load model nhiều lần)
 # ---------------------------------------------------------------------------
@@ -182,6 +192,7 @@ def run_system_on_test_set(
         "baseline": _run_one_baseline,
         "closed-book": _run_one_closedbook,
         "oracle": _run_one_oracle,
+        "bm25": _run_one_bm25,
     }
     assert system in _RUNNERS, f"system '{system}' không hợp lệ: {list(_RUNNERS)}"
     runner = _RUNNERS[system]
@@ -296,8 +307,8 @@ def main() -> int:
         "--systems",
         default="graphrag,baseline",
         help="Hệ thống chạy, cách bởi dấu phẩy: graphrag | baseline (naive RAG) | "
-             "closed-book (E2a, không retrieval) | oracle (E2a, context=GT chunks). "
-             "Mặc định: graphrag,baseline",
+             "bm25 (E2a, lexical) | closed-book (E2a, không retrieval) | "
+             "oracle (E2a, context=GT chunks). Mặc định: graphrag,baseline",
     )
     parser.add_argument("--limit", type=int, default=0, help="Chỉ chạy N câu đầu (0=full)")
     parser.add_argument("--out-dir", type=Path, default=Path("data/evaluation/"))

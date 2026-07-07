@@ -1,6 +1,7 @@
 """Tests cho E2a baselines: closed-book + oracle (không gọi API thật)."""
 from unittest.mock import MagicMock
 
+from src.baseline.bm25_rag import _tokenize, _unit_label
 from src.baseline.closed_book import run_closedbook_query
 from src.evaluation.oracle import _cit_label, build_oracle_context
 
@@ -55,3 +56,16 @@ class TestOracleContext:
         ctx = build_oracle_context([{"dieu": "3", "khoan": "1", "van_ban": "vb"}], idx)
         assert "--- Điều 3, Khoản 1 (vb) ---" in ctx
         assert "Nội dung khoản 1." in ctx
+
+
+class TestBM25:
+    def test_tokenize_lower(self):
+        assert _tokenize("Hạn Mức đất") == ["hạn", "mức", "đất"]
+
+    def test_unit_label_shortens_heading(self):
+        cp = ["quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+              "Điều 3. Hạn mức giao đất ở", "Khoản 3."]
+        assert _unit_label(cp) == "Điều 3, Khoản 3 (quyet-dinh-69-2024-qd-ubnd-tp-hcm)"
+
+    def test_unit_label_norm_only(self):
+        assert _unit_label(["luat-dat-dai-2024"]) == "luat-dat-dai-2024"
