@@ -45,7 +45,8 @@ logger = logging.getLogger(__name__)
 
 def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                       response_mode: str = "auto",
-                      verify: bool = False, verify_tier: int = 1) -> dict:
+                      verify: bool = False, verify_tier: int = 1,
+                      ablation=None) -> dict:
     """Chạy GraphRAG, inject ground-truth jurisdiction từ test_set.
 
     Eval mode: `force_jurisdiction` bơm jurisdiction từ test_set khi câu hỏi không
@@ -55,6 +56,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
     verify/verify_tier: bật Verifier agent (ablation ±verifier). Mặc định off.
     """
     from src.pipeline import run_pipeline
+    from src.retrieval.ablation_config import FULL
     neo4j_driver, qdrant_client, anthropic_client, model = clients
 
     resolved_mode = None if response_mode == "auto" else response_mode
@@ -69,6 +71,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         response_mode=resolved_mode,
         verify=verify,
         verify_tier=verify_tier,
+        ablation=ablation or FULL,
     )
 
     return {
@@ -144,6 +147,7 @@ def run_system_on_test_set(
     response_mode: str = "auto",
     verify: bool = False,
     verify_tier: int = 1,
+    ablation=None,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -174,8 +178,9 @@ def run_system_on_test_set(
         try:
             runner_kwargs = dict(llm_cache_dir=llm_cache_dir, response_mode=response_mode)
             if system == "graphrag":
-                # Verifier chỉ áp dụng cho GraphRAG (component của hệ thống ta).
-                runner_kwargs.update(verify=verify, verify_tier=verify_tier)
+                # Verifier + ablation chỉ áp dụng cho GraphRAG (component hệ thống ta).
+                runner_kwargs.update(verify=verify, verify_tier=verify_tier,
+                                     ablation=ablation)
             sys_out = runner(item, clients, **runner_kwargs)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
@@ -322,6 +327,11 @@ def main() -> int:
         help="Chọn NGẪU NHIÊN N câu (0=không). Khác --limit (N câu đầu). Dùng với --seed.",
     )
     parser.add_argument("--seed", type=int, default=42, help="Seed cho --sample.")
+    parser.add_argument(
+        "--ablation", default="full",
+        help="E1 ablation (chỉ GraphRAG): full | no-theme | no-jurisdiction | "
+             "no-implements | no-amends | no-temporal | no-traversal | dense-only.",
+    )
     args = parser.parse_args()
 
     if not args.test_set.exists():
@@ -420,6 +430,11 @@ def main() -> int:
         return 0
 
     systems = [s.strip() for s in args.systems.split(",") if s.strip()]
+    from src.retrieval.ablation_config import get_ablation
+    ablation_cfg = get_ablation(args.ablation)
+    if ablation_cfg.name != "full":
+        logger.info(f"ABLATION MODE: {ablation_cfg.name} "
+                    f"(kỳ vọng sụp {ablation_cfg.gap_target or '—'})")
     invalid = set(systems) - {"graphrag", "baseline"}
     if invalid:
         print(f"❌ Hệ thống không hợp lệ: {invalid}", file=sys.stderr)
@@ -454,13 +469,15 @@ def main() -> int:
                 response_mode=args.response_mode,
                 verify=args.verify,
                 verify_tier=args.verify_tier,
+                ablation=ablation_cfg,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
             logger.info(f"[{system}] hoàn thành {len(results)} câu trong {elapsed:.1f}s")
 
-            # Lưu per-question
-            out_path = args.out_dir / f"results_{system}_{timestamp}.json"
+            # Lưu per-question (gắn tên ablation vào filename để không ghi đè run full)
+            abl_tag = "" if ablation_cfg.name == "full" else f"_{ablation_cfg.name}"
+            out_path = args.out_dir / f"results_{system}{abl_tag}_{timestamp}.json"
             out_path.write_text(
                 json.dumps(
                     {
@@ -503,6 +520,7 @@ def main() -> int:
             run_config = {
                 "systems": ",".join(systems),
                 "limit": args.limit or "full",
+                "ablation": ablation_cfg.name,
                 "force_jurisdiction": "ground-truth (bơm khi câu hỏi không nêu địa phương)",
                 "llm_cache": "ON" if llm_cache_dir else "OFF",
                 "anthropic_max_retries": ANTHROPIC_MAX_RETRIES,

@@ -55,7 +55,11 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import FieldCondition, Filter, MatchValue
 
 from src.ingestion.vectorizer import encode_text
+from src.retrieval.ablation_config import FULL, AblationConfig
 from src.retrieval.query_planner import QueryPlan
+
+# Mọi tỉnh — dùng khi ablation no-jurisdiction (bỏ hard-filter địa phương)
+_ALL_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 
 logger = logging.getLogger(__name__)
 
@@ -82,12 +86,24 @@ LCCIDs = list[str]
 # Stage 1 — Qdrant semantic search trên summary vectors
 # ---------------------------------------------------------------------------
 
-_STAGE2_CYPHER = """
+def _build_stage2_cypher(rels: list[str]) -> str:
+    """Sinh Cypher traversal Stage 2 theo danh sách quan hệ (ablation-aware).
+
+    rels rỗng (no-traversal) → chỉ lấy seed norm, không mở rộng.
+    rels=['IMPLEMENTS','AMENDS'] (full) → bao đóng derivation như cũ (D-09).
+    rels=['AMENDS'] (no-implements) / ['IMPLEMENTS'] (no-amends) → cắt cấp cạnh.
+    """
+    if rels:
+        rel_pat = "|".join(rels)
+        expand = f"   OR EXISTS {{ MATCH (seed)-[:{rel_pat}*1..4]-(related) }}"
+    else:
+        expand = ""  # chỉ seed norm
+    return f"""
 UNWIND $seed_ids AS seed_id
-MATCH (seed:Norm {id: seed_id})
+MATCH (seed:Norm {{id: seed_id}})
 MATCH (related:Norm)
 WHERE related.id = seed_id
-   OR EXISTS { MATCH (seed)-[:IMPLEMENTS|AMENDS*1..4]-(related) }
+{expand}
 MATCH (related)-[:APPLIES_TO]->(j:Jurisdiction)
 WHERE j.name IN $allowed_jurisdictions
 MATCH (related)-[:HAS_COMPONENT]->(c:Component)-[:HAS_CTV]->(v:CTV)
@@ -97,6 +113,10 @@ RETURN DISTINCT related.id AS norm_id, c.id AS component_id
 """
 
 
+# Cypher mặc định (full) — giữ tên cũ cho tương thích, dựng sẵn 1 lần
+_STAGE2_CYPHER = _build_stage2_cypher(["IMPLEMENTS", "AMENDS"])
+
+
 def stage1_norm_ids(
     question: str,
     query_plan: QueryPlan,
@@ -104,6 +124,7 @@ def stage1_norm_ids(
     model,
     top_n: int = 5,
     min_score: float = 0.3,
+    ablation: AblationConfig = FULL,
 ) -> list[str]:
     """Stage 1: encode câu hỏi → search summary vectors → trả về top-N norm_ids.
 
@@ -120,6 +141,22 @@ def stage1_norm_ids(
         List norm_ids được sắp xếp theo độ liên quan giảm dần.
     """
     theme = query_plan.get("theme")
+    # Ablation no-theme (Gap 1): bỏ hard-filter theme → search summary toàn corpus
+    if ablation.no_theme:
+        vector = encode_text(model, question)
+        must_conditions = [
+            FieldCondition(key="content_type", match=MatchValue(value="summary")),
+        ]
+        results = qdrant_client.query_points(
+            "legal_texts", query=vector, limit=top_n,
+            query_filter=Filter(must=must_conditions),
+        ).points
+        norm_ids = [r.payload["norm_id"] for r in results if r.score >= min_score]
+        if not norm_ids and results:
+            norm_ids = [results[0].payload["norm_id"]]
+        logger.info(f"Stage 1 [no-theme]: {len(norm_ids)} norm_ids = {norm_ids}")
+        return norm_ids
+
     if not theme:
         logger.warning("stage1_norm_ids: theme=None — không thể filter, trả về []")
         return []
@@ -160,6 +197,7 @@ def stage2_component_ids(
     norm_ids: list[str],
     query_plan: QueryPlan,
     neo4j_driver: Driver,
+    ablation: AblationConfig = FULL,
 ) -> LCCIDs:
     """Stage 2: từ seed norm_ids, duyệt graph → Component IDs.
 
@@ -180,8 +218,11 @@ def stage2_component_ids(
         return []
 
     jurisdiction = query_plan.get("jurisdiction") or "toan-quoc"
-    allowed = _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"])
-    temporal = query_plan.get("temporal")
+    # Ablation no-jurisdiction (Gap 2): cho phép mọi tỉnh; no-temporal (Gap 4b): temporal=None
+    allowed = (_ALL_JURISDICTIONS if ablation.no_jurisdiction
+               else _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"]))
+    temporal = None if ablation.no_temporal else query_plan.get("temporal")
+    cypher = _build_stage2_cypher(ablation.traversal_rels)
 
     params = {
         "seed_ids": norm_ids,
@@ -190,7 +231,7 @@ def stage2_component_ids(
     }
 
     with neo4j_driver.session() as session:
-        rows = session.run(_STAGE2_CYPHER, **params).data()
+        rows = session.run(cypher, **params).data()
 
     # Nhóm theo norm và áp dụng per-norm cap để tránh luật lớn (tier 1) thống trị pool
     norm_to_components: dict[str, list[str]] = {}
@@ -234,6 +275,7 @@ def stage2_norm_ids(
     norm_ids: list[str],
     query_plan: QueryPlan,
     neo4j_driver: Driver,
+    ablation: AblationConfig = FULL,
 ) -> list[str]:
     """Stage 2 (norm_ids variant): từ seed norm_ids, duyệt graph → unique norm_ids liên quan.
 
@@ -259,8 +301,10 @@ def stage2_norm_ids(
         return []
 
     jurisdiction = query_plan.get("jurisdiction") or "toan-quoc"
-    allowed = _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"])
-    temporal = query_plan.get("temporal")
+    allowed = (_ALL_JURISDICTIONS if ablation.no_jurisdiction
+               else _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"]))
+    temporal = None if ablation.no_temporal else query_plan.get("temporal")
+    cypher = _build_stage2_cypher(ablation.traversal_rels)
 
     params = {
         "seed_ids": norm_ids,
@@ -269,7 +313,7 @@ def stage2_norm_ids(
     }
 
     with neo4j_driver.session() as session:
-        rows = session.run(_STAGE2_CYPHER, **params).data()
+        rows = session.run(cypher, **params).data()
 
     result_norm_ids = list({row["norm_id"] for row in rows})
 
@@ -320,6 +364,7 @@ def extract_subgraph(
     qdrant_client: QdrantClient,
     model,
     top_n: int = 5,
+    ablation: AblationConfig = FULL,
 ) -> tuple[list[str], list[str]]:
     """Orchestrator: Stage 1 + Stage 2 + Stage 3.
 
@@ -336,7 +381,13 @@ def extract_subgraph(
         - norm_ids: Danh sách văn bản liên quan (Qdrant filter).
         - graph_component_ids: Các điều khoản được Soft Boost qua Ontology Mapping.
     """
-    seed_norm_ids = stage1_norm_ids(question, query_plan, qdrant_client, model, top_n)
-    result_norm_ids = stage2_norm_ids(seed_norm_ids, query_plan, neo4j_driver)
+    seed_norm_ids = stage1_norm_ids(question, query_plan, qdrant_client, model, top_n,
+                                    ablation=ablation)
+    # Ablation dense-only (sàn): bỏ toàn bộ mở rộng graph + graph-boost, chỉ seed Stage 1
+    if ablation.dense_only:
+        logger.info("extract_subgraph [dense-only]: bỏ Stage 2/3, chỉ seed norms")
+        return seed_norm_ids, []
+    result_norm_ids = stage2_norm_ids(seed_norm_ids, query_plan, neo4j_driver,
+                                      ablation=ablation)
     graph_comp_ids = stage3_graph_component_ids(result_norm_ids, query_plan, neo4j_driver)
     return result_norm_ids, graph_comp_ids

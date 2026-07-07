@@ -29,6 +29,7 @@ from src.retrieval.answer_generator import generate_answer
 from src.retrieval.context_assembler import assemble_context
 from src.retrieval.query_planner import QueryPlan, plan_query
 from src.retrieval.semantic_filter import hybrid_search
+from src.retrieval.ablation_config import FULL, AblationConfig
 from src.retrieval.subgraph_extractor import extract_subgraph
 from src.retrieval.verifier import verify_citations
 
@@ -142,6 +143,7 @@ def run_pipeline(
     verify: bool = False,
     verify_tier: int = 1,
     llm_mode: str = "claude",
+    ablation: AblationConfig = FULL,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -212,7 +214,8 @@ def run_pipeline(
         # --- TASK-11: Sub-graph Extraction ---
         logger.info("run_pipeline: extract_subgraph")
         norm_ids, graph_comp_ids = extract_subgraph(
-            question, query_plan, neo4j_driver, qdrant_client, model
+            question, query_plan, neo4j_driver, qdrant_client, model,
+            ablation=ablation,
         )
         logger.info(f"run_pipeline: {len(norm_ids)} norm_ids, {len(graph_comp_ids)} graph_comp_ids từ Stage 2+3")
 
