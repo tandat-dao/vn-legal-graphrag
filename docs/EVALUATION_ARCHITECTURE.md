@@ -92,6 +92,8 @@ Claim có dạng *"thành phần X **cần thiết** cho gap N"*. "Cần thiết
 | **dense-only / no-hybrid** (tắt toàn bộ KG / 4-pass) | mốc "không graph" cho mọi gap |||| 
 | **Full GraphRAG** | cao | cao | cao | cao |
 
+> **✅ Cập nhật 2026-07-07 — infra E1 ĐÃ BUILD** (`src/retrieval/ablation_config.py`, 7 mode, 267 test pass). **Confound Gap 3/4 đã giải:** cắt ở CẤP CẠNH — `IMPLEMENTS` và `AMENDS` tách riêng qua `_build_stage2_cypher` (rel pattern động). Smoke live xác nhận: seed Luật ĐĐ, `no-amends` bỏ NQ254 (9→6 norm, giữ IMPLEMENTS); `no-implements` giữ NQ254 (cắt IMPLEMENTS 9→2). jurisdiction/temporal chỉ đổi param, theme ở Stage 1. Chạy: `run_evaluation --ablation <mode>`. **Chờ GT freeze để chạy đo.**
+
 **Tiêu chí vàng:** mỗi ablation phải **sụp đúng gap tương ứng (p<0.05) VÀ không đổi ở gap khác** (double dissociation). Chỉ "tắt X → tổng F1 giảm" là KHÔNG đủ — nó chỉ chứng minh X có ích chung chung, không chứng minh X giải *đúng* gap N. Nếu ablation làm sụp cả gap khác → có confound, phải giải thích.
 
 > **Lưu ý Gap 1:** `no-theme` chứng minh Gap 1 ở chiều **chống cross-domain contamination** (tắt routing → câu Hộ tịch kéo nhầm chunk Đất đai → sụp). Đây chỉ là **một nửa** bằng chứng Gap 1. Nửa kia (độ nhất quán xuyên lĩnh vực) là phép *đo lường*, không phải ablation → nằm ở **E2b**.
@@ -185,7 +187,8 @@ Mỗi claim có **gói bằng chứng đa nguồn** — tấn công gap nào cũ
 ```
 src/evaluation/
 ├── run_evaluation.py        ← thêm ablation systems vào --systems (BUILD: wiring)
-├── ablation_config.py       ← MỚI: AblationConfig (cờ tắt từng thành phần KG) — cốt lõi E1
+│   (ablation_config.py đặt ở src/retrieval/ — cơ chế thuộc retrieval, tránh cycle)
+├── (ablation → xem src/retrieval/ablation_config.py + run_evaluation --ablation) ✅ ĐÃ BUILD
 ├── metrics.py               ← giữ (F1 Khoản/Điều, NormR, cit_matches)
 ├── retrieval_eval.py        ← E1 retrieval-level Recall@k/MRR (đã có)
 ├── faithfulness.py          ← E3 (đã có)
