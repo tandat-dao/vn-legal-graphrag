@@ -109,9 +109,15 @@ hoặc cảnh báo ngoài scope**. Chấm điều chỉnh:
 
 - **~24–30 câu** cho mẫu người chấm, **phân tầng** để phủ: mỗi gap vài câu + vài
   negative + vài underspecified/composite (nơi chất lượng câu trả lời khác biệt rõ).
+- **⚠️ CÙNG MỘT MẪU cho MỌI người chấm** — tất cả người chấm (bạn luật, [A]/[B],
+  các người thân) chấm trên **đúng cùng N câu đó**, KHÔNG chia câu cho mỗi người.
+  Đây là điều kiện BẮT BUỘC để tính kappa (chỉ đo được đồng thuận khi chấm cùng
+  item). Cái chia theo người là *chiều chấm* (nhóm A vs nhóm B), không phải *câu*.
 - Mỗi câu kèm câu trả lời của **các hệ đưa vào so sánh** (tối thiểu GraphRAG vs
-  1–2 baseline), ẩn danh + xáo trộn.
-- Chọn mẫu bằng seed cố định (tái lập). Sinh phiếu bằng `human_eval.py` (sắp build).
+  1–2 baseline), ẩn danh + xáo trộn. → khối lượng chấm = N câu × số hệ (VD 25 × 3
+  = 75 câu trả lời/người). Cân số hệ đưa vào chấm mù với sức người thật.
+- Chọn mẫu bằng seed cố định (tái lập). Sinh phiếu bằng `human_eval.py` (sắp build)
+  — một mẫu duy nhất → sinh phiếu cho từng người, tất cả phủ đúng cùng item.
 
 ---
 
