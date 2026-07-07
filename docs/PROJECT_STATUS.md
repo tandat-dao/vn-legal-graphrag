@@ -7,6 +7,8 @@
 >
 > **2. Sửa 3 lỗi data corpus B phát hiện khi soạn** (commit riêng từng lỗi): NĐ123 `implements: null` → `luat-ho-tich-2014` (thiếu cạnh IMPLEMENTS trực tiếp — Gap 3); 9+6 annotation NĐ 07/2025 ghi nhầm hiệu lực 09/01/**2019** → 09/01/**2025** (NĐ123 + NĐ87 — đầu độc Gap 4); đã re-ingest, graph xác nhận 18/18 Amendment đúng date, cạnh NĐ123→Luật HT có. **Việc B hậu kiểm:** 3 fix trên + source_url NĐ123 (trỏ nhầm NĐ104) + typo '4.500.000 triệu đồng' NĐ114 Đ6.
 >
+> **2b. Khâu đánh giá — code đã build (2026-07-07, chờ GT freeze để chạy đo):** **E1 ablation** `src/retrieval/ablation_config.py` (7 mode cắt CẤP CẠNH — IMPLEMENTS/AMENDS tách riêng, giải confound Gap3/4; wired `run_evaluation --ablation`); **E2a baseline ladder** — `bm25` (`src/baseline/bm25_rag.py` Okapi tự cài), `closed-book` (`src/baseline/closed_book.py`), `oracle` (`src/evaluation/oracle.py`), cùng naive RAG cũ (`run_evaluation --systems graphrag,baseline,bm25,closed-book,oracle`). 277 test pass. **Chưa chạy đo** (chờ test_set_v2 freeze). Review sheet GT: `src/evaluation/build_review_sheet.py` → `data/evaluation/GT_REVIEW.html`.
+>
 > **3. Việc tiếp theo cho GT:** [A] + [B] REVIEW CHÉO từng câu (guide §8; [B] duyệt đất đai của [A], [A] duyệt hộ tịch/NCN của [B]) → sửa nếu cần → chạy lại verify → **FREEZE + pre-register (commit hash vào E0) TRƯỚC khi chạy bất kỳ eval nào trên bộ này**. Dev set 26 câu cũ (`test_set_dat_dai.json`) chính thức là DEV SET (contaminated D-10/D-11), không dùng báo số cuối. Lưu ý harness: nhóm underspecified (jurisdiction=null) eval KHÔNG bơm force_jurisdiction — cần sửa `run_evaluation` skip inject khi item.jurisdiction=null (chưa làm).
 
 > **v2.20 — Cập nhật 2026-07-06 (Gỡ Confirmation Loop — D-25):**
