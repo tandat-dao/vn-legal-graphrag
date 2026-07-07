@@ -109,6 +109,25 @@ def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None,
     }
 
 
+def _run_one_closedbook(item: dict, clients, llm_cache_dir: Path | None = None,
+                        response_mode: str = "auto") -> dict:
+    """Closed-book baseline (E2a): LLM trả lời KHÔNG retrieval."""
+    from src.baseline.closed_book import run_closedbook_query
+    _, _, anthropic_client, _ = clients
+    mode = "general" if response_mode == "auto" else response_mode
+    return run_closedbook_query(item["question"], anthropic_client, llm_cache_dir, mode)
+
+
+def _run_one_oracle(item: dict, clients, llm_cache_dir: Path | None = None,
+                    response_mode: str = "auto", text_index=None) -> dict:
+    """Oracle baseline (E2a): generator chạy trên context = GT chunks (trần chẩn đoán)."""
+    from src.evaluation.oracle import run_oracle_query
+    _, _, anthropic_client, _ = clients
+    mode = "general" if response_mode == "auto" else response_mode
+    return run_oracle_query(item["question"], item.get("ground_truth_citations", []),
+                            text_index, anthropic_client, llm_cache_dir, mode)
+
+
 # ---------------------------------------------------------------------------
 # Shared client factory (tránh load model nhiều lần)
 # ---------------------------------------------------------------------------
@@ -158,8 +177,20 @@ def run_system_on_test_set(
     Returns:
         List per-question result dict.
     """
-    assert system in {"graphrag", "baseline"}
-    runner = _run_one_graphrag if system == "graphrag" else _run_one_baseline
+    _RUNNERS = {
+        "graphrag": _run_one_graphrag,
+        "baseline": _run_one_baseline,
+        "closed-book": _run_one_closedbook,
+        "oracle": _run_one_oracle,
+    }
+    assert system in _RUNNERS, f"system '{system}' không hợp lệ: {list(_RUNNERS)}"
+    runner = _RUNNERS[system]
+
+    # Oracle cần text index của corpus (build MỘT LẦN, tái dùng cả test set)
+    oracle_text_index = None
+    if system == "oracle":
+        from src.evaluation.build_review_sheet import build_text_index
+        oracle_text_index = build_text_index(Path("data/raw"))
 
     # Faithfulness setup (lazy import để không break khi không dùng)
     judge_client = None
@@ -181,6 +212,8 @@ def run_system_on_test_set(
                 # Verifier + ablation chỉ áp dụng cho GraphRAG (component hệ thống ta).
                 runner_kwargs.update(verify=verify, verify_tier=verify_tier,
                                      ablation=ablation)
+            elif system == "oracle":
+                runner_kwargs.update(text_index=oracle_text_index)
             sys_out = runner(item, clients, **runner_kwargs)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
@@ -262,7 +295,9 @@ def main() -> int:
     parser.add_argument(
         "--systems",
         default="graphrag,baseline",
-        help="Hệ thống chạy, cách bởi dấu phẩy. Mặc định: graphrag,baseline",
+        help="Hệ thống chạy, cách bởi dấu phẩy: graphrag | baseline (naive RAG) | "
+             "closed-book (E2a, không retrieval) | oracle (E2a, context=GT chunks). "
+             "Mặc định: graphrag,baseline",
     )
     parser.add_argument("--limit", type=int, default=0, help="Chỉ chạy N câu đầu (0=full)")
     parser.add_argument("--out-dir", type=Path, default=Path("data/evaluation/"))
