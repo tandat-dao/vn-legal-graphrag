@@ -16,6 +16,9 @@
   được agreement thật). Bàn bạc thống nhất chỉ SAU khi đã nộp điểm.
 - **Mỗi câu trả lời chấm theo từng chiều dưới đây**, cho điểm 1–5 (hoặc 0/1 với
   Hallucination). Có ô ghi chú lý do (khuyến khích, nhất là điểm thấp).
+- **Cách neo thang điểm:** Nhóm A (pháp lý) neo đủ cả 5 mức — chấm mịn. Nhóm B
+  (người dùng) neo 1–3–5; điểm **2 = trung gian giữa 1 và 3**, **4 = trung gian
+  giữa 3 và 5** (vẫn cho 2/4 khi câu trả lời rơi vào khoảng giữa).
 - **Ai chấm chiều nào:** xem Mục 3. KHÔNG chấm chiều ngoài chuyên môn của mình
   (người không chuyên luật KHÔNG chấm chiều pháp lý).
 
@@ -35,13 +38,17 @@ Nội dung câu trả lời có đúng quy định pháp luật hiện hành kh�
 Câu trả lời có bao quát các khía cạnh mà câu hỏi đòi hỏi không (điều kiện, thẩm
 quyền, ngoại lệ, mốc thời gian… tùy câu)?
 - **5** — Trọn vẹn mọi khía cạnh cốt lõi của câu hỏi.
-- **3** — Trả lời ý chính, bỏ sót khía cạnh phụ hoặc một số trường hợp.
+- **4** — Đầy đủ ý chính; chỉ bỏ sót một khía cạnh phụ nhỏ, không ảnh hưởng tính dùng được.
+- **3** — Trả lời ý chính nhưng bỏ sót khía cạnh phụ ĐÁNG KỂ hoặc một số trường hợp/ngoại lệ.
+- **2** — Bỏ sót nhiều nội dung; chỉ chạm bề mặt câu hỏi.
 - **1** — Bỏ sót phần cốt lõi của câu hỏi.
 
 ### A3. Citation Accuracy — Chính xác trích dẫn (1–5)
 Các trích dẫn Điều/Khoản/Văn bản có đúng vị trí và đủ nguồn không?
-- **5** — Mọi trích dẫn đúng và đủ; không thiếu nguồn quan trọng, không thừa nguồn lạc.
+- **5** — Mọi trích dẫn đúng vị trí và đủ nguồn; không thiếu nguồn quan trọng, không thừa nguồn lạc.
+- **4** — Trích dẫn đúng, đủ nguồn chính; chỉ sai/thừa/thiếu MỘT nguồn phụ nhỏ.
 - **3** — Có trích dẫn đúng nhưng THIẾU nguồn quan trọng HOẶC THỪA nguồn không liên quan.
+- **2** — Phần lớn trích dẫn sai vị trí hoặc thiếu; chỉ lác đác một nguồn đúng.
 - **1** — Không trích dẫn / trích dẫn sai hết / dẫn văn bản không tồn tại.
 
 ### A4. Hallucination — Bịa đặt (0 hoặc 1) *(nhị phân)*
