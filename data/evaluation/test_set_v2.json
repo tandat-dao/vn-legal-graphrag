@@ -476,7 +476,7 @@
   },
   {
     "id": "V021",
-    "question": "Ở Đồng Nai, thửa đất trồng cây lâu năm ở vị trí 1 nhưng nằm cách mốc hành lang an toàn đường bộ 150 mét thì giá đất được tính như thế nào theo bảng giá đất mới?",
+    "question": "Ở Đồng Nai, thửa đất trồng cây lâu năm ở vị trí 1 nằm ở khoảng cách 150 mét tính từ mốc hành lang an toàn đường bộ thì giá đất được tính như thế nào theo bảng giá đất mới?",
     "theme": "dat-dai",
     "jurisdiction": "dong-nai",
     "gap_type": "gap2",
@@ -484,7 +484,7 @@
     "pair_id": null,
     "difficulty": "hard",
     "synthesis": false,
-    "ground_truth_answer": "Theo Điều 5 Khoản 1 Điểm a Nghị quyết 28/2025/NQ-HĐND tỉnh Đồng Nai, vị trí 1 chia theo phạm vi khoảng cách từ mốc hành lang an toàn đường bộ: khoảng cách 150 mét thuộc Phạm vi 2 (trên 100 mét đến hết mét thứ 200) nên giá đất tính bằng 80% giá đất nông nghiệp vị trí 1, nhưng không được thấp hơn giá đất tối thiểu theo từng địa bàn xã, phường quy định tại Phụ lục VIII.",
+    "ground_truth_answer": "Theo Điều 5 Khoản 1 Điểm a Nghị quyết 28/2025/NQ-HĐND tỉnh Đồng Nai, đất vị trí 1 được chia thành ba phạm vi theo khoảng cách của thửa đất tính từ mốc hành lang an toàn đường bộ, và áp một tỷ lệ phần trăm duy nhất cho CẢ THỬA tùy thửa đất nằm ở phạm vi nào (không tính lũy tiến theo từng mét chiều sâu): Phạm vi 1 (đến hết mét thứ 100) bằng 100%, Phạm vi 2 (trên 100 mét đến hết mét thứ 200) bằng 80%, Phạm vi 3 (trên 200 mét) bằng 60% giá đất nông nghiệp vị trí 1. Thửa đất nằm ở khoảng cách 150 mét thuộc Phạm vi 2 nên giá đất tính bằng 80% giá đất nông nghiệp vị trí 1, nhưng không được thấp hơn giá đất tối thiểu theo từng địa bàn xã, phường quy định tại Phụ lục VIII.",
     "ground_truth_citations": [
       {
         "dieu": "5",
@@ -494,7 +494,7 @@
       }
     ],
     "relevant_component_ids": [],
-    "notes": "HARD: đòi suy luận khoảng (150m → phạm vi 2 → 80%) từ quy tắc 3 phạm vi (100%/80%/60%). Phương pháp ĐN (vị trí + phạm vi mét) khác hẳn HCM (khu vực địa bàn) — tín hiệu Gap 2 cấp phương pháp luận. Verify OK 2026-07-06.",
+    "notes": "HARD: đòi suy luận khoảng (150m → phạm vi 2 → 80%) từ quy tắc 3 phạm vi (100%/80%/60%). Phương pháp ĐN (vị trí + phạm vi mét) khác hẳn HCM (khu vực địa bàn) — tín hiệu Gap 2 cấp phương pháp luận. Verify OK 2026-07-06. | [review B vòng 1] đổi 'cách mốc 150m'→'nằm ở khoảng cách 150m tính từ mốc' + làm rõ áp % theo phạm vi vị trí (không lũy tiến từng mét); B đọc nhầm sang lũy tiến, GT khớp luật.",
     "review": {
       "verified_by": null,
       "date": null
@@ -1442,7 +1442,7 @@
     "pair_id": null,
     "difficulty": "hard",
     "synthesis": true,
-    "ground_truth_answer": "Chuỗi quy định 3 văn bản. (1) Điều 122 Khoản 1 Luật Đất đai 2024: việc chuyển mục đích sử dụng đất trồng lúa phải tuân theo tiêu chí, điều kiện do Chính phủ quy định. (2) Điều 46 Khoản 1 Điểm b Nghị định 102/2024/NĐ-CP: một trong các tiêu chí (với diện tích từ 02 ha trở lên) là có PHƯƠNG ÁN SỬ DỤNG TẦNG ĐẤT MẶT theo quy định của pháp luật về trồng trọt. (3) Điều 10 Nghị định 112/2024/NĐ-CP quy định chi tiết: người được giao đất, cho thuê đất khi xây dựng công trình trên đất chuyển đổi từ đất chuyên trồng lúa phải có phương án sử dụng tầng đất mặt được cơ quan có thẩm quyền chấp thuận (Khoản 1); nội dung phương án gồm: thông tin người đề nghị chuyển mục đích; thông tin diện tích đất chuyên trồng lúa đề nghị chuyển đổi; khối lượng tầng đất mặt sau khi bóc tách; phương án, vị trí và mục đích sử dụng khối lượng đất mặt được bóc tách (Khoản 2).",
+    "ground_truth_answer": "Chuỗi quy định 3 tầng văn bản. (1) Điều 122 Khoản 1 Luật Đất đai 2024: việc chuyển mục đích sử dụng đất trồng lúa phải tuân theo tiêu chí, điều kiện do Chính phủ quy định. (2) Điều 46 Khoản 1 Nghị định 102/2024/NĐ-CP: một trong các tiêu chí (với diện tích từ 02 ha trở lên) là có PHƯƠNG ÁN SỬ DỤNG TẦNG ĐẤT MẶT theo quy định của pháp luật về trồng trọt. (3) Nội dung phương án được quy định chi tiết tại Điều 10 Nghị định 112/2024/NĐ-CP — điều này đã được SỬA ĐỔI TOÀN BỘ bởi Khoản 2 Điều 5 Nghị định 226/2025/NĐ-CP (hiệu lực 15/08/2025), nên áp dụng bản hiện hành: người được giao đất, cho thuê đất, cho phép chuyển mục đích khi xây dựng công trình trên đất chuyển đổi từ đất chuyên trồng lúa phải có phương án sử dụng tầng đất mặt được lập theo quy định (Khoản 1); nội dung phương án gồm thông tin người đề nghị chuyển mục đích, diện tích đất chuyên trồng lúa đề nghị chuyển đổi, khối lượng tầng đất mặt sau khi bóc tách, phương án - vị trí - mục đích sử dụng khối lượng đất mặt được bóc tách (Khoản 2); độ sâu tầng đất mặt bóc tách tối thiểu 20 cm (Khoản 3); phương án là thành phần hồ sơ giao đất, cho thuê đất, cho phép chuyển mục đích (Khoản 4).",
     "ground_truth_citations": [
       {
         "dieu": "122",
@@ -1455,18 +1455,13 @@
         "van_ban": "nghi-dinh-102-2024-nd-cp"
       },
       {
-        "dieu": "10",
-        "khoan": "1",
-        "van_ban": "nghi-dinh-112-2024-nd-cp"
-      },
-      {
-        "dieu": "10",
+        "dieu": "5",
         "khoan": "2",
-        "van_ban": "nghi-dinh-112-2024-nd-cp"
+        "van_ban": "nghi-dinh-226-2025-nd-cp"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "GAP3 CHUỖI 3 VĂN BẢN (Luật → NĐ102 tiêu chí → NĐ112 nội dung phương án) — chuỗi dài nhất bộ GT; mỗi tầng thêm một lớp chi tiết. NĐ112 Đ10 cũng là điều bị NĐ226/2025 sửa (case Q019 dev set) — góc hỏi ở đây khác. Verify OK 2026-07-06.",
+    "notes": "GAP3 CHUỖI 3 VĂN BẢN (Luật → NĐ102 tiêu chí → NĐ112 nội dung phương án) — chuỗi dài nhất bộ GT; mỗi tầng thêm một lớp chi tiết. NĐ112 Đ10 cũng là điều bị NĐ226/2025 sửa (case Q019 dev set) — góc hỏi ở đây khác. Verify OK 2026-07-06. | [review B v1] Điều 10 NĐ112 bị NĐ226/2025 (Đ5 K2) sửa toàn bộ → cite bản hiện hành NĐ226; thêm annotation vào raw NĐ112.",
     "review": {
       "verified_by": null,
       "date": null
@@ -2467,7 +2462,7 @@
     "pair_id": null,
     "difficulty": "medium",
     "synthesis": true,
-    "ground_truth_answer": "Theo Điều 19 Khoản 2 Nghị định 101/2024/NĐ-CP, cơ quan tiếp nhận/giải quyết không tiếp nhận hồ sơ hoặc dừng giải quyết thủ tục đăng ký đất đai và trả hồ sơ (trừ đăng ký lần đầu mà không cấp Giấy chứng nhận) trong các trường hợp: (a) không thuộc thẩm quyền tiếp nhận, hồ sơ không đầy đủ thành phần, không bảo đảm tính thống nhất nội dung giữa các giấy tờ, hoặc kê khai không đầy đủ thông tin; (b) nhận được văn bản của cơ quan thi hành án dân sự hoặc cơ quan/người có thẩm quyền tố tụng yêu cầu tạm dừng hoặc dừng việc đăng ký, cấp Giấy chứng nhận đối với tài sản của người phải thi hành án; (c) nhận được văn bản thông báo về việc kê biên tài sản thi hành án.",
+    "ground_truth_answer": "Theo Điều 19 Khoản 2 Nghị định 101/2024/NĐ-CP, cơ quan tiếp nhận/giải quyết không tiếp nhận hồ sơ hoặc dừng giải quyết thủ tục đăng ký đất đai và trả hồ sơ (trừ đăng ký lần đầu mà không cấp Giấy chứng nhận) trong các trường hợp: (a) không thuộc thẩm quyền tiếp nhận, hồ sơ không đầy đủ thành phần, không bảo đảm tính thống nhất nội dung giữa các giấy tờ, hoặc kê khai không đầy đủ thông tin; (b) nhận được văn bản của cơ quan thi hành án dân sự hoặc cơ quan/người có thẩm quyền tố tụng yêu cầu tạm dừng/dừng việc đăng ký, cấp Giấy chứng nhận đối với tài sản của người phải thi hành án; (c) nhận được văn bản thông báo về việc kê biên tài sản thi hành án; (d) nhận được văn bản của UBND cấp xã hoặc UBND cấp huyện (lập trước 01/7/2025) hoặc UBND cấp tỉnh hoặc Bộ trưởng Bộ Tài nguyên và Môi trường về việc đã thụ lý đơn yêu cầu hòa giải/giải quyết tranh chấp đất đai; (đ) nhận được văn bản của Tòa án nhân dân có thẩm quyền đã thụ lý đơn giải quyết tranh chấp; (e) nhận được văn bản của Trọng tài Thương mại Việt Nam về thụ lý tranh chấp thương mại liên quan đến đất đai; (g) nhận được văn bản yêu cầu dừng thủ tục để áp dụng biện pháp khẩn cấp tạm thời; (h) đăng ký biến động do nhận chuyển nhượng/tặng cho đất đang thế chấp đã đăng ký mà thiếu văn bản đồng ý của bên nhận thế chấp; (i) chủ đầu tư đã thế chấp và đăng ký thế chấp dự án nhưng chuyển nhượng/bán tài sản mà chưa đăng ký thay đổi để rút bớt tài sản thế chấp đã bán.",
     "ground_truth_citations": [
       {
         "dieu": "19",
@@ -2476,7 +2471,7 @@
       }
     ],
     "relevant_component_ids": [],
-    "notes": "GAP1 archetype TỪ CHỐI — bản đất đai, khép bộ ba tu-choi. Verify OK 2026-07-06.",
+    "notes": "GAP1 archetype TỪ CHỐI — bản đất đai, khép bộ ba tu-choi. Verify OK 2026-07-06. | [review B v1] bổ sung đáp án đủ trường hợp a→i; cite giữ {Đ19,K2} cấp khoản.",
     "review": {
       "verified_by": null,
       "date": null
@@ -2597,16 +2592,21 @@
     "pair_id": null,
     "difficulty": "medium",
     "synthesis": false,
-    "ground_truth_answer": "Về nguyên tắc là KHÔNG. Theo Điều 139 Khoản 1 Luật Đất đai 2024: đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng sau khi Nhà nước đã công bố, cắm mốc; lấn chiếm lòng đường, lề đường, vỉa hè sau khi đã công bố chỉ giới xây dựng; hoặc lấn chiếm đất dùng cho trụ sở cơ quan, công trình sự nghiệp, công trình công cộng khác — thì Nhà nước THU HỒI đất để trả lại cho công trình, KHÔNG cấp Giấy chứng nhận cho diện tích đã lấn chiếm. Ngoại lệ: nếu quy hoạch đã điều chỉnh và diện tích đó không còn thuộc hành lang bảo vệ/chỉ giới xây dựng thì được XEM XÉT cấp và phải thực hiện nghĩa vụ tài chính.",
+    "ground_truth_answer": "Về nguyên tắc là KHÔNG. Theo Điều 139 Khoản 1 Luật Đất đai 2024: đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng sau khi Nhà nước đã công bố, cắm mốc; lấn chiếm lòng đường, lề đường, vỉa hè sau khi đã công bố chỉ giới xây dựng; hoặc lấn chiếm đất dùng cho trụ sở cơ quan, công trình sự nghiệp, công trình công cộng khác — thì Nhà nước THU HỒI đất để trả lại cho công trình, KHÔNG cấp Giấy chứng nhận cho diện tích đã lấn chiếm. Ngoại lệ: nếu quy hoạch đã điều chỉnh và diện tích đó không còn thuộc hành lang bảo vệ/chỉ giới xây dựng thì được XEM XÉT cấp và phải thực hiện nghĩa vụ tài chính. Lưu ý về thời điểm: Điều 139 áp dụng cho vi phạm TRƯỚC ngày 01/7/2014. Nếu hành vi lấn, chiếm diễn ra TỪ ngày 01/7/2014 trở về sau thì theo Khoản 5 Điều 139, Nhà nước cũng KHÔNG cấp Giấy chứng nhận và xử lý theo quy định của pháp luật (không có ngoại lệ 'quy hoạch điều chỉnh' như Khoản 1).",
     "ground_truth_citations": [
       {
         "dieu": "139",
         "khoan": "1",
         "van_ban": "luat-dat-dai-2024"
+      },
+      {
+        "dieu": "139",
+        "khoan": "5",
+        "van_ban": "luat-dat-dai-2024"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "GAP1 archetype TỪ CHỐI — câu BÙ thứ 2 (đất đai 2 câu tu-choi: V096 từ chối tiếp nhận hồ sơ + V101 không cấp GCN đất vi phạm). Cùng khoản với V031 (gap3) nhưng góc archetype đơn giản. Verify OK 2026-07-06.",
+    "notes": "GAP1 archetype TỪ CHỐI — câu BÙ thứ 2 (đất đai 2 câu tu-choi: V096 từ chối tiếp nhận hồ sơ + V101 không cấp GCN đất vi phạm). Cùng khoản với V031 (gap3) nhưng góc archetype đơn giản. Verify OK 2026-07-06. | [review B v1] thêm K5 Điều 139 (vi phạm từ 01/7/2014 trở đi cũng không cấp).",
     "review": {
       "verified_by": null,
       "date": null
@@ -2991,10 +2991,16 @@
         "dieu": "_default",
         "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
         "loai": "phu_luc"
+      },
+      {
+        "dieu": "1",
+        "khoan": "6",
+        "diem": "b",
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "UNDERSPECIFIED — khung 2 tỉnh, nhiều mức theo khu vực. Verify OK 2026-07-06.",
+    "notes": "UNDERSPECIFIED — khung 2 tỉnh, nhiều mức theo khu vực. Verify OK 2026-07-06. | [review B v1] thêm cite Đ1 K6 điểm b NQ21 (chống lưng chi tiết 'trực tuyến 0%' vốn nằm ở Điều 1, không ở Phụ lục).",
     "review": {
       "verified_by": null,
       "date": null
@@ -3213,11 +3219,12 @@
     "pair_id": null,
     "difficulty": "hard",
     "synthesis": true,
-    "ground_truth_answer": "(1) CÓ THỂ được xem xét cấp: đất vi phạm trước ngày 01/7/2014 được xử lý theo Điều 139 Luật Đất đai 2024 (trừ trường hợp lấn hành lang bảo vệ công trình/chỉ giới xây dựng còn hiệu lực thì thu hồi). (2) DIỆN TÍCH ĐẤT Ở: sử dụng từ 1995 thuộc giai đoạn 15/10/1993 – trước 01/7/2014, nên theo Điều 25 Khoản 2 Nghị định 101/2024/NĐ-CP: nếu thửa đất bằng hoặc lớn hơn hạn mức GIAO đất ở thì diện tích đất ở được xác định bằng hạn mức giao đất ở; nếu diện tích đã xây nhà lớn hơn hạn mức thì công nhận theo diện tích thực tế đã xây; nếu thửa nhỏ hơn hạn mức thì công nhận toàn bộ thửa. (3) LỆ PHÍ: cá nhân có đất thuộc phường của Biên Hòa nộp 30.000 đồng/giấy cho GCN quyền sử dụng đất, 120.000 đồng nếu gồm cả tài sản (Phụ lục Nghị quyết 21/2024/NQ-HĐND, mục I.2); phải thực hiện nghĩa vụ tài chính về đất theo quy định.",
+    "ground_truth_answer": "(1) CÓ THỂ được xem xét cấp: đất lấn, chiếm đất công sử dụng ổn định làm nhà ở từ năm 1995 (trước 01/7/2014), KHÔNG thuộc lấn hành lang bảo vệ/chỉ giới xây dựng (Khoản 1) và KHÔNG thuộc nguồn gốc nông, lâm trường (Khoản 2), nên rơi vào Khoản 3 Điều 139 Luật Đất đai 2024: theo điểm a Khoản 3, nếu đang sử dụng ổn định và phù hợp với quy hoạch sử dụng đất cấp huyện/quy hoạch chung/phân khu/xây dựng thì được xem xét cấp Giấy chứng nhận và phải thực hiện nghĩa vụ tài chính. (2) DIỆN TÍCH ĐẤT Ở: sử dụng từ 1995 thuộc giai đoạn 15/10/1993 – trước 01/7/2014, nên theo Điều 25 Khoản 2 Nghị định 101/2024/NĐ-CP: nếu thửa đất bằng hoặc lớn hơn hạn mức GIAO đất ở thì diện tích đất ở được xác định bằng hạn mức giao đất ở; nếu diện tích đã xây nhà lớn hơn hạn mức thì công nhận theo diện tích thực tế đã xây; nếu thửa nhỏ hơn hạn mức thì công nhận toàn bộ thửa. (3) LỆ PHÍ: cá nhân có đất thuộc phường của Biên Hòa nộp 30.000 đồng/giấy cho GCN quyền sử dụng đất, 120.000 đồng nếu gồm cả tài sản (Phụ lục Nghị quyết 21/2024/NQ-HĐND, mục I.2); phải thực hiện nghĩa vụ tài chính về đất theo quy định.",
     "ground_truth_citations": [
       {
         "dieu": "139",
-        "khoan": "1",
+        "khoan": "3",
+        "diem": "a",
         "van_ban": "luat-dat-dai-2024"
       },
       {
@@ -3232,7 +3239,7 @@
       }
     ],
     "relevant_component_ids": [],
-    "notes": "COMPOSITE nặng nhất: gap4 (mốc thời gian 1995 → chọn đúng Khoản 2 chứ không phải K1 của Đ25) + gap3 (Luật→NĐ) + gap2 (lệ phí ĐN theo khu vực phường). Đo pinpoint mốc thời gian sử dụng đất. Gaps phụ: 2,3. Verify OK 2026-07-06.",
+    "notes": "COMPOSITE nặng nhất: gap4 (mốc thời gian 1995 → chọn đúng Khoản 2 chứ không phải K1 của Đ25) + gap3 (Luật→NĐ) + gap2 (lệ phí ĐN theo khu vực phường). Đo pinpoint mốc thời gian sử dụng đất. Gaps phụ: 2,3. Verify OK 2026-07-06. | [review B v1] sửa cite Đ139 K1→K3 điểm a (kịch bản không thuộc hành lang, ổn định phù hợp quy hoạch).",
     "review": {
       "verified_by": null,
       "date": null
@@ -3279,7 +3286,7 @@
     "pair_id": null,
     "difficulty": "hard",
     "synthesis": true,
-    "ground_truth_answer": "(1) ĐIỀU KIỆN: chuyển đất trồng lúa sang mục đích khác chỉ được quyết định sau khi có Nghị quyết của HĐND cấp tỉnh và đáp ứng căn cứ tại Điều 116 (Điều 122 Khoản 1 Luật Đất đai 2024); diện tích từ 02 ha trở lên phải đáp ứng tiêu chí tại Điều 46 Khoản 1 Nghị định 102/2024/NĐ-CP (phương án trồng rừng thay thế/nộp tiền; phương án sử dụng tầng đất mặt; đánh giá tác động môi trường). (2) TIỀN: nộp tiền sử dụng đất/tiền thuê đất theo mức chênh lệch giữa loại đất sau và trước khi chuyển (Điều 10 Khoản 2 Nghị quyết 254/2025/QH15); ngoài ra người được giao đất chuyển từ đất chuyên trồng lúa phải nộp khoản tiền bảo vệ đất trồng lúa theo mức UBND tỉnh quy định nhưng không thấp hơn 50% số tiền theo diện tích đất chuyên trồng lúa phải chuyển nhân giá đất trồng lúa trong bảng giá đất (quy định trong Phụ lục Nghị định 151/2025/NĐ-CP). (3) TẦNG ĐẤT MẶT: phải có phương án sử dụng tầng đất mặt được chấp thuận với nội dung theo Điều 10 Khoản 2 Nghị định 112/2024/NĐ-CP (khối lượng bóc tách, vị trí, mục đích sử dụng đất mặt).",
+    "ground_truth_answer": "(1) ĐIỀU KIỆN: chuyển đất trồng lúa sang mục đích khác chỉ được quyết định sau khi có Nghị quyết của HĐND cấp tỉnh và đáp ứng căn cứ tại Điều 116 (Điều 122 Khoản 1 Luật Đất đai 2024); diện tích từ 02 ha trở lên phải đáp ứng tiêu chí tại Điều 46 Khoản 1 Nghị định 102/2024/NĐ-CP (phương án trồng rừng thay thế/nộp tiền; phương án sử dụng tầng đất mặt; đánh giá tác động môi trường). (2) TIỀN: nộp tiền sử dụng đất/tiền thuê đất theo mức chênh lệch giữa loại đất sau và trước khi chuyển (Điều 10 Khoản 2 Nghị quyết 254/2025/QH15); ngoài ra người được giao đất chuyển từ đất chuyên trồng lúa phải nộp khoản tiền bảo vệ đất trồng lúa theo mức UBND tỉnh quy định. (3) TẦNG ĐẤT MẶT: phải có phương án sử dụng tầng đất mặt được lập theo quy định, với nội dung theo Điều 10 Nghị định 112/2024/NĐ-CP — điều này đã được sửa đổi toàn bộ bởi Khoản 2 Điều 5 Nghị định 226/2025/NĐ-CP (bản hiện hành): khối lượng tầng đất mặt sau bóc tách, vị trí và mục đích sử dụng đất mặt, độ sâu bóc tách tối thiểu 20 cm.",
     "ground_truth_citations": [
       {
         "dieu": "122",
@@ -3297,13 +3304,13 @@
         "van_ban": "nghi-quyet-254-2025-qh15"
       },
       {
-        "dieu": "10",
+        "dieu": "5",
         "khoan": "2",
-        "van_ban": "nghi-dinh-112-2024-nd-cp"
+        "van_ban": "nghi-dinh-226-2025-nd-cp"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "COMPOSITE rộng nhất: 4 văn bản, 3 tier (Luật + NQ QH + 2 NĐ), hợp nhất V030+V054+V069. Ghi chú reviewer: khoản '50% tiền bảo vệ đất lúa' nằm trong Phụ lục NĐ151 (dòng đã verify khi khảo sát) — không cite riêng vì thuộc phụ lục trình tự, [A] cân nhắc thêm citation nếu muốn chặt hơn. Gaps phụ: 2. Verify OK 2026-07-06.",
+    "notes": "COMPOSITE rộng nhất: 4 văn bản, 3 tier (Luật + NQ QH + 2 NĐ), hợp nhất V030+V054+V069. Ghi chú reviewer: khoản '50% tiền bảo vệ đất lúa' nằm trong Phụ lục NĐ151 (dòng đã verify khi khảo sát) — không cite riêng vì thuộc phụ lục trình tự, [A] cân nhắc thêm citation nếu muốn chặt hơn. Gaps phụ: 2. Verify OK 2026-07-06. | [review B v1] thay cite NĐ112 Đ10 K2 (lỗi thời)→NĐ226 Đ5 K2 (bản hiện hành).",
     "review": {
       "verified_by": null,
       "date": null
@@ -3694,16 +3701,21 @@
     "pair_id": "V101",
     "difficulty": "medium",
     "synthesis": false,
-    "ground_truth_answer": "Về nguyên tắc là KHÔNG. Theo Điều 139 Khoản 1 Luật Đất đai 2024: đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng sau khi Nhà nước đã công bố, cắm mốc; lấn chiếm lòng đường, lề đường, vỉa hè sau khi đã công bố chỉ giới xây dựng; hoặc lấn chiếm đất dùng cho trụ sở cơ quan, công trình sự nghiệp, công trình công cộng khác — thì Nhà nước THU HỒI đất để trả lại cho công trình, KHÔNG cấp Giấy chứng nhận cho diện tích đã lấn chiếm. Ngoại lệ: nếu quy hoạch đã điều chỉnh và diện tích đó không còn thuộc hành lang bảo vệ/chỉ giới xây dựng thì được XEM XÉT cấp và phải thực hiện nghĩa vụ tài chính.",
+    "ground_truth_answer": "Về nguyên tắc là KHÔNG. Theo Điều 139 Khoản 1 Luật Đất đai 2024: đất lấn, chiếm hành lang bảo vệ an toàn công trình công cộng sau khi Nhà nước đã công bố, cắm mốc; lấn chiếm lòng đường, lề đường, vỉa hè sau khi đã công bố chỉ giới xây dựng; hoặc lấn chiếm đất dùng cho trụ sở cơ quan, công trình sự nghiệp, công trình công cộng khác — thì Nhà nước THU HỒI đất để trả lại cho công trình, KHÔNG cấp Giấy chứng nhận cho diện tích đã lấn chiếm. Ngoại lệ: nếu quy hoạch đã điều chỉnh và diện tích đó không còn thuộc hành lang bảo vệ/chỉ giới xây dựng thì được XEM XÉT cấp và phải thực hiện nghĩa vụ tài chính. Lưu ý về thời điểm: Điều 139 áp dụng cho vi phạm TRƯỚC ngày 01/7/2014. Nếu hành vi lấn, chiếm diễn ra TỪ ngày 01/7/2014 trở về sau thì theo Khoản 5 Điều 139, Nhà nước cũng KHÔNG cấp Giấy chứng nhận và xử lý theo quy định của pháp luật (không có ngoại lệ 'quy hoạch điều chỉnh' như Khoản 1).",
     "ground_truth_citations": [
       {
         "dieu": "139",
         "khoan": "1",
         "van_ban": "luat-dat-dai-2024"
+      },
+      {
+        "dieu": "139",
+        "khoan": "5",
+        "van_ban": "luat-dat-dai-2024"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "REGISTER-PAIR của V101: 'lấn ra lề đường một khúc', 'làm sổ'. Citations giữ nguyên V101.",
+    "notes": "REGISTER-PAIR của V101: 'lấn ra lề đường một khúc', 'làm sổ'. Citations giữ nguyên V101. | [review B v1] thêm K5 Điều 139 (vi phạm từ 01/7/2014 trở đi cũng không cấp).",
     "review": {
       "verified_by": null,
       "date": null
