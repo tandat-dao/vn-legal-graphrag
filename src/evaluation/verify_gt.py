@@ -39,14 +39,15 @@ REQUIRED_FIELDS = {
 # File trong data/raw/ không phải văn bản QPPL (không parse)
 _NON_NORM_FILES = {"mapping_table.md", "crossref_decisions.md", "review_log.md"}
 
-# Phân bổ CHỐT theo guide §1 (enforce khi --final).
-# Lưu ý: gap2=26 (dư 1 so kế hoạch — cặp đảo cận-nghèo hộ tịch đáng giữ),
-# bù bằng register=19 để tổng đúng 150.
+# Phân bổ CHỐT sau review B vòng 1 (enforce khi --final).
+# 150 gốc − 13 câu OOS hộ tịch (kết hôn/xác nhận tình trạng hôn nhân/khai tử/
+# nhận cha-mẹ-con — ngoài 6 thủ tục khai báo) = 137. 10 OOS thuộc gap2 + 3 gap3;
+# 2 câu (V135/V136) đổi gap2/3→gap1. Xem docs/GT_REVIEW_TRIAGE.md.
 _TARGET = {
-    "gap1": 25, "gap2": 26, "gap3": 25, "gap4": 25,
+    "gap1": 25, "gap2": 19, "gap3": 24, "gap4": 25,
     "negative/obvious": 8, "negative/trap": 6,
-    "underspecified": 8, "composite": 8, "register": 19,
-    "total": 150,
+    "underspecified": 6, "composite": 7, "register": 17,
+    "total": 137,
 }
 
 _DIEU_RE = re.compile(r"^Điều\s+(\w+)")
