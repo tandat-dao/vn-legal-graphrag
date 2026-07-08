@@ -481,7 +481,7 @@ def main() -> int:
     if ablation_cfg.name != "full":
         logger.info(f"ABLATION MODE: {ablation_cfg.name} "
                     f"(kỳ vọng sụp {ablation_cfg.gap_target or '—'})")
-    invalid = set(systems) - {"graphrag", "baseline"}
+    invalid = set(systems) - {"graphrag", "baseline", "closed-book", "oracle", "bm25"}
     if invalid:
         print(f"❌ Hệ thống không hợp lệ: {invalid}", file=sys.stderr)
         return 2
