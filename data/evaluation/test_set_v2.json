@@ -1800,11 +1800,12 @@
       },
       {
         "dieu": "4",
-        "van_ban": "nghi-dinh-123-2015-nd-cp"
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "khoan": "2"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "GAP3 2 tầng: case 'chết đã lâu' chỉ được xử lý ở TT04 Đ13 (TT tự trích 'khoản 2 Điều 4 NĐ123'); Luật/NĐ không có lời giải trực tiếp. Kèm nhánh TỪ CHỐI (K2). Verify OK 2026-07-06.",
+    "notes": "GAP3 2 tầng: case 'chết đã lâu' chỉ được xử lý ở TT04 Đ13 (TT tự trích 'khoản 2 Điều 4 NĐ123'); Luật/NĐ không có lời giải trực tiếp. Kèm nhánh TỪ CHỐI (K2). Verify OK 2026-07-06. | [review B v1] siết cite NĐ123 Điều 4→Đ4 K2 (giấy tờ thay Giấy báo tử); nội dung K2 trong corpus origin ĐẦY ĐỦ (B soi bản local cũ).",
     "review": {
       "verified_by": null,
       "date": null
@@ -2014,10 +2015,14 @@
       {
         "dieu": "13",
         "van_ban": "luat-ho-tich-2014"
+      },
+      {
+        "dieu": "35",
+        "van_ban": "luat-ho-tich-2014"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "GAP1 archetype THẨM QUYỀN — bản hộ tịch. Câu cùng khuôn V078/V080 nhưng route sang domain khác — đo Theme routing. Verify OK 2026-07-06.",
+    "notes": "GAP1 archetype THẨM QUYỀN — bản hộ tịch. Câu cùng khuôn V078/V080 nhưng route sang domain khác — đo Theme routing. Verify OK 2026-07-06. | [review B v1] thêm cite Đ35 (thẩm quyền khai sinh yếu tố nước ngoài) mà đáp án có nhắc.",
     "review": {
       "verified_by": null,
       "date": null
@@ -2039,10 +2044,15 @@
         "dieu": "9",
         "khoan": "1",
         "van_ban": "luat-nuoi-con-nuoi-2010"
+      },
+      {
+        "dieu": "9",
+        "khoan": "2",
+        "van_ban": "luat-nuoi-con-nuoi-2010"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "GAP1 archetype THẨM QUYỀN — bản nuôi con nuôi, khép bộ ba tham-quyen. Verify OK 2026-07-06.",
+    "notes": "GAP1 archetype THẨM QUYỀN — bản nuôi con nuôi, khép bộ ba tham-quyen. Verify OK 2026-07-06. | [review B v1] thêm cite Đ9 K2 (nuôi con nuôi yếu tố nước ngoài) mà đáp án có nhắc.",
     "review": {
       "verified_by": null,
       "date": null
@@ -3164,10 +3174,16 @@
         "khoan": "1",
         "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
         "loai": "phu_luc"
+      },
+      {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "b",
+        "van_ban": "luat-ho-tich-2014"
       }
     ],
     "relevant_component_ids": [],
-    "notes": "COMPOSITE: gap1-archetype-mix (thời hạn + nơi nộp + hồ sơ + lệ phí trong 1 câu) + gap2 (lệ phí HCM) + gap3 (Luật tier1 + NQ tier4). Gaps phụ: 3. Verify OK 2026-07-06.",
+    "notes": "COMPOSITE: gap1-archetype-mix (thời hạn + nơi nộp + hồ sơ + lệ phí trong 1 câu) + gap2 (lệ phí HCM) + gap3 (Luật tier1 + NQ tier4). Gaps phụ: 3. Verify OK 2026-07-06. | [review B v1] thêm cite Đ11 K1 điểm b Luật HT (miễn lệ phí khi khai sinh đúng hạn — chi tiết nằm ở đây, không ở phụ lục NQ124).",
     "review": {
       "verified_by": null,
       "date": null
