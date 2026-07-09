@@ -76,6 +76,19 @@ _JURISDICTION_ALLOW = {
     "multi-juris": ["toan-quoc", "tp-hcm", "dong-nai"],
 }
 
+
+def _resolve_allowed_jurisdictions(jurisdiction, ablation) -> list[str]:
+    """jurisdiction → danh sách jurisdiction được phép trong hard-filter Stage 2.
+
+    Fix A (v2, 2026-07-09): jurisdiction=None (câu underspecified, KHÔNG nêu địa
+    phương) → cho phép MỌI tỉnh, KHÔNG ép về "toan-quoc". Bug cũ (`... or "toan-quoc"`)
+    loại sạch văn bản phí cấp tỉnh khỏi câu hỏi phí không nêu tỉnh → gap2 underspecified
+    F1=0.000. Câu không nêu tỉnh thì phải quét toàn bộ tỉnh (giống multi-juris).
+    """
+    if ablation.no_jurisdiction or jurisdiction is None:
+        return _ALL_JURISDICTIONS
+    return _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"])
+
 # ---------------------------------------------------------------------------
 # Types
 # ---------------------------------------------------------------------------
@@ -217,10 +230,10 @@ def stage2_component_ids(
         logger.warning("stage2_component_ids: norm_ids rỗng — trả về []")
         return []
 
-    jurisdiction = query_plan.get("jurisdiction") or "toan-quoc"
-    # Ablation no-jurisdiction (Gap 2): cho phép mọi tỉnh; no-temporal (Gap 4b): temporal=None
-    allowed = (_ALL_JURISDICTIONS if ablation.no_jurisdiction
-               else _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"]))
+    jurisdiction = query_plan.get("jurisdiction")
+    # Ablation no-jurisdiction (Gap 2): mọi tỉnh; jurisdiction=None: mọi tỉnh (Fix A);
+    # no-temporal (Gap 4b): temporal=None
+    allowed = _resolve_allowed_jurisdictions(jurisdiction, ablation)
     temporal = None if ablation.no_temporal else query_plan.get("temporal")
     cypher = _build_stage2_cypher(ablation.traversal_rels)
 
@@ -300,9 +313,8 @@ def stage2_norm_ids(
         logger.warning("stage2_norm_ids: norm_ids rỗng — trả về []")
         return []
 
-    jurisdiction = query_plan.get("jurisdiction") or "toan-quoc"
-    allowed = (_ALL_JURISDICTIONS if ablation.no_jurisdiction
-               else _JURISDICTION_ALLOW.get(jurisdiction, ["toan-quoc"]))
+    jurisdiction = query_plan.get("jurisdiction")
+    allowed = _resolve_allowed_jurisdictions(jurisdiction, ablation)
     temporal = None if ablation.no_temporal else query_plan.get("temporal")
     cypher = _build_stage2_cypher(ablation.traversal_rels)
 
