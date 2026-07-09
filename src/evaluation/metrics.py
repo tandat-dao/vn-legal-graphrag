@@ -239,7 +239,7 @@ def aggregate(per_question: list[dict]) -> dict:
             "f1_dieu": _mean(q.get("citation_score_dieu", {}).get("f1") for q in qs),
             "norm_recall": _mean(q["norm_recall"] for q in qs),
         }
-        for gap, qs in sorted(by_gap.items())
+        for gap, qs in sorted(by_gap.items(), key=lambda kv: (kv[0] is None, str(kv[0])))
     }
 
     # Per-theme breakdown
@@ -252,7 +252,7 @@ def aggregate(per_question: list[dict]) -> dict:
             "f1": _mean(q["citation_score"]["f1"] for q in qs),
             "norm_recall": _mean(q["norm_recall"] for q in qs),
         }
-        for theme, qs in sorted(by_theme.items())
+        for theme, qs in sorted(by_theme.items(), key=lambda kv: (kv[0] is None, str(kv[0])))
     }
 
     return overall
@@ -308,7 +308,8 @@ def render_summary_md(
         lines.append(f"| Negative correct rate ({n} câu) | {_f(g)} | {_f(b)} | {_f(g - b)} |")
 
     lines += ["", "## Theo gap_type", "", "| Gap | N | G F1(Kh) | B F1(Kh) | G F1(Đ) | B F1(Đ) | G NormR | B NormR |", "|---|---:|---:|---:|---:|---:|---:|---:|"]
-    gaps = sorted(set(graphrag_agg.get("by_gap", {}).keys()) | set(baseline_agg.get("by_gap", {}).keys()))
+    gaps = sorted(set(graphrag_agg.get("by_gap", {}).keys()) | set(baseline_agg.get("by_gap", {}).keys()),
+                  key=lambda k: (k is None, str(k)))
     for gap in gaps:
         g = graphrag_agg.get("by_gap", {}).get(gap, {})
         b = baseline_agg.get("by_gap", {}).get(gap, {})
@@ -321,7 +322,8 @@ def render_summary_md(
         )
 
     lines += ["", "## Theo theme", "", "| Theme | N | G F1 | B F1 | G NormRecall | B NormRecall |", "|---|---:|---:|---:|---:|---:|"]
-    themes = sorted(set(graphrag_agg.get("by_theme", {}).keys()) | set(baseline_agg.get("by_theme", {}).keys()))
+    themes = sorted(set(graphrag_agg.get("by_theme", {}).keys()) | set(baseline_agg.get("by_theme", {}).keys()),
+                    key=lambda k: (k is None, str(k)))
     for theme in themes:
         g = graphrag_agg.get("by_theme", {}).get(theme, {})
         b = baseline_agg.get("by_theme", {}).get(theme, {})
