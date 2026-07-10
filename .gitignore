@@ -54,3 +54,8 @@ notebooks/data/
 data/evaluation/_sub*
 data/evaluation/sanity_*
 data/evaluation/bakeoff/
+# Kết quả nhiễm 429 + dev-subset runs — giữ local, không commit (xem README trong folder)
+data/evaluation/quarantine_429/*
+!data/evaluation/quarantine_429/README.md
+data/evaluation/dev_runs/*
+!data/evaluation/dev_runs/README.md
