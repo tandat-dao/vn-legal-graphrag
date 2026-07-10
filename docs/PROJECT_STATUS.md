@@ -1,5 +1,17 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.21 | Cập nhật 2026-07-06**
+**Phiên bản 2.22 | Cập nhật 2026-07-10**
+
+> **v2.22 — Cập nhật 2026-07-10 (KHÂU ĐÁNH GIÁ HOÀN TẤT — GT freeze 137 câu + chiến dịch eval v1/v2 + Fix A. Kế tiếp: VIẾT BÁO CÁO):**
+>
+> **1. GT v2 FREEZE 137 câu (2026-07-08).** [B] review chéo 150 câu → 27 fix: bỏ 13 OOS hộ tịch (kết hôn/XNTTHN/khai tử/nhận cha-mẹ-con — ngoài 6 thủ tục), relabel V135/V136→gap1, sửa 9 đất đai (gồm lỗi data Điều 10 NĐ112 bị NĐ226/2025 Đ5K2 sửa toàn bộ — thêm annotation + re-ingest, Amendment 322→323) + 4 hộ tịch/ncn. Freeze SHA256 `bd2c5eaf…f146`, tag `gt-v2-freeze`, pre-register `docs/GT_FREEZE.md`. Triage: `docs/GT_REVIEW_TRIAGE.md`.
+>
+> **2. Chiến dịch eval hoàn tất (Gemini, 137 câu).** Số chốt cho Chương 4 ở **`docs/V2_RESULTS.md`**: GraphRAG v2 **N=3 F1 Khoản 0.578±0.004** vs baseline 0.435±0.008 — **Δ+0.156, 95% CI [0.070,0.242], Wilcoxon p=0.001\*\*\*** (E0). Bậc thang E2a: oracle 0.858 > graphrag 0.578 ≈ bm25 0.571 > baseline 0.435 > closed-book 0.102. Double-dissociation E1: Gap3/4 VỮNG (no-traversal −0.091/−0.130), Gap1 ok (−0.041), **Gap2 limitation** (jurisdiction net-hại +0.182). E2b per-domain: dat-dai 0.617 / ho-tich 0.580 / ncn 0.392. E3: retrieval_fail 32→21 nhờ Fix A. Chẩn đoán v1: `docs/V1_DIAGNOSTIC.md`.
+>
+> **3. Fix v2 + negative results.** **Fix A** (commit `3efd0e8`, cải tiến hậu kiểm duy nhất thành công): jurisdiction=None→quét mọi tỉnh; gap2 0.454→0.517, jur=None 0→0.328, 0 regress. **3 fix thất bại đã revert** (ghi Limitations): 2 thí nghiệm prompt under-cite (recall bất biến — Gemini-inherent), temporal neo bản-cũ (regress Gap4). Over-cite 161 phần lớn GT-artifact (32% same-norm) → precision under-measured.
+>
+> **4. Bug hạ tầng đã fix trong chiến dịch** (commit riêng): `aggregate()` + `expanded_eval` crash sort None (theme/juris=null của GT v2 — `8b07a95`, `ec7645c`); baseline collection stale thiếu 15/32 norm (quên rebuild sau ingest corpus B — suýt làm baseline=0 trên 68 câu hộ tịch); validation `--systems` chặn bm25/closed-book/oracle (`9ab28c8`); `_TARGET` verify_gt 150→137 (`2167a7b`). **Gotcha mới:** N=3 dồn ~1800 call/đêm → Vertex **429 RESOURCE_EXHAUSTED** làm hỏng 4 mẫu (F1 sụp giả) — đã cách ly `data/evaluation/quarantine_429/`, chỉ dùng mẫu 0-lỗi-429; lần sau giãn nhịp.
+>
+> **5. Việc tiếp theo:** **(a) VIẾT BÁO CÁO** — đề cương + Chương 1 đã nháp (`docs/thesis/`), Ch4 dùng V2_RESULTS.md; **(b) E2c** — sinh phiếu chấm mù từ đáp án v2 (`human_eval sheets`) → bạn-luật + người thân chấm (cùng 1 mẫu); **(c)** rotate key Gemini/Vertex trước bảo vệ; **(d)** V149 thiếu dấu review B (kiểm khi tiện).
 
 > **v2.21 — Cập nhật 2026-07-06 (EVAL SET V2 HOÀN THÀNH — 150 câu, verify --final PASS):**
 >

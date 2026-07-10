@@ -25,6 +25,7 @@
 - graphrag 3 mẫu: 0.581 / 0.572 / 0.581 (`results_graphrag_{20260709-223945, 20260709-230729, 20260710-085236}.json`)
 - baseline 3 mẫu: 0.433 / 0.427 / 0.446 (`results_baseline_{20260710-001154, -085236, -104109}.json`)
 - σ cực nhỏ → **kết quả tái lập tốt** dù Gemini non-deterministic.
+- *Footnote phương pháp:* mẫu graphrag #1 (223945) chạy với LLM-cache — phần lớn answer là replay generation gốc của run v1 (prompt identical vì retrieval không đổi ngoài 6 câu jur=None Fix A chạy tươi). Mỗi generation gốc vẫn là 1 lần rút mẫu độc lập từ phân phối answer của hệ v2 → hợp lệ làm 1/3 mẫu; 2 mẫu còn lại (230729, 085236) fresh hoàn toàn (`--no-llm-cache`).
 
 **Significance (paired, per-question, 123 câu có GT — loại negative):**
 

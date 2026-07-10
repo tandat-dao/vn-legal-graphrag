@@ -15,9 +15,9 @@
 
 ---
 
-## TRẠNG THÁI HIỆN TẠI (cập nhật 2026-06-30)
+## TRẠNG THÁI HIỆN TẠI (cập nhật 2026-07-10)
 
-**Phase 0-4 đã hoàn tất cơ bản.** Corpus đa-domain (Đất đai + Hộ tịch + Nuôi con nuôi, 32 Norm) đã ingest; multi-LLM (Claude + Gemini via Vertex ADC) hoạt động; hệ thống đã đánh giá (GraphRAG > Baseline có ý nghĩa thống kê trên cả 2 LLM). **Việc đang làm: xây dựng lại pha đánh giá E0-E3** (đặc biệt E1 ablation) + viết luận văn.
+**Phase 0-4 hoàn tất + KHÂU ĐÁNH GIÁ E0-E3 ĐÃ CHẠY XONG.** Corpus đa-domain 32 Norm; GT v2 freeze 137 câu (tag `gt-v2-freeze`, pre-register `docs/GT_FREEZE.md`); chiến dịch eval v1/v2 hoàn tất trên Gemini — **số chốt cho Chương 4 ở `docs/V2_RESULTS.md`** (GraphRAG N=3 F1 0.578±0.004 vs baseline 0.435, Δ+0.156 CI[0.070,0.242] p=0.001***; Gap3/4 vững qua double-dissociation, Gap2 = limitation). **Việc đang làm: VIẾT LUẬN VĂN** (`docs/thesis/` — đề cương + Chương 1 đã nháp) + E2c người chấm.
 
 **Trước khi bắt đầu bất kỳ task nào — ĐỌC 3 file này:**
 1. `docs/PROJECT_STATUS.md` — **đọc §1.0 "CẬP NHẬT MỚI NHẤT" TRƯỚC** (trạng thái + việc tiếp theo), rồi changelog v2.19 ở đầu file
