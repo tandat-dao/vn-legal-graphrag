@@ -332,7 +332,7 @@ def build_report(g_meta, g_res, b_meta, b_res) -> str:
     L.append("|---|---:|---:|---:|---:|---:|---:|")
     gap_label = {"gap1": "Gap1 đa lĩnh vực", "gap2": "Gap2 địa phương",
                  "gap3": "Gap3 đa tầng", "gap4": "Gap4 phiên bản", "negative": "Negative"}
-    for gap in sorted(set(g_gap) | set(b_gap)):
+    for gap in sorted(set(g_gap) | set(b_gap), key=lambda k: (k is None, str(k))):
         g, b = g_gap.get(gap, {}), b_gap.get(gap, {})
         d = g.get("f1_khoan", 0) - b.get("f1_khoan", 0)
         L.append(f"| {gap_label.get(gap, gap)} | {g.get('n', b.get('n', 0))} | "
@@ -346,7 +346,7 @@ def build_report(g_meta, g_res, b_meta, b_res) -> str:
     g_j, b_j = _group_means(g_res, "jurisdiction"), _group_means(b_res, "jurisdiction")
     L.append("| Jurisdiction | N | G F1(Kh) | B F1(Kh) | Δ | G NormR | B NormR |")
     L.append("|---|---:|---:|---:|---:|---:|---:|")
-    for j in sorted(set(g_j) | set(b_j)):
+    for j in sorted(set(g_j) | set(b_j), key=lambda k: (k is None, str(k))):
         g, b = g_j.get(j, {}), b_j.get(j, {})
         d = g.get("f1_khoan", 0) - b.get("f1_khoan", 0)
         L.append(f"| {j} | {g.get('n', b.get('n', 0))} | {_fmt(g.get('f1_khoan'))} | "
