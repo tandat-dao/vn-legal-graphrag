@@ -194,7 +194,6 @@ graphrag-vn-law/
 - [`CLAUDE.md`](CLAUDE.md) — Conventions, rules, schema quick reference, Decision Log
 - [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Changelog đầy đủ + trạng thái task hiện tại (v2.22)
 - [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) — Kiến trúc hệ thống, schema Ontology, tech stack, known problems
-- [`docs/plan.md`](docs/plan.md) — Kế hoạch thực thi ban đầu (historical reference)
 
 ### Tài liệu evaluation
 - [`data/evaluation/ABLATION_MATRIX.md`](data/evaluation/ABLATION_MATRIX.md) — Bảng impact cumulative 4 fix layers + per-gap 4-gap breakdown (Baseline → v2.8)

@@ -10,7 +10,7 @@ nên attention bidirectional có thể phân biệt — đây là lớp rerank k
 Tính chất: chạy **LOCAL, $0 inference** (không gọi API). Model mặc định
 `BAAI/bge-reranker-v2-m3` — cùng họ BGE-M3, đa ngôn ngữ (hỗ trợ tiếng Việt).
 
-Vai trò kép (xem IMPROVEMENT_ROADMAP): (1) lớp rerank trong retrieval; (2) "teacher"
+Vai trò kép (D-20): (1) lớp rerank trong retrieval; (2) "teacher"
 sinh hard-negative + soft-label để distill xuống bi-encoder khi finetune embedding.
 
 LƯU Ý: `load_reranker()` tải model (~600MB) ở lần gọi ĐẦU TIÊN — lazy, chỉ xảy ra
