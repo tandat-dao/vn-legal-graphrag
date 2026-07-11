@@ -225,7 +225,7 @@ def main() -> int:
                         help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
                              "2=grounding + LLM support judge (TỐN Haiku API).")
     parser.add_argument("--llm-mode",
-                        choices=["claude", "claude-fallback", "gemini"],
+                        choices=["claude", "claude-fallback", "gemini", "gemini-fallback"],
                         default="claude-fallback",
                         help="Mode LLM: 'claude' thuần | 'claude-fallback' Claude + Gemini "
                              "khi drop (mặc định demo) | 'gemini' end-to-end. "

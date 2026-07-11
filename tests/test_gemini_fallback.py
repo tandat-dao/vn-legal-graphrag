@@ -11,12 +11,14 @@ import anthropic
 import pytest
 
 from src.utils.gemini_fallback import (
+    FallbackGeminiClient,
     FallbackLLMClient,
     GeminiClient,
     _extract_system_text,
     _extract_user_text,
     _gemini_model_for,
     _should_fallback,
+    _should_fallback_gemini,
 )
 from src.utils.llm_config import make_llm_client
 
@@ -142,6 +144,99 @@ def test_factory_mode_invalid_fallback_claude(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     client = make_llm_client(mode="khong-hop-le")
     assert isinstance(client, anthropic.Anthropic)
+
+
+def test_factory_mode_gemini_fallback_co_vertex(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    monkeypatch.setenv("GEMINI_USE_VERTEX", "true")
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    client = make_llm_client(mode="gemini-fallback")
+    assert isinstance(client, FallbackGeminiClient)
+
+
+def test_factory_mode_gemini_fallback_thieu_gemini_degrade(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.delenv("GEMINI_USE_VERTEX", raising=False)
+    client = make_llm_client(mode="gemini-fallback")
+    assert isinstance(client, anthropic.Anthropic)   # degrade về Claude thuần
+
+
+# --- FallbackGeminiClient: Gemini chính → Claude dự phòng ------------------
+
+class _FakeGoogleError(Exception):
+    """Lỗi google-genai giả với .code (HTTP status) như APIError thật."""
+    def __init__(self, code, message=""):
+        self.code = code
+        super().__init__(message or f"fake {code}")
+
+
+def test_gemini_ok_khong_dung_claude(monkeypatch):
+    import src.utils.gemini_fallback as gf
+    monkeypatch.setattr(gf, "_build_gemini_client", lambda key: object())
+    monkeypatch.setattr(gf, "_gemini_complete", lambda c, **kw: "GEMINI_OK")
+    client = FallbackGeminiClient("gem-key", _FakeAnthropic(None))
+    resp = client.messages.create(model="m", messages=[{"role": "user", "content": "u"}])
+    assert resp.content[0].text == "GEMINI_OK"
+    assert client._anthropic.messages.calls == 0   # Claude KHÔNG bị gọi khi Gemini OK
+
+
+def test_gemini_429_fallback_claude(monkeypatch):
+    """Gemini 429 RESOURCE_EXHAUSTED (hết quota) → chuyển sang Claude."""
+    import src.utils.gemini_fallback as gf
+    monkeypatch.setattr(gf, "_build_gemini_client", lambda key: object())
+    def _boom(c, **kw):
+        raise _FakeGoogleError(429, "RESOURCE_EXHAUSTED")
+    monkeypatch.setattr(gf, "_gemini_complete", _boom)
+    client = FallbackGeminiClient("gem-key", _FakeAnthropic(None))
+    resp = client.messages.create(model="claude-sonnet-4-6",
+                                  messages=[{"role": "user", "content": "u"}])
+    assert resp.content[0].text == "CLAUDE_OK"   # đã chuyển sang Claude
+    assert client._anthropic.messages.calls == 1
+
+
+def test_gemini_500_fallback_claude(monkeypatch):
+    import src.utils.gemini_fallback as gf
+    monkeypatch.setattr(gf, "_build_gemini_client", lambda key: object())
+    def _boom(c, **kw):
+        raise _FakeGoogleError(503, "UNAVAILABLE")
+    monkeypatch.setattr(gf, "_gemini_complete", _boom)
+    client = FallbackGeminiClient("k", _FakeAnthropic(None))
+    resp = client.messages.create(model="m", messages=[{"role": "user", "content": "u"}])
+    assert resp.content[0].text == "CLAUDE_OK"
+
+
+def test_gemini_400_khong_fallback_re_raise(monkeypatch):
+    """Lỗi logic 400 INVALID_ARGUMENT = bug của ta → re-raise, KHÔNG fallback."""
+    import src.utils.gemini_fallback as gf
+    monkeypatch.setattr(gf, "_build_gemini_client", lambda key: object())
+    def _boom(c, **kw):
+        raise _FakeGoogleError(400, "INVALID_ARGUMENT")
+    monkeypatch.setattr(gf, "_gemini_complete", _boom)
+    client = FallbackGeminiClient("k", _FakeAnthropic(None))
+    with pytest.raises(_FakeGoogleError):
+        client.messages.create(model="m", messages=[{"role": "user", "content": "u"}])
+    assert client._anthropic.messages.calls == 0
+
+
+@pytest.mark.parametrize("code,expected", [
+    (429, True), (500, True), (503, True), (529, True),
+    (400, False), (401, False), (403, False), (404, False),
+])
+def test_should_fallback_gemini_theo_code(code, expected):
+    assert _should_fallback_gemini(_FakeGoogleError(code)) is expected
+
+
+@pytest.mark.parametrize("msg,expected", [
+    ("RESOURCE_EXHAUSTED: quota", True),
+    ("503 UNAVAILABLE", True),
+    ("INTERNAL error", True),
+    ("400 INVALID_ARGUMENT", False),
+    ("PERMISSION_DENIED", False),
+])
+def test_should_fallback_gemini_theo_message(msg, expected):
+    """Lỗi không có .code (vd connection) → dò theo message."""
+    assert _should_fallback_gemini(Exception(msg)) is expected
 
 
 def test_gemini_client_always_gemini(monkeypatch):

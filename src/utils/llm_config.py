@@ -31,21 +31,23 @@ def make_anthropic_client(api_key: str | None = None) -> anthropic.Anthropic:
     )
 
 
-VALID_LLM_MODES = ("claude", "claude-fallback", "gemini")
+VALID_LLM_MODES = ("claude", "claude-fallback", "gemini", "gemini-fallback")
 
 
 def make_llm_client(api_key: str | None = None, *, mode: str | None = None):
-    """Client LLM cho retrieval/demo path — chọn 1 trong 3 mode.
+    """Client LLM cho retrieval/demo path — chọn 1 trong 4 mode.
 
     mode:
       - "claude" (MẶC ĐỊNH): thuần Claude, KHÔNG fallback. Dùng cho EVAL → reproducible.
       - "claude-fallback": Claude chính + Gemini khi Claude drop (lỗi hạ tầng).
       - "gemini": Gemini end-to-end (planner + generator chạy Gemini, KHÔNG đụng Claude).
+      - "gemini-fallback": Gemini chính + Claude khi Gemini drop (429/5xx) — cho DEMO
+        bảo vệ chạy Gemini nhưng vẫn sống khi Vertex hết quota.
       - None → đọc env `LLM_MODE` (mặc định "claude").
 
     QUAN TRỌNG: mặc định "claude" để EVAL luôn thuần Claude. Demo chọn mode khác.
-    Thiếu cấu hình Gemini (không key + không vertex) → claude-fallback tự degrade về
-    Claude thuần + cảnh báo.
+    Thiếu cấu hình Gemini (không key + không vertex) → *-fallback tự degrade về Claude
+    thuần + cảnh báo.
     """
     if mode is None:
         mode = os.getenv("LLM_MODE", "claude").lower()
@@ -65,6 +67,17 @@ def make_llm_client(api_key: str | None = None, *, mode: str | None = None):
     anthropic_client = make_anthropic_client(api_key)
     if mode == "claude":
         return anthropic_client
+
+    if mode == "gemini-fallback":
+        if not gemini_ready:
+            logger.warning(
+                "mode=gemini-fallback nhưng thiếu cấu hình Gemini (GEMINI_API_KEY/Vertex) "
+                "→ chạy Anthropic thuần"
+            )
+            return anthropic_client
+        from src.utils.gemini_fallback import FallbackGeminiClient
+        logger.info("LLM client: Gemini + Claude fallback (dự phòng khi Gemini sập/hết quota)")
+        return FallbackGeminiClient(gemini_key, anthropic_client)
 
     # claude-fallback
     if not gemini_ready:

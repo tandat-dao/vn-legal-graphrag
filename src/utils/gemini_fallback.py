@@ -94,6 +94,29 @@ def _should_fallback(err: anthropic.APIError) -> bool:
     return status == 429 or status >= 500
 
 
+def _should_fallback_gemini(err: Exception) -> bool:
+    """True nếu lỗi Gemini là hạ tầng (đáng fallback sang Claude); False nếu lỗi logic.
+
+    Đối xứng `_should_fallback` nhưng cho google-genai. Fallback: 429 RESOURCE_EXHAUSTED
+    (hết quota Vertex — CHÍNH sự cố đã cắn mẻ eval), 5xx (UNAVAILABLE/INTERNAL), connection.
+    KHÔNG fallback: 400 INVALID_ARGUMENT / 401/403 PERMISSION_DENIED (bug/cấu hình của ta —
+    Claude không cứu được, re-raise để lộ lỗi thật thay vì nuốt).
+    """
+    status = getattr(err, "code", None)
+    if not isinstance(status, int):
+        status = getattr(err, "status_code", None)
+    if isinstance(status, int):
+        return status == 429 or status >= 500
+    msg = str(err).upper()
+    # Loại trừ lỗi logic trước (không fallback)
+    if any(m in msg for m in ("INVALID_ARGUMENT", "PERMISSION_DENIED", "UNAUTHENTICATED",
+                              "NOT_FOUND", " 400", " 401", " 403", " 404")):
+        return False
+    infra = ("RESOURCE_EXHAUSTED", "429", "UNAVAILABLE", "INTERNAL", "DEADLINE",
+             "503", "500", "502", "504", "TIMEOUT", "CONNECTION")
+    return any(m in msg for m in infra)
+
+
 class _Messages:
     """Giả lập namespace `client.messages` với method `.create()`."""
 
@@ -219,3 +242,45 @@ class GeminiClient:
             temperature=kwargs.get("temperature", 0.0),
         )
         return SimpleNamespace(content=[SimpleNamespace(text=text)])
+
+
+class FallbackGeminiClient:
+    """Gemini chính + Claude dự phòng — ĐỐI XỨNG `FallbackLLMClient`, cho DEMO chạy Gemini.
+
+    Demo bảo vệ chạy Gemini end-to-end (mode "gemini"). Nếu Gemini lỗi hạ tầng — nhất là
+    `429 RESOURCE_EXHAUSTED` (hết quota Vertex, đã từng làm hỏng mẻ eval) — thì demo chết
+    vì `GeminiClient` không có dự phòng. Lớp này bọc trong suốt: gọi Gemini trước; lỗi hạ
+    tầng → tự chuyển request sang Claude (kwargs vốn đã dạng Anthropic: model là tên Claude,
+    system/messages/max_tokens y hệt → truyền thẳng). Lỗi logic (400/403) → re-raise.
+
+    Mặc định TẮT (eval luôn thuần Gemini mode "gemini" để reproducible). Chỉ demo bật.
+    """
+
+    def __init__(self, gemini_api_key: str | None,
+                 anthropic_client: anthropic.Anthropic) -> None:
+        self._gemini_api_key = gemini_api_key
+        self._gemini_client = None  # lazy
+        self._anthropic = anthropic_client
+        self.messages = _Messages(self)
+
+    def _create(self, **kwargs: Any) -> Any:
+        try:
+            if self._gemini_client is None:
+                self._gemini_client = _build_gemini_client(self._gemini_api_key)
+            text = _gemini_complete(
+                self._gemini_client,
+                model=kwargs.get("model", ""),
+                system_text=_extract_system_text(kwargs.get("system")),
+                user_text=_extract_user_text(kwargs.get("messages")),
+                max_tokens=kwargs.get("max_tokens"),
+                temperature=kwargs.get("temperature", 0.0),
+            )
+            return SimpleNamespace(content=[SimpleNamespace(text=text)])
+        except Exception as err:  # noqa: BLE001 — google-genai raise nhiều loại; lọc bằng helper
+            if not _should_fallback_gemini(err):
+                logger.error("Gemini lỗi logic (không fallback): %s", err)
+                raise
+            logger.warning(
+                "⚠️  Gemini API thất bại (%s) → CHUYỂN SANG CLAUDE fallback", err
+            )
+            return self._anthropic.messages.create(**kwargs)

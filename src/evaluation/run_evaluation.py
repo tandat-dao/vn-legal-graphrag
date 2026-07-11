@@ -364,7 +364,7 @@ def main() -> int:
              "2=grounding + LLM support judge (TỐN ~1 Haiku call per citation).",
     )
     parser.add_argument(
-        "--llm-mode", choices=["claude", "claude-fallback", "gemini"], default="claude",
+        "--llm-mode", choices=["claude", "claude-fallback", "gemini", "gemini-fallback"], default="claude",
         help="LLM cho HỆ THỐNG (GraphRAG + Baseline): claude (mặc định, reproducible) | "
              "claude-fallback | gemini end-to-end. Judge giữ Claude cố định (thước đo).",
     )
