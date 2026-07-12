@@ -367,7 +367,7 @@
 > - Negative (n=2): 100% vs 100% tied
 > - Q026 evaluation artifact (baseline citation match từ refusal): nếu loại bỏ → Gap 4 baseline thực = 0.071 → improvement +700%
 >
-> **5. Thesis chapter skeleton ([thesis/CHAPTERS_OUTLINE.md](../thesis/CHAPTERS_OUTLINE.md))**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
+> **5. Thesis chapter skeleton (`thesis/CHAPTERS_OUTLINE.md` — đã gỡ 2026-07-11, thay bằng `docs/thesis/`)**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
 >
 > **Tổng commits session 2026-05-19/20**: 22 commits từ canonical `225b3aa` → `2b72bb8`. F1 Khoản improvement: +22.6% qua 4 fix layers, statistically backed (N=3).
 

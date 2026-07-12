@@ -7,3 +7,6 @@ pyyaml>=6.0
 anthropic>=0.40.0
 rich>=13.7.0
 google-genai>=1.0.0   # dự phòng Gemini khi Claude sập (demo) — import lazy, chỉ cần khi fallback nổ
+numpy>=1.26            # expanded_eval: bootstrap CI (dep của sentence-transformers, khai tường minh vì import trực tiếp)
+scipy>=1.11            # expanded_eval: Wilcoxon signed-rank
+torch>=2.0             # reranker (D-20, teacher) — đã là dep của sentence-transformers

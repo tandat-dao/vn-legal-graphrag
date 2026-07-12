@@ -1,5 +1,7 @@
 # Ablation Matrix — Cumulative Fix Impact (26 câu Đất đai)
 
+> ⚠️ **Tài liệu lịch sử (dev set 26 câu, kỷ nguyên v2.x/Claude).** Số chính thức cho báo cáo: `docs/V2_RESULTS.md` (GT freeze 137 câu). Các tham chiếu "CHAPTER_4_EXPERIMENTS" bên dưới trỏ tới file đã gỡ khỏi cây làm việc (còn trong lịch sử git).
+
 Bảng tổng hợp impact của từng fix layer, đo trên cùng test set (`test_set_dat_dai.json`), cùng embedding (BGE-M3), cùng LLM (Claude Sonnet 4.6), cùng eval-mode (force_jurisdiction + bypass_completeness). **Chỉ khác retrieval/parsing logic**.
 
 **Reproducibility note**: v2.6 final config có N=3 runs cùng code state với `--no-llm-cache` để measure variance. Các config trước (v2.3-v2.5) là N=1 — variance không đo nhưng cùng order of magnitude (xem REPRODUCIBILITY_REPORT_20260520.md).
