@@ -24,7 +24,7 @@ from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
 
 from src.ingestion.vectorizer import load_model
-from src.utils.llm_config import make_anthropic_client, make_llm_client
+from src.utils.llm_config import make_llm_client
 from src.retrieval.answer_generator import generate_answer
 from src.retrieval.context_assembler import assemble_context
 from src.retrieval.query_planner import QueryPlan, plan_query

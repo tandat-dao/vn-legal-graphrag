@@ -496,7 +496,7 @@ def run_ingestion(data_dir: str) -> None:
                 anthropic_client = make_llm_client(mode=_ingest_mode)
                 with open(ontology_path, "r", encoding="utf-8") as f:
                     core_data = json.load(f)
-                
+
                 # Tính lũy đẳng (Idempotency): Tải trước danh sách các component đã map
                 with session.begin_transaction() as tx:
                     mapped_records = tx.run(
@@ -508,7 +508,7 @@ def run_ingestion(data_dir: str) -> None:
                     ).data()
                     mapped_set = {r["comp_id"] for r in mapped_records}
                 logger.info(f"Pass 4 — Bỏ qua {len(mapped_set)} components đã map từ lần chạy trước để tiết kiệm chi phí.")
-                
+
                 mapping_count = 0
                 total_nodes = sum(len(res["nodes"]) for res in all_results)
                 processed = 0
@@ -519,25 +519,25 @@ def run_ingestion(data_dir: str) -> None:
                     try:
                         for idx, node in enumerate(result["nodes"]):
                             comp_id = node["id"]
-                            
+
                             # Idempotency: Skip nếu đã map
                             if comp_id in mapped_set:
                                 processed += 1
                                 continue
-                                
+
                             text = node["text"]
                             if not text.strip():
                                 processed += 1
                                 continue
-                            
+
                             mapped_concepts = map_component_to_concepts(anthropic_client, text, core_data)
-                            
+
                             # Đánh dấu đã quét LLM (dù có ra mảng rỗng hay không)
                             tx.run(
                                 "MATCH (c:Component {id: $comp_id}) SET c.ontology_mapped = true",
                                 comp_id=comp_id
                             )
-                            
+
                             for concept_id in mapped_concepts:
                                 tx.run(
                                     """
@@ -548,11 +548,11 @@ def run_ingestion(data_dir: str) -> None:
                                     comp_id=comp_id, concept_id=concept_id
                                 )
                                 mapping_count += 1
-                            
+
                             processed += 1
                             if processed % 100 == 0:
                                 logger.info(f"  Đã map {processed}/{total_nodes} components...")
-                            
+
                             # Batch commit sau mỗi 50 node
                             if (idx + 1) % batch_size == 0:
                                 tx.commit()

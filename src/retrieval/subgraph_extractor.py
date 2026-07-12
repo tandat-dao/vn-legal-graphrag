@@ -356,10 +356,10 @@ def stage3_graph_component_ids(
     proc_id = query_plan.get("procedure")
     if not proc_id or not norm_ids:
         return []
-        
+
     with neo4j_driver.session() as session:
         rows = session.run(_GRAPH_BOOST_CYPHER, norm_ids=norm_ids, proc_id=proc_id).data()
-    
+
     comp_ids = [row["component_id"] for row in rows]
     logger.info(f"Stage 3: {len(comp_ids)} graph_component_ids mapped for procedure {proc_id}")
     return comp_ids

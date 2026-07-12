@@ -588,7 +588,7 @@ def hybrid_search(
 
     # --- Path 1: Dense search (dùng query đã strip jurisdiction) ---
     question_for_dense = _strip_jurisdiction_for_dense(question)
-    
+
     query_vector = encode_text(model, question_for_dense)
     dense_results = qdrant_client.query_points(
         "legal_texts",

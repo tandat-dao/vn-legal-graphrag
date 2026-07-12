@@ -10,7 +10,6 @@ Cơ chế:
 """
 import json
 import logging
-from typing import Any
 
 import anthropic
 
@@ -47,12 +46,12 @@ def map_component_to_concepts(
     core_data: dict,
 ) -> list[str]:
     """Phân loại text của component vào danh sách concept_ids.
-    
+
     Args:
         client: Anthropic client.
         text: Nội dung của Component / TextUnit.
         core_data: Dữ liệu từ data/ontology/core_v1.json.
-        
+
     Returns:
         Danh sách các concept_id hợp lệ.
     """
@@ -73,7 +72,7 @@ def map_component_to_concepts(
             messages=[{"role": "user", "content": text}],
         )
         raw = message.content[0].text.strip()
-        
+
         # Strip markdown fence nếu có
         if raw.startswith("```"):
             raw = raw.split("```", 2)[1]
@@ -82,11 +81,11 @@ def map_component_to_concepts(
             raw = raw.strip()
 
         parsed = json.loads(raw)
-        
+
         if not isinstance(parsed, list):
             logger.warning(f"Ontology Mapper trả về không phải list: {parsed}")
             return []
-            
+
         # Lọc bỏ hallucinated concepts
         mapped_concepts = []
         for cid in parsed:
@@ -95,7 +94,7 @@ def map_component_to_concepts(
                 mapped_concepts.append(cid_str)
             else:
                 logger.warning(f"Drop ngoại lai concept_id: {cid_str}")
-                
+
         return mapped_concepts
 
     except json.JSONDecodeError as e:

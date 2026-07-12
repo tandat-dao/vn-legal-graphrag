@@ -70,7 +70,7 @@ def _aggregate(results: list[dict]) -> dict:
 
 def _aggregate_repro_n3(filenames: list[str]) -> dict:
     """Compute mean across N runs cho v2.6 final config."""
-    import math, statistics
+    import statistics
     aggs = []
     for fname in filenames:
         path = DATA_DIR / fname
