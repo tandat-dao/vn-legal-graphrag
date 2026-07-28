@@ -1,5 +1,287 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.8 | Cập nhật 2026-05-21**
+**Phiên bản 2.22 | Cập nhật 2026-07-10**
+
+> **v2.22 — Cập nhật 2026-07-10 (KHÂU ĐÁNH GIÁ HOÀN TẤT — GT freeze 137 câu + chiến dịch eval v1/v2 + Fix A. Kế tiếp: VIẾT BÁO CÁO):**
+>
+> **1. GT v2 FREEZE 137 câu (2026-07-08).** [B] review chéo 150 câu → 27 fix: bỏ 13 OOS hộ tịch (kết hôn/XNTTHN/khai tử/nhận cha-mẹ-con — ngoài 6 thủ tục), relabel V135/V136→gap1, sửa 9 đất đai (gồm lỗi data Điều 10 NĐ112 bị NĐ226/2025 Đ5K2 sửa toàn bộ — thêm annotation + re-ingest, Amendment 322→323) + 4 hộ tịch/ncn. Freeze SHA256 `bd2c5eaf…f146`, tag `gt-v2-freeze`, pre-register `docs/GT_FREEZE.md`. Triage: `docs/GT_REVIEW_TRIAGE.md`.
+>
+> **2. Chiến dịch eval hoàn tất (Gemini, 137 câu).** Số chốt cho Chương 4 ở **`docs/V2_RESULTS.md`**: GraphRAG v2 **N=3 F1 Khoản 0.578±0.004** vs baseline 0.435±0.008 — **Δ+0.143, 95% CI [0.061,0.225], Wilcoxon p=0.0015\*\*** (E0). Bậc thang E2a: oracle 0.858 > graphrag 0.578 ≈ bm25 0.571 > baseline 0.435 > closed-book 0.102. Double-dissociation E1: Gap3/4 VỮNG (no-traversal −0.091/−0.130), Gap1 ok (−0.041), **Gap2 limitation** (jurisdiction net-hại +0.182). E2b per-domain: dat-dai 0.617 / ho-tich 0.580 / ncn 0.392. E3: retrieval_fail 32→21 nhờ Fix A.
+>
+> **3. Fix v2 + negative results.** **Fix A** (commit `3efd0e8`, cải tiến hậu kiểm duy nhất thành công): jurisdiction=None→quét mọi tỉnh; gap2 0.454→0.517, jur=None 0→0.328, 0 regress. **3 fix thất bại đã revert** (ghi Limitations): 2 thí nghiệm prompt under-cite (recall bất biến — Gemini-inherent), temporal neo bản-cũ (regress Gap4). Over-cite 161 phần lớn GT-artifact (32% same-norm) → precision under-measured.
+>
+> **4. Bug hạ tầng đã fix trong chiến dịch** (commit riêng): `aggregate()` + `expanded_eval` crash sort None (theme/juris=null của GT v2 — `8b07a95`, `ec7645c`); baseline collection stale thiếu 15/32 norm (quên rebuild sau ingest corpus B — suýt làm baseline=0 trên 68 câu hộ tịch); validation `--systems` chặn bm25/closed-book/oracle (`9ab28c8`); `_TARGET` verify_gt 150→137 (`2167a7b`). **Gotcha mới:** N=3 dồn ~1800 call/đêm → Vertex **429 RESOURCE_EXHAUSTED** làm hỏng 4 mẫu (F1 sụp giả) — đã cách ly `data/evaluation/quarantine_429/`, chỉ dùng mẫu 0-lỗi-429; lần sau giãn nhịp.
+>
+> **5. Việc tiếp theo:** **(a) VIẾT BÁO CÁO** — đề cương + Chương 1 đã nháp (`docs/thesis/`), Ch4 dùng V2_RESULTS.md; **(b) E2c** — sinh phiếu chấm mù từ đáp án v2 (`human_eval sheets`) → bạn-luật + người thân chấm (cùng 1 mẫu); **(c)** rotate key Gemini/Vertex trước bảo vệ; **(d)** V149 thiếu dấu review B (kiểm khi tiện).
+
+> **v2.21 — Cập nhật 2026-07-06 (EVAL SET V2 HOÀN THÀNH — 150 câu, verify --final PASS):**
+>
+> **1. Bộ GT eval set v2 soạn xong 150/150 câu** (`data/evaluation/test_set_v2.json`), theo `docs/GT_AUTHORING_GUIDE.md`. Phân bổ: gap1 25 (7 bộ archetype song song 3 domain), gap2 26 (6 minimal-pair liên tỉnh, 2 cặp ĐẢO đáp án Có/Không), gap3 25 (chuỗi ủy quyền/tinh-chỉnh/AMENDS, dài nhất 3 văn bản), gap4 25 (regime-diff 2013/2024, 2 component CTV-kép, span-regime, mô hình 2 cấp), negative 14 (8 obvious + 6 trap verified-absent), underspecified 8 (bảo vệ D-25, có bản bất-đối-xứng), composite 8 (có câu 4-gap + liên-lĩnh-vực NCN+hộ tịch), register 19 (khẩu ngữ, citation giữ nguyên câu gốc). Theme: dat-dai 61/ho-tich 52/ncn 29/null 8; difficulty: easy 40/medium 59/hard 51. **Mọi citation verify cơ khí ngược corpus** (`python -m src.evaluation.verify_gt --final` PASS).
+>
+> **2. Sửa 3 lỗi data corpus B phát hiện khi soạn** (commit riêng từng lỗi): NĐ123 `implements: null` → `luat-ho-tich-2014` (thiếu cạnh IMPLEMENTS trực tiếp — Gap 3); 9+6 annotation NĐ 07/2025 ghi nhầm hiệu lực 09/01/**2019** → 09/01/**2025** (NĐ123 + NĐ87 — đầu độc Gap 4); đã re-ingest, graph xác nhận 18/18 Amendment đúng date, cạnh NĐ123→Luật HT có. **Việc B hậu kiểm:** 3 fix trên + source_url NĐ123 (trỏ nhầm NĐ104) + typo '4.500.000 triệu đồng' NĐ114 Đ6.
+>
+> **2b. Khâu đánh giá — code đã build (2026-07-07, chờ GT freeze để chạy đo):** **E1 ablation** `src/retrieval/ablation_config.py` (7 mode cắt CẤP CẠNH — IMPLEMENTS/AMENDS tách riêng, giải confound Gap3/4; wired `run_evaluation --ablation`); **E2a baseline ladder** — `bm25` (`src/baseline/bm25_rag.py` Okapi tự cài), `closed-book` (`src/baseline/closed_book.py`), `oracle` (`src/evaluation/oracle.py`), cùng naive RAG cũ (`run_evaluation --systems graphrag,baseline,bm25,closed-book,oracle`). 277 test pass. **Chưa chạy đo** (chờ test_set_v2 freeze). Review sheet GT: `src/evaluation/build_review_sheet.py` → `data/evaluation/GT_REVIEW.html`.
+>
+> **3. Việc tiếp theo cho GT:** [A] + [B] REVIEW CHÉO từng câu (guide §8; [B] duyệt đất đai của [A], [A] duyệt hộ tịch/NCN của [B]) → sửa nếu cần → chạy lại verify → **FREEZE + pre-register (commit hash vào E0) TRƯỚC khi chạy bất kỳ eval nào trên bộ này**. Dev set 26 câu cũ (`test_set_dat_dai.json`) chính thức là DEV SET (contaminated D-10/D-11), không dùng báo số cuối. Lưu ý harness: nhóm underspecified (jurisdiction=null) eval KHÔNG bơm force_jurisdiction — cần sửa `run_evaluation` skip inject khi item.jurisdiction=null (chưa làm).
+
+> **v2.20 — Cập nhật 2026-07-06 (Gỡ Confirmation Loop — D-25):**
+>
+> **Gỡ bỏ Confirmation Loop** khỏi toàn hệ thống. Lý do: hệ là **1Q-1A (không đa lượt)** → "hỏi lại khi thiếu field" chỉ dừng ở **ngõ cụt** (không nhận được câu trả lời tiếp), lại **không đóng góp khoa học** và eval **luôn bypass** nó. Gỡ: `query_planner` (`is_complete`/`missing_fields`/`_compute_completeness`/`build_confirmation_prompt`/`build_question_framework`), `pipeline` (nhánh dừng-hỏi + field `confirmation_needed`/`confirmation_prompt` + param `bypass_completeness`), `demo`/`run_evaluation`/`naive_rag` (bỏ truyền bypass + key confirmation trong results). **Bảo toàn kết quả canonical**: `force_jurisdiction` đổi điều kiện sang `jurisdiction is None` (tương đương → eval Gemini/Claude KHÔNG xê dịch). Demo giờ luôn best-effort. Refactor 12 file, xóa 12 test tính năng gỡ → **254 test pass**. Side-fix: `precache_demo` param stale `llm_fallback=`→`llm_mode="claude"`. **Ảnh hưởng GT plan:** bỏ dạng câu "thiếu-field→hỏi-lại". *(Chương 3 luận văn + outline 5.3 cần bỏ Confirmation Loop khỏi phần Limitations/UX khi viết.)*
+
+> **v2.19 — Cập nhật 2026-06-30 (Corpus B re-ingest đa-domain + Multi-LLM mode + Gemini-only validated):**
+>
+> **1. Corpus B vào graph (D-23):** pull + làm sạch 13 file Hộ tịch/Nuôi con nuôi của [B] (sửa NQ 124 đa-theme hướng A, `amended_by_norms`, heading typo, comment template, spacing). Hỗ trợ `implements` đa-cha (string\|list\|null). **Re-ingest** → graph đa-domain: **32 Norm (dat-dai 20, ho-tich 8, nuoi-con-nuoi 4)**, 4548 Component, 6394 MAPS_TO_CONCEPT. D-23 verify data thật: NĐ 120 → [Luật Hộ tịch, Luật NCN]; TT 04 → [NĐ 123, Luật Hộ tịch].
+>
+> **2. Multi-LLM provider (D-24):** 3 mode `claude` \| `claude-fallback` \| `gemini` cho cả demo lẫn eval (`--llm-mode`). Gemini chạy **Vertex AI qua ADC** ($300 Cloud credit; vùng VN không free tier Developer API). Wrapper trong suốt; mặc định `claude` → eval reproducible. Judge giữ Claude Haiku cố định. Fix bug truncation (sàn `max_output_tokens=2048` cho thinking model). Bake-off: generator `gemini-2.5-pro` (≈ Claude), planner/ontology `gemini-2.5-flash`; model 3.x mới hơn lại KÉM hơn.
+>
+> **3. Gemini-only validated** (full 26): GraphRAG-Gemini **F1 0.549 / NormR 0.766** vs Baseline-Gemini 0.356/0.554 → **Δ kiến trúc +0.193 F1** (≈ Δ Claude +0.206) = ưu thế kiến trúc LLM-agnostic. 2 negative result tune NormR (prompt provider-aware; structural backfill) đều đánh đổi F1 → REJECT, chấp nhận NormR 0.766 (đặc tính Gemini).
+>
+> **4. Demo resilience:** Lớp 1 pre-cache (`precache_demo.py`) + Lớp 2 Gemini fallback. 266 test pass.
+>
+> **Chờ [B]:** sign-off cross-check (TASK-05) + test set Hộ tịch/Nuôi con nuôi → mở Gap 1 + E1 ablation đầy đủ.
+
+> **v2.18 — Cập nhật 2026-06-29 (Kiến trúc Đánh giá E0–E3 — design spec, chưa triển khai):**
+>
+> **Bối cảnh:** session bàn sâu về phương pháp luận đánh giá. Kết luận: evaluation hiện tại (Full GraphRAG vs Naive RAG) chứng minh hệ thống *tốt*, nhưng chưa chứng minh nó tốt *vì đúng những lý do luận văn claim* (từng thành phần KG giải đúng từng gap). Thiết kế lại toàn bộ khâu đánh giá thành kiến trúc 4 khối, lưu vào **[docs/EVALUATION_ARCHITECTURE.md](EVALUATION_ARCHITECTURE.md)** (design spec để các session sau dựa theo). Quyết định **D-22**.
+>
+> **4 khối (triết lý "Claim → Evidence"):**
+> - **E0 — Tiền đề:** độ tin cậy phép đo. Reproducibility N=3 ✅ + significance (bootstrap CI + Wilcoxon) ✅ đã có; **cần VIẾT** GT provenance + metric validity (làm được ngay, không cần API/corpus).
+> - **E1 — Cơ chế (phần thiếu, quan trọng nhất):** ablation leave-one-out với **double dissociation** — `no-theme`/`no-jurisdiction`/`no-traversal`/`no-temporal` phải sụp ĐÚNG gap tương ứng VÀ ổn định ở gap khác. Build `ablation_config.py` (cờ tắt thành phần trong `run_pipeline`).
+> - **E2 — Hệ thống:** (2a) baseline ladder đa-**trục** — thêm **closed-book** ("có cần retrieval?"), **auto-GraphRAG** ("có cần ontology?" — killer học thuật), **oracle** (trần); (2b) consistency per-domain = mảnh chính Gap 1; (2c) **bỏ BERTScore → người chấm + máy chấm** (chủ-tớ, validated qua kappa).
+> - **E3 — Giới hạn:** failure taxonomy ✅ + negative results (D-12/19/20) ✅ giữ làm mục chính thức + error severity (tham vọng).
+>
+> **Mỗi gap có gói bằng chứng đa nguồn** (ablation + so sánh + bổ trợ). Phân biệt cứng: baseline (thắng) ≠ ablation (sụp) ≠ upper bound (tiến gần).
+>
+> **Trạng thái:** đây là **design spec, CHƯA code**. Làm được ngay (không chờ B): viết E0 methodology, thiết kế `ablation_config.py` + `human_eval.py` rubric, BM25/closed-book/oracle baseline. **Blocker chờ corpus [B]:** chạy ablation suite E1 + E2b consistency + auto-GraphRAG. Đồng bộ với `project_eval_tier1_deferred`.
+
+> **v2.17 — Cập nhật 2026-06-23 (Evaluation Tier 0: mở rộng thang đo $0 — significance + citation behavior; Tier 1 ablation HOÃN tới khi corpus đủ):**
+>
+> **Bối cảnh:** 2 hướng thuật toán (multi-agent verifier, cross-encoder/finetune embedding) đã đi qua, phần lớn cho negative result. Giá trị biên cao nhất giờ ở **đo lường** (thêm thang đo, chứng minh ưu/nhược kiến trúc) chứ không thêm cơ chế. Chia 2 tier theo chi phí: **Tier 0 = $0 offline** (tái dùng results JSON đã chạy), **Tier 1 = ablation tốn API** (chạy qua mọi câu).
+>
+> **Phát hiện trước khi code:** `metrics.aggregate` ĐÃ có per-gap/per-theme/precision-recall/latency → KHÔNG dựng lại; chỉ bổ sung 3 thứ còn thiếu.
+>
+> **1. Module [src/evaluation/expanded_eval.py](../src/evaluation/expanded_eval.py)** ($0, đọc 2 results JSON sẵn, KHÔNG API/DB):
+> - **Significance** — paired bootstrap 95% CI (10000 resamples, seed=42 deterministic) + Wilcoxon signed-rank + win/loss/tie. Trả lời "N=26 nhỏ → +Δ có thật không".
+> - **Citation behavior** — over-citation rate, mean pred/gt count, precision–recall gap (chẩn đoán cite thừa vs bỏ sót).
+> - **Per-gap + per-jurisdiction breakdown** tái dùng `cit_matches`; **report tiếng Anh hợp nhất** cho luận văn.
+> - **Fix alignment quan trọng:** nhãn `gap_type` đồng bộ theo `test_set_dat_dai.json` HIỆN TẠI theo `id` — baseline run 05-19 gộp gap4 vào gap3 *trước* khi relabel; nếu đọc nhãn lưu trong run sẽ lệch grouping (gap4 baseline = N/A). Lấy nhãn từ test set = single source of truth.
+>
+> **2. Kết quả canonical** (graphrag `20260528-142757` vs baseline `20260519-204426`, N=26, [EXPANDED_EVAL_20260528.md](../data/evaluation/EXPANDED_EVAL_20260528.md)):
+>
+> | Metric | Δ (G−B) | 95% CI | Wilcoxon p | Win/Loss/Tie |
+> |---|---:|---|---:|---:|
+> | F1 Khoản | **+0.281** | [0.154, 0.417] | 0.001 *** | 18/3/3 |
+> | F1 Điều | +0.298 | [0.174, 0.430] | <0.001 *** | 18/3/3 |
+> | Norm Recall | +0.257 | [0.108, 0.424] | 0.007 ** | 10/1/13 |
+>
+> - **Ưu thế KG có ý nghĩa thống kê** (CI loại trừ 0) — chống phản biện "26 câu may rủi".
+> - **Per-gap:** Gap4 phiên bản **Δ +0.522** (lớn nhất; baseline 0.071 — KG temporal/CTV/AMENDS quyết định); Gap2 địa phương mạnh nhất tuyệt đối (0.726, hard-filter jurisdiction).
+> - **Nhược điểm trung thực:** câu `multi-juris` GraphRAG **thua** baseline (Δ −0.244) → ghi vào Limitations.
+> - **Citation behavior:** baseline over-cite nhiều hơn (0.958 vs 0.792); cả hai recall > precision (xu hướng cite thừa — chừa đất Verifier Tier 1 đã KEEP ở D-18).
+>
+> **3. Test:** `tests/test_expanded_eval.py` — 10 case deterministic ($0 mock). Toàn suite **230 pass**. Quyết định **D-21**.
+>
+> **Caveat:** cặp canonical lệch ngày (graphrag post prompt-v2.9 05-28 vs baseline 05-19); GT + test set cố định nên so sánh hợp lệ, nhưng muốn sạch tuyệt đối phải chạy lại cùng phiên (thuộc Tier 1).
+>
+> **HOÃN Tier 1 (ablation suite):** formalize `dense-no-KG` + BM25 + tắt từng thành phần KG (jurisdiction / temporal / graph-traversal / hybrid off) thành system trong `run_evaluation`, chạy qua mọi câu → **tốn API**. Chỉ chạy khi **thành viên B nạp đủ corpus multi-domain** (hộ tịch + nuôi con nuôi) — ablation full-run chỉ có nghĩa khi corpus hoàn chỉnh, tránh chạy lại. Prototype dense-no-KG (10 câu) phiên trước đã cho GraphRAG ≈ gấp đôi F1 (0.618 vs 0.302) → tín hiệu mạnh, chờ corpus để chạy chuẩn full 26.
+>
+> **Tiếp theo (khi corpus B sẵn sàng):** (a) formalize dense-no-KG + BM25 baseline; (b) ablation từng thành phần KG; (c) chạy lại cặp graphrag+baseline cùng phiên để bỏ confound lệch ngày.
+
+> **v2.16 — Cập nhật 2026-06-23 (Retrieval-metric harness $0 + go/no-go finetune embedding):**
+>
+> **Bối cảnh:** trước khi đổ công finetune embedding (corpus nhỏ → rủi ro), cần xác nhận có "đích" để distill. Dựng [src/evaluation/retrieval_eval.py](../src/evaluation/retrieval_eval.py) đo **retrieval thuần (KHÔNG generation → $0)**: Recall@k + MRR cấp Điều/Khoản, so DENSE (BGE-M3) vs CROSS-ENCODER rerank trên cùng pool. (Planner cached ~$0, dense+CE local. Cũng là phần harness #4.)
+>
+> **Kết quả go/no-go (24 câu non-negative, $0):**
+>
+> | Metric | DENSE | RERANK | Δ |
+> |---|---:|---:|---:|
+> | MRR Điều | 0.625 | **0.758** | **+0.132** |
+> | MRR Khoản | 0.591 | 0.656 | +0.065 |
+> | Recall Điều@5 | 0.642 | 0.675 | +0.033 |
+> | Recall Khoản@5 | 0.555 | 0.609 | +0.054 |
+> | Recall Điều@10 | 0.700 | 0.714 | +0.014 |
+>
+> **→ GO (đủ điều kiện):** cross-encoder **nâng MRR rõ (+0.13 cấp Điều)** — xếp đúng chunk lên cao khi nó có trong pool (đúng tín hiệu disambiguation Q021 MRR 0.50→1.00, Q022 0.20→1.00, Q025/Q026 0.50→1.00). **Có đích thật để distill** vào BGE-M3.
+>
+> **Nuance trung thực:** gain chủ yếu ở **ranking (MRR)**, Recall@10 gần phẳng → đây là lý do ablation F1 trước net-trung tính (LLM đọc cả top-25 nên xếp lại không đổi context). Finetune embedding để có ích cần (a) context nhỏ hơn để ranking quan trọng, HOẶC (b) cải thiện cả Recall. Q024 normR=0 (Stage-1 miss norm) → lỗi upstream, finetune không chữa được.
+>
+> **Tiếp theo:** pipeline finetune — mine hard-negative qua graph (cùng Norm/tier) + cross-encoder soft-label → distill BGE-M3, đo bằng harness này ($0 gate) trước khi tốn generation.
+
+> **v2.15 — Cập nhật 2026-06-23 (Cross-encoder retrieval modifier: ablate → REJECT → gỡ integration; giữ module làm teacher):**
+>
+> **Bối cảnh:** direction 2 (retrieval precision) — cross-encoder `bge-reranker-v2-m3` (LOCAL $0) vá embedding blindness disambiguation cấp Điều (P-08/Q022: bi-encoder chọn "Điều 4 Hiệu lực" thay "Điều 1 hạn mức").
+>
+> **Thử 2 cách tích hợp + ablation 7-câu** (subset thiên vị: Q022/Q021/Q020/Q003/Q025/Q024 headroom + Q001 canary; base cache vs rerank fresh):
+> - **(A) Rerank Floor** (thay Dense Floor ở Pass 0): F1 Khoản **+0.019** NHƯNG **regression Q021** (1.00→0.80).
+> - **(B) Blend** (cộng `rerank_rank` thành tín hiệu RRF thứ 3, GIỮ Dense Floor): F1 Khoản **+0.048** (chữa Q021) NHƯNG **NormR −0.071 + F1 Điều −0.050** — cross-encoder kéo chunk lexically-relevant nhưng SAI norm lên (Q022 NormR 1.00→0.50, Q003 F1 Điều 0.29→0.00).
+>
+> **Kết luận:** cả 2 là **đánh đổi, không thắng sạch** (đặc biệt B hi sinh NormR — metric quan trọng cho QA pháp lý). Giống **D-12** → **REJECT làm default + GỠ integration** khỏi `hybrid_search`/`pipeline`/`demo`/`run_evaluation` (giữ D-10: dense là ground signal). `semantic_filter.py` restore về bản sạch (pre-rerank).
+>
+> **GIỮ `src/retrieval/reranker.py`** (+ test, LOCAL $0, **CPU** vì MPS treo 3.5h) — REPURPOSE làm **teacher** sinh hard-negative/soft-label cho **finetune embedding** (bước direction-2 kế tiếp). Quyết định D-20. Tổng suite **210 pass**.
+>
+> **Lưu ý phương pháp:** ablation trên subset thiên vị + confound (base cache vs rerank fresh) → kết quả định hướng, không phải tác động trung bình. Nhưng đủ rõ để không bật mặc định.
+
+> **v2.13 — Cập nhật 2026-06-23 (Đo Verifier: Tier 1 thắng / Tier 2 reject + fix bug snippet Phụ lục):**
+>
+> **Tier 1 (grounding, $0) — kết quả dương:** ablation offline trên run canonical 20260520-211930 (26 câu, $0 vì tái dùng answer+context đã lưu): **F1 Khoản 0.524 → 0.547 (+0.023)**, F1 Điều +0.023, NormR −0.010. Bỏ đúng **7 citation bịa** (ungrounded) ở 4/26 câu (Q008/Q024/Q025 ▲, Q019 =). Wiring live xác nhận trên 3 câu random.
+>
+> **Tier 2 (LLM support-judge) — REJECT làm bộ lọc drop (D-19):** thử live trên 3 câu over-cite (Q004/Q008/Q019):
+> - Q004 (over-cite thật 3 vs GT 2): judge giữ cả 3 — citation thừa vẫn grounded + được chunk khẳng định → **support-judge KHÔNG bắt được over-cite** ("support" ≠ "đáp án GT tối thiểu").
+> - Q008: flag cả 2 citation **GT đúng** (mismatch cấu trúc Phụ lục); Q019: flag citation mà metric tính match → **hard-drop sẽ REGRESS F1** (over-prune).
+> - Phần lớn "over-cite" là **metric/GT artifact** (Q004 citation thừa thực ra đúng, GT thiếu) → drop = tối ưu theo thước đo lỗi.
+> - Kết luận: **giữ Tier 1, reject Tier 2-support** (giống D-12). Future work: relevance/necessity-judge + GT completeness + Tier 2 flag-only-for-reporting.
+>
+> **Bug fix:** `faithfulness._extract_answer_snippet` chỉ bắt regex `Điều`, bỏ sót `[Phụ lục ...]` → fallback 400 ký tự đầu → judge nhìn sai ngữ cảnh → flag oan (chính là Q008). Đã fix dispatch theo `loai` (cải thiện cả faithfulness Tier 2 metric lẫn verifier). `tests/test_faithfulness.py` (5 case, $0 mock). Toàn suite 203 pass.
+>
+> **Tiếp theo:** sang nhánh **cross-encoder rerank** (direction 2 — retrieval precision, $0 local).
+
+> **v2.12 — Cập nhật 2026-06-23 (Verifier agent — tầng multi-agent Generator → Verifier → prune):**
+>
+> **Bối cảnh**: Phân tích lại bottleneck — Norm Recall đã 0.93 nhưng F1 Khoản chỉ 0.539; root-cause (ROOT_CAUSE_ANALYSIS) chỉ ra **over-citation là nguyên nhân DOMINANT** của precision thấp (47 citation dư). Tức retrieval gần như xong, phần mất điểm nằm ở việc Generator cite quá tay / sai Điều mà không ai kiểm lại. Đây là khởi đầu hướng nghiên cứu **multi-agent** (do [A] đảm nhận, cùng nhánh retrieval-precision cross-encoder → finetune embedding).
+>
+> **1. Verifier agent** ([src/retrieval/verifier.py](../src/retrieval/verifier.py)) — mẫu Self-Refine/CRITIC, đặt sau Generator:
+> - **Tier 1 — grounding (deterministic, $0)**: drop citation không có header tương ứng trong CONTEXT (bắt hallucination thô). Tái dùng `faithfulness._citation_in_context`.
+> - **Tier 2 — support (Haiku, tùy chọn)**: judge chunk có thực sự khẳng định claim không; mặc định UNSUPPORTED → "flag" (giữ, bảo thủ chống over-prune), `drop_unsupported=True` để prune cứng. Tái dùng `faithfulness._judge_citation`.
+> - Thiết kế = "faithfulness metric nâng thành filter inline" — không circular import (faithfulness chỉ phụ thuộc anthropic/stdlib).
+>
+> **2. Tích hợp** ([pipeline.py](../src/pipeline.py)): tham số `verify` / `verify_tier`, **mặc định `verify=False` → hành vi pipeline cũ KHÔNG đổi**. Cờ `--verify` / `--verify-tier {0,1,2}` cho [demo.py](../src/demo.py) + [run_evaluation.py](../src/evaluation/run_evaluation.py) → ablation ±verifier. Verifier chỉ áp dụng GraphRAG (không baseline). `PipelineResult` thêm field `verifier`.
+>
+> **3. Test**: `tests/test_verifier.py` — 13 case **mock hoàn toàn** ($0 API). Toàn suite 198 pass (185 cũ + 13). Import sạch, không circular.
+>
+> **Pending (cần API — chờ duyệt chi phí)**: chạy ablation ±verifier trên test set (N≥3) để đo F1/precision delta thực tế. Hiệu quả định lượng CHƯA đo. Quyết định D-18.
+
+> **v2.11 — Cập nhật 2026-05-30 (2-mode trả lời: General gọn vs IRAC tư vấn + order-independent citation parser):**
+>
+> **Bối cảnh**: Hệ thống hướng tới 2 đối tượng — người dân (cần đáp án trực tiếp, gọn) và người làm luật / câu hỏi có tình huống cụ thể (cần phân tích chi tiết). Áp một phong cách trả lời cho mọi câu vừa hao token vừa kém UX: quan sát thấy câu "giá cấp sổ đỏ HCM?" bị LLM nhồi hết hạn mức/lệ phí/tỷ lệ 30-50-100% thay vì đi thẳng vào phí được hỏi.
+>
+> **1. Prompt directness + abstention** ([context_assembler.py](../src/retrieval/context_assembler.py)):
+> - Thêm "NGUYÊN TẮC TRẢ LỜI ĐÚNG TRỌNG TÂM" ưu tiên cao nhất, vô hiệu hóa các rule "BẮT BUỘC..." khi không liên quan câu hỏi.
+> - Làm mềm rule nghĩa vụ tài chính: trả lời trọng tâm khoản được hỏi thay vì liệt kê mọi con số trong CONTEXT.
+> - Nâng abstention thành rule cứng: thiếu căn cứ → câu chuẩn "Tôi không đủ thông tin để cung cấp câu trả lời chính xác cho bạn." (không dùng kiến thức LLM chế câu trả lời); partial → trình bày phần có + nêu rõ phần thiếu.
+>
+> **2. 2-mode response style** (`build_messages(q, c, mode)`):
+> - `general` (mặc định): câu trả lời gọn, đi thẳng đáp án, cite nguồn trực tiếp.
+> - `irac`: cấu trúc Vấn đề / Căn cứ pháp lý / Phân tích / Kết luận cho câu hỏi có tình huống cụ thể; Rule chỉ trích từ CONTEXT (không bịa), fallback general khi thiếu fact.
+> - CORE rules đặt trước, mode block đặt sau → CORE vẫn cache chung (giữ D-15 prompt caching).
+>
+> **3. Auto-detect mode** ([query_planner.py](../src/retrieval/query_planner.py)):
+> - Thêm field `response_mode` vào QueryPlan: phân biệt câu tra cứu chung (general) vs câu mô tả tình huống cá nhân (irac). Resolve: explicit override > planner auto-detect > "general".
+> - Demo `--mode {auto,general,irac}`; eval `--response-mode {auto,general,irac}`.
+> - Verify auto-detect 4/4 đúng trên câu demo; câu khiếu nại gốc ("giá sổ đỏ") đã đi thẳng vào phí, IRAC chạy đúng 4 heading + dùng abstention partial khi thiếu căn cứ.
+>
+> **4. Khung hướng dẫn cách hỏi khi theme=None** ([query_planner.py](../src/retrieval/query_planner.py)):
+> - `build_question_framework()`: khi không xác định được lĩnh vực, thay câu hỏi cụt bằng công thức `[thủ tục]+[địa phương]+[tình huống]` + 3 ví dụ mẫu. Demo panel confirmation render Markdown.
+>
+> **5. A/B eval 2-mode** (12 câu / 4 gap, [test_subset_2mode.json](../data/evaluation/test_subset_2mode.json) + [notebooks/phase4_2mode_eval.ipynb](../notebooks/phase4_2mode_eval.ipynb)):
+> - General F1 Khoản 0.466 vs IRAC 0.439 (Δ −0.027, trong nhiễu) — **2 mode tương đương F1**, khác ở phong cách. Win/Loss/Tie = 2/2/8.
+> - IRAC trội ở câu đa tầng phức tạp (Q011 NormR 0.33→1.0); ép IRAC cho câu tra cứu đơn có thể hại (Q007) → củng cố thiết kế auto-detect (mỗi loại câu một mode).
+>
+> **6. Order-independent citation parser** ([answer_generator.py](../src/retrieval/answer_generator.py)):
+> - Điều tra Q007 (IRAC F1 0.50→0.00) phát hiện **metric artifact**: answer đúng (bảng phí đầy đủ) nhưng cite `[Điểm đ, Khoản 2, Phụ lục, ...]` (đảo thứ tự) → regex cũ cố định thứ tự fail → trả [].
+> - Fix: `parse_citations` split block `[...]` theo dấu phẩy, phân loại từng phần theo prefix — bất kể thứ tự. Tương tự `parse_sections` đã robust.
+> - Verify: 13 unit case + 17 pytest pass; re-parse 26 câu canonical (run 20260520-211930) **0 regress**, Q008 ▲0.33→0.57 (cùng pattern Phụ lục đảo được cứu), aggregate F1 +0.0099. → F1 cũ bị đánh giá thấp nhẹ ở vài câu Phụ lục NQ HĐND do format-order, không phải lỗi retrieval.
+>
+> **Eval impact**: `run_evaluation` mặc định `--response-mode auto` (= general cho câu tra cứu); 26-câu canonical metric **không đổi về bản chất** (chỉ Q008 +0.24 nhờ parser fix). Số thesis ổn định.
+>
+> **Files thay đổi**: `context_assembler.py`, `query_planner.py`, `answer_generator.py`, `pipeline.py`, `baseline/naive_rag.py`, `demo.py`, `run_evaluation.py`, `test_subset_2mode.json` (mới), `notebooks/phase4_2mode_eval.ipynb` (mới), `tests/test_query_planner.py`.
+>
+> **Pending**: re-run notebook 2-mode với parser mới (Q007 IRAC sẽ về ~0.5); cân nhắc N=3 canonical rerun với parser order-independent để cập nhật ABLATION_MATRIX.
+
+
+
+> **v2.10 — Cập nhật 2026-05-28 (Defense-in-Depth chống Thuật ngữ Giả: Prompt Sanitization B1 + Term Validator B2):**
+>
+> **Bối cảnh**: Sau v2.9 (fix hallucination L1), demo CLI một câu hỏi span-regime phát hiện LLM tự tạo cụm **"(nguyên tắc cắt ngang)"** — thuật ngữ pháp lý GIẢ, không có trong văn bản pháp luật Việt Nam thật, nguồn gốc từ shortcut nội bộ `(cắt ngang)` trong prompt template. Phân tích cho thấy đây là 1 case của class bug lớn hơn: **bất kỳ shorthand/label nào tôi viết trong prompt đều có thể bị LLM promote thành thuật ngữ giả**. Sửa từng case không scalable.
+>
+> **Cách tiếp cận khoa học (3-layer defense-in-depth)**:
+>
+> **B1 — Prompt sanitization (chặn nguồn leak structural)** ([context_assembler.py:248](../src/retrieval/context_assembler.py#L248)):
+> - Loại bỏ TẤT CẢ parenthetical shortcut/label khỏi prompt: `(lex superior)`, `(lex posterior)`, `(lex specialis)`, `(cắt ngang)` → thay bằng mô tả tiếng Việt đầy đủ.
+> - Thêm meta-rule mạnh: *"TUYỆT ĐỐI KHÔNG tự tạo tên gọi/nhãn riêng cho nguyên tắc, học thuyết, quy tắc, khái niệm pháp lý. Nếu CONTEXT không gọi tên một nguyên tắc bằng cụm cụ thể, hãy MÔ TẢ bằng câu văn đầy đủ, KHÔNG rút gọn thành 'nguyên tắc X', '(X)', hay đặt cụm vào ngoặc kép như một thuật ngữ định danh."*
+> - Cấm cụm tiếng La-tinh xuất hiện trong output: "lex superior/posterior/specialis/lex…" — diễn đạt bằng tiếng Việt mô tả.
+>
+> **B2 — Term grounding validator (auto-detect post-generation)** ([src/evaluation/term_validator.py](../src/evaluation/term_validator.py)):
+> - Module độc lập extract candidate "thuật ngữ giả" từ câu trả lời LLM bằng 4 pattern:
+>   - `named_principle` (high-precision): "nguyên tắc/quy tắc/học thuyết X" — signature mạnh, không filter
+>   - `quoted` (heuristic): cụm trong `"..."` — apply `_looks_like_term` filter
+>   - `parenthetical` (heuristic): cụm trong `(...)` — apply filter
+>   - `bold` (heuristic): cụm `**X**` — apply filter
+> - `_looks_like_term` heuristic: loại các cụm có số (measurement), function word prefix ("không", "có", "tại"...), descriptive words ("phù hợp", "bắt buộc"), >5 từ.
+> - Mỗi candidate được validate bằng substring lookup vào (1) CONTEXT retrieve được, (2) corpus `data/raw/*.md`.
+> - Metric `grounding_rate = #grounded / #candidates_total` — analogue của citation existence_rate nhưng cho thuật ngữ.
+> - CLI: `python -m src.evaluation.term_validator results_*.json --corpus data/raw`.
+>
+> **B3 — Faithfulness metric extension** (chưa làm, để dành sau): tích hợp `terminology_grounding_rate` vào `faithfulness.py` để báo cáo cùng `citation_existence_rate`.
+>
+> **Validation kết quả**:
+> - Demo câu hỏi span-regime gốc: 0 candidate ungrounded (vs 1 trong v2.9). Câu trả lời không còn "(nguyên tắc cắt ngang)" — diễn đạt thay bằng "thời điểm cơ quan có thẩm quyền ra quyết định sẽ quyết định văn bản nào được áp dụng".
+> - 8 câu subset (Q008, Q011, Q019, Q022, Q023, Q024, Q025, Q026): **15 candidate terms / 0 ungrounded / 100% grounding rate**.
+> - Validator chạy trên run cũ 20260520-211930 (canonical N=3): phát hiện **16 ungrounded terms / 26 câu**, bao gồm tất cả các leak đã biết (SPAN-REGIME, cắt ngang, Quy định dẫn chiếu, chuyển giao thẩm quyền…) — chứng minh recall của detector.
+>
+> **F1 trade-off (8-câu subset)**: 0.586 (v2.9 iter2) → 0.569 (v2.10 B1) = −0.017, nằm trong nhiễu (Q008 σ=0.22 documented trong REPRODUCIBILITY_REPORT). Term grounding gain >> F1 marginal loss.
+>
+> **Tại sao tổng quát hơn từng-case-patch**:
+> - Câu hỏi mới thêm vào: validator tự động chạy, không cần audit thủ công
+> - Thuật ngữ mới LLM bịa: detector pattern catch (`named_principle` đặc biệt high-recall)
+> - Reproducibility cho thesis: có metric quantitative `grounding_rate` thay vì anecdotal "đã sửa Q022"
+> - Decision Log: D-16 (B1 prompt sanitization), D-17 (B2 term validator)
+>
+> **Files thay đổi**:
+> - `src/retrieval/context_assembler.py`: B1 prompt sanitization
+> - `src/evaluation/term_validator.py` (mới): B2 detector module
+> - `CLAUDE.md`: D-16, D-17
+> - `data/evaluation/results_graphrag_20260528-152726.json`: 8-câu B1 evidence
+
+> **v2.9 — Cập nhật 2026-05-28 (Hallucination Fix L1 + Anthropic Prompt Caching):**
+>
+> **Bối cảnh**: Phân tích faithfulness của run canonical 20260520-211930 (N=3) phát hiện 3 loại lỗi tinh vi:
+> - **F1 — Prompt label leakage**: Q022/Q023 output có cụm "Đây là câu hỏi **SPAN-REGIME**…" — nhãn kỹ thuật nội bộ từ prompt template `TEMPORAL #4` rò rỉ ra answer.
+> - **F2 — Citation slug vs số hiệu**: Q024/Q025 cite `[Điều 57 K2 a, Văn bản 47/2024/QH15]` — LLM dùng số hiệu pháp lý từ pretraining knowledge thay vì slug ID corpus.
+> - **F3 — Citation pointer misattribution**: Q019 cite `[Điều 10 K1-4, Văn bản nghi-dinh-226-2025-nd-cp]` — content đúng nhưng pointer sai (NĐ 226 sửa Điều 10 của NĐ 112, NĐ 226 không có Điều 10).
+> - **F4 — Malformed citation**: Q008 cite `[Phụ lục I và Phụ lục II - Ghi chú, …]` — gộp 2 phụ lục vào 1 label.
+>
+> **Tổng cộng 7/94 citations bịa (existence_rate = 92.6%) trên 4/26 câu.**
+>
+> **L1 prompt rewrite ([context_assembler.py:248](../src/retrieval/context_assembler.py#L248))**:
+> - Refactor `build_prompt(q, c) -> str` thành `build_messages(q, c) -> (system, user)` để hỗ trợ Anthropic prompt caching. `build_prompt()` giữ làm wrapper backward-compat.
+> - **Bỏ hoàn toàn nhãn `SPAN-REGIME` / `POINT-IN-TIME`** khỏi prompt — diễn đạt thuần Việt thay thế ("hồ sơ đang trong giai đoạn chuyển tiếp", "câu hỏi tại một thời điểm cụ thể").
+> - **Meta-rule chống leak**: "TUYỆT ĐỐI không sao chép vào câu trả lời bất kỳ nhãn kỹ thuật, mã viết tắt, hoặc cụm UPPERCASE nào xuất hiện trong các quy tắc".
+> - **Rule cứng về `Văn bản` field**: bắt buộc slug ID, "TUYỆT ĐỐI KHÔNG dùng số hiệu pháp lý gốc (47/2024/QH15, 31/2024/QH15…)".
+> - **Rule chống malformed**: "Mỗi citation chỉ chứa MỘT vị trí, không gộp 'I và II'".
+> - **Rule amendment (dual-cite mềm)**: cho phép cite cả văn bản gốc + văn bản sửa đổi khi cả 2 đều có content trực tiếp trong context. Sau iteration 1 phát hiện rule strict "KHÔNG cite văn bản sửa đổi" gây regression Q011 (-0.29) + Q026 (-0.33) vì GT của bạn dùng convention cite cả 2 — đã làm mềm trong iter2.
+>
+> **Anthropic prompt caching ([answer_generator.py:209](../src/retrieval/answer_generator.py#L209))**:
+> - System prompt (~2117 tokens, > 1024 minimum của Sonnet 4.6) đánh dấu `cache_control: ephemeral`.
+> - Cache hit từ request thứ 2 trở đi: input cost giảm ~90% trên phần system. TTL ~5 phút.
+> - Local prompt-hash cache vẫn được duy trì (hash trên `system + user` để invalidate khi prompt template đổi).
+>
+> **Validation methodology** (test pyramid để tiết kiệm API):
+> 1. **Iter1** (subset 6 câu lỗi gốc): F1 0.317 → 0.519 (+64%), hallucination 7 → 1, leak/bad-slug → 0. Phát hiện Q011/Q026 regression do rule strict.
+> 2. **Iter2** (subset 8 câu = 6 cũ + Q011 + Q026): F1 → 0.587, hallucination 1 → **0**. Trade-off Q024 (-0.33), Q023 (-0.25).
+> 3. **Regression 26 câu × 1**: F1 0.539 (N=3 old) → 0.554 (N=1 new), nằm trong nhiễu CI; hallucination 7 → 1; leak 2 → 0; bad-slug 2 → 0.
+> 4. **Confirm 13 câu random (seed=42)**: F1 0.406 → 0.474 (+0.068), **0 hallucination / 0 leak / 0 bad-slug**. Q004 lặp regression −0.33 (cùng câu xuất hiện 2 run liên tiếp — có thể là single-run variance, cần N=2+ confirm cho thesis).
+>
+> **Kết quả cuối (iter2, full 26 câu, N=1, sẽ rerun N=3 ở giai đoạn final report)**:
+>
+> | Metric | v2.8 (N=3) | v2.9 (N=1) | Δ |
+> |---|---:|---:|---:|
+> | F1 Khoản | 0.539 ± 0.021 | 0.554 | +0.015 (within CI) |
+> | F1 Điều | 0.567 ± 0.032 | 0.570 | +0.003 |
+> | NormR | 0.931 ± 0.005 | 0.936 | +0.005 |
+> | **Hallucinated citations** | 7 (trong 94) | **0–1** | **−86%** |
+> | **Prompt leak (SPAN-REGIME)** | **2 câu** | **0** | **fix triệt để** |
+> | **Bad slug (số hiệu thay vì slug)** | **2 câu** | **0** | **fix triệt để** |
+> | Negative correct | 100% | 100% | tied |
+>
+> **Documentation deliverable cho thesis**: bằng chứng cụ thể về hallucination → systematic fix → empirical validation, dùng làm case study trong chương "Engineering Trustworthy LLM Output" hoặc Limitations.
+>
+> **Files thay đổi**:
+> - `src/retrieval/context_assembler.py`: prompt rewrite (build_messages + meta-rules)
+> - `src/retrieval/answer_generator.py`: Anthropic prompt caching
+> - `data/evaluation/test_subset_hallucination.json` (mới): 8 câu cho iteration testing
+> - `data/evaluation/test_subset_regression13.json` (mới): 13 câu random seed=42 cho regression
+> - `CLAUDE.md`: D-14 (prompt L1 rewrite), D-15 (Anthropic prompt caching)
+>
+> **Pending**: full N=3 canonical rerun (sẽ làm ở giai đoạn final report) để cập nhật ABLATION_MATRIX + REPRODUCIBILITY_REPORT.
 
 > **v2.8 — Cập nhật 2026-05-21 (Gap 4 — Đa phiên bản + Q024 re-label + Baseline re-aggregate):**
 >
@@ -85,7 +367,7 @@
 > - Negative (n=2): 100% vs 100% tied
 > - Q026 evaluation artifact (baseline citation match từ refusal): nếu loại bỏ → Gap 4 baseline thực = 0.071 → improvement +700%
 >
-> **5. Thesis chapter skeleton ([thesis/CHAPTERS_OUTLINE.md](../thesis/CHAPTERS_OUTLINE.md))**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
+> **5. Thesis chapter skeleton (`thesis/CHAPTERS_OUTLINE.md` — đã gỡ 2026-07-11, thay bằng `docs/thesis/`)**: 5 chapters + Appendix với data refs cụ thể cho tác giả expand prose.
 >
 > **Tổng commits session 2026-05-19/20**: 22 commits từ canonical `225b3aa` → `2b72bb8`. F1 Khoản improvement: +22.6% qua 4 fix layers, statistically backed (N=3).
 
@@ -601,7 +883,32 @@
 
 ## 1. Trạng thái tiến độ hiện tại
 
-> **Cập nhật toàn diện 2026-05-21** — đồng bộ với code, database production, và các fix layer v2.7. Section trước đó stale từ Phase 1.
+### §1.0 CẬP NHẬT MỚI NHẤT — 2026-06-30 (ĐỌC TRƯỚC — điểm neo cho phiên làm việc mới)
+
+> Block này là **single source of truth** về "đang ở đâu + làm gì tiếp". §1.1–1.3 bên dưới là tham chiếu chi tiết nhưng **một phần lỗi thời từ 2026-05-21** (ghi 17 file/3031 vector/Phase 1 chờ B — đã cũ). Chi tiết diễn biến: xem changelog v2.19 ở đầu file + Decision Log D-23/D-24 trong CLAUDE.md.
+
+**ĐÃ XONG (toàn bộ đã commit + push lên `origin/develop`):**
+- **Corpus B đã ingest** (D-23): 13 file Hộ tịch + Nuôi con nuôi của [B] đã pull/làm sạch/validate. **Graph đa-domain**: `32 Norm` (dat-dai 20, ho-tich 8, nuoi-con-nuoi 4), 4548 Component, 6394 MAPS_TO_CONCEPT. Qdrant `legal_texts` = **4582 vector** (4550 text_unit + 32 summary). `implements` hỗ trợ str|list|null (đa-cha). **TASK-05 cross-check** đã sign-off mức [A]+Claude (`data/raw/review_log.md`); [B] hậu kiểm 2 quyết định (NQ124 tách 2 Norm, thong-tu-01 amended_by) khi có thời gian.
+- **Multi-LLM 3-mode** (D-24): `--llm-mode {claude|claude-fallback|gemini}` cho demo + eval. Gemini chạy **Vertex AI qua ADC** ($300 Cloud credit; vùng VN không free tier Developer API). Mặc định `claude` → eval reproducible. Judge Claude Haiku cố định. Files mới: `src/utils/gemini_fallback.py`, `src/precache_demo.py`.
+- **Gemini-only validated** (full 26, graph đa-domain): GraphRAG-Gemini **F1 0.549 / NormR 0.766** vs Baseline-Gemini 0.356/0.554 → **Δ kiến trúc +0.193 F1** (≈ Δ Claude +0.206) = LLM-agnostic. Lineup Gemini: generator `gemini-2.5-pro`, planner+ontology `gemini-2.5-flash`. 2 negative result tune NormR (prompt provider-aware; structural backfill) → REJECT, chấp nhận NormR 0.766 (đặc tính Gemini). Kết quả canonical: `data/evaluation/gemini_full26/`.
+- **Demo Gemini chạy được**: `python -m src.demo "..." --llm-mode gemini --mode {general|irac}`. Bug truncation đã fix (headroom thinking cho Gemini `max_output_tokens`).
+
+**VIỆC TIẾP THEO (ưu tiên):**
+1. **E1 ablation Gap 2/3/4** ★ — build `src/evaluation/ablation_config.py` (cờ tắt no-jurisdiction/no-traversal/no-temporal), chạy double-dissociation trên đất đai + Gemini. **Làm được ngay, không chờ B.** Đây là bằng chứng kiến trúc mạnh nhất (chứng minh TỪNG cơ chế KG giải đúng gap của nó).
+2. **E2 baselines** (closed-book "có cần retrieval?" + BM25 + oracle trần) + **E0 docs** (GT provenance + metric validity). Làm được ngay.
+3. **Viết Chương 1-3** (Intro/Background/Methodology) — song song, tư liệu đầy đủ.
+4. **Chờ [B]**: test set Hộ tịch/NCN → mở khóa Gap 1 (E1 no-theme) + E2b consistency per-domain.
+5. **Demo prep** (gần ngày bảo vệ): Lớp 1 pre-cache câu demo thật + quay video + rotate key.
+
+**GOTCHAS MÔI TRƯỜNG (quan trọng cho phiên sau):**
+- **Python interpreter:** cài gcloud (cho Vertex ADC) đã đổi `python`/`python3` sang Homebrew python THIẾU deps dự án. Deps đầy đủ ở **`/Library/Frameworks/Python.framework/Versions/3.12/bin/python3`** — DÙNG path này để chạy demo/eval/pytest. Nếu lỗi `ModuleNotFoundError: dotenv` là do gọi nhầm python.
+- **Gemini = Vertex ADC:** cần `gcloud auth application-default login` (đã login) + `.env` có `GEMINI_USE_VERTEX=true`, `GEMINI_VERTEX_PROJECT=vn-legal-graphrag`, `GEMINI_VERTEX_LOCATION=global`, `GEMINI_MODEL_GENERATOR=gemini-2.5-pro`, `GEMINI_MODEL_PLANNER=gemini-2.5-flash`. KHÔNG dùng api_key cho Vertex.
+- **Cache:** demo/eval cache answer theo hash(prompt), KHÔNG phân biệt provider → khi so Claude vs Gemini phải `--no-llm-cache`.
+- **BẢO MẬT:** vài Gemini key + 1 Anthropic key đã lộ trong chat lịch sử → rotate sau bảo vệ.
+
+---
+
+> **Cập nhật toàn diện 2026-05-21** (PHẦN DƯỚI PARTIAL STALE — xem §1.0 ở trên cho trạng thái mới nhất) — đồng bộ với code, database production, và các fix layer v2.7. Section trước đó stale từ Phase 1.
 
 ### §1.1 Đã hoàn thành ✅
 
@@ -630,7 +937,8 @@
 - `src/retrieval/semantic_filter.py` — Hybrid Search 4-pass (Pass -1 Struct Cite / Pass 0 Dense Floor / Pass 1 RRF breadth / Pass 2 RRF depth)
 - `src/retrieval/context_assembler.py` — sort + cap 6000 tokens + build_prompt với 5 rule blocks (TEMPORAL #4)
 - `src/retrieval/answer_generator.py` — Claude Sonnet 4.6 + cache + parse_citations với dedupe
-- `src/pipeline.py` — end-to-end orchestrator
+- `src/retrieval/verifier.py` — Verifier agent (multi-agent, D-18): Tier 1 grounding $0 + Tier 2 LLM judge; `verify=False` mặc định
+- `src/pipeline.py` — end-to-end orchestrator (+ tham số verify/verify_tier)
 - `src/utils/llm_config.py` — centralized Anthropic client (max_retries=8)
 
 **Phase 4 — Đánh giá [A]:**
@@ -639,6 +947,8 @@
 - `src/evaluation/run_evaluation.py` — eval orchestrator
 - `src/evaluation/metrics.py` — F1 Khoản/Điều, NormR, negative_correct (`cit_matches` single source of truth)
 - `src/evaluation/faithfulness.py` — 2-tier metric (existence + LLM judge)
+- `src/evaluation/term_validator.py` — B2 phát hiện thuật ngữ giả (grounding_rate, D-17)
+- `src/evaluation/validate_test_set.py` — validator test set (gap diversity, phân bổ DoD)
 - `src/evaluation/report_builder.py` — auto-sinh REPORT_<timestamp>.md
 - `src/evaluation/compare_runs.py` — A/B diff
 - `src/evaluation/build_ablation_matrix.py` — cumulative table
@@ -668,6 +978,13 @@
 **Phase 4 — domain mở rộng:**
 - Test set Hộ tịch + Nuôi con nuôi (chờ [B] đổ data)
 - Mở test set lên ≥40 câu cross-domain để validate hypothesis Gap 1 generalize ngoài Đất đai
+- **Kiến trúc đánh giá E0–E3** ([docs/EVALUATION_ARCHITECTURE.md](EVALUATION_ARCHITECTURE.md), D-22) — design spec hoàn chỉnh; phần làm được ngay: E0 methodology + `ablation_config.py` + rubric `human_eval.py`; phần chờ B: ablation suite E1 + E2b consistency + auto-GraphRAG
+
+**Hướng nghiên cứu nâng cao [A] (precision in / precision out):**
+- **Multi-agent — Verifier agent**: code xong (v2.12, D-18), `verify=False` mặc định; CHƯA đo ablation ±verifier (cần API).
+- **Cross-encoder rerank** (vá disambiguation cấp Điều, Q022) — phép thử $0 trước khi finetune; đồng thời là "teacher" sinh hard-negative.
+- **Finetune embedding BGE-M3** (distill từ cross-encoder) — sau khi cross-encoder xác nhận giả thuyết.
+- Phụ thuộc: **harness đo lường + baseline dense-no-KG (#4) phải có sớm** để đo được 3 hướng trên (N≥3).
 
 **Phase 5 — Báo cáo:**
 - Expand prose Chapter 4 (Experiments) từ scaffold
@@ -1221,7 +1538,7 @@ Nhận LCCIDs từ TASK-11 và câu hỏi gốc, thực hiện hybrid search (De
 #### Đầu ra
 - `src/retrieval/semantic_filter.py` — module với:
   - `hybrid_search(question: str, lccids: LCCIDs, qdrant_client, model, top_k: int = 10) -> list[TextUnit]`
-  - Cơ chế: Dense search (BGE-M3) + Sparse search (BM25) → RRF fusion
+  - Cơ chế: Dense search (BGE-M3) + Keyword search (slug-overlap) → RRF fusion (BM25 trong spec gốc đã thay bằng slug-overlap khi triển khai — xem semantic_filter.py)
   - Payload filter: `content_type="text_unit" AND component_id IN lccids`
 
 #### Định nghĩa Hoàn thành (DoD)

@@ -306,13 +306,6 @@ def _render_per_question(
                 lines.append(_render_gt_citations(gt_cits, r.get("pred_citations", [])))
                 lines.append("")
 
-            if r.get("confirmation_needed"):
-                lines.append("> ⚠️ Hệ thống yêu cầu xác nhận (Confirmation Loop) — câu hỏi thiếu thông tin.")
-                lines.append("")
-            if r.get("confirmation_retried"):
-                lines.append("> ℹ️ Đã retry sau khi tự bổ sung jurisdiction từ test set.")
-                lines.append("")
-
     return "\n".join(lines)
 
 
@@ -339,7 +332,7 @@ def build_human_report(
         timestamp: Hiển thị trong header. Mặc định: now().
         test_set_file: Path test set hiển thị trong header (informational).
         run_config: Dict các flag cấu hình chạy ảnh hưởng kết quả (VD
-                    force_jurisdiction, bypass_completeness, llm_cache, top_k...).
+                    force_jurisdiction, llm_cache, top_k...).
                     Hiển thị trong "Cấu hình run" để người đọc biết kết quả đã được
                     sinh dưới điều kiện nào — đảm bảo tính khoa học/reproducibility.
 

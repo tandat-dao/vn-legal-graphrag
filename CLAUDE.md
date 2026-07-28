@@ -15,14 +15,18 @@
 
 ---
 
-## TRẠNG THÁI HIỆN TẠI
+## TRẠNG THÁI HIỆN TẠI (cập nhật 2026-07-10)
 
-Phase 0 (Môi trường) và Phase 1 (Dữ liệu) — xem `docs/PROJECT_STATUS.md` để biết task nào đang active.
+**Phase 0-4 hoàn tất + KHÂU ĐÁNH GIÁ E0-E3 ĐÃ CHẠY XONG.** Corpus đa-domain 32 Norm; GT v2 freeze 137 câu (tag `gt-v2-freeze`, pre-register `docs/GT_FREEZE.md`); chiến dịch eval v1/v2 hoàn tất trên Gemini — **số chốt cho Chương 4 ở `docs/V2_RESULTS.md`** (GraphRAG N=3 F1 0.578±0.004 vs baseline 0.435, Δ+0.156 CI[0.070,0.242] p=0.001***; Gap3/4 vững qua double-dissociation, Gap2 = limitation). **Việc đang làm: VIẾT LUẬN VĂN** (`docs/thesis/` — đề cương + Chương 1 đã nháp) + E2c người chấm.
 
-**Trước khi bắt đầu bất kỳ task nào:**
-1. Đọc `docs/PROJECT_STATUS.md` — xác định TASK-ID cần làm, đọc kỹ phần Inputs / Outputs / DoD
-2. Đọc `docs/PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
-3. Đọc toàn bộ file code có liên quan được liệt kê trong phần Inputs của task card
+**Trước khi bắt đầu bất kỳ task nào — ĐỌC 3 file này:**
+1. `docs/PROJECT_STATUS.md` — **đọc §1.0 "CẬP NHẬT MỚI NHẤT" TRƯỚC** (trạng thái + việc tiếp theo), rồi changelog v2.19 ở đầu file
+2. `docs/PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
+3. Decision Log trong file này (D-01…D-26) — đặc biệt D-23 (implements đa-cha), D-24 (multi-LLM + Gemini-only), D-26 (gemini-fallback demo)
+
+**⚠️ Gotchas môi trường (đọc trước khi chạy code):**
+- **Python:** cài gcloud đã đổi `python` sang bản thiếu deps → dùng `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3` cho MỌI lệnh demo/eval/pytest.
+- **Gemini** = Vertex AI qua ADC (`gcloud auth application-default login` đã setup); config trong `.env` (`GEMINI_USE_VERTEX=true`, project/location/model). Chạy `--llm-mode gemini`.
 
 ---
 
@@ -61,14 +65,19 @@ graphrag-vn-law/
 │   │   ├── subgraph_extractor.py← TASK-11
 │   │   ├── semantic_filter.py   ← TASK-12
 │   │   ├── context_assembler.py ← TASK-13
-│   │   └── answer_generator.py  ← TASK-13
+│   │   ├── answer_generator.py  ← TASK-13
+│   │   └── verifier.py          ← Verifier agent (D-18)
 │   ├── baseline/                ← Phase 4
 │   │   └── naive_rag.py         ← TASK-16
 │   ├── evaluation/              ← Phase 4
-│   │   └── metrics.py           ← TASK-17
+│   │   └── metrics.py           ← TASK-17 (+ run_evaluation, faithfulness, expanded_eval…)
+│   ├── demo.py                  ← Rich CLI demo (--llm-mode, --mode)
+│   ├── precache_demo.py         ← Lớp 1 pre-cache câu demo (D-24)
 │   └── utils/
 │       ├── connection_check.py  ← TASK-02
-│       └── validate_metadata.py ← TASK-04
+│       ├── validate_metadata.py ← TASK-04
+│       ├── llm_config.py        ← make_llm_client(mode=) — 4 LLM mode (D-24, D-26)
+│       └── gemini_fallback.py   ← Gemini wrapper (Vertex ADC), FallbackLLMClient/GeminiClient (D-24)
 ├── tests/
 │   ├── test_parser.py
 │   └── test_query_planner.py
@@ -169,6 +178,19 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-11 | Pass -1 Structured Citation Boost — regex "Khoản X Điều Y" → ép Components match vào top-K | Q026 GT cite trực tiếp "Khoản 1 Điều 13" — dense top NĐ 49 = K11/K12 vì label dài bias embedding. Additive boost: no-op nếu pattern không match | 2026-05-20 |
 | D-12 | Label-keyword Boost (Pass -0.5) — REJECTED sau ablation | Empirical net F1 −0.055 trên 8-câu (Q022 +0.5 nhưng Q001/Q002/Q008/Q024 regress vì label keyword overlap đa Điều cùng tier). Documented as embedding limitation, future work cross-encoder | 2026-05-20 |
 | D-13 | Giữ `Procedure` node + thêm `Concept` node (TASK-15) cho concept rarity scoring | D-07 xóa `[:SPECIFIED_IN]` (manual mapping không scalable) nhưng node `Procedure` được REPURPOSED: kết hợp `Concept` node (Core Ontology) + `[:MAPS_TO_CONCEPT]` (Component → Concept) + `[:REQUIRES_CONCEPT]` (Procedure → Concept) → `hybrid_search` boost components giàu concept hiếm thuộc procedure quan tâm. Ontology Mapping bottom-up qua LLM Haiku (`src/ingestion/ontology_mapper.py`) | Phase 4 |
+| D-14 | Prompt L1 rewrite chống hallucination (no-leak + slug enforcement + amendment dual-cite mềm) | Faithfulness analysis run 20260520-211930 phát hiện 4 nhóm lỗi: F1 prompt leak (`SPAN-REGIME` UPPERCASE label rò rỉ vào output Q022/Q023), F2 citation slug vs số hiệu (`47/2024/QH15` thay vì slug ở Q024/Q025), F3 pointer misattribution (NĐ 226 K10 không tồn tại — phải là NĐ 112 K10 sửa bởi NĐ 226 Đ5 ở Q019), F4 malformed (`Phụ lục I và Phụ lục II` gộp ở Q008). Fix: bỏ hoàn toàn nhãn nội bộ khỏi prompt + meta-rule chống leak + rule cứng slug + rule dual-cite mềm cho amendment. Iter2: hallucination 7→0, leak 2→0, F1 0.539→0.554 (+0.015 N=1 vs N=3 cũ). Refactor `build_prompt()` → `build_messages()` để hỗ trợ prompt caching | 2026-05-28 |
+| D-15 | Anthropic prompt caching cho system prompt (~2117 tokens, `cache_control: ephemeral`) | System rules giống nhau cho mọi câu hỏi → trả tiền lặp lại 78 lần (N=3 × 26 câu) cho cùng nội dung. Caching giảm ~90% input cost trên phần system từ request thứ 2 trở đi, TTL ~5 phút (đủ 1 batch eval). Yêu cầu: tách `build_messages(q,c) -> (system, user)`, system phải ≥ **2048 tokens** — ngưỡng cache tối thiểu thực tế của Sonnet 4.6 (KHÔNG phải 1024; nếu prompt bị cắt xuống dưới 2048 thì cache im lặng ngừng hoạt động, không báo lỗi). Local prompt-hash cache vẫn được giữ độc lập | 2026-05-28 |
+| D-16 | Prompt sanitization B1 — loại bỏ MỌI shorthand/label trong prompt, cấm coin thuật ngữ | Demo span-regime sau v2.9 phát hiện LLM tự promote `(cắt ngang)` thành **"(nguyên tắc cắt ngang)"** trong output — thuật ngữ pháp lý GIẢ. Class bug lớn hơn: bất kỳ shorthand `(X)` / Latin label `(lex superior)` nào trong prompt đều có thể leak. Fix: xóa hết parenthetical shortcuts khỏi prompt + meta-rule mạnh cấm "tự tạo tên gọi/nhãn cho nguyên tắc". Loại bỏ `(lex superior/posterior/specialis)` (Latin), `(cắt ngang)` (rút gọn). Pair với D-17 (auto-detect) tạo defense-in-depth chống thuật ngữ giả | 2026-05-28 |
+| D-17 | Term grounding validator B2 — module `src/evaluation/term_validator.py` auto-detect thuật ngữ giả | Sửa từng case không scalable; câu hỏi mới có thể sinh thuật ngữ giả mới. Approach khoa học: extract candidate "term-like" phrases bằng 4 regex pattern (`named_principle`, `quoted`, `parenthetical`, `bold`) + heuristic `_looks_like_term` (loại measurement/function-word/descriptive), validate qua substring lookup vào CONTEXT + corpus `data/raw/*.md`. Metric `grounding_rate = #grounded / #candidates_total` — analogue của citation existence_rate cho thuật ngữ. Validation: trên 8-câu subset post-B1 đạt **100% grounding rate** (15 candidates / 0 ungrounded); trên run cũ canonical bắt được tất cả leak đã biết (SPAN-REGIME, cắt ngang, chuyển giao thẩm quyền…) | 2026-05-28 |
+| D-18 | Verifier agent (tầng multi-agent: Generator → Verifier → prune) — `src/retrieval/verifier.py` | Nút thắt F1 không phải retrieval (NormR đã 0.93) mà là **over-citation**: ROOT_CAUSE_ANALYSIS cho thấy 47 citation dư là nguyên nhân DOMINANT của precision thấp. Pipeline gốc một lượt Generator, không ai kiểm lại. Verifier = mẫu Self-Refine/CRITIC, **tái dùng hạ tầng `faithfulness.py`** (faithfulness metric → filter inline, không circular import). Tier 1 grounding ($0 deterministic) drop citation không có trong context (bắt hallucination); Tier 2 (Haiku, tùy chọn) judge support, mặc định UNSUPPORTED→flag (bảo thủ, tránh over-prune), `drop_unsupported` để prune cứng. Mặc định `verify=False` → hành vi pipeline cũ KHÔNG đổi; cờ `--verify`/`--verify-tier` cho ablation ±verifier (demo + run_evaluation). Hiệu quả thực nghiệm: **Tier 1 +0.023 F1 Khoản** (offline $0, 26 câu canonical, bỏ 7 citation bịa); wiring live xác nhận. | 2026-06-23 |
+| D-19 | Verifier Tier 2 (LLM support-judge) — REJECTED làm bộ lọc DROP; sửa bug snippet Phụ lục | Thử Tier 2 live trên 3 câu over-cite (Q004/Q008/Q019): (1) **không bắt được over-cite thật** — Q004 (3 vs GT 2) judge giữ cả 3 vì citation thừa vẫn grounded + được chunk khẳng định ("support" ≠ "là đáp án GT tối thiểu"); (2) **over-flag citation ĐÚNG** — Q008 flag cả 2 citation GT (mismatch cấu trúc Phụ lục), Q019 flag citation mà metric tính match → hard-drop sẽ REGRESS F1; (3) phần lớn "over-cite" đo được là **metric/GT artifact** (H4 9 ca + H5 8 ca — Q004 citation thừa thực ra ĐÚNG, GT thiếu) → drop = tối ưu theo thước đo lỗi. Quyết định: **giữ Tier 1, reject Tier 2-support cho mục đích drop** (giống D-12). Phát hiện kèm: bug `faithfulness._extract_answer_snippet` chỉ bắt regex `Điều`, bỏ sót `[Phụ lục ...]` → fallback 400 ký tự → flag oan; đã fix (dispatch theo `loai`, ảnh hưởng cả faithfulness Tier 2 metric). **Future work**: relevance/necessity-judge (thay support-judge) + GT completeness + Tier 2 dạng flag-only-for-reporting (không drop). | 2026-06-23 |
+| D-20 | Cross-encoder (`bge-reranker-v2-m3`) làm **retrieval modifier** — REJECTED sau ablation; `reranker.py` GIỮ làm teacher | Direction 2: vá embedding blindness disambiguation cấp Điều (P-08/Q022). Thử 2 cách tích hợp vào `hybrid_search`, ablation 7-câu (subset thiên vị, base cache vs rerank fresh): **(A) Rerank Floor** (thay Dense Floor ở Pass 0): F1 Khoản +0.019 NHƯNG regression Q021 (1.00→0.80). **(B) Blend** (cộng `rerank_rank` thành tín hiệu RRF thứ 3, giữ Dense Floor): F1 Khoản +0.048 (chữa được Q021) NHƯNG **NormR −0.071 + F1 Điều −0.050** (cross-encoder kéo chunk lexically-relevant nhưng sai norm lên — Q022/Q003). Cả 2 là **đánh đổi, không thắng sạch** → **REJECT làm default + GỠ integration** khỏi `hybrid_search`/`pipeline`/CLI (giữ D-10: dense là ground signal, không để feature không-ăn-thua trong core path). Giống D-12. **GIỮ `src/retrieval/reranker.py`** (module độc lập, LOCAL $0, **CPU** vì MPS treo 3.5h — env `RERANKER_DEVICE`) — REPURPOSE làm **teacher** sinh hard-negative/soft-label cho finetune embedding (bước direction-2 kế tiếp). | 2026-06-23 |
+| D-21 | Evaluation Tier 0 — mở rộng thang đo $0 (significance + citation behavior + per-gap/juris), KHÔNG gọi API | Sau khi 2 hướng thuật toán (verifier, rerank/finetune) phần lớn cho negative result, giá trị biên cao nhất ở **đo lường** chứ không thêm cơ chế. `metrics.aggregate` đã có per-gap/per-theme/PR/latency → KHÔNG dựng lại; chỉ bổ sung cái còn thiếu: **(1)** paired bootstrap 95% CI (10000 resamples, seed=42 deterministic) + Wilcoxon signed-rank — trả lời "N=26 nhỏ, +Δ có thật không"; **(2)** citation behavior (over-cite rate, P–R gap); **(3)** report tiếng Anh hợp nhất. Module `src/evaluation/expanded_eval.py` đọc 2 results JSON SẴN ($0). **Fix alignment quan trọng**: nhãn `gap_type` đồng bộ theo `test_set_dat_dai.json` HIỆN TẠI theo id (baseline run 05-19 gộp gap4 vào gap3 trước relabel → nếu đọc nhãn lưu trong run sẽ lệch). **Kết quả** (graphrag 0528-142757 vs baseline 0519-204426): F1 Khoản Δ **+0.281, CI [0.154, 0.417], p=0.001 *** (win/loss/tie 18/3/3)** → ưu thế KG **có ý nghĩa thống kê**; per-gap: **Gap4 Δ +0.522** (lớn nhất, baseline 0.071 — KG temporal quyết định), Gap2 mạnh nhất tuyệt đối (0.726); **nhược điểm thật**: `multi-juris` Δ −0.244 (1 câu thua → Limitations). Đủ "thật sự có cải tiến" để cân nhắc Tier 1 (ablation suite). | 2026-06-23 |
+| D-22 | Tái cấu trúc khâu đánh giá thành kiến trúc 4 khối **E0–E3** (triết lý "Claim → Evidence") — `docs/EVALUATION_ARCHITECTURE.md` | Evaluation cũ (Full vs Naive RAG) chỉ chứng minh *toàn bộ* hệ thống hơn baseline, KHÔNG chứng minh từng thành phần KG giải đúng gap của nó. Tái cấu trúc: **E0** nền tin cậy (reproducibility + significance + GT provenance + metric validity) → **E1** ablation **double dissociation** (no-theme/no-jurisdiction/no-traversal/no-temporal phải sụp ĐÚNG gap tương ứng VÀ ổn định ở gap khác — chứng minh *necessity* từng cơ chế) → **E2** baseline ladder đa-**trục** (thêm **closed-book** "có cần retrieval?" + **auto-GraphRAG** "có cần ontology?" + **oracle** trần) + E2b consistency per-domain (Gap 1) + **E2c bỏ BERTScore → người chấm/máy chấm** (chủ-tớ: LLM-judge validated với người qua kappa rồi mới mở rộng; D-19 là tiền lệ cảnh báo) → **E3** failure taxonomy + negative results (D-12/19/20). Mỗi gap có **gói bằng chứng đa nguồn**. Phân biệt cứng: baseline (thắng) ≠ ablation (sụp) ≠ upper bound (tiến gần). Build mới: `ablation_config.py` + `human_eval.py` + `error_analysis.py`. Ablation suite E1 + E2b chờ corpus [B] (xem `project_eval_tier1_deferred`) | 2026-06-29 |
+| D-23 | `implements` frontmatter chấp nhận **string \| list \| null** (đa văn bản cha) | Corpus [B] (Hộ tịch + Nuôi con nuôi) có văn bản hướng dẫn thi hành ĐỒNG THỜI nhiều cha — VD `thong-tu-04-2020-tt-btp` implements cả `nghi-dinh-123-2015-nd-cp` LẪN `luat-ho-tich-2014`; `nghi-dinh-120-2025-nd-cp` implements cả Luật Nuôi con nuôi lẫn Luật Hộ tịch. Đây là quan hệ pháp lý THẬT và chính là tín hiệu đa-tầng **Gap 3** → làm phẳng về 1 cha sẽ vứt mất cạnh `[:IMPLEMENTS]` thật. Schema cũ giả định 1 cha khiến `validate_metadata.py` crash (`unhashable list`) + `graph_builder` tạo edge hỏng. Fix: chuẩn hóa thành list ở 3 điểm — validator (type-check + global-ref), `graph_builder.create_edges` + Pass 2 (lặp qua từng cha). Đa-parent IMPLEMENTS vốn đã được đồ thị hỗ trợ (1 Norm có nhiều cạnh `[:IMPLEMENTS]`); chỉ frontmatter single-value là hẹp. **Kèm theo**: NQ 124/2016 TP.HCM (văn bản đa-**theme** đầu tiên — đụng P-03) xử lý theo hướng A (tách 2 Norm theo theme: id `-datdai` / `-hotich`), KHÔNG implement `[:BELONGS_TO]` (giữ P-03 hoãn). 243 test pass | 2026-06-30 |
+| D-24 | Multi-LLM provider — 3 mode `claude` \| `claude-fallback` \| `gemini`; hướng **Gemini-only** validated | (1) **Resilience demo**: Lớp 1 pre-cache + Lớp 2 Gemini fallback (`gemini_fallback.py`, `make_llm_client(mode=)`). Wrapper TRONG SUỐT (`.messages.create` y hệt → call site KHÔNG đổi). Mặc định `claude` → eval reproducible. (2) **Gemini chạy qua Vertex AI + ADC** (KHÔNG api_key — Vertex đòi OAuth/ADC; vùng VN không có free tier Developer API → 429 prepaid), `location=global`, dùng credit Cloud $300. Judge giữ Claude Haiku CỐ ĐỊNH (thước đo độc lập). (3) **Bug truncation fix**: Gemini 2.5/3.x là thinking model, `max_tokens` nhỏ Claude-tuned (128 ontology, 256 planner) → thinking ăn hết → output cụt; fix sàn `max_output_tokens=2048`. (4) **Bake-off generator** (đo, không đoán): `gemini-2.5-pro` ≈ Claude (F1 0.587 vs 0.539 trên 10 câu); `3.5-flash`/`3.1-pro-preview` KÉM hơn nhiều → "model mới ≠ tốt hơn". Lineup: planner+ontology `gemini-2.5-flash`, generator `gemini-2.5-pro`. (5) **Gemini-only validated** (full 26): GraphRAG-Gemini F1 **0.549** / NormR 0.766 vs Baseline-Gemini 0.356/0.554 → **Δ kiến trúc +0.193 F1 / +0.212 NormR** — ưu thế kiến trúc GIỮ trên Gemini (≈ Δ Claude +0.206) = bằng chứng LLM-agnostic. (6) **2 negative result tune NormR** (Gemini under-cite chuỗi đa tầng): prompt provider-aware (+0.004 F1, 0 NormR — trong nhiễu, Q018 "win" là Gemini non-determinism) + structural backfill (mọi ngưỡng NormR↑ ĐỔI LẤY F1↓) → cả hai đánh đổi F1, REJECT, **chấp nhận NormR 0.766** (đặc tính model, ghi Limitations). Giống D-12/19/20. Eval `--llm-mode`/`--sample`; judge Claude cố định. 266 test pass | 2026-06-30 |
+| D-25 | **Gỡ bỏ Confirmation Loop** (query_planner `is_complete`/`missing_fields`/`build_confirmation_prompt` + pipeline nhánh dừng-hỏi + demo/eval `bypass_completeness`) | Hệ là **1Q-1A, không đa lượt** → khi thiếu field, "hỏi lại" chỉ **dừng ở ngõ cụt** (không có cơ chế nhận câu trả lời tiếp và chạy lại với bối cảnh cũ) → không phải tính năng an toàn hoàn chỉnh. Ngoài ra nó **không đóng góp khoa học** (không cô lập gap nào) và eval **luôn bypass** nó (`bypass_completeness=True`) → đóng góp *số 0* cho mọi con số F1/NormR. **Bảo toàn kết quả canonical**: `force_jurisdiction` đổi điều kiện từ `not is_complete & jurisdiction∈missing` → `jurisdiction is None` (tương đương từng nhánh: đất đai không nêu tỉnh→bơm GT; ngoài đất đai→đã toan-quoc; có nêu→giữ) → eval Gemini/Claude KHÔNG xê dịch. Hệ quả: demo luôn chạy best-effort thay vì hỏi lại. Refactor 12 file, xóa 12 test cho tính năng gỡ, **254 test pass**. Kèm: vá `precache_demo` param cũ `llm_fallback=`→`llm_mode="claude"` (stale từ D-24). Ảnh hưởng GT: bỏ dạng câu "thiếu-field→hỏi-lại" khỏi kế hoạch test set | 2026-07-06 |
+| D-26 | Mode `gemini-fallback` — Gemini chính + Claude dự phòng, đối xứng `claude-fallback` (D-24) | Demo bảo vệ chạy Gemini end-to-end (mode `gemini`) KHÔNG có dự phòng — chính lỗi `429 RESOURCE_EXHAUSTED` (hết quota Vertex) đã từng làm hỏng mẻ eval đêm 09→10/07 có thể làm demo chết giữa buổi bảo vệ. `FallbackGeminiClient` (`src/utils/gemini_fallback.py`) bọc trong suốt: gọi Gemini trước, lỗi hạ tầng (429/5xx/timeout, `_should_fallback_gemini`) → tự chuyển sang Claude; lỗi logic (400/403) → re-raise. Mặc định TẮT — eval vẫn dùng `claude`/`gemini` thuần để reproducible, KHÔNG đụng số liệu `V2_RESULTS.md`. 19 test mới, 316 test pass | 2026-07-11 |
 
 ---
 
@@ -359,11 +381,13 @@ CONTEXT_MAX_TOKENS = 6000
 DEFAULT_TOP_K = 25
 MAX_PER_NORM = 3                  # _MAX_PER_NORM trong semantic_filter.py — cap top-k diversity
 ANTHROPIC_MAX_RETRIES = 8         # src/utils/llm_config.py — chống 529 Overloaded
+VALID_VERIFY_TIERS = (0, 1, 2)    # verifier.py — 0=no-op, 1=grounding $0, 2=+LLM judge
 VALID_TO_SENTINEL = "9999-12-31"  # CTV.valid_to khi vẫn còn hiệu lực (thay null per ac516ad)
 
-# Neo4j schema: 7 edge types
+# Neo4j schema: 9 node types + 10 edge types (8 retrieval core + 2 concept scoring)
 # IMPLEMENTS: hướng dẫn thi hành (NĐ -> Luật)
 # AMENDS: sửa đổi/bổ sung (NQ 254 -> Luật ĐĐ)  [D-09]
+# MAPS_TO_CONCEPT / REQUIRES_CONCEPT: concept rarity scoring (D-13)
 ```
 
 ---
@@ -420,6 +444,18 @@ answer_generator.py  ← context + question + Anthropic client + cache_dir
                      → {answer, citations, context_used, cache_hit}
                      → parse_citations() w/ dedupe (commit 023bb64)
 
+verifier.py          ← question + context + answer + citations (tầng multi-agent, D-18)
+                     → VerifierResult {filtered_citations, verdicts, n_dropped, ...}
+                     → verify_citations(tier=0/1/2): Tier 1 grounding ($0) + Tier 2
+                       LLM support judge (Haiku, tùy chọn). Tái dùng faithfulness.py.
+                     → pipeline.run_pipeline(verify=, verify_tier=) — mặc định OFF
+
+reranker.py          ← question + candidates [{text}] (cross-encoder, direction 2, D-20)
+                     → rerank(query, candidates, model=) → sorted theo rerank_score
+                     → bge-reranker-v2-m3 LOCAL $0 (CPU — MPS treo); load_reranker() lazy
+                     → KHÔNG wire vào retrieval (integration REJECTED, D-20). Dùng làm
+                       TEACHER sinh hard-negative/soft-label cho finetune embedding (bước sau)
+
 src/utils/llm_config.py — make_anthropic_client() factory với max_retries=8
 
 Phase 4 — Evaluation:
@@ -439,6 +475,8 @@ src/evaluation/compare_runs.py   — A/B diff giữa 2 results JSON
 src/evaluation/build_ablation_matrix.py — table cumulative impact 4 fix layers
 src/evaluation/build_reproducibility_report.py — N=3 study mean ± σ
 src/evaluation/instrument_retrieval.py  — debug Stage 1/2/3 (API-free)
+src/evaluation/retrieval_eval.py — Recall@k/MRR cấp Điều/Khoản, dense vs cross-encoder ($0, không generation) — go/no-go finetune embedding + harness #4
+src/evaluation/expanded_eval.py  — Tier 0 metric expansion ($0, offline): đọc 2 results JSON sẵn → paired bootstrap 95% CI + Wilcoxon significance, citation behavior (over-cite/PR-gap), per-gap/per-juris breakdown, report tiếng Anh. Đồng bộ nhãn gap_type theo test set hiện tại (D-21)
 
 Demo:
 src/demo.py        — Rich CLI cho weekly meeting (panels + Markdown render + spinner + Tree trace)
@@ -488,9 +526,18 @@ Bốn task sau là "cổng" bắt buộc. Phase sau **không được bắt đ�
 
 ## MÔI TRƯỜNG PHÁT TRIỂN
 
+> **⚠️ PYTHON:** cài gcloud (Vertex ADC) đã đổi `python` sang bản thiếu deps. Dùng
+> `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3` cho mọi lệnh bên dưới
+> (thay `python`/`pytest`). Ví dụ: `.../python3 -m pytest tests/ -q`. Alias `pyt` cho gọn.
+> Ingestion chạy dạng module (`python -m src.ingestion.graph_builder`), không chạy file trực tiếp.
+
 ```bash
 # Khởi động databases
 docker compose up -d
+
+# Demo Gemini (multi-LLM, D-24) — nhớ --no-llm-cache khi muốn gọi tươi
+# python -m src.demo "câu hỏi" --llm-mode gemini --mode general --jurisdiction tp-hcm --bypass-completeness --no-llm-cache
+# Eval trên Gemini: python -m src.evaluation.run_evaluation --test-set ... --systems graphrag,baseline --llm-mode gemini --no-llm-cache
 
 # Kiểm tra databases đang chạy
 docker compose ps
@@ -535,10 +582,22 @@ NEO4J_PASSWORD=<password>
 QDRANT_HOST=localhost
 QDRANT_PORT=6333
 EMBEDDING_MODEL=BAAI/bge-m3
-LLM_PROVIDER=<openai|anthropic|local>
-LLM_MODEL=<model-name>
-LLM_API_KEY=<key>
+LLM_PROVIDER=anthropic
+LLM_MODEL_PLANNER=claude-haiku-4-5-20251001     # Query Planner + Faithfulness judge + Ontology mapper
+LLM_MODEL_GENERATOR=claude-sonnet-4-6           # Answer Generator
+ANTHROPIC_API_KEY=<key>                         # SDK đọc trực tiếp biến này (make_anthropic_client)
+LLM_API_KEY=<key>                               # alias giữ tương thích
+
+# Multi-LLM (D-24) — Gemini qua Vertex AI + ADC. Mặc định mode=claude (eval reproducible).
+LLM_MODE=claude                                 # claude | claude-fallback | gemini (make_llm_client)
+GEMINI_USE_VERTEX=true                           # Vertex ADC (KHÔNG api_key); cần `gcloud auth application-default login`
+GEMINI_VERTEX_PROJECT=vn-legal-graphrag          # GCP project ($300 credit)
+GEMINI_VERTEX_LOCATION=global                    # region Vertex (2.5-pro/flash có ở global)
+GEMINI_MODEL_GENERATOR=gemini-2.5-pro            # generator (≈ Claude Sonnet); thắng bake-off
+GEMINI_MODEL_PLANNER=gemini-2.5-flash            # planner + ontology mapper (rẻ)
 ```
+
+> **Multi-LLM (D-24):** `make_llm_client(mode=)` trả wrapper trong suốt (`.messages.create` y hệt). Demo `--llm-mode {claude|claude-fallback|gemini}`; eval `--llm-mode` + `--sample N --seed S`. Vertex đòi OAuth/ADC (không api_key); vùng VN không có free tier Developer API. Gemini là thinking model → `gemini_fallback._gemini_complete` cộng headroom vào `max_output_tokens` (tránh cụt output). Judge (faithfulness) giữ Claude Haiku CỐ ĐỊNH — thước đo độc lập với mode hệ thống.
 
 ---
 

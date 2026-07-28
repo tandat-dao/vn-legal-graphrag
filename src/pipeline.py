@@ -5,7 +5,6 @@ Kết nối TASK-10 → TASK-11 → TASK-12 → TASK-13 thành một hàm duy nh
 Flow:
   question
     → plan_query()           [TASK-10] QueryPlan
-    → (nếu thiếu field)      → trả về confirmation_needed
     → extract_subgraph()     [TASK-11] LCCIDs
     → hybrid_search()        [TASK-12] Top-k ScoredTextUnit
     → assemble_context()     [TASK-13] context string
@@ -25,12 +24,14 @@ from neo4j import GraphDatabase
 from qdrant_client import QdrantClient
 
 from src.ingestion.vectorizer import load_model
-from src.utils.llm_config import make_anthropic_client
+from src.utils.llm_config import make_llm_client
 from src.retrieval.answer_generator import generate_answer
 from src.retrieval.context_assembler import assemble_context
-from src.retrieval.query_planner import QueryPlan, build_confirmation_prompt, plan_query
+from src.retrieval.query_planner import QueryPlan, plan_query
 from src.retrieval.semantic_filter import hybrid_search
+from src.retrieval.ablation_config import FULL, AblationConfig
 from src.retrieval.subgraph_extractor import extract_subgraph
+from src.retrieval.verifier import verify_citations
 
 load_dotenv()
 
@@ -88,8 +89,7 @@ def _resolve_temporal_anchor(anchor: str | None) -> str | None:
 class PipelineResult(TypedDict):
     question: str
     query_plan: QueryPlan
-    confirmation_needed: bool
-    confirmation_prompt: str | None
+    response_mode: str           # mode đã resolve cho answer generation
     lccids_count: int
     top_k_count: int
     context_tokens: int
@@ -98,14 +98,19 @@ class PipelineResult(TypedDict):
     citations: list[dict]
     context_used: bool
     elapsed_seconds: float
+    verifier: dict | None        # thống kê Verifier agent (None nếu verify=False)
 
 
 # ---------------------------------------------------------------------------
 # Clients factory
 # ---------------------------------------------------------------------------
 
-def _build_clients() -> tuple:
-    """Khởi tạo Neo4j driver, Qdrant client, Anthropic client, embedding model từ .env."""
+def _build_clients(llm_mode: str = "claude") -> tuple:
+    """Khởi tạo Neo4j driver, Qdrant client, LLM client, embedding model từ .env.
+
+    llm_mode: "claude" (eval, thuần) | "claude-fallback" (Claude+Gemini drop) |
+    "gemini" (end-to-end). Mặc định "claude" → eval reproducible.
+    """
     neo4j_driver = GraphDatabase.driver(
         os.getenv("NEO4J_URI", "bolt://localhost:7687"),
         auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "")),
@@ -114,7 +119,7 @@ def _build_clients() -> tuple:
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = make_anthropic_client()
+    anthropic_client = make_llm_client(mode=llm_mode)
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
@@ -133,8 +138,12 @@ def run_pipeline(
     top_k: int = DEFAULT_TOP_K,
     max_tokens: int = CONTEXT_MAX_TOKENS,
     force_jurisdiction: str | None = None,
-    bypass_completeness: bool = False,
     llm_cache_dir: Path | None = None,
+    response_mode: str | None = None,
+    verify: bool = False,
+    verify_tier: int = 1,
+    llm_mode: str = "claude",
+    ablation: AblationConfig = FULL,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -148,67 +157,35 @@ def run_pipeline(
         max_tokens: Token budget tối đa cho context.
 
     Returns:
-        PipelineResult với đầy đủ thông tin pipeline.
-        Nếu câu hỏi thiếu thông tin → confirmation_needed=True, answer="".
+        PipelineResult với đầy đủ thông tin pipeline. Retrieval luôn chạy
+        best-effort kể cả khi query_plan thiếu field (không còn Confirmation Loop).
     """
     t_start = time.perf_counter()
 
     # Lazy init clients
     _own_clients = neo4j_driver is None
     if _own_clients:
-        neo4j_driver, qdrant_client, anthropic_client, model = _build_clients()
+        neo4j_driver, qdrant_client, anthropic_client, model = _build_clients(llm_mode)
 
     try:
         # --- TASK-10: Query Planning ---
         logger.info(f"run_pipeline: plan_query cho '{question[:60]}...'")
         query_plan = plan_query(question, anthropic_client, neo4j_driver=neo4j_driver)
         logger.info(
-            f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']} "
-            f"complete={query_plan['is_complete']}"
+            f"run_pipeline: plan={query_plan['theme']}/{query_plan['jurisdiction']}"
         )
 
-        # Bypass Confirmation Loop cho evaluation: inject jurisdiction từ ground truth
-        # nếu được cung cấp. Chỉ unblock khi jurisdiction là field thiếu duy nhất.
-        if force_jurisdiction and not query_plan["is_complete"]:
-            if "jurisdiction" in query_plan["missing_fields"]:
-                query_plan["jurisdiction"] = force_jurisdiction
-                query_plan["missing_fields"] = [
-                    f for f in query_plan["missing_fields"] if f != "jurisdiction"
-                ]
-                if not query_plan["missing_fields"]:
-                    query_plan["is_complete"] = True
-                logger.info(
-                    f"run_pipeline: force_jurisdiction='{force_jurisdiction}' áp dụng, "
-                    f"is_complete={query_plan['is_complete']}"
-                )
+        # Resolve answer mode: explicit override > planner auto-detect > "general".
+        resolved_mode = response_mode or query_plan.get("response_mode") or "general"
+        logger.info(f"run_pipeline: response_mode='{resolved_mode}'")
 
-        # Bypass toàn diện cho evaluation: chấp nhận query_plan thiếu field (procedure,
-        # theme...) và chạy retrieval với best-effort. Dùng cho TASK-17 để đo retrieval
-        # + generation thuần, không đo cơ chế Confirmation Loop. KHÔNG dùng trong production.
-        if bypass_completeness and not query_plan["is_complete"]:
+        # Inject jurisdiction từ ground truth (eval): áp dụng khi câu hỏi KHÔNG nêu
+        # địa phương (jurisdiction=None). Tương đương điều kiện cũ "missing jurisdiction"
+        # nhưng không phụ thuộc Confirmation Loop (đã gỡ). Hệ 1Q-1A luôn chạy best-effort.
+        if force_jurisdiction and query_plan["jurisdiction"] is None:
+            query_plan["jurisdiction"] = force_jurisdiction
             logger.info(
-                f"run_pipeline: bypass_completeness=True — bỏ qua missing={query_plan['missing_fields']}, "
-                f"tiếp tục retrieval với best-effort"
-            )
-            query_plan["is_complete"] = True
-
-        # Thiếu thông tin → yêu cầu xác nhận
-        if not query_plan["is_complete"]:
-            confirmation_prompt = build_confirmation_prompt(query_plan["missing_fields"])
-            elapsed = time.perf_counter() - t_start
-            return PipelineResult(
-                question=question,
-                query_plan=query_plan,
-                confirmation_needed=True,
-                confirmation_prompt=confirmation_prompt,
-                lccids_count=0,
-                top_k_count=0,
-                context_tokens=0,
-                context="",
-                answer="",
-                citations=[],
-                context_used=False,
-                elapsed_seconds=round(elapsed, 2),
+                f"run_pipeline: force_jurisdiction='{force_jurisdiction}' áp dụng"
             )
 
         # --- TEMPORAL LAYER (Option C Phần 2) ---
@@ -237,7 +214,8 @@ def run_pipeline(
         # --- TASK-11: Sub-graph Extraction ---
         logger.info("run_pipeline: extract_subgraph")
         norm_ids, graph_comp_ids = extract_subgraph(
-            question, query_plan, neo4j_driver, qdrant_client, model
+            question, query_plan, neo4j_driver, qdrant_client, model,
+            ablation=ablation,
         )
         logger.info(f"run_pipeline: {len(norm_ids)} norm_ids, {len(graph_comp_ids)} graph_comp_ids từ Stage 2+3")
 
@@ -247,8 +225,7 @@ def run_pipeline(
             return PipelineResult(
                 question=question,
                 query_plan=query_plan,
-                confirmation_needed=False,
-                confirmation_prompt=None,
+                response_mode=resolved_mode,
                 lccids_count=0,
                 top_k_count=0,
                 context_tokens=0,
@@ -257,6 +234,7 @@ def run_pipeline(
                 citations=[],
                 context_used=False,
                 elapsed_seconds=round(elapsed, 2),
+                verifier=None,
             )
 
         # --- TASK-12: Hybrid Search ---
@@ -280,27 +258,51 @@ def run_pipeline(
 
         # --- TASK-13b: Answer Generation ---
         logger.info("run_pipeline: generate_answer")
-        result = generate_answer(question, context, anthropic_client, cache_dir=llm_cache_dir)
+        result = generate_answer(
+            question, context, anthropic_client, cache_dir=llm_cache_dir, mode=resolved_mode
+        )
+
+        # --- Verifier agent (tầng multi-agent, tùy chọn) ---
+        # Mặc định verify=False → hành vi pipeline gốc KHÔNG đổi. Khi bật: lọc
+        # citation theo grounding (tier 1, $0) hoặc + LLM support judge (tier 2, API).
+        citations = result["citations"]
+        verifier_info = None
+        if verify:
+            vr = verify_citations(
+                question, context, result["answer"], citations,
+                tier=verify_tier, llm_client=anthropic_client,
+            )
+            citations = vr["filtered_citations"]
+            verifier_info = {
+                "n_input": vr["n_input"], "n_kept": vr["n_kept"],
+                "n_dropped": vr["n_dropped"], "n_flagged": vr["n_flagged"],
+                "tier": vr["tier"], "verdicts": vr["verdicts"],
+            }
+            logger.info(
+                f"run_pipeline: verifier tier={vr['tier']} "
+                f"{vr['n_input']}→{vr['n_kept']} citations "
+                f"(drop {vr['n_dropped']}, flag {vr['n_flagged']})"
+            )
 
         elapsed = time.perf_counter() - t_start
         logger.info(
             f"run_pipeline: hoàn thành trong {elapsed:.1f}s — "
-            f"{len(result['citations'])} citations"
+            f"{len(citations)} citations"
         )
 
         return PipelineResult(
             question=question,
             query_plan=query_plan,
-            confirmation_needed=False,
-            confirmation_prompt=None,
+            response_mode=resolved_mode,
             lccids_count=len(norm_ids),
             top_k_count=len(scored_units),
             context_tokens=context_tokens,
             context=context,
             answer=result["answer"],
-            citations=result["citations"],
+            citations=citations,
             context_used=result["context_used"],
             elapsed_seconds=round(elapsed, 2),
+            verifier=verifier_info,
         )
 
     finally:

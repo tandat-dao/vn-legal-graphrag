@@ -231,7 +231,7 @@ def create_edges(
     norm_id: str,
     theme_name: str,
     jurisdiction: str,
-    implements: str | None,
+    implements: str | list[str] | None,
     component_id: str,
     ctv_id: str,
     text_unit_id: str,
@@ -257,13 +257,16 @@ def create_edges(
         jur=jurisdiction,
     )
     # Norm -[:IMPLEMENTS]-> Norm  (chỉ tạo nếu target đã tồn tại)
+    # Hỗ trợ đa cha (D-23): implements có thể là string hoặc list string.
     if implements:
-        tx.run(
-            "MATCH (n:Norm {id: $norm_id}), (p:Norm {id: $parent}) "
-            "MERGE (n)-[:IMPLEMENTS]->(p)",
-            norm_id=norm_id,
-            parent=implements,
-        )
+        parents = implements if isinstance(implements, list) else [implements]
+        for parent in parents:
+            tx.run(
+                "MATCH (n:Norm {id: $norm_id}), (p:Norm {id: $parent}) "
+                "MERGE (n)-[:IMPLEMENTS]->(p)",
+                norm_id=norm_id,
+                parent=parent,
+            )
     # Norm -[:HAS_COMPONENT]-> Component
     tx.run(
         "MATCH (n:Norm {id: $norm_id}), (c:Component {id: $comp_id}) "
@@ -446,14 +449,17 @@ def run_ingestion(data_dir: str) -> None:
             with session.begin_transaction() as tx:
                 for result in all_results:
                     meta = result["metadata"]
-                    if meta.get("implements"):
-                        tx.run(
-                            "MATCH (n:Norm {id: $id}) MATCH (p:Norm {id: $parent}) "
-                            "MERGE (n)-[:IMPLEMENTS]->(p)",
-                            id=meta["id"],
-                            parent=meta["implements"],
-                        )
-                        implements_count += 1
+                    impl = meta.get("implements")
+                    if impl:
+                        parents = impl if isinstance(impl, list) else [impl]
+                        for parent in parents:
+                            tx.run(
+                                "MATCH (n:Norm {id: $id}) MATCH (p:Norm {id: $parent}) "
+                                "MERGE (n)-[:IMPLEMENTS]->(p)",
+                                id=meta["id"],
+                                parent=parent,
+                            )
+                            implements_count += 1
                 tx.commit()
             logger.info(f"Pass 2 — {implements_count} [:IMPLEMENTS] edges đã xử lý.")
 
@@ -480,14 +486,17 @@ def run_ingestion(data_dir: str) -> None:
             logger.info(f"Pass 3 — {amends_count} [:AMENDS] edges đã xử lý.")
 
             # Pass 4: Ontology Mapping (Bottom-up LLM Classification)
-            # Dùng Claude Haiku để gán nhãn từng Component vào các Concept có sẵn.
+            # LLM client theo INGEST_LLM_MODE (mặc định LLM_MODE, fallback "claude").
+            # Gemini-only: INGEST_LLM_MODE=gemini → ontology mapper chạy gemini-2.5-flash.
             ontology_path = Path("data/ontology/core_v1.json")
             if ontology_path.exists():
-                logger.info("Pass 4 — Bắt đầu Ontology Mapping (LLM Classification)...")
-                anthropic_client = __import__("anthropic").Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+                from src.utils.llm_config import make_llm_client
+                _ingest_mode = os.getenv("INGEST_LLM_MODE", os.getenv("LLM_MODE", "claude"))
+                logger.info(f"Pass 4 — Ontology Mapping (LLM Classification, mode={_ingest_mode})...")
+                anthropic_client = make_llm_client(mode=_ingest_mode)
                 with open(ontology_path, "r", encoding="utf-8") as f:
                     core_data = json.load(f)
-                
+
                 # Tính lũy đẳng (Idempotency): Tải trước danh sách các component đã map
                 with session.begin_transaction() as tx:
                     mapped_records = tx.run(
@@ -499,7 +508,7 @@ def run_ingestion(data_dir: str) -> None:
                     ).data()
                     mapped_set = {r["comp_id"] for r in mapped_records}
                 logger.info(f"Pass 4 — Bỏ qua {len(mapped_set)} components đã map từ lần chạy trước để tiết kiệm chi phí.")
-                
+
                 mapping_count = 0
                 total_nodes = sum(len(res["nodes"]) for res in all_results)
                 processed = 0
@@ -510,25 +519,25 @@ def run_ingestion(data_dir: str) -> None:
                     try:
                         for idx, node in enumerate(result["nodes"]):
                             comp_id = node["id"]
-                            
+
                             # Idempotency: Skip nếu đã map
                             if comp_id in mapped_set:
                                 processed += 1
                                 continue
-                                
+
                             text = node["text"]
                             if not text.strip():
                                 processed += 1
                                 continue
-                            
+
                             mapped_concepts = map_component_to_concepts(anthropic_client, text, core_data)
-                            
+
                             # Đánh dấu đã quét LLM (dù có ra mảng rỗng hay không)
                             tx.run(
                                 "MATCH (c:Component {id: $comp_id}) SET c.ontology_mapped = true",
                                 comp_id=comp_id
                             )
-                            
+
                             for concept_id in mapped_concepts:
                                 tx.run(
                                     """
@@ -539,11 +548,11 @@ def run_ingestion(data_dir: str) -> None:
                                     comp_id=comp_id, concept_id=concept_id
                                 )
                                 mapping_count += 1
-                            
+
                             processed += 1
                             if processed % 100 == 0:
                                 logger.info(f"  Đã map {processed}/{total_nodes} components...")
-                            
+
                             # Batch commit sau mỗi 50 node
                             if (idx + 1) % batch_size == 0:
                                 tx.commit()

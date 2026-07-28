@@ -588,7 +588,7 @@ def hybrid_search(
 
     # --- Path 1: Dense search (dùng query đã strip jurisdiction) ---
     question_for_dense = _strip_jurisdiction_for_dense(question)
-    
+
     query_vector = encode_text(model, question_for_dense)
     dense_results = qdrant_client.query_points(
         "legal_texts",
@@ -893,6 +893,13 @@ def hybrid_search(
         if point.id in used_point_ids:
             continue
         _try_add(rrf_score_val, point)
+
+    # Sắp xếp output cuối cùng theo rrf_score giảm dần — khớp docstring + đúng thứ tự
+    # mà assemble_context() dùng. Các pass -1/0/1/2 ở trên chỉ quyết định CHỌN point
+    # nào vào top_k (đa dạng norm/tier + bảo toàn struct-cite/dense-floor); thứ tự
+    # trả về thì theo rrf_score để consumer và test thấy ranking nhất quán. Eval-neutral:
+    # assemble_context() vốn đã re-sort theo rrf_score nên không đổi context/metric.
+    results.sort(key=lambda u: -u["rrf_score"])
 
     if results:
         norm_dist = {n: c for n, c in norm_count.items()}

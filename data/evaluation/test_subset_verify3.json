@@ -1,0 +1,159 @@
+[
+  {
+    "id": "Q022",
+    "question": "Hồ sơ giao đất ở của tôi nộp tháng 6/2024 nhưng đến nay (tháng 10/2024) vẫn chưa có quyết định cuối cùng, áp dụng hạn mức theo Quyết định 18/2016 hay Quyết định 69/2024?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "difficulty": "hard",
+    "ground_truth_answer": "Hồ sơ nộp 6/2024 chưa có quyết định cuối khi QĐ 69/2024 có hiệu lực (30/9/2024). Quyết định 69/2024 KHÔNG có điều khoản chuyển tiếp bảo lưu cho hồ sơ dở dang. Áp dụng nguyên tắc 'cắt ngang' — hồ sơ chưa có quyết định hành chính cuối cùng sẽ áp dụng QĐ 69/2024 (hạn mức mới). Quy định cụ thể hạn mức theo phân loại quận tại Điều 3 QĐ 69/2024. Hệ thống NÊN HỎI LẠI user: quyết định hành chính cuối cùng chưa? loại đất gì? đang tại quận/huyện nào?",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #3 — HỒ SƠ DỞ DANG (case_status='do-dang'). temporal_intent.has_temporal_context=True, temporal_anchor='2024-06' (hoặc 'unspecified_past'). Pipeline phải: (a) retrieve cả QĐ 18 lẫn QĐ 69; (b) trình bày nguyên tắc 'pháp luật không hồi tố' + 'cắt ngang'; (c) HỎI LẠI user trạng thái hồ sơ. KHÔNG được im lặng bỏ qua QĐ 18."
+  },
+  {
+    "id": "Q021",
+    "question": "So sánh hạn mức giao đất ở cho cá nhân tại các quận nội thành TP.HCM theo Quyết định 18/2016 (cũ) và Quyết định 69/2024 (hiện hành) có gì khác nhau?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "difficulty": "medium",
+    "ground_truth_answer": "Cả hai Quyết định đều quy định 160m² cho các quận nội thành, nhưng khác về DANH SÁCH QUẬN cụ thể: (1) QĐ 18/2016 Điều 1 khoản 1 điểm a liệt kê: Quận 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú (KHÔNG có Quận 2, 7, 9, 12, Bình Tân, Thủ Đức); (2) QĐ 69/2024 Điều 3 khoản 1 mở rộng nhóm 160m² gồm Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và TP Thủ Đức.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #2 — SO SÁNH 2 PHIÊN BẢN. has_temporal_context=True, temporal_anchor='unspecified_past' (so sánh cũ-mới). Pipeline phải retrieve cả 2 QĐ + LLM trình bày bảng so sánh, làm rõ khác biệt phân loại quận."
+  },
+  {
+    "id": "Q020",
+    "question": "Năm 2020, hạn mức giao đất ở cho cá nhân tại Quận 1 TP.HCM được quy định ở văn bản nào và mức bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "difficulty": "hard",
+    "ground_truth_answer": "Năm 2020, hạn mức giao đất ở tại Quận 1 TP.HCM được quy định bởi Quyết định 18/2016/QĐ-UBND (hiệu lực từ 26/5/2016 đến 29/9/2024). Theo Điều 1 khoản 1 điểm a, hạn mức là KHÔNG QUÁ 160m²/hộ. Đây là văn bản đã hết hiệu lực và được thay thế bởi Quyết định 69/2024/QĐ-UBND TP.HCM từ ngày 30/9/2024.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #1 — TƯỜNG MINH THỜI ĐIỂM (năm 2020). temporal_intent.has_temporal_context=True, temporal_anchor='2020', case_status=null. Pipeline phải retrieve QĐ 18/2016 (active 2016-2024) và LLM cite đúng. Test khả năng phân biệt văn bản còn/hết hiệu lực qua metadata header '[... HẾT HIỆU LỰC]'."
+  },
+  {
+    "id": "Q003",
+    "question": "Cá nhân muốn chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở thì cần đáp ứng điều kiện gì theo pháp luật hiện hành?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Việc chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở của cá nhân phải đáp ứng đồng thời quy định ở 3 cấp văn bản: (1) Luật Đất đai 2024 Điều 121 khoản 1 điểm b quy định đây là trường hợp phải được cơ quan nhà nước có thẩm quyền cho phép; (2) Nghị quyết 254/2025/QH15 Điều 4 quy định bổ sung về thẩm quyền và trình tự cho phép chuyển mục đích sử dụng đất, trong đó người có thẩm quyền không phải trình HĐND cấp tỉnh chấp thuận đối với một số trường hợp; (3) Nghị định 102/2024/NĐ-CP Điều 44a (bổ sung bởi NĐ 49/2026/NĐ-CP) quy định chi tiết trình tự, thủ tục cho phép chuyển mục đích sử dụng đất.",
+    "ground_truth_citations": [
+      {
+        "dieu": "121",
+        "khoan": "1",
+        "diem": "b",
+        "van_ban": "luat-dat-dai-2024"
+      },
+      {
+        "dieu": "4",
+        "van_ban": "nghi-quyet-254-2025-qh15"
+      },
+      {
+        "dieu": "44a",
+        "van_ban": "nghi-dinh-102-2024-nd-cp"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap 3 — Luật + NQ QH (tier 1) + NĐ (tier 2). Lex posterior: NQ 254 (2025) bổ sung Luật ĐĐ (2024)."
+  },
+  {
+    "id": "Q025",
+    "question": "Hiện nay năm 2026, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì? Có gì khác so với bản gốc không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "difficulty": "hard",
+    "ground_truth_answer": "Hiện nay (2026), Luật Đất đai 2024 Điều 116 khoản 5 quy định căn cứ cho phép chuyển mục đích sử dụng đất là 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị và nông thôn đã được cơ quan có thẩm quyền phê duyệt'. So với bản gốc Luật 2024 (hiệu lực 01/08/2024), cụm từ 'pháp luật về quy hoạch đô thị' đã được Luật 47/2024/QH15 (điểm a khoản 2 Điều 57) thay thế bằng 'pháp luật về quy hoạch đô thị và nông thôn', có hiệu lực từ 01/07/2025.",
+    "ground_truth_citations": [
+      {
+        "dieu": "116",
+        "khoan": "5",
+        "van_ban": "luat-dat-dai-2024"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #6 — MULTI-CTV COMPARISON. has_temporal_context=True, temporal_anchor='2026' → 2026-12-31. Pipeline phải retrieve CTV_v1 (active 2025-07-01 → sentinel) của Component Đ116 K5 — TextUnit hiện hành chứa 'pháp luật về quy hoạch đô thị và nông thôn'. Câu hỏi 'có gì khác so với bản gốc' khiến LLM cần BIẾT cả 2 phiên bản → demo span-regime (broad retrieve) hoặc temporal_anchor='unspecified_past'/'luat-cu'. Pipeline phải trình bày BẢNG SO SÁNH 2 phiên bản + cite Luật 47/2024 là amending norm."
+  },
+  {
+    "id": "Q024",
+    "question": "Năm 2024, Luật Đất đai 2024 quy định căn cứ cho phép chuyển mục đích sử dụng đất là gì?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "difficulty": "hard",
+    "ground_truth_answer": "Tại năm 2024 (trước ngày Luật 47/2024/QH15 sửa đổi có hiệu lực 01/07/2025), Luật Đất đai 2024 Điều 116 khoản 5 quy định: căn cứ cho phép chuyển mục đích sử dụng đất nông nghiệp trong khu dân cư, đất nông nghiệp trong cùng thửa đất có đất ở sang đất ở, hoặc chuyển mục đích các loại đất phi nông nghiệp không phải là đất ở sang đất ở đối với hộ gia đình, cá nhân là 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị đã được cơ quan có thẩm quyền phê duyệt'. (Lưu ý: cụm từ 'pháp luật về quy hoạch đô thị' đã được Luật 47/2024/QH15 thay thế bằng 'pháp luật về quy hoạch đô thị và nông thôn' kể từ 01/07/2025.)",
+    "ground_truth_citations": [
+      {
+        "dieu": "116",
+        "khoan": "5",
+        "van_ban": "luat-dat-dai-2024"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Temporal #5 — MULTI-CTV CẤP COMPONENT. has_temporal_context=True, temporal_anchor='2024' → end-of-year 2024-12-31. Pipeline phải retrieve CTV_v0 (active 2024-08-01 → 2025-06-30) của Component Đ116 K5, trả về TextUnit GỐC chứa 'pháp luật về quy hoạch đô thị' (KHÔNG có 'và nông thôn'). Đây là demo Cấp B multi-version CTV — TextUnit khác nhau theo từng phiên bản thời gian. Pipeline phải KHÔNG retrieve CTV_v1 (2025-07-01 → sentinel) tại thời điểm 2024."
+  },
+  {
+    "id": "Q001",
+    "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu m²?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "difficulty": "easy",
+    "ground_truth_answer": "Theo Quyết định 69/2024/QĐ-UBND TP.HCM Điều 3, hạn mức giao đất ở cho cá nhân tại TP.HCM được phân theo khu vực: (1) các quận nội thành (Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân) và TP Thủ Đức không quá 160 m²/cá nhân; (2) thị trấn các huyện và khu vực đã thực hiện dự án đô thị mới tại Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ không quá 200 m²/cá nhân; (3) các xã của 5 huyện trên không quá 250 m²/cá nhân.",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      },
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+      }
+    ],
+    "relevant_component_ids": [],
+    "notes": "Gap 2 — cặp với Q002 (Đồng Nai). Câu trả lời chấp nhận được nếu nêu đủ 3 mức 160/200/250 m²."
+  }
+]

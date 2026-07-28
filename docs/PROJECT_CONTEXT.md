@@ -157,7 +157,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 │      ▼                                                            │
 │  [Query Planner / LLM]                                           │
 │  Extract: Theme, Procedure, Jurisdiction, Temporal               │
-│  → Nếu thiếu: Confirmation Loop                                  │
+│  → Thiếu field: chạy best-effort (1Q-1A, không hỏi lại — D-25)   │
 │      │                                                            │
 │      ▼                                                            │
 │  [Sub-graph Extraction] ──► Neo4j Graph Traversal                │
@@ -165,13 +165,13 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 │      │                                                            │
 │      ▼                                                            │
 │  [Semantic Filtering] ──► Qdrant Hybrid Search                   │
-│  Dense (BGE-M3) + Sparse (BM25) → RRF Fusion                    │
+│  Dense (BGE-M3) + Keyword (slug-overlap) → RRF Fusion           │
 │  Filter: component_id IN LCCIDs, CTV status = active            │
 │  Output: Top-k TextUnit                                           │
 │      │                                                            │
 │      ▼                                                            │
 │  [Context Assembly]                                               │
-│  Sort by tier (1→4), Token Budget Cap (3000 tokens)             │
+│  Sort by rrf_score, Token Budget Cap (6000 tokens)             │
 │      │                                                            │
 │      ▼                                                            │
 │  [Answer Generator / LLM]                                        │
@@ -329,7 +329,7 @@ Nội dung điểm a.
 | `tier` | int | Chỉ nhận 1 trong 4 giá trị: 1=Luật/Bộ luật/NQ Quốc hội, 2=Nghị định/Pháp lệnh, 3=Thông tư/Thông tư liên tịch, 4=Quyết định UBND tỉnh/NQ HĐND tỉnh |
 | `theme` | string | Chỉ nhận: `dat-dai`, `ho-tich`, `nuoi-con-nuoi` |
 | `jurisdiction` | string | Chỉ nhận: `toan-quoc`, `tp-hcm`, `dong-nai` |
-| `implements` | string\|null | Phải trỏ đúng `id` tồn tại trong tập file. null nếu là Luật gốc |
+| `implements` | string\|list\|null | Trỏ đúng `id` tồn tại trong tập file. null nếu là Luật gốc; **list** nếu hướng dẫn thi hành nhiều cha (D-23) |
 | `valid_from` | string | Format `YYYY-MM-DD` bắt buộc |
 | `valid_to` | string\|null | Format `YYYY-MM-DD` hoặc `null` nếu vẫn còn hiệu lực |
 | `source_vbhn` | string\|null | **Optional.** Số hiệu VBHN dùng làm nguồn nội dung, VD: `"44/VBHN-VPQH"`. null nếu lấy từ văn bản gốc |
@@ -350,8 +350,8 @@ data/raw/*.md
   └──[YAML frontmatter]──►  [Ontology Instantiation]
        metadata: id, tier,                │
        theme, jurisdiction,               ├──► Neo4j (port 7687)
-       implements, valid_from,            │    Nodes: 7 loại
-       valid_to                           │    Edges: 8 loại
+       implements, valid_from,            │    Nodes: 9 loại
+       valid_to                           │    Edges: 10 loại
                                           │    Upsert (MERGE)
                                           │
                                           └──► Qdrant (port 6333)
@@ -434,6 +434,13 @@ Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào s�
   Input: prompt, temperature=0, max_retries=8, cache_dir=.llm_cache/
   Output: raw answer text → parse_citations() (regex + dedupe) →
           {answer, citations: [{dieu, khoan, diem, tiet, van_ban, loai}]}
+
+[Verifier Agent — tùy chọn, mặc định OFF] (verifier.py, D-18)  ◄── tầng multi-agent
+  Khi verify=True: lọc citations của đáp án nháp trước khi trả ra.
+  Tier 1 grounding ($0): drop citation không có trong CONTEXT (chống over-citation,
+    nguyên nhân DOMINANT của precision thấp — NormR 0.93 nhưng F1 0.54).
+  Tier 2 (Haiku, tùy chọn): judge support; UNSUPPORTED → flag (bảo thủ) hoặc drop.
+  Tái dùng faithfulness.py (metric → filter inline). Cờ --verify cho ablation.
 ```
 
 ---
@@ -448,8 +455,8 @@ Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào s�
 | **Ngôn ngữ lập trình** | Python | ≥ 3.10 | ✅ Đã xác nhận |
 | **Neo4j driver** | neo4j (Python official) | 5.x | ✅ Đã xác nhận |
 | **Qdrant client** | qdrant-client | latest | ✅ Đã xác nhận |
-| **Embedding model** | BGE-M3 (BAAI/bge-m3) | dim=1024 | ⚙️ Cần quyết định: local vs API |
-| **Sparse retrieval** | BM25 (via Qdrant sparse) | — | ✅ Đã xác nhận |
+| **Embedding model** | BGE-M3 (BAAI/bge-m3) | dim=1024 | ✅ Local (Apple Silicon MPS) — P-02 resolved |
+| **Keyword retrieval** | slug-overlap (norm_id + component_id tokens) — KHÔNG dùng BM25 sparse | — | ✅ Đã xác nhận (xem §2.6 Path 1) |
 | **Rank fusion** | Reciprocal Rank Fusion (RRF) | custom impl hoặc thư viện | ✅ Đã xác nhận |
 | **LLM — Query Planner** | Claude (Anthropic) | claude-haiku-4-5-20251001 (có planner cache) | ✅ Đã xác nhận |
 | **LLM — Answer Generator** | Claude (Anthropic) | claude-sonnet-4-6, temperature=0, max_retries=8 | ✅ Đã xác nhận |
@@ -503,12 +510,12 @@ Câu hỏi: "Khoản 1 Điều 13 NĐ 102/2024 đã được văn bản nào s�
 | Tính năng | Phase | Loại |
 |---|---|---|
 | Query Planner (LLM + structured extraction) | 3 | Core |
-| Confirmation Loop khi thiếu Jurisdiction | 3 | Core |
+| ~~Confirmation Loop khi thiếu Jurisdiction~~ (GỠ — D-25, hệ 1Q-1A) | 3 | Removed |
 | Sub-graph Extraction via Cypher | 3 | Core |
 | Temporal filtering (CTV valid_from/to) | 3 | Core |
 | Qdrant payload filtering | 3 | Core |
 | Dense retrieval (BGE-M3) | 3 | Core |
-| Sparse retrieval (BM25) | 3 | Core |
+| Keyword retrieval (slug-overlap) | 3 | Core |
 | RRF fusion | 3 | Core |
 | Context assembly + hierarchy ordering | 3 | Core |
 | Token budget cap | 3 | Core |

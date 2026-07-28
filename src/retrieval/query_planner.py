@@ -5,8 +5,9 @@ Nhận câu hỏi tiếng Việt, dùng Claude Haiku 4.5 để extract:
 Trả về QueryPlan TypedDict.
 
 Quy tắc tự động:
-  - Hộ tịch và Nuôi con nuôi luôn gán jurisdiction = "toan-quoc" (không hỏi lại)
-  - Đất đai không có jurisdiction → is_complete = False, missing_fields = ["jurisdiction"]
+  - Hộ tịch và Nuôi con nuôi luôn gán jurisdiction = "toan-quoc"
+  - Đất đai giữ jurisdiction=None nếu câu hỏi không nêu; retrieval chạy best-effort
+    (eval bơm jurisdiction từ ground-truth qua force_jurisdiction ở pipeline)
 """
 import hashlib
 import json
@@ -46,12 +47,13 @@ MODEL = "claude-haiku-4-5-20251001"
 _SYSTEM_PROMPT = """\
 Bạn là bộ phân loại câu hỏi pháp lý Việt Nam. Nhiệm vụ: extract 5 trường từ câu hỏi người dùng.
 
-Trả về JSON với đúng 5 trường (không có trường nào khác):
+Trả về JSON với đúng 6 trường (không có trường nào khác):
 {
   "theme": <"dat-dai" | "ho-tich" | "nuoi-con-nuoi" | null>,
   "procedure": <một trong các giá trị dưới đây | null>,
   "jurisdiction": <"toan-quoc" | "tp-hcm" | "dong-nai" | null>,
   "temporal": <chuỗi ngày "YYYY-MM-DD" nếu câu hỏi đề cập thời điểm cụ thể | null>,
+  "response_mode": <"general" | "irac">,
   "temporal_intent": {
     "has_temporal_context": <true | false>,
     "temporal_anchor": <"YYYY-MM-DD" | "trước-YYYY-MM-DD" | "luat-cu" | "unspecified_past" | null>,
@@ -98,6 +100,13 @@ Quy tắc temporal_intent (PHÂN BIỆT QUÁ KHỨ VÀ HIỆN TẠI):
 
 9. reasoning — 1 câu giải thích ngắn (≤ 30 từ) phát hiện temporal.
 
+Quy tắc response_mode (PHÂN BIỆT CÂU HỎI TRA CỨU CHUNG VS TÌNH HUỐNG CỤ THỂ):
+10. response_mode = "irac" KHI câu hỏi MÔ TẢ MỘT TÌNH HUỐNG/SỰ VIỆC CỤ THỂ của người hỏi cần áp dụng luật vào tình tiết để ra kết luận. Dấu hiệu:
+    - Có chủ thể + tình tiết cụ thể: "Tôi có 500m² đất...", "Gia đình tôi...", "Bên mua đặt cọc 200 triệu...", "Trường hợp của tôi..."
+    - Hỏi "tôi có được... không?", "tôi phải làm gì?", "ai đúng/sai?", "có hợp pháp không?" gắn với sự việc đã/đang xảy ra.
+    response_mode = "general" KHI câu hỏi TRA CỨU QUY ĐỊNH CHUNG, không gắn tình tiết cá nhân: "Điều kiện X là gì?", "Hạn mức Y bao nhiêu?", "Thủ tục Z gồm những bước nào?", "Văn bản nào sửa đổi...?".
+    Khi không chắc → "general".
+
 VÍ DỤ:
 Q: "Hạn mức giao đất ở TP.HCM tối đa bao nhiêu m²?"
 → temporal_intent: {"has_temporal_context": false, "temporal_anchor": null, "case_status": null, "reasoning": "Câu hỏi về quy định hiện hành, không có yếu tố thời gian"}
@@ -110,6 +119,12 @@ Q: "Đất nhà tôi mua từ hồi luật cũ chưa sửa, giờ muốn cấp s
 
 Q: "Hồ sơ tôi nộp tháng trước nhưng xã ngâm đến nay chưa có quyết định"
 → temporal_intent: {"has_temporal_context": true, "temporal_anchor": "unspecified_past", "case_status": "do-dang", "reasoning": "Hồ sơ chưa có quyết định cuối — có thể bị áp dụng luật mới nếu không có chuyển tiếp"}
+
+VÍ DỤ response_mode:
+Q: "Hạn mức giao đất ở tại TP.HCM tối đa bao nhiêu m²?"
+→ "response_mode": "general"   (tra cứu quy định chung, không có tình tiết cá nhân)
+Q: "Tôi có 500m² đất nông nghiệp ở Quận 9 mua năm 2010, muốn chuyển 200m² sang đất ở thì có được không?"
+→ "response_mode": "irac"      (tình huống cụ thể của người hỏi, cần áp dụng luật vào tình tiết)
 
 Chỉ trả về JSON thuần — không có markdown, không có giải thích ngoài JSON.
 """
@@ -145,14 +160,16 @@ _DEFAULT_TEMPORAL_INTENT: TemporalIntent = {
 _VALID_CASE_STATUS = {"hoan-tat", "do-dang", "moi"}
 
 
+VALID_RESPONSE_MODES = ("general", "irac")
+
+
 class QueryPlan(TypedDict):
     theme: str | None
     procedure: str | None
     jurisdiction: str | None
     temporal: str | None
     temporal_intent: TemporalIntent
-    is_complete: bool
-    missing_fields: list[str]
+    response_mode: str          # "general" (gọn) | "irac" (tư vấn chi tiết)
 
 
 # ---------------------------------------------------------------------------
@@ -267,6 +284,7 @@ def _validate_and_clean(raw: dict) -> dict:
     procedure = raw.get("procedure")
     jurisdiction = raw.get("jurisdiction")
     temporal = raw.get("temporal")
+    response_mode = raw.get("response_mode")
     temporal_intent = _validate_temporal_intent(raw.get("temporal_intent"))
 
     if theme not in VALID_THEMES:
@@ -277,12 +295,15 @@ def _validate_and_clean(raw: dict) -> dict:
         jurisdiction = None
     if not isinstance(temporal, str):
         temporal = None
+    if response_mode not in VALID_RESPONSE_MODES:
+        response_mode = "general"  # default an toàn khi LLM bỏ trống/sai
 
     return {
         "theme": theme,
         "procedure": procedure,
         "jurisdiction": jurisdiction,
         "temporal": temporal,
+        "response_mode": response_mode,
         "temporal_intent": temporal_intent,
     }
 
@@ -294,25 +315,6 @@ def _apply_jurisdiction_rules(fields: dict) -> dict:
         fields = dict(fields)
         fields["jurisdiction"] = "toan-quoc"
     return fields
-
-
-def _compute_completeness(fields: dict) -> tuple[bool, list[str]]:
-    """Xác định is_complete và missing_fields.
-
-    Đất đai bắt buộc có jurisdiction vì quy định khác nhau giữa địa phương.
-    Hộ tịch + Nuôi con nuôi luôn toan-quoc nên không bao giờ missing jurisdiction.
-    """
-    missing: list[str] = []
-    if fields["theme"] is None:
-        missing.append("theme")
-    if fields["procedure"] is None:
-        missing.append("procedure")
-
-    theme = fields["theme"]
-    if theme == "dat-dai" and fields["jurisdiction"] is None:
-        missing.append("jurisdiction")
-
-    return (len(missing) == 0, missing)
 
 
 # ---------------------------------------------------------------------------
@@ -401,12 +403,10 @@ def plan_query(
             fields["theme"] = backfilled
 
     fields = _apply_jurisdiction_rules(fields)
-    is_complete, missing = _compute_completeness(fields)
 
     logger.info(
         f"plan_query | theme={fields['theme']} procedure={fields['procedure']} "
         f"jurisdiction={fields['jurisdiction']} temporal={fields['temporal']} "
-        f"is_complete={is_complete} missing={missing} "
         f"temporal_ctx={fields['temporal_intent']['has_temporal_context']}"
     )
 
@@ -416,39 +416,8 @@ def plan_query(
         jurisdiction=fields["jurisdiction"],
         temporal=fields["temporal"],
         temporal_intent=fields["temporal_intent"],
-        is_complete=is_complete,
-        missing_fields=missing,
+        response_mode=fields["response_mode"],
     )
-
-
-def build_confirmation_prompt(missing_fields: list[str]) -> str:
-    """Tạo câu hỏi ngược lại người dùng khi thiếu thông tin.
-
-    Args:
-        missing_fields: Danh sách trường còn thiếu từ QueryPlan.
-
-    Returns:
-        Câu hỏi tiếng Việt yêu cầu người dùng bổ sung thông tin.
-    """
-    parts: list[str] = []
-
-    if "theme" in missing_fields:
-        parts.append(
-            "Bạn muốn tra cứu thủ tục thuộc lĩnh vực nào? "
-            "(Đất đai / Hộ tịch / Nuôi con nuôi)"
-        )
-    if "procedure" in missing_fields:
-        parts.append("Bạn muốn tra cứu thủ tục hành chính cụ thể nào?")
-    if "jurisdiction" in missing_fields:
-        parts.append(
-            "Bất động sản / đất đai của bạn thuộc tỉnh/thành phố nào? "
-            "(TP. Hồ Chí Minh / Đồng Nai / địa phương khác)"
-        )
-
-    if not parts:
-        return "Vui lòng cung cấp thêm thông tin để tôi có thể hỗ trợ chính xác hơn."
-
-    return " ".join(parts)
 
 
 # ---------------------------------------------------------------------------
@@ -478,10 +447,6 @@ if __name__ == "__main__":
 
     for q in test_questions:
         plan = plan_query(q, client)
-        status = "✅" if plan["is_complete"] else f"❌ thiếu {plan['missing_fields']}"
         print(f"\nQ: {q}")
         print(f"   theme={plan['theme']} procedure={plan['procedure']} "
               f"jurisdiction={plan['jurisdiction']} temporal={plan['temporal']}")
-        print(f"   {status}")
-        if not plan["is_complete"]:
-            print(f"   → {build_confirmation_prompt(plan['missing_fields'])}")

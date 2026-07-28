@@ -158,16 +158,6 @@ def _render_result(question: str, result: dict, total_time: float,
         expand=False,
     ))
 
-    # Confirmation needed case
-    if result.get("confirmation_needed"):
-        console.print()
-        console.print(Panel(
-            Text(result.get("confirmation_prompt", "(không có prompt)"), style="yellow"),
-            title="⚠️  [bold yellow]HỆ THỐNG YÊU CẦU XÁC NHẬN[/bold yellow]",
-            border_style="yellow",
-        ))
-        return
-
     # Trace tree (optional)
     if show_trace and trace_records:
         console.print()
@@ -221,13 +211,25 @@ def main() -> int:
     parser.add_argument("--trace", action="store_true",
                         help="Hiện chi tiết pipeline trace (Tree view)")
     parser.add_argument("--jurisdiction", choices=["toan-quoc", "tp-hcm", "dong-nai"],
-                        help="Force jurisdiction (bypass Confirmation Loop)")
-    parser.add_argument("--bypass-completeness", action="store_true",
-                        help="Bypass kiểm tra đầy đủ field")
+                        help="Ép jurisdiction khi câu hỏi không nêu địa phương")
     parser.add_argument("--no-llm-cache", action="store_true",
                         help="Tắt LLM cache (luôn gọi API)")
     parser.add_argument("--llm-cache-dir", default="data/evaluation/.llm_cache/",
                         help="Thư mục cache LLM")
+    parser.add_argument("--mode", choices=["auto", "general", "irac"], default="auto",
+                        help="Chế độ trả lời: auto (planner tự chọn), general (gọn), "
+                             "irac (tư vấn chi tiết). Mặc định auto.")
+    parser.add_argument("--verify", action="store_true",
+                        help="Bật Verifier agent lọc citation (mặc định tắt).")
+    parser.add_argument("--verify-tier", type=int, default=1, choices=[0, 1, 2],
+                        help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
+                             "2=grounding + LLM support judge (TỐN Haiku API).")
+    parser.add_argument("--llm-mode",
+                        choices=["claude", "claude-fallback", "gemini", "gemini-fallback"],
+                        default="claude-fallback",
+                        help="Mode LLM: 'claude' thuần | 'claude-fallback' Claude + Gemini "
+                             "khi drop (mặc định demo) | 'gemini' end-to-end. "
+                             "Fallback tự degrade về Claude nếu thiếu cấu hình Gemini.")
     args = parser.parse_args()
 
     # Setup logging
@@ -257,15 +259,18 @@ def main() -> int:
             result = run_pipeline(
                 args.question,
                 force_jurisdiction=args.jurisdiction,
-                bypass_completeness=args.bypass_completeness,
                 llm_cache_dir=cache_dir,
+                response_mode=None if args.mode == "auto" else args.mode,
+                verify=args.verify,
+                verify_tier=args.verify_tier,
+                llm_mode=args.llm_mode,
             )
-        except _anthropic.OverloadedError as e:
+        except _anthropic.APIStatusError as e:
             elapsed = time.perf_counter() - t_start
             console.print()
             console.print(Panel(
                 Text.from_markup(
-                    f"[bold red]Anthropic API 529 Overloaded[/bold red]\n\n"
+                    f"[bold red]Anthropic API Lỗi ({e.status_code})[/bold red]\n\n"
                     f"Lỗi: {e}\n\n"
                     f"[dim]Gợi ý: thử lại sau vài phút. Cache đã được populate cho\n"
                     f"các câu hỏi đã chạy trước đây — chỉ câu mới phụ thuộc API live.[/dim]\n\n"

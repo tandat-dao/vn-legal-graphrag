@@ -58,8 +58,6 @@ class BaselineResult(TypedDict):
     elapsed_seconds: float
     # Các field GraphRAG không có trong baseline (để None nhằm giữ schema chung)
     query_plan: None
-    confirmation_needed: bool
-    confirmation_prompt: None
     lccids_count: int
 
 
@@ -278,6 +276,7 @@ def run_baseline_query(
     model=None,
     top_k: int = DEFAULT_TOP_K,
     llm_cache_dir: Path | None = None,
+    mode: str = "general",
 ) -> BaselineResult:
     """Pure vector search + LLM. Trả về output schema giống run_pipeline().
 
@@ -338,13 +337,11 @@ def run_baseline_query(
                 context="",
                 elapsed_seconds=round(elapsed, 2),
                 query_plan=None,
-                confirmation_needed=False,
-                confirmation_prompt=None,
                 lccids_count=0,
             )
 
-        # Dùng đúng generate_answer của GraphRAG để cùng prompt + cùng LLM
-        gen = generate_answer(question, context, anthropic_client, cache_dir=llm_cache_dir)
+        # Dùng đúng generate_answer của GraphRAG để cùng prompt + cùng LLM + cùng mode
+        gen = generate_answer(question, context, anthropic_client, cache_dir=llm_cache_dir, mode=mode)
 
         elapsed = time.perf_counter() - t_start
         logger.info(
@@ -362,8 +359,6 @@ def run_baseline_query(
             context=context,
             elapsed_seconds=round(elapsed, 2),
             query_plan=None,
-            confirmation_needed=False,
-            confirmation_prompt=None,
             lccids_count=0,
         )
 

@@ -132,6 +132,7 @@ def _extract_chunk_for_citation(citation: dict, context: str) -> str | None:
     vb = _norm(citation.get("van_ban"))
     dieu = _norm(citation.get("dieu"))
     khoan = _norm(citation.get("khoan"))
+    diem = _norm(citation.get("diem"))
     loai = _norm(citation.get("loai"))
     if not vb:
         return None
@@ -140,36 +141,65 @@ def _extract_chunk_for_citation(citation: dict, context: str) -> str | None:
     is_phu_luc = loai == "phu_luc" or dieu == "_default"
     # Split context theo header blocks
     blocks = re.split(r"(?=^---[^\n]*$)", context, flags=re.MULTILINE)
-    for block in blocks:
+
+    def _match(block: str, with_diem: bool) -> bool:
         first_line_end = block.find("\n")
         header = (block[:first_line_end] if first_line_end > 0 else block).lower()
         if vb not in header:
-            continue
+            return False
         if is_phu_luc:
             if "phụ lục" not in header:
-                continue
+                return False
             if dieu and dieu != "_default" and f"phụ lục {dieu}" not in header:
-                continue
+                return False
         else:
             if f"điều {dieu}." not in header:
-                continue
+                return False
         if khoan is not None and f"khoản {khoan}." not in header:
+            return False
+        if with_diem and diem is not None and f"điểm {diem}." not in header:
+            return False
+        return True
+
+    # Pass 1 — khớp tới cấp Điểm (tránh trả nhầm Điểm khác cùng Điều/Khoản).
+    # Pass 2 — nới lỏng: ngữ cảnh có thể chỉ chứa khối ở cấp Khoản.
+    for with_diem in (True, False):
+        if with_diem and diem is None:
             continue
-        return block.strip()
+        for block in blocks:
+            if _match(block, with_diem):
+                return block.strip()
     return None
 
 
 def _extract_answer_snippet(citation: dict, answer: str, window: int = 200) -> str:
-    """Lấy snippet quanh nơi citation xuất hiện trong answer text."""
-    # Citation format: [Điều X, ...] hoặc [Phụ lục X, ...]
-    dieu = citation.get("dieu", "")
+    """Lấy snippet quanh nơi citation xuất hiện trong answer text.
+
+    Hỗ trợ cả citation Điều ([Điều X, Khoản Y, ...]) lẫn Phụ lục ([Phụ lục I, ...]
+    / [Phụ lục, Khoản 2, ...]). Trước đây chỉ bắt regex `Điều` → citation Phụ lục
+    luôn rơi vào fallback (400 ký tự đầu answer) → judge nhìn sai ngữ cảnh → flag
+    oan (quan sát Q008 chạy Tier 2). Dispatch theo `loai` để fix.
+    """
+    dieu = citation.get("dieu", "") or ""
     khoan = citation.get("khoan", "")
     vb = citation.get("van_ban", "")
-    # Tìm vị trí citation pattern trong answer
-    patterns = []
-    if khoan:
-        patterns.append(rf"\[Điều\s+{re.escape(dieu)},\s*Khoản\s+{re.escape(khoan)}[^\]]*{re.escape(vb)}\]")
-    patterns.append(rf"\[Điều\s+{re.escape(dieu)}[^\]]*{re.escape(vb)}\]")
+    loai = citation.get("loai")
+    vb_esc = re.escape(vb)
+
+    patterns: list[str] = []
+    if loai == "phu_luc":
+        # [Phụ lục I, ...] hoặc [Phụ lục, ...] (dieu='_default' khi Phụ lục không số)
+        head = r"\[Phụ\s*lục"
+        if dieu and dieu != "_default":
+            head += rf"\s+{re.escape(dieu)}"
+        if khoan:
+            patterns.append(head + rf"[^\]]*Khoản\s+{re.escape(khoan)}[^\]]*{vb_esc}\]")
+        patterns.append(head + rf"[^\]]*{vb_esc}\]")
+    else:
+        if khoan:
+            patterns.append(rf"\[Điều\s+{re.escape(dieu)},\s*Khoản\s+{re.escape(khoan)}[^\]]*{vb_esc}\]")
+        patterns.append(rf"\[Điều\s+{re.escape(dieu)}[^\]]*{vb_esc}\]")
+
     for pat in patterns:
         m = re.search(pat, answer, re.IGNORECASE)
         if m:

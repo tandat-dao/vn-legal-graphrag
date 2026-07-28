@@ -100,7 +100,6 @@ def instrument_one(item: dict, clients) -> dict:
     qp = plan_query(item["question"], anthropic_client, neo4j_driver=neo4j_driver)
     # Force jurisdiction như eval mode
     qp["jurisdiction"] = item["jurisdiction"]
-    qp["is_complete"] = True
 
     # Apply temporal layer (sao chép từ pipeline.py)
     from src.pipeline import _resolve_temporal_anchor

@@ -43,36 +43,23 @@ logger = logging.getLogger(__name__)
 # Per-system runners
 # ---------------------------------------------------------------------------
 
-_JURIS_SUFFIX = {
-    "toan-quoc": "trên cả nước Việt Nam",
-    "tp-hcm": "tại Thành phố Hồ Chí Minh",
-    "dong-nai": "tại tỉnh Đồng Nai",
-}
+def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
+                      response_mode: str = "auto",
+                      verify: bool = False, verify_tier: int = 1,
+                      ablation=None) -> dict:
+    """Chạy GraphRAG, inject ground-truth jurisdiction từ test_set.
 
+    Eval mode: `force_jurisdiction` bơm jurisdiction từ test_set khi câu hỏi không
+    nêu địa phương. Đo retrieval + generation. Hệ 1Q-1A luôn chạy best-effort
+    (không còn Confirmation Loop).
 
-def _augment_question(question: str, jurisdiction: str) -> str:
-    """Phụ trợ jurisdiction vào câu hỏi khi pipeline yêu cầu confirmation.
-
-    Mô phỏng user trả lời confirmation prompt với jurisdiction lấy từ test_set.
-    Chỉ append nếu suffix chưa xuất hiện trong câu.
-    """
-    suffix = _JURIS_SUFFIX.get(jurisdiction, "")
-    if not suffix or suffix.lower() in question.lower():
-        return question
-    base = question.rstrip("?.! ")
-    return f"{base} {suffix}?"
-
-
-def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) -> dict:
-    """Chạy GraphRAG với force_jurisdiction bypass Confirmation Loop.
-
-    Eval mode: inject ground-truth jurisdiction từ test_set vào run_pipeline.
-    Mục tiêu là đo retrieval + generation, không đo UX Confirmation Loop.
-    Vẫn giữ augment+retry như fallback cho trường hợp pipeline thiếu field khác.
+    verify/verify_tier: bật Verifier agent (ablation ±verifier). Mặc định off.
     """
     from src.pipeline import run_pipeline
+    from src.retrieval.ablation_config import FULL
     neo4j_driver, qdrant_client, anthropic_client, model = clients
 
+    resolved_mode = None if response_mode == "auto" else response_mode
     res = run_pipeline(
         item["question"],
         neo4j_driver=neo4j_driver,
@@ -80,75 +67,87 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None) ->
         anthropic_client=anthropic_client,
         model=model,
         force_jurisdiction=item["jurisdiction"],
-        bypass_completeness=True,  # Eval mode: chạy retrieval ngay cả khi planner thiếu procedure/theme
         llm_cache_dir=llm_cache_dir,
+        response_mode=resolved_mode,
+        verify=verify,
+        verify_tier=verify_tier,
+        ablation=ablation or FULL,
     )
-
-    # Với bypass_completeness=True, confirmation_needed gần như không bao giờ True.
-    # Giữ retry như defensive fallback cho trường hợp bất thường.
-    retried = False
-    if res["confirmation_needed"]:
-        aug_q = _augment_question(item["question"], item["jurisdiction"])
-        if aug_q != item["question"]:
-            logger.info(f"  [retry] confirmation_needed bất thường → augment: '{aug_q[:80]}...'")
-            res2 = run_pipeline(
-                aug_q,
-                neo4j_driver=neo4j_driver,
-                qdrant_client=qdrant_client,
-                anthropic_client=anthropic_client,
-                model=model,
-                force_jurisdiction=item["jurisdiction"],
-                bypass_completeness=True,
-                llm_cache_dir=llm_cache_dir,
-            )
-            res2["elapsed_seconds"] = round(res["elapsed_seconds"] + res2["elapsed_seconds"], 2)
-            res = res2
-            retried = True
 
     return {
         "answer": res["answer"],
         "citations": res["citations"],
         "elapsed_seconds": res["elapsed_seconds"],
-        "confirmation_needed": res["confirmation_needed"],
-        "confirmation_retried": retried,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
         "context": res.get("context", ""),  # needed cho faithfulness eval
+        "response_mode": res.get("response_mode", response_mode),
+        "verifier": res.get("verifier"),  # thống kê verifier (None nếu verify=False)
     }
 
 
-def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None) -> dict:
+def _run_one_baseline(item: dict, clients, llm_cache_dir: Path | None = None,
+                      response_mode: str = "auto") -> dict:
     from src.baseline.naive_rag import run_baseline_query
     _, qdrant_client, anthropic_client, model = clients
+    resolved_mode = "general" if response_mode == "auto" else response_mode
     res = run_baseline_query(
         item["question"],
         qdrant_client=qdrant_client,
         anthropic_client=anthropic_client,
         model=model,
         llm_cache_dir=llm_cache_dir,
+        mode=resolved_mode,
     )
     return {
         "answer": res["answer"],
         "citations": res["citations"],
         "elapsed_seconds": res["elapsed_seconds"],
-        "confirmation_needed": False,
-        "confirmation_retried": False,
         "context_used": res["context_used"],
         "top_k_count": res["top_k_count"],
         "context": res.get("context", ""),
     }
 
 
+def _run_one_closedbook(item: dict, clients, llm_cache_dir: Path | None = None,
+                        response_mode: str = "auto") -> dict:
+    """Closed-book baseline (E2a): LLM trả lời KHÔNG retrieval."""
+    from src.baseline.closed_book import run_closedbook_query
+    _, _, anthropic_client, _ = clients
+    mode = "general" if response_mode == "auto" else response_mode
+    return run_closedbook_query(item["question"], anthropic_client, llm_cache_dir, mode)
+
+
+def _run_one_oracle(item: dict, clients, llm_cache_dir: Path | None = None,
+                    response_mode: str = "auto", text_index=None) -> dict:
+    """Oracle baseline (E2a): generator chạy trên context = GT chunks (trần chẩn đoán)."""
+    from src.evaluation.oracle import run_oracle_query
+    _, _, anthropic_client, _ = clients
+    mode = "general" if response_mode == "auto" else response_mode
+    return run_oracle_query(item["question"], item.get("ground_truth_citations", []),
+                            text_index, anthropic_client, llm_cache_dir, mode)
+
+
+def _run_one_bm25(item: dict, clients, llm_cache_dir: Path | None = None,
+                  response_mode: str = "auto") -> dict:
+    """BM25 baseline (E2a): retrieval LEXICAL thay dense (lazy-build corpus 1 lần)."""
+    from src.baseline.bm25_rag import run_bm25_query
+    _, _, anthropic_client, _ = clients
+    mode = "general" if response_mode == "auto" else response_mode
+    return run_bm25_query(item["question"], anthropic_client,
+                          cache_dir=llm_cache_dir, mode=mode)
+
+
 # ---------------------------------------------------------------------------
 # Shared client factory (tránh load model nhiều lần)
 # ---------------------------------------------------------------------------
 
-def _build_shared_clients():
+def _build_shared_clients(llm_mode: str = "claude"):
     from neo4j import GraphDatabase
     from qdrant_client import QdrantClient
 
     from src.ingestion.vectorizer import load_model
-    from src.utils.llm_config import make_anthropic_client
+    from src.utils.llm_config import make_llm_client
 
     neo4j_driver = GraphDatabase.driver(
         os.getenv("NEO4J_URI", "bolt://localhost:7687"),
@@ -158,7 +157,8 @@ def _build_shared_clients():
         host=os.getenv("QDRANT_HOST", "localhost"),
         port=int(os.getenv("QDRANT_PORT", "6333")),
     )
-    anthropic_client = make_anthropic_client()
+    # Client HỆ THỐNG (GraphRAG + Baseline) theo llm_mode. Judge dựng riêng (Claude cố định).
+    anthropic_client = make_llm_client(mode=llm_mode)
     model = load_model()
     return neo4j_driver, qdrant_client, anthropic_client, model
 
@@ -173,6 +173,10 @@ def run_system_on_test_set(
     clients,
     llm_cache_dir: Path | None = None,
     faithfulness_tier: int = 0,  # 0=skip, 1=existence only, 2=existence+LLM judge
+    response_mode: str = "auto",
+    verify: bool = False,
+    verify_tier: int = 1,
+    ablation=None,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -183,30 +187,51 @@ def run_system_on_test_set(
     Returns:
         List per-question result dict.
     """
-    assert system in {"graphrag", "baseline"}
-    runner = _run_one_graphrag if system == "graphrag" else _run_one_baseline
+    _RUNNERS = {
+        "graphrag": _run_one_graphrag,
+        "baseline": _run_one_baseline,
+        "closed-book": _run_one_closedbook,
+        "oracle": _run_one_oracle,
+        "bm25": _run_one_bm25,
+    }
+    assert system in _RUNNERS, f"system '{system}' không hợp lệ: {list(_RUNNERS)}"
+    runner = _RUNNERS[system]
+
+    # Oracle cần text index của corpus (build MỘT LẦN, tái dùng cả test set)
+    oracle_text_index = None
+    if system == "oracle":
+        from src.evaluation.build_review_sheet import build_text_index
+        oracle_text_index = build_text_index(Path("data/raw"))
 
     # Faithfulness setup (lazy import để không break khi không dùng)
     judge_client = None
     if faithfulness_tier >= 1:
         from src.evaluation.faithfulness import evaluate_faithfulness
         if faithfulness_tier >= 2:
-            _, _, judge_client, _ = clients  # reuse anthropic_client làm judge
+            # Judge CỐ ĐỊNH Claude — thước đo độc lập với mode hệ thống (tránh
+            # Gemini tự chấm Gemini khi mode=gemini). Xem bàn về judge.
+            from src.utils.llm_config import make_anthropic_client
+            judge_client = make_anthropic_client()
 
     results = []
     for i, item in enumerate(test_set, 1):
         qid = item["id"]
         logger.info(f"[{system}] {i}/{len(test_set)} {qid}: {item['question'][:60]}...")
         try:
-            sys_out = runner(item, clients, llm_cache_dir=llm_cache_dir)
+            runner_kwargs = dict(llm_cache_dir=llm_cache_dir, response_mode=response_mode)
+            if system == "graphrag":
+                # Verifier + ablation chỉ áp dụng cho GraphRAG (component hệ thống ta).
+                runner_kwargs.update(verify=verify, verify_tier=verify_tier,
+                                     ablation=ablation)
+            elif system == "oracle":
+                runner_kwargs.update(text_index=oracle_text_index)
+            sys_out = runner(item, clients, **runner_kwargs)
         except Exception as e:
             logger.exception(f"[{system}] {qid} CRASHED: {e}")
             sys_out = {
                 "answer": f"<<ERROR: {e}>>",
                 "citations": [],
                 "elapsed_seconds": 0.0,
-                "confirmation_needed": False,
-                "confirmation_retried": False,
                 "context_used": False,
                 "top_k_count": 0,
                 "context": "",
@@ -247,11 +272,10 @@ def run_system_on_test_set(
             "negative_correct": nc,
             "faithfulness": faithfulness,
             "elapsed_seconds": sys_out["elapsed_seconds"],
-            "confirmation_needed": sys_out["confirmation_needed"],
-            "confirmation_retried": sys_out["confirmation_retried"],
             "context_used": sys_out["context_used"],
             "top_k_count": sys_out["top_k_count"],
             "context": sys_out.get("context", ""),  # save cho future faithfulness re-eval
+            "verifier": sys_out.get("verifier"),    # thống kê verifier (None nếu off)
         }
         results.append(result)
 
@@ -282,7 +306,9 @@ def main() -> int:
     parser.add_argument(
         "--systems",
         default="graphrag,baseline",
-        help="Hệ thống chạy, cách bởi dấu phẩy. Mặc định: graphrag,baseline",
+        help="Hệ thống chạy, cách bởi dấu phẩy: graphrag | baseline (naive RAG) | "
+             "bm25 (E2a, lexical) | closed-book (E2a, không retrieval) | "
+             "oracle (E2a, context=GT chunks). Mặc định: graphrag,baseline",
     )
     parser.add_argument("--limit", type=int, default=0, help="Chỉ chạy N câu đầu (0=full)")
     parser.add_argument("--out-dir", type=Path, default=Path("data/evaluation/"))
@@ -312,11 +338,45 @@ def main() -> int:
         help="Xóa toàn bộ cache trước khi chạy. Dùng khi thay đổi prompt template.",
     )
     parser.add_argument(
+        "--response-mode",
+        default="auto",
+        choices=["auto", "general", "irac"],
+        help="Chế độ trả lời: auto (planner tự chọn), general (gọn), irac (tư vấn IRAC). "
+             "Mặc định auto. Dùng general/irac để so sánh A/B 2 mode.",
+    )
+    parser.add_argument(
         "--faithfulness-tier",
         type=int, default=0, choices=[0, 1, 2],
         help="Faithfulness metric tier: 0=skip (default), 1=existence-only ($0), "
-             "2=existence+LLM-judge (~1 Haiku call per citation). Đo % citation "
+             "2=existence+LLM-judge (~1 Haiku call per citation). Đo %% citation "
              "có chunk match context (Tier 1) và semantic support (Tier 2).",
+    )
+    parser.add_argument(
+        "--verify",
+        action="store_true",
+        help="Bật Verifier agent lọc citation cho GraphRAG (ablation ±verifier). "
+             "Mặc định TẮT (= hành vi cũ).",
+    )
+    parser.add_argument(
+        "--verify-tier",
+        type=int, default=1, choices=[0, 1, 2],
+        help="Tier verifier: 0=no-op, 1=grounding ($0, mặc định), "
+             "2=grounding + LLM support judge (TỐN ~1 Haiku call per citation).",
+    )
+    parser.add_argument(
+        "--llm-mode", choices=["claude", "claude-fallback", "gemini", "gemini-fallback"], default="claude",
+        help="LLM cho HỆ THỐNG (GraphRAG + Baseline): claude (mặc định, reproducible) | "
+             "claude-fallback | gemini end-to-end. Judge giữ Claude cố định (thước đo).",
+    )
+    parser.add_argument(
+        "--sample", type=int, default=0,
+        help="Chọn NGẪU NHIÊN N câu (0=không). Khác --limit (N câu đầu). Dùng với --seed.",
+    )
+    parser.add_argument("--seed", type=int, default=42, help="Seed cho --sample.")
+    parser.add_argument(
+        "--ablation", default="full",
+        help="E1 ablation (chỉ GraphRAG): full | no-theme | no-jurisdiction | "
+             "no-implements | no-amends | no-temporal | no-traversal | dense-only.",
     )
     args = parser.parse_args()
 
@@ -325,6 +385,12 @@ def main() -> int:
         return 2
 
     test_set = json.loads(args.test_set.read_text(encoding="utf-8"))
+    if args.sample > 0:
+        import random
+        rng = random.Random(args.seed)
+        test_set = rng.sample(test_set, min(args.sample, len(test_set)))
+        logger.info(f"SAMPLE {len(test_set)} câu ngẫu nhiên (seed={args.seed}): "
+                    f"{[it['id'] for it in test_set]}")
     if args.limit > 0:
         test_set = test_set[: args.limit]
 
@@ -410,7 +476,12 @@ def main() -> int:
         return 0
 
     systems = [s.strip() for s in args.systems.split(",") if s.strip()]
-    invalid = set(systems) - {"graphrag", "baseline"}
+    from src.retrieval.ablation_config import get_ablation
+    ablation_cfg = get_ablation(args.ablation)
+    if ablation_cfg.name != "full":
+        logger.info(f"ABLATION MODE: {ablation_cfg.name} "
+                    f"(kỳ vọng sụp {ablation_cfg.gap_target or '—'})")
+    invalid = set(systems) - {"graphrag", "baseline", "closed-book", "oracle", "bm25"}
     if invalid:
         print(f"❌ Hệ thống không hợp lệ: {invalid}", file=sys.stderr)
         return 2
@@ -429,8 +500,8 @@ def main() -> int:
     else:
         logger.info("LLM cache DISABLED — sẽ tốn API cho mọi câu")
 
-    logger.info(f"Build shared clients (Neo4j + Qdrant + Anthropic + BGE-M3)...")
-    clients = _build_shared_clients()
+    logger.info(f"Build shared clients (Neo4j + Qdrant + LLM[{args.llm_mode}] + BGE-M3)...")
+    clients = _build_shared_clients(llm_mode=args.llm_mode)
 
     all_aggs = {}
     all_results: dict[str, list[dict]] = {}
@@ -441,13 +512,18 @@ def main() -> int:
                 test_set, system, clients,
                 llm_cache_dir=llm_cache_dir,
                 faithfulness_tier=args.faithfulness_tier,
+                response_mode=args.response_mode,
+                verify=args.verify,
+                verify_tier=args.verify_tier,
+                ablation=ablation_cfg,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
             logger.info(f"[{system}] hoàn thành {len(results)} câu trong {elapsed:.1f}s")
 
-            # Lưu per-question
-            out_path = args.out_dir / f"results_{system}_{timestamp}.json"
+            # Lưu per-question (gắn tên ablation vào filename để không ghi đè run full)
+            abl_tag = "" if ablation_cfg.name == "full" else f"_{ablation_cfg.name}"
+            out_path = args.out_dir / f"results_{system}{abl_tag}_{timestamp}.json"
             out_path.write_text(
                 json.dumps(
                     {
@@ -490,8 +566,8 @@ def main() -> int:
             run_config = {
                 "systems": ",".join(systems),
                 "limit": args.limit or "full",
-                "force_jurisdiction": "ground-truth (eval-mode bypass Confirmation Loop)",
-                "bypass_completeness": True,
+                "ablation": ablation_cfg.name,
+                "force_jurisdiction": "ground-truth (bơm khi câu hỏi không nêu địa phương)",
                 "llm_cache": "ON" if llm_cache_dir else "OFF",
                 "anthropic_max_retries": ANTHROPIC_MAX_RETRIES,
             }

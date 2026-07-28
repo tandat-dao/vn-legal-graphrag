@@ -47,7 +47,7 @@ File `test_set.json` là array các object. Mỗi object là một câu hỏi đ
 - `khoan`, `diem` optional
 - `van_ban` bắt buộc, là `id` của Norm — phải tồn tại trong `data/raw/*.md` (frontmatter `id`)
 
-Format này khớp với output của [parse_citations()](src/retrieval/answer_generator.py#L40) để Citation Accuracy có thể so trực tiếp.
+Format này khớp với output của [parse_citations()](../../src/retrieval/answer_generator.py) để Citation Accuracy có thể so trực tiếp.
 
 ## Phân loại `gap_type`
 
@@ -68,7 +68,7 @@ Format này khớp với output của [parse_citations()](src/retrieval/answer_g
 - [ ] ≥ 3 câu `gap_type="gap2"` có cặp TP.HCM / Đồng Nai ground truth khác nhau
 - [ ] ≥ 3 câu `gap_type="gap3"` với ≥ 2 `van_ban` khác tier
 - [ ] Mỗi câu non-negative có ≥ 1 citation
-- [ ] Cross-check 2 thành viên — sign-off trong [review_log.md](data/raw/review_log.md)
+- [ ] Cross-check 2 thành viên — sign-off trong [review_log.md](../raw/review_log.md)
 
 Script `python src/evaluation/validate_test_set.py data/evaluation/test_set.json` kiểm tự động các điều kiện đếm/format.
 

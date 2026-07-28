@@ -225,6 +225,8 @@ Diện tích đất xây dựng công trình theo quy định tại Điều này
 
 ## Điều 10. Quy định bóc tách và sử dụng tầng đất mặt khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng lúa sang mục đích phi nông nghiệp
 
+<!-- amended_by: 226/2025/NĐ-CP, khoản 2 Điều 5, hiệu lực: 15/08/2025, nội dung: sửa đổi, bổ sung toàn bộ Điều 10 — bỏ yêu cầu phương án phải "được cơ quan nhà nước có thẩm quyền chấp thuận" (thay bằng "được lập theo quy định"), mở rộng thành phần hồ sơ áp dụng cho cả giao đất, cho thuê đất, cho phép chuyển mục đích -->
+
 ### Khoản 1.
 
 Người được nhà nước giao đất, cho thuê đất khi xây dựng công trình trên đất được chuyển đổi từ đất chuyên trồng lúa sang đất phi nông nghiệp phải có phương án sử dụng tầng đất mặt được cơ quan nhà nước có thẩm quyền chấp thuận.

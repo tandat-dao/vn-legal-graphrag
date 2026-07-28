@@ -2,20 +2,19 @@
 
 Hệ thống trả lời câu hỏi pháp lý hành chính Việt Nam có trích dẫn, kết hợp Knowledge Graph (Neo4j) và Vector Search (Qdrant). Hệ thống xử lý 3 lĩnh vực: **Đất đai**, **Hộ tịch**, và **Nuôi con nuôi** (Hôn nhân & Gia đình), giải quyết 4 gap nghiên cứu: đa lĩnh vực, đa địa phương (TP.HCM & Đồng Nai), đa tầng văn bản (Luật → Nghị định → Thông tư → Quyết định UBND), và **đa phiên bản** (temporal versioning: CTV, amendment tracking, regime change).
 
-## Kết quả chính (v2.8, 26 câu Đất đai, N=3)
+## Kết quả chính (v2 canonical — GT freeze 137 câu, 3 lĩnh vực, Gemini, N=3)
 
-| Metric | GraphRAG (v2.8) | Baseline (Naive RAG) | Δ % |
-|---|---:|---:|---:|
-| **F1 Khoản** (strict cấp Điều+Khoản) | **0.539 ± 0.021** | 0.333 | **+61.8%** |
-| F1 Điều (cấp văn bản+Điều) | 0.567 ± 0.032 | 0.333 | +70.3% |
-| Norm Recall (văn bản) | 0.931 ± 0.005 | 0.718 | +29.7% |
-| Gap 3 (đa tầng, n=8) | 0.412 ± 0.013 | 0.209 | +97.1% |
-| **Gap 4 (đa phiên bản, n=7)** | **0.568 ± 0.031** | **0.214** | **+165.4%** ← differentiator mạnh nhất |
-| Faithfulness (citation trust) | 0.916 ± 0.069 | n/a | mới |
-| Negative correct (refusal) | 100% | 100% | tied |
-| Latency mean | 22.92 ± 0.12s | 18.29s | +25% |
+| Metric | GraphRAG | Baseline (Naive RAG) |
+|---|---:|---:|
+| **F1 Khoản** (strict cấp Điều+Khoản) | **0.578 ± 0.004** | 0.435 ± 0.008 |
+| F1 Điều (cấp văn bản+Điều) | 0.596 ± 0.006 | 0.459 ± 0.008 |
+| Norm Recall (văn bản) | 0.771 ± 0.016 | 0.588 ± 0.005 |
 
-Toàn bộ chi tiết trong [`data/evaluation/ABLATION_MATRIX.md`](data/evaluation/ABLATION_MATRIX.md) và [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md).
+Chênh lệch ghép cặp (123 câu có GT): **Δ +0.143, KTC 95% [0.061, 0.225], Wilcoxon p = 0.0015** → có ý nghĩa thống kê. Bậc thang baseline: oracle 0.858 > graphrag 0.578 ≈ bm25 0.571 > baseline 0.435 > closed-book 0.102. Ablation phân ly kép chứng minh cạnh duyệt đồ thị cần thiết cho Gap 3/4 (no-traversal −0.091/−0.130).
+
+Tính trung thực của trích dẫn: tỉ lệ tồn tại 880/881 = 99.9% (kiểm tra tất định); tỉ lệ được hậu thuẫn 247/296 = 83.5% (giám khảo `gemini-2.5-pro` — lưu ý hạn chế tự-đánh-giá vì hệ cũng chạy Gemini).
+
+Toàn bộ số liệu chốt: [`docs/V2_RESULTS.md`](docs/V2_RESULTS.md) (nguồn cho Chương 4). Tài liệu eval cũ (dev set 26 câu, F1 0.539) chỉ còn giá trị lịch sử.
 
 ---
 
@@ -94,10 +93,10 @@ Sau khi đã ingest dữ liệu (Phase 2 hoàn tất), thử hỏi 1 câu:
 
 ```bash
 python -m src.demo "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu m²?" \
-       --jurisdiction tp-hcm --bypass-completeness
+       --jurisdiction tp-hcm
 ```
 
-Output: panel câu hỏi → panel trả lời (markdown render) → table citations → thống kê.
+Output: panel câu hỏi → panel trả lời (markdown render) → table citations → thống kê. Hệ chạy best-effort khi thiếu field (1Q-1A, không hỏi lại). Demo Gemini có dự phòng Claude: thêm `--llm-mode gemini-fallback`.
 
 ```bash
 # Hiện chi tiết pipeline trace
@@ -106,12 +105,13 @@ python -m src.demo "..." --trace
 
 ### Evaluation framework
 
-Chạy full eval 26 câu Đất đai + so sánh với Baseline:
+Chạy eval canonical (GT freeze 137 câu, 3 lĩnh vực) + so sánh với Baseline:
 
 ```bash
 python -m src.evaluation.run_evaluation \
-       --test-set data/evaluation/test_set_dat_dai.json \
+       --test-set data/evaluation/test_set_v2.json \
        --systems graphrag,baseline \
+       --llm-mode gemini \
        --no-llm-cache \
        --faithfulness-tier 2
 ```
@@ -180,8 +180,8 @@ graphrag-vn-law/
 │   └── pipeline.py       ← End-to-end pipeline orchestrator
 ├── tests/                ← Unit tests
 ├── notebooks/            ← Jupyter notebooks cho exploration
-├── docs/                 ← Tài liệu dự án (PROJECT_CONTEXT, PROJECT_STATUS, plan, Instruction)
-├── thesis/               ← Skeleton chapters cho luận văn (CHAPTERS_OUTLINE, CHAPTER_4_EXPERIMENTS)
+├── docs/                 ← Tài liệu dự án (PROJECT_CONTEXT, PROJECT_STATUS, V2_RESULTS...)
+│   └── thesis/           ← Bản nháp luận văn (Ch1–5 + front/back matter)
 ├── docker-compose.yml    ← Định nghĩa Docker services (Neo4j + Qdrant)
 ├── .env.example          ← Template biến môi trường
 ├── requirements.txt      ← Python dependencies
@@ -195,9 +195,8 @@ graphrag-vn-law/
 ## Tài liệu dự án
 
 - [`CLAUDE.md`](CLAUDE.md) — Conventions, rules, schema quick reference, Decision Log
-- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Changelog đầy đủ + trạng thái task hiện tại (v2.8)
+- [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) — Changelog đầy đủ + trạng thái task hiện tại (v2.22)
 - [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) — Kiến trúc hệ thống, schema Ontology, tech stack, known problems
-- [`docs/plan.md`](docs/plan.md) — Kế hoạch thực thi ban đầu (historical reference)
 
 ### Tài liệu evaluation
 - [`data/evaluation/ABLATION_MATRIX.md`](data/evaluation/ABLATION_MATRIX.md) — Bảng impact cumulative 4 fix layers + per-gap 4-gap breakdown (Baseline → v2.8)
@@ -207,5 +206,5 @@ graphrag-vn-law/
 - [`data/evaluation/PROMPT_TUNING_EXPERIMENT_20260519.md`](data/evaluation/PROMPT_TUNING_EXPERIMENT_20260519.md) — 3-round prompt ablation
 
 ### Tài liệu thesis
-- [`thesis/CHAPTERS_OUTLINE.md`](thesis/CHAPTERS_OUTLINE.md) — Skeleton 5 chapters + Appendix với data refs
-- [`thesis/CHAPTER_4_EXPERIMENTS.md`](thesis/CHAPTER_4_EXPERIMENTS.md) — Chapter 4 detailed scaffold với tables ready
+- [`docs/thesis/`](docs/thesis/) — Bản nháp toàn quyển luận văn (Ch1–5 + front/back matter, Markdown) — xem `docs/thesis/README.md`
+- [`docs/thesis/00_DE_CUONG.md`](docs/thesis/00_DE_CUONG.md) — Đề cương chi tiết
