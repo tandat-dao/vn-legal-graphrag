@@ -31,18 +31,26 @@
 
 | Metric | mean Δ (G−B) | 95% CI | Wilcoxon p | Win/Loss/Tie |
 |---|---|---|---|---|
-| **F1 Khoản** | **+0.156** | **[0.070, 0.242]** | **0.001 \*\*\*** | 62 / 32 / 29 |
+| **F1 Khoản** | **+0.143** | **[0.061, 0.225]** | **0.0015 \*\*** | 65 / 36 / 22 |
 
 → **CI không chứa 0 ⇒ ưu thế GraphRAG có ý nghĩa thống kê ở mức 95%.** (bootstrap 10000 resample, seed=42)
+
+> **Đính chính (28/07/2026).** Con số cũ ghi ở đây là Δ +0.156, CI [0.070, 0.242],
+> p = 0.001, W/L/T 62/32/29. Nó được tính bằng cách ghép cặp **một** run graphrag với
+> **một** run baseline, mà run baseline được chọn tình cờ là mẫu yếu nhất trong 3 mẫu
+> (0.3861 so với trung bình 0.395) → Δ bị thổi lên. Bộ số hiện tại lấy trung bình
+> **từng câu qua cả 3 lần chạy** của mỗi hệ rồi mới ghép cặp, nên không phụ thuộc vào
+> việc bốc trúng run nào. Mức ý nghĩa vì thế hạ từ *** xuống **; kết luận không đổi.
+> Đây mới là bộ số dùng cho Chương 4 và cho poster.
 
 ## 2. Bậc thang baseline (E2a)
 
 | Hệ | F1 Khoản | NormR | Vai trò |
 |---|---|---|---|
 | oracle (trần) | 0.858 | 0.955 | context = GT chunks |
-| bm25 | 0.571 | 0.808 | lexical — mạnh bất ngờ |
 | **GraphRAG v2** | **0.578** | 0.771 | hệ đề xuất |
-| baseline (naive RAG) | 0.435 | — | đối thủ chính |
+| bm25 | 0.571 | 0.808 | lexical — mạnh bất ngờ |
+| baseline (naive RAG) | 0.435 | 0.588 | đối thủ chính |
 | closed-book | 0.102 | 0.102 | không retrieval → **chứng minh retrieval cần thiết** |
 
 *(oracle/bm25/closed-book lấy từ mẻ v1 — Fix A không đụng các hệ này.)*

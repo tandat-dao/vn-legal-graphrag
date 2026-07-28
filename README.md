@@ -7,9 +7,12 @@ Hệ thống trả lời câu hỏi pháp lý hành chính Việt Nam có trích
 | Metric | GraphRAG | Baseline (Naive RAG) |
 |---|---:|---:|
 | **F1 Khoản** (strict cấp Điều+Khoản) | **0.578 ± 0.004** | 0.435 ± 0.008 |
-| Norm Recall (văn bản) | 0.771 ± 0.016 | — |
+| F1 Điều (cấp văn bản+Điều) | 0.596 ± 0.006 | 0.459 ± 0.008 |
+| Norm Recall (văn bản) | 0.771 ± 0.016 | 0.588 ± 0.005 |
 
-Chênh lệch ghép cặp (123 câu có GT): **Δ +0.156, KTC 95% [0.070, 0.242], Wilcoxon p = 0.001** → có ý nghĩa thống kê. Bậc thang baseline: oracle 0.858 > bm25 0.571 ≈ graphrag 0.578 > baseline 0.435 > closed-book 0.102. Ablation phân ly kép chứng minh cạnh duyệt đồ thị cần thiết cho Gap 3/4 (no-traversal −0.091/−0.130).
+Chênh lệch ghép cặp (123 câu có GT): **Δ +0.143, KTC 95% [0.061, 0.225], Wilcoxon p = 0.0015** → có ý nghĩa thống kê. Bậc thang baseline: oracle 0.858 > graphrag 0.578 ≈ bm25 0.571 > baseline 0.435 > closed-book 0.102. Ablation phân ly kép chứng minh cạnh duyệt đồ thị cần thiết cho Gap 3/4 (no-traversal −0.091/−0.130).
+
+Tính trung thực của trích dẫn: tỉ lệ tồn tại 880/881 = 99.9% (kiểm tra tất định); tỉ lệ được hậu thuẫn 247/296 = 83.5% (giám khảo `gemini-2.5-pro` — lưu ý hạn chế tự-đánh-giá vì hệ cũng chạy Gemini).
 
 Toàn bộ số liệu chốt: [`docs/V2_RESULTS.md`](docs/V2_RESULTS.md) (nguồn cho Chương 4). Tài liệu eval cũ (dev set 26 câu, F1 0.539) chỉ còn giá trị lịch sử.
 
