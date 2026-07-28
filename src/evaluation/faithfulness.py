@@ -132,6 +132,7 @@ def _extract_chunk_for_citation(citation: dict, context: str) -> str | None:
     vb = _norm(citation.get("van_ban"))
     dieu = _norm(citation.get("dieu"))
     khoan = _norm(citation.get("khoan"))
+    diem = _norm(citation.get("diem"))
     loai = _norm(citation.get("loai"))
     if not vb:
         return None
@@ -140,22 +141,34 @@ def _extract_chunk_for_citation(citation: dict, context: str) -> str | None:
     is_phu_luc = loai == "phu_luc" or dieu == "_default"
     # Split context theo header blocks
     blocks = re.split(r"(?=^---[^\n]*$)", context, flags=re.MULTILINE)
-    for block in blocks:
+
+    def _match(block: str, with_diem: bool) -> bool:
         first_line_end = block.find("\n")
         header = (block[:first_line_end] if first_line_end > 0 else block).lower()
         if vb not in header:
-            continue
+            return False
         if is_phu_luc:
             if "phụ lục" not in header:
-                continue
+                return False
             if dieu and dieu != "_default" and f"phụ lục {dieu}" not in header:
-                continue
+                return False
         else:
             if f"điều {dieu}." not in header:
-                continue
+                return False
         if khoan is not None and f"khoản {khoan}." not in header:
+            return False
+        if with_diem and diem is not None and f"điểm {diem}." not in header:
+            return False
+        return True
+
+    # Pass 1 — khớp tới cấp Điểm (tránh trả nhầm Điểm khác cùng Điều/Khoản).
+    # Pass 2 — nới lỏng: ngữ cảnh có thể chỉ chứa khối ở cấp Khoản.
+    for with_diem in (True, False):
+        if with_diem and diem is None:
             continue
-        return block.strip()
+        for block in blocks:
+            if _match(block, with_diem):
+                return block.strip()
     return None
 
 
