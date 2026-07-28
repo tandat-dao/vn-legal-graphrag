@@ -59,3 +59,13 @@ data/evaluation/quarantine_429/*
 !data/evaluation/quarantine_429/README.md
 data/evaluation/dev_runs/*
 !data/evaluation/dev_runs/README.md
+
+# Đánh giá con người E2C — repo này PUBLIC. E2C_KEY.json là khóa giải ẩn danh
+# (ánh xạ mã câu → hệ nào sinh câu trả lời); công khai là phá tính ẩn danh của
+# thí nghiệm và cho phép truy ngược điểm của từng người chấm.
+data/evaluation/e2c/
+
+# Bản nháp báo cáo khóa luận — không commit lên repo công khai. Ngoài lý do
+# bản quyền, bản nháp nằm public còn có thể bị Turnitin quét trúng và báo
+# trùng lặp với chính bài của mình.
+docs/thesis/
