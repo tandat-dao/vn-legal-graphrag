@@ -309,9 +309,12 @@ class LlamaCppBackend(Backend):
         `--dump-prompt` (soi bằng mắt trước khi tiêu 548 lượt sinh) và cho việc ước
         lượng độ dài, nhưng đừng coi là byte-identical.
 
-        Đường này CHƯA từng chạy với weights thật (Windows không có wheel dựng sẵn cho
-        llama-cpp-python) → bọc try/except, hỏng thì lùi về đếm xấp xỉ, không làm
-        chết cả mẻ chạy.
+        Template của `Qwen3-4B-Instruct-2507` BẮT BUỘC hai khoá `tool_calls` và
+        `reasoning_content` trên mỗi message: nhánh assistant truy cập
+        `message.tool_calls`, và template mở đầu bằng `{%- if tools %}`. Với
+        `StrictUndefined`, thiếu khoá là `UndefinedError` → phải bơm sẵn (xem dưới).
+
+        Vẫn bọc try/except: hỏng thì lùi về đếm xấp xỉ, không làm chết cả mẻ chạy.
         """
         try:
             import jinja2
@@ -329,15 +332,23 @@ class LlamaCppBackend(Backend):
 
             env = jinja2.Environment(undefined=jinja2.StrictUndefined,
                                      trim_blocks=True, lstrip_blocks=True)
+            # Template Qwen3 truy cập message.tool_calls trong nhánh assistant, và mở
+            # đầu bằng {%- if tools %}. Với StrictUndefined, dict thiếu key -> raise
+            # UndefinedError. Bổ sung đúng hai key (None = falsy), GIỮ StrictUndefined
+            # cho mọi biến khác: template còn cần gì nữa thì vẫn muốn nó nổ, không
+            # muốn nó lặng lẽ chèn chuỗi rỗng.
+            _msgs = [{"tool_calls": None, "reasoning_content": None, **m}
+                     for m in messages]
             rendered = env.from_string(tmpl).render(
-                messages=messages,
+                messages=_msgs,
+                tools=None,
                 add_generation_prompt=True,
                 bos_token=_tok("tokenizer.ggml.bos_token_id"),
                 eos_token=_tok("tokenizer.ggml.eos_token_id"),
             )
             return rendered, "gguf-chat-template-jinja2"
         except Exception as e:  # noqa: BLE001 — hỏng thì lùi, không chết mẻ chạy
-            return None, f"render-loi:{type(e).__name__}"
+            return None, f"render-loi:{type(e).__name__}: {e}"
 
     def count_prompt_tokens(self, messages: list[dict]) -> tuple[int | None, str]:
         rendered, how = self.render_prompt(messages)
