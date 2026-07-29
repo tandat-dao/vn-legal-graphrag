@@ -1,0 +1,379 @@
+{
+  "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu?",
+  "recorded_at": "2026-07-27T15:15:32",
+  "mode": "fixture-viet-tay",
+  "tam": true,
+  "ghi_chu": "FIXTURE TẠM cho Task 3 — nhãn block, nguyên văn điều khoản và citation lấy từ data/raw thật; còn score Stage 1, phân bổ pass và mốc thời gian là SỐ MINH HỌA, không phải một lượt chạy thật. Thay bằng fixture do `python -m ui.record` sinh ở máy B (Task 4) trước buổi bảo vệ.",
+  "params": {
+    "force_jurisdiction": "tp-hcm",
+    "response_mode": null,
+    "verify": false,
+    "llm_mode": "claude"
+  },
+  "events": [
+    {
+      "seq": 0,
+      "t": 0.0,
+      "step": "question",
+      "kind": "result",
+      "raw": "",
+      "data": {
+        "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu?",
+        "force_jurisdiction": "tp-hcm",
+        "response_mode": null,
+        "verify": false,
+        "llm_mode": "claude"
+      }
+    },
+    {
+      "seq": 1,
+      "t": 0.02,
+      "step": "plan",
+      "kind": "log",
+      "raw": "run_pipeline: plan_query cho 'Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiê...'",
+      "data": {
+        "question_preview": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiê..."
+      }
+    },
+    {
+      "seq": 2,
+      "t": 1.71,
+      "step": "plan",
+      "kind": "log",
+      "raw": "plan_query | theme=dat-dai procedure=chuyen-muc-dich-su-dung-dat jurisdiction=tp-hcm temporal=None temporal_ctx=False",
+      "data": {
+        "theme": "dat-dai",
+        "procedure": "chuyen-muc-dich-su-dung-dat",
+        "jurisdiction": "tp-hcm",
+        "temporal": null,
+        "has_temporal_context": false
+      }
+    },
+    {
+      "seq": 3,
+      "t": 1.72,
+      "step": "plan",
+      "kind": "log",
+      "raw": "run_pipeline: plan=dat-dai/tp-hcm",
+      "data": {
+        "theme": "dat-dai",
+        "jurisdiction": "tp-hcm"
+      }
+    },
+    {
+      "seq": 4,
+      "t": 1.72,
+      "step": "plan",
+      "kind": "log",
+      "raw": "run_pipeline: response_mode='general'",
+      "data": {
+        "response_mode": "general"
+      }
+    },
+    {
+      "seq": 5,
+      "t": 1.73,
+      "step": "stage2",
+      "kind": "log",
+      "raw": "run_pipeline: extract_subgraph",
+      "data": {}
+    },
+    {
+      "seq": 6,
+      "t": 2.28,
+      "step": "stage1",
+      "kind": "log",
+      "raw": "Stage 1: top-5 scores=[0.671, 0.588, 0.542, 0.417, 0.286], threshold=0.3 → 4 norm_ids = ['quyet-dinh-69-2024-qd-ubnd-tp-hcm', 'luat-dat-dai-2024', 'quyet-dinh-18-2016-qd-ubnd-tp-hcm', 'nghi-quyet-87-2025-nq-hdnd-tp-hcm']",
+      "data": {
+        "top_n": 5,
+        "scores": [
+          0.671,
+          0.588,
+          0.542,
+          0.417,
+          0.286
+        ],
+        "threshold": 0.3,
+        "norm_ids": [
+          "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "luat-dat-dai-2024",
+          "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+          "nghi-quyet-87-2025-nq-hdnd-tp-hcm"
+        ],
+        "n_norms": 4,
+        "no_theme": false,
+        "ranked": [
+          {
+            "rank": 0,
+            "score": 0.671,
+            "norm_id": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+            "chon": true,
+            "duoi_nguong": false
+          },
+          {
+            "rank": 1,
+            "score": 0.588,
+            "norm_id": "luat-dat-dai-2024",
+            "chon": true,
+            "duoi_nguong": false
+          },
+          {
+            "rank": 2,
+            "score": 0.542,
+            "norm_id": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+            "chon": true,
+            "duoi_nguong": false
+          },
+          {
+            "rank": 3,
+            "score": 0.417,
+            "norm_id": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+            "chon": true,
+            "duoi_nguong": false
+          },
+          {
+            "rank": 4,
+            "score": 0.286,
+            "norm_id": null,
+            "chon": false,
+            "duoi_nguong": true
+          }
+        ]
+      }
+    },
+    {
+      "seq": 7,
+      "t": 2.54,
+      "step": "stage2",
+      "kind": "log",
+      "raw": "Stage 2 (norm_ids): 5 norms (jurisdiction=tp-hcm, temporal=None): ['quyet-dinh-69-2024-qd-ubnd-tp-hcm', 'luat-dat-dai-2024', 'quyet-dinh-18-2016-qd-ubnd-tp-hcm', 'nghi-quyet-87-2025-nq-hdnd-tp-hcm', 'nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai']",
+      "data": {
+        "n_norms": 5,
+        "jurisdiction": "tp-hcm",
+        "temporal": null,
+        "norm_ids": [
+          "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "luat-dat-dai-2024",
+          "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+          "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+          "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai"
+        ]
+      }
+    },
+    {
+      "seq": 8,
+      "t": 2.61,
+      "step": "stage3",
+      "kind": "log",
+      "raw": "Stage 3: 14 graph_component_ids mapped for procedure chuyen-muc-dich-su-dung-dat",
+      "data": {
+        "n_components": 14,
+        "procedure": "chuyen-muc-dich-su-dung-dat"
+      }
+    },
+    {
+      "seq": 9,
+      "t": 2.62,
+      "step": "stage3",
+      "kind": "log",
+      "raw": "run_pipeline: 5 norm_ids, 14 graph_comp_ids từ Stage 2+3",
+      "data": {
+        "n_norm_ids": 5,
+        "n_graph_comp_ids": 14
+      }
+    },
+    {
+      "seq": 10,
+      "t": 2.63,
+      "step": "hybrid",
+      "kind": "log",
+      "raw": "run_pipeline: hybrid_search",
+      "data": {}
+    },
+    {
+      "seq": 11,
+      "t": 3.35,
+      "step": "hybrid",
+      "kind": "log",
+      "raw": "hybrid_search: dense=50, keyword=9, graph=14 candidates",
+      "data": {
+        "dense": 50,
+        "keyword": 9,
+        "graph": 14
+      }
+    },
+    {
+      "seq": 12,
+      "t": 3.41,
+      "step": "hybrid",
+      "kind": "log",
+      "raw": "hybrid_search: rarity stats — 5 norms, 37 components mapped, 9 required concepts",
+      "data": {
+        "n_norms": 5,
+        "n_components_mapped": 37,
+        "n_required_concepts": 9
+      }
+    },
+    {
+      "seq": 13,
+      "t": 3.58,
+      "step": "hybrid",
+      "kind": "log",
+      "raw": "hybrid_search: top-25 | pass-1(struct-cite)=0, pass-0.5(label-keyword)=0, pass0(dense-floor)=5, pass1(rrf-breadth)=4, pass2(depth)=16 | caps: per_norm=3, per_tier={1: 8, 2: 8, 3: 6, 4: 8} | best rrf=0.0331 | tier_dist={1: 9, 4: 16} | norm_dist={'quyet-dinh-69-2024-qd-ubnd-tp-hcm': 3, 'luat-dat-dai-2024': 3, 'quyet-dinh-18-2016-qd-ubnd-tp-hcm': 3, 'nghi-quyet-87-2025-nq-hdnd-tp-hcm': 3, 'nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai': 3}",
+      "data": {
+        "top_k": 25,
+        "passes": {
+          "struct_cite": 0,
+          "label_keyword": 0,
+          "dense_floor": 5,
+          "rrf_breadth": 4,
+          "depth": 16
+        },
+        "caps": {
+          "per_norm": 3,
+          "per_tier": {
+            "1": 8,
+            "2": 8,
+            "3": 6,
+            "4": 8
+          }
+        },
+        "best_rrf": 0.0331,
+        "tier_dist": {
+          "1": 9,
+          "4": 16
+        },
+        "norm_dist": {
+          "quyet-dinh-69-2024-qd-ubnd-tp-hcm": 3,
+          "luat-dat-dai-2024": 3,
+          "quyet-dinh-18-2016-qd-ubnd-tp-hcm": 3,
+          "nghi-quyet-87-2025-nq-hdnd-tp-hcm": 3,
+          "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai": 3
+        }
+      }
+    },
+    {
+      "seq": 14,
+      "t": 3.6,
+      "step": "hybrid",
+      "kind": "log",
+      "raw": "run_pipeline: 25 scored units",
+      "data": {
+        "n_scored_units": 25
+      }
+    },
+    {
+      "seq": 15,
+      "t": 3.61,
+      "step": "context",
+      "kind": "log",
+      "raw": "run_pipeline: assemble_context",
+      "data": {}
+    },
+    {
+      "seq": 16,
+      "t": 3.94,
+      "step": "context",
+      "kind": "log",
+      "raw": "assemble_context: 25 blocks, ~2180 tokens",
+      "data": {
+        "n_blocks": 25,
+        "tokens": 2180
+      }
+    },
+    {
+      "seq": 17,
+      "t": 3.95,
+      "step": "generate",
+      "kind": "log",
+      "raw": "run_pipeline: generate_answer",
+      "data": {}
+    },
+    {
+      "seq": 18,
+      "t": 18.62,
+      "step": "generate",
+      "kind": "log",
+      "raw": "generate_answer: 1348 chars, 4 citations, sections={'tra_loi': True, 'canh_bao_lex': False, 'pham_vi': False}",
+      "data": {
+        "n_chars": 1348,
+        "n_citations": 4,
+        "sections": {
+          "tra_loi": true,
+          "canh_bao_lex": false,
+          "pham_vi": false
+        },
+        "cache_hit": false
+      }
+    },
+    {
+      "seq": 19,
+      "t": 18.71,
+      "step": "done",
+      "kind": "log",
+      "raw": "run_pipeline: hoàn thành trong 18.7s — 4 citations",
+      "data": {
+        "elapsed_seconds": 18.7,
+        "n_citations": 4
+      }
+    }
+  ],
+  "result": {
+    "question": "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu?",
+    "query_plan": {
+      "theme": "dat-dai",
+      "procedure": "chuyen-muc-dich-su-dung-dat",
+      "jurisdiction": "tp-hcm",
+      "temporal": null,
+      "temporal_intent": {
+        "has_temporal_context": false,
+        "temporal_anchor": null,
+        "case_status": null
+      },
+      "response_mode": null
+    },
+    "response_mode": "general",
+    "lccids_count": 5,
+    "top_k_count": 25,
+    "context_tokens": 2180,
+    "context": "--- [Tier 4 | Hiệu lực: 2024-09-30] Điều 3. Hạn mức giao đất ở cho cá nhân trên địa bàn Thành phố, Khoản 1. (quyet-dinh-69-2024-qd-ubnd-tp-hcm) ---\nKhoản 1.\nCác Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và thành phố Thủ Đức: không quá 160 m2/cá nhân.\n\n--- [Tier 4 | Hiệu lực: 2024-09-30] Điều 3. Hạn mức giao đất ở cho cá nhân trên địa bàn Thành phố, Khoản 2. (quyet-dinh-69-2024-qd-ubnd-tp-hcm) ---\nKhoản 2.\nThị trấn các huyện và khu vực đã thực hiện dự án xây dựng đô thị mới theo quy hoạch hệ thống đô thị và nông thôn tại các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ: không quá 200 m2/cá nhân.\n\n--- [Tier 4 | Hiệu lực: 2024-09-30] Điều 3. Hạn mức giao đất ở cho cá nhân trên địa bàn Thành phố, Khoản 3. (quyet-dinh-69-2024-qd-ubnd-tp-hcm) ---\nKhoản 3.\nCác xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ: không quá 250 m2/cá nhân.\n\n--- [Tier 4 | Hiệu lực: 2016-05-26 → 2024-09-30 (HẾT HIỆU LỰC)] Điều 1. Quy định hạn mức đất ở đối với hộ gia đình, cá nhân và mục đích áp dụng hạn mức như sau, Khoản 1., Điểm b. (quyet-dinh-18-2016-qd-ubnd-tp-hcm) ---\nĐiểm b.\nCác quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện: Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 200m2/hộ.\n\n--- [Tier 1 | Hiệu lực: 2024-08-01] Điều 195. Đất ở tại nông thôn (luat-dat-dai-2024) ---\nĐiều 195. Đất ở tại nông thôn\nKhoản 1.\nĐất ở tại nông thôn là đất để làm nhà ở và mục đích khác phục vụ cho đời sống trong cùng một thửa đất thuộc khu vực nông thôn.\nKhoản 2.\nCăn cứ vào quỹ đất và tình hình thực tế của địa phương, Ủy ban nhân dân cấp tỉnh quy định hạn mức giao đất ở cho cá nhân tại nông thôn.\nKhoản 3.\nĐất ở tại nông thôn phải bố trí đồng bộ với đất sử dụng cho mục đích xây dựng các công trình công cộng, công trình sự nghiệp bảo đảm thuận tiện cho sản xuất, đời sống của nhân dân, vệ sinh môi trường và theo hướng hiện đại hóa nông thôn.\nKhoản 4.\nNhà nước có chính sách tạo điều kiện cho những người sống ở nông thôn có chỗ ở trên cơ sở tận dụng đất trong những khu dân cư sẵn có, hạn chế việc mở rộng khu dân cư trên đất nông nghiệp.\n\n--- [Tier 1 | Hiệu lực: 2024-08-01] Điều 196. Đất ở tại đô thị (luat-dat-dai-2024) ---\nĐiều 196. Đất ở tại đô thị\nKhoản 1.\nĐất ở tại đô thị là đất để làm nhà ở và mục đích khác phục vụ cho đời sống trong cùng một thửa đất thuộc khu vực đô thị.\nKhoản 2.\nCăn cứ vào quỹ đất và tình hình thực tế của địa phương, Ủy ban nhân dân cấp tỉnh quy định hạn mức giao đất ở cho cá nhân tại đô thị.\nKhoản 3.\nĐất ở tại đô thị phải bố trí đồng bộ với đất sử dụng cho mục đích xây dựng các công trình công cộng, công trình sự nghiệp, bảo đảm vệ sinh môi trường và cảnh quan đô thị.\nKhoản 4.\nViệc chuyển đất ở sang đất xây dựng cơ sở sản xuất, kinh doanh phải phù hợp với quy hoạch, kế hoạch sử dụng đất, quy hoạch xây dựng đã được cơ quan có thẩm quyền phê duyệt, tuân thủ quy định của pháp luật về trật tự, an toàn, pháp luật về bảo vệ môi trường và quy định khác của pháp luật có liên quan.",
+    "answer": "Tại Thành phố Hồ Chí Minh, hạn mức giao đất ở cho cá nhân **tối đa là 250 m²/cá nhân**, áp dụng cho các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ [Điều 3, Khoản 3, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm].\n\nMức cụ thể theo từng khu vực:\n\n- Các Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và thành phố Thủ Đức: không quá 160 m²/cá nhân [Điều 3, Khoản 1, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm].\n- Thị trấn các huyện và khu vực đã thực hiện dự án xây dựng đô thị mới tại các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ: không quá 200 m²/cá nhân [Điều 3, Khoản 2, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm].\n- Các xã của các huyện nêu trên: không quá 250 m²/cá nhân [Điều 3, Khoản 3, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm].\n\nLưu ý: Quy định trước đây tại Quyết định 18/2016/QĐ-UBND (mức 200 m²/hộ cho các quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện) đã hết hiệu lực kể từ ngày 30/9/2024 và được thay thế bởi Quyết định 69/2024/QĐ-UBND [Điều 1, Khoản 1, Điểm b, Văn bản quyet-dinh-18-2016-qd-ubnd-tp-hcm].",
+    "citations": [
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      }
+    ],
+    "context_used": true,
+    "elapsed_seconds": 18.71,
+    "verifier": null
+  }
+}

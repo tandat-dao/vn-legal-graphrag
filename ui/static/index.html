@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GraphRAG Pháp luật Việt Nam — Demo pipeline</title>
+<!-- CDN: Task 5 sẽ tải về ui/static/vendor/ và đổi sang tham chiếu local
+     (máy trình diễn có thể không có internet lúc bảo vệ). -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<style>
+  .buoc-cho    { opacity: .45; }
+  .buoc-chay   { box-shadow: 0 0 0 2px #6366f1; }
+  .buoc-xong   { opacity: 1; }
+  .cit-chip    { cursor: pointer; }
+  #do-thi      { height: 320px; background: #f8fafc; border-radius: .5rem; }
+  .scroll-mong::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scroll-mong::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+<!-- ===================== HEADER ===================== -->
+<header class="bg-slate-900 text-white px-6 py-3 flex items-center gap-4 sticky top-0 z-20">
+  <div>
+    <div class="font-semibold">Ontology-Driven GraphRAG cho Pháp luật Việt Nam</div>
+    <div class="text-xs text-slate-400">Trình diễn luồng xử lý: câu hỏi → 7 bước → câu trả lời có trích dẫn</div>
+  </div>
+  <span id="badge-mode" class="ml-auto text-xs font-bold px-3 py-1 rounded-full bg-slate-700">…</span>
+</header>
+
+<div id="canh-bao-fixture" class="hidden bg-amber-100 border-b border-amber-300 text-amber-900 text-xs px-6 py-2"></div>
+
+<main class="p-4 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-4 max-w-[1600px] mx-auto">
+
+  <!-- ===================== CỘT TRÁI ===================== -->
+  <section class="space-y-3">
+
+    <!-- Ô nhập câu hỏi -->
+    <div class="bg-white rounded-xl p-4 shadow-sm">
+      <textarea id="o-cau-hoi" rows="2" placeholder="Nhập câu hỏi pháp lý…"
+        class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
+      <div class="flex flex-wrap items-center gap-2 mt-2 text-sm">
+        <select id="o-juris" class="border border-slate-300 rounded-lg px-2 py-1.5">
+          <option value="">Địa phương: (không ép)</option>
+          <option value="toan-quoc">toàn quốc</option>
+          <option value="tp-hcm">tp-hcm</option>
+          <option value="dong-nai">dong-nai</option>
+        </select>
+        <select id="o-mode" class="border border-slate-300 rounded-lg px-2 py-1.5">
+          <option value="">Chế độ trả lời: tự động</option>
+          <option value="general">general (ngắn gọn)</option>
+          <option value="irac">irac (tư vấn chi tiết)</option>
+        </select>
+        <label class="flex items-center gap-1.5 text-slate-600">
+          <input type="checkbox" id="o-verify" class="rounded"> Verifier
+        </label>
+        <button id="nut-hoi"
+          class="ml-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white px-5 py-1.5 rounded-lg font-medium">
+          Hỏi
+        </button>
+      </div>
+      <div id="goi-y" class="mt-2 flex flex-wrap gap-2 text-xs"></div>
+    </div>
+
+    <div id="bang-loi" class="hidden bg-rose-50 border border-rose-300 text-rose-800 rounded-xl p-3 text-sm"></div>
+
+    <!-- Stepper 7 bước -->
+    <div id="cac-buoc" class="space-y-3"></div>
+  </section>
+
+  <!-- ===================== CỘT PHẢI: NGUYÊN VĂN ===================== -->
+  <aside class="xl:sticky xl:top-16 h-fit">
+    <div class="bg-white rounded-xl shadow-sm p-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold text-sm">Nguyên văn điều khoản</h2>
+        <button id="nut-dong-panel" class="text-slate-400 hover:text-slate-700 text-lg leading-none">×</button>
+      </div>
+      <div id="panel-nguyen-van" class="mt-3 text-sm text-slate-500">
+        Bấm vào một trích dẫn ở bước 7 (hoặc một dòng ở bước 6) để xem nguyên văn lấy trực tiếp từ
+        <code class="text-xs">data/raw/*.md</code>.
+      </div>
+    </div>
+  </aside>
+</main>
+
+<script>
+"use strict";
+// Toàn bộ state giữ trong biến JS (spec mục 1.5: KHÔNG localStorage/sessionStorage).
+let DANG_CHAY = false;
+let DO_THI_CORPUS = null;   // {nodes, edges} từ /api/norm-graph
+let CY = null;              // instance Cytoscape
+let SEED_STAGE1 = [];       // norm seed của Stage 1 (để tô màu ở bước 4)
+let BLOCKS = [];            // block context của câu hiện tại
+
+const BUOC = [
+  { id: "question", so: 1, ten: "Câu hỏi",                       mo_ta: "Đầu vào của người dùng" },
+  { id: "plan",     so: 2, ten: "Query Planner",                 mo_ta: "LLM trả JSON: theme / jurisdiction / procedure / temporal" },
+  { id: "stage1",   so: 3, ten: "Stage 1 — Qdrant summary",      mo_ta: "Tìm văn bản gốc bằng embedding của summary" },
+  { id: "stage2",   so: 4, ten: "Stage 2 — Duyệt đồ thị",        mo_ta: "IMPLEMENTS | AMENDS *1..4 → lọc jurisdiction + temporal" },
+  { id: "stage3",   so: 5, ten: "Stage 3 — Procedure mapping",   mo_ta: "Component gắn concept của thủ tục → boost" },
+  { id: "hybrid",   so: 6, ten: "Hybrid search + Context",       mo_ta: "4 pass RRF → ghép context theo token budget" },
+  { id: "generate", so: 7, ten: "Câu trả lời",                   mo_ta: "LLM sinh câu trả lời + trích dẫn" },
+];
+// Bước phụ gộp vào bước chính để hiển thị.
+const GOP = { temporal: "plan", context: "hybrid", verify: "generate", done: "generate" };
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const escRe = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// ============================================================================
+// LỚP HIỂN THỊ TÊN VĂN BẢN (spec mục 3.3)
+// Slug (`luat-dat-dai-2024`) là ID kỹ thuật, không phải thứ đọc lên trước hội
+// đồng. Lớp này CHỈ đổi cách hiển thị: dữ liệu bên dưới — nhất là
+// `citation.van_ban` — giữ nguyên slug.
+// ============================================================================
+let TEN_VAN_BAN = {};   // slug → tên hiển thị
+let RE_SLUG = null;     // alternation mọi slug, sắp theo độ dài GIẢM DẦN
+let RE_TRA_LOI = null;  // citation | slug — dùng cho một lượt thay ở bước 7
+
+function dungBangTen(nodes) {
+  TEN_VAN_BAN = {};
+  const dem = {};
+  (nodes || []).forEach(n => {
+    const so = (n.so_hieu || "").trim();
+    const title = (n.title || n.id).trim();
+    // Nối số hiệu khi title CHƯA chứa nó; đã có thì để nguyên (tránh
+    // "Nghị định 102/2024/NĐ-CP (102/2024/NĐ-CP)").
+    const ten = so && !title.includes(so) ? `${title} (${so})` : title;
+    TEN_VAN_BAN[n.id] = ten;
+    dem[ten] = (dem[ten] || 0) + 1;
+  });
+  // D-23: NQ 124/2016 bị tách thành 2 Norm theo theme → cùng title + số hiệu.
+  // Thêm theme để người xem phân biệt được hai node trên đồ thị.
+  (nodes || []).forEach(n => {
+    if (dem[TEN_VAN_BAN[n.id]] > 1 && n.theme) TEN_VAN_BAN[n.id] += ` — ${n.theme}`;
+  });
+
+  // Sắp GIẢM DẦN theo độ dài: nếu không, `nghi-quyet-124-2016-nq-hdnd-tp-hcm`
+  // sẽ khớp trước và ăn mất phần `-datdai` của slug dài hơn.
+  const slugs = Object.keys(TEN_VAN_BAN).sort((a, b) => b.length - a.length);
+  const alt = slugs.map(escRe).join("|");
+  RE_SLUG = slugs.length ? new RegExp(alt, "g") : null;
+  RE_TRA_LOI = new RegExp(`\\[[^\\][]*Văn bản[^\\][]*\\]${slugs.length ? "|" + alt : ""}`, "g");
+}
+
+/** Tên hiển thị của MỘT slug; slug lạ (ngoài corpus) giữ nguyên. */
+const tenVB = (slug) => TEN_VAN_BAN[slug] || slug;
+
+/** Rút gọn cho chip/nhãn đồ thị (title đầy đủ vẫn ở tooltip). */
+const tenNgan = (slug, n = 46) => {
+  const t = tenVB(slug);
+  return t.length > n ? t.slice(0, n - 1).trimEnd() + "…" : t;
+};
+
+/** Đổi MỌI slug trong một chuỗi bằng ĐÚNG MỘT lượt replace. */
+function doiTenTrongChuoi(text, bien_doi = (x) => x) {
+  if (!RE_SLUG || !text) return text;
+  return String(text).replace(RE_SLUG, (m) => bien_doi(tenVB(m)));
+}
+
+// ---------------------------------------------------------------- stepper
+function dungStepper() {
+  $("cac-buoc").innerHTML = BUOC.map(b => `
+    <div id="buoc-${b.id}" class="buoc-cho bg-white rounded-xl shadow-sm p-4 transition">
+      <div class="flex items-center gap-3">
+        <span class="w-7 h-7 shrink-0 rounded-full bg-slate-200 text-slate-700 font-bold text-sm grid place-items-center">${b.so}</span>
+        <div>
+          <div class="font-semibold text-sm">${esc(b.ten)}</div>
+          <div class="text-xs text-slate-500">${esc(b.mo_ta)}</div>
+        </div>
+        <span id="tg-${b.id}" class="ml-auto text-xs text-slate-400 font-mono"></span>
+      </div>
+      <div id="noi-dung-${b.id}" class="mt-3 text-sm"></div>
+      <details class="mt-2">
+        <summary class="text-xs text-slate-400 cursor-pointer">log gốc</summary>
+        <pre id="log-${b.id}" class="text-[11px] text-slate-500 whitespace-pre-wrap mt-1 scroll-mong max-h-40 overflow-auto"></pre>
+      </details>
+    </div>`).join("");
+}
+
+function batBuoc(id, t) {
+  const key = GOP[id] || id;
+  const el = $("buoc-" + key);
+  if (!el) return;
+  el.classList.remove("buoc-cho");
+  el.classList.add("buoc-chay");
+  BUOC.forEach(b => { if (b.id !== key) $("buoc-" + b.id).classList.remove("buoc-chay"); });
+  if (t != null) $("tg-" + key).textContent = t.toFixed(2) + "s";
+}
+
+function themLog(id, raw) {
+  const key = GOP[id] || id;
+  const pre = $("log-" + key);
+  if (pre && raw) pre.textContent += raw + "\n";
+}
+
+// ---------------------------------------------------------------- render từng bước
+function renderCauHoi(d) {
+  if (d.fixture_tam) {
+    $("canh-bao-fixture").classList.remove("hidden");
+    $("canh-bao-fixture").innerHTML =
+      `<b>⚠ FIXTURE TẠM</b> (${esc(d.fixture_file || "")}) — ${esc(d.fixture_ghi_chu || "")}`;
+  }
+  $("noi-dung-question").innerHTML = `
+    <div class="font-medium text-slate-800">${esc(d.question)}</div>
+    <div class="mt-2 flex flex-wrap gap-2 text-xs">
+      ${chip("Địa phương ép", d.force_jurisdiction || "không")}
+      ${chip("Chế độ trả lời", d.response_mode || "tự động")}
+      ${chip("Verifier", d.verify ? "bật" : "tắt")}
+      ${d.llm_mode ? chip("LLM", d.llm_mode) : ""}
+    </div>`;
+}
+
+function chip(nhan, gia_tri, mau = "bg-slate-100 text-slate-700") {
+  return `<span class="px-2 py-1 rounded ${mau}"><span class="text-slate-400">${esc(nhan)}:</span> <b>${esc(gia_tri)}</b></span>`;
+}
+
+let PLAN = {};
+function renderPlan(d) {
+  Object.assign(PLAN, d);
+  const p = PLAN;
+  const temporal = p.temporal ? p.temporal : (p.reason ? "broad (không neo ngày)" : "—");
+  $("noi-dung-plan").innerHTML = `
+    <div class="flex flex-wrap gap-2 text-xs">
+      ${chip("theme", p.theme || "—", "bg-indigo-50 text-indigo-700")}
+      ${chip("jurisdiction", p.jurisdiction || "—", "bg-indigo-50 text-indigo-700")}
+      ${chip("procedure", p.procedure || "—", "bg-indigo-50 text-indigo-700")}
+      ${chip("response_mode", p.response_mode || "—")}
+      ${p.force_jurisdiction ? chip("ép jurisdiction", p.force_jurisdiction, "bg-amber-100 text-amber-800") : ""}
+      ${chip("temporal", temporal, "bg-slate-100 text-slate-700")}
+      ${p.cache_hit ? chip("planner", "cache HIT ($0)", "bg-emerald-100 text-emerald-800") : ""}
+    </div>
+    ${p.reason ? `<div class="mt-2 text-xs text-slate-500">Quyết định temporal: <b>${esc(p.reason)}</b>
+       ${p.temporal_anchor ? ` (anchor <code>${esc(p.temporal_anchor)}</code>` : ""}${p.case_status ? `, case_status <code>${esc(p.case_status)}</code>)` : (p.temporal_anchor ? ")" : "")}</div>` : ""}`;
+}
+
+function renderStage1(d) {
+  SEED_STAGE1 = d.norm_ids || [];
+  const hang = (d.ranked || []).map(r => `
+    <tr class="${r.chon ? "" : "text-slate-400 line-through decoration-slate-300"}">
+      <td class="py-1 pr-2 font-mono text-xs">#${r.rank + 1}</td>
+      <td class="py-1 pr-2 font-mono text-xs">${r.score == null ? "—" : r.score.toFixed(3)}</td>
+      <td class="py-1 pr-2" title="${esc(r.norm_id || "")}">${
+        r.norm_id ? esc(tenVB(r.norm_id)) : "(dưới ngưỡng — bị loại)"}</td>
+      <td class="py-1">${r.chon
+        ? `<span class="text-emerald-600 text-xs">giữ</span>`
+        : `<span class="text-rose-500 text-xs">loại</span>`}</td>
+    </tr>`).join("");
+  $("noi-dung-stage1").innerHTML = `
+    <div class="text-xs text-slate-500 mb-2">
+      Ngưỡng similarity <b>${d.threshold ?? "—"}</b> · giữ <b>${d.n_norms}</b>/${d.top_n ?? (d.ranked || []).length} văn bản
+      ${d.no_theme ? " · <span class='text-amber-700'>chạy không lọc theme (ablation)</span>" : ""}
+    </div>
+    <table class="w-full text-sm"><tbody>${hang}</tbody></table>`;
+}
+
+function renderStage2(d) {
+  const norms = (d.norm_ids || []).slice();
+  const meta = {};
+  (DO_THI_CORPUS?.nodes || []).forEach(n => meta[n.id] = n);
+  // Mục 3.2: đây là TẬP HỢP, KHÔNG có thứ hạng (stage2_norm_ids dựng từ set).
+  // Sắp theo tier rồi alphabet — tiêu chí của UI, không phải của hệ thống.
+  norms.sort((a, b) => ((meta[a]?.tier ?? 9) - (meta[b]?.tier ?? 9)) || a.localeCompare(b));
+  const the = norms.map(id => {
+    const m = meta[id] || {};
+    const seed = SEED_STAGE1.includes(id);
+    return `<span class="px-2 py-1 rounded text-xs border ${seed
+      ? "bg-indigo-50 border-indigo-300 text-indigo-800" : "bg-white border-slate-300 text-slate-700"}"
+      title="${esc(id)}">
+      <span class="text-slate-400">T${m.tier ?? "?"}</span> ${esc(tenNgan(id))}${seed ? " ●" : ""}</span>`;
+  }).join(" ");
+  $("noi-dung-stage2").innerHTML = `
+    <div class="text-xs text-slate-500 mb-2">
+      <b>${d.n_norms}</b> văn bản còn lại sau lọc — jurisdiction <b>${esc(d.jurisdiction || "—")}</b>,
+      temporal <b>${esc(d.temporal || "None")}</b>.
+      <span class="text-slate-400">Đây là một tập hợp (sắp theo tier rồi tên để dễ đọc), không phải bảng xếp hạng —
+      hệ thống không chấm điểm ở bước này. ● = văn bản seed từ Stage 1.</span>
+    </div>
+    <div class="flex flex-wrap gap-1.5 mb-3">${the}</div>
+    <div id="do-thi"></div>`;
+  veDoThi(norms);
+}
+
+function renderStage3(d) {
+  const cu = $("noi-dung-stage3").innerHTML;
+  if (d.n_components != null && d.procedure !== undefined) {
+    $("noi-dung-stage3").innerHTML = `
+      <div class="flex flex-wrap gap-2 text-xs">
+        ${chip("procedure", d.procedure || "—", "bg-indigo-50 text-indigo-700")}
+        ${chip("component được boost", d.n_components)}
+      </div>
+      <div class="text-xs text-slate-500 mt-2">Component gắn với concept mà thủ tục này cần
+      (<code>MAPS_TO_CONCEPT</code> / <code>REQUIRES_CONCEPT</code>) được cộng điểm ở Path 2 của hybrid search.</div>`;
+  } else if (d.n_norm_ids != null) {
+    $("noi-dung-stage3").innerHTML = cu +
+      `<div class="text-xs text-slate-500 mt-2">Tổng vào hybrid search: <b>${d.n_norm_ids}</b> norm ·
+       <b>${d.n_graph_comp_ids}</b> component boost.</div>`;
+  }
+}
+
+let HYBRID = {};
+function renderHybrid(d) {
+  Object.assign(HYBRID, d);
+  const h = HYBRID;
+  let html = "";
+
+  if (h.dense != null) {
+    html += `<div class="flex flex-wrap gap-2 text-xs mb-2">
+      ${chip("dense (BGE-M3)", h.dense)} ${chip("keyword", h.keyword)} ${chip("graph boost", h.graph)}</div>`;
+  }
+
+  if (h.passes) {
+    const p = h.passes, tong = Object.values(p).reduce((a, b) => a + b, 0) || 1;
+    const dai = [
+      ["struct-cite", p.struct_cite, "bg-rose-400"],
+      ["label-keyword", p.label_keyword, "bg-slate-300"],
+      ["dense-floor", p.dense_floor, "bg-indigo-500"],
+      ["rrf-breadth", p.rrf_breadth, "bg-sky-400"],
+      ["depth", p.depth, "bg-emerald-400"],
+    ].filter(x => x[1] > 0);
+    html += `
+      <div class="text-xs text-slate-500 mb-1">Phân bổ ${h.top_k} block theo pass (tổng hợp — hệ thống không lưu pass của từng dòng):</div>
+      <div class="flex h-4 rounded overflow-hidden mb-1">
+        ${dai.map(([ten, n, mau]) => `<div class="${mau}" style="width:${n / tong * 100}%" title="${ten}: ${n}"></div>`).join("")}
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs mb-2">
+        ${dai.map(([ten, n, mau]) => `<span class="flex items-center gap-1"><i class="${mau} w-3 h-3 inline-block rounded-sm"></i>${ten} ${n}</span>`).join("")}
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs mb-2">
+        ${chip("best rrf", (h.best_rrf ?? 0).toFixed(4))}
+        ${chip("cap/norm", h.caps?.per_norm)}
+        ${chip("tier_dist", JSON.stringify(h.tier_dist || {}))}
+      </div>`;
+  }
+
+  if (h.n_blocks != null) {
+    const tokens = h.tokens ?? h.context_tokens ?? 0, max = h.max_tokens || 6000;
+    html += `
+      <div class="text-xs text-slate-500 mt-2 mb-1">Token budget: <b>${tokens}</b>/${max}
+        ${h.bi_cat ? `<span class="text-amber-700">· context bị cắt tại ${h.n_blocks} block</span>` : ""}</div>
+      <div class="h-2 bg-slate-200 rounded overflow-hidden">
+        <div class="h-full ${h.bi_cat ? "bg-amber-500" : "bg-indigo-500"}" style="width:${Math.min(100, tokens / max * 100)}%"></div>
+      </div>`;
+  }
+
+  $("noi-dung-hybrid").innerHTML = html + `<div id="bang-block" class="mt-3"></div>`;
+  if (BLOCKS.length) renderBangBlock();
+}
+
+function renderBangBlock() {
+  const hang = BLOCKS.map(b => `
+    <tr class="border-t border-slate-100 hover:bg-slate-50 cursor-pointer" data-block="${b.index}">
+      <td class="py-1.5 pr-2 text-xs text-slate-400 font-mono">${b.index + 1}</td>
+      <td class="py-1.5 pr-2 text-xs">${b.tier != null ? `<span class="px-1.5 py-0.5 rounded bg-slate-200">T${b.tier}</span>` : ""}</td>
+      <td class="py-1.5 pr-2">
+        <div class="text-xs">${esc(b.vi_tri || "(cả văn bản)")}</div>
+        <div class="text-[11px] text-slate-500" title="${esc(b.norm_id)}">${esc(tenVB(b.norm_id))}</div>
+      </td>
+      <td class="py-1.5 text-xs whitespace-nowrap">
+        ${b.het_hieu_luc
+          ? `<span class="text-rose-600">HẾT HIỆU LỰC ${esc(b.valid_to || "")}</span>`
+          : `<span class="text-slate-500">${esc(b.valid_from || "")}</span>`}
+        ${b.amendments?.length ? `<div class="text-amber-700">⚠ ${b.amendments.length} sửa đổi</div>` : ""}
+      </td>
+    </tr>`).join("");
+  $("bang-block").innerHTML = `
+    <div class="text-xs text-slate-500 mb-1">${BLOCKS.length} block trong context (thứ tự = rrf giảm dần) — bấm để xem nguyên văn:</div>
+    <div class="max-h-72 overflow-auto scroll-mong border border-slate-200 rounded-lg">
+      <table class="w-full"><tbody>${hang}</tbody></table>
+    </div>`;
+  $("bang-block").querySelectorAll("tr[data-block]").forEach(tr =>
+    tr.onclick = () => hienBlock(BLOCKS[+tr.dataset.block]));
+}
+
+// -- markdown tối giản (tránh thêm một CDN nữa phải vendor ở Task 5) --------
+function markdown(text) {
+  let h = esc(text);
+  h = h.replace(/^### (.*)$/gm, '<h3 class="font-semibold mt-3 mb-1">$1</h3>');
+  h = h.replace(/^## (.*)$/gm, '<h2 class="font-bold mt-3 mb-1">$1</h2>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  h = h.replace(/^\s*[-*] (.*)$/gm, '<li class="ml-5 list-disc">$1</li>');
+  h = h.replace(/(<li[\s\S]*?<\/li>)(?!\s*<li)/g, "<ul class='my-1'>$1</ul>");
+  return h.split(/\n{2,}/).map(p => p.match(/^<(h\d|ul)/) ? p : `<p class="my-2">${p}</p>`).join("");
+}
+
+// -- chip trích dẫn inline ------------------------------------------------
+function chipCitation(noi_dung, links) {
+  const phan = {};
+  noi_dung.split(",").forEach(p => {
+    const m = p.trim().match(/^(Điều|Phụ lục|Khoản|Điểm|Tiết|Văn bản)\s*(.*)$/i);
+    if (m) phan[m[1].toLowerCase()] = m[2].trim();
+  });
+  const van_ban = phan["văn bản"] || "";
+  const la_phu_luc = "phụ lục" in phan;
+  // "[Phụ lục, Văn bản x]" (Phụ lục không đánh số) ↔ sentinel "_default" mà
+  // parse_citations dùng — phải quy về cùng một giá trị mới đối chiếu được.
+  const dieu = la_phu_luc ? (phan["phụ lục"] || "_default") : (phan["điều"] || "");
+  const khoan = phan["khoản"] || "", diem = phan["điểm"] || "";
+  const link = (links || []).find(l => l.citation.van_ban === van_ban
+    && String(l.citation.dieu ?? "") === dieu
+    && String(l.citation.khoan ?? "") === khoan
+    && String(l.citation.diem ?? "") === diem);
+  const mau = !link ? "bg-slate-100 text-slate-600 border-slate-300"
+    : link.khop === "chinh-xac" ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+    : link.khop === "gan-dung" ? "bg-amber-50 text-amber-800 border-amber-300"
+    : "bg-rose-50 text-rose-800 border-rose-300";
+  const chu = link ? link.chu_thich : "không đối chiếu được với context";
+  // Nhãn hiện tên thật, nhưng `data-vb` GIỮ NGUYÊN slug — đây là giá trị thật
+  // của `citation.van_ban`, dùng để tra nguyên văn (spec mục 3.3).
+  const nhan = esc(noi_dung).replace(esc(van_ban), esc(tenVB(van_ban)));
+  return `<span class="cit-chip border rounded px-1.5 py-0.5 text-xs ${mau}"
+    title="${esc(chu)} — ${esc(van_ban)}"
+    data-vb="${esc(van_ban)}" data-dieu="${esc(dieu)}" data-khoan="${esc(khoan)}" data-diem="${esc(diem)}"
+    >[${nhan}]</span>`;
+}
+
+let TRA_LOI_HIEN_TAI = null;   // data của event generate/result gần nhất
+let HIEN_NGUYEN_VAN_LLM = false;
+
+function renderCauTraLoi(d) {
+  if (d) TRA_LOI_HIEN_TAI = d;
+  d = TRA_LOI_HIEN_TAI || {};
+  const links = d.citation_links || [];
+
+  // MỘT lượt replace duy nhất: alternation `citation | slug`. Citation đứng
+  // trước nên được xử lý trọn khối; slug trong văn xuôi (LLM đôi khi nhắc slug
+  // ngoài tag) đổi thành tên thật. String.replace KHÔNG quét lại phần vừa chèn
+  // nên slug nằm trong `data-vb` của chip không bị đụng tới.
+  let html = markdown(d.answer || "");
+  if (RE_TRA_LOI) {
+    html = html.replace(RE_TRA_LOI, (m) => m.startsWith("[")
+      ? chipCitation(m.slice(1, -1), links)
+      : esc(tenVB(m)));
+  } else {
+    html = html.replace(/\[([^\][]*Văn bản[^\][]*)\]/g, (_, noi) => chipCitation(noi, links));
+  }
+
+  const than = HIEN_NGUYEN_VAN_LLM
+    ? `<div class="text-xs text-slate-500 mb-1">Chuỗi LLM trả về, chưa qua lớp hiển thị tên và chưa render markdown:</div>
+       <pre class="text-xs whitespace-pre-wrap bg-slate-50 rounded p-3 max-h-[60vh] overflow-auto scroll-mong">${esc(d.answer || "")}</pre>`
+    : `<div class="prose prose-sm max-w-none text-slate-800">${html}</div>`;
+
+  const thong_ke = links.reduce((a, l) => (a[l.khop] = (a[l.khop] || 0) + 1, a), {});
+  $("noi-dung-generate").innerHTML = `
+    <div class="flex justify-end mb-1">
+      <button id="nut-nguyen-van-llm"
+        class="text-xs border rounded px-2 py-1 ${HIEN_NGUYEN_VAN_LLM
+          ? "bg-slate-800 text-white border-slate-800" : "border-slate-300 text-slate-600 hover:bg-slate-50"}">
+        ${HIEN_NGUYEN_VAN_LLM ? "← Về bản hiển thị" : "Nguyên văn LLM"}
+      </button>
+    </div>
+    ${than}
+    <div class="mt-3 pt-3 border-t border-slate-100">
+      <div class="text-xs text-slate-500 mb-1">${links.length} trích dẫn ·
+        ${thong_ke["chinh-xac"] || 0} khớp context ·
+        ${thong_ke["gan-dung"] || 0} khớp gần đúng ·
+        ${thong_ke["khong-tim-thay"] || 0} không có trong context</div>
+      <div class="flex flex-wrap gap-1.5">
+        ${links.map(l => {
+          const c = l.citation;
+          const nhan = [c.loai === "phu_luc" ? `Phụ lục ${c.dieu === "_default" ? "" : c.dieu}` : `Điều ${c.dieu}`,
+            c.khoan ? `Khoản ${c.khoan}` : "", c.diem ? `Điểm ${c.diem}` : ""].filter(Boolean).join(", ");
+          const mau = l.khop === "chinh-xac" ? "bg-emerald-50 text-emerald-800 border-emerald-300"
+            : l.khop === "gan-dung" ? "bg-amber-50 text-amber-800 border-amber-300"
+            : "bg-rose-50 text-rose-800 border-rose-300";
+          return `<span class="cit-chip border rounded px-2 py-1 text-xs ${mau}"
+            title="${esc(l.chu_thich)} — ${esc(c.van_ban)}"
+            data-vb="${esc(c.van_ban)}" data-dieu="${esc(c.dieu ?? "")}" data-khoan="${esc(c.khoan ?? "")}" data-diem="${esc(c.diem ?? "")}"
+            >${esc(nhan)} · ${esc(tenNgan(c.van_ban))}</span>`;
+        }).join("")}
+      </div>
+    </div>`;
+  ganSuKienChip();
+  $("nut-nguyen-van-llm").onclick = () => {
+    HIEN_NGUYEN_VAN_LLM = !HIEN_NGUYEN_VAN_LLM;
+    renderCauTraLoi(null);          // vẽ lại từ dữ liệu đã lưu
+  };
+  if (VERIFIER_HIEN_TAI) renderVerifier(VERIFIER_HIEN_TAI);
+}
+
+let VERIFIER_HIEN_TAI = null;
+function renderVerifier(v) {
+  if (!v) return;
+  VERIFIER_HIEN_TAI = v;
+  $("noi-dung-generate").insertAdjacentHTML("beforeend", `
+    <div class="mt-2 text-xs text-slate-600">Verifier tier ${v.tier}:
+      ${v.n_input} → ${v.n_kept} trích dẫn (bỏ ${v.n_dropped}, đánh dấu ${v.n_flagged}).</div>`);
+}
+
+function ganSuKienChip() {
+  document.querySelectorAll(".cit-chip").forEach(el => el.onclick = () =>
+    moNguyenVan(el.dataset.vb, el.dataset.dieu, el.dataset.khoan, el.dataset.diem));
+}
+
+// ---------------------------------------------------------------- panel nguyên văn
+function hienBlock(b) {
+  if (!b) return;
+  $("panel-nguyen-van").innerHTML = `
+    <div class="text-xs text-slate-600">${esc(tenVB(b.norm_id))}</div>
+    <div class="text-[11px] text-slate-400 font-mono">${esc(b.norm_id)}</div>
+    <div class="font-medium text-sm mt-1">${esc(b.vi_tri || "(cả văn bản)")}</div>
+    <div class="flex flex-wrap gap-1.5 my-2 text-xs">
+      ${b.tier != null ? chip("tier", b.tier) : ""}
+      ${b.valid_from ? chip("hiệu lực", b.valid_from + (b.valid_to ? ` → ${b.valid_to}` : "")) : ""}
+      ${b.het_hieu_luc ? `<span class="px-2 py-1 rounded bg-rose-100 text-rose-700">HẾT HIỆU LỰC</span>` : ""}
+    </div>
+    ${b.amendments?.length ? `<div class="bg-amber-50 border border-amber-200 rounded p-2 text-xs mb-2">
+      <b>Cảnh báo sửa đổi</b><ul class="mt-1 space-y-1">${b.amendments.map(a =>
+        `<li>• ${esc(a.amending_norm)} (${esc(a.amending_loc)}, hiệu lực ${esc(a.effective_date)}): ${esc(a.content_summary)}</li>`).join("")}</ul></div>` : ""}
+    <pre class="text-xs whitespace-pre-wrap bg-slate-50 rounded p-3 max-h-[55vh] overflow-auto scroll-mong">${esc(b.text)}</pre>
+    <div class="text-[11px] text-slate-400 mt-2">Nguồn: block context đã gửi cho LLM.</div>`;
+}
+
+async function moNguyenVan(norm_id, dieu, khoan, diem) {
+  if (!norm_id || !dieu) return;
+  $("panel-nguyen-van").innerHTML = `<div class="text-slate-400 text-sm">Đang tra…</div>`;
+  const q = new URLSearchParams({ norm_id, dieu });
+  if (khoan) q.set("khoan", khoan);
+  if (diem) q.set("diem", diem);
+  try {
+    const r = await fetch("/api/text?" + q.toString());
+    const d = await r.json();
+    const vt = [`Điều ${dieu}`, khoan && `Khoản ${khoan}`, diem && `Điểm ${diem}`].filter(Boolean).join(", ");
+    $("panel-nguyen-van").innerHTML = `
+      <div class="text-xs text-slate-600">${esc(tenVB(norm_id))}</div>
+      <div class="text-[11px] text-slate-400 font-mono">${esc(norm_id)}</div>
+      <div class="font-medium text-sm mt-1">${esc(vt)}</div>
+      ${d.norm ? `<div class="text-xs text-slate-500 mt-1">${esc(d.norm.title)} ${d.norm.so_hieu ? "· " + esc(d.norm.so_hieu) : ""}
+        · tier ${d.norm.tier} · hiệu lực ${esc(d.norm.valid_from || "?")}${d.norm.valid_to ? " → " + esc(d.norm.valid_to) : ""}</div>` : ""}
+      ${d.tim_thay
+        ? `<pre class="text-xs whitespace-pre-wrap bg-slate-50 rounded p-3 mt-2 max-h-[55vh] overflow-auto scroll-mong">${esc(d.text)}</pre>`
+        : `<div class="bg-rose-50 border border-rose-200 text-rose-700 rounded p-3 mt-2 text-xs">
+             Không tìm thấy vị trí này trong <code>data/raw/${esc(norm_id)}.md</code>.
+             Đây là tín hiệu thật: trích dẫn trỏ tới điều khoản không tồn tại trong corpus.</div>`}
+      <div class="text-[11px] text-slate-400 mt-2">Nguồn: <code>data/raw/*.md</code> (không qua Neo4j).</div>`;
+  } catch (e) {
+    $("panel-nguyen-van").innerHTML = `<div class="text-rose-700 text-sm">Lỗi tra nguyên văn: ${esc(e.message)}</div>`;
+  }
+}
+
+$("nut-dong-panel").onclick = () =>
+  $("panel-nguyen-van").innerHTML = `<div class="text-slate-500 text-sm">Bấm một trích dẫn để xem nguyên văn.</div>`;
+
+// ---------------------------------------------------------------- đồ thị Cytoscape
+async function taiDoThi() {
+  try {
+    DO_THI_CORPUS = await (await fetch("/api/norm-graph")).json();
+    dungBangTen(DO_THI_CORPUS.nodes);   // lớp hiển thị tên (mục 3.3)
+  } catch (e) { console.warn("Không tải được đồ thị norm:", e); }
+}
+
+function veDoThi(norms) {
+  const el = $("do-thi");
+  if (!el || !DO_THI_CORPUS || !window.cytoscape) return;
+  const tap = new Set(norms);
+  const nodes = DO_THI_CORPUS.nodes.filter(n => tap.has(n.id)).map(n => ({
+    data: {
+      id: n.id, nhan: `${tenNgan(n.id, 40)}\n(T${n.tier})`,
+      tier: n.tier, seed: SEED_STAGE1.includes(n.id) ? 1 : 0,
+    },
+  }));
+  const edges = DO_THI_CORPUS.edges
+    .filter(e => tap.has(e.source) && tap.has(e.target))
+    .map((e, i) => ({ data: { id: "e" + i, source: e.source, target: e.target, loai: e.type } }));
+
+  CY = cytoscape({
+    container: el,
+    elements: { nodes, edges },
+    style: [
+      { selector: "node", style: {
+        "label": "data(nhan)", "text-wrap": "wrap", "font-size": 9, "text-valign": "center",
+        "color": "#1e293b", "background-color": "#e2e8f0", "width": 130, "height": 42,
+        "shape": "round-rectangle", "text-max-width": 120 } },
+      { selector: "node[seed = 1]", style: { "background-color": "#c7d2fe", "border-width": 2, "border-color": "#4f46e5" } },
+      { selector: "edge", style: {
+        "label": "data(loai)", "font-size": 8, "color": "#64748b", "width": 1.5,
+        "line-color": "#94a3b8", "target-arrow-color": "#94a3b8",
+        "target-arrow-shape": "triangle", "curve-style": "bezier" } },
+      { selector: "edge[loai = 'AMENDS']", style: { "line-color": "#f59e0b", "target-arrow-color": "#f59e0b", "line-style": "dashed" } },
+    ],
+    layout: { name: "breadthfirst", directed: true, padding: 14, spacingFactor: 1.1 },
+    wheelSensitivity: 0.2,
+  });
+  CY.on("tap", "node", (evt) => moNguyenVan(evt.target.id(), "1"));
+}
+
+// ---------------------------------------------------------------- luồng SSE
+function dispatch(ev) {
+  batBuoc(ev.step, ev.t);
+  themLog(ev.step, ev.raw);
+
+  if (ev.kind === "error") {
+    $("bang-loi").classList.remove("hidden");
+    $("bang-loi").innerHTML = `<b>Lỗi:</b> ${esc(ev.data.thong_bao || ev.raw)}
+      ${(ev.data.cau_hoi_co_san || []).length
+        ? `<div class="mt-2 text-xs">Câu có sẵn: ${ev.data.cau_hoi_co_san.map(q => `<button class="underline goi-y-loi">${esc(q)}</button>`).join(" · ")}</div>` : ""}`;
+    document.querySelectorAll(".goi-y-loi").forEach(b => b.onclick = () => { $("o-cau-hoi").value = b.textContent; });
+    return;
+  }
+
+  const d = ev.data || {};
+  switch (ev.step) {
+    case "question": renderCauHoi(d); break;
+    case "plan":
+    case "temporal": renderPlan(d); break;
+    case "stage1": if (d.ranked) renderStage1(d); break;
+    case "stage2": if (d.norm_ids) renderStage2(d); break;
+    case "stage3": renderStage3(d); break;
+    case "hybrid": renderHybrid(d); break;
+    case "context":
+      if (d.blocks) { BLOCKS = d.blocks; renderHybrid({ n_blocks: d.n_blocks, tokens: d.context_tokens }); }
+      else renderHybrid(d);
+      break;
+    case "generate": if (d.answer != null) renderCauTraLoi(d); break;
+    case "verify": if (d.verifier) renderVerifier(d.verifier); break;
+    case "done":
+      if (ev.kind === "done") {
+        BUOC.forEach(b => { $("buoc-" + b.id).classList.remove("buoc-chay", "buoc-cho"); });
+        $("tg-generate").textContent = (d.elapsed_seconds ?? ev.t).toFixed(2) + "s";
+      }
+      break;
+  }
+}
+
+async function hoi() {
+  if (DANG_CHAY) return;
+  const question = $("o-cau-hoi").value.trim();
+  if (!question) return;
+
+  DANG_CHAY = true;
+  $("nut-hoi").disabled = true;
+  $("nut-hoi").textContent = "Đang chạy…";
+  $("bang-loi").classList.add("hidden");
+  BLOCKS = []; PLAN = {}; HYBRID = {}; SEED_STAGE1 = [];
+  TRA_LOI_HIEN_TAI = null; VERIFIER_HIEN_TAI = null; HIEN_NGUYEN_VAN_LLM = false;
+  dungStepper();
+
+  try {
+    const res = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question,
+        jurisdiction: $("o-juris").value || null,
+        response_mode: $("o-mode").value || null,
+        verify: $("o-verify").checked,
+      }),
+    });
+    // KHÔNG dùng EventSource (chỉ GET + tự kết nối lại) — đọc thẳng body stream.
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let dem = "";
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      dem += decoder.decode(value, { stream: true });
+      const khung = dem.split("\n\n");
+      dem = khung.pop();
+      for (const k of khung) {
+        const dong = k.split("\n").find(l => l.startsWith("data: "));
+        if (!dong) continue;
+        try { dispatch(JSON.parse(dong.slice(6))); }
+        catch (e) { console.warn("Khung SSE hỏng:", k, e); }
+      }
+    }
+  } catch (e) {
+    $("bang-loi").classList.remove("hidden");
+    $("bang-loi").innerHTML = `<b>Mất kết nối tới server:</b> ${esc(e.message)}`;
+  } finally {
+    DANG_CHAY = false;
+    $("nut-hoi").disabled = false;
+    $("nut-hoi").textContent = "Hỏi";
+  }
+}
+
+$("nut-hoi").onclick = hoi;
+$("o-cau-hoi").addEventListener("keydown", e => {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) hoi();
+});
+
+// ---------------------------------------------------------------- khởi động
+(async function khoiDong() {
+  dungStepper();
+  await taiDoThi();   // xong trước khi hỏi để bước 3/4/6/7 có tên thật
+  try {
+    const m = await (await fetch("/api/mode")).json();
+    const replay = m.mode === "replay";
+    $("badge-mode").textContent = replay ? `PHÁT LẠI ×${m.replay_speed ?? ""}` : "TRỰC TIẾP";
+    $("badge-mode").className = "ml-auto text-xs font-bold px-3 py-1 rounded-full " +
+      (replay ? "bg-amber-400 text-amber-950" : "bg-emerald-500 text-white");
+    if (replay) {
+      $("canh-bao-fixture").classList.remove("hidden");
+      $("canh-bao-fixture").innerHTML =
+        "Đang chạy <b>PHÁT LẠI</b> từ fixture đã ghi sẵn — không gọi Neo4j/Qdrant/LLM. " +
+        "Mốc thời gian là thời gian thật của lượt chạy đã ghi, được tua nhanh.";
+    }
+    $("goi-y").innerHTML = (m.questions || []).map(q =>
+      `<button class="goi-y-nut border border-slate-300 hover:border-indigo-400 hover:bg-indigo-50 rounded-full px-3 py-1">${esc(q)}</button>`).join("");
+    document.querySelectorAll(".goi-y-nut").forEach(b =>
+      b.onclick = () => { $("o-cau-hoi").value = b.textContent; hoi(); });
+    if ((m.questions || []).length === 1) $("o-cau-hoi").value = m.questions[0];
+  } catch (e) {
+    $("badge-mode").textContent = "MẤT KẾT NỐI";
+  }
+})();
+</script>
+</body>
+</html>

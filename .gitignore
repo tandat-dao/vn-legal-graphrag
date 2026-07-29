@@ -69,3 +69,11 @@ data/evaluation/e2c/
 # bản quyền, bản nháp nằm public còn có thể bị Turnitin quét trúng và báo
 # trùng lặp với chính bài của mình.
 docs/thesis/
+
+# Finetune (TASK-FT-*): weights GGUF/LoRA + dataset sinh ra — nặng, tái tạo được
+# bằng code trong finetune/. Report + notebook + kết quả JSON vẫn được commit.
+finetune/models/
+finetune/data/*.jsonl
+# File dở dang của replay.py (--resume đọc lại) + đầu ra mock khi verify schema
+finetune/results/*.partial.jsonl
+finetune/results/*_mock_*.json

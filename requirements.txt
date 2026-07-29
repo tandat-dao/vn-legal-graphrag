@@ -10,3 +10,5 @@ google-genai>=1.0.0   # dự phòng Gemini khi Claude sập (demo) — import la
 numpy>=1.26            # expanded_eval: bootstrap CI (dep của sentence-transformers, khai tường minh vì import trực tiếp)
 scipy>=1.11            # expanded_eval: Wilcoxon signed-rank
 torch>=2.0             # reranker (D-20, teacher) — đã là dep của sentence-transformers
+fastapi>=0.110         # UI demo bảo vệ (ui/server.py) — chỉ cần khi chạy web UI
+uvicorn>=0.27          # ASGI server cho UI demo: uvicorn ui.server:app --port 8000
