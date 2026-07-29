@@ -20,7 +20,7 @@ Nếu ở bước nào thấy cần khởi động DB hoặc gọi Vertex AI th�
 | `dataset_report.py` | FT-04: `reports/dataset_stats.md` + `reports/samples_20.txt` |
 | `data/` | `mode_map.json`, `gate_ids.json` (`*.jsonl` bị gitignore) |
 | `results/` | Đầu ra replay (`*_mock_*.json` và `*.partial.jsonl` bị gitignore) |
-| `reports/` | `api_contract.md` (FT-00), `token_budget.md` (FT-01), `dataset_stats.md` (FT-04) |
+| `reports/` | `api_contract.md` (FT-00), `token_budget.md` (FT-01), `gate_base_model.md` (FT-03), `dataset_stats.md` (FT-04) |
 | `models/` | Weights GGUF — **gitignore toàn bộ** |
 
 ## Trạng thái
@@ -30,7 +30,7 @@ Nếu ở bước nào thấy cần khởi động DB hoặc gọi Vertex AI th�
 | FT-00 hợp đồng API | ✅ `reports/api_contract.md` |
 | FT-01 ngân sách token + `response_mode` | ✅ `reports/token_budget.md` |
 | FT-02 bộ phát lại | ✅ `replay.py`, 48 test |
-| FT-03 gate | ✅ phiên 1 đã chạy trên Kaggle — xem "Kết quả phiên 1" dưới |
+| FT-03 gate | ✅ `reports/gate_base_model.md` — giữ 4B, chốt `presence_penalty = 0` (còn treo: đọc `--dump-prompt` bằng mắt trước FT-06) |
 | FT-04 chuẩn bị dữ liệu | ✅ `build_dataset.py`, `reports/dataset_stats.md`, 49 test |
 | FT-05 → FT-07 | ⬜ chưa bắt đầu |
 
@@ -76,17 +76,26 @@ chọn*, không phải đọc được từ code. Lý do chọn ghi ở `reports
 
 ### Kết quả phiên 1 FT-03 (Kaggle, `Qwen3-4B-Instruct-2507-Q4_K_M`, 15 câu)
 
+Ma trận 2×2 đầy đủ + ba dè dặt + ba kiểm tra hạ tầng:
+[`reports/gate_base_model.md`](reports/gate_base_model.md).
+
 | Ô | `format_ok_rate` | `soft_article_hit` | `f1_khoan` | `tu_choi_dung` | `hit_token_cap` |
 |---|---:|---:|---:|---:|---:|
-| zero-shot, pp=1.0 | 0.083 | 1.000 | 0.200 | 0.667 (2/3) | 0 |
-| few-shot 2, pp=1.0 | 0.833 | 1.000 | 0.531 | 0.333 (1/3) | 0 |
-| few-shot 2, pp=0 | 0.833 | 1.000 | **0.600** | 0.333 (1/3) | 0 |
+| zero-shot, pp=1.0 | 0.083 (1/12) | 1.000 | 0.200 | 0.667 (2/3) | 0 |
+| zero-shot, pp=0 | 0.167 (2/12) | 1.000 | 0.244 | 0.667 (2/3) | 0 |
+| few-shot 2, pp=1.0 | 0.833 (10/12) | 1.000 | 0.531 | 0.333 (1/3) | 0 |
+| few-shot 2, pp=0 | 0.833 (10/12) | 1.000 | **0.600** | 0.333 (1/3) | 0 |
 
 Đọc theo bảng chẩn đoán ở §TASK-FT-03: `soft_article_hit` = 1.000 mà `format_ok`
 zero-shot chỉ 0.083 → **định vị được điều luật, không biết viết cú pháp** — đúng
-thứ tinh chỉnh sửa được, **giữ 4B**, không leo lên 8B. `hit_token_cap` = 0 ở mọi ô
-nên `presence_penalty=0` là lựa chọn đúng (không có lý do phạt chính hành vi chép
-nguyên văn). Hai lần chạy lại lệnh 1 cho answer **trùng khít từng ký tự**.
+thứ tinh chỉnh sửa được, **giữ 4B**, không leo lên 8B. Chốt `presence_penalty = 0`
+theo **quy tắc đăng ký trước** ("chọn giá trị nhỏ nhất mà `hit_token_cap = 0`"),
+KHÔNG theo "điểm cao hơn" — chọn theo điểm của chính 15 câu này là
+selection-on-test. Hai lần chạy lại lệnh 1 cho answer **trùng khít từng ký tự**.
+
+⚠️ Chênh 1/12 vs 2/12 ở trục pp là **đúng một câu** (KTC Wilson [0.015, 0.354] vs
+[0.047, 0.448], chồng lấn gần hoàn toàn) — viết là *"hướng nhất quán trên cỡ mẫu
+nhỏ"*, không viết là *"pp=0 cải thiện định dạng"*. Xem `gate_base_model.md` §4.
 
 `tu_choi_dung` tụt 0.667 → 0.333 khi bật few-shot chính là bằng chứng cho yêu cầu
 20% mẫu từ chối ở FT-04.
@@ -208,7 +217,7 @@ Gate này **không để huỷ kế hoạch** mà để biết trước sẽ vi�
 huấn luyện. Kể cả `format_ok_rate < 10%` vẫn đi tiếp — đó chính là kết quả cho thấy
 tinh chỉnh là *điều kiện cần* để mô hình nhỏ tham gia được kiến trúc.
 
-**Đầu ra phiên 1:** `reports/gate_base_model.md`.
+**Đầu ra phiên 1:** ✅ [`reports/gate_base_model.md`](reports/gate_base_model.md).
 
 ---
 
