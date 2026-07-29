@@ -26,6 +26,7 @@ import unsloth   # PHAI import truoc trl/transformers/peft, neu khong mat toi uu
 from unsloth import FastLanguageModel
 from unsloth.chat_templates import train_on_responses_only
 from trl import SFTTrainer, SFTConfig
+from transformers import TrainerCallback
 from datasets import Dataset, load_dataset
 import numpy as np
 
@@ -42,6 +43,12 @@ def parse_args():
     p.add_argument("--dataset",     required=True,
                    help="file .jsonl cuc bo, hoac repo dataset tren HF")
     p.add_argument("--dataset-split", default="train")
+    p.add_argument("--val-dataset", default=None,
+                   help="file .jsonl (hoac repo HF) dung lam tap validation. "
+                        "Khong dat = khong eval, chi co train loss.")
+    p.add_argument("--val-limit", type=int, default=64,
+                   help="cat tap validation con N mau (0 = dung het). 64 la du de "
+                        "thay epoch 2 co overfit khong ma khong ton dang ke gio pod.")
     p.add_argument("--output-dir",  default="/workspace/adapter")
     p.add_argument("--max-seq-length", type=int, default=16384)
     p.add_argument("--epochs",      type=float, default=2)
@@ -91,7 +98,7 @@ def load_rows(path_or_repo, split):
     return out
 
 
-def audit_lengths(texts, tok, limit, allow_trunc, outdir):
+def audit_lengths(texts, tok, limit, allow_trunc, outdir, fname="length_stats.json"):
     """Phep assert o diem 3: KHONG mau nao duoc cham tran.
     Neu vuot, thu vien cat phan DUOI -> cat dung dap an va khoi trich dan
     -> day mo hinh sinh cau tra loi cut khong trich dan. Hong AM THAM."""
@@ -106,7 +113,7 @@ def audit_lengths(texts, tok, limit, allow_trunc, outdir):
         print(f"  {k:14s} {stats[k]:>10,}")
     print(f"  {'total_tokens':14s} {stats['total_tokens']:>10,}"
           f"   <- nhan voi so epoch = khoi luong cong viec that")
-    pathlib.Path(outdir, "length_stats.json").write_text(json.dumps(stats, indent=2))
+    pathlib.Path(outdir, fname).write_text(json.dumps(stats, indent=2))
 
     if stats["over_limit"]:
         idx = np.where(n > limit)[0][:10]
@@ -122,7 +129,30 @@ def audit_lengths(texts, tok, limit, allow_trunc, outdir):
     return stats
 
 
-def build_sft_kwargs(a, bf16, cf_fields):
+class EvalPrinter(TrainerCallback):
+    """In eval_loss NGAY sau moi lan eval (cuoi moi epoch), thay vi chi thay o
+    bang tong ket cuoi. Tren pod, biet som epoch 2 dang overfit thi con kip tat."""
+
+    def on_evaluate(self, args, state, control, metrics=None, **kw):
+        if metrics and "eval_loss" in metrics:
+            print(f"  [EVAL] epoch={state.epoch:.2f} step={state.global_step} "
+                  f"eval_loss={metrics['eval_loss']:.4f}", flush=True)
+
+
+def pick_field(cf_fields, *names):
+    """Tra ve ten truong DAU TIEN co that trong SFTConfig, hoac None.
+
+    Ten doi giua cac doi TRL/transformers (vd evaluation_strategy ->
+    eval_strategy). Dat nham ten thi no bi bo loc o cuoi build_sft_kwargs va
+    VUT IM LANG: khong eval lan nao, khong bao loi, chi la bang ket qua thieu
+    cot eval_loss. Do thay vi hardcode."""
+    for n in names:
+        if n in cf_fields:
+            return n
+    return None
+
+
+def build_sft_kwargs(a, bf16, cf_fields, has_val=False):
     """Ten tham so doi giua cac doi TRL. Do thay vi hardcode."""
     kw = dict(
         per_device_train_batch_size = 1,          # 1 mau = 1 chuoi, KHONG padding
@@ -146,6 +176,19 @@ def build_sft_kwargs(a, bf16, cf_fields):
     kw["max_length" if "max_length" in cf_fields else "max_seq_length"] = a.max_seq_length
     if "dataset_text_field" in cf_fields:
         kw["dataset_text_field"] = "text"
+
+    if has_val:
+        # Ke hoach §TASK-FT-05 doi log train/val loss. Eval theo EPOCH: cai can
+        # biet la epoch 2 co overfit khong, khong phai duong cong theo step.
+        ev = pick_field(cf_fields, "eval_strategy", "evaluation_strategy")
+        if ev:
+            kw[ev] = "epoch"
+        else:
+            print("CANH BAO: SFTConfig khong co eval_strategy/evaluation_strategy "
+                  "-> se KHONG eval. Kiem lai doi TRL.")
+        bs = pick_field(cf_fields, "per_device_eval_batch_size")
+        if bs:
+            kw[bs] = 1        # 1 mau = 1 chuoi, KHONG padding (giong train)
     if not a.no_push and a.hub_model_id:
         kw.update(push_to_hub=True, hub_model_id=a.hub_model_id,
                   hub_strategy="checkpoint",     # day last-checkpoint sau moi lan save
@@ -205,6 +248,23 @@ def main():
     audit_lengths(texts, tok, a.max_seq_length, a.allow_truncation, a.output_dir)
     ds = Dataset.from_dict({"text": texts}).shuffle(seed=a.seed)
 
+    # ---- tap validation (tuy chon) ----
+    # Dung CHINH load_rows va CHINH duong apply_chat_template o tren: neu val
+    # duoc dung theo cach khac train thi eval_loss khong so duoc voi train loss.
+    val_ds = None
+    if a.val_dataset:
+        val_convs = load_rows(a.val_dataset, a.dataset_split)
+        val_texts = [tok.apply_chat_template(c, tokenize=False, add_generation_prompt=False)
+                     for c in val_convs]
+        val_ds = Dataset.from_dict({"text": val_texts})
+        if a.val_limit and a.val_limit < len(val_texts):
+            # Xao TRUOC khi cat: val.jsonl tach theo doc_name nen N mau dau co
+            # the roi het vao vai van ban. Xao theo seed -> van tat dinh.
+            val_ds = val_ds.shuffle(seed=a.seed).select(range(a.val_limit))
+        print(f"Nap {len(val_ds)}/{len(val_texts)} mau validation tu {a.val_dataset}")
+        audit_lengths(val_ds["text"], tok, a.max_seq_length, a.allow_truncation,
+                      a.output_dir, fname="val_length_stats.json")
+
     # ---------------- 3. trainer ----------------
     cf = {f.name for f in dataclasses.fields(SFTConfig)}
     tr = set(inspect.signature(SFTTrainer.__init__).parameters)
@@ -212,13 +272,22 @@ def main():
     print(f"API TRL: tok_arg={tok_arg} | "
           f"seq_arg={'max_length' if 'max_length' in cf else 'max_seq_length'}")
 
+    sft_kwargs = build_sft_kwargs(a, bf16, cf, has_val=val_ds is not None)
     trainer = SFTTrainer(
         model         = model,
         train_dataset = ds,
-        args          = SFTConfig(**build_sft_kwargs(a, bf16, cf)),
+        eval_dataset  = val_ds,          # None = khong eval
+        args          = SFTConfig(**sft_kwargs),
         **{tok_arg: tok},
     )
+    if val_ds is not None:
+        print(f"Eval: {len(val_ds)} mau, "
+              f"strategy={sft_kwargs.get('eval_strategy', sft_kwargs.get('evaluation_strategy'))}")
+        trainer.add_callback(EvalPrinter())
 
+    # train_on_responses_only boc DATA COLLATOR, ma collator dung chung cho ca
+    # train lan eval -> eval_loss cung chi tinh tren phan dap an. Dung nhu vay:
+    # hai con so moi so duoc voi nhau.
     if not a.no_response_only:
         trainer = train_on_responses_only(
             trainer, instruction_part=INSTR_PART, response_part=RESP_PART)
@@ -237,10 +306,28 @@ def main():
     print(f"\nXONG: loss={st.training_loss:.4f}  runtime={st.metrics['train_runtime']:.0f}s")
     print(f"  thong luong ~ {st.metrics.get('train_tokens_per_second', float('nan')):.0f} tok/s")
 
+    # Lich su eval lay tu log_history (nguon duy nhat, khong tu ghi song song).
+    evals = [{k: v for k, v in h.items() if k in ("epoch", "step", "eval_loss")}
+             for h in trainer.state.log_history if "eval_loss" in h]
+    if evals:
+        print("\n--- EVAL LOSS THEO EPOCH ---")
+        for h in evals:
+            print(f"  epoch {h.get('epoch', 0):.2f}  step {h.get('step', 0):>5}  "
+                  f"eval_loss {h['eval_loss']:.4f}")
+        if len(evals) >= 2 and evals[-1]["eval_loss"] > evals[-2]["eval_loss"]:
+            print("  CANH BAO: eval_loss TANG o epoch cuoi -> dau hieu overfit. "
+                  "Can nhac dung o epoch truoc.")
+    elif a.val_dataset:
+        print("\nCANH BAO: co --val-dataset ma log_history khong co eval_loss nao.")
+
     model.save_pretrained(a.output_dir)
     tok.save_pretrained(a.output_dir)
     pathlib.Path(a.output_dir, "train_result.json").write_text(
-        json.dumps({"loss": st.training_loss, **st.metrics}, indent=2))
+        json.dumps({"loss": st.training_loss, **st.metrics,
+                    "eval_history": evals,
+                    "eval_loss_final": evals[-1]["eval_loss"] if evals else None,
+                    "val_dataset": a.val_dataset, "val_limit": a.val_limit},
+                   indent=2))
     print("adapter ->", a.output_dir)
 
 

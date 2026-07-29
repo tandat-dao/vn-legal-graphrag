@@ -256,6 +256,8 @@ if has_stage train; then
   python train_qlora.py \
     --base-model      "$BASE_MODEL" \
     --dataset         "$DATA_DIR/train.jsonl" \
+    --val-dataset     "$DATA_DIR/val.jsonl" \
+    --val-limit       64 \
     --max-seq-length  "$MAX_SEQ_LEN" \
     --epochs          "$EPOCHS" \
     --lora-r          16 \

@@ -35,7 +35,8 @@ Nếu ở bước nào thấy cần khởi động DB hoặc gọi Vertex AI th�
 | FT-02 bộ phát lại | ✅ `replay.py`, 48 test |
 | FT-03 gate | ✅ `reports/gate_base_model.md` — giữ 4B, chốt `presence_penalty = 0` (còn treo: đọc `--dump-prompt` bằng mắt trước FT-06) |
 | FT-04 chuẩn bị dữ liệu | ✅ `build_dataset.py`, `reports/dataset_stats.md`, 49 test |
-| FT-05 → FT-07 | ⬜ chưa bắt đầu |
+| FT-05 huấn luyện QLoRA | 🟡 code sẵn (`train_qlora.py` + `run.sh` + `upload_dataset.sh`), **chưa chạy lần nào trọn vẹn** |
+| FT-06 → FT-07 | ⬜ chưa bắt đầu |
 
 ---
 
@@ -73,6 +74,11 @@ HF_REPO_DATA=<user>/<repo> bash finetune/upload_dataset.sh   # đổi repo đíc
 Script tạo repo **private** (`--exist-ok`), in `sha256` + số dòng của cả hai file
 rồi đẩy `train.jsonl`, `val.jsonl` và hai file `.sha256` đi kèm. Kiểm lại phía pod:
 `STAGES=data bash finetune/run.sh`.
+
+`val.jsonl` không còn nằm không: `run.sh` truyền `--val-dataset $WORK/data/val.jsonl
+--val-limit 64` → `eval_strategy="epoch"`, in `eval_loss` sau mỗi epoch và ghi
+`eval_history` vào `train_result.json` (kế hoạch §TASK-FT-05 đòi log train/val loss).
+64 mẫu là cố ý: đủ để thấy epoch 2 có overfit không mà không tốn đáng kể giờ pod.
 
 Ba điều quyết định chất lượng bộ này — đọc `reports/dataset_stats.md` trước khi
 đụng vào `build_dataset.py`:
