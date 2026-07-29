@@ -1,0 +1,244 @@
+{
+  "seed": 42,
+  "n_yeu_cau": 5000,
+  "drops": {
+    "leak_question_ngram": 2247,
+    "qa_khong_suy_duoc_dieu": 1733,
+    "article_qua_ngan": 210,
+    "article_qua_dai": 53,
+    "khong_suy_duoc_slug": 2331,
+    "leak_doc_corpus": 133,
+    "qa_co_ngoac_vuong": 9,
+    "doc_thieu_dieu_de_dong_goi": 19,
+    "doc_ngoai_pham_vi": 5408
+  },
+  "blocklist": [
+    {
+      "id": "luat-dat-dai-2013",
+      "title": "Luật Đất đai 2013",
+      "so_hieu": null,
+      "ten_chan": "luat dat dai"
+    },
+    {
+      "id": "luat-dat-dai-2024",
+      "title": "Luật Đất đai",
+      "so_hieu": null,
+      "ten_chan": "luat dat dai"
+    },
+    {
+      "id": "luat-ho-tich-2014",
+      "title": "Luật Hộ Tịch",
+      "so_hieu": null,
+      "ten_chan": "luat ho tich"
+    },
+    {
+      "id": "luat-nuoi-con-nuoi-2010",
+      "title": "Luật Nuôi Con Nuôi",
+      "so_hieu": null,
+      "ten_chan": "luat nuoi con nuoi"
+    },
+    {
+      "id": "nghi-dinh-101-2024-nd-cp",
+      "title": "Nghị định 101/2024/NĐ-CP",
+      "so_hieu": "101/2024/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-102-2024-nd-cp",
+      "title": "Nghị định 102/2024/NĐ-CP",
+      "so_hieu": "102/2024/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-112-2024-nd-cp",
+      "title": "Nghị định 112/2024/NĐ-CP",
+      "so_hieu": "112/2024/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-114-2016-nd-cp",
+      "title": "Nghị định số 114/2016/NĐ-CP",
+      "so_hieu": "114/2016/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-120-2025-nd-cp",
+      "title": "Nghị định 120/2025/NĐ-CP",
+      "so_hieu": "120/2025/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-123-2015-nd-cp",
+      "title": "Nghị định 123/2015/NĐ-CP",
+      "so_hieu": "123/2015/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-151-2025-nd-cp",
+      "title": "Nghị định 151/2025/NĐ-CP",
+      "so_hieu": "151/2025/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-19-2011-nd-cp",
+      "title": "Nghị định 19/2011/NĐ-CP",
+      "so_hieu": "19/2011/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-226-2025-nd-cp",
+      "title": "Nghị định 226/2025/NĐ-CP",
+      "so_hieu": "226/2025/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-49-2026-nd-cp",
+      "title": "Nghị định 49/2026/NĐ-CP",
+      "so_hieu": "49/2026/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-50-2026-nd-cp",
+      "title": "Nghị định 50/2026/NĐ-CP",
+      "so_hieu": "50/2026/nd-cp",
+      "ten_chan": "cp"
+    },
+    {
+      "id": "nghi-dinh-87-2020-nd-cp",
+      "title": "Nghị định 87/2020/NĐ-CP quy định về Cơ sở dữ liệu hộ tịch điện tử, đăng ký hộ tịch trực tuyến",
+      "so_hieu": "87/2020/nd-cp",
+      "ten_chan": "cp quy dinh ve co du lieu ho tich dien tu dang ky ho tich truc tuyen"
+    },
+    {
+      "id": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+      "title": "Nghị quyết 02/2023/NQ-HĐND TP.HCM",
+      "so_hieu": "02/2023/nq-hdnd",
+      "ten_chan": "hdnd tp hcm"
+    },
+    {
+      "id": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+      "title": "Nghị quyết 11/2023/NQ-HĐND Đồng Nai",
+      "so_hieu": "11/2023/nq-hdnd",
+      "ten_chan": "hdnd dong nai"
+    },
+    {
+      "id": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai",
+      "title": "Nghị quyết 124/2016/NQ-HĐND TP.HCM",
+      "so_hieu": "124/2016/nq-hdnd",
+      "ten_chan": "hdnd tp hcm"
+    },
+    {
+      "id": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+      "title": "Nghị quyết 124/2016/NQ-HĐND TP.HCM",
+      "so_hieu": "124/2016/nq-hdnd",
+      "ten_chan": "hdnd tp hcm"
+    },
+    {
+      "id": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+      "title": "Nghị quyết 21/2024/NQ-HĐND Đồng Nai",
+      "so_hieu": "21/2024/nq-hdnd",
+      "ten_chan": "hdnd dong nai"
+    },
+    {
+      "id": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+      "title": "Nghị quyết 22/2024/NQ-HĐND Đồng Nai",
+      "so_hieu": "22/2024/nq-hdnd",
+      "ten_chan": "hdnd dong nai"
+    },
+    {
+      "id": "nghi-quyet-254-2025-qh15",
+      "title": "Nghị quyết 254/2025/QH15",
+      "so_hieu": "254/2025/qh15",
+      "ten_chan": ""
+    },
+    {
+      "id": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+      "title": "Nghị quyết 28/2025/NQ-HĐND Đồng Nai",
+      "so_hieu": "28/2025/nq-hdnd",
+      "ten_chan": "hdnd dong nai"
+    },
+    {
+      "id": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+      "title": "Nghị quyết 87/2025/NQ-HĐND TP.HCM",
+      "so_hieu": "87/2025/nq-hdnd",
+      "ten_chan": "hdnd tp hcm"
+    },
+    {
+      "id": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+      "title": "Quyết định 18/2016/QĐ-UBND quy định về hạn mức đất ở trên địa bàn Thành phố Hồ Chí Minh",
+      "so_hieu": "18/2016/qd-ubnd",
+      "ten_chan": "ubnd quy dinh ve han muc dat o tren dia ban thanh pho ho chi minh"
+    },
+    {
+      "id": "quyet-dinh-52-2016-qd-ubnd-tp-hcm",
+      "title": "Quyết định 52/2016/QĐ-UBND TP.HCM",
+      "so_hieu": "52/2016/qd-ubnd",
+      "ten_chan": "ubnd tp hcm"
+    },
+    {
+      "id": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+      "title": "Quyết định 69/2024/QĐ-UBND TP.HCM",
+      "so_hieu": "69/2024/qd-ubnd",
+      "ten_chan": "ubnd tp hcm"
+    },
+    {
+      "id": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+      "title": "Quyết định 92/2025/QĐ-UBND Đồng Nai",
+      "so_hieu": "92/2025/qd-ubnd",
+      "ten_chan": "ubnd dong nai"
+    },
+    {
+      "id": "thong-tu-01-2022-tt-btp",
+      "title": "Thông tư 01/2022/TT-BTP quy định chi tiết một số điều và biện pháp thi hành Nghị định số 87/2020/NĐ-CP về Cơ sở dữ liệu hộ tịch điện tử, đăng ký hộ tịch trực tuyến",
+      "so_hieu": "01/2022/tt-btp",
+      "ten_chan": "btp quy dinh chi tiet mot dieu va bien phap thi hanh cp ve co du lieu ho tich dien tu dang ky ho tich truc tuyen"
+    },
+    {
+      "id": "thong-tu-04-2020-tt-btp",
+      "title": "Thông tư 04/2020/TT-BTP",
+      "so_hieu": "04/2020/tt-btp",
+      "ten_chan": "btp"
+    },
+    {
+      "id": "thong-tu-267-2016-tt-btc",
+      "title": "Thông tư 267/2016/TT-BTC hướng dẫn lập dự toán, quản lý, sử dụng và quyết toán kinh phí ngân sách nhà nước bảo đảm cho công tác nuôi con nuôi và cấp, gia hạn, sửa đổi giấy phép hoạt động của tổ chức con nuôi nước ngoài tại Việt Nam",
+      "so_hieu": "267/2016/tt-btc",
+      "ten_chan": "btc huong dan lap du toan quan ly su dung va quyet toan kinh phi ngan sach nha nuoc bao dam cho cong tac nuoi con nuoi va cap gia han sua doi giay phep hoat dong cua to chuc con nuoi nuoc ngoai tai viet nam"
+    }
+  ],
+  "n_doc_sau_loc": 90,
+  "n_qa_dung_duoc": 16962,
+  "n_qa_trong_pham_vi": 11554,
+  "n_qa_ngoai_pham_vi": 5408,
+  "doc_ngoai_pham_vi": [
+    "Luật Bảo hiểm tiền gửi của Quốc hội, số 06/2012/QH13",
+    "Luật Chứng khoán của Quốc hội, số 54/2019/QH14",
+    "Luật Chứng khoán số 70/2006/QH11 của Quốc hội",
+    "Luật Các tổ chức tín dụng của Quốc hội, số 32/2024/QH15",
+    "Luật Các tổ chức tín dụng của Quốc hội, số 47/2010/QH12",
+    "Luật Công chứng của Quốc hội, số 46/2024/QH15",
+    "Luật Công chứng của Quốc hội, số 53/2014/QH13",
+    "Luật Công đoàn của Quốc hội, số 50/2024/QH15",
+    "Luật Kinh doanh bảo hiểm của Quốc hội, số 08/2022/QH15",
+    "Luật Ngân hàng Nhà nước Việt Nam của Quốc hội, số 46/2010/QH12",
+    "Luật Ngân hàng Nhà nước số 01/1997/QH10",
+    "Luật Quản lý nợ công của Quốc hội, số 20/2017/QH14",
+    "Luật Quản lý nợ công, số 29/2009/QH12 của Quốc hội",
+    "Luật Quản lý, sử dụng vốn Nhà nước đầu tư vào sản xuất, kinh doanh tại doanh nghiệp của Quốc hội, số 69/2014/QH13",
+    "Luật Thi hành tạm giữ, tạm giam của Quốc hội, số 94/2015/QH13",
+    "Luật Thi hành án dân sự số 26/2008/QH12 của Quốc hội",
+    "Luật Trọng tài thương mại của Quốc hội, số 54/2010/QH12",
+    "Luật Tố tụng hành chính của Quốc hội, số 64/2010/QH12",
+    "Luật Tố tụng hành chính của Quốc hội, số 93/2015/QH13",
+    "Luật các tổ chức tín dụng số 02/1997/QH10",
+    "Luật sửa đổi, bổ sung một số điều của Luật Chứng khoán, Luật Kế toán, Luật Kiểm toán độc lập, Luật Ngân sách Nhà nước, Luật Quản lý, sử dụng tài sản công, Luật Quản lý thuế, Luật Thuế thu nhập cá nhân, Luật Dự trữ quốc gia, Luật Xử lý vi phạm hành chính của Quốc hội, số 56/2024/QH15",
+    "Luật sửa đổi, bổ sung một số điều của Luật Các tổ chức tín dụng của Quốc hội, số 17/2017/QH14",
+    "Luật sửa đổi, bổ sung một số điều của Luật Kinh doanh bảo hiểm, Luật Sở hữu trí tuệ của Quốc hội, số 42/2019/QH14",
+    "Luật sửa đổi, bổ sung một số điều của Luật Xử lý vi phạm hành chính của Quốc hội, số 67/2020/QH14",
+    "Luật sửa đổi, bổ sung một số điều của Luật Đấu giá tài sản của Quốc hội, số 37/2024/QH15",
+    "Luật sửa đổi, bổ sung một số điều của Luật Đầu tư công, Luật Đầu tư theo phương thức đối tác công tư, Luật Đầu tư, Luật Nhà ở, Luật Đấu thầu, Luật Điện lực, Luật Doanh nghiệp, Luật Thuế tiêu thụ đặc biệt và Luật Thi hành án dân sự của Quốc hội, số 03/2022/QH15",
+    "Luật Đấu giá tài sản của Quốc hội, số 01/2016/QH14",
+    "Luật Đầu tư công của Quốc hội, số 49/2014/QH13",
+    "Luật Đặc xá của Quốc hội, số 30/2018/QH14"
+  ]
+}

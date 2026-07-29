@@ -15,9 +15,12 @@ Nếu ở bước nào thấy cần khởi động DB hoặc gọi Vertex AI th�
 | `select_gate_ids.py` | Chọn 15 câu phân tầng cho gate FT-03 → `data/gate_ids.json` |
 | `measure_token_budget.py` | FT-01A: đo ngân sách token thật |
 | `recover_response_mode.py` | FT-01B: khôi phục `response_mode` → `data/mode_map.json` |
+| `slug.py` | FT-04: suy slug từ `doc_name` theo convention, cơ khí (không LLM) |
+| `build_dataset.py` | FT-04: sinh 5 000 mẫu huấn luyện → `data/{train,val}.jsonl` |
+| `dataset_report.py` | FT-04: `reports/dataset_stats.md` + `reports/samples_20.txt` |
 | `data/` | `mode_map.json`, `gate_ids.json` (`*.jsonl` bị gitignore) |
 | `results/` | Đầu ra replay (`*_mock_*.json` và `*.partial.jsonl` bị gitignore) |
-| `reports/` | `api_contract.md` (FT-00), `token_budget.md` (FT-01) |
+| `reports/` | `api_contract.md` (FT-00), `token_budget.md` (FT-01), `dataset_stats.md` (FT-04) |
 | `models/` | Weights GGUF — **gitignore toàn bộ** |
 
 ## Trạng thái
@@ -27,8 +30,66 @@ Nếu ở bước nào thấy cần khởi động DB hoặc gọi Vertex AI th�
 | FT-00 hợp đồng API | ✅ `reports/api_contract.md` |
 | FT-01 ngân sách token + `response_mode` | ✅ `reports/token_budget.md` |
 | FT-02 bộ phát lại | ✅ `replay.py`, 48 test |
-| **FT-03 gate** | 🟡 **code xong, chờ chạy trên Kaggle** |
-| FT-04 → FT-07 | ⬜ chưa bắt đầu |
+| FT-03 gate | ✅ phiên 1 đã chạy trên Kaggle — xem "Kết quả phiên 1" dưới |
+| FT-04 chuẩn bị dữ liệu | ✅ `build_dataset.py`, `reports/dataset_stats.md`, 49 test |
+| FT-05 → FT-07 | ⬜ chưa bắt đầu |
+
+---
+
+## FT-04 — Sinh dữ liệu huấn luyện
+
+```bash
+python -m finetune.build_dataset              # 5 000 mẫu, seed 42, tất định
+python -m finetune.build_dataset --report-only # chỉ dựng lại báo cáo từ jsonl đã ghi
+python -m pytest tests/test_finetune_slug.py tests/test_finetune_dataset.py -q
+```
+
+Đầu ra: `data/train.jsonl` + `data/val.jsonl` (một khoá `messages` — đúng dạng
+`load_rows` của `train_qlora.py:69-91` nhận; khoá lạ thì nó `raise ValueError`),
+`data/{train,val}_meta.jsonl` (metadata song song theo dòng, để **ngoài** file
+huấn luyện), `reports/dataset_stats.md`, `reports/samples_20.txt`.
+
+```bash
+python finetune/train_qlora.py --dataset finetune/data/train.jsonl \
+       --limit-samples 50 --max-seq-length 2048 --epochs 1 \
+       --output-dir /tmp/dry/adapter_real --no-push        # dry-run trên Kaggle
+```
+
+Ba điều quyết định chất lượng bộ này — đọc `reports/dataset_stats.md` trước khi
+đụng vào `build_dataset.py`:
+
+1. **Prompt dựng bằng CHÍNH `src…build_messages`** — cùng hàm `replay.py` dùng lúc
+   đánh giá. System prompt thật 3 936 token chiếm 46% chuỗi; train bằng prompt rút
+   gọn tự chế rồi eval bằng khối thật là dạy một đằng chấm một nẻo.
+2. **Cả hai khuôn header, ~50/50.** Chỉ dạy khuôn GraphRAG thì mô hình đọc cột
+   Naive RAG kém hơn *vì lý do định dạng* → Δ ở hàng "đã tinh chỉnh" phồng giả tạo.
+3. **9% mẫu từ chối** (70/30 giữa `no_basis` / `out_of_scope`). Bộ nguồn không có
+   mẫu nào; 5 000 mẫu toàn trả lời được sẽ dạy "luôn luôn trả lời" và làm
+   `tu_choi_dung` TỆ ĐI — phiên 1 FT-03 đã đo đúng hướng đó (0.667 → 0.333 khi bật
+   few-shot toàn ví dụ trả lời được). Nhưng chỉ **4/127** câu eval thật sự đi qua mô
+   hình sinh ở nhánh phủ định (10/14 câu bẫy do nhánh truy hồi rỗng quyết định),
+   trong khi F1 cấp Khoản đo trên **123** câu → 20% là đem 123 câu ra đánh cược để
+   bảo vệ 4 câu. Hạ xuống 9%, giữ nghiêng về `no_basis`: xem `reports/dataset_stats.md` §4.2.
+
+⚠️ `train_qlora.py` **chưa tồn tại** khi chạy FT-04 → định dạng đầu ra là *lựa
+chọn*, không phải đọc được từ code. Lý do chọn ghi ở `reports/dataset_stats.md` §8.
+
+### Kết quả phiên 1 FT-03 (Kaggle, `Qwen3-4B-Instruct-2507-Q4_K_M`, 15 câu)
+
+| Ô | `format_ok_rate` | `soft_article_hit` | `f1_khoan` | `tu_choi_dung` | `hit_token_cap` |
+|---|---:|---:|---:|---:|---:|
+| zero-shot, pp=1.0 | 0.083 | 1.000 | 0.200 | 0.667 (2/3) | 0 |
+| few-shot 2, pp=1.0 | 0.833 | 1.000 | 0.531 | 0.333 (1/3) | 0 |
+| few-shot 2, pp=0 | 0.833 | 1.000 | **0.600** | 0.333 (1/3) | 0 |
+
+Đọc theo bảng chẩn đoán ở §TASK-FT-03: `soft_article_hit` = 1.000 mà `format_ok`
+zero-shot chỉ 0.083 → **định vị được điều luật, không biết viết cú pháp** — đúng
+thứ tinh chỉnh sửa được, **giữ 4B**, không leo lên 8B. `hit_token_cap` = 0 ở mọi ô
+nên `presence_penalty=0` là lựa chọn đúng (không có lý do phạt chính hành vi chép
+nguyên văn). Hai lần chạy lại lệnh 1 cho answer **trùng khít từng ký tự**.
+
+`tu_choi_dung` tụt 0.667 → 0.333 khi bật few-shot chính là bằng chứng cho yêu cầu
+20% mẫu từ chối ở FT-04.
 
 ---
 
