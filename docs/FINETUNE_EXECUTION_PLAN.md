@@ -1,7 +1,17 @@
 # Kế hoạch Thực thi — Bổ sung Mô hình Sinh Cục bộ vào Chương 4
 
-**Phiên bản 2.3.1 | Ngày: 30/07/2026**
+**Phiên bản 2.3.2 | Ngày: 30/07/2026**
 
+> **Thay đổi v2.3.1 → v2.3.2:** sửa **năm chỗ kế hoạch lạc hậu so với mã đang chạy**.
+> (1) §TASK-FT-02 ghi `temperature 0` — **sai**, `replay.py` chạy bộ tham số Qwen
+> 2507 (0.7/0.8/20/0) và tính tất định đến từ seed + bản dựng + phần cứng, không từ
+> greedy; (2) §TASK-FT-05 đổi `notebooks/train_qlora.ipynb` → `train_qlora.py` +
+> `run.sh` + `upload_dataset.sh`, và nêu rõ `run.sh` phải truyền tường minh
+> `--lora-r 16 --lora-alpha 32` vì mặc định script là 32/64; (3) §TASK-FT-03 bỏ
+> "llama-server" → llama-cpp-python in-process; (4) **thống nhất mẫu số** 137 / 127 /
+> 123 (§9.4); (5) §TASK-FT-04 bổ sung tỉ lệ mẫu từ chối **9%, chia 70/30** — quyết
+> định này trước đó chỉ sống trong `build_dataset.py` và `dataset_stats.md` §4.2.
+>
 > **Thay đổi v2.3 → v2.3.1:** **chốt N=1 cho cả bốn ô của FT-06** (548 lượt sinh),
 > thay đoạn để ngỏ trước đó. Căn cứ mới: tính tất định đã đo được ở phiên 1 FT-03
 > (hai lần chạy cùng seed → `answer` trùng khít từng ký tự 15/15 câu), cộng lý do
@@ -279,7 +289,18 @@ sổ ngữ cảnh ≥ N token, do đó mô hình phải thuộc lớp X"*.
 - **Không sinh `NaN`.** File gốc chứa 118 literal `NaN` ở
   `faithfulness.support_rate` → JSON không chuẩn. Ta không đo tỉ lệ hậu thuẫn
   cho hàng cục bộ → đặt `faithfulness: null`.
-- **Tất định:** temperature 0, seed cố định, ghi seed vào output.
+- **Tham số sinh:** theo khuyến nghị Qwen cho bản 2507 — `temperature=0.7`,
+  `top_p=0.8`, `top_k=20`, `min_p=0`, **`presence_penalty=0`** (chốt ở FT-03,
+  §TASK-FT-03). **KHÔNG dùng `temperature=0`** (bản trước của kế hoạch ghi vậy —
+  sai): greedy trên model này sinh lặp vô tận, lặp ăn hết `max_new_tokens`, mà
+  khối trích dẫn nằm **cuối** câu trả lời nên bị cắt → F1 = 0 vì lý do thuần kỹ
+  thuật. Cả bốn ô của FT-06 dùng **giống hệt** bộ tham số này.
+- **Tất định:** đến từ **seed cố định + cùng bản dựng llama.cpp + cùng phần
+  cứng**, KHÔNG phải từ `temperature=0`. Đã chứng minh, không phải giả định:
+  phiên 1 FT-03 chạy lại cùng lệnh cho `answer` **trùng khít từng ký tự 15/15
+  câu**. Lập luận **N=1 ở §TASK-FT-06 dựa vào chính điều này** — nếu về sau đổi
+  phần cứng hoặc bản dựng llama.cpp thì tiền đề đó không còn, phải đo lại trước
+  khi giữ N=1. Ghi seed vào output.
 - **Resume được:** ghi từng item ngay khi xong, `--resume` bỏ qua item đã có.
 - `format_ok` ghi vào output như field phụ (dùng nội bộ, xem §3.1).
 - **`max_new_tokens = 2048` và PHẢI log mỗi lần chạm trần.** Gemini trả lời rất
@@ -350,7 +371,9 @@ model biết follow instruction; bản base ra 0 vì lý do tầm thường và 
    {`presence_penalty=1.0`, `presence_penalty=0`}.
    *(Lý do thử pp=0: tác vụ là CHÉP NGUYÊN VĂN slug từ ngữ cảnh, mà presence
    penalty phạt đúng token đã xuất hiện — tức phạt đúng hành vi ta cần.)*
-3. Kiểm ba thứ về hạ tầng: đường llama-server có chạy không; prompt render qua
+3. Kiểm ba thứ về hạ tầng: đường **llama-cpp-python in-process**
+   (`Llama.create_chat_completion`) có chạy không — **không có llama-server, không
+   có HTTP**; `usage.prompt_tokens` lấy từ **trả về của chính hàm đó**; prompt render qua
    chat template có đúng không (`--dump-prompt`, nhìn bằng mắt); số token prompt
    tự đếm có khớp `usage.prompt_tokens` của server không.
 4. Báo cáo `format_ok_rate`, F1 cấp Khoản thô, và hai chỉ báo chẩn đoán dưới đây.
@@ -503,6 +526,35 @@ Hệ quả: seq length mẫu train = 3 936 + context + answer → khớp
 `general` — tỉ lệ `irac` quá nhỏ để đáng công dựng đáp án theo cấu trúc 4 heading.
 Ghi vào giới hạn §8.
 
+#### Tỉ lệ mẫu TỪ CHỐI: 9%, chia 70/30
+
+Bộ nguồn `thangvip` **không có mẫu từ chối nào**. 5 000 mẫu toàn câu trả lời được
+sẽ dạy mô hình "luôn luôn trả lời" — phiên 1 FT-03 đã đo đúng hướng đó:
+`tu_choi_dung` tụt **0.667 → 0.333** khi bật few-shot toàn ví dụ trả lời được. Nên
+phải có mẫu từ chối. Câu hỏi là **bao nhiêu**.
+
+| | |
+|---|---|
+| Tỉ lệ | **9%** — 450/5 000 (`FRAC_REFUSAL = 0.09` trong `build_dataset.py`) |
+| Chia | **70/30** — 315 `refusal_no_basis` / 135 `refusal_out_of_scope` |
+
+**Vì sao 9% chứ không phải 20%** (mẻ đầu đặt 0.20 = 1 000 mẫu): chỉ **4/127** câu
+đi qua mô hình sinh nằm ở nhánh phủ định — 10/14 câu bẫy do nhánh truy hồi rỗng
+quyết định, mô hình chưa từng được gọi (§9.1) — trong khi **F1 cấp Khoản đo trên
+123 câu**. Dành 20% ngân sách huấn luyện cho hành vi từ chối là **đem 123 câu ra
+đánh cược để bảo vệ 4 câu**. Đây là bất đối xứng rủi ro, không phải tinh chỉnh
+tham số.
+
+**Vì sao vẫn nghiêng về `no_basis`:** V005 — ca `no_basis` duy nhất trong eval — là
+ca mà **cả Gemini cũng trả lời quá đà** (`negative_correct=False`), tức hành vi khó,
+cần nhiều mẫu. Ba ca `out_of_scope` ngược lại: được chi phối bởi **danh sách chặn
+tường minh** ở `src/retrieval/context_assembler.py:368-373` (system prompt liệt kê
+thẳng chủ đề ngoài phạm vi kèm nguyên văn câu phải trả lời) nên cần ít mẫu hơn.
+
+⚠️ 9% là **giả định có lập luận, không phải số đo**. Nếu hàng "cục bộ đã tinh chỉnh"
+cho `tu_choi_dung` tụt so với hàng chưa tinh chỉnh thì đây là biến đầu tiên phải xem
+lại. Chi tiết + số đo thực tế: `finetune/reports/dataset_stats.md` §4.2.
+
 **DoD:** `slug.py` có ≥10 ca test; 0 mẫu còn khớp danh sách chặn (assert
 trong test); phân phối độ dài khớp xấp xỉ TASK-FT-01; **in 20 mẫu ngẫu nhiên
 đầy đủ để người đọc kiểm tay trước khi huấn luyện** — không được bỏ qua.
@@ -514,11 +566,28 @@ trong test); phân phối độ dài khớp xấp xỉ TASK-FT-01; **in 20 mẫu
 **Chạy ở Kaggle Notebooks (T4 16GB, 30 giờ/tuần miễn phí).** GPU 1650 Ti 4GB
 không train được ở độ dài chuỗi này.
 
-Claude Code viết `finetune/notebooks/train_qlora.ipynb`, người chủ dự án
-upload và chạy. Nội dung: nạp mô hình đã chốt ở FT-03 → nạp train/val jsonl →
-QLoRA `r=16`, `alpha=32`, `lr=2e-4`, 2–3 epoch, **`max_seq_length = 16384`**
-(đã chốt ở FT-01 — không hardcode 8192, cũng không cần 32k) → log train/val loss →
-merge LoRA → export GGUF Q4.
+Hiện thực **không phải notebook** như bản trước ghi (`finetune/notebooks/train_qlora.ipynb`)
+mà là ba file script:
+
+| File | Vai trò |
+|---|---|
+| `finetune/train_qlora.py` | script huấn luyện — tự render chat template, `train_on_responses_only`, audit độ dài, `--val-dataset` / `--val-limit` |
+| `finetune/run.sh` | 7 chặng trên RunPod: `preflight → install → data → train → merge → gguf → publish`, tự huỷ pod ở mọi đường thoát |
+| `finetune/upload_dataset.sh` | chạy **trên máy người dùng**: đẩy `train.jsonl`/`val.jsonl` + `.sha256` lên HF dataset repo (`.gitignore` chặn `*.jsonl` nên pod không lấy được qua git) |
+
+Nội dung: nạp mô hình đã chốt ở FT-03 → nạp train/val jsonl → QLoRA
+**`r=16`, `alpha=32`** (`run.sh` truyền **tường minh** `--lora-r 16 --lora-alpha 32`
+— mặc định trong `train_qlora.py` là 32/64, nên không truyền là chạy sai kế hoạch mà
+không có dấu hiệu gì) → `lr=2e-4`, 2 epoch, **`max_seq_length = 16384`**
+(đã chốt ở FT-01 — không hardcode 8192, cũng không cần 32k) → log train/val loss
+(`eval_strategy="epoch"`, `--val-limit 64`, ghi `eval_history` vào
+`train_result.json`) → merge LoRA → export GGUF Q4.
+
+**Dry-run trên Kaggle phải bỏ chặng preflight** (`STAGES=install,train`): preflight
+chặn `sm < 80`, mà Kaggle chỉ có T4 = `sm75`. Hệ quả phải ghi nhận: dry-run Kaggle
+**không kiểm được đường bf16/FlashAttention-2** — `sm75` không có bf16 gốc nên script
+tự chuyển sang fp16. Nó chứng minh "đường code chạy hết", không chứng minh đường số
+học thật của RTX 4090.
 
 **Bật dynamic padding / length-grouped batching.** Mẫu p50 chỉ ~8 000 token; trả phí
 16k cho mọi mẫu là lãng phí và làm căng bộ nhớ vô cớ.
@@ -677,7 +746,22 @@ Nguồn: `finetune/reports/token_budget.md`.
 | `max_seq_length` (FT-05) | **16 384** |
 | System prompt | 3 936 token (`general`) / 4 034 (`irac`) |
 | Ký tự/token tiếng Việt (Qwen2.5) | 2.87 |
-| `response_mode` | graphrag 13 `irac` / 124 `general`; baseline **137 `general`, tất định theo code** |
+| `response_mode` | graphrag **13 `irac` / 114 `general` trên 127 câu đi qua mô hình sinh** (10 câu còn lại ngữ cảnh rỗng, chưa từng gọi mô hình → không có mode); baseline **137 `general`, tất định theo code** |
+
+#### Quy ước mẫu số — dùng thống nhất từ đây
+
+Kế hoạch trước dùng lẫn 137 và 127 cho cùng một đại lượng. Chốt:
+
+| Mẫu số | Nghĩa | Dùng ở đâu |
+|---:|---|---|
+| **137** | **tổng bộ câu hỏi** `test_set_v2.json` | khối lượng chạy (137 × 2 × 2 = 548), `negative_count` = 14 |
+| **127** | **số câu ĐI QUA MÔ HÌNH SINH** = 137 − 10 câu ngữ cảnh rỗng (V106–V113, V115, V116; `pipeline.py:223` return trước `generate_answer`) | mọi phát biểu về hành vi mô hình sinh: tỉ lệ `irac`, số câu phủ định thực đo (4/127) |
+| **123** | số câu có `ground_truth_citations` **khác rỗng** | **chỉ** mẫu số của `format_ok_rate` (§3.1) |
+
+Hệ quả cụ thể: "13/127 câu eval là `irac`" (§TASK-FT-04) là **đúng** — 13 câu `irac`
+trong 127 câu đi qua mô hình. Con số thô "13/137" ở §9.3 là số **đếm trên file** trước
+khi loại 10 câu ngữ cảnh rỗng; hai con số không mâu thuẫn, chỉ khác mẫu số, và từ nay
+**phát biểu bằng 127**.
 
 **Bốn sửa đổi:**
 
