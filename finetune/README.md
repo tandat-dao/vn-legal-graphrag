@@ -18,6 +18,9 @@ Nếu ở bước nào thấy cần khởi động DB hoặc gọi Vertex AI th�
 | `slug.py` | FT-04: suy slug từ `doc_name` theo convention, cơ khí (không LLM) |
 | `build_dataset.py` | FT-04: sinh 5 000 mẫu huấn luyện → `data/{train,val}.jsonl` |
 | `dataset_report.py` | FT-04: `reports/dataset_stats.md` + `reports/samples_20.txt` |
+| `train_qlora.py` | FT-05: QLoRA trên Qwen3-4B → adapter (tự render chat template, `train_on_responses_only`) |
+| `run.sh` | FT-05: 7 chặng trên RunPod — preflight → install → data → train → merge → gguf → publish |
+| `upload_dataset.sh` | FT-05: đẩy `data/{train,val}.jsonl` + `.sha256` lên HF dataset repo — **chạy trên máy người dùng** |
 | `data/` | `mode_map.json`, `gate_ids.json` (`*.jsonl` bị gitignore) |
 | `results/` | Đầu ra replay (`*_mock_*.json` và `*.partial.jsonl` bị gitignore) |
 | `reports/` | `api_contract.md` (FT-00), `token_budget.md` (FT-01), `gate_base_model.md` (FT-03), `dataset_stats.md` (FT-04) |
@@ -54,6 +57,22 @@ python finetune/train_qlora.py --dataset finetune/data/train.jsonl \
        --limit-samples 50 --max-seq-length 2048 --epochs 1 \
        --output-dir /tmp/dry/adapter_real --no-push        # dry-run trên Kaggle
 ```
+
+### Đưa dữ liệu lên HF trước khi chạy pod
+
+`.gitignore` chặn `finetune/data/*.jsonl` (nặng, tái tạo được) → pod **không** lấy
+được qua git. Chặng `data` của `run.sh` tải chúng từ HF dataset repo và đối chiếu
+sha256, nên phải upload trước — chạy **trên máy mình**, không phải trên pod:
+
+```bash
+export HF_TOKEN=hf_xxxxx
+bash finetune/upload_dataset.sh            # in sha256 TRƯỚC khi upload
+HF_REPO_DATA=<user>/<repo> bash finetune/upload_dataset.sh   # đổi repo đích
+```
+
+Script tạo repo **private** (`--exist-ok`), in `sha256` + số dòng của cả hai file
+rồi đẩy `train.jsonl`, `val.jsonl` và hai file `.sha256` đi kèm. Kiểm lại phía pod:
+`STAGES=data bash finetune/run.sh`.
 
 Ba điều quyết định chất lượng bộ này — đọc `reports/dataset_stats.md` trước khi
 đụng vào `build_dataset.py`:
