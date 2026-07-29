@@ -1,7 +1,12 @@
 # Kế hoạch Thực thi — Bổ sung Mô hình Sinh Cục bộ vào Chương 4
 
-**Phiên bản 2.3 | Ngày: 28/07/2026**
+**Phiên bản 2.3.1 | Ngày: 30/07/2026**
 
+> **Thay đổi v2.3 → v2.3.1:** **chốt N=1 cho cả bốn ô của FT-06** (548 lượt sinh),
+> thay đoạn để ngỏ trước đó. Căn cứ mới: tính tất định đã đo được ở phiên 1 FT-03
+> (hai lần chạy cùng seed → `answer` trùng khít từng ký tự 15/15 câu), cộng lý do
+> kỹ thuật vì sao KHÔNG lồng nhiều seed vào `replay.py`. Xem **§TASK-FT-06**.
+>
 > **Thay đổi v2.2 → v2.3:** **chốt một mô hình duy nhất** và rút gọn FT-03. Gate
 > trước đó bị gán thêm việc “chọn giữa 2–3 ứng viên” — việc đó sinh ra toàn bộ
 > vấn đề độ phân giải thống kê và selection-on-test. Bỏ nó, mọi thứ tan. Xem **§9.5**.
@@ -528,12 +533,46 @@ duy nhất** dùng cho mọi phép đo.
 
 **Chạy ở GPU thuê** (vast.ai / runpod, ~$1 vài giờ).
 
-Khối lượng: 137 câu × 2 mô hình × 2 loại ngữ cảnh = 548 lượt sinh cho N=1.
+Khối lượng: 137 câu × 2 mô hình × 2 khuôn ngữ cảnh = **548 lượt sinh**.
 
-**Về số lần chạy:** Bảng 4.3 dùng N=3 cho GraphRAG và Naive RAG, nhưng Bảng
-4.5 báo cáo Oracle / BM25 / Closed-book ở một lần chạy. Mục 4.7 có thể theo
-tiền lệ đó: **N=1 là chấp nhận được nếu ghi rõ**, và chỉ nâng lên N=3 cho hàng
-"cục bộ đã tinh chỉnh" nếu thời gian cho phép. Không bắt buộc N=3 cả bốn ô.
+#### Số lần chạy: N=1 cho cả bốn ô — CHỐT, không để ngỏ
+
+**Hai căn cứ:**
+
+**(a) Tiền lệ trong chính báo cáo.** Bảng 4.3 dùng N=3 cho GraphRAG và Naive RAG,
+nhưng **Bảng 4.5 báo cáo Oracle / BM25 / Closed-book ở một lần chạy**. Mục 4.7 là
+cùng loại bảng với 4.5 (so cấu hình, không so σ) nên theo đúng tiền lệ đó.
+
+**(b) Tính tất định đã được chứng minh, không phải giả định.** Phiên 1 của FT-03:
+hai lần chạy cùng seed, cùng build, cùng phần cứng cho `answer` **trùng khít từng
+ký tự trên 15/15 câu** (`finetune/reports/gate_base_model.md`). Khi lặp lại cho ra
+đúng cùng một chuỗi thì σ giữa các lần chạy **bằng 0 theo cấu tạo** — chạy thêm hai
+lần nữa chỉ chép lại cùng một file. Đây là khác biệt thật so với hàng Gemini: Gemini
+không tất định (đã ghi nhận ở D-24, "Q018 win là non-determinism"), nên N=3 ở Bảng
+4.3 giải quyết một vấn đề mà hàng cục bộ không có.
+
+**Vì sao KHÔNG lồng nhiều seed vào `replay.py`.** Cách rẻ nhất về mặt code — chạy 3
+seed rồi ghi cả 3 vào cùng một results JSON — làm **hỏng im lặng** hai con số của
+bảng, không raise gì:
+
+| Đại lượng | Đúng | Sau khi lồng 3 seed |
+|---|---:|---:|
+| mẫu số `format_ok_rate` | 123 | 369 |
+| `negative_count` (nhãn cột "Từ chối đúng") | 14 | **42** |
+
+`metrics.aggregate` đếm **phẳng theo item**: `negs = [q for q in per_question if
+q["gap_type"] == "negative"]` rồi `negative_count = len(negs)`
+(`src/evaluation/metrics.py:226-229`), và con số đó được in thẳng vào nhãn cột
+(`metrics.py:304-308`). Cột sẽ hiện "Từ chối đúng (42 câu)" trong khi bộ test chỉ có
+14 câu phủ định — sai mà **không có dấu hiệu gì**, đúng loại lỗi mà §TASK-FT-02 đã
+phải dựng assert schema để chặn.
+
+**Nếu về sau muốn σ:** nâng N=3 cho **riêng hàng "cục bộ đã tinh chỉnh"** bằng **ba
+lần chạy ĐỘC LẬP** (ba lệnh, ba file results, ba lần `aggregate`, rồi báo mean ± σ
+như `build_reproducibility_report.py` đang làm) — **không sửa code**. Chi phí:
++2 × 274 = **548 lượt** phụ. Với mô hình tất định thì khoản chi đó mua được σ = 0,
+nên chỉ làm nếu có lý do khác (ví dụ đổi phần cứng giữa chừng, hoặc bản llama.cpp
+khác) khiến tính tất định không còn được bảo đảm.
 
 Chạy `metrics.aggregate` trên kết quả, lập bảng theo đúng bốn cột ở §3.
 
