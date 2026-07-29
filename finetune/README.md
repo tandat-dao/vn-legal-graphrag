@@ -54,10 +54,19 @@ python -m pytest tests/test_finetune_slug.py tests/test_finetune_dataset.py -q
 huấn luyện), `reports/dataset_stats.md`, `reports/samples_20.txt`.
 
 ```bash
+# mini-run: 8 mẫu DÀI NHẤT, 20 bước, GIỮ NGUYÊN 16384
 python finetune/train_qlora.py --dataset finetune/data/train.jsonl \
-       --limit-samples 50 --max-seq-length 2048 --epochs 1 \
-       --output-dir /tmp/dry/adapter_real --no-push        # dry-run trên Kaggle
+       --limit-samples 8 --longest-first --max-steps 20 --epochs 1 \
+       --max-seq-length 16384 \
+       --output-dir /tmp/dry/adapter_real --no-push
 ```
+
+⚠️ **Đừng hạ `--max-seq-length` cho mini-run.** Hai lý do, đều đo được trên
+`train.jsonl` hiện tại: ở 2 048 thì `audit_lengths` `SystemExit` ngay vì **4690/4690
+mẫu vượt trần**, mini-run không chạy nổi; và rủi ro thật của lần chạy thật là **OOM ở
+16 384**, chạm được chỉ khi mini-run dùng đúng trần đó. Cùng lý do, `--longest-first`
+lấy 8 mẫu **dài nhất** (~36 500 ký tự) chứ không phải 8 mẫu **đầu** (dài nhất trong
+nhóm đó chỉ 28 100) — đỉnh bộ nhớ ở `batch=1` là hàm của mẫu dài nhất gặp phải.
 
 ### Đưa dữ liệu lên HF trước khi chạy pod
 

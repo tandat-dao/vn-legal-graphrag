@@ -53,6 +53,12 @@ def parse_args():
     p.add_argument("--max-seq-length", type=int, default=16384)
     p.add_argument("--epochs",      type=float, default=2)
     p.add_argument("--limit-samples", type=int, default=0, help="0 = dung het")
+    p.add_argument("--longest-first", action="store_true",
+                   help="sap theo do dai token GIAM DAN truoc khi cat --limit-samples. "
+                        "Mini-run lay N mau DAI NHAT moi la phep thu bo nho that.")
+    p.add_argument("--max-steps", type=int, default=0,
+                   help="0 = khong gioi han (chay du --epochs). Khac 0 thi max_steps "
+                        "GHI DE num_train_epochs (hanh vi cua HF Trainer).")
     p.add_argument("--lr",          type=float, default=2e-4)
     p.add_argument("--lora-r",      type=int, default=32)
     p.add_argument("--lora-alpha",  type=int, default=64)
@@ -177,6 +183,18 @@ def build_sft_kwargs(a, bf16, cf_fields, has_val=False):
     if "dataset_text_field" in cf_fields:
         kw["dataset_text_field"] = "text"
 
+    if a.max_steps:
+        ms = pick_field(cf_fields, "max_steps")
+        if ms:
+            kw[ms] = a.max_steps
+            # HF Trainer: max_steps > 0 GHI DE num_train_epochs va cho dataloader
+            # chay vong lai khi het du lieu. Voi --limit-samples 8 va grad_accum
+            # 16 thi 20 buoc = 20 x 16 = 320 luot forward/backward tren 8 mau do.
+            print(f"max_steps={a.max_steps} -> GHI DE epochs={a.epochs}. "
+                  f"So luot forward/backward = {a.max_steps * a.grad_accum}.")
+        else:
+            print("CANH BAO: SFTConfig khong co max_steps -> --max-steps bi bo qua.")
+
     if has_val:
         # Ke hoach §TASK-FT-05 doi log train/val loss. Eval theo EPOCH: cai can
         # biet la epoch 2 co overfit khong, khong phai duong cong theo step.
@@ -231,7 +249,8 @@ def main():
 
     # ---------------- 2. du lieu ----------------
     convs = load_rows(a.dataset, a.dataset_split)
-    if a.limit_samples:
+    # --longest-first phai render + do TOAN BO roi moi cat, nen khong cat truoc.
+    if a.limit_samples and not a.longest_first:
         convs = convs[:a.limit_samples]
     print(f"Nap {len(convs)} hoi thoai tu {a.dataset}")
 
@@ -239,6 +258,22 @@ def main():
     # hoi thoai — day la du lieu huan luyen, khong phai prompt suy luan.
     texts = [tok.apply_chat_template(c, tokenize=False, add_generation_prompt=False)
              for c in convs]
+
+    if a.longest_first:
+        # N mau DAI NHAT, khong phai N mau DAU. Mini-run tren mau ngau nhien ve
+        # do dai chay xanh KHONG noi len gi ve rui ro OOM: dinh bo nho o
+        # batch=1 la ham cua mau DAI NHAT gap phai, ma p50 chi ~6 800 token
+        # trong khi tran la 16 384. Lay dung phan duoi cua phan bo moi la phep thu.
+        n_tok = np.array([len(tok(t, add_special_tokens=False)["input_ids"])
+                          for t in texts])
+        order = np.argsort(-n_tok)
+        texts = [texts[i] for i in order]
+        keep = min(a.limit_samples or len(texts), len(texts))
+        print(f"--longest-first: sap {len(texts)} mau theo do dai giam dan, giu {keep} "
+              f"mau dai nhat ({int(n_tok[order[0]])} -> {int(n_tok[order[keep - 1]])} token; "
+              f"p50 toan bo = {int(np.percentile(n_tok, 50))})")
+    if a.limit_samples:
+        texts = texts[:a.limit_samples]
 
     if a.dump_prompts:
         d = pathlib.Path(a.output_dir, "rendered_samples.txt")
@@ -326,7 +361,10 @@ def main():
         json.dumps({"loss": st.training_loss, **st.metrics,
                     "eval_history": evals,
                     "eval_loss_final": evals[-1]["eval_loss"] if evals else None,
-                    "val_dataset": a.val_dataset, "val_limit": a.val_limit},
+                    "val_dataset": a.val_dataset, "val_limit": a.val_limit,
+                    # Ghi lai de mot ket qua SMOKE khong bi doc nham thanh chay that.
+                    "max_seq_length": a.max_seq_length, "max_steps": a.max_steps,
+                    "limit_samples": a.limit_samples, "longest_first": a.longest_first},
                    indent=2))
     print("adapter ->", a.output_dir)
 

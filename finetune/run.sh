@@ -10,9 +10,18 @@
 #   export SELFDESTRUCT=1
 #   bash run.sh
 #
+# SMOKE=1 - mini-run truoc khi chay that:
+#   export SMOKE=1
+#   STAGES=data,train bash run.sh
+#
+#   = 8 mau DAI NHAT, 20 buoc, GIU NGUYEN max_seq_length 16384.
+#   Giu 16k la co y: rui ro that cua lan chay that la OOM o 16k, nen mini-run
+#   phai cham dung cai tran do. Ha xuong 2048 thi vua khong kiem duoc gi, vua
+#   lam audit_lengths SystemExit vi du lieu that co p50 ~6 800 token.
+#
 # DRY-RUN TREN KAGGLE (mien phi) - PHAI BO CHANG PREFLIGHT:
 #   export SELFDESTRUCT=0 SMOKE=1
-#   STAGES=install,train bash run.sh      # 50 mau, max_seq_length=2048
+#   STAGES=install,train bash run.sh
 #
 #   Vi sao bo preflight: preflight exit 1 khi sm<80, ma Kaggle chi co T4 =
 #   sm75. Chay ca preflight tren Kaggle la chac chan that bai o giay thu 30.
@@ -22,6 +31,12 @@
 #   khong dung FA2. No chi chung minh "duong code chay het", KHONG chung minh
 #   duong so hoc that cua RTX 4090 (sm89). Loi rieng cua nhanh bf16/FA2 chi
 #   lo ra o lan chay that.
+#
+#   ⚠ T4 chi co 16GB (pod la 24GB) nen SMOKE=1 o 16 384 CO THE OOM tren Kaggle.
+#   OOM o day KHONG ket luan duoc gi ve pod - khac phan cung, khac kieu so.
+#   Muon kiem rieng duong code tren Kaggle thi ha tran BANG BIEN MOI TRUONG:
+#       MAX_SEQ_LEN=4096 SMOKE=1 STAGES=install,train bash run.sh
+#   va nho rang lan chay do KHONG con la phep thu bo nho nua.
 #
 # CHAY LAI TUNG CHANG sau khi loi (vd pod chet o buoc gguf):
 #   RUN_NAME=$(cat /workspace/run_name.txt) STAGES=gguf,publish bash run.sh
@@ -43,10 +58,15 @@ LCP_VERSION="${LCP_VERSION:-0.3.16}"
 LLAMA_TARBALL="${LLAMA_TARBALL:-llamacpp-${LLAMA_TAG}-cpu-static-x64.tar.gz}"
 LLAMA_TARBALL_SHA256="9f8e92b8a69b3c8399e6f42324430f8a0faaf1bba707deeee7c8cb96bbd9c6d5"
 
-MAX_SEQ_LEN=16384                       # GIU 16k - khong ha
+# GIU 16k KE CA KHI SMOKE=1. Ban truoc ha xuong 2048 khi smoke, hong ca hai dau:
+#   (1) bo du lieu that co p50 ~6 800 token -> audit_lengths cua train_qlora.py
+#       SystemExit "mau vuot tran" TRUOC khi train, mini-run khong chay noi;
+#   (2) o 2048 thi mini-run KHONG kiem duoc rui ro that, la OOM o 16 384 tren 24GB.
+# Smoke gio chi gioi han SO MAU va SO BUOC, khong dung do dai chuoi.
+MAX_SEQ_LEN="${MAX_SEQ_LEN:-16384}"
 EPOCHS=2
 SMOKE="${SMOKE:-0}"
-if [ "$SMOKE" = "1" ]; then MAX_SEQ_LEN=2048; EPOCHS=1; fi
+if [ "$SMOKE" = "1" ]; then EPOCHS=1; fi
 
 WORK=/workspace
 mkdir -p "$WORK"
@@ -242,8 +262,15 @@ if has_stage train; then
 
   # SMOKE la "0" hoac "1" -> ${SMOKE:+...} bung ra o CA HAI truong hop vi "0"
   # van la da dat va khac rong. Phai kiem tuong minh.
-  LIMIT_ARG=""
-  if [ "$SMOKE" = "1" ]; then LIMIT_ARG="--limit-samples 50"; fi
+  #
+  # Smoke = 8 mau DAI NHAT (--longest-first) o DUNG do dai that 16 384, 20 buoc.
+  # Dinh bo nho o batch=1 la ham cua mau DAI NHAT gap phai, nen 8 mau dai nhat
+  # cham tran bo nho ngay trong vai luot dau. Lay 8 mau DAU thi mini-run xanh
+  # ma khong noi len gi - dung loai "kiem tra qua ma van hong o lan chay that".
+  SMOKE_ARGS=""
+  if [ "$SMOKE" = "1" ]; then
+    SMOKE_ARGS="--limit-samples 8 --longest-first --max-steps 20"
+  fi
 
   # Cac co dung GACH NOI - parse_args() cua train_qlora.py (dong 39-65) dinh
   # nghia bang gach noi; dung gach duoi thi argparse bao "unrecognized arguments".
@@ -265,7 +292,7 @@ if has_stage train; then
     --output-dir      "$ADAPTER_DIR" \
     --hub-model-id    "$HF_REPO_MODEL" \
     --run-name        "$RUN_NAME" \
-    $LIMIT_ARG \
+    $SMOKE_ARGS \
     $RESUME_ARG
 
   hf upload "$HF_REPO_MODEL" "$ADAPTER_DIR" "adapter/${RUN_NAME}" --repo-type model
