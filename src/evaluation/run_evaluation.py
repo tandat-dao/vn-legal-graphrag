@@ -376,7 +376,8 @@ def main() -> int:
     parser.add_argument(
         "--ablation", default="full",
         help="E1 ablation (chỉ GraphRAG): full | no-theme | no-jurisdiction | "
-             "no-implements | no-amends | no-temporal | no-traversal | dense-only.",
+             "no-implements | no-amends | no-temporal | no-traversal | dense-only | "
+             "graphrag-basic (giữ 3 giai đoạn, tắt đồng thời 3 bộ lọc — bậc E2).",
     )
     args = parser.parse_args()
 
