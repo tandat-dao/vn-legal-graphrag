@@ -1,0 +1,15 @@
+{
+  "id": "dangnguyen254/vn-legal-graphrag-ft06",
+  "title": "vn-legal-graphrag FT-06 eval",
+  "code_file": "ft06_eval.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}
