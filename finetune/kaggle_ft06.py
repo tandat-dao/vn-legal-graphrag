@@ -9,8 +9,8 @@ HF ngay sau từng ô thay vì đợi tới cuối.
     prep           tải + đối chiếu sha256 wheel llama-cpp-python và hai file GGUF
     gate-template  CỔNG CHẶN A — chat template nhúng trong hai GGUF phải trùng khít
     gate-prompt    CỔNG CHẶN B — đọc prompt đã render bằng mắt (món nợ của FT-03 §5.2)
-    run            sáu ô, mỗi ô một lệnh `finetune.replay`, đẩy HF sau từng ô
-    table          gom sáu file kết quả → finetune/reports/ft06_matrix.md
+    run            CỔNG CHẶN NGUỒN rồi sáu ô, mỗi ô một `finetune.replay`, đẩy HF ngay
+    table          gom sáu file kết quả → finetune/reports/ft06b_matrix.md
 
 Kaggle cấp **T4 x2** → xem khối chú thích "Ghim GPU" dưới đây: mỗi lời gọi `replay.py`
 ghim đúng MỘT card qua `CUDA_VISIBLE_DEVICES` của subprocess. `--parallel` (mặc định
@@ -70,6 +70,40 @@ MODELS_DIR = REPO / "finetune/models"
 REPORTS_DIR = REPO / "finetune/reports"
 RESULTS_DIR = REPO / "finetune/results"
 
+# ────────────────────────────────────────────────────────────────────────────────
+# LƯỢT ft06b — vì sao MỌI tên đều đổi tiền tố
+# ────────────────────────────────────────────────────────────────────────────────
+# Lượt trước (`ft06-*`, HF `session3_ft06/`) chạy trên ngữ cảnh của mẻ
+# 20260710-085236. Partner đã sửa tầng lập kế hoạch truy vấn → 17 câu đổi ngữ cảnh
+# phía GraphRAG → phải chạy lại sáu ô trên nguồn mới.
+#
+# Chạy lại với CÙNG tag là một cái bẫy IM LẶNG, không phải một lỗi:
+#   1. `--out` TẤT ĐỊNH (không timestamp) — bắt buộc để `--resume` sống qua session
+#      đứt, xem `Cell.out_path`.
+#   2. `replay.py:725` suy tên `.partial.jsonl` TỪ tên file đầu ra.
+#   3. `_hf_keo_partial` còn KÉO `.partial.jsonl` cũ từ HF về khi thiếu cục bộ.
+#   ⇒ `--resume` đọc partial cũ, thấy đủ 137 item "đã xong", BỎ QUA hết, rồi xuất ra
+#      file chứa NGUYÊN VĂN câu trả lời sinh trên NGỮ CẢNH CŨ. Không có lỗi nào,
+#      không có cảnh báo nào; bảng mới trông y như bảng cũ vì nó ĐÚNG LÀ bảng cũ.
+#   Xoá file cục bộ KHÔNG đủ — partial cũ nằm trên HF ở `session3_ft06/`.
+#
+# Nên: tag `ft06b-*`, tiền tố HF `session3b_ft06`, hiện vật báo cáo `ft06b_*`.
+# Kết quả cũ trong `finetune/results/` và trên HF là nhánh "TRƯỚC" của phép so ghép
+# cặp ở mục 5 của bảng — TUYỆT ĐỐI không xoá, không ghi đè.
+# Cổng chặn `_kiem_cong_chan_nguon` là lớp phòng thủ thứ hai: kể cả khi tag trùng
+# thì nó vẫn bắt được, vì nó đối chiếu `context` từng câu chứ không tin tên file.
+BAO_CAO_PREFIX = "ft06b"
+
+
+def _bc(ten: str) -> Path:
+    """Đường dẫn hiện vật báo cáo của LƯỢT NÀY (tiền tố `ft06b_`).
+
+    Mọi file mà script này GHI vào `finetune/reports/` đi qua đây. Lượt trước ghi
+    `ft06_*`; những file đó là bằng chứng của nhánh "trước" (bảng ma trận cũ,
+    prompt đã đọc bằng mắt, ghi nhận phần cứng) nên không được đè lên.
+    """
+    return REPORTS_DIR / f"{BAO_CAO_PREFIX}_{ten}"
+
 # Nguồn ngữ cảnh: PHẢI là cặp file của CÙNG một mẻ chạy 20260710-085236 — chính mẻ
 # sinh ra 0.578 (GraphRAG) và 0.435 (Naive RAG) ở hàng Gemini. Trộn hai timestamp
 # khác nhau là đổi luôn vế trái của cột Δ.
@@ -87,7 +121,11 @@ GEMINI_DELTA = 0.143
 #                             run.sh:48-49 và upload_dataset.sh:21)
 #   Kaggle = dangnguyen425  → CHỈ trường "id" của finetune/notebooks/kernel-metadata.json
 HF_REPO_DEFAULT = "dangnguyen254/thesis-graphrag-gguf"
-HF_PREFIX_DEFAULT = "session3_ft06"
+# `session3b_` chứ KHÔNG phải `session3_`: `session3_ft06/` trên HF còn nguyên sáu
+# file kết quả + sáu `.partial.jsonl` của lượt trước. Đẩy đè lên đó là mất nhánh
+# "trước" của phép so; và `_hf_keo_partial` kéo về đúng partial cũ thì `--resume`
+# bỏ qua toàn bộ 137 câu (xem khối "LƯỢT ft06b" ở đầu file).
+HF_PREFIX_DEFAULT = "session3b_ft06"
 
 # Khoá metadata GGUF chứa chat template. KHÔNG đoán: đây đúng là khoá mà
 # `replay.py:323` đọc (`meta.get("tokenizer.chat_template")` trên
@@ -214,14 +252,23 @@ class Cell:
 
 
 CELLS = [
-    Cell(1, "ft", 0, "graphrag", "ft06-ft-s0"),
-    Cell(2, "ft", 0, "baseline", "ft06-ft-s0"),
-    Cell(3, "base", 2, "graphrag", "ft06-base-s2"),
-    Cell(4, "base", 2, "baseline", "ft06-base-s2"),
-    Cell(5, "base", 0, "graphrag", "ft06-base-s0"),
-    Cell(6, "base", 0, "baseline", "ft06-base-s0"),
+    Cell(1, "ft", 0, "graphrag", "ft06b-ft-s0"),
+    Cell(2, "ft", 0, "baseline", "ft06b-ft-s0"),
+    Cell(3, "base", 2, "graphrag", "ft06b-base-s2"),
+    Cell(4, "base", 2, "baseline", "ft06b-base-s2"),
+    Cell(5, "base", 0, "graphrag", "ft06b-base-s0"),
+    Cell(6, "base", 0, "baseline", "ft06b-base-s0"),
 ]
 CELL_BY_IDX = {c.idx: c for c in CELLS}
+
+# Tag của LƯỢT TRƯỚC (ngữ cảnh cũ) — chỉ ĐỌC, dùng ở mục "17 câu đổi ngữ cảnh".
+# Suy bằng phép thay chuỗi để hai danh sách không bao giờ lệch nhau.
+TAG_CU = {c.tag: c.tag.replace("ft06b-", "ft06-", 1) for c in CELLS}
+
+
+def _out_path_cu(cell: Cell) -> Path:
+    """File kết quả của lượt TRƯỚC cho cùng ô (ngữ cảnh cũ). CHỈ ĐỌC."""
+    return RESULTS_DIR / f"results_{cell.system}_{TAG_CU[cell.tag]}.json"
 
 # Cặp ô cùng model + cùng n_shot, khác nguồn ngữ cảnh — dùng ở chặng table để đối
 # chiếu elapsed_seconds giữa hai card.
@@ -247,7 +294,7 @@ LANES: dict[int, list[int]] = {
 }
 GPU_TUAN_TU = 0     # chế độ tuần tự: mọi ô trên card này
 
-GPU_INFO_PATH = REPORTS_DIR / "ft06_gpu_info.json"
+GPU_INFO_PATH = _bc("gpu_info.json")
 # Log của hai luồng ghi ra file riêng rồi in gộp khi cả hai xong. KHÔNG dùng threading
 # để trộn stdout — log lẫn vào nhau là không đọc được.
 LOG_DIR = Path("/kaggle/working") if Path("/kaggle/working").is_dir() else RESULTS_DIR
@@ -279,9 +326,9 @@ def sha256_text(s: str) -> str:
 
 
 def _constraints_path() -> Path:
-    p = Path("/kaggle/working/ft06_constraints.txt")
+    p = Path(f"/kaggle/working/{BAO_CAO_PREFIX}_constraints.txt")
     if not p.parent.exists():
-        p = REPO / "finetune/results/ft06_constraints.txt"
+        p = RESULTS_DIR / f"{BAO_CAO_PREFIX}_constraints.txt"
         p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(CONSTRAINTS, encoding="utf-8")
     return p
@@ -364,7 +411,7 @@ def _ghim_map(song_song: bool, gpu: int | None) -> dict[int, int]:
 
 
 def _bao_cao_gpu(song_song: bool, gpu: int | None, nguon: str) -> dict:
-    """In + ghi ft06_gpu_info.json. Chặng table đọc lại để đưa vào ft06_matrix.md.
+    """In + ghi ft06b_gpu_info.json. Chặng table đọc lại để đưa vào ft06b_matrix.md.
 
     Đây là **giá trị ghim thứ bảy** của tuyên bố tái lập: mọi ô chạy trên ĐÚNG MỘT T4,
     ghim tường minh. Phải ghi vào khoá luận cùng với sáu giá trị kia.
@@ -529,7 +576,7 @@ def stage_prep(args) -> int:
 
     # Ghi lại ghim đã dùng — để chặng sau không phải giải lại, và để khoá luận có
     # một file duy nhất trả lời "đã chạy trên đúng những file nào".
-    (REPORTS_DIR / "ft06_artifacts.json").write_text(json.dumps({
+    _bc("artifacts.json").write_text(json.dumps({
         "wheel": {"repo": WHEEL.repo, "file": WHEEL.file, "sha256": WHEEL.sha256},
         "base": {"repo": base_repo, "file": base_file, "revision": base_rev,
                  "sha256": base_sha, "local": _rel(MODELS_DIR / BASE_LOCAL_NAME)},
@@ -612,7 +659,7 @@ def stage_gate_template(args) -> int:
         t = _doc_chat_template(p)
         if t is None:
             return 2
-        out = REPORTS_DIR / f"ft06_chat_template_{ten}.jinja"
+        out = _bc(f"chat_template_{ten}.jinja")
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(t, encoding="utf-8")
         tmpl[ten] = t
@@ -732,7 +779,7 @@ def stage_gate_prompt(args) -> int:
     print(f"  model dùng để render: {_rel(gguf)} (cổng A đã chứng minh base ≡ ft)")
 
     # Kiểm ba thẻ vai có thật trong template đã ghi ở cổng A — không hardcode mù.
-    tpl = REPORTS_DIR / "ft06_chat_template_ft.jinja"
+    tpl = _bc("chat_template_ft.jinja")
     if tpl.exists():
         t = tpl.read_text(encoding="utf-8")
         thieu = [s for s in (SYSTEM_OPEN, ASSISTANT_OPEN, TURN_END) if s not in t]
@@ -740,7 +787,7 @@ def stage_gate_prompt(args) -> int:
             print(f"  ⚠️  thẻ vai không thấy trong template: {thieu} → mục (4)(5) có "
                   f"thể FAIL vì sai giả định ChatML, không vì prompt sai")
     else:
-        print("  ⚠️  chưa có ft06_chat_template_ft.jinja (chạy gate-template trước) → "
+        print(f"  ⚠️  chưa có {_rel(tpl)} (chạy gate-template trước) → "
               "không kiểm chéo được giả định ChatML")
 
     to_hop = [("graphrag", 0), ("graphrag", 2), ("baseline", 0), ("baseline", 2)]
@@ -799,7 +846,7 @@ def _status_path(gpu: int | None) -> Path:
     """File trạng thái. Hai luồng song song phải ghi hai file khác nhau — chung một
     file là hai tiến trình ghi đè lẫn nhau và mất một nửa báo cáo."""
     hau_to = f"_gpu{gpu}" if gpu is not None else ""
-    return REPORTS_DIR / f"ft06_run_status{hau_to}.json"
+    return _bc(f"run_status{hau_to}.json")
 
 
 def _doc_status(p: Path) -> dict:
@@ -846,12 +893,163 @@ def _hf_day(paths: list[Path], repo: str, prefix: str) -> None:
                   f"      Kết quả vẫn còn ở {_rel(p)} — session chết là mất.")
 
 
+# ---------------------------------------------------------------------------
+# CỔNG CHẶN NGUỒN — chống bẫy --resume đọc partial của ngữ cảnh CŨ
+# ---------------------------------------------------------------------------
+
+# Sentinel: id có trong file kết quả nhưng KHÔNG có trong nguồn hiện tại. Dùng chuỗi
+# không thể là context thật để phép so luôn cho "lệch" thay vì âm thầm cho "khớp".
+_KHONG_CO_TRONG_NGUON = "\x00<id không có trong nguồn hiện tại>"
+
+
+def _ctx_theo_id(src_rel: str) -> dict[str, str]:
+    """{id: context} của một file nguồn. Đây là ĐẠI LƯỢNG mà cổng chặn so sánh.
+
+    So `context` chứ không so tên file: `replay_item` chép `src["context"]` nguyên
+    văn vào từng item (replay.py:614), nên hai file kết quả sinh trên hai ngữ cảnh
+    khác nhau thì KHÁC NHAU ở đúng trường này — không suy đoán gì.
+    """
+    d = json.loads((REPO / src_rel).read_text(encoding="utf-8"))
+    return {r["id"]: (r.get("context") or "") for r in d["results"]}
+
+
+def _xung_dot_mot_o(cell: Cell, src_rel: str, ctx: dict[str, str]) -> list[str]:
+    """Mọi xung đột nguồn của MỘT ô. Rỗng = sạch, chạy tiếp được."""
+    xung: list[str] = []
+
+    # (a) file KẾT QUẢ mang tag mới -----------------------------------------------
+    if cell.out_path.exists():
+        try:
+            d = json.loads(cell.out_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as e:  # noqa: BLE001
+            xung.append(f"{_rel(cell.out_path)} — không đọc được ({type(e).__name__}) "
+                        f"→ không chứng minh được nó sinh trên nguồn nào")
+        else:
+            rep = d.get("replay") or {}
+            ghi = str(rep.get("src_file") or rep.get("nguon") or "").replace("\\", "/")
+            if ghi and ghi != src_rel:
+                xung.append(f"{_rel(cell.out_path)} — metadata ghi nguồn {ghi!r}, "
+                            f"SRC hiện tại là {src_rel!r}")
+            lech = [r["id"] for r in d.get("results", [])
+                    if (r.get("context") or "") != ctx.get(r["id"], _KHONG_CO_TRONG_NGUON)]
+            if lech:
+                xung.append(f"{_rel(cell.out_path)} — {len(lech)}/{len(d.get('results', []))} "
+                            f"câu có `context` KHÁC nguồn hiện tại "
+                            f"(vd {', '.join(lech[:6])})")
+
+    # (b) .partial.jsonl — CHỖ NGUY HIỂM THẬT ------------------------------------
+    # `--resume` đọc đúng file này (replay.py:728-733) và bỏ qua mọi id đã có trong
+    # đó. Partial của ngữ cảnh cũ ⇒ 137/137 bị bỏ qua ⇒ file kết quả "mới" là bản
+    # sao của lượt cũ, không một dòng cảnh báo nào.
+    if cell.partial_path.exists():
+        lech, tong, hong = [], 0, 0
+        for line in cell.partial_path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            tong += 1
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                hong += 1
+                continue
+            if (rec.get("context") or "") != ctx.get(rec.get("id"), _KHONG_CO_TRONG_NGUON):
+                lech.append(str(rec.get("id")))
+        if lech:
+            xung.append(f"{_rel(cell.partial_path)} — {len(lech)}/{tong} item có "
+                        f"`context` KHÁC nguồn hiện tại (vd {', '.join(lech[:6])}); "
+                        f"`--resume` sẽ BỎ QUA những câu này")
+        if hong:
+            xung.append(f"{_rel(cell.partial_path)} — {hong} dòng không parse được JSON")
+    return xung
+
+
+def _kiem_cong_chan_nguon(cells: list[Cell], srcs: dict[str, str]) -> int:
+    """CỔNG CHẶN — chạy TRƯỚC mọi thứ khác của chặng run. 0 = qua, 3 = dừng.
+
+    Bẫy này không tự báo lỗi bao giờ, nên phải có người đi tìm nó:
+    tên `--out` là TẤT ĐỊNH (bắt buộc, để `--resume` sống qua session đứt),
+    `.partial.jsonl` suy từ tên đó (replay.py:725), và `_hf_keo_partial` còn kéo
+    partial từ HF về khi cục bộ thiếu. Ba thứ đó cộng lại: chạy lại với tag cũ =
+    xuất ra câu trả lời của NGỮ CẢNH CŨ, im lặng hoàn toàn.
+
+    Cổng này không tin tên file. Nó mở từng file kết quả / partial mang tag HIỆN TẠI
+    và đối chiếu `context` từng câu với SRC hiện tại.
+    """
+    _tieu_de("CỔNG CHẶN NGUỒN — file mang tag hiện tại phải sinh trên ĐÚNG SRC hiện tại")
+    for he, rel in sorted(srcs.items()):
+        p = REPO / rel
+        if not p.exists():
+            print(f"❌ thiếu file nguồn {he}: {rel}", file=sys.stderr)
+            return 3
+        print(f"  SRC {he:<8} = {rel}\n"
+              f"      sha256 {sha256_file(p)}")
+
+    ctx_cache: dict[str, dict[str, str]] = {}
+    xung: list[str] = []
+    for cell in cells:
+        rel = srcs[cell.system]
+        if rel not in ctx_cache:
+            ctx_cache[rel] = _ctx_theo_id(rel)
+        for m in _xung_dot_mot_o(cell, rel, ctx_cache[rel]):
+            xung.append(f"[{cell.nhan}] {m}")
+
+    if not xung:
+        print(f"\n  ✅ QUA — {len(cells)} ô, không file nào mang tag hiện tại mà lại "
+              f"sinh trên nguồn khác.")
+        return 0
+
+    print("\n" + "\033[1;31m" + "!" * 78 + "\033[0m", file=sys.stderr)
+    print("\033[1;31m❌ XUNG ĐỘT NGUỒN — DỪNG. Chạy tiếp là ghi vào khoá luận số của "
+          "NGỮ CẢNH CŨ.\033[0m", file=sys.stderr)
+    for m in xung:
+        print(f"  \033[1;31m→ {m}\033[0m", file=sys.stderr)
+    print("\033[1;31m" + "!" * 78 + "\033[0m", file=sys.stderr)
+    print("\nCách xử lý — theo thứ tự ưu tiên:\n"
+          "  1. Kiểm lại --src-graphrag/--src-baseline có đúng mẻ định chạy không.\n"
+          "  2. Nếu đúng nguồn mà file cũ còn sót: DI CHUYỂN (không xoá) file gây xung\n"
+          "     đột ra chỗ khác, hoặc đổi tag của lượt này (BAO_CAO_PREFIX + Cell.tag).\n"
+          "  3. KHÔNG bao giờ chỉ xoá file cục bộ rồi chạy lại: `_hf_keo_partial` sẽ\n"
+          "     kéo đúng partial cũ từ HF về và bẫy đóng lại y như trước.",
+          file=sys.stderr)
+    return 3
+
+
+def _ghi_nguon_vao_metadata(path: Path, src_rel: str, src_sha: str) -> None:
+    """Ghi `src_file` + `src_sha256` vào khối `replay` của một file kết quả.
+
+    `replay.py:811` chỉ ghi `nguon` = ĐƯỜNG DẪN. Đường dẫn không nói nội dung: mẻ mới
+    ghi đè lên cùng tên file là hai kết quả khác nhau mang cùng một chữ `nguon`. Hai
+    trường này để lần sau đối chiếu được nguồn mà không phải suy đoán — và chính là
+    cái `_xung_dot_mot_o` đọc trước tiên.
+    """
+    if not path.exists():
+        return
+    try:
+        d = json.loads(path.read_text(encoding="utf-8"))
+        d.setdefault("replay", {})["src_file"] = src_rel
+        d["replay"]["src_sha256"] = src_sha
+        path.write_text(json.dumps(d, ensure_ascii=False, indent=2, allow_nan=False),
+                        encoding="utf-8")
+        print(f"  metadata: src_file={src_rel} src_sha256={src_sha[:16]}… → {_rel(path)}")
+    except (OSError, ValueError) as e:  # noqa: BLE001
+        print(f"  ⚠️  không ghi được src_file/src_sha256 vào {_rel(path)}: "
+              f"{type(e).__name__}: {e}")
+
+
 def _run_song_song(args) -> int:
     """Hai luồng bằng subprocess, mỗi luồng ghim MỘT card, mỗi luồng một file log.
 
     Không dùng threading: hai mẻ sinh mỗi mẻ 400+ dòng tiến độ, trộn vào một stdout là
     không đọc được. Log riêng → in gộp khi cả hai xong.
     """
+    # Cổng chặn nguồn chạy ở ĐÂY nữa (luồng con cũng chạy nó): bắt sớm ở tiến trình
+    # cha thì thấy ngay trên stdout, không phải đi mò trong hai file log.
+    chon_ss = set(args.cells) if args.cells else None
+    rc_cong = _kiem_cong_chan_nguon(
+        [c for c in CELLS if chon_ss is None or c.idx in chon_ss], SRC_BY_SYSTEM)
+    if rc_cong != 0:
+        return rc_cong
+
     g = _bao_cao_gpu(True, None, "run — thực tế")
     n_thay = g.get("n_card_nhin_thay") or 0
     if n_thay < len(LANES):
@@ -869,7 +1067,7 @@ def _run_song_song(args) -> int:
         if not lane:
             print(f"  luồng card {dev}: không có ô nào được chọn → bỏ qua")
             continue
-        log = LOG_DIR / f"ft06_gpu{dev}.log"
+        log = LOG_DIR / f"{BAO_CAO_PREFIX}_gpu{dev}.log"
         cmd = [sys.executable, str(Path(__file__).resolve()), "--stage", "run",
                "--gpu", str(dev), "--cells", ",".join(str(i) for i in lane),
                "--hf-repo", args.hf_repo, "--hf-prefix", args.hf_prefix]
@@ -938,6 +1136,13 @@ def stage_run(args) -> int:
     # Giữ ĐÚNG thứ tự người gõ ở --cells: luồng song song truyền thứ tự của luồng
     # (vd 1,3,2) và thứ tự đó có chủ ý.
     thu_tu = [CELL_BY_IDX[i] for i in args.cells] if args.cells else list(CELLS)
+
+    # CỔNG CHẶN NGUỒN — trước khi nạp GGUF, trước khi kéo partial, trước mọi thứ.
+    rc_cong = _kiem_cong_chan_nguon(thu_tu, SRC_BY_SYSTEM)
+    if rc_cong != 0:
+        return rc_cong
+    src_sha = {he: sha256_file(REPO / rel) for he, rel in SRC_BY_SYSTEM.items()}
+
     sp = _status_path(args.gpu)
     status = _doc_status(sp)
 
@@ -945,6 +1150,17 @@ def stage_run(args) -> int:
         _tieu_de(f"{cell.nhan}  card {dev}  → {_rel(cell.out_path)}")
         if not args.no_push:
             _hf_keo_partial(cell, args.hf_repo, args.hf_prefix)
+            # Cổng chặn LẦN HAI, chỉ cho ô này: partial vừa kéo về từ HF chưa hề đi
+            # qua cổng ở đầu chặng. Nếu tiền tố HF bị trỏ nhầm về `session3_ft06`
+            # thì đây đúng là chỗ ngữ cảnh cũ chui vào.
+            xung = _xung_dot_mot_o(cell, SRC_BY_SYSTEM[cell.system],
+                                   _ctx_theo_id(SRC_BY_SYSTEM[cell.system]))
+            if xung:
+                print("\033[1;31m❌ XUNG ĐỘT NGUỒN sau khi kéo partial từ HF — DỪNG "
+                      "ô này (và cả lượt):\033[0m", file=sys.stderr)
+                for m in xung:
+                    print(f"  \033[1;31m→ {m}\033[0m", file=sys.stderr)
+                return 3
 
         cmd = [
             sys.executable, "-m", "finetune.replay",
@@ -982,10 +1198,18 @@ def stage_run(args) -> int:
                 agg_line = line.strip()
         rc = proc.wait()
 
+        # Ghim nguồn vào chính file kết quả TRƯỚC khi đẩy HF — file trên Hub cũng
+        # phải tự trả lời được "sinh trên nội dung nào".
+        if rc == 0:
+            _ghi_nguon_vao_metadata(cell.out_path, SRC_BY_SYSTEM[cell.system],
+                                    src_sha[cell.system])
+
         status[cell.tag + "|" + cell.system] = {
             "o": cell.idx, "model": cell.model_key, "n_shot": cell.n_shot,
             "system": cell.system, "returncode": rc, "gpu": dev,
             "out": _rel(cell.out_path), "aggregate": agg_line or None,
+            "src_file": SRC_BY_SYSTEM[cell.system],
+            "src_sha256": src_sha[cell.system],
         }
         _ghi_status(sp, status)
 
@@ -1146,7 +1370,7 @@ def _muc_doi_chieu_latency(o: dict) -> list[str]:
 
 
 def stage_table(args) -> int:
-    _tieu_de("CHẶNG table — gom sáu ô vào finetune/reports/ft06_matrix.md")
+    _tieu_de("CHẶNG table — gom sáu ô vào finetune/reports/ft06b_matrix.md")
 
     o = {c.idx: _doc_o(c) for c in CELLS}
     thieu = [CELLS[i - 1].nhan for i in sorted(o) if o[i] is None]
@@ -1243,7 +1467,7 @@ def stage_table(args) -> int:
             "", "Bảng chưa đầy đủ. Chạy lại `--stage run --cells <số ô>`.",
         ]
 
-    out = REPORTS_DIR / "ft06_matrix.md"
+    out = _bc("matrix.md")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L))
