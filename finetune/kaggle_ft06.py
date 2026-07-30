@@ -104,17 +104,56 @@ def _bc(ten: str) -> Path:
     """
     return REPORTS_DIR / f"{BAO_CAO_PREFIX}_{ten}"
 
-# Nguồn ngữ cảnh: PHẢI là cặp file của CÙNG một mẻ chạy 20260710-085236 — chính mẻ
-# sinh ra 0.578 (GraphRAG) và 0.435 (Naive RAG) ở hàng Gemini. Trộn hai timestamp
-# khác nhau là đổi luôn vế trái của cột Δ.
-SRC_GRAPHRAG = "data/evaluation/results_graphrag_20260710-085236.json"
+# ────────────────────────────────────────────────────────────────────────────────
+# NGUỒN NGỮ CẢNH — vì sao HAI VẾ đến từ HAI MẺ KHÁC NHAU
+# ────────────────────────────────────────────────────────────────────────────────
+# Chú thích cũ ở đây nói cặp file "PHẢI là của CÙNG một mẻ chạy". Điều đó KHÔNG
+# CÒN ĐÚNG, và ba lý do dưới đây thay chỗ nó.
+#
+# (1) VÌ SAO ĐƯỢC PHÉP DÙNG NGUỒN KHÁC MẺ.
+#     Vế Naive RAG không đi qua bộ lập kế hoạch truy vấn: `naive_rag.py:339` và
+#     `naive_rag.py:361` truyền `query_plan=None` (khai báo ở dòng 60). Sửa đổi của
+#     partner nằm TRỌN trong `query_planner`, nên nó không thể chạm tới context
+#     baseline. Đã đối chiếu trực tiếp, không suy luận: bốn mẻ baseline đủ 137 câu
+#     (`20260709-073933`, `20260710-001154`, `20260710-085236`, `20260710-104109`)
+#     có `context` trùng khít 137/137 với nhau, MỘT ngoại lệ duy nhất —
+#     `20260710-001154` để rỗng câu V022 (sự cố của riêng mẻ đó). Mẻ đang dùng làm
+#     SRC_BASELINE, `20260710-085236`, KHÔNG nằm trong ngoại lệ đó.
+#     ⇒ Vế Naive RAG không cần chạy lại, và giữ nguyên nó không đổi vế trái của Δ.
+#
+# (2) VÌ SAO CHỌN final1 LÀ TUỲ Ý MÀ VÔ HẠI.
+#     Ba mẻ `final1/2/3` là ba lần SINH trên CÙNG một ngữ cảnh đông cứng, không
+#     phải ba lần truy hồi khác nhau: đã đối chiếu `context` từng câu, final1 ≡
+#     final2 ≡ final3 ở 137/137. Mà `replay.py` chỉ đọc `id`, `question`, `context`,
+#     `ground_truth_citations`, `top_k_count` từ file nguồn — trường `answer` của
+#     Gemini bị bỏ hoàn toàn (trừ 10 câu hằng số, nơi nó chỉ dùng để assert).
+#     ⇒ Lấy final1 hay final2 hay final3 làm nguồn ngữ cảnh cho ra prompt y hệt.
+#
+# (3) DẪN CHIẾU. `docs/V3_RESULTS.md` §1 (lỗi "LUÔN gán toan-quoc" ở lời nhắc hệ
+#     thống của `query_planner` và chuỗi hậu quả), §2 (số liệu v3 ba mẻ).
+#     Danh sách 17 câu đổi ngữ cảnh KHÔNG chép từ báo cáo — chặng `table` tự tính
+#     lại từ hai file rồi in ra (xem `_mo_ta_17_cau`).
+SRC_GRAPHRAG = "data/evaluation/results_graphrag_final1_20260729-022916.json"
 SRC_BASELINE = "data/evaluation/results_baseline_20260710-085236.json"
 SRC_BY_SYSTEM = {"graphrag": SRC_GRAPHRAG, "baseline": SRC_BASELINE}
 
-# Hàng Gemini — lấy từ báo cáo (kế hoạch §2), KHÔNG tính lại ở đây.
-GEMINI_F1_NAIVE = 0.435
-GEMINI_F1_GRAPHRAG = 0.578
-GEMINI_DELTA = 0.143
+# Nguồn ngữ cảnh CŨ — nhánh "trước" của phép so ghép cặp ở mục 5 của bảng. Chỉ đọc.
+SRC_GRAPHRAG_CU = "data/evaluation/results_graphrag_20260710-085236.json"
+
+# Ba mẻ Gemini của bộ số v3 (`docs/V3_RESULTS.md`). Chặng `table` chạy
+# `metrics.aggregate` trên CẢ BA rồi báo trung bình ± độ lệch chuẩn — KHÔNG ghim số
+# cứng. Danh sách này độc lập với `SRC_GRAPHRAG`: `SRC_GRAPHRAG` chỉ quyết định lấy
+# ngữ cảnh đông cứng từ mẻ nào (ba mẻ giống hệt nhau ở trường đó, xem (2) trên).
+GEMINI_GRAPHRAG_RUNS = [
+    "data/evaluation/results_graphrag_final1_20260729-022916.json",
+    "data/evaluation/results_graphrag_final2_20260729-032225.json",
+    "data/evaluation/results_graphrag_final3_20260729-041450.json",
+]
+
+# Vế Naive RAG của hàng Gemini: KHÔNG ghim danh sách mẻ. Chặng `table` quét MỌI
+# `results_baseline_*.json` trong thư mục dưới đây và in từng mẻ một — lý do ở
+# `_mo_ta_gemini_naive`.
+EVAL_DIR = REPO / "data/evaluation"
 
 # ⚠️ HAI HANDLE KHÁC NHAU, chỉ khác thứ tự chữ số — đừng chép lẫn:
 #   HF     = dangnguyen254  → mọi repo_id HF, --hf-repo, đường dẫn upload (kể cả
@@ -375,6 +414,19 @@ def _rel(p: Path) -> str:
         return str(p.relative_to(REPO)).replace("\\", "/")
     except ValueError:
         return str(p).replace("\\", "/")
+
+
+def _src_by_system(args) -> dict[str, str]:
+    """{tên hệ: đường dẫn nguồn} của LƯỢT NÀY, ưu tiên cờ CLI.
+
+    Có `--src-graphrag` / `--src-baseline` để lần sau đổi nguồn (mẻ mới, ablation
+    khác) là đổi ở dòng lệnh, không phải sửa mã rồi commit. Mặc định = hằng số
+    `SRC_GRAPHRAG` / `SRC_BASELINE` ở đầu file, nên hành vi không đổi khi không gõ.
+    """
+    return {
+        "graphrag": (getattr(args, "src_graphrag", None) or SRC_GRAPHRAG).replace("\\", "/"),
+        "baseline": (getattr(args, "src_baseline", None) or SRC_BASELINE).replace("\\", "/"),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -703,7 +755,8 @@ def _tach_dump(text: str) -> tuple[str, str]:
     return "", text
 
 
-def _kiem_mot_prompt(path: Path, system: str, n_shot: int) -> list[tuple[str, bool, str]]:
+def _kiem_mot_prompt(path: Path, system: str, n_shot: int,
+                     src_rel: str) -> list[tuple[str, bool, str]]:
     """Năm kiểm tra tự động trên một file prompt đã dump. Trả list (tên, ok, chi tiết)."""
     from finetune.replay import MODE_MAP_PATH, build_chat_messages
 
@@ -722,8 +775,24 @@ def _kiem_mot_prompt(path: Path, system: str, n_shot: int) -> list[tuple[str, bo
     # JSON là TÊN HỆ ("graphrag"/"baseline"), không phải system prompt
     # (replay.py:686 dùng nó làm khoá tra mode_map). System prompt thật là phần tử 0
     # của `build_messages` → dựng lại bằng CHÍNH `build_chat_messages` rồi so.
-    src = json.loads((REPO / SRC_BY_SYSTEM[system]).read_text(encoding="utf-8"))
+    src = json.loads((REPO / src_rel).read_text(encoding="utf-8"))
     first = next(s for s in src["results"] if s["top_k_count"] > 0)
+    # ────────────────────────────────────────────────────────────────────────────
+    # `mode_map.json` GIỮ NGUYÊN — không suy lại từ nguồn mới. 13 id irac ở lại.
+    # ────────────────────────────────────────────────────────────────────────────
+    # `mode_map` được khôi phục bằng cách suy ngược từ heading của câu trả lời
+    # (`recover_response_mode.infer_mode`: đủ 4/4 heading irac → irac). Chạy đúng
+    # phép suy đó trên ba mẻ final — ba mẻ CHUNG một ngữ cảnh — cho **15 / 15 / 13**
+    # id irac, và ba tập đó còn khác nhau về thành phần (final1 và final3 lệch nhau
+    # ở V006, V018, V035, V051, V127, V141). Cùng đầu vào mà ra ba đáp số thì phép
+    # suy đang đo **dao động văn phong của Gemini**, không đo chế độ.
+    #
+    # Mà `mode` là ĐẦU VÀO của khâu sinh (`build_chat_messages` → prompt irac hay
+    # general). Để nó trôi theo mẻ là để hai ô trong CÙNG một hàng nhận hai prompt
+    # khác nhau → cột Δ của hàng đó lẫn cả khác biệt chế độ lẫn khác biệt ngữ cảnh,
+    # mà không có dấu hiệu gì trên bảng. Nên ghim cố định: cả lượt ft06 lẫn ft06b
+    # đọc CÙNG `finetune/data/mode_map.json` (nguồn ghi trong `_nguon` của chính
+    # file đó: cặp 20260710-085236).
     mode = json.loads(MODE_MAP_PATH.read_text(encoding="utf-8"))["he_thong"][system]["mode_map"][first["id"]]
     msgs = build_chat_messages(first["question"], first["context"], mode, n_shot)
     dau200 = msgs[0]["content"][:200]
@@ -790,6 +859,7 @@ def stage_gate_prompt(args) -> int:
         print(f"  ⚠️  chưa có {_rel(tpl)} (chạy gate-template trước) → "
               "không kiểm chéo được giả định ChatML")
 
+    srcs = _src_by_system(args)
     to_hop = [("graphrag", 0), ("graphrag", 2), ("baseline", 0), ("baseline", 2)]
     tat_ca_ok = True
     for system, n_shot in to_hop:
@@ -797,7 +867,7 @@ def stage_gate_prompt(args) -> int:
         _tieu_de(f"{system} · n_shot={n_shot}")
         cmd = [
             sys.executable, "-m", "finetune.replay",
-            "--input", SRC_BY_SYSTEM[system],
+            "--input", srcs[system],
             "--model", _rel(gguf),
             "--limit", "1",
             "--n-shot", str(n_shot),
@@ -816,7 +886,8 @@ def stage_gate_prompt(args) -> int:
             continue
 
         print(f"\n  --- KẾT QUẢ KIỂM TỰ ĐỘNG: {_rel(dump)} ---")
-        for ten, ok, chi_tiet in _kiem_mot_prompt(dump, system, n_shot):
+        for ten, ok, chi_tiet in _kiem_mot_prompt(dump, system, n_shot,
+                                                  srcs[system]):
             print(f"   [{'PASS' if ok else 'FAIL'}] {ten}")
             print(f"          {chi_tiet}")
             tat_ca_ok &= ok
@@ -1045,8 +1116,9 @@ def _run_song_song(args) -> int:
     # Cổng chặn nguồn chạy ở ĐÂY nữa (luồng con cũng chạy nó): bắt sớm ở tiến trình
     # cha thì thấy ngay trên stdout, không phải đi mò trong hai file log.
     chon_ss = set(args.cells) if args.cells else None
+    srcs = _src_by_system(args)
     rc_cong = _kiem_cong_chan_nguon(
-        [c for c in CELLS if chon_ss is None or c.idx in chon_ss], SRC_BY_SYSTEM)
+        [c for c in CELLS if chon_ss is None or c.idx in chon_ss], srcs)
     if rc_cong != 0:
         return rc_cong
 
@@ -1136,12 +1208,13 @@ def stage_run(args) -> int:
     # Giữ ĐÚNG thứ tự người gõ ở --cells: luồng song song truyền thứ tự của luồng
     # (vd 1,3,2) và thứ tự đó có chủ ý.
     thu_tu = [CELL_BY_IDX[i] for i in args.cells] if args.cells else list(CELLS)
+    srcs = _src_by_system(args)
 
     # CỔNG CHẶN NGUỒN — trước khi nạp GGUF, trước khi kéo partial, trước mọi thứ.
-    rc_cong = _kiem_cong_chan_nguon(thu_tu, SRC_BY_SYSTEM)
+    rc_cong = _kiem_cong_chan_nguon(thu_tu, srcs)
     if rc_cong != 0:
         return rc_cong
-    src_sha = {he: sha256_file(REPO / rel) for he, rel in SRC_BY_SYSTEM.items()}
+    src_sha = {he: sha256_file(REPO / rel) for he, rel in srcs.items()}
 
     sp = _status_path(args.gpu)
     status = _doc_status(sp)
@@ -1153,8 +1226,8 @@ def stage_run(args) -> int:
             # Cổng chặn LẦN HAI, chỉ cho ô này: partial vừa kéo về từ HF chưa hề đi
             # qua cổng ở đầu chặng. Nếu tiền tố HF bị trỏ nhầm về `session3_ft06`
             # thì đây đúng là chỗ ngữ cảnh cũ chui vào.
-            xung = _xung_dot_mot_o(cell, SRC_BY_SYSTEM[cell.system],
-                                   _ctx_theo_id(SRC_BY_SYSTEM[cell.system]))
+            xung = _xung_dot_mot_o(cell, srcs[cell.system],
+                                   _ctx_theo_id(srcs[cell.system]))
             if xung:
                 print("\033[1;31m❌ XUNG ĐỘT NGUỒN sau khi kéo partial từ HF — DỪNG "
                       "ô này (và cả lượt):\033[0m", file=sys.stderr)
@@ -1164,7 +1237,12 @@ def stage_run(args) -> int:
 
         cmd = [
             sys.executable, "-m", "finetune.replay",
-            "--input", SRC_BY_SYSTEM[cell.system],
+            # `replay.py:704` tự đọc `finetune/data/mode_map.json` — KHÔNG truyền, và
+            # KHÔNG suy lại mode từ nguồn mới: xem khối chú thích dài ở
+            # `_kiem_mot_prompt`. Tóm tắt: mode là ĐẦU VÀO của khâu sinh, phải ghim
+            # cố định giữa hai lượt, nếu không Δ trong cùng một hàng lẫn cả khác
+            # biệt chế độ.
+            "--input", srcs[cell.system],
             "--model", _rel(gguf[cell.model_key]),
             "--n-shot", str(cell.n_shot),
             "--resume",
@@ -1201,14 +1279,14 @@ def stage_run(args) -> int:
         # Ghim nguồn vào chính file kết quả TRƯỚC khi đẩy HF — file trên Hub cũng
         # phải tự trả lời được "sinh trên nội dung nào".
         if rc == 0:
-            _ghi_nguon_vao_metadata(cell.out_path, SRC_BY_SYSTEM[cell.system],
+            _ghi_nguon_vao_metadata(cell.out_path, srcs[cell.system],
                                     src_sha[cell.system])
 
         status[cell.tag + "|" + cell.system] = {
             "o": cell.idx, "model": cell.model_key, "n_shot": cell.n_shot,
             "system": cell.system, "returncode": rc, "gpu": dev,
             "out": _rel(cell.out_path), "aggregate": agg_line or None,
-            "src_file": SRC_BY_SYSTEM[cell.system],
+            "src_file": srcs[cell.system],
             "src_sha256": src_sha[cell.system],
         }
         _ghi_status(sp, status)
@@ -1508,6 +1586,16 @@ def main() -> int:
     ap.add_argument("--gpu", type=int, default=None,
                     help="ghim mọi ô của lượt này vào card N. Chặng run dùng cờ này khi "
                          "tự gọi lại chính nó cho từng luồng của --parallel.")
+    ap.add_argument("--src-graphrag", default=None,
+                    help=f"file results JSON làm nguồn ngữ cảnh cột GraphRAG "
+                         f"(mặc định {SRC_GRAPHRAG}). Đổi nguồn thì đổi ở đây, "
+                         f"KHÔNG sửa mã — nhưng nhớ đổi cả tag/tiền tố HF, nếu không "
+                         f"cổng chặn nguồn sẽ dừng lượt chạy.")
+    ap.add_argument("--src-baseline", default=None,
+                    help=f"file results JSON làm nguồn ngữ cảnh cột Naive RAG "
+                         f"(mặc định {SRC_BASELINE}). Vế này KHÔNG đi qua "
+                         f"query_planner (naive_rag.py:339,361 truyền query_plan=None) "
+                         f"nên sửa đổi ở tầng lập kế hoạch không chạm tới nó.")
     ap.add_argument("--hf-repo", default=HF_REPO_DEFAULT,
                     help=f"repo HF để đẩy kết quả (mặc định {HF_REPO_DEFAULT})")
     ap.add_argument("--hf-prefix", default=HF_PREFIX_DEFAULT,
@@ -1529,6 +1617,15 @@ def main() -> int:
     xau = [n for n in args.cells if n not in {c.idx for c in CELLS}]
     if xau:
         print(f"❌ --cells có số không phải ô: {xau} (hợp lệ 1..{len(CELLS)})", file=sys.stderr)
+        return 2
+
+    # Kiểm TỒN TẠI THẬT ngay ở đây, không đợi tới lúc replay.py mở file: chặng prep
+    # tải 2,5 GB GGUF trước khi đụng tới nguồn, gõ sai tên file mà biết sau đó là
+    # mất công vô ích.
+    thieu = [f"{he}: {rel}" for he, rel in sorted(_src_by_system(args).items())
+             if not (REPO / rel).exists()]
+    if thieu:
+        print("❌ không có file nguồn:\n  " + "\n  ".join(thieu), file=sys.stderr)
         return 2
 
     return STAGES[args.stage](args)
