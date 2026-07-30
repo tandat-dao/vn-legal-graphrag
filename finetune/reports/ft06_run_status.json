@@ -1,0 +1,62 @@
+{
+  "ft06-ft-s0|graphrag": {
+    "o": 1,
+    "model": "ft",
+    "n_shot": 0,
+    "system": "graphrag",
+    "returncode": 0,
+    "gpu": 0,
+    "out": "finetune/results/results_graphrag_ft06-ft-s0.json",
+    "aggregate": "aggregate: F1_khoan=0.402 F1_dieu=0.445 NormR=0.541 tu_choi_dung=0.929 (14 câu)"
+  },
+  "ft06-base-s2|graphrag": {
+    "o": 3,
+    "model": "base",
+    "n_shot": 2,
+    "system": "graphrag",
+    "returncode": 0,
+    "gpu": 0,
+    "out": "finetune/results/results_graphrag_ft06-base-s2.json",
+    "aggregate": "aggregate: F1_khoan=0.493 F1_dieu=0.536 NormR=0.630 tu_choi_dung=0.857 (14 câu)"
+  },
+  "ft06-ft-s0|baseline": {
+    "o": 2,
+    "model": "ft",
+    "n_shot": 0,
+    "system": "baseline",
+    "returncode": 0,
+    "gpu": 0,
+    "out": "finetune/results/results_baseline_ft06-ft-s0.json",
+    "aggregate": "aggregate: F1_khoan=0.301 F1_dieu=0.344 NormR=0.609 tu_choi_dung=0.571 (14 câu)"
+  },
+  "ft06-base-s0|graphrag": {
+    "o": 5,
+    "model": "base",
+    "n_shot": 0,
+    "system": "graphrag",
+    "returncode": 0,
+    "gpu": 1,
+    "out": "finetune/results/results_graphrag_ft06-base-s0.json",
+    "aggregate": "aggregate: F1_khoan=0.136 F1_dieu=0.136 NormR=0.137 tu_choi_dung=0.929 (14 câu)"
+  },
+  "ft06-base-s2|baseline": {
+    "o": 4,
+    "model": "base",
+    "n_shot": 2,
+    "system": "baseline",
+    "returncode": 0,
+    "gpu": 1,
+    "out": "finetune/results/results_baseline_ft06-base-s2.json",
+    "aggregate": "aggregate: F1_khoan=0.239 F1_dieu=0.315 NormR=0.599 tu_choi_dung=0.500 (14 câu)"
+  },
+  "ft06-base-s0|baseline": {
+    "o": 6,
+    "model": "base",
+    "n_shot": 0,
+    "system": "baseline",
+    "returncode": 0,
+    "gpu": 1,
+    "out": "finetune/results/results_baseline_ft06-base-s0.json",
+    "aggregate": "aggregate: F1_khoan=0.154 F1_dieu=0.170 NormR=0.265 tu_choi_dung=0.929 (14 câu)"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "wheel": {
+    "repo": "dangnguyen254/thesis-graphrag-gguf",
+    "file": "runtime/llama_cpp_python-0.3.16-cp312-cp312-linux_x86_64.whl",
+    "sha256": "a3cb84bddb15c1759a0ece5ec8ef9d10d1419f926c895064d1a91ec517fd0da7"
+  },
+  "base": {
+    "repo": "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+    "file": "Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "revision": "ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+    "sha256": "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e",
+    "local": "finetune/models/Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
+  },
+  "ft": {
+    "repo": "dangnguyen254/thesis-graphrag-gguf",
+    "file": "gguf/ft04-5k-2ep-20260729-2122-Q4_K_M.gguf",
+    "sha256": "c115e6a79299d1fe0e41eb5f6720955108df1e869676dc96f0b7ba61c37ce5d0",
+    "local": "finetune/models/ft04-5k-2ep-20260729-2122-Q4_K_M.gguf"
+  }
+}
