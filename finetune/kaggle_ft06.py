@@ -151,28 +151,31 @@ FT_GGUF = Artifact(
     local_name="ft04-5k-2ep-20260729-2122-Q4_K_M.gguf",
 )
 
-# ⚠️ GGUF GỐC — `sha256` CỐ Ý ĐỂ None, xem `_resolve_base_pin`.
-# `gate_base_model.md` và `finetune/README.md` chỉ ghi TÊN model. Phiên FT-03 đọc
-# revision + sha256 từ `/kaggle/working/base_manifest.json`
-# (`notebooks/vn-legal-graphrag (5).ipynb` ô 15: `old["repo"]`, `old["file"]`,
-# `old["revision"]`, `old["sha256"]`) — file đó chưa từng được commit.
+# GGUF GỐC — cả bốn giá trị ghim đã đủ, không còn bước tay nào.
 #
-# `revision` thì KHÔI PHỤC ĐƯỢC, không phải đoán: nó nằm trong **output đã lưu** của
-# chính ô 15 notebook đó, hai chỗ độc lập —
+# `revision` = `ae44f08e1392f39c0e474af10c3ff8355c8b6688`. Khôi phục từ **output đã
+# lưu** của `notebooks/vn-legal-graphrag (5).ipynb` ô 15, hai chỗ độc lập —
 #   HEAD .../resolve/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_…-Q4_K_M.gguf
 #   path mới: …/snapshots/ae44f08e1392f39c0e474af10c3ff8355c8b6688/Qwen_…-Q4_K_M.gguf
 # và ô đó chạy `assert h == old["sha256"]` rồi in "OK, sha256 khớp bản đã ghi", tức
 # đúng revision này đã qua cổng sha256 ở phiên 1.
 #
-# `sha256` thì KHÔNG khôi phục được: ô 15 in kết luận chứ không in chuỗi hash, và
-# không có chuỗi 64 hex nào của file GGUF gốc trong repo. Điền tay là bịa giá trị
-# ghim → script đọc lúc chạy và exit 1 nếu không có.
+# `sha256` = `2fde00ce…4464e`. **Nguồn: metadata LFS của HF tại đúng revision trên**
+# — không phải `base_manifest.json` (file đó chưa từng được commit) và không phải
+# output notebook (ô 15 chỉ in kết luận "sha256 khớp", không in chuỗi). Lệnh lấy:
+#
+#     HfApi().list_repo_tree("bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+#         revision="ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+#         expand=True, recursive=True)   ->  f.lfs.sha256 của file Q4_K_M
+#
+# Đây là nguồn thẩm quyền hơn `base_manifest.json`: hash do chính Hub lưu cho blob
+# tại revision đó, đọc lại được bất cứ lúc nào mà không cần tải 2,5 GB.
 BASE_GGUF_REPO = "bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF"
 BASE_GGUF_FILE = "Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
 BASE_GGUF_REVISION = "ae44f08e1392f39c0e474af10c3ff8355c8b6688"
-# 8 ký tự đầu của sha256 — phần DUY NHẤT được ghi lại (trong đơn việc FT-06). Không
-# đủ làm cổng chặn, nhưng đủ để bắt lỗi "cung cấp sai hash của file khác".
-BASE_SHA256_PREFIX = "2fde00ce"
+BASE_GGUF_SHA256 = "2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e"
+# 8 ký tự đầu — dùng bắt lỗi khi ai đó ghi đè bằng hash của FILE KHÁC.
+BASE_SHA256_PREFIX = BASE_GGUF_SHA256[:8]
 # Tên cục bộ giữ ĐÚNG như phiên FT-03 (bartowski có tiền tố `Qwen_`, repo mong đợi
 # tên không tiền tố — `kaggle_clean.ipynb` ô 24).
 BASE_LOCAL_NAME = "Qwen3-4B-Instruct-2507-Q4_K_M.gguf"
@@ -400,15 +403,18 @@ def _bao_cao_gpu(song_song: bool, gpu: int | None, nguon: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Ghim của model gốc — đọc lúc chạy, KHÔNG điền tay
+# Ghim của model gốc
 # ---------------------------------------------------------------------------
 
 def _resolve_base_pin(args) -> tuple[str, str, str, str]:
     """Trả (repo, file, revision, sha256) cho GGUF gốc.
 
-    Thứ tự tìm: cờ CLI → biến môi trường → `base_manifest.json` (chính file mà phiên
-    FT-03 dùng). Không có thì exit 1 — thà dừng còn hơn chạy 822 lượt trên một file
-    không chứng minh được là đúng file của FT-03.
+    Thứ tự ưu tiên (giữ nguyên như trước, chỉ đổi cái cuối):
+      cờ CLI → `FT06_BASE_*` → `base_manifest.json` → **giá trị ghim trong file này**.
+
+    Ba đường ghi đè giữ nguyên để phiên sau còn trỏ được sang revision khác mà không
+    phải sửa code; chặng cuối trước đây là exit 1, giờ là mặc định đã ghim (nguồn:
+    metadata LFS của HF tại đúng revision — xem chú thích ở `BASE_GGUF_SHA256`).
     """
     repo, file = BASE_GGUF_REPO, BASE_GGUF_FILE
     rev = args.base_revision or os.getenv("FT06_BASE_REVISION")
@@ -432,36 +438,18 @@ def _resolve_base_pin(args) -> tuple[str, str, str, str]:
         nguon_rev = "output đã lưu của notebook FT-03 ô 15 (xem chú thích trong file này)"
 
     if not sha:
-        print(
-            "\n❌ DỪNG — không có sha256 đã ghim của GGUF GỐC.\n"
-            f"   repo     : {repo}\n"
-            f"   file     : {file}\n"
-            f"   revision : {rev}  ({nguon_rev})\n"
-            "   sha256   : KHÔNG CÓ\n\n"
-            "   Giá trị này không nằm trong repo. `gate_base_model.md` và\n"
-            "   `finetune/README.md` chỉ ghi tên model; phiên FT-03 đọc nó từ\n"
-            "   `/kaggle/working/base_manifest.json` (notebook FT-03 ô 15), mà file đó\n"
-            "   chưa từng được commit — và ô đó in kết luận 'sha256 khớp' chứ không in\n"
-            "   chuỗi hash, nên output notebook cũng không khôi phục được.\n\n"
-            "   Script CỐ Ý không tự điền: ghim bịa thì cổng chặn sha256 thành vô nghĩa.\n"
-            "   Ba cách cung cấp:\n"
-            f"     1. để `{args.base_manifest}` tồn tại với khoá `sha256`\n"
-            "        (đúng khuôn FT-03: repo / file / revision / sha256)\n"
-            "     2. --base-sha256 <sha>\n"
-            "     3. FT06_BASE_SHA256=<sha>\n\n"
-            f"   Ghi chú: revision ĐÃ được ghim ({rev[:12]}…) nên bản tải về vốn đã\n"
-            "   khoá theo commit bất biến của Hub; sha256 là ổ khoá thứ hai, độc lập —\n"
-            "   nó bắt cả trường hợp file tải về bị hỏng dở giữa đường.\n",
-            file=sys.stderr,
-        )
-        raise SystemExit(1)
+        sha = BASE_GGUF_SHA256
+        nguon_sha = "metadata LFS của HF tại revision đã ghim (xem chú thích trong file này)"
 
     if BASE_SHA256_PREFIX and not sha.startswith(BASE_SHA256_PREFIX):
-        print(f"  ⚠️  sha256 cung cấp bắt đầu bằng {sha[:8]!r}, đơn việc FT-06 ghi "
-              f"{BASE_SHA256_PREFIX!r} → có thể đang ghim hash của FILE KHÁC. Kiểm lại.")
+        print(f"  ⚠️  sha256 đang dùng bắt đầu bằng {sha[:8]!r}, giá trị ghim của FT-06 "
+              f"bắt đầu bằng {BASE_SHA256_PREFIX!r} → có thể đang ghim hash của FILE "
+              f"KHÁC (hoặc revision khác). Kiểm lại trước khi chạy 822 lượt.")
 
-    print(f"  ghim GGUF gốc — revision: {nguon_rev}")
-    print(f"                  sha256  : {nguon_sha}")
+    print(f"  ghim GGUF gốc — revision: {rev}\n"
+          f"                            ({nguon_rev})")
+    print(f"                  sha256  : {sha}\n"
+          f"                            ({nguon_sha})")
     return repo, file, rev, sha
 
 
@@ -1299,9 +1287,14 @@ def main() -> int:
     ap.add_argument("--no-push", action="store_true",
                     help="không đẩy HF (chạy thử cục bộ)")
     ap.add_argument("--base-manifest", default="/kaggle/working/base_manifest.json",
-                    help="file JSON chứa ghim GGUF gốc (khuôn FT-03: repo/file/revision/sha256)")
-    ap.add_argument("--base-revision", default=None, help="ghi đè revision GGUF gốc")
-    ap.add_argument("--base-sha256", default=None, help="ghi đè sha256 GGUF gốc")
+                    help="file JSON chứa ghim GGUF gốc (khuôn FT-03: repo/file/revision/sha256). "
+                         "Chỉ dùng khi cờ và biến môi trường đều trống; không có file cũng "
+                         "không sao — script đã ghim sẵn cả revision lẫn sha256.")
+    ap.add_argument("--base-revision", default=None,
+                    help=f"ghi đè revision GGUF gốc (mặc định đã ghim: {BASE_GGUF_REVISION})")
+    ap.add_argument("--base-sha256", default=None,
+                    help=f"ghi đè sha256 GGUF gốc (mặc định đã ghim: {BASE_GGUF_SHA256} "
+                         f"— nguồn: metadata LFS của HF tại revision trên)")
     args = ap.parse_args()
 
     args.cells = [int(s) for s in args.cells.split(",") if s.strip()] if args.cells else []

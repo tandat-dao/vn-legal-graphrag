@@ -4,6 +4,42 @@
 **Phiên 1:** Kaggle, 29/07/2026 · 15 câu (`finetune/data/gate_ids.json`) · seed 42 · `n_ctx = 16384` · `max_new_tokens = 2048`
 **Nguồn ngữ cảnh:** `data/evaluation/results_graphrag_20260710-085236.json` (chỉ đọc)
 
+### Hiện vật GGUF gốc — giá trị ghim
+
+| | |
+|---|---|
+| repo | `bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF` |
+| file | `Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf` |
+| `revision` | `ae44f08e1392f39c0e474af10c3ff8355c8b6688` |
+| `sha256` | `2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e` |
+
+**Đây là lần đầu hai giá trị này được ghi vào repo.** Phiên 1 đọc chúng từ
+`/kaggle/working/base_manifest.json`, mà file đó **chưa từng được commit**; và ô 15
+của notebook FT-03 chỉ in kết luận *"OK, sha256 khớp bản đã ghi"* chứ **không in chuỗi
+hash**, nên output notebook cũng không khôi phục lại được. Trước đó báo cáo này chỉ ghi
+**tên** model.
+
+Xuất xứ của từng giá trị:
+
+- **`revision`** — khôi phục từ **output đã lưu** của ô 15 notebook FT-03, hai chỗ độc
+  lập: URL `HEAD …/resolve/ae44f08e…/Qwen_…-Q4_K_M.gguf` và đường cache
+  `…/snapshots/ae44f08e…/Qwen_…-Q4_K_M.gguf`. Chính ô đó chạy
+  `assert h == old["sha256"]` rồi báo khớp → revision này đã qua cổng sha256 ở phiên 1.
+- **`sha256`** — đọc trực tiếp từ **metadata LFS của HF tại đúng revision trên**, nguồn
+  thẩm quyền hơn `base_manifest.json` (hash do chính Hub lưu cho blob, đọc lại được bất
+  cứ lúc nào mà không phải tải 2,5 GB):
+
+  ```python
+  HfApi().list_repo_tree("bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF",
+      revision="ae44f08e1392f39c0e474af10c3ff8355c8b6688",
+      expand=True, recursive=True)   # -> f.lfs.sha256 của file Q4_K_M
+  ```
+
+Hệ quả vận hành: `finetune/kaggle_ft06.py` ghim cả bốn giá trị làm **mặc định** nên
+chặng `prep` không còn bước tay nào. Ba đường ghi đè vẫn còn cho phiên sau (`--base-revision`
+/ `--base-sha256`, `FT06_BASE_*`, `base_manifest.json`), và script cảnh báo nếu giá trị
+ghi đè không bắt đầu bằng `2fde00ce`.
+
 > **Kết luận một dòng:** `soft_article_hit = 1.000` ở cả bốn ô trong khi `format_ok`
 > zero-shot chỉ 0.083 → mô hình **định vị được điều luật, không viết nổi cú pháp
 > trích dẫn** — đúng thứ tinh chỉnh sửa được. **GIỮ 4B**, nhánh leo thang 8B KHÔNG
