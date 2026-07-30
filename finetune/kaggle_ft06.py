@@ -363,7 +363,9 @@ def _bao_cao_gpu(song_song: bool, gpu: int | None, nguon: str) -> dict:
     ghim tường minh. Phải ghi vào khoá luận cùng với sáu giá trị kia.
     """
     smi = _nvidia_smi()
-    # Số card NHÌN THẤY ĐƯỢC ở mức script (nvidia-smi bỏ dòng tiêu đề).
+    # Số card VẬT LÝ (nvidia-smi đi qua NVML nên KHÔNG bị `CUDA_VISIBLE_DEVICES` che;
+    # bỏ dòng tiêu đề của --format=csv). Đó đúng là đại lượng cần cho --parallel: câu
+    # hỏi là "có đủ hai card để ghim mỗi luồng một card không".
     n_thay = max(0, len([l for l in smi if not l.lower().startswith("index")]))
     ghim = _ghim_map(song_song, gpu)
     che_do = ("song song, hai luồng, mỗi luồng một card" if song_song and gpu is None
