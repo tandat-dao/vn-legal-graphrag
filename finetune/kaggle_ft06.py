@@ -52,6 +52,7 @@ import hashlib
 import json
 import os
 import re
+import statistics
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -1346,6 +1347,238 @@ def _f(v, fmt=".3f") -> str:
     return f"{v:{fmt}}" if isinstance(v, (int, float)) else "—"
 
 
+# ---------------------------------------------------------------------------
+# Hàng Gemini — TÍNH, không ghim số cứng
+# ---------------------------------------------------------------------------
+# Bản trước ghim `GEMINI_F1_NAIVE = 0.435` / `GEMINI_F1_GRAPHRAG = 0.578` chép tay
+# từ báo cáo. Hai vấn đề: (a) số đó thuộc bộ v2, đã bị `docs/V3_RESULTS.md` thay
+# thế, mà hằng số thì không tự biết điều đó; (b) ba cột còn lại (F1 Điều, NormR,
+# Từ chối đúng) phải để `—` vì không ai chép chúng sang. Nay chặng `table` tự chạy
+# `metrics.aggregate` trên chính các file kết quả → bốn cột đủ, và số không bao giờ
+# lệch khỏi file.
+
+def _agg_file(rel: str) -> tuple[dict | None, str]:
+    """`metrics.aggregate` trên một file results. Trả (agg, ghi_chú_lỗi)."""
+    from src.evaluation.metrics import aggregate
+
+    p = REPO / rel if not Path(rel).is_absolute() else Path(rel)
+    if not p.exists():
+        return None, "không có file"
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+        return aggregate(d["results"]), ""
+    except (OSError, ValueError, KeyError, TypeError) as e:  # noqa: BLE001
+        # Mẻ cũ (19/26 câu) có schema khác → aggregate ném KeyError. Ghi nhận rồi đi
+        # tiếp: một file hỏng không được làm sập cả chặng table.
+        return None, f"{type(e).__name__}: {e}"
+
+
+def _ms(xs: list[float]) -> tuple[float | None, float | None]:
+    """(trung bình, độ lệch chuẩn mẫu). std = None khi chỉ có 1 giá trị."""
+    xs = [x for x in xs if isinstance(x, (int, float))]
+    if not xs:
+        return None, None
+    return statistics.mean(xs), (statistics.stdev(xs) if len(xs) > 1 else None)
+
+
+def _ms_str(xs: list[float], fmt: str = ".3f") -> str:
+    m, s = _ms(xs)
+    if m is None:
+        return "—"
+    return f"{m:{fmt}}" if s is None else f"{m:{fmt}} ± {s:{fmt}}"
+
+
+_KHOA_BANG = [
+    ("F1 cấp Khoản", "f1_mean"),
+    ("F1 cấp Điều", "f1_dieu_mean"),
+    ("Norm Recall", "norm_recall_mean"),
+]
+
+
+def _gemini_graphrag() -> dict:
+    """Aggregate trên CẢ BA mẻ final → trung bình ± độ lệch chuẩn + ba giá trị lẻ.
+
+    Ba mẻ này chung MỘT ngữ cảnh đông cứng (context trùng khít 137/137) — chúng là
+    ba lần SINH, không phải ba lần truy hồi. Nên độ lệch chuẩn ở đây đo đúng một
+    thứ: tính ngẫu nhiên của Gemini. Đó cũng là lý do hàng Gemini báo N=3 còn hàng
+    cục bộ báo N=1 (xem `_ghi_chu_bat_doi_xung`).
+    """
+    tung_me: list[dict] = []
+    for rel in GEMINI_GRAPHRAG_RUNS:
+        agg, loi = _agg_file(rel)
+        tung_me.append({"file": rel, "agg": agg, "loi": loi})
+    co = [m["agg"] for m in tung_me if m["agg"]]
+    return {
+        "tung_me": tung_me,
+        "n": len(co),
+        "gia_tri": {khoa: [a[khoa] for a in co if a.get(khoa) is not None]
+                    for _, khoa in _KHOA_BANG},
+        "tu_choi": [a["negative_correct_rate"] for a in co
+                    if a.get("negative_correct_rate") is not None],
+        "tu_choi_mau_so": co[0].get("negative_count") if co else None,
+    }
+
+
+def _gemini_naive() -> dict:
+    """MỌI `results_baseline_*.json` trong data/evaluation/ — liệt kê, không chọn.
+
+    `docs/V3_RESULTS.md` §3 nói "trung bình từng câu qua cả 3 mẻ của mỗi hệ" nhưng
+    KHÔNG ghi ba mẻ baseline nào. Script này KHÔNG tự chọn ba mẻ — tự chọn là dựng
+    lại đúng cái mập mờ đang cần gỡ. Nó liệt kê hết, chạy aggregate từng file, in ra
+    kèm số câu, rồi để người phụ trách xác nhận.
+    """
+    files = sorted(EVAL_DIR.glob("results_baseline_*.json"))
+    me: list[dict] = []
+    for p in files:
+        rel = _rel(p)
+        agg, loi = _agg_file(rel)
+        n_cau = None
+        try:
+            n_cau = len(json.loads(p.read_text(encoding="utf-8"))["results"])
+        except (OSError, ValueError, KeyError):
+            pass
+        me.append({"file": rel, "agg": agg, "loi": loi, "n_cau": n_cau})
+
+    # Phép lọc DUY NHẤT script tự làm, và nó được nói ra thành lời trong báo cáo:
+    # giữ các mẻ có CÙNG SỐ CÂU với mẻ đang dùng làm nguồn ngữ cảnh baseline. Thư mục
+    # còn cả mẻ 19 và 26 câu của bộ câu hỏi CŨ; gộp chúng vào một trung bình là trộn
+    # ba bộ câu hỏi khác nhau, và con số đó không so được với hàng nào.
+    # Lọc theo số câu ≠ chọn mẻ. Vẫn phải người phụ trách duyệt.
+    n_src = None
+    p_src = REPO / SRC_BASELINE
+    if p_src.exists():
+        try:
+            n_src = len(json.loads(p_src.read_text(encoding="utf-8"))["results"])
+        except (OSError, ValueError, KeyError):
+            n_src = None
+    cung = [m for m in me if n_src and m["n_cau"] == n_src]
+    return {"me": me, "cung": cung, "n_cau_src": n_src}
+
+
+def _gia_tri(me: list[dict], khoa: str) -> list[float]:
+    return [m["agg"][khoa] for m in me
+            if m.get("agg") and isinstance(m["agg"].get(khoa), (int, float))]
+
+
+def _ghi_chu_bang_1(gem_g: dict, gem_n: dict) -> list[str]:
+    """Ba chú giải bắt buộc của bảng 1: cơ sở tỉ lệ, bất đối xứng N, chi tiết Gemini."""
+    L = [
+        "",
+        "### 1.1 Cơ sở của cột **Tỉ lệ G/N** — MỘT cơ sở duy nhất cho mọi hàng",
+        "",
+        "Tỉ lệ = `aggregate.f1_mean` (GraphRAG) chia `aggregate.f1_mean` (Naive RAG),",
+        "**cả hai tính trên TOÀN BỘ 137 câu của file kết quả**, gồm cả 14 câu phủ định.",
+        "Hàng Gemini lấy trung bình `f1_mean` của các mẻ rồi mới chia.",
+        "",
+        "Ghi rõ vì báo cáo trước **trộn hai cơ sở** trong cùng một bảng: tỉ lệ của hàng",
+        "Gemini tính trên 123 câu ghép cặp (đã loại câu phủ định), còn tỉ lệ của hàng",
+        "cục bộ tính trên aggregate đầy đủ. Hai cơ sở cho hai con số không so được với",
+        "nhau, mà bảng lại xếp chúng cạnh nhau như thể so được. Ở đây mọi hàng dùng",
+        "aggregate đầy đủ — chọn nó vì đó là đại lượng mà cả sáu ô cục bộ đều có sẵn,",
+        "không phải vì nó tốt hơn. Muốn dùng cơ sở 123 câu ghép cặp thì phải đổi cho",
+        "**cả bảng**, không đổi cho một hàng.",
+        "",
+        "### 1.2 Vì sao N của hàng Gemini khác N của hàng cục bộ",
+        "",
+        "Mô hình cục bộ chạy qua llama.cpp với `seed` cố định trên phần cứng đã ghim →",
+        "**tất định theo seed**: ở phiên 1, hai lần chạy cùng seed cho câu trả lời trùng",
+        "khít 15/15. Với một quá trình tất định thì N=1 đã là bức tranh đầy đủ, chạy",
+        "thêm chỉ tốn giờ GPU để chép lại cùng một file.",
+        "",
+        "Gemini thì có yếu tố ngẫu nhiên không tắt được, nên hàng đó báo trung bình ±",
+        "độ lệch chuẩn qua nhiều lần **sinh trên CÙNG một ngữ cảnh đông cứng** — ba mẻ",
+        "`final1/2/3` có `context` trùng khít 137/137, tức độ lệch chuẩn ở đây đo đúng",
+        "một thứ: dao động của mô hình sinh, không lẫn dao động của truy hồi.",
+        "",
+        "### 1.3 Hàng Gemini · GraphRAG — ba mẻ, giá trị lẻ",
+        "",
+        "| Mẻ | F1 cấp Khoản | F1 cấp Điều | Norm Recall | Từ chối đúng |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for m in gem_g["tung_me"]:
+        if not m["agg"]:
+            L.append(f"| `{m['file']}` | — | — | — | — · **{m['loi']}** |")
+            continue
+        a = m["agg"]
+        L.append(f"| `{m['file']}` | {_f(a['f1_mean'], '.4f')} | "
+                 f"{_f(a['f1_dieu_mean'], '.4f')} | {_f(a['norm_recall_mean'], '.4f')} | "
+                 f"{_tu_choi(a)} |")
+    L += [
+        "",
+        f"Trung bình ± độ lệch chuẩn trên {gem_g['n']} mẻ (chính là hàng Gemini ·",
+        "GraphRAG của bảng 1). Ba giá trị lẻ in ở đây để kiểm lại được bằng tay.",
+        "",
+        "Độ lệch chuẩn ở đây là **độ lệch chuẩn MẪU** (`statistics.stdev`, chia n−1).",
+        "`docs/V3_RESULTS.md` dùng độ lệch chuẩn tổng thể (chia n), nên chữ số cuối có",
+        "thể lệch — vd Norm Recall 0.006 ở đây so với 0.005 ở đó. Cùng dữ liệu, khác",
+        "quy ước; ghi ra để không ai đi tìm một sai lệch không tồn tại.",
+        "",
+        "### 1.4 Hàng Gemini · Naive RAG — MỌI mẻ tìm thấy, không chọn lọc",
+        "",
+        f"Quét `data/evaluation/results_baseline_*.json`: tìm thấy "
+        f"**{len(gem_n['me'])}** file.",
+        "",
+        "| Mẻ | số câu | F1 cấp Khoản | F1 cấp Điều | Norm Recall | Từ chối đúng |",
+        "|---|---:|---:|---:|---:|---:|",
+    ]
+    for m in gem_n["me"]:
+        if not m["agg"]:
+            L.append(f"| `{m['file']}` | {m['n_cau'] or '—'} | — | — | — | "
+                     f"**{m['loi']}** |")
+            continue
+        a = m["agg"]
+        L.append(f"| `{m['file']}` | {m['n_cau'] or '—'} | {_f(a['f1_mean'], '.4f')} | "
+                 f"{_f(a['f1_dieu_mean'], '.4f')} | {_f(a['norm_recall_mean'], '.4f')} | "
+                 f"{_tu_choi(a)} |")
+
+    n_cau_khac = sorted({m["n_cau"] for m in gem_n["me"] if m["n_cau"]})
+    cung, n_src = gem_n["cung"], gem_n["n_cau_src"]
+    L += [
+        "",
+        "**Trung bình ± độ lệch chuẩn trên TOÀN BỘ các mẻ tìm được** "
+        f"(N={len(_gia_tri(gem_n['me'], 'f1_mean'))}, "
+        f"số câu gặp phải: {n_cau_khac}): "
+        f"F1 Khoản {_ms_str(_gia_tri(gem_n['me'], 'f1_mean'))} · "
+        f"F1 Điều {_ms_str(_gia_tri(gem_n['me'], 'f1_dieu_mean'))} · "
+        f"NormR {_ms_str(_gia_tri(gem_n['me'], 'norm_recall_mean'))}.",
+        "",
+        "**Con số đó KHÔNG dùng được** và không phải cái nằm ở bảng 1: nó gộp nhiều bộ",
+        "câu hỏi khác nhau vào một trung bình. In ra vì đề bài yêu cầu liệt kê hết,",
+        "không giấu mẻ nào.",
+        "",
+        f"Hàng \"Gemini 2.5 Pro · Naive RAG\" của bảng 1 lấy các mẻ có **cùng {n_src} câu**"
+        if n_src else "Hàng Naive RAG của bảng 1 để trống — không xác định được số câu"
+        " của nguồn baseline.",
+    ]
+    if n_src:
+        L += [
+            f"với `{SRC_BASELINE}` — {len(cung)} mẻ, "
+            f"N={len(_gia_tri(cung, 'f1_mean'))}:",
+            "",
+            *[f"- `{m['file']}`" for m in cung],
+            "",
+            f"F1 Khoản {_ms_str(_gia_tri(cung, 'f1_mean'))} · "
+            f"F1 Điều {_ms_str(_gia_tri(cung, 'f1_dieu_mean'))} · "
+            f"NormR {_ms_str(_gia_tri(cung, 'norm_recall_mean'))}.",
+        ]
+    L += [
+        "",
+        "> ### ⚠️ HÀNG NAIVE RAG PHẢI ĐƯỢC XÁC NHẬN TRƯỚC KHI VÀO KHOÁ LUẬN",
+        ">",
+        "> `docs/V3_RESULTS.md` §3 viết \"trung bình từng câu qua cả **3 mẻ của mỗi hệ**\"",
+        "> nhưng **không ghi ba mẻ baseline nào**. Script này KHÔNG tự chọn ba mẻ — tự",
+        "> chọn là dựng lại đúng cái mập mờ đang cần gỡ, và ba mẻ khác nhau cho ba con",
+        "> số khác nhau ở mẫu số của cột Tỉ lệ G/N.",
+        ">",
+        f"> Cái nó làm là một phép **lọc theo số câu** ({n_src} câu), không phải phép",
+        f"> chọn mẻ: hiện lọc ra {len(cung)} mẻ chứ không phải 3. Nếu ba mẻ đúng là ba",
+        "> trong số đó thì con số ở bảng 1 sẽ đổi. Người phụ trách phải chỉ đúng ba mẻ.",
+        ">",
+        "> Ký hiệu ⚠️ ở cột N của hàng đó nhắc lại đúng điều này.",
+    ]
+    return L
+
+
 def _tu_choi(agg: dict) -> str:
     if "negative_correct_rate" not in agg:
         return "—"
@@ -1460,47 +1693,78 @@ def stage_table(args) -> int:
         ("Cục bộ đã tinh chỉnh, 0-shot", 2, 1),
     ]
 
+    gem_g = _gemini_graphrag()
+    gem_n = _gemini_naive()
+    srcs = _src_by_system(args)
+
     L: list[str] = [
         "# TASK-FT-06 — Ma trận mục 4.7: ba mô hình sinh × hai khuôn ngữ cảnh",
         "",
         "Sinh bởi `finetune/kaggle_ft06.py --stage table`. Mọi con số ở bảng 1 do",
-        "`src/evaluation/metrics.py::aggregate` tính (dòng 195-260) — script này KHÔNG",
-        "tự tính lại thang đo nào.",
+        "`src/evaluation/metrics.py::aggregate` tính (dòng 189-256) — script này KHÔNG",
+        "tự tính lại thang đo nào, và KHÔNG ghim số cứng chép từ báo cáo.",
         "",
-        f"- Nguồn ngữ cảnh: `{SRC_GRAPHRAG}` và `{SRC_BASELINE}` — **cùng một mẻ chạy**,",
-        "  chính mẻ sinh ra 0.578 / 0.435 ở hàng Gemini. Truy hồi đóng băng ở cả sáu ô.",
+        f"- Nguồn ngữ cảnh: `{srcs['graphrag']}` (GraphRAG) và",
+        f"  `{srcs['baseline']}` (Naive RAG) — **hai mẻ khác nhau, có chủ ý**.",
+        "  Vế Naive RAG không đi qua bộ lập kế hoạch truy vấn (`naive_rag.py:339,361`",
+        "  truyền `query_plan=None`) nên sửa đổi ở tầng đó không chạm tới nó và nó",
+        "  không cần chạy lại; vế GraphRAG lấy ngữ cảnh mới sau khi sửa (`V3_RESULTS.md`",
+        "  §1). Truy hồi vẫn đóng băng ở cả sáu ô — mỗi ô chỉ đổi mô hình sinh.",
         "- Tham số sinh: bộ đã chốt ở `gate_base_model.md` §3 (temperature 0.7 · top_p 0.8",
         "  · top_k 20 · min_p 0 · **presence_penalty 0** · seed 42 · max_new_tokens 2048",
         "  · n_ctx 16384 · n_gpu_layers −1), giống hệt nhau ở cả sáu ô.",
-        "- N=1 cho mọi ô cục bộ — chốt ở kế hoạch §TASK-FT-06 (tính tất định đã đo).",
+        "- `finetune/data/mode_map.json` ghim cố định (13 id `irac`), CHUNG cho lượt",
+        "  trước và lượt này — `mode` là đầu vào của khâu sinh, để nó trôi theo mẻ thì",
+        "  Δ trong cùng một hàng lẫn cả khác biệt chế độ.",
         "",
         "## 1. Bốn thang đo của Bảng 4.5",
         "",
-        "| Mô hình sinh | Hệ truy hồi | F1 cấp Khoản | F1 cấp Điều | Norm Recall | Từ chối đúng (x/14) | Δ (F1 Khoản) |",
-        "|---|---|---:|---:|---:|---:|---:|",
-        f"| Gemini 2.5 Pro | Naive RAG | {GEMINI_F1_NAIVE:.3f} | — | — | — | |",
-        f"| Gemini 2.5 Pro | GraphRAG | {GEMINI_F1_GRAPHRAG:.3f} | — | — | — | **+{GEMINI_DELTA:.3f}** |",
+        "| Mô hình sinh | Hệ truy hồi | N | F1 cấp Khoản | F1 cấp Điều | Norm Recall | "
+        "Từ chối đúng | Δ (F1 Khoản) | Tỉ lệ G/N |",
+        "|---|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
+
+    # --- hàng Gemini: TÍNH từ file, không ghim ---------------------------------
+    # Vế Naive dùng các mẻ CÙNG SỐ CÂU với nguồn baseline — thư mục còn cả mẻ 19 và
+    # 26 câu của bộ câu hỏi cũ, gộp vào là trộn ba bộ câu hỏi. Bảng đầy đủ + trung
+    # bình gộp-tất-cả nằm ở §1.4, kèm cảnh báo phải xác nhận.
+    gv, gn = gem_g["gia_tri"], _gia_tri(gem_n["cung"], "f1_mean")
+    nv = {khoa: _gia_tri(gem_n["cung"], khoa) for _, khoa in _KHOA_BANG}
+    n_tu_choi = [m["agg"]["negative_correct_rate"] for m in gem_n["cung"]
+                 if m.get("agg") and m["agg"].get("negative_correct_rate") is not None]
+    L += [
+        f"| Gemini 2.5 Pro | Naive RAG | {len(gn)} ⚠️ | {_ms_str(nv['f1_mean'])} | "
+        f"{_ms_str(nv['f1_dieu_mean'])} | {_ms_str(nv['norm_recall_mean'])} | "
+        f"{_ms_str(n_tu_choi)} | | |",
+    ]
+    gm, _ = _ms(gv["f1_mean"])
+    nm, _ = _ms(gn)
+    delta_gem = f"**{gm - nm:+.3f}**" if (gm is not None and nm is not None) else "—"
+    ti_le_gem = f"{gm / nm:.3f}" if (gm and nm) else "—"
+    L += [
+        f"| Gemini 2.5 Pro | GraphRAG | {gem_g['n']} | {_ms_str(gv['f1_mean'])} | "
+        f"{_ms_str(gv['f1_dieu_mean'])} | {_ms_str(gv['norm_recall_mean'])} | "
+        f"{_ms_str(gem_g['tu_choi'])} | {delta_gem} | {ti_le_gem} |",
+    ]
+
     for ten, i_naive, i_graph in hang:
         n_, g_ = o[i_naive], o[i_graph]
         for nhan, cell_data in (("Naive RAG", n_), ("GraphRAG", g_)):
             if cell_data is None:
-                L.append(f"| {ten} | {nhan} | — | — | — | — | |")
+                L.append(f"| {ten} | {nhan} | — | — | — | — | — | | |")
                 continue
             a = cell_data["agg"]
-            delta = ""
+            delta = ti_le = ""
             if nhan == "GraphRAG" and n_ is not None:
                 d = a["f1_mean"] - n_["agg"]["f1_mean"]
                 delta = f"**{d:+.3f}**"
-            L.append(f"| {ten} | {nhan} | {_f(a['f1_mean'])} | {_f(a['f1_dieu_mean'])} "
-                     f"| {_f(a['norm_recall_mean'])} | {_tu_choi(a)} | {delta} |")
+                cs = n_["agg"]["f1_mean"]
+                ti_le = f"{a['f1_mean'] / cs:.3f}" if cs else "—"
+            L.append(f"| {ten} | {nhan} | 1 | {_f(a['f1_mean'])} | {_f(a['f1_dieu_mean'])} "
+                     f"| {_f(a['norm_recall_mean'])} | {_tu_choi(a)} | {delta} | {ti_le} |")
 
+    L += _ghi_chu_bang_1(gem_g, gem_n)
     L += [
-        "",
-        "Hàng Gemini lấy từ báo cáo (kế hoạch §2). Ba cột còn lại của hàng đó để `—` có",
-        "chủ ý: chúng không nằm trong ba con số mà kế hoạch ghim, và điền bằng số lấy từ",
-        "chỗ khác (khác N, khác cách gộp) là trộn hai đại lượng. Lấy ở `docs/V2_RESULTS.md`",
-        "khi cần, và ghi rõ nguồn.",
         "",
         "## 2. Sức khoẻ từng ô — đọc TRƯỚC khi tin bảng 1",
         "",
