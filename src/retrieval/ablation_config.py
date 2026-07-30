@@ -65,6 +65,15 @@ ABLATIONS: dict[str, AblationConfig] = {
     "no-temporal": AblationConfig(name="no-temporal", no_temporal=True),
     "no-traversal": AblationConfig(name="no-traversal", no_traversal=True),
     "dense-only": AblationConfig(name="dense-only", dense_only=True),
+    # Bậc tham chiếu E2: GraphRAG giữ NGUYÊN ba giai đoạn truy hồi (định tuyến,
+    # duyệt IMPLEMENTS/AMENDS, tìm kiếm lai) nhưng TẮT ĐỒNG THỜI ba bộ lọc do
+    # Ontology dẫn dắt. Chênh lệch với "full" = đóng góp gộp của ba bộ lọc.
+    # LƯU Ý khi viết báo cáo: bậc này VẪN dùng Ontology (đồ thị theo lược đồ 9
+    # thực thể/10 quan hệ, traversal theo quan hệ có kiểu) — không được gọi là
+    # "GraphRAG không dùng Ontology".
+    "graphrag-basic": AblationConfig(
+        name="graphrag-basic", no_theme=True, no_jurisdiction=True, no_temporal=True
+    ),
 }
 
 
