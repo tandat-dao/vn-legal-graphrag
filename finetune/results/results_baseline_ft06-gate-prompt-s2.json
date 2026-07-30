@@ -1,0 +1,124 @@
+{
+  "system": "baseline",
+  "test_set": "data/evaluation/test_set_v2.json",
+  "timestamp": "20260730-060057",
+  "total_elapsed_s": 6.6,
+  "replay": {
+    "nguon": "data/evaluation/results_baseline_20260710-085236.json",
+    "ids_loc": null,
+    "backend": "llama-cpp:ft04-5k-2ep-20260729-2122-Q4_K_M.gguf",
+    "model": "finetune/models/ft04-5k-2ep-20260729-2122-Q4_K_M.gguf",
+    "gen_params": {
+      "temperature": 0.7,
+      "top_p": 0.8,
+      "top_k": 20,
+      "min_p": 0.0,
+      "presence_penalty": 0.0,
+      "seed": 42,
+      "max_new_tokens": 2048,
+      "greedy": false
+    },
+    "n_shot": 2,
+    "n_ctx": 16384,
+    "include_schema_b": false,
+    "prompt_builder": "build_messages",
+    "soft_article_hit_mean": 1.0,
+    "soft_article_hit_do_duoc": 1,
+    "soft_article_mentions_tong": 3,
+    "n_qua_mo_hinh": 1,
+    "n_sao_chep_hang_so": 0,
+    "n_hit_token_cap": 0,
+    "ids_hit_token_cap": [],
+    "format_ok_rate": 1.0,
+    "format_ok_mau_so": 1,
+    "prompt_tokens_max": 6594,
+    "prompt_tokens_do_duoc": 1,
+    "prompt_len_lech_max": 56
+  },
+  "results": [
+    {
+      "id": "V001",
+      "question": "Gia đình tôi sống tại một xã thuộc huyện Củ Chi, TP.HCM. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?",
+      "gap_type": "gap2",
+      "theme": "dat-dai",
+      "jurisdiction": "tp-hcm",
+      "difficulty": "easy",
+      "system": "baseline",
+      "answer": "</tool_call>\n\n<tool_call>\n\nTrả lời câu hỏi của bạn: hạn mức giao đất ở cho cá nhân tại nông thôn thuộc huyện Củ Chi, TP.HCM là không quá 300 m2/cá nhân [Điều 3, Khoản 3, Điểm a, Văn bản quyet-dinh-69-2024-qd-ubnd-tp-hcm].",
+      "pred_citations": [
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "diem": "a",
+          "tiet": null,
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+          "loai": "dieu"
+        }
+      ],
+      "ground_truth_citations": [
+        {
+          "dieu": "3",
+          "khoan": "3",
+          "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm"
+        }
+      ],
+      "citation_score": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 1,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "citation_score_dieu": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "pred_count": 1,
+        "gt_count": 1,
+        "match_count": 1
+      },
+      "norm_recall": 1.0,
+      "negative_correct": null,
+      "faithfulness": null,
+      "elapsed_seconds": 6.6,
+      "context_used": true,
+      "top_k_count": 10,
+      "context": "--- Văn bản: quyet-dinh-69-2024-qd-ubnd-tp-hcm, chunk 1 ---\nết giao đất ở cho cá nhân.\n\n## Điều 3. Hạn mức giao đất ở cho cá nhân trên địa bàn Thành phố\n\n### Khoản 1.\n\nCác Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và thành phố Thủ Đức: không quá 160 m2/cá nhân.\n\n### Khoản 2.\n\nThị trấn các huyện và khu vực đã thực hiện dự án xây dựng đô thị mới theo quy hoạch hệ thống đô thị và nông thôn tại các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ: không quá 200 m2/cá nhân.\n\n### Khoản 3.\n\nCác xã của các huyện Bình\n\n--- Văn bản: quyet-dinh-18-2016-qd-ubnd-tp-hcm, chunk 0 ---\n## Điều 1. Quy định hạn mức đất ở đối với hộ gia đình, cá nhân và mục đích áp dụng hạn mức như sau\n\n### Khoản 1.\n\nHạn mức đất ở đối với hộ gia đình, cá nhân:\n\n#### Điểm a.\n\nCác quận 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú không quá 160m2/hộ.\n\n#### Điểm b.\n\nCác quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện: Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 200m2/hộ.\n\n#### Điểm c.\n\nKhu quy hoạch phát triển đô thị không quá 250m2/hộ.\n\n#### Điểm d.\n\nHuyện Cần Giờ và cá\n\n--- Văn bản: quyet-dinh-18-2016-qd-ubnd-tp-hcm, chunk 1 ---\ng quá 250m2/hộ.\n\n#### Điểm d.\n\nHuyện Cần Giờ và các khu dân cư nông thôn tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 300m2/hộ.\n\n### Khoản 2.\n\nHạn mức đất ở quy định tại khoản 1 Điều này áp dụng cho các mục đích sau:\n\n#### Điểm a.\n\nGiao đất cho hộ gia đình, cá nhân tự xây nhà ở.\n\n#### Điểm b.\n\nXác định nghĩa vụ tài chính trong các trường hợp sau:\n- Giao đất cho hộ gia đình, cá nhân tự xây nhà ở;\n- Cho phép hộ gia đình, cá nhân chuyển mục đích sử dụng đất sang đất ở;\n- Cấp \"Giấy chứ\n\n--- Văn bản: quyet-dinh-69-2024-qd-ubnd-tp-hcm, chunk 0 ---\n## Điều 1. Phạm vi điều chỉnh\n\nQuyết định này quy định hạn mức giao đất ở cho cá nhân tại nông thôn, tại đô thị trên địa bàn Thành phố Hồ Chí Minh theo quy định tại khoản 2 Điều 195 và khoản 2 Điều 196 Luật Đất đai ngày 18 tháng 01 năm 2024.\n\n## Điều 2. Đối tượng áp dụng\n\n### Khoản 1.\n\nCá nhân thuộc đối tượng và đủ điều kiện giao đất ở theo quy định của Luật Đất đai ngày 18 tháng 01 năm 2024.\n\n### Khoản 2.\n\nCác cơ quan nhà nước có liên quan đến việc giải quyết giao đất ở cho cá nhân.\n\n## Điều 3. Hạn mức gia\n\n--- Văn bản: quyet-dinh-18-2016-qd-ubnd-tp-hcm, chunk 6 ---\n, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú không quá 200m2/hộ.\n\n### Khoản 2.\n\nCác quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện: Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 250m2/hộ.\n\n### Khoản 3.\n\nKhu quy hoạch phát triển đô thị không quá 300m2/hộ.\n\n### Khoản 4.\n\nHuyện Cần Giờ và các khu dân cư nông thôn tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 400m2/hộ.\n\n## Điều 4. Hiệu lực thi hành\n\n### Khoản 1.\n\nQuyết định này có hiệu lực thi hành sau mười (10) ngày, kể từ ngà\n\n--- Văn bản: luat-dat-dai-2024, chunk 534 ---\n.\n\nKhông quá 03 ha cho mỗi loại đất đối với tỉnh, thành phố trực thuộc trung ương thuộc khu vực Đông Nam Bộ và khu vực đồng bằng sông Cửu Long;\n\n#### Điểm b.\n\nKhông quá 02 ha cho mỗi loại đất đối với tỉnh, thành phố trực thuộc trung ương khác.\n\n### Khoản 2.\n\nHạn mức giao đất trồng cây lâu năm cho cá nhân không quá 10 ha đối với xã, phường, thị trấn ở đồng bằng; không quá 30 ha đối với xã, phường, thị trấn ở trung du, miền núi.\n\n### Khoản 3.\n\nHạn mức giao đất cho cá nhân không quá 30 ha đối với mỗi loại đất:\n\n--- Văn bản: luat-dat-dai-2024, chunk 535 ---\ncho cá nhân không quá 30 ha đối với mỗi loại đất:\n\n#### Điểm a.\n\nĐất rừng phòng hộ;\n\n#### Điểm b.\n\nĐất rừng sản xuất là rừng trồng.\n\n### Khoản 4.\n\nCá nhân được giao nhiều loại đất trong các loại đất trồng cây hằng năm, đất nuôi trồng thủy sản, đất làm muối thì tổng hạn mức giao đất không quá 05 ha; trường hợp được giao thêm đất trồng cây lâu năm thì hạn mức đất trồng cây lâu năm không quá 05 ha đối với xã, phường, thị trấn ở đồng bằng, không quá 25 ha đối với xã, phường, thị trấn ở trung du, miền núi; trườ\n\n--- Văn bản: quyet-dinh-92-2025-qd-ubnd-dong-nai, chunk 1 ---\nbàn tỉnh Đồng Nai.\n\n## Điều 3. Hạn mức giao đất ở\n\n### Khoản 1. Tại đô thị.\n\n#### Điểm a.\n\nCác phường: Biên Hòa, Trấn Biên, Tam Hiệp, Long Bình, Trảng Dài, Hố Nai, Long Hưng, Tam Phước, Phước Tân, Bình Lộc, Bảo Vinh, Xuân Lập, Long Khánh, Hàng Gòn và phường Tân Triều: không quá 200 m2.\n\n#### Điểm b.\n\nCác phường: Minh Hưng, Chơn Thành, Bình Long, An Lộc, Phước Bình, Phước Long, Đồng Xoài và phường Bình Phước: không quá 300 m2.\n\n### Khoản 2. Tại nông thôn.\n\n#### Điểm a.\n\nCác xã: Đại Phước, Nhơn Trạch, Phước A\n\n--- Văn bản: nghi-quyet-02-2023-nq-hdnd-tp-hcm, chunk 10 ---\nđịnh hồ sơ cấp giấy chứng nhận quyền sử dụng đất trên địa bàn Thành phố Hồ Chí Minh.\n\n### Khoản 1. Trường hợp giao đất, cho thuê đất.\n\n#### Điểm a. Đối với hộ gia đình, cá nhân, cộng đồng dân cư.\n\n| Quy mô diện tích | Tại quận | Tại huyện |\n|-------------------|----------|-----------|\n| Nhỏ hơn 500m²    | 50.000   | 25.000    |\n| Từ 500m² trở lên | 500.000  | 250.000   |\n\n#### Điểm b. Đối với tổ chức, cơ sở tôn giáo.\n\n| Quy mô diện tích | Mức thu |\n|-------------------|---------|\n| Nhỏ hơn 10.000m² | 2.000\n\n--- Văn bản: nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai, chunk 2 ---\nhu: trẻ em, hộ nghèo, người cao tuổi, người khuyết tật, người có công với cách mạng; cấp Giấy chứng nhận quyền sử dụng đất lần đầu đối với hộ gia đình cá nhân.\n\na) Trường hợp giao đất, cho thuê đất:\n\n| STT | Quy mô diện tích (m²) | Mức thu tại quận (đồng/hồ sơ) | Mức thu tại huyện (đồng/hồ sơ) |\n|---|---|---|---|\n| I | Đối với hộ gia đình, cá nhân | | |\n| 1 | Nhỏ hơn 500m² | 50.000 | 25.000 |\n| 2 | Từ 500m² trở lên | 500.000 | 250.000 |\n| II | Đối với tổ chức | | |\n| 1 | Nhỏ hơn 10.000m² | 2.000.000 | 2.000",
+      "verifier": null,
+      "response_mode": "general",
+      "format_ok": true,
+      "soft_article_hit": 1.0,
+      "soft_article": {
+        "n_mentions": 3,
+        "n_hit": 3,
+        "hit_rate": 1.0,
+        "theo_loai": {
+          "dieu": {
+            "n": 1,
+            "n_hit": 1,
+            "miss": []
+          },
+          "khoan": {
+            "n": 1,
+            "n_hit": 1,
+            "miss": []
+          },
+          "slug": {
+            "n": 1,
+            "n_hit": 1,
+            "miss": []
+          }
+        }
+      },
+      "gt_nonempty": true,
+      "hit_token_cap": false,
+      "n_tokens_out": 85,
+      "n_tokens_prompt": 6594,
+      "prompt_len_method": "gguf-chat-template-jinja2",
+      "n_tokens_prompt_backend": 6538,
+      "prompt_len_lech": 56,
+      "frozen_copy": false
+    }
+  ]
+}
