@@ -77,3 +77,7 @@ finetune/data/*.jsonl
 # File dở dang của replay.py (--resume đọc lại) + đầu ra mock khi verify schema
 finetune/results/*.partial.jsonl
 finetune/results/*_mock_*.json
+# Log của hai luồng --parallel (FT-06). Trên Kaggle chúng nằm ở /kaggle/working;
+# ngoài Kaggle thì LOG_DIR lùi về finetune/results/. Nội dung đã được in gộp vào
+# output notebook nên không cần commit.
+finetune/results/*.log

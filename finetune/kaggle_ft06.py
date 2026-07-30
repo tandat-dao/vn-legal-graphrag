@@ -12,6 +12,10 @@ HF ngay sau từng ô thay vì đợi tới cuối.
     run            sáu ô, mỗi ô một lệnh `finetune.replay`, đẩy HF sau từng ô
     table          gom sáu file kết quả → finetune/reports/ft06_matrix.md
 
+Kaggle cấp **T4 x2** → xem khối chú thích "Ghim GPU" dưới đây: mỗi lời gọi `replay.py`
+ghim đúng MỘT card qua `CUDA_VISIBLE_DEVICES` của subprocess. `--parallel` (mặc định
+TẮT) chia sáu ô thành hai luồng, mỗi luồng một card, trong luồng thì tuần tự.
+
 Sáu ô (thứ tự đã sắp có chủ ý — ô giá trị nhất trước, để session đứt thì phần quan
 trọng đã có trên HF):
 
@@ -210,8 +214,36 @@ CELLS = [
     Cell(5, "base", 0, "graphrag", "ft06-base-s0"),
     Cell(6, "base", 0, "baseline", "ft06-base-s0"),
 ]
+CELL_BY_IDX = {c.idx: c for c in CELLS}
 
-STATUS_PATH = REPORTS_DIR / "ft06_run_status.json"
+# Cặp ô cùng model + cùng n_shot, khác nguồn ngữ cảnh — dùng ở chặng table để đối
+# chiếu elapsed_seconds giữa hai card.
+CAP_O = [(1, 2), (3, 4), (5, 6)]
+
+# --- Ghim GPU -------------------------------------------------------------------
+# Kaggle cấp T4 **x2**. Với `--n-gpu-layers -1` và hai card nhìn thấy được, llama.cpp
+# tự chia layer qua cả hai. Q4_K_M chỉ 2,4 GB nên chia KHÔNG nhanh hơn, mà đổi thứ tự
+# rút gọn → có thể lệch số học. Nguy hiểm thật không phải chậm mà là **không nhất
+# quán giữa các ô**: khi đó cột Δ đo lẫn cả khác biệt phần cứng.
+#
+# Nên MỌI lời gọi `replay.py` chạy với `CUDA_VISIBLE_DEVICES` ghim đúng MỘT card,
+# truyền qua env của subprocess — KHÔNG đặt biến toàn cục cho cả script (đặt toàn cục
+# thì chặng gate-template/table cũng bị ảnh hưởng, và không còn thấy được ô nào ghim
+# card nào).
+#
+# Chia luồng khi --parallel: mỗi luồng một card, trong luồng thì TUẦN TỰ. Không chia
+# một ô qua hai card, không chạy hai ô cùng lúc trên cùng một card (tranh VRAM + tranh
+# I/O làm `elapsed_seconds` vô nghĩa, mà đó là số liệu đi vào bảng).
+LANES: dict[int, list[int]] = {
+    0: [1, 3, 2],   # FT s0 graphrag → base s2 graphrag → FT s0 baseline
+    1: [5, 4, 6],   # base s0 graphrag → base s2 baseline → base s0 baseline
+}
+GPU_TUAN_TU = 0     # chế độ tuần tự: mọi ô trên card này
+
+GPU_INFO_PATH = REPORTS_DIR / "ft06_gpu_info.json"
+# Log của hai luồng ghi ra file riêng rồi in gộp khi cả hai xong. KHÔNG dùng threading
+# để trộn stdout — log lẫn vào nhau là không đọc được.
+LOG_DIR = Path("/kaggle/working") if Path("/kaggle/working").is_dir() else RESULTS_DIR
 
 
 # ---------------------------------------------------------------------------
@@ -289,6 +321,80 @@ def _rel(p: Path) -> str:
         return str(p.relative_to(REPO)).replace("\\", "/")
     except ValueError:
         return str(p).replace("\\", "/")
+
+
+# ---------------------------------------------------------------------------
+# Ghim GPU
+# ---------------------------------------------------------------------------
+
+def _env_ghim_gpu(dev: int) -> dict[str, str]:
+    """env cho MỘT subprocess, ghim đúng một card. Không đụng os.environ của script."""
+    env = os.environ.copy()
+    env["CUDA_VISIBLE_DEVICES"] = str(dev)
+    return env
+
+
+def _nvidia_smi() -> list[str]:
+    """`nvidia-smi --query-gpu=index,name,memory.total --format=csv` → list dòng."""
+    try:
+        r = subprocess.run(
+            ["nvidia-smi", "--query-gpu=index,name,memory.total", "--format=csv"],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60)
+    except (OSError, subprocess.SubprocessError) as e:  # noqa: PERF203
+        return [f"(không chạy được nvidia-smi: {type(e).__name__})"]
+    if r.returncode != 0:
+        return [f"(nvidia-smi rc={r.returncode}: {(r.stderr or '').strip()[:200]})"]
+    return [l for l in (r.stdout or "").splitlines() if l.strip()]
+
+
+def _ghim_map(song_song: bool, gpu: int | None) -> dict[int, int]:
+    """{số ô: card}. Nguồn duy nhất cho cả lúc chạy và lúc lập bảng."""
+    if gpu is not None:
+        return {c.idx: gpu for c in CELLS}
+    if song_song:
+        return {idx: dev for dev, idxs in LANES.items() for idx in idxs}
+    return {c.idx: GPU_TUAN_TU for c in CELLS}
+
+
+def _bao_cao_gpu(song_song: bool, gpu: int | None, nguon: str) -> dict:
+    """In + ghi ft06_gpu_info.json. Chặng table đọc lại để đưa vào ft06_matrix.md.
+
+    Đây là **giá trị ghim thứ bảy** của tuyên bố tái lập: mọi ô chạy trên ĐÚNG MỘT T4,
+    ghim tường minh. Phải ghi vào khoá luận cùng với sáu giá trị kia.
+    """
+    smi = _nvidia_smi()
+    # Số card NHÌN THẤY ĐƯỢC ở mức script (nvidia-smi bỏ dòng tiêu đề).
+    n_thay = max(0, len([l for l in smi if not l.lower().startswith("index")]))
+    ghim = _ghim_map(song_song, gpu)
+    che_do = ("song song, hai luồng, mỗi luồng một card" if song_song and gpu is None
+              else f"tuần tự, mọi ô trên card {ghim[1]}")
+
+    _tieu_de("GHIM PHẦN CỨNG — giá trị ghim thứ bảy của tuyên bố tái lập")
+    for l in smi:
+        print("  " + l)
+    print(f"\n  số card nhìn thấy được : {n_thay}")
+    print(f"  chế độ                 : {che_do}   ({nguon})")
+    print(f"  CUDA_VISIBLE_DEVICES của từng ô:")
+    for c in CELLS:
+        print(f"    ô {c.idx}  {c.model_key:<4} n_shot={c.n_shot}  {c.system:<8} "
+              f"→ CUDA_VISIBLE_DEVICES={ghim[c.idx]}")
+    if n_thay > 1 and not song_song and gpu is None:
+        print(f"\n  Ghi chú: thấy {n_thay} card nhưng chạy TUẦN TỰ trên card "
+              f"{GPU_TUAN_TU}. Đó là mặc định có chủ ý — mỗi ô vẫn ghim đúng một card, "
+              f"nên llama.cpp không chia layer qua hai card. Muốn dùng cả hai: --parallel.")
+
+    d = {
+        "nvidia_smi_csv": smi,
+        "n_card_nhin_thay": n_thay,
+        "che_do": che_do,
+        "song_song": bool(song_song and gpu is None),
+        "ghim_cuda_visible_devices": {str(k): v for k, v in ghim.items()},
+        "nguon": nguon,
+    }
+    GPU_INFO_PATH.parent.mkdir(parents=True, exist_ok=True)
+    GPU_INFO_PATH.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"\n  ghi → {_rel(GPU_INFO_PATH)}")
+    return d
 
 
 # ---------------------------------------------------------------------------
@@ -461,6 +567,10 @@ def stage_prep(args) -> int:
     else:
         print("  ❌ quá 10 vòng vẫn không import được", file=sys.stderr)
         return 1
+
+    # Chế độ ở đây là DỰ KIẾN (đọc từ cờ --parallel của chính lệnh prep); chặng run
+    # ghi lại lần nữa với nguồn "thực tế".
+    _bao_cao_gpu(args.parallel, args.gpu, "prep — dự kiến")
 
     print("\n✅ prep XONG. Chặng kế: --stage gate-template")
     return 0
@@ -691,15 +801,22 @@ def stage_gate_prompt(args) -> int:
 # CHẶNG run
 # ---------------------------------------------------------------------------
 
-def _doc_status() -> dict:
-    if STATUS_PATH.exists():
-        return json.loads(STATUS_PATH.read_text(encoding="utf-8"))
+def _status_path(gpu: int | None) -> Path:
+    """File trạng thái. Hai luồng song song phải ghi hai file khác nhau — chung một
+    file là hai tiến trình ghi đè lẫn nhau và mất một nửa báo cáo."""
+    hau_to = f"_gpu{gpu}" if gpu is not None else ""
+    return REPORTS_DIR / f"ft06_run_status{hau_to}.json"
+
+
+def _doc_status(p: Path) -> dict:
+    if p.exists():
+        return json.loads(p.read_text(encoding="utf-8"))
     return {}
 
 
-def _ghi_status(d: dict) -> None:
-    STATUS_PATH.parent.mkdir(parents=True, exist_ok=True)
-    STATUS_PATH.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
+def _ghi_status(p: Path, d: dict) -> None:
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _hf_keo_partial(cell: Cell, repo: str, prefix: str) -> None:
@@ -735,21 +852,103 @@ def _hf_day(paths: list[Path], repo: str, prefix: str) -> None:
                   f"      Kết quả vẫn còn ở {_rel(p)} — session chết là mất.")
 
 
+def _run_song_song(args) -> int:
+    """Hai luồng bằng subprocess, mỗi luồng ghim MỘT card, mỗi luồng một file log.
+
+    Không dùng threading: hai mẻ sinh mỗi mẻ 400+ dòng tiến độ, trộn vào một stdout là
+    không đọc được. Log riêng → in gộp khi cả hai xong.
+    """
+    g = _bao_cao_gpu(True, None, "run — thực tế")
+    n_thay = g.get("n_card_nhin_thay") or 0
+    if n_thay < len(LANES):
+        print(f"\n❌ --parallel cần {len(LANES)} card, chỉ thấy {n_thay}.\n"
+              f"   Ghim vào một card không tồn tại thì llama.cpp không thấy GPU nào và\n"
+              f"   ÂM THẦM lùi về CPU — ô đó chạy hàng giờ rồi cho ra số không so được\n"
+              f"   với ô chạy trên GPU. Bỏ --parallel để chạy tuần tự trên card "
+              f"{GPU_TUAN_TU}.", file=sys.stderr)
+        return 1
+    chon = set(args.cells) if args.cells else None
+
+    luong: list[dict] = []
+    for dev, idxs in LANES.items():
+        lane = [i for i in idxs if chon is None or i in chon]
+        if not lane:
+            print(f"  luồng card {dev}: không có ô nào được chọn → bỏ qua")
+            continue
+        log = LOG_DIR / f"ft06_gpu{dev}.log"
+        cmd = [sys.executable, str(Path(__file__).resolve()), "--stage", "run",
+               "--gpu", str(dev), "--cells", ",".join(str(i) for i in lane),
+               "--hf-repo", args.hf_repo, "--hf-prefix", args.hf_prefix]
+        if args.no_push:
+            cmd.append("--no-push")
+        print(f"\n  luồng card {dev}: ô {lane} → log {log}")
+        print("  $ " + " ".join(cmd))
+        fh = log.open("w", encoding="utf-8")
+        # env ghim card cho CẢ luồng con: mọi lời gọi replay.py bên trong nó kế thừa,
+        # và luồng con còn ghim lại lần nữa ở từng lời gọi (đai + dây lưng).
+        p = subprocess.Popen(cmd, cwd=REPO, stdout=fh, stderr=subprocess.STDOUT,
+                             env=_env_ghim_gpu(dev))
+        luong.append({"dev": dev, "o": lane, "log": log, "proc": p, "fh": fh})
+
+    print("\n  cả hai luồng đang chạy. Chờ… (mỗi luồng ~3 ô × 137 câu, tuần tự trong luồng)")
+    for L in luong:
+        # Chỉ CHỜ, không kill: một luồng hỏng thì luồng kia vẫn chạy tiếp.
+        L["rc"] = L["proc"].wait()
+        L["fh"].close()
+        print(f"  luồng card {L['dev']} kết thúc rc={L['rc']}")
+
+    for L in luong:
+        _tieu_de(f"LOG LUỒNG CARD {L['dev']} — ô {L['o']}  ({L['log']})")
+        print(L["log"].read_text(encoding="utf-8", errors="replace")
+              if L["log"].exists() else "(không có log)")
+
+    # Gộp hai file trạng thái để chặng table và người đọc thấy toàn cảnh.
+    gop: dict = {}
+    for L in luong:
+        gop.update(_doc_status(_status_path(L["dev"])))
+    _ghi_status(_status_path(None), gop)
+
+    _tieu_de("TỔNG KẾT SÁU Ô")
+    for c in CELLS:
+        v = gop.get(c.tag + "|" + c.system)
+        if v is None:
+            print(f"  {c.nhan:<34} KHÔNG CHẠY")
+        elif v["returncode"] == 0:
+            print(f"  {c.nhan:<34} OK   card {v.get('gpu')}  {v.get('aggregate') or ''}")
+        else:
+            print(f"  {c.nhan:<34} HỎNG rc={v['returncode']} card {v.get('gpu')}")
+    hong_luong = [L["dev"] for L in luong if L["rc"] != 0]
+    if hong_luong:
+        print(f"\n  ⚠️  luồng hỏng: card {hong_luong} — xem log tương ứng ở trên")
+    if not args.no_push:
+        _hf_day([_status_path(None), GPU_INFO_PATH], args.hf_repo, args.hf_prefix)
+    print("\n  Chặng kế: --stage table")
+    return 0
+
+
 def stage_run(args) -> int:
-    _tieu_de("CHẶNG run — SÁU Ô")
+    if args.parallel and args.gpu is None:
+        return _run_song_song(args)
+
+    dev = args.gpu if args.gpu is not None else GPU_TUAN_TU
+    _tieu_de(f"CHẶNG run — SÁU Ô, tuần tự, CUDA_VISIBLE_DEVICES={dev}")
+    if args.gpu is None:
+        _bao_cao_gpu(False, None, "run — thực tế")
+
     gguf = {"base": MODELS_DIR / BASE_LOCAL_NAME, "ft": MODELS_DIR / FT_GGUF.local_name}
     for k, p in gguf.items():
         if not p.exists():
             print(f"❌ thiếu GGUF {k}: {_rel(p)} → chạy `--stage prep` trước", file=sys.stderr)
             return 1
 
-    chon = set(args.cells) if args.cells else None
-    status = _doc_status()
+    # Giữ ĐÚNG thứ tự người gõ ở --cells: luồng song song truyền thứ tự của luồng
+    # (vd 1,3,2) và thứ tự đó có chủ ý.
+    thu_tu = [CELL_BY_IDX[i] for i in args.cells] if args.cells else list(CELLS)
+    sp = _status_path(args.gpu)
+    status = _doc_status(sp)
 
-    for cell in CELLS:
-        if chon and cell.idx not in chon:
-            continue
-        _tieu_de(f"{cell.nhan}  → {_rel(cell.out_path)}")
+    for cell in thu_tu:
+        _tieu_de(f"{cell.nhan}  card {dev}  → {_rel(cell.out_path)}")
         if not args.no_push:
             _hf_keo_partial(cell, args.hf_repo, args.hf_prefix)
 
@@ -771,12 +970,16 @@ def stage_run(args) -> int:
             # đã chốt; truyền lại là nhân đôi nguồn chân lý.
             # KHÔNG truyền --limit / --ids: sáu ô chạy đủ 137 câu.
         ]
-        print("  $ " + " ".join(cmd) + "\n")
+        print(f"  $ CUDA_VISIBLE_DEVICES={dev} " + " ".join(cmd) + "\n")
 
         agg_line, dong_cuoi = "", []
+        # Ghim card qua env của SUBPROCESS. Không đặt os.environ toàn cục: một ô chia
+        # layer qua hai card trong khi ô khác không là confound phần cứng ngay trong
+        # cùng cột Δ, và đặt toàn cục thì không còn thấy được ô nào ghim card nào.
         proc = subprocess.Popen(cmd, cwd=REPO, stdout=subprocess.PIPE,
                                 stderr=subprocess.STDOUT, text=True,
-                                encoding="utf-8", errors="replace", bufsize=1)
+                                encoding="utf-8", errors="replace", bufsize=1,
+                                env=_env_ghim_gpu(dev))
         for line in proc.stdout:            # stream ra notebook, đừng nuốt
             sys.stdout.write(line)
             sys.stdout.flush()
@@ -787,10 +990,10 @@ def stage_run(args) -> int:
 
         status[cell.tag + "|" + cell.system] = {
             "o": cell.idx, "model": cell.model_key, "n_shot": cell.n_shot,
-            "system": cell.system, "returncode": rc,
+            "system": cell.system, "returncode": rc, "gpu": dev,
             "out": _rel(cell.out_path), "aggregate": agg_line or None,
         }
-        _ghi_status(status)
+        _ghi_status(sp, status)
 
         if rc != 0:
             print(f"\n  ⚠️  CẢNH BÁO — {cell.nhan} HỎNG (rc={rc}). VẪN CHẠY TIẾP các ô "
@@ -801,12 +1004,13 @@ def stage_run(args) -> int:
 
         # Đẩy NGAY, kể cả khi rc != 0 — partial dở vẫn cứu được nửa mẻ.
         if not args.no_push:
-            _hf_day([cell.out_path, cell.partial_path], args.hf_repo, args.hf_prefix)
-        if not args.no_push:
-            _hf_day([STATUS_PATH], args.hf_repo, args.hf_prefix)
+            _hf_day([cell.out_path, cell.partial_path, sp],
+                    args.hf_repo, args.hf_prefix)
 
     xong = [k for k, v in status.items() if v["returncode"] == 0]
-    print(f"\n  {len(xong)}/{len(CELLS)} ô xong. Chặng kế: --stage table")
+    print(f"\n  {len(xong)}/{len(thu_tu)} ô của lượt này xong"
+          + ("" if args.gpu is None else f" (luồng card {dev})")
+          + (". Chặng kế: --stage table" if args.gpu is None else "."))
     return 0
 
 
@@ -822,8 +1026,15 @@ def _doc_o(cell: Cell) -> dict | None:
         return None
     d = json.loads(cell.out_path.read_text(encoding="utf-8"))
     rep = d.get("replay", {})
+    # elapsed trung bình mỗi câu, CHỈ trên câu đi qua mô hình. `aggregate` tính
+    # latency_mean_s trên cả 137 item, mà 10 câu hằng số của cột GraphRAG có
+    # elapsed = 0.0 (replay.py:566) → mean bị kéo xuống ~7% chỉ vì cột nào có bao
+    # nhiêu câu hằng số. So hai card thì phải so cùng một loại câu.
+    qua = [r["elapsed_seconds"] for r in d["results"] if not r.get("frozen_copy")]
     return {
         "agg": aggregate(d["results"]),
+        "elapsed_mean_qua_mo_hinh": (sum(qua) / len(qua)) if qua else None,
+        "n_qua": len(qua),
         "format_ok_rate": rep.get("format_ok_rate"),
         "format_ok_mau_so": rep.get("format_ok_mau_so"),
         "n_hit_token_cap": rep.get("n_hit_token_cap"),
@@ -845,6 +1056,99 @@ def _tu_choi(agg: dict) -> str:
     n = agg.get("negative_count", 0)
     r = agg["negative_correct_rate"]
     return f"{r:.3f} ({round(r * n)}/{n})"
+
+
+LECH_LATENCY_NGUONG = 0.25   # 25% — ngưỡng cảnh báo throttle giữa hai card
+
+
+def _muc_ghim_gpu() -> list[str]:
+    """Mục 3 của báo cáo: ghim phần cứng — giá trị ghim thứ bảy."""
+    L = ["", "## 3. Ghim phần cứng — giá trị ghim thứ bảy", ""]
+    if not GPU_INFO_PATH.exists():
+        return L + [f"`{_rel(GPU_INFO_PATH)}` chưa có (chạy `--stage prep` hoặc "
+                    "`--stage run`). **Không có mục này thì tuyên bố tái lập còn thiếu "
+                    "một giá trị ghim.**"]
+    g = json.loads(GPU_INFO_PATH.read_text(encoding="utf-8"))
+    L += [
+        "Kaggle cấp **T4 x2**. Với `--n-gpu-layers -1` và hai card nhìn thấy được,",
+        "llama.cpp tự chia layer qua cả hai. Q4_K_M chỉ 2,4 GB nên chia **không nhanh",
+        "hơn**, mà đổi thứ tự rút gọn → có thể lệch số học; và cái nguy hiểm thật là",
+        "**không nhất quán giữa các ô**, khi đó cột Δ đo lẫn cả khác biệt phần cứng.",
+        "Nên mọi lời gọi `replay.py` ghim đúng **một** card qua `CUDA_VISIBLE_DEVICES`",
+        "của subprocess.",
+        "",
+        "```",
+        *[f"{l}" for l in g.get("nvidia_smi_csv", [])],
+        "```",
+        "",
+        f"- số card nhìn thấy được: **{g.get('n_card_nhin_thay')}**",
+        f"- chế độ đã dùng: **{g.get('che_do')}** (ghi nhận lúc: {g.get('nguon')})",
+        "",
+        "| Ô | Mô hình | n_shot | Hệ | `CUDA_VISIBLE_DEVICES` |",
+        "|---:|---|---:|---|---:|",
+    ]
+    ghim = g.get("ghim_cuda_visible_devices", {})
+    for c in CELLS:
+        L.append(f"| {c.idx} | {c.model_key} | {c.n_shot} | {c.system} | "
+                 f"{ghim.get(str(c.idx), '—')} |")
+    L += ["", "**Ghi vào khoá luận cùng với sáu giá trị ghim kia.** Không ô nào chia "
+          "layer qua hai card; không hai ô nào chạy cùng lúc trên cùng một card."]
+    return L
+
+
+def _muc_doi_chieu_latency(o: dict) -> list[str]:
+    """Mục 4: cặp ô cùng model + cùng n_shot, khác nguồn → so elapsed trung bình.
+
+    Lệch lớn giữa hai ô chạy trên HAI CARD KHÁC NHAU là dấu hiệu một card bị throttle,
+    và khi đó `latency_mean_s` của Bảng 4.13 không so được giữa các hàng.
+    """
+    ghim = {}
+    if GPU_INFO_PATH.exists():
+        ghim = json.loads(GPU_INFO_PATH.read_text(encoding="utf-8")) \
+            .get("ghim_cuda_visible_devices", {})
+
+    L = ["", "## 4. Đối chiếu `elapsed_seconds` giữa hai card", "",
+         "Trung bình **mỗi câu đi qua mô hình** (loại 10 câu hằng số của cột GraphRAG —",
+         "chúng có `elapsed = 0.0` nên nếu tính vào thì hai cột lệch nhau chỉ vì số câu",
+         "hằng số khác nhau, không vì phần cứng).", "",
+         "| Cặp ô (cùng model + cùng n_shot) | GraphRAG s/câu | Naive s/câu | Lệch | Card | Kết luận |",
+         "|---|---:|---:|---:|---|---|"]
+    canh_bao: list[str] = []
+    for i_g, i_n in CAP_O:
+        cg, cn = CELL_BY_IDX[i_g], CELL_BY_IDX[i_n]
+        dg, dn = o.get(i_g), o.get(i_n)
+        ten = f"ô {i_g}+{i_n} · {cg.model_key} n_shot={cg.n_shot}"
+        card = f"{ghim.get(str(i_g), '?')} vs {ghim.get(str(i_n), '?')}"
+        if not (dg and dn) or None in (dg["elapsed_mean_qua_mo_hinh"],
+                                       dn["elapsed_mean_qua_mo_hinh"]):
+            L.append(f"| {ten} | — | — | — | {card} | thiếu ô |")
+            continue
+        a, b = dg["elapsed_mean_qua_mo_hinh"], dn["elapsed_mean_qua_mo_hinh"]
+        lech = abs(a - b) / min(a, b) if min(a, b) > 0 else 0.0
+        khac_card = ghim.get(str(i_g)) != ghim.get(str(i_n))
+        if khac_card and lech > LECH_LATENCY_NGUONG:
+            kl = f"⚠️ **LỆCH {lech:.0%} > 25% TRÊN HAI CARD KHÁC NHAU**"
+            canh_bao.append(f"- **{ten}**: {a:.2f} s/câu (card {ghim.get(str(i_g))}) vs "
+                            f"{b:.2f} s/câu (card {ghim.get(str(i_n))}) — lệch {lech:.0%}")
+        elif khac_card:
+            kl = "hai card, lệch trong ngưỡng"
+        else:
+            kl = "cùng card — lệch không quy về throttle"
+        L.append(f"| {ten} | {a:.2f} | {b:.2f} | {lech:.0%} | {card} | {kl} |")
+
+    if canh_bao:
+        L += ["", "### ⚠️ CẢNH BÁO — nghi một card bị throttle", ""] + canh_bao + [
+            "",
+            "Hai ô cùng model + cùng `n_shot` chỉ khác nguồn ngữ cảnh thì khối lượng tính",
+            "toán mỗi câu KHÔNG chênh tới mức này (prompt GraphRAG dài hơn Naive nên chênh",
+            "vài phần trăm là bình thường; hai chục phần trăm thì không). Trên hai card",
+            "khác nhau, cách giải thích đơn giản nhất là **một card bị throttle** — hệ quả:",
+            "`latency_mean_s` của Bảng 4.13 **không so được** giữa các hàng, phải ghi chú",
+            "hoặc chạy lại cả hai ô của cặp trên cùng một card (`--cells` + bỏ `--parallel`).",
+        ]
+    else:
+        L += ["", "Không cặp nào lệch quá 25% trên hai card khác nhau."]
+    return L
 
 
 def stage_table(args) -> int:
@@ -937,6 +1241,9 @@ def stage_table(args) -> int:
         L += ["", "`n_hit_token_cap` = 0 ở mọi ô đã chạy. Đọc là *không thấy bằng chứng "
               "lặp*, KHÔNG phải *đã loại trừ lặp* (`gate_base_model.md` §4.2).", ""]
 
+    L += _muc_ghim_gpu()
+    L += _muc_doi_chieu_latency(o)
+
     if thieu:
         L += ["", "### Ô còn thiếu", ""] + [f"- {t}" for t in thieu] + [
             "", "Bảng chưa đầy đủ. Chạy lại `--stage run --cells <số ô>`.",
@@ -973,7 +1280,16 @@ def main() -> int:
     )
     ap.add_argument("--stage", required=True, choices=list(STAGES))
     ap.add_argument("--cells", default="",
-                    help="chặng run: chỉ chạy các ô này, vd '3,4' (mặc định: cả sáu)")
+                    help="chặng run: chỉ chạy các ô này, vd '3,4' (mặc định: cả sáu). "
+                         "Thứ tự gõ được giữ nguyên.")
+    ap.add_argument("--parallel", action="store_true",
+                    help="chặng run: hai luồng, mỗi luồng ghim MỘT card "
+                         f"(card 0: ô {LANES[0]}, card 1: ô {LANES[1]}); trong luồng thì "
+                         "tuần tự. Mặc định TẮT = sáu ô tuần tự trên card "
+                         f"{GPU_TUAN_TU}. Không bao giờ chia một ô qua hai card.")
+    ap.add_argument("--gpu", type=int, default=None,
+                    help="ghim mọi ô của lượt này vào card N. Chặng run dùng cờ này khi "
+                         "tự gọi lại chính nó cho từng luồng của --parallel.")
     ap.add_argument("--hf-repo", default=HF_REPO_DEFAULT,
                     help=f"repo HF để đẩy kết quả (mặc định {HF_REPO_DEFAULT})")
     ap.add_argument("--hf-prefix", default=HF_PREFIX_DEFAULT,
