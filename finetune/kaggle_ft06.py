@@ -82,6 +82,10 @@ GEMINI_F1_NAIVE = 0.435
 GEMINI_F1_GRAPHRAG = 0.578
 GEMINI_DELTA = 0.143
 
+# ⚠️ HAI HANDLE KHÁC NHAU, chỉ khác thứ tự chữ số — đừng chép lẫn:
+#   HF     = dangnguyen254  → mọi repo_id HF, --hf-repo, đường dẫn upload (kể cả
+#                             run.sh:48-49 và upload_dataset.sh:21)
+#   Kaggle = dangnguyen425  → CHỈ trường "id" của finetune/notebooks/kernel-metadata.json
 HF_REPO_DEFAULT = "dangnguyen254/thesis-graphrag-gguf"
 HF_PREFIX_DEFAULT = "session3_ft06"
 
