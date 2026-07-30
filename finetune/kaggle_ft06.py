@@ -700,7 +700,11 @@ def _doc_chat_template(gguf: Path) -> str | None:
 def stage_gate_template(args) -> int:
     _tieu_de("CỔNG CHẶN A — chat template nhúng trong hai GGUF phải trùng khít")
     print("Nếu hai file mang template khác nhau thì hai hàng của ma trận nhận prompt\n"
-          "khác nhau, và cột Δ không còn đo mô hình sinh mà đo cả khác biệt prompt.")
+          "khác nhau, và cột Δ không còn đo mô hình sinh mà đo cả khác biệt prompt.\n"
+          "\n"
+          "Lượt ft06b KHÔNG đổi GGUF nào (cả hai vẫn đúng sha256 đã ghim) nên cổng này\n"
+          "gần như chắc chắn qua. Vẫn chạy: mất vài giây, và nó là bằng chứng phải có\n"
+          "cho khoá luận — 'đã kiểm ở lượt trước' không phải là bằng chứng của lượt này.")
 
     paths = {"base": MODELS_DIR / BASE_LOCAL_NAME, "ft": MODELS_DIR / FT_GGUF.local_name}
     tmpl: dict[str, str] = {}
@@ -839,6 +843,10 @@ def stage_gate_prompt(args) -> int:
     print("FT-03 ('hai file --dump-prompt đã sinh nhưng chưa ai mở ra nhìn bằng mắt').")
     print("Chặng này đóng đúng món nợ đó: sinh lại prompt cho cả BỐN tổ hợp, kiểm tự")
     print("động năm mục, rồi in ra để người đọc nhìn tận mắt.\n")
+    print("Lượt ft06b BẮT BUỘC chạy lại phía graphrag: nguồn ngữ cảnh đã đổi, nên prompt")
+    print("thực sự đi vào mô hình cũng đổi ở 17 câu. Bản dump của lượt trước không nói")
+    print("gì về prompt của lượt này. File dump ghi ra tên MỚI (`ft06b_prompt_*`) để")
+    print("không đè bản cũ — bản cũ là bằng chứng đã đọc bằng mắt của lượt trước.\n")
 
     # Dùng model FT: cổng chặn A đã chứng minh hai template trùng khít, nên một model
     # là đủ; và FT là hiện vật CHƯA TỪNG được render (base đã dump ở FT-03).
@@ -861,10 +869,20 @@ def stage_gate_prompt(args) -> int:
               "không kiểm chéo được giả định ChatML")
 
     srcs = _src_by_system(args)
+
+    # Tập câu đổi ngữ cảnh — dùng để CẢNH BÁO người đọc prompt, không để chặn.
+    # Nếu item được dump rơi vào tập này thì phần CONTEXT của nó là phần vừa đổi,
+    # tức đúng chỗ đáng soi nhất; nếu không thì prompt dump ra giống hệt lượt trước
+    # và người đọc chỉ cần kiểm khuôn, không cần kiểm nội dung.
+    doi_ngu_canh = {d["id"] for d in _tap_doi_ngu_canh(srcs["graphrag"],
+                                                       SRC_GRAPHRAG_CU)[0]}
+
     to_hop = [("graphrag", 0), ("graphrag", 2), ("baseline", 0), ("baseline", 2)]
     tat_ca_ok = True
     for system, n_shot in to_hop:
-        dump = REPORTS_DIR / f"ft06_prompt_{system}_s{n_shot}.txt"
+        # Tên MỚI (`ft06b_prompt_*`): `ft06_prompt_*` là bằng chứng đã đọc bằng mắt
+        # của lượt trước — món nợ hạ tầng #2 chỉ đóng được một lần, đừng đè lên nó.
+        dump = _bc(f"prompt_{system}_s{n_shot}.txt")
         _tieu_de(f"{system} · n_shot={n_shot}")
         cmd = [
             sys.executable, "-m", "finetune.replay",
@@ -873,7 +891,8 @@ def stage_gate_prompt(args) -> int:
             "--limit", "1",
             "--n-shot", str(n_shot),
             "--dump-prompt", _rel(dump),
-            "--out", _rel(RESULTS_DIR / f"results_{system}_ft06-gate-prompt-s{n_shot}.json"),
+            "--out", _rel(RESULTS_DIR
+                          / f"results_{system}_ft06b-gate-prompt-s{n_shot}.json"),
             # Bộ đã chốt ở gate_base_model.md §3. CHỈ presence_penalty phải truyền
             # tường minh (mặc định replay.py là 1.0) — xem docstring đầu file.
             "--presence-penalty", "0",
@@ -885,6 +904,22 @@ def stage_gate_prompt(args) -> int:
                   file=sys.stderr)
             tat_ca_ok = False
             continue
+
+        # id của item được dump — đọc từ CHÍNH header file dump (replay.py:754), không
+        # suy lại: nếu `replay.py` đổi cách chọn item thì con số suy ra sẽ sai âm thầm.
+        header, _ = _tach_dump(dump.read_text(encoding="utf-8"))
+        m = re.search(r"#\s*item=(\S+)", header)
+        qid = m.group(1) if m else None
+        print(f"\n  item được dump: {qid or '(không đọc được từ header)'}")
+        if qid and qid in doi_ngu_canh and system == "graphrag":
+            print(f"  ⚠️  {qid} NẰM TRONG {len(doi_ngu_canh)} câu đổi ngữ cảnh giữa hai "
+                  f"lượt.\n"
+                  f"      → Khi đọc bằng mắt, chú ý phần CONTEXT: nó KHÁC bản dump "
+                  f"`ft06_prompt_{system}_s{n_shot}.txt` của lượt trước, và khác vì "
+                  f"nguồn đổi chứ không phải vì khuôn prompt đổi.")
+        elif qid and system == "graphrag":
+            print(f"  {qid} KHÔNG nằm trong {len(doi_ngu_canh)} câu đổi ngữ cảnh → phần "
+                  f"CONTEXT của prompt này trùng khít lượt trước; chỉ cần kiểm khuôn.")
 
         print(f"\n  --- KẾT QUẢ KIỂM TỰ ĐỘNG: {_rel(dump)} ---")
         for ten, ok, chi_tiet in _kiem_mot_prompt(dump, system, n_shot,
