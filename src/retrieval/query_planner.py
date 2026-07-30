@@ -1,13 +1,20 @@
 """
 Query Planner — TASK-10
-Nhận câu hỏi tiếng Việt, dùng Claude Haiku 4.5 để extract:
+Nhận câu hỏi tiếng Việt, dùng mô hình ngôn ngữ để extract:
   theme, procedure, jurisdiction, temporal
 Trả về QueryPlan TypedDict.
 
-Quy tắc tự động:
-  - Hộ tịch và Nuôi con nuôi luôn gán jurisdiction = "toan-quoc"
-  - Đất đai giữ jurisdiction=None nếu câu hỏi không nêu; retrieval chạy best-effort
-    (eval bơm jurisdiction từ ground-truth qua force_jurisdiction ở pipeline)
+Quy tắc tự động cho jurisdiction:
+  - Câu hỏi CÓ nêu tên địa phương → dùng đúng địa phương đó, BẤT KỂ lĩnh vực.
+  - Câu hỏi KHÔNG nêu địa phương: Hộ tịch / Nuôi con nuôi → "toan-quoc";
+    Đất đai → None (retrieval chạy best-effort).
+
+Lịch sử: trước 2026-07-28 luật là "Hộ tịch và Nuôi con nuôi LUÔN gán toan-quoc",
+xuất phát từ giai đoạn kho ngữ liệu chỉ có văn bản địa phương ở lĩnh vực đất đai.
+Giả định đó hết đúng khi kho mở rộng đa lĩnh vực: hộ tịch có nghị quyết lệ phí
+cấp tỉnh (NQ 11/2023 Đồng Nai, NQ 124/2016 TP.HCM). Chữ "LUÔN" khiến planner trả
+"toan-quoc" ngay cả khi câu hỏi ghi rõ tên tỉnh, làm hard-filter Stage 2 gạt sạch
+văn bản cấp tỉnh → F1 = 0 trên các câu hộ tịch có yếu tố địa phương.
 """
 import hashlib
 import json
@@ -39,7 +46,10 @@ VALID_PROCEDURES = [
 
 VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 
-# Các theme luôn áp dụng toàn quốc — không cần hỏi lại người dùng
+# Theme lấy "toan-quoc" làm MẶC ĐỊNH khi câu hỏi không nêu địa phương.
+# KHÔNG có nghĩa là các theme này luôn thuộc phạm vi toàn quốc: hộ tịch vẫn có
+# nghị quyết lệ phí cấp tỉnh. Khi câu hỏi nêu tên tỉnh, giá trị từ planner được
+# giữ nguyên và mặc định này không áp dụng (xem _apply_jurisdiction_rules).
 _NATIONAL_THEMES = {"ho-tich", "nuoi-con-nuoi"}
 
 MODEL = "claude-haiku-4-5-20251001"
@@ -71,37 +81,41 @@ Giá trị hợp lệ của procedure:
 - "dang-ky-lai-nuoi-con-nuoi"     — đăng ký lại nuôi con nuôi trong nước
 
 Quy tắc quan trọng:
-1. Nếu câu hỏi liên quan Hộ tịch hoặc Nuôi con nuôi: LUÔN gán jurisdiction = "toan-quoc".
-2. Nếu câu hỏi liên quan Đất đai nhưng không đề cập địa phương: trả jurisdiction = null.
-3. TP.HCM / Thành phố Hồ Chí Minh / HCM → "tp-hcm"
-4. Đồng Nai / tỉnh Đồng Nai → "dong-nai"
-5. Nếu không xác định được trường nào → trả null cho trường đó.
+1. ƯU TIÊN CAO NHẤT — nếu câu hỏi có NÊU TÊN địa phương thì gán đúng địa phương đó,
+   BẤT KỂ thuộc lĩnh vực nào. Mọi lĩnh vực (kể cả Hộ tịch và Nuôi con nuôi) đều có
+   thể có quy định riêng của tỉnh, ví dụ mức thu lệ phí do HĐND tỉnh ban hành.
+   - TP.HCM / Thành phố Hồ Chí Minh / HCM → "tp-hcm"
+   - Đồng Nai / tỉnh Đồng Nai → "dong-nai"
+2. Nếu câu hỏi KHÔNG nêu địa phương:
+   - Hộ tịch hoặc Nuôi con nuôi → "toan-quoc"
+   - Đất đai → null
+3. Nếu không xác định được trường nào → trả null cho trường đó.
 
 Quy tắc temporal_intent (PHÂN BIỆT QUÁ KHỨ VÀ HIỆN TẠI):
-6. has_temporal_context = true KHI câu hỏi NGẦM hoặc TƯỜNG MINH chỉ tới THỜI ĐIỂM QUÁ KHỨ, hoặc HỒ SƠ DỞ DANG, hoặc REGIME CHANGE. Bao gồm:
+4. has_temporal_context = true KHI câu hỏi NGẦM hoặc TƯỜNG MINH chỉ tới THỜI ĐIỂM QUÁ KHỨ, hoặc HỒ SƠ DỞ DANG, hoặc REGIME CHANGE. Bao gồm:
    - Tường minh thời điểm: "năm 2020", "trước 2024", "tháng 6/2024", "ngày 15/8/2025"
    - Ngữ cảnh quá khứ: "luật cũ chưa sửa", "hồi xưa", "đời ông bà", "khi tôi mua đất 10 năm trước", "trước khi có luật mới"
    - Hồ sơ dở dang: "hồ sơ tôi nộp tháng trước", "đang ngâm", "chưa có quyết định", "đang giải quyết"
    - Hành vi/sự kiện quá khứ: "hợp đồng ký năm 2010", "đất ông bà để lại từ 1985"
    has_temporal_context = false KHI câu hỏi chỉ về quy định hiện hành ("hạn mức TP.HCM bao nhiêu m²?", "thủ tục cấp sổ đỏ").
 
-7. temporal_anchor — neo thời gian:
+5. temporal_anchor — neo thời gian:
    - Nếu có ngày tường minh: dùng "YYYY-MM-DD" hoặc "YYYY-MM" hoặc "YYYY"
    - Nếu chỉ "trước/sau ngày X": dùng "trước-YYYY-MM-DD" hoặc "sau-YYYY-MM-DD"
    - Nếu chung chung "luật cũ" / "trước khi có luật mới": dùng "luat-cu"
    - Nếu rõ là quá khứ nhưng không xác định: dùng "unspecified_past"
    - Nếu has_temporal_context=false: dùng null
 
-8. case_status — trạng thái hồ sơ user (KHÔNG đoán nếu không nói rõ):
+6. case_status — trạng thái hồ sơ user (KHÔNG đoán nếu không nói rõ):
    - "hoan-tat" — đã có quyết định hành chính cuối cùng / đã nhận sổ
    - "do-dang" — đã nộp hồ sơ nhưng chưa có quyết định
    - "moi" — sự kiện/hành vi MỚI phát sinh, chưa nộp gì
    - null — không nói rõ
 
-9. reasoning — 1 câu giải thích ngắn (≤ 30 từ) phát hiện temporal.
+7. reasoning — 1 câu giải thích ngắn (≤ 30 từ) phát hiện temporal.
 
 Quy tắc response_mode (PHÂN BIỆT CÂU HỎI TRA CỨU CHUNG VS TÌNH HUỐNG CỤ THỂ):
-10. response_mode = "irac" KHI câu hỏi MÔ TẢ MỘT TÌNH HUỐNG/SỰ VIỆC CỤ THỂ của người hỏi cần áp dụng luật vào tình tiết để ra kết luận. Dấu hiệu:
+8. response_mode = "irac" KHI câu hỏi MÔ TẢ MỘT TÌNH HUỐNG/SỰ VIỆC CỤ THỂ của người hỏi cần áp dụng luật vào tình tiết để ra kết luận. Dấu hiệu:
     - Có chủ thể + tình tiết cụ thể: "Tôi có 500m² đất...", "Gia đình tôi...", "Bên mua đặt cọc 200 triệu...", "Trường hợp của tôi..."
     - Hỏi "tôi có được... không?", "tôi phải làm gì?", "ai đúng/sai?", "có hợp pháp không?" gắn với sự việc đã/đang xảy ra.
     response_mode = "general" KHI câu hỏi TRA CỨU QUY ĐỊNH CHUNG, không gắn tình tiết cá nhân: "Điều kiện X là gì?", "Hạn mức Y bao nhiêu?", "Thủ tục Z gồm những bước nào?", "Văn bản nào sửa đổi...?".
