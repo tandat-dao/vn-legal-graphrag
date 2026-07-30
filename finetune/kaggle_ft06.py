@@ -1680,6 +1680,221 @@ def _muc_doi_chieu_latency(o: dict) -> list[str]:
     return L
 
 
+# ---------------------------------------------------------------------------
+# Mục 5 — tập câu ĐỔI NGỮ CẢNH giữa hai lượt
+# ---------------------------------------------------------------------------
+# Đây là phân tích mà chính lần chạy này mở ra, và không lượt nào trước có được:
+# hai lượt chỉ khác nhau ĐÚNG MỘT thứ — ngữ cảnh của một nhúm câu — nên chênh lệch
+# đo trên đúng nhúm đó là hiệu ứng của TRUY HỒI, tách khỏi mọi thứ khác.
+#
+# Câu hỏi nó trả lời: cải thiện truy hồi có CHUYỂN GIAO sang mô hình sinh yếu hơn
+# không? Nếu Gemini hưởng lợi mà mô hình cục bộ thì không, cải thiện truy hồi phụ
+# thuộc năng lực mô hình sinh — kết luận khác hẳn "truy hồi tốt hơn thì ai cũng
+# tốt hơn", và nó thuộc về phần Bàn luận của khoá luận.
+
+def _tap_doi_ngu_canh(src_moi: str, src_cu: str) -> tuple[list[dict], str]:
+    """Câu có `context` KHÁC nhau giữa hai nguồn. TỰ TÍNH, không tin con số báo cáo.
+
+    Trả (danh sách {id, theme, gap_type, do_dai_cu, do_dai_moi}, ghi_chú_lỗi).
+    """
+    pm, pc = REPO / src_moi, REPO / src_cu
+    if not (pm.exists() and pc.exists()):
+        thieu = [s for s, p in ((src_moi, pm), (src_cu, pc)) if not p.exists()]
+        return [], f"thiếu nguồn: {', '.join(thieu)}"
+    dm = {r["id"]: r for r in json.loads(pm.read_text(encoding="utf-8"))["results"]}
+    dc = {r["id"]: r for r in json.loads(pc.read_text(encoding="utf-8"))["results"]}
+    ra: list[dict] = []
+    for qid, r in dm.items():
+        cu = dc.get(qid)
+        moi_ctx, cu_ctx = (r.get("context") or ""), ((cu or {}).get("context") or "")
+        if cu is None or moi_ctx != cu_ctx:
+            ra.append({
+                "id": qid, "theme": r.get("theme"), "gap_type": r.get("gap_type"),
+                "jurisdiction": r.get("jurisdiction"),
+                "do_dai_cu": len(cu_ctx) if cu is not None else None,
+                "do_dai_moi": len(moi_ctx),
+                "chi_co_o_moi": cu is None,
+            })
+    return sorted(ra, key=lambda d: d["id"]), ""
+
+
+def _doc_results(p: Path) -> list[dict] | None:
+    if not p.exists():
+        return None
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))["results"]
+    except (OSError, ValueError, KeyError):
+        return None
+
+
+def _agg_tap_con(paths: list[Path], ids: set[str]) -> tuple[dict | None, int]:
+    """`aggregate` trên tập con `ids`, trung bình qua nhiều file. Trả (agg_gộp, N).
+
+    Gộp bằng cách lấy trung bình các khoá số học của từng file — KHÔNG dồn item của
+    nhiều mẻ vào một `aggregate` (làm thế thì mỗi câu bị đếm ba lần và mọi thang đo
+    hoá thành trung bình của 3×n mẫu, không so được với ô cục bộ N=1).
+    """
+    from src.evaluation.metrics import aggregate
+
+    aggs = []
+    for p in paths:
+        rs = _doc_results(p)
+        if rs is None:
+            continue
+        sub = [r for r in rs if r["id"] in ids]
+        if sub:
+            aggs.append(aggregate(sub))
+    if not aggs:
+        return None, 0
+    khoa = ["f1_mean", "f1_dieu_mean", "norm_recall_mean"]
+    return ({k: statistics.mean(a[k] for a in aggs) for k in khoa}, len(aggs))
+
+
+def _f1_theo_id(paths: list[Path], ids: set[str]) -> dict[str, float]:
+    """{id: F1 cấp Khoản}, trung bình qua nhiều file. Rỗng nếu không đọc được file."""
+    gom: dict[str, list[float]] = {}
+    for p in paths:
+        for r in _doc_results(p) or []:
+            if r["id"] in ids:
+                gom.setdefault(r["id"], []).append(r["citation_score"]["f1"])
+    return {k: statistics.mean(v) for k, v in gom.items() if v}
+
+
+def _hang_17(o_graphrag_moi: dict[int, Path]) -> list[dict]:
+    """Ba hàng của bảng ghép cặp: (tên, file ngữ cảnh CŨ, file ngữ cảnh MỚI)."""
+    return [
+        {"ten": "Gemini 2.5 Pro",
+         "cu": [REPO / SRC_GRAPHRAG_CU],
+         "moi": [REPO / r for r in GEMINI_GRAPHRAG_RUNS]},
+        {"ten": "Cục bộ gốc, 2-shot",
+         "cu": [_out_path_cu(CELL_BY_IDX[3])], "moi": [o_graphrag_moi[3]]},
+        {"ten": "Cục bộ đã tinh chỉnh, 0-shot",
+         "cu": [_out_path_cu(CELL_BY_IDX[1])], "moi": [o_graphrag_moi[1]]},
+    ]
+
+
+def _muc_17_cau(srcs: dict[str, str]) -> list[str]:
+    """Mục 5 của báo cáo. KHÔNG làm vỡ chặng table khi thiếu file."""
+    L = ["", "## 5. Tập câu ĐỔI NGỮ CẢNH giữa hai lượt", ""]
+    tap, loi = _tap_doi_ngu_canh(srcs["graphrag"], SRC_GRAPHRAG_CU)
+    if loi:
+        return L + [f"Không lập được mục này — {loi}."]
+    ids = {d["id"] for d in tap}
+    L += [
+        f"So `context` từng câu giữa `{SRC_GRAPHRAG_CU}` (cũ) và",
+        f"`{srcs['graphrag']}` (mới): **{len(ids)} câu** khác nhau.",
+        "",
+        "Con số này do chặng `table` **tự tính lại** từ hai file, không chép từ báo",
+        "cáo nào. Vế Naive RAG không có mục tương ứng: nó không đi qua bộ lập kế",
+        "hoạch truy vấn (`naive_rag.py:339,361`) nên không câu nào đổi ngữ cảnh.",
+        "",
+        "| id | `theme` | `gap_type` | `jurisdiction` | ký tự ngữ cảnh (cũ → mới) |",
+        "|---|---|---|---|---:|",
+    ]
+    for d in tap:
+        cu = "—" if d["chi_co_o_moi"] else f"{d['do_dai_cu']:,}"
+        L.append(f"| {d['id']} | {d['theme'] or '—'} | {d['gap_type'] or '—'} | "
+                 f"{d['jurisdiction'] or '—'} | {cu} → {d['do_dai_moi']:,} |")
+    from collections import Counter
+    dem = Counter(d["theme"] or "—" for d in tap)
+    L += ["", "Theo lĩnh vực: " + " · ".join(f"**{k}** {v}" for k, v in sorted(dem.items()))]
+
+    # --- ghép cặp -----------------------------------------------------------
+    moi = {i: CELL_BY_IDX[i].out_path for i in (1, 3)}
+    thieu = [_rel(p) for p in moi.values() if not p.exists()]
+    hang = _hang_17(moi)
+    if thieu:
+        L += [
+            "",
+            "### Bảng ghép cặp — CHƯA LẬP ĐƯỢC",
+            "",
+            "Thiếu kết quả lượt `ft06b` cho cột GraphRAG:",
+            *[f"- `{t}`" for t in thieu],
+            "",
+            "Chạy `--stage run --cells 1,3` rồi chạy lại `--stage table`. Danh sách id ở",
+            "trên vẫn đúng và dùng được ngay — nó chỉ cần hai file trong `data/evaluation/`.",
+        ]
+        return L
+
+    L += [
+        "",
+        "### 5.1 Ghép cặp trên ĐÚNG tập câu đó",
+        "",
+        f"Chỉ {len(ids)} câu trên. Hai cột khác nhau ĐÚNG MỘT thứ: ngữ cảnh mà mô hình",
+        "sinh nhận được. Cùng mô hình, cùng tham số sinh, cùng `mode`, cùng phần cứng.",
+        "",
+        "**Câu hỏi bảng này trả lời: cải thiện truy hồi có CHUYỂN GIAO sang mô hình",
+        "sinh yếu hơn không?**",
+        "",
+        "| Mô hình sinh | N (cũ/mới) | F1 Khoản cũ | F1 Khoản mới | Δ | F1 Điều cũ | "
+        "F1 Điều mới | NormR cũ | NormR mới |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    for h in hang:
+        a_cu, n_cu = _agg_tap_con(h["cu"], ids)
+        a_moi, n_moi = _agg_tap_con(h["moi"], ids)
+        if not (a_cu and a_moi):
+            L.append(f"| {h['ten']} | {n_cu}/{n_moi} | — | — | — | — | — | — | — | "
+                     f"**thiếu file** |")
+            continue
+        d = a_moi["f1_mean"] - a_cu["f1_mean"]
+        L.append(f"| {h['ten']} | {n_cu}/{n_moi} | {_f(a_cu['f1_mean'])} | "
+                 f"{_f(a_moi['f1_mean'])} | **{d:+.3f}** | {_f(a_cu['f1_dieu_mean'])} | "
+                 f"{_f(a_moi['f1_dieu_mean'])} | {_f(a_cu['norm_recall_mean'])} | "
+                 f"{_f(a_moi['norm_recall_mean'])} |")
+
+    # --- regression ---------------------------------------------------------
+    f1s = {h["ten"]: (_f1_theo_id(h["cu"], ids), _f1_theo_id(h["moi"], ids))
+           for h in hang}
+    giam: dict[str, set[str]] = {}
+    for ten, (cu, mo) in f1s.items():
+        giam[ten] = {q for q in ids
+                     if q in cu and q in mo and mo[q] < cu[q] - 1e-9}
+    ca_ba = set.intersection(*giam.values()) if giam else set()
+
+    L += [
+        "",
+        "### 5.2 Câu bị GIẢM F1 giữa hai ngữ cảnh",
+        "",
+        "Mọi câu có F1 cấp Khoản mới < cũ, cho cả ba hàng. Câu giảm ở **CẢ BA** hàng",
+        "được đánh dấu `⛔`: ba mô hình sinh rất khác nhau cùng tụt ở cùng một câu thì",
+        "cách giải thích tiết kiệm nhất là **ngữ cảnh mới của câu đó xấu đi**, tức hiện",
+        "tượng của TRUY HỒI, không phải của mô hình sinh.",
+        "",
+        "| id | " + " | ".join(f"{h['ten']} (cũ → mới)" for h in hang) + " | ghi chú |",
+        "|---|" + "---:|" * len(hang) + "---|",
+    ]
+    moi_giam = sorted(set().union(*giam.values())) if giam else []
+    for q in moi_giam:
+        o_ = []
+        for h in hang:
+            cu, mo = f1s[h["ten"]]
+            if q not in cu or q not in mo:
+                o_.append("—")
+            else:
+                mui = " ↓" if q in giam[h["ten"]] else ""
+                o_.append(f"{cu[q]:.3f} → {mo[q]:.3f}{mui}")
+        L.append(f"| {q} | " + " | ".join(o_) + " | "
+                 + ("⛔ **giảm ở cả ba hàng — hiện tượng của truy hồi**"
+                    if q in ca_ba else "") + " |")
+    if not moi_giam:
+        L.append("| — | " + " | ".join("—" for _ in hang) +
+                 " | không câu nào giảm ở hàng nào |")
+
+    L += [
+        "",
+        f"Số câu giảm: " + " · ".join(f"**{t}** {len(v)}/{len(ids)}"
+                                      for t, v in giam.items())
+        + f" · **giảm ở cả ba hàng** {len(ca_ba)}"
+        + (f" (`{', '.join(sorted(ca_ba))}`)" if ca_ba else ""),
+        "",
+        "Đọc bảng này cùng 5.1: 5.1 nói cả tập đi lên hay đi xuống, 5.2 nói cái giá",
+        "phải trả — một thay đổi truy hồi cải thiện tổng thể vẫn có thể làm hỏng vài",
+        "câu, và những câu đó là chỗ phải xem bằng mắt.",
+    ]
+    return L
+
+
 def stage_table(args) -> int:
     _tieu_de("CHẶNG table — gom sáu ô vào finetune/reports/ft06b_matrix.md")
 
@@ -1803,6 +2018,7 @@ def stage_table(args) -> int:
 
     L += _muc_ghim_gpu()
     L += _muc_doi_chieu_latency(o)
+    L += _muc_17_cau(srcs)
 
     if thieu:
         L += ["", "### Ô còn thiếu", ""] + [f"- {t}" for t in thieu] + [
