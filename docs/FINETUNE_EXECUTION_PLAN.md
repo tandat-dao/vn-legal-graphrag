@@ -1,7 +1,18 @@
 # Kế hoạch Thực thi — Bổ sung Mô hình Sinh Cục bộ vào Chương 4
 
-**Phiên bản 2.3.3 | Ngày: 30/07/2026**
+**Phiên bản 2.3.4 | Ngày: 30/07/2026**
 
+> **Thay đổi v2.3.3 → v2.3.4:** thêm **§TASK-FT-06 → Ghim GPU** — Kaggle cấp T4 **x2**
+> và `--n-gpu-layers -1` khiến llama.cpp tự chia layer qua cả hai card; với Q4_K_M
+> 2,4 GB việc chia không nhanh hơn mà đổi thứ tự rút gọn, và cái nguy hiểm là **không
+> nhất quán giữa các ô** → cột Δ đo lẫn khác biệt phần cứng. Chốt: mọi lời gọi
+> `replay.py` ghim **đúng một card** qua `CUDA_VISIBLE_DEVICES` của subprocess; cờ
+> `--parallel` (mặc định TẮT) chia hai luồng, mỗi luồng một card, trong luồng tuần tự.
+> Ghim card là **giá trị ghim thứ bảy** của tuyên bố tái lập, phải vào khoá luận. Kèm
+> phép kiểm sau khi chạy: cặp ô cùng model + cùng `n_shot` mà chạy hai card khác nhau
+> lệch `elapsed_seconds` > 25% → cảnh báo throttle, `latency_mean_s` của Bảng 4.13
+> không so được.
+>
 > **Thay đổi v2.3.2 → v2.3.3:** viết lại **§TASK-FT-06** cho khớp hiện thực
 > (`finetune/kaggle_ft06.py` + `finetune/notebooks/ft06_eval.ipynb`). (1) **bốn ô →
 > sáu ô, 548 → 822 lượt sinh**: hàng "cục bộ gốc" báo **cả hai** biến thể 0-shot và
@@ -683,6 +694,39 @@ kiểm tự động năm mục (render bằng chat template thật chứ không 
 6 · kết thúc bằng `TRẢ LỜI:` rồi tới thẻ mở vai assistant · số thẻ mở vai assistant 1
 hay 3), rồi in 40 dòng đầu + 20 dòng cuối mỗi file để người đọc nhìn tận mắt. Bất kỳ
 mục FAIL → **exit 2**.
+
+#### Ghim GPU — giá trị ghim thứ bảy của tuyên bố tái lập
+
+Kaggle cấp **T4 x2**. Với `--n-gpu-layers -1` và hai card nhìn thấy được, llama.cpp
+**tự chia layer qua cả hai**. Q4_K_M chỉ 2,4 GB nên chia **không nhanh hơn**, mà đổi
+thứ tự rút gọn → có thể lệch số học. Nguy hiểm thật không phải chậm mà là **không
+nhất quán giữa các ô**: khi đó cột Δ đo lẫn cả khác biệt phần cứng.
+
+Nên **mọi lời gọi `replay.py` chạy với `CUDA_VISIBLE_DEVICES` ghim đúng MỘT card**,
+truyền qua env của subprocess — không đặt biến toàn cục cho cả script.
+
+| Chế độ | Phân bổ |
+|---|---|
+| mặc định (tuần tự) | sáu ô lần lượt, tất cả trên card **0** |
+| `--parallel` | luồng card **0**: ô 1 → 3 → 2 · luồng card **1**: ô 5 → 4 → 6 |
+
+Trong mỗi luồng các ô chạy **tuần tự**. Tuyệt đối **không** chia một ô qua hai card
+và **không** chạy hai ô cùng lúc trên cùng một card: tranh VRAM + tranh I/O làm
+`elapsed_seconds` vô nghĩa, mà đó là số liệu đi vào bảng. Hai luồng là subprocess với
+log riêng (`/kaggle/working/ft06_gpu{0,1}.log`), in gộp khi cả hai xong; một luồng
+hỏng thì luồng kia vẫn chạy tiếp.
+
+Chặng `prep` và `run` in **và ghi** `finetune/reports/ft06_gpu_info.json`:
+`nvidia-smi --query-gpu=index,name,memory.total --format=csv`, số card nhìn thấy
+được, chế độ đã dùng, và `CUDA_VISIBLE_DEVICES` của từng ô. Chặng `table` đưa khối đó
+vào `ft06_matrix.md` §3. **Phải ghi vào khoá luận cùng với sáu giá trị ghim kia.**
+
+**Kiểm sau khi chạy** (`ft06_matrix.md` §4): với mỗi cặp ô cùng model + cùng `n_shot`
+nhưng khác nguồn — (1,2), (3,4), (5,6) — in `elapsed_seconds` trung bình mỗi câu
+(chỉ trên câu đi qua mô hình; 10 câu hằng số của cột GraphRAG có `elapsed = 0.0`).
+Hai ô chạy trên **hai card khác nhau** mà lệch **quá 25%** → cảnh báo: dấu hiệu một
+card bị throttle, và `latency_mean_s` của Bảng 4.13 khi đó không so được giữa các
+hàng.
 
 #### Số lần chạy: N=1 cho cả sáu ô — CHỐT, không để ngỏ
 
