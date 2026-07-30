@@ -1,7 +1,21 @@
 # Kế hoạch Thực thi — Bổ sung Mô hình Sinh Cục bộ vào Chương 4
 
-**Phiên bản 2.3.2 | Ngày: 30/07/2026**
+**Phiên bản 2.3.3 | Ngày: 30/07/2026**
 
+> **Thay đổi v2.3.2 → v2.3.3:** viết lại **§TASK-FT-06** cho khớp hiện thực
+> (`finetune/kaggle_ft06.py` + `finetune/notebooks/ft06_eval.ipynb`). (1) **bốn ô →
+> sáu ô, 548 → 822 lượt sinh**: hàng "cục bộ gốc" báo **cả hai** biến thể 0-shot và
+> 2-shot (few-shot là biến thật với nó — `format_ok` 0.083 → 0.833), còn hàng "đã
+> tinh chỉnh" chỉ chạy **0-shot** vì bộ huấn luyện FT-04 dựng bằng chính
+> `build_messages` nên chèn ví dụ minh hoạ là tạo lệch train/eval; kèm bảng sáu ô và
+> thứ tự chạy (ô giá trị nhất trước, đẩy HF sau từng ô). (2) thêm **hai cổng chặn A
+> (chat template hai GGUF phải trùng khít) và B (đọc prompt đã render)** vào quy
+> trình — **B chính là món nợ của FT-03**, kiểm tra hạ tầng #2 mà
+> `gate_base_model.md` §5 ghi ⚠️ CÒN TREO và §7 xếp là việc $0 chặn cứng. (3) ghi rõ
+> **nguồn ngữ cảnh là cặp file `20260710-085236`** và lý do phải đúng cặp đó. (4) nơi
+> chạy: **Kaggle T4**, không phải GPU thuê. (5) nhắc `presence_penalty` mặc định của
+> `replay.py` là 1.0 nên phải truyền tường minh 0.
+>
 > **Thay đổi v2.3.1 → v2.3.2:** sửa **năm chỗ kế hoạch lạc hậu so với mã đang chạy**.
 > (1) §TASK-FT-02 ghi `temperature 0` — **sai**, `replay.py` chạy bộ tham số Qwen
 > 2507 (0.7/0.8/20/0) và tính tất định đến từ seed + bản dựng + phần cứng, không từ
@@ -12,7 +26,8 @@
 > 123 (§9.4); (5) §TASK-FT-04 bổ sung tỉ lệ mẫu từ chối **9%, chia 70/30** — quyết
 > định này trước đó chỉ sống trong `build_dataset.py` và `dataset_stats.md` §4.2.
 >
-> **Thay đổi v2.3 → v2.3.1:** **chốt N=1 cho cả bốn ô của FT-06** (548 lượt sinh),
+> **Thay đổi v2.3 → v2.3.1:** **chốt N=1 cho cả bốn ô của FT-06** (548 lượt sinh —
+> v2.3.3 nâng lên sáu ô / 822 lượt),
 > thay đoạn để ngỏ trước đó. Căn cứ mới: tính tất định đã đo được ở phiên 1 FT-03
 > (hai lần chạy cùng seed → `answer` trùng khít từng ký tự 15/15 câu), cộng lý do
 > kỹ thuật vì sao KHÔNG lồng nhiều seed vào `replay.py`. Xem **§TASK-FT-06**.
@@ -278,7 +293,7 @@ sổ ngữ cảnh ≥ N token, do đó mô hình phải thuộc lớp X"*.
   Mẻ 10/07 chạy với `false`; để `true` là prompt không còn trùng khít.
 - **Chốt `build_messages`** (không phải `build_prompt`), ánh xạ (system, user)
   vào chat template của mô hình. Chỉ lùi về `build_prompt` nếu mô hình chốt ở
-  FT-03 không có system role — và khi đó **cả bốn ô dùng chung một lựa chọn**.
+  FT-03 không có system role — và khi đó **cả sáu ô dùng chung một lựa chọn**.
   Trộn hai cách giữa các ô là tự tạo confound.
 - **Assert schema trước khi ghi.** `aggregate` dùng `.get()` cho
   `citation_score_dieu` → thiếu field này thì **cột F1 cấp Điều ra 0.000 im
@@ -294,7 +309,9 @@ sổ ngữ cảnh ≥ N token, do đó mô hình phải thuộc lớp X"*.
   §TASK-FT-03). **KHÔNG dùng `temperature=0`** (bản trước của kế hoạch ghi vậy —
   sai): greedy trên model này sinh lặp vô tận, lặp ăn hết `max_new_tokens`, mà
   khối trích dẫn nằm **cuối** câu trả lời nên bị cắt → F1 = 0 vì lý do thuần kỹ
-  thuật. Cả bốn ô của FT-06 dùng **giống hệt** bộ tham số này.
+  thuật. Cả sáu ô của FT-06 dùng **giống hệt** bộ tham số này. ⚠️ `presence_penalty`
+  mặc định trong `replay.py:166` là **1.0**, không phải 0 → `kaggle_ft06.py` truyền
+  tường minh `--presence-penalty 0` ở mọi ô; bảy giá trị còn lại để mặc định lo.
 - **Tất định:** đến từ **seed cố định + cùng bản dựng llama.cpp + cùng phần
   cứng**, KHÔNG phải từ `temperature=0`. Đã chứng minh, không phải giả định:
   phiên 1 FT-03 chạy lại cùng lệnh cho `answer` **trùng khít từng ký tự 15/15
@@ -598,13 +615,76 @@ duy nhất** dùng cho mọi phép đo.
 
 ---
 
-### TASK-FT-06 — Chạy đủ bốn ô
+### TASK-FT-06 — Chạy đủ sáu ô
 
-**Chạy ở GPU thuê** (vast.ai / runpod, ~$1 vài giờ).
+**Chạy ở Kaggle Notebooks (T4)** — cùng nền đã dùng cho FT-03 và FT-05, nên bản dựng
+llama.cpp và phần cứng khớp với phiên gate. Hiện thực: `finetune/kaggle_ft06.py`
+(năm chặng `--stage`) + `finetune/notebooks/ft06_eval.ipynb` (bốn ô mỏng).
 
-Khối lượng: 137 câu × 2 mô hình × 2 khuôn ngữ cảnh = **548 lượt sinh**.
+Khối lượng: **sáu ô × 137 câu = 822 lượt sinh** (không phải 548 như bản trước).
 
-#### Số lần chạy: N=1 cho cả bốn ô — CHỐT, không để ngỏ
+#### Sáu ô, không phải bốn
+
+| # | Mô hình | `--n-shot` | Khuôn ngữ cảnh | `--tag` |
+|---:|---|---:|---|---|
+| 1 | đã tinh chỉnh | 0 | GraphRAG | `ft06-ft-s0` |
+| 2 | đã tinh chỉnh | 0 | Naive RAG | `ft06-ft-s0` |
+| 3 | gốc | 2 | GraphRAG | `ft06-base-s2` |
+| 4 | gốc | 2 | Naive RAG | `ft06-base-s2` |
+| 5 | gốc | 0 | GraphRAG | `ft06-base-s0` |
+| 6 | gốc | 0 | Naive RAG | `ft06-base-s0` |
+
+**Thứ tự có chủ ý:** ô giá trị nhất trước. Session Kaggle đứt bất cứ lúc nào và
+`/kaggle/working` bị xoá theo session — hàng "đã tinh chỉnh" là hàng mới duy nhất
+của mục 4.7 nên nó chạy trước, và kết quả được đẩy lên HF `session3_ft06/` **ngay
+sau từng ô** thay vì đợi tới cuối.
+
+**Vì sao hàng FT chỉ chạy 0-shot.** Bộ huấn luyện FT-04 dựng bằng **chính**
+`build_messages` (README `finetune/` §FT-04 điểm 1), tức mô hình đã được dạy đúng
+khuôn `(system, user)` hai lượt. Chèn thêm hai cặp minh hoạ định dạng vào lúc đánh
+giá là tạo **lệch train/eval** — đo một cấu hình mà tinh chỉnh chưa từng thấy, rồi
+gán chênh lệch cho "tinh chỉnh". 0-shot là cấu hình khớp với cách nó được huấn luyện.
+
+**Vì sao hàng gốc chạy CẢ HAI.** Với mô hình gốc, few-shot là **biến thật, đã đo**:
+`format_ok` nhảy 0.083 → 0.833 khi bật `--n-shot 2` (`gate_base_model.md` §1). Báo
+đúng một biến thể là chọn hậu nghiệm — 0-shot làm hàng gốc trông tệ hơn thực tế,
+2-shot làm nó trông tốt hơn cấu hình mà hàng FT được đo. Báo cả hai, để người đọc
+thấy trần và sàn của "chưa tinh chỉnh".
+
+#### Nguồn ngữ cảnh — cặp file 20260710-085236
+
+```
+data/evaluation/results_graphrag_20260710-085236.json
+data/evaluation/results_baseline_20260710-085236.json
+```
+
+**Phải là cặp file của CÙNG một mẻ chạy**, và đúng mẻ này: nó chính là mẻ sinh ra
+**0.578** (GraphRAG) và **0.435** (Naive RAG) ở hàng Gemini của ma trận §2. Trộn hai
+timestamp khác nhau là đổi luôn vế trái của cột Δ — số cục bộ khi đó so với một cấu
+hình truy hồi khác cái hàng Gemini đã dùng, mà không có gì trong file kết quả báo
+động điều đó.
+
+#### Hai cổng chặn trước khi tiêu 822 lượt
+
+**CỔNG CHẶN A — chat template** (`--stage gate-template`). Đọc
+`tokenizer.chat_template` nhúng trong **cả hai** file GGUF, so độ dài + sha256, ghi cả
+hai ra `finetune/reports/ft06_chat_template_{base,ft}.jinja`. Khác nhau → **dừng
+(exit 2)**: hai hàng của ma trận sẽ nhận prompt khác nhau và cột Δ không còn đo mô
+hình sinh mà đo cả khác biệt prompt. Cổng này là mới ở FT-06 vì FT-05 đi qua đường
+merge LoRA → convert → quantize, mỗi chặng đều có thể ghi lại metadata.
+
+**CỔNG CHẶN B — prompt đã render** (`--stage gate-prompt`). Đây là **món nợ của
+FT-03**: `gate_base_model.md` §5 ghi kiểm tra hạ tầng #2 là ⚠️ CÒN TREO — hai file
+`--dump-prompt` đã sinh nhưng *chưa ai mở ra nhìn bằng mắt*, mà "nhìn bằng mắt" mới
+là nội dung của kiểm tra. §7 xếp nó là việc **$0 và chặn cứng** phải làm trước FT-06.
+Chặng này đóng nợ đó: sinh prompt cho cả bốn tổ hợp `{graphrag, baseline} × {0, 2}`,
+kiểm tự động năm mục (render bằng chat template thật chứ không phải nhánh lùi
+`render-loi:` · 200 ký tự đầu system prompt khớp `build_messages` · số lượt vai 2 hay
+6 · kết thúc bằng `TRẢ LỜI:` rồi tới thẻ mở vai assistant · số thẻ mở vai assistant 1
+hay 3), rồi in 40 dòng đầu + 20 dòng cuối mỗi file để người đọc nhìn tận mắt. Bất kỳ
+mục FAIL → **exit 2**.
+
+#### Số lần chạy: N=1 cho cả sáu ô — CHỐT, không để ngỏ
 
 **Hai căn cứ:**
 
@@ -638,8 +718,9 @@ phải dựng assert schema để chặn.
 
 **Nếu về sau muốn σ:** nâng N=3 cho **riêng hàng "cục bộ đã tinh chỉnh"** bằng **ba
 lần chạy ĐỘC LẬP** (ba lệnh, ba file results, ba lần `aggregate`, rồi báo mean ± σ
-như `build_reproducibility_report.py` đang làm) — **không sửa code**. Chi phí:
-+2 × 274 = **548 lượt** phụ. Với mô hình tất định thì khoản chi đó mua được σ = 0,
+như `build_reproducibility_report.py` đang làm) — **không sửa code**. Chi phí: hàng
+FT là ô 1 + ô 2 = 274 lượt, nên +2 × 274 = **548 lượt** phụ. Với mô hình tất định thì
+khoản chi đó mua được σ = 0,
 nên chỉ làm nếu có lý do khác (ví dụ đổi phần cứng giữa chừng, hoặc bản llama.cpp
 khác) khiến tính tất định không còn được bảo đảm.
 
@@ -706,7 +787,7 @@ của cả hai file 10/07. Round-trip `parse_citations(answer) == pred_citations
 |---|---|---|---|
 | 1 | 10 câu ngữ cảnh rỗng | **Sao chép hằng số** ở mọi hàng (phương án a) | TASK-FT-02, §8.5 |
 | 2 | `format_ok_rate` tính trên tập nào | **123 câu có GT khác rỗng** | §3.1 |
-| 3 | `build_messages` hay `build_prompt` | **`build_messages`**, cố định qua cả bốn ô | TASK-FT-02 |
+| 3 | `build_messages` hay `build_prompt` | **`build_messages`**, cố định qua cả sáu ô | TASK-FT-02 |
 
 **Luận cứ cho (1):** nguyên tắc nền của toàn bộ thí nghiệm là *đóng băng truy
 hồi, chỉ đổi mô hình sinh*. Nhánh `if not norm_ids` nằm trong truy hồi → đầu ra
@@ -754,7 +835,7 @@ Kế hoạch trước dùng lẫn 137 và 127 cho cùng một đại lượng. C
 
 | Mẫu số | Nghĩa | Dùng ở đâu |
 |---:|---|---|
-| **137** | **tổng bộ câu hỏi** `test_set_v2.json` | khối lượng chạy (137 × 2 × 2 = 548), `negative_count` = 14 |
+| **137** | **tổng bộ câu hỏi** `test_set_v2.json` | khối lượng chạy (137 × 6 ô = 822), `negative_count` = 14 |
 | **127** | **số câu ĐI QUA MÔ HÌNH SINH** = 137 − 10 câu ngữ cảnh rỗng (V106–V113, V115, V116; `pipeline.py:223` return trước `generate_answer`) | mọi phát biểu về hành vi mô hình sinh: tỉ lệ `irac`, số câu phủ định thực đo (4/127) |
 | **123** | số câu có `ground_truth_citations` **khác rỗng** | **chỉ** mẫu số của `format_ok_rate` (§3.1) |
 
@@ -775,8 +856,10 @@ khi loại 10 câu ngữ cảnh rỗng; hai con số không mâu thuẫn, chỉ 
 
 **Một rủi ro đã giảm nhưng chưa biến mất:** T4 là `sm75`, không có
 FlashAttention-2 (đòi `sm80`+). Ở 4B + dynamic padding thì khả thi hơn nhiều so
-với 7B, nhưng **vẫn chưa đo**. Vì đã thuê GPU cho FT-06, thuê luôn cho FT-05 trên
-L4/A100 chỉ tốn thêm vài đô và gỡ hẳn ràng buộc này.
+với 7B, nhưng **vẫn chưa đo**. *(v2.3.3: đoạn "vì đã thuê GPU cho FT-06 thì thuê
+luôn cho FT-05" không còn đúng — FT-06 chạy trên Kaggle T4, không thuê GPU. Ràng buộc
+`sm75` vì thế vẫn còn, và FT-05 đã ghi nhận nó: dry-run Kaggle không kiểm được đường
+bf16/FlashAttention-2, script tự chuyển sang fp16.)*
 
 **Một giới hạn giữ nguyên:** `response_mode` của cột GraphRAG là **suy luận bằng
 regex**, không phải giá trị gốc. Bằng chứng rất mạnh (phân bố lưỡng cực tuyệt
@@ -833,7 +916,7 @@ FT-04  chuẩn bị dữ liệu     ── $0
           │
 FT-05  huấn luyện QLoRA     ── Kaggle T4
           │
-FT-06  chạy bốn ô           ── GPU thuê
+FT-06  chạy sáu ô           ── Kaggle T4
           │
 FT-07  viết 4.7 + sửa 5.4
 ```
