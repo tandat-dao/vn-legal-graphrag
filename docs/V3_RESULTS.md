@@ -106,6 +106,46 @@ Bậc mới, đáp ứng yêu cầu của GVHD: giữ nguyên **ba giai đoạn 
 
 ---
 
+## 6b. Ma trận phân ly kép — chạy lại trên mã đã sửa (31/07)
+
+Sáu cấu hình, mỗi cấu hình 1 mẻ đủ 137 câu, Gemini + `--no-llm-cache`.
+Mốc đối chiếu là cấu hình đầy đủ lấy trung bình 3 mẻ: đa lĩnh vực 0.545 · đa địa phương 0.667 · đa tầng 0.544 · đa phiên bản 0.571.
+
+| Cơ chế vô hiệu | Đa lĩnh vực | Đa địa phương | Đa tầng | Đa phiên bản |
+|---|---|---|---|---|
+| Lọc lĩnh vực | **−0.039** | −0.009 | −0.006 | +0.001 |
+| Lọc địa phương | −0.047 | **+0.050** | −0.025 | +0.010 |
+| [:IMPLEMENTS] | −0.042 | +0.021 | **−0.050** | +0.006 |
+| [:AMENDS] | −0.059 | +0.035 | +0.003 | **−0.004** |
+| Lọc thời gian | −0.018 | −0.013 | +0.004 | **+0.045** |
+| Duyệt đồ thị | −0.041 | +0.008 | **−0.101** | **−0.122** |
+
+**Ngưỡng nhiễu** (biên độ giữa 3 mẻ cùng cấu hình đầy đủ): đa địa phương 0.003 · đa tầng 0.010 · hai nhóm còn lại 0.033. Mọi ô in đậm đều vượt ngưỡng này.
+
+**Đọc kết quả:**
+- Phân ly kép **sạch**: lọc lĩnh vực (−0.039 đúng nhóm, ba nhóm khác ≈ 0) và duyệt đồ thị (−0.101 / −0.122 ở hai nhóm liên kết văn bản, +0.008 ở nhóm không liên quan).
+- `[:IMPLEMENTS]` là cơ chế trực tiếp của đa tầng (−0.050), `[:AMENDS]` gần như không tác động tới nhóm đó (+0.003).
+- **Kết quả phủ định:** hai bộ lọc cứng vẫn dương ở chính nhóm của mình — địa phương +0.050, thời gian +0.045. So với v2 (+0.182), việc sửa lỗi làm dịu bất thường hơn ba lần rưỡi nhưng **không đảo dấu**. Lợi ích ở nhóm đa địa phương đến từ bộ lập kế hoạch nhận đúng địa phương, không từ phép lọc cứng.
+
+## 6c. Tính trung thực — đo lần đầu bằng Tầng 2 thật
+
+Trước 31/07 **chưa từng có** kết quả Tầng 2 nào trong kho: mọi tệp đều có `supported = None`, `support_rate = nan`. Số 247/296 = 83.5% ở bản báo cáo cũ không truy được nguồn.
+
+Đo trên `results_graphrag_final1_20260729-022916.json`:
+
+| Bộ chấm | Tỉ lệ tồn tại | Tỉ lệ hậu thuẫn |
+|---|---|---|
+| **Gemini 2.5 Flash** (dùng cho báo cáo) | 295/296 = 99.7% | **230/295 = 78.0%** |
+| Claude Haiku 4.5 (đối chứng nhà cung cấp khác) | 295/296 = 99.7% | 260/295 = 88.1% |
+
+Theo nhóm (Gemini): đa lĩnh vực 0.873 · đa tầng 0.800 · đa phiên bản 0.721 · đa địa phương 0.716.
+
+⚠️ `JUDGE_MODEL` trong `faithfulness.py` mang tên Claude Haiku; khi chạy qua wrapper Gemini, hàm ánh xạ thấy chữ "haiku" nên chuyển sang `GEMINI_MODEL_PLANNER` = **Gemini 2.5 Flash**, không phải 2.5 Pro. Bảng 3.6 của báo cáo phải ghi Flash.
+
+Bộ chấm cùng họ (Flash) **chặt hơn** bộ chấm nhà cung cấp khác (Haiku) — 78.0% so với 88.1% — nên lo ngại thiên lệch tự đề cao không được số liệu ủng hộ.
+
+---
+
 ## 7. Phân tích bổ sung (dùng cho Chương 4 và 5)
 
 ### 7.1 Độ nhạy với độ chặt của thang đo
