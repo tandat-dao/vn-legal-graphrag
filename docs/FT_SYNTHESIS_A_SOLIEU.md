@@ -12,14 +12,24 @@
 
 ---
 
-## 0. Bốn chỗ hai nguồn lệch nhau — đọc trước
+## 0. Chỗ hai nguồn lệch nhau — đọc trước
+
+> **Lượt đánh giá được báo cáo là `ft06b`.** Nguồn ngữ cảnh: `data/evaluation/results_graphrag_final1_20260729-022916.json`
+> (cột GraphRAG) và `data/evaluation/results_baseline_20260710-085236.json` (cột Naive RAG)
+> — **hai mẻ khác nhau, có chủ ý**. Lý do đầy đủ ở `finetune/reports/ft06b_matrix.md`
+> đầu file và ở khối chú thích `finetune/kaggle_ft06.py:110-136`: vế Naive RAG không đi
+> qua bộ lập kế hoạch truy vấn (`naive_rag.py:339,361` truyền `query_plan=None`) nên sửa
+> đổi ở tầng đó không chạm tới nó và nó không cần chạy lại; vế GraphRAG lấy ngữ cảnh mới
+> sau khi sửa (`docs/V3_RESULTS.md` §1). Truy hồi vẫn đóng băng ở cả sáu ô — mỗi ô chỉ
+> đổi mô hình sinh.
 
 | # | Đại lượng | Nguồn A | Nguồn B | Ghi chú |
 |---:|---|---|---|---|
-| 1 | Hàng Gemini, F1 Khoản GraphRAG / Naive | **0.578 / 0.435**, Δ **+0.143** — `finetune/reports/ft06_matrix.md` §1, hằng số ở `finetune/kaggle_ft06.py:81-83`, gốc `docs/V2_RESULTS.md` §1 (**mean N=3**) | **0.581423 / 0.426975**, Δ **+0.154448** — `aggregate` chạy lại trên **đúng cặp file đã đóng băng** `data/evaluation/results_{graphrag,baseline}_20260710-085236.json` (**N=1**) | Không mâu thuẫn: A là trung bình 3 lần chạy, B là chính lần chạy cấp ngữ cảnh cho sáu ô. **Số đo khớp điều kiện thí nghiệm của mục 4.7 là B**; số đã in trong `ft06_matrix.md` là A |
-| 2 | Δ F1 Khoản của Bảng 4.3 + mức ý nghĩa | **+0.156**, CI [0.070, 0.242], p = 0.001 \*\*\* — `CLAUDE.md` §TRẠNG THÁI HIỆN TẠI | **+0.143**, CI [0.061, 0.225], p = 0.0015 \*\*, W/L/T 65/36/22 — `docs/V2_RESULTS.md` §1 | `V2_RESULTS.md` ghi rõ đây là **đính chính ngày 28/07/2026** và là bộ số dùng cho Chương 4 → **B là số đo mới nhất**; `CLAUDE.md` chưa cập nhật |
-| 3 | LoRA `r` / `alpha` | mặc định **32 / 64** — `finetune/train_qlora.py:63-64` | truyền tường minh **16 / 32** — `finetune/run.sh:290-291`; kế hoạch §TASK-FT-05 (`docs/FINETUNE_EXECUTION_PLAN.md:607-608`) chốt 16/32 | Lệnh huấn luyện đi qua `run.sh` nên **giá trị đã chạy là 16 / 32**. **Chưa xác minh được bằng `adapter_config.json`** — file đó KHÔNG CÓ TRONG REPO (xem §5) |
-| 4 | Phân bố độ dài mẫu huấn luyện | tokenizer **Qwen2.5-7B** lúc dựng dữ liệu — `finetune/reports/dataset_stats.md` §2 | tokenizer **Qwen3 thật** lúc huấn luyện (`audit_lengths`, `train_qlora.py:107-135`) → `length_stats.json` | `length_stats.json` **KHÔNG CÓ TRONG REPO** → chỉ có nguồn A. Lệch dự kiến nhỏ (`dataset_stats.md` §8.1: cùng họ BPE 151k) nhưng **chưa đo được** |
+| 1 | Δ F1 Khoản của hàng Gemini | **+0.181317** — hiệu hai `aggregate.f1_mean` tính trên **toàn bộ 137 câu** (gồm 14 câu phủ định); cơ sở của `ft06b_matrix.md` §1 | **+0.187**, CI [0.108, 0.264], p = 0.00003 \*\*\*, W/L/T 67/32/24 — **ghép cặp từng câu trên 123 câu** (đã loại câu phủ định), `docs/V3_RESULTS.md` §3 | Không mâu thuẫn — **hai cơ sở khác nhau**. Bảng ma trận dùng cơ sở A vì đó là đại lượng mà **cả sáu ô cục bộ đều có sẵn** (`ft06b_matrix.md` §1.1); mức ý nghĩa thống kê chỉ tồn tại ở cơ sở B. Không được trộn hai cơ sở trong cùng một bảng |
+| 2 | Δ F1 Khoản của Bảng 4.3 + mức ý nghĩa | **+0.156**, CI [0.070, 0.242], p = 0.001 \*\*\* — `CLAUDE.md` §TRẠNG THÁI HIỆN TẠI · **+0.143**, CI [0.061, 0.225], p = 0.0015 \*\* — `docs/V2_RESULTS.md` §1 | **+0.187**, CI [0.108, 0.264], p = 0.00003 \*\*\* — `docs/V3_RESULTS.md` §3 | `V3_RESULTS.md` là bộ số **thay thế** `V2_RESULTS.md` sau khi sửa lỗi phân loại địa phương (§1 của file đó) → **B là số đo mới nhất**; `CLAUDE.md` và `V2_RESULTS.md` chưa cập nhật |
+| 3 | Tên kho mô hình gốc dùng để huấn luyện | `unsloth/Qwen3-4B-Instruct-2507` — `finetune/run.sh:50` truyền `--base-model` | **`unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit`** — `base_model_name_or_path` trong `adapter/…/checkpoint-588/adapter_config.json` | **Kho thật đã nạp là B.** Unsloth tự chuyển hướng tên kho sang bản **lượng tử-4-bit dựng sẵn** của chính họ khi `load_in_4bit=True`. Đây là **giá trị ghim** — người tái lập tải kho A sẽ nạp trọng số bf16 gốc, không phải trọng số 4-bit đã dựng sẵn, và ra kết quả khác. Xem §2.1 |
+| 4 | Phân bố độ dài mẫu huấn luyện | tokenizer **Qwen2.5-7B** lúc dựng dữ liệu — `finetune/reports/dataset_stats.md` §2: mean 7 498 · p50 6 818 · p95 11 001 · max 12 950 | tokenizer **Qwen3 thật** lúc huấn luyện — `finetune/logs/ft04-5k-2ep-20260729-2122.log:51-60`: mean 7 530 · p50 6 869 · p95 11 009 · max 12 968 | **Đã đối chiếu được** (log phiên 2 nay có trong repo). Lệch ≤ 0.5 % ở mọi phân vị — đúng kỳ vọng nêu ở `dataset_stats.md` §8.1 (cùng họ BPE 151k). `over_limit = 0` ở cả train lẫn val, **đọc trực tiếp**, không còn phải suy |
+| 5 | Thông lượng token/s của phiên huấn luyện | log in **`nan tok/s`** — `…2122.log:374` | **≈ 3 625.9 tok/s** — TÍNH LẠI: `total_tokens 35 316 237 × 2 epoch ÷ train_runtime 19 480 s` | Không phải mô hình chạy hỏng: `train_qlora.py:342` in `st.metrics.get("train_tokens_per_second", float("nan"))`, mà `transformers 5.5.0` **không đặt khoá đó** trong `st.metrics` → rơi vào giá trị mặc định `nan`. Giá trị TÍNH LẠI dùng ba con số đều đọc trực tiếp từ log (dòng 59, 87, 370) — xem §5.4 |
 
 ---
 
@@ -27,31 +37,38 @@
 
 | Hạng mục | Giá trị | Nguồn |
 |---|---|---|
-| Mô hình gốc (huấn luyện từ) | `unsloth/Qwen3-4B-Instruct-2507` | `finetune/run.sh:50`; `finetune/train_qlora.py:42` |
-| Mô hình gốc (hàng "chưa tinh chỉnh", GGUF) | `bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF` :: `Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `finetune/reports/ft06_artifacts.json` |
+| Mô hình gốc (kho **thật đã nạp** để huấn luyện) | `unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit` | `adapter/ft04-5k-2ep-20260729-2122/checkpoint-588/adapter_config.json` (`base_model_name_or_path`) |
+| Mô hình gốc (tên **truyền vào CLI**) | `unsloth/Qwen3-4B-Instruct-2507` — Unsloth tự chuyển hướng sang kho 4-bit ở dòng trên | `finetune/run.sh:50`; `finetune/train_qlora.py:42`; xem §0 mục 3 và §2.1 |
+| Mô hình gốc (hàng "chưa tinh chỉnh", GGUF) | `bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF` :: `Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf` | `finetune/reports/ft06b_artifacts.json` |
 | Phương pháp | QLoRA 4-bit + LoRA, `train_on_responses_only` | `finetune/train_qlora.py:231-248`, `326-335` |
-| LoRA r / alpha / dropout | 16 / 32 / 0.0 | `finetune/run.sh:290-291`; `finetune/train_qlora.py:239` |
+| LoRA r / alpha / dropout | 16 / 32 / 0.0 — **xác minh bằng `adapter_config.json`** | `adapter_config.json` (`r`, `lora_alpha`, `lora_dropout`) |
+| Số layer được vá / loại mô-đun | **36 layer** — 36 QKV + 36 O + 36 MLP | `…2122.log:47` |
+| Tham số huấn luyện được / tổng | **33 030 144 / 4 055 498 240 = 0.81 %** | `…2122.log:90` |
 | `max_seq_length` | 16 384 | `finetune/run.sh:66`; `finetune/train_qlora.py:53` |
 | Số mẫu tổng | 5 000 | `finetune/reports/dataset_stats.md` §0; `finetune/build_dataset.py:88` |
 | Số mẫu train / val | 4 690 / 310 | đếm dòng `finetune/data/train.jsonl`, `finetune/data/val.jsonl` |
-| Số mẫu val thực dùng khi eval | 64 | `finetune/run.sh:287`; `finetune/train_qlora.py:49-51` |
-| Epoch | 2 | `finetune/run.sh:67` |
-| Số bước tối ưu | **KHÔNG CÓ TRONG REPO** (suy được từ `train_result.json` — thiếu) | xem §5 |
-| Thời gian huấn luyện | **KHÔNG CÓ TRONG REPO** (`train_runtime` trong `train_result.json` — thiếu) | xem §5 |
-| `eval_loss` epoch 1 / epoch 2 | 0.3129 / 0.3082 — **chỉ có ở tài liệu tóm tắt**, không có file gốc | `docs/FT_SYNTHESIS_B_KHOKHAN.md:576-577`; xem §5 |
-| GGUF đã tinh chỉnh | `ft04-5k-2ep-20260729-2122-Q4_K_M.gguf` | `finetune/reports/ft06_artifacts.json` |
-| **F1 Khoản — ô 1** (ft, 0-shot, GraphRAG) | **0.402433** | `aggregate` trên `finetune/results/results_graphrag_ft06-ft-s0.json` |
-| **F1 Khoản — ô 2** (ft, 0-shot, Naive) | **0.300765** | `finetune/results/results_baseline_ft06-ft-s0.json` |
-| **F1 Khoản — ô 3** (base, 2-shot, GraphRAG) | **0.492631** | `finetune/results/results_graphrag_ft06-base-s2.json` |
-| **F1 Khoản — ô 4** (base, 2-shot, Naive) | **0.239092** | `finetune/results/results_baseline_ft06-base-s2.json` |
-| **F1 Khoản — ô 5** (base, 0-shot, GraphRAG) | **0.136253** | `finetune/results/results_graphrag_ft06-base-s0.json` |
-| **F1 Khoản — ô 6** (base, 0-shot, Naive) | **0.153771** | `finetune/results/results_baseline_ft06-base-s0.json` |
-| Δ F1 Khoản — hàng ft 0-shot | **+0.101668** | tính từ ô 1 − ô 2 |
-| Δ F1 Khoản — hàng base 2-shot | **+0.253540** | tính từ ô 3 − ô 4 |
-| Δ F1 Khoản — hàng base 0-shot | **−0.017518** | tính từ ô 5 − ô 6 |
-| Δ F1 Khoản — hàng Gemini | **+0.143** (mean N=3) / **+0.154448** (cặp file đã đóng băng) | §0 mục 1 |
-| Tổng lượt sinh | 822 = 6 ô × 137 câu | `docs/FINETUNE_EXECUTION_PLAN.md:635`; `finetune/kaggle_ft06.py:216-223` |
-| Số lần chạy mỗi ô | N = 1 | `docs/FINETUNE_EXECUTION_PLAN.md:731-745` |
+| Số mẫu val thực dùng khi eval | 64 | `finetune/run.sh:287`; `finetune/train_qlora.py:49-51`; `…2122.log:62` |
+| Epoch | 2 | `finetune/run.sh:67`; `…2122.log:87` |
+| Số bước tối ưu | **588** (294 mỗi epoch) — **số đo**, không phải suy | `…2122.log:87`, `:369`, `:377-378` |
+| Thời gian huấn luyện | **19 480 s = 5 giờ 24 phút 40 giây** | `…2122.log:370`, `:373` (`train_runtime`), tiến trình `:367` |
+| `train_loss` | **0.4054** | `…2122.log:370`, `:373` |
+| `eval_loss` epoch 1 / epoch 2 | **0.3129 / 0.3082** | `…2122.log:377-378` (bảng `--- EVAL LOSS THEO EPOCH ---`) |
+| Tỉ lệ token bị che | **5 623 / 5 707 = 98.5 %** | `…2122.log:84` |
+| Thông lượng | **≈ 3 625.9 tok/s** — **TÍNH LẠI** (log ghi `nan`) | §0 mục 5; §5.4 |
+| GGUF đã tinh chỉnh | `ft04-5k-2ep-20260729-2122-Q4_K_M.gguf` | `finetune/reports/ft06b_artifacts.json` |
+| **F1 Khoản — ô 1** (ft, 0-shot, GraphRAG) | **0.401703** | `aggregate` trên `finetune/results/results_graphrag_ft06b-ft-s0.json` |
+| **F1 Khoản — ô 2** (ft, 0-shot, Naive) | **0.300765** | `finetune/results/results_baseline_ft06b-ft-s0.json` |
+| **F1 Khoản — ô 3** (base, 2-shot, GraphRAG) | **0.510879** | `finetune/results/results_graphrag_ft06b-base-s2.json` |
+| **F1 Khoản — ô 4** (base, 2-shot, Naive) | **0.239092** | `finetune/results/results_baseline_ft06b-base-s2.json` |
+| **F1 Khoản — ô 5** (base, 0-shot, GraphRAG) | **0.131387** | `finetune/results/results_graphrag_ft06b-base-s0.json` |
+| **F1 Khoản — ô 6** (base, 0-shot, Naive) | **0.153771** | `finetune/results/results_baseline_ft06b-base-s0.json` |
+| Δ F1 Khoản — hàng ft 0-shot | **+0.100938** | tính từ ô 1 − ô 2 |
+| Δ F1 Khoản — hàng base 2-shot | **+0.271788** | tính từ ô 3 − ô 4 |
+| Δ F1 Khoản — hàng base 0-shot | **−0.022384** | tính từ ô 5 − ô 6 |
+| Δ F1 Khoản — hàng Gemini | **+0.181317** (cơ sở aggregate 137 câu, dùng cho ma trận) | §6.1; §0 mục 1 |
+| Tổng lượt sinh | 822 = 6 ô × 137 câu | `docs/FINETUNE_EXECUTION_PLAN.md:635` |
+| Số lần chạy mỗi ô — hàng cục bộ | N = 1 (tất định theo seed) | `docs/FINETUNE_EXECUTION_PLAN.md:731-745`; `ft06b_matrix.md` §1.2 |
+| Số lần chạy — hàng Gemini | GraphRAG N = 3 (`final1/2/3`) · Naive N = 4 (bốn mẻ đủ 137 câu) | `ft06b_matrix.md` §1.3, §1.4 |
 
 ---
 
@@ -61,14 +78,18 @@
 
 | Tham số | Giá trị đã chạy | Nơi đặt | Ghi chú |
 |---|---|---|---|
-| `--base-model` | `unsloth/Qwen3-4B-Instruct-2507` | `run.sh:50` (`BASE_MODEL`) → `run.sh:284`; mặc định script `train_qlora.py:42` | |
-| Lượng tử hoá | `load_in_4bit = True` | `train_qlora.py:234` | QLoRA; `dtype = None` (`train_qlora.py:235`) để Unsloth tự chọn |
-| `r` | **16** | `run.sh:290` truyền `--lora-r 16` | mặc định script là **32** (`train_qlora.py:63`) — xem §0 mục 3 |
-| `lora_alpha` | **32** | `run.sh:291` truyền `--lora-alpha 32` | mặc định script là **64** (`train_qlora.py:64`) |
-| `lora_dropout` | **0.0** | `train_qlora.py:240` | hardcode trong script, không có cờ CLI |
-| `bias` | `"none"` | `train_qlora.py:241` | hardcode |
-| `target_modules` | `q_proj`, `k_proj`, `v_proj`, `o_proj`, `gate_proj`, `up_proj`, `down_proj` (**7 module**) | `train_qlora.py:243-244` | hardcode |
-| `use_rslora` | `False` | `train_qlora.py:246` | hardcode |
+| `--base-model` (tên truyền vào) | `unsloth/Qwen3-4B-Instruct-2507` | `run.sh:50` (`BASE_MODEL`) → `run.sh:284`; mặc định script `train_qlora.py:42` | ⚠️ **KHÔNG phải kho thật đã nạp** — xem dòng dưới |
+| **Kho thật đã nạp** | **`unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit`** | `adapter_config.json` → `base_model_name_or_path` | Với `load_in_4bit = True`, Unsloth **tự chuyển hướng** tên kho sang bản lượng tử-4-bit (bitsandbytes NF4) mà họ dựng sẵn, thay vì tải trọng số bf16 rồi tự lượng tử hoá. Người tái lập phải dùng **chuỗi này**, không dùng chuỗi ở dòng trên |
+| Lượng tử hoá | `load_in_4bit = True` | `train_qlora.py:234` | QLoRA; `dtype = None` (`train_qlora.py:235`) để Unsloth tự chọn. Đây chính là cờ kích hoạt việc chuyển hướng kho ở dòng trên |
+| `r` | **16** | `run.sh:290` truyền `--lora-r 16`; **xác minh** `adapter_config.json` → `"r": 16` | mặc định script là **32** (`train_qlora.py:63`) — cấu hình adapter đã lưu chốt lại giá trị thật là 16 |
+| `lora_alpha` | **32** | `run.sh:291` truyền `--lora-alpha 32`; **xác minh** `adapter_config.json` → `"lora_alpha": 32` | mặc định script là **64** (`train_qlora.py:64`) |
+| `lora_dropout` | **0.0** | `train_qlora.py:240`; **xác minh** `adapter_config.json` → `"lora_dropout": 0.0` | hardcode trong script, không có cờ CLI |
+| `bias` | `"none"` | `train_qlora.py:241`; **xác minh** `adapter_config.json` → `"bias": "none"` | hardcode |
+| `target_modules` | `q_proj`, `k_proj`, `v_proj`, `o_proj`, `gate_proj`, `up_proj`, `down_proj` (**7 module**) | `train_qlora.py:243-244`; **xác minh** `adapter_config.json` → `target_modules` đúng 7 tên đó (thứ tự trong file là `k, o, down, q, gate, v, up` — tập hợp trùng khít) | hardcode |
+| `use_rslora` | `False` | `train_qlora.py:246`; **xác minh** `adapter_config.json` → `"use_rslora": false` | hardcode |
+| `use_dora` | `False` | `adapter_config.json` → `"use_dora": false` | không đặt trong script → mặc định thư viện |
+| `peft_version` | **0.20.0** | `adapter_config.json` → `"peft_version": "0.20.0"` | khớp bộ ghim `peft==0.20.0` (§4.6) |
+| `init_lora_weights` / `task_type` | `true` / `CAUSAL_LM` | `adapter_config.json` | mặc định thư viện |
 | `random_state` | 42 | `train_qlora.py:247` (= `--seed`, mặc định 42 tại `train_qlora.py:67`) | |
 | `use_gradient_checkpointing` | `"unsloth"` | `train_qlora.py:245` | |
 | `learning_rate` | **2e-4** | `train_qlora.py:62` (mặc định, `run.sh` KHÔNG truyền lại) | kế hoạch §TASK-FT-05 chốt `lr=2e-4` (`FINETUNE_EXECUTION_PLAN.md:609`) |
@@ -104,17 +125,32 @@
 | `neftune_noise_alpha`, `label_smoothing_factor` | không đặt → mặc định thư viện |
 | `lora_alpha`-scaling nội bộ Unsloth | không can thiệp |
 
-### 2.3 Số liệu KHÔNG CÓ TRONG REPO
+### 2.3 Cấu trúc adapter — đọc từ log và `adapter_config.json`
 
-| Đại lượng | Nơi lẽ ra chứa nó | Đã tìm ở |
+| Đại lượng | Giá trị | Nguồn |
 |---|---|---|
-| Số layer được vá LoRA | log huấn luyện (dòng in của Unsloth) | `finetune/logs/` (chỉ có `ft06_gpu0.log`, `ft06_gpu1.log` — **log phiên 3, không phải phiên 2**), `finetune/results/`, `finetune/reports/`, thư mục gốc repo, `../results/` |
-| Số tham số huấn luyện được / tổng | log huấn luyện | như trên |
-| `r` / `alpha` thực nạp | `adapter/adapter_config.json` | `find . -iname "adapter_config.json"` → 0 kết quả trong repo |
-| Số lượt forward/backward thật | `train_result.json` (`train_runtime`, `global_step`) | `find . -iname "train_result*.json"` → 0 kết quả |
-| Tỉ lệ token bị che | log huấn luyện — script in ở `train_qlora.py:331-335` | như trên |
+| Số layer được vá LoRA | **36 layer**, gồm **36 QKV + 36 O + 36 MLP** | `finetune/logs/ft04-5k-2ep-20260729-2122.log:47` — *"Unsloth 2026.7.5 patched 36 layers with 36 QKV layers, 36 O layers and 36 MLP layers."* (dòng này lặp lại nguyên văn ở `:395` khi chặng merge nạp lại mô hình) |
+| Số tham số huấn luyện được / tổng | **33 030 144 / 4 055 498 240 — 0.81 %** | `…2122.log:90` — *"Trainable parameters = 33,030,144 of 4,055,498,240 (0.81% trained)"* |
+| `r` / `alpha` thực nạp | **16 / 32** | `adapter/ft04-5k-2ep-20260729-2122/checkpoint-588/adapter_config.json` |
+| Số bước tối ưu thật | **588** (`Total steps = 588`, và eval mốc `step 294` / `step 588`) | `…2122.log:87`, `:377-378` |
+| Tỉ lệ token bị che | **5 623 / 5 707 token = 98.5 %** | `…2122.log:84` — *"che 5623/5707 token (98.5%) — con lai la dap an"*; script in ở `train_qlora.py:331-335` |
 
-*(Việc truy tìm các file này trong Downloads/ổ đĩa ngoài repo đã được người dùng cho tạm gác lại.)*
+#### Kiểm chéo độc lập cho `r` — phép nhân phải khớp
+
+Bảy mô-đun đích của Qwen3-4B cộng lại có **57 344** chiều vào+ra mỗi layer. Một adapter
+LoRA hạng `r` trên một mô-đun `d_in → d_out` thêm `r × (d_in + d_out)` tham số, nên tổng
+tham số huấn luyện được phải bằng:
+
+```
+36 layer × 57 344 × r  =  36 × 57 344 × 16  =  33 030 144
+```
+
+**Trùng khít** con số `33,030,144` mà log in ở dòng 90. Đây là **xác nhận thứ ba** cho
+`r = 16`, độc lập với `run.sh:290` (cờ CLI) và với `adapter_config.json` (cấu hình đã
+lưu): nếu `r` thật là 32 thì log phải in 66 060 288. Ba nguồn cùng chỉ về 16.
+
+*(Cảnh báo cách đọc: phép nhân này giả định `lora_dropout` không thêm tham số và không có
+`modules_to_save` — `adapter_config.json` xác nhận cả hai: `"modules_to_save": null`.)*
 
 ---
 
@@ -156,7 +192,7 @@
 | Thứ được tái dùng | Hàm | File gốc | Nơi import |
 |---|---|---|---|
 | System prompt + khung user prompt | `build_messages(question, context, mode)` | `src/retrieval/context_assembler.py` | `finetune/build_dataset.py:62` (import), `:643` (gọi) |
-| Cùng hàm đó dùng lúc đánh giá | `build_chat_messages` gọi `build_messages` | `finetune/replay.py` | `finetune/kaggle_ft06.py:661` (cổng chặn B dựng lại để đối chiếu) |
+| Cùng hàm đó dùng lúc đánh giá | `build_chat_messages` gọi `build_messages` | `finetune/replay.py` | `finetune/kaggle_ft06.py:768` (cổng chặn B import `build_chat_messages` để dựng lại và đối chiếu) |
 | Bộ chấm | `parse_citations`, `cit_matches`, `aggregate` | `src/retrieval/answer_generator.py`, `src/evaluation/metrics.py` | `build_dataset.py:897` (round-trip), `replay.py` (chấm) |
 
 `RESPONSE_MODE = "general"` cho toàn bộ 5 000 mẫu — `build_dataset.py:102`.
@@ -263,11 +299,25 @@ Số citation mỗi mẫu trả lời được: mean **1.26**, max **2**. Số b
 | GraphRAG | 127 | ~4 200 | ~7 600 | ~8 000 |
 | Baseline | 137 | ~1 800 | – | ~2 450 |
 
-**Nguồn B — đo lúc huấn luyện bằng tokenizer thật:** `audit_lengths()` (`train_qlora.py:107-135`) ghi `length_stats.json` (train) và `val_length_stats.json` (val) với các khoá `n_samples`, `p50`, `p95`, `max`, `mean`, `total_tokens`, `over_limit`, `limit`.
+**Nguồn B — đo lúc huấn luyện bằng tokenizer thật** (`audit_lengths()`, `train_qlora.py:107-135`). File `length_stats.json` / `val_length_stats.json` vẫn không có trong repo, nhưng **cùng bảng đó được in nguyên vẹn ra log huấn luyện** — `finetune/logs/ft04-5k-2ep-20260729-2122.log`, khối `--- PHAN BO DO DAI MAU (tokenizer that, chuoi that) ---`:
 
-> **Cả hai file KHÔNG CÓ TRONG REPO.** Đã tìm: `finetune/results/`, `finetune/reports/`, `finetune/logs/`, `finetune/models/`, thư mục gốc repo, và `../results/` (bản tải về của phiên 3). Lệnh: `find . -iname "*length_stats*.json"` → 0 kết quả.
-> Hệ quả: **không đối chiếu được** giữa hai nguồn. `dataset_stats.md` §8.1 nêu kỳ vọng lệch nhỏ (Qwen2.5 và Qwen3 cùng họ BPE 151k), nhưng đó là lập luận chứ không phải số đo.
-> Điều **biết chắc**: `audit_lengths` **dừng chương trình** (`SystemExit`, `train_qlora.py:130-131`) nếu có mẫu vượt trần, mà lần chạy thật đã đi tới bước merge/gguf → suy ra `over_limit = 0` ở cả train lẫn val. (Đây là suy luận từ hành vi mã, không phải số đọc từ file.)
+| Tập | dòng log | n_samples | p50 | mean | p95 | max | limit | over_limit | total_tokens |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| **train** | `:51-60` | 4 690 | 6 869 | 7 530 | 11 009 | 12 968 | 16 384 | **0** | **35 316 237** |
+| **val** (64 mẫu đã cắt) | `:64-73` | 64 | 6 542 | 7 286 | 10 956 | 12 062 | 16 384 | **0** | **466 358** |
+
+**Đối chiếu hai nguồn — lệch không đáng kể:**
+
+| Đại lượng | Qwen2.5 (dựng dữ liệu, 5 000 mẫu) | Qwen3 thật (huấn luyện, 4 690 mẫu train) | Lệch |
+|---|---:|---:|---:|
+| mean | 7 498 | 7 530 | +0.43 % |
+| p50 | 6 818 | 6 869 | +0.75 % |
+| p95 | 11 001 | 11 009 | +0.07 % |
+| max | 12 950 | 12 968 | +0.14 % |
+
+Kỳ vọng nêu ở `dataset_stats.md` §8.1 (Qwen2.5 và Qwen3 cùng họ BPE 151k) **được số đo xác nhận** — không còn là lập luận suông. Hai cột không cùng mẫu số (5 000 so với 4 690) nên đây là đối chiếu **phân bố**, không phải phép trừ từng mẫu.
+
+`over_limit = 0` ở cả train lẫn val nay **đọc trực tiếp** (`:58`, `:71`), không còn phải suy từ việc `audit_lengths` không kích `SystemExit` (`train_qlora.py:130-131`).
 
 **Số liệu ngân sách token đối chiếu, đo trên 137 câu eval thật** (`finetune/reports/token_budget.md` §2.1, tokenizer Qwen2.5-7B):
 
@@ -294,7 +344,7 @@ Bóc tách (Qwen2.5, GraphRAG — `token_budget.md` §2.2): `system_prompt` mean
 | 6 | `build_dataset.py:911` | `f"Điều {dieu}."` phải có mặt trong `context` | 4 550 | ✅ |
 | 7 | `build_dataset.py:915` | mẫu từ chối phải parse ra **đúng 0** citation | 450 | ✅ |
 | 8 | `build_dataset.py:71` | `context_assembler.INCLUDE_SCHEMA_B is False` (kiểm lúc import) | — | ✅ |
-| 9 | `train_qlora.py:124-131` | `over_limit == 0`, nếu không thì `SystemExit` | 4 690 + 64 | **KHÔNG ĐỌC ĐƯỢC** (thiếu `length_stats.json`) — xem §3.4 |
+| 9 | `train_qlora.py:124-131` | `over_limit == 0`, nếu không thì `SystemExit` | 4 690 + 64 | ✅ **0/4690** và **0/64** — `…2122.log:58`, `:60`, `:71`, `:73` |
 
 Kiểm thủ công bổ sung: 20 mẫu đầy đủ xuất ra `finetune/reports/samples_20.txt` (319 152 byte) — `dataset_stats.md` §6 mục 5.
 
@@ -317,11 +367,14 @@ Unit test: `finetune/slug.py` có **22 ca** ở `tests/test_finetune_slug.py` (`
 |---|---|---|
 | Nền | RunPod Community Cloud | Kaggle Notebooks |
 | GPU dự kiến / yêu cầu | RTX 4090, preflight chặn `sm < 80` và VRAM < 22 000 MB | — |
-| GPU thực tế | **KHÔNG CÓ TRONG REPO** (nằm ở log huấn luyện — thiếu) | **Tesla T4 × 2, 15 360 MiB mỗi card** |
-| Nguồn | `finetune/run.sh:6`, `:132-143` | `finetune/reports/ft06_gpu_info.json`; `ft06_matrix.md` §3 |
+| GPU thực tế | **NVIDIA GeForce RTX 4090 · sm89 · Num GPUs = 1 · Max memory 23.516 GB · Linux** — `…2122.log:39`, `:41` | **Tesla T4 × 2, 15 360 MiB mỗi card** |
+| bf16 | **bf16 gốc = True** (`…2122.log:39`); `Bfloat16 = TRUE` (`:43`) | không áp dụng |
+| Attention backend | **Xformers 0.0.35 · FA2 = False** — `…2122.log:43` | không áp dụng |
+| Bộ thư viện lúc chạy | Torch **2.10.0+cu128** · CUDA **8.9** · CUDA Toolkit **12.8** · Triton **3.6.0** (`:42`) · Transformers **5.5.0** · Unsloth **2026.7.5** (`:40`) | xem §4.6 |
+| Nguồn | `finetune/run.sh:6`, `:132-143`; `finetune/logs/ft04-5k-2ep-20260729-2122.log:39-43` | `finetune/reports/ft06b_gpu_info.json`; `ft06b_matrix.md` §3; `finetune/reports/ft06b_run_status.json` |
 | Ràng buộc đĩa | ≥ 50 GB trống (`run.sh:145-146`) | — |
-| Ràng buộc Python | đúng 3.12 (`run.sh:150-151`, vì wheel là cp312) | cp312 (`ft06_artifacts.json`) |
-| Thời gian | **KHÔNG CÓ TRONG REPO** | tổng `total_elapsed_s` sáu ô = **10 638.06 s ≈ 2 giờ 57 phút** (cộng từ sáu results JSON, §6.2) |
+| Ràng buộc Python | đúng 3.12 (`run.sh:150-151`, vì wheel là cp312) | cp312 (`ft06b_artifacts.json`) |
+| Thời gian | chặng `train` = **19 480 s ≈ 5 giờ 24 phút 40 giây** (`…2122.log:370`, `:373`); tổng cả bảy chặng **KHÔNG CÓ TRONG REPO** (log không in mốc thời gian đầu/cuối) | tổng `total_elapsed_s` sáu ô = **11 313.56 s ≈ 3 giờ 8 phút** (cộng từ sáu results JSON, §6.2) |
 | Chi phí | **KHÔNG CÓ TRONG REPO** — không file nào ghi giá thuê. `run.sh:129` chỉ nêu chi phí một lần preflight hỏng ≈ $0.003 | Kaggle miễn phí (30 giờ/tuần — `FINETUNE_EXECUTION_PLAN.md:594`) |
 
 ### 4.2 Bảy chặng của `finetune/run.sh`
@@ -346,62 +399,74 @@ Danh sách chặng: `prep`, `gate-template`, `gate-prompt`, `run`, `table` — `
 
 | # | Chặng | Hàm · dòng | Làm gì | Đầu ra |
 |---:|---|---|---|---|
-| 1 | `prep` | `stage_prep()` — `kaggle_ft06.py:478` | Tải wheel `llama-cpp-python` và đối chiếu sha256 **trước khi** `pip install`; tải hai file GGUF (base theo `revision` ghim, ft); đối chiếu sha256 cả hai; tạo symlink vào `finetune/models/`; in `nvidia-smi` | `finetune/reports/ft06_artifacts.json`, `finetune/reports/ft06_gpu_info.json` |
-| 2 | `gate-template` | `stage_gate_template()` — `:600` | Đọc `tokenizer.chat_template` nhúng trong **cả hai** GGUF (khoá `kaggle_ft06.py:96`); so độ dài + sha256; in `difflib` nếu khác; **`exit 2`** nếu khác | `finetune/reports/ft06_chat_template_base.jinja`, `…_ft.jinja` |
-| 3 | `gate-prompt` | `stage_gate_prompt()` — `:719` | Sinh prompt cho bốn tổ hợp `{graphrag, baseline} × {0-shot, 2-shot}`; chạy 5 kiểm tự động (§4.5); in 40 dòng đầu + 20 dòng cuối mỗi file; **`exit 2`** nếu bất kỳ mục FAIL | 4 file `ft06_prompt_{system}_s{n}.txt`, 4 file `results_{system}_ft06-gate-prompt-s{n}.json` |
-| 4 | `run` | `stage_run()` — `:923`; song song `_run_song_song()` — `:849` | Sáu ô, mỗi ô một lệnh `python -m finetune.replay`, ghim `CUDA_VISIBLE_DEVICES` của subprocess; `--resume`; đẩy HF ngay sau từng ô | 6 file `results_{system}_{tag}.json` + 6 `.partial.jsonl`, `ft06_run_status*.json`, `ft06_gpu{0,1}.log` |
-| 5 | `table` | — | Gom sáu file kết quả, gọi `metrics.aggregate`, dựng bảng | `finetune/reports/ft06_matrix.md` |
+| 1 | `prep` | `stage_prep()` — `kaggle_ft06.py:578` | Tải wheel `llama-cpp-python` và đối chiếu sha256 **trước khi** `pip install`; tải hai file GGUF (base theo `revision` ghim, ft); đối chiếu sha256 cả hai; tạo symlink vào `finetune/models/`; in `nvidia-smi` | `finetune/reports/ft06b_artifacts.json`, `finetune/reports/ft06b_gpu_info.json` |
+| 2 | `gate-template` | `stage_gate_template()` — `:700` | Đọc `tokenizer.chat_template` nhúng trong **cả hai** GGUF; so độ dài + sha256; in `difflib` nếu khác; **`exit 2`** nếu khác (`:730`) | `finetune/reports/ft06b_chat_template_base.jinja`, `…_ft.jinja` |
+| 3 | `gate-prompt` | `stage_gate_prompt()` — `:840` | Sinh prompt cho bốn tổ hợp `{graphrag, baseline} × {0-shot, 2-shot}`; chạy 5 kiểm tự động (§4.5); in 40 dòng đầu + 20 dòng cuối mỗi file; **`exit 2`** nếu bất kỳ mục FAIL | 4 file `ft06b_prompt_{system}_s{n}.txt`, 4 file `results_{system}_ft06b-gate-prompt-s{n}.json` |
+| 4 | `run` | `stage_run()` — `:1229`; song song `_run_song_song()` — `:1146` | Sáu ô, mỗi ô một lệnh `python -m finetune.replay`, ghim `CUDA_VISIBLE_DEVICES` của subprocess; `--resume`; đẩy HF ngay sau từng ô | 6 file `results_{system}_ft06b-*.json` + 6 `.partial.jsonl`, `ft06b_run_status*.json`, `ft06b_gpu{0,1}.log` |
+| 5 | `table` | `stage_table()` — `:1933` | Gom sáu file kết quả, gọi `metrics.aggregate`, dựng bảng; hàng Gemini **cũng tính từ file kết quả**, không ghim hằng số | `finetune/reports/ft06b_matrix.md` |
 
-Tham số sinh: script **KHÔNG truyền lại bảy trong tám giá trị** (đã là mặc định của `replay.py`); **ngoại lệ duy nhất** là `--presence-penalty 0` truyền tường minh tại `kaggle_ft06.py:761`, vì mặc định của `replay.py` là **1.0** (`replay.py:166`) — `kaggle_ft06.py:37-45`.
+Tham số sinh: script **KHÔNG truyền lại bảy trong tám giá trị** (đã là mặc định của `replay.py`); **ngoại lệ duy nhất** là `--presence-penalty 0` truyền tường minh tại `kaggle_ft06.py:898` (chặng gate-prompt) và `:1291` (chặng run), vì mặc định của `replay.py` là **1.0** (`replay.py:166`) — lý do ghi ở `kaggle_ft06.py:42`.
 
-Phân luồng GPU: `LANES = {0: [1, 3, 2], 1: [5, 4, 6]}` — `kaggle_ft06.py:244-247`.
+Nguồn ngữ cảnh là **tham số**, không ghim cứng: `SRC_GRAPHRAG` / `SRC_BASELINE` (`kaggle_ft06.py:137-139`) đổi được qua cờ `--src-graphrag` / `--src-baseline` (`:2104`, `:2109`). Ba lý do cho phép hai vế dùng hai mẻ khác nhau ghi ở `kaggle_ft06.py:110-136`.
+
+Phân luồng GPU: `LANES = {0: [1, 3, 2], 1: [5, 4, 6]}` — `kaggle_ft06.py:331-334`.
 
 ### 4.4 Cổng chặn A — chat template
 
 | Mục | Giá trị | Nguồn |
 |---|---|---|
-| Điều kiện qua | `sha256(template_base) == sha256(template_ft)` | `kaggle_ft06.py:626`; hỏng → `exit 2` |
-| Độ dài template base | **4 040 ký tự** | đo trên `finetune/reports/ft06_chat_template_base.jinja` |
-| Độ dài template ft | **4 040 ký tự** | đo trên `finetune/reports/ft06_chat_template_ft.jinja` |
+| Điều kiện qua | `sha256(template_base) == sha256(template_ft)` | `kaggle_ft06.py:730`; hỏng → `exit 2` |
+| Độ dài template base | **4 040 ký tự** | đo trên `finetune/reports/ft06b_chat_template_base.jinja` |
+| Độ dài template ft | **4 040 ký tự** | đo trên `finetune/reports/ft06b_chat_template_ft.jinja` |
 | sha256 cả hai | `40c21f34cf67d8c760ef72f8ad3ae5afad514299d4b06e91dd9a8d705af7b541` | tính lại trên hai file `.jinja` |
 | Kết quả | **TRÙNG KHÍT** (byte-identical, hai file giống nhau hoàn toàn) | như trên |
 
+*Lượt `ft06b` không đổi file GGUF nào (cả hai vẫn đúng sha256 đã ghim ở §4.6) nên cổng này chỉ chạy lại để xác nhận, và cho đúng cùng một chuỗi sha256 với lượt trước.*
+
 ### 4.5 Cổng chặn B — prompt đã render
 
-Năm kiểm tự động, hàm `_kiem_mot_prompt()` — `kaggle_ft06.py:659-716`:
+Năm kiểm tự động, hàm `_kiem_mot_prompt()` — `kaggle_ft06.py:763-838`:
 
 | # | Kiểm tra | Điều kiện | Dòng |
 |---:|---|---|---|
-| 1 | Render bằng chat template GGUF thật | header chứa `render=gguf-chat-template-jinja2`, KHÔNG phải nhánh lùi `render-loi:` | `:671-674` |
-| 2 | System prompt còn nguyên đầu | 200 ký tự đầu sau `<\|im_start\|>system` khớp `build_chat_messages(...)[0]` | `:676-691` |
-| 3 | Số lượt vai | = **2** khi `n_shot = 0`, = **6** khi `n_shot = 2` | `:693-696` |
-| 4 | Kết thúc prompt | nội dung cuối trước thẻ mở vai assistant là `"TRẢ LỜI:"` | `:698-708` |
-| 5 | Số thẻ mở vai assistant | = **1** khi `n_shot = 0`, = **3** khi `n_shot = 2` | `:710-714` |
+| 1 | Render bằng chat template GGUF thật | header chứa `render=gguf-chat-template-jinja2`, KHÔNG phải nhánh lùi `render-loi:` | `:772-776` |
+| 2 | System prompt còn nguyên đầu | 200 ký tự đầu sau `<\|im_start\|>system` khớp `build_chat_messages(...)[0]` | `:778-812` |
+| 3 | Số lượt vai | = **2** khi `n_shot = 0`, = **6** khi `n_shot = 2` | `:814-818` |
+| 4 | Kết thúc prompt | nội dung cuối trước thẻ mở vai assistant là `"TRẢ LỜI:"` | `:820-830` |
+| 5 | Số thẻ mở vai assistant | = **1** khi `n_shot = 0`, = **3** khi `n_shot = 2` | `:832-836` |
+
+**Cổng chặn B được chạy LẠI cho lượt `ft06b`, không tái dùng bản dump cũ.** Lý do in ngay trong chặng (`kaggle_ft06.py:844-847`): nguồn ngữ cảnh phía GraphRAG đã đổi nên prompt thực sự đi vào mô hình cũng đổi ở 17 câu; bản dump của lượt trước không nói gì về prompt của lượt này. File dump ghi ra **tên mới** (`ft06b_prompt_*`) để không đè bản cũ.
 
 Bằng chứng đã chạy — bốn file prompt và bốn results JSON tương ứng (câu **V001** cho cả bốn):
 
 | Tổ hợp | File prompt | Kích thước file | `n_tokens_prompt` (tự đếm) | `n_tokens_prompt_backend` | `prompt_len_lech` |
 |---|---|---:|---:|---:|---:|
-| graphrag · 0-shot | `finetune/reports/ft06_prompt_graphrag_s0.txt` | 37 402 B | **10 144** | 10 122 | 22 |
-| graphrag · 2-shot | `finetune/reports/ft06_prompt_graphrag_s2.txt` | 38 566 B | **10 556** | 10 500 | 56 |
-| baseline · 0-shot | `finetune/reports/ft06_prompt_baseline_s0.txt` | 22 513 B | **6 182** | 6 160 | 22 |
-| baseline · 2-shot | `finetune/reports/ft06_prompt_baseline_s2.txt` | 23 677 B | **6 594** | 6 538 | 56 |
+| graphrag · 0-shot | `finetune/reports/ft06b_prompt_graphrag_s0.txt` | 37 402 B | **10 144** | 10 122 | 22 |
+| graphrag · 2-shot | `finetune/reports/ft06b_prompt_graphrag_s2.txt` | 38 566 B | **10 556** | 10 500 | 56 |
+| baseline · 0-shot | `finetune/reports/ft06b_prompt_baseline_s0.txt` | 22 513 B | **6 182** | 6 160 | 22 |
+| baseline · 2-shot | `finetune/reports/ft06b_prompt_baseline_s2.txt` | 23 677 B | **6 594** | 6 538 | 56 |
 
-Cả bốn file results gate-prompt đều `format_ok_rate = 1.0`, `f1_mean = 1.0`, `n_hit_token_cap = 0` (`aggregate` trên `finetune/results/results_*_ft06-gate-prompt-s*.json`).
+Cả bốn file results gate-prompt đều `format_ok_rate = 1.0`, `f1_mean = 1.0`, `n_hit_token_cap = 0` (`aggregate` trên `finetune/results/results_*_ft06b-gate-prompt-s*.json`).
+
+*V001 nằm ngoài 17 câu đổi ngữ cảnh, nên bốn con số độ dài prompt ở bảng trên **trùng khít** bản dump của lượt trước. Đó là kết quả mong đợi, không phải dấu hiệu bản dump bị tái dùng — bốn file `ft06b_prompt_*.txt` là file mới, sinh trong lượt này.*
 
 ### 4.6 Bảy giá trị ghim — chuỗi đầy đủ
 
 | # | Đối tượng | Chuỗi đầy đủ | File ghi |
 |---:|---|---|---|
 | 1 | Tarball llama.cpp (CPU-only static, dùng để **lượng tử hoá**) | tag `b10165`; file `llamacpp-b10165-cpu-static-x64.tar.gz`; sha256 `9f8e92b8a69b3c8399e6f42324430f8a0faaf1bba707deeee7c8cb96bbd9c6d5` | `finetune/run.sh:53`, `:58`, `:59` |
-| 2 | Wheel `llama-cpp-python` (dùng để **chạy suy luận, sinh số liệu**) | repo `dangnguyen254/thesis-graphrag-gguf`; file `runtime/llama_cpp_python-0.3.16-cp312-cp312-linux_x86_64.whl`; sha256 `a3cb84bddb15c1759a0ece5ec8ef9d10d1419f926c895064d1a91ec517fd0da7` | `finetune/reports/ft06_artifacts.json`; `finetune/kaggle_ft06.py:143-147`; `finetune/run.sh:54` (`LCP_VERSION=0.3.16`) |
-| 3 | GGUF mô hình gốc + revision | repo `bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF`; file `Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf`; revision `ae44f08e1392f39c0e474af10c3ff8355c8b6688`; sha256 `2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e` | `finetune/reports/ft06_artifacts.json`; `finetune/kaggle_ft06.py:177-180`; `finetune/reports/gate_base_model.md` §Hiện vật GGUF gốc; `../results/__huggingface_repos__.json` (xác nhận độc lập cùng `commitHash`) |
+| 2 | Wheel `llama-cpp-python` (dùng để **chạy suy luận, sinh số liệu**) | repo `dangnguyen254/thesis-graphrag-gguf`; file `runtime/llama_cpp_python-0.3.16-cp312-cp312-linux_x86_64.whl`; sha256 `a3cb84bddb15c1759a0ece5ec8ef9d10d1419f926c895064d1a91ec517fd0da7` | `finetune/reports/ft06b_artifacts.json`; `finetune/kaggle_ft06.py:225`; `finetune/run.sh:54` (`LCP_VERSION=0.3.16`) |
+| 3 | GGUF mô hình gốc + revision | repo `bartowski/Qwen_Qwen3-4B-Instruct-2507-GGUF`; file `Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf`; revision `ae44f08e1392f39c0e474af10c3ff8355c8b6688`; sha256 `2fde00ce69dd4899c70d020845e2638353015bba0fdf161b3eb965f2bca4464e` | `finetune/reports/ft06b_artifacts.json`; `finetune/kaggle_ft06.py:242-251`; `finetune/reports/gate_base_model.md` §Hiện vật GGUF gốc; `../results/__huggingface_repos__.json` (xác nhận độc lập cùng `commitHash`) |
+| 3b | **Kho mô hình gốc dùng để HUẤN LUYỆN** (khác giá trị 3 — đó là bản GGUF của hàng "chưa tinh chỉnh") | `unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit` — **KHÔNG** phải `unsloth/Qwen3-4B-Instruct-2507` như cờ CLI ghi | `adapter/ft04-5k-2ep-20260729-2122/checkpoint-588/adapter_config.json` → `base_model_name_or_path`; xem §0 mục 3 |
 | 4 | Commit code | **phiên 3:** `2a712adf7707164b7302afa42cf98ea06c99b417` (nhánh `dev/fine-tune`) · **phiên 1:** `eecdc7b7dc533f2c564d74e795704fb4dcbb81a2` **cộng** một bản vá `render_prompt` chưa từng nằm trong commit nào | phiên 3: `../results/repo/.git/refs/heads/dev/fine-tune` + `../results/repo/.git/logs/HEAD` (clone lúc epoch 1785391123 = 2026-07-30T05:58:43Z); phiên 1: `finetune/reports/gate_base_model.md` §6 |
 | 5 | Dữ liệu huấn luyện | `train.jsonl` sha256 `615ad1e7a3ad0dfa991147ae503e6078f138bce90e6a45252bc0189535c79b20` · `val.jsonl` sha256 `2361e15b7f195e3c7929599d57ad94f5d215343565af8f11cb3d5fe178b93ead` | `finetune/data/train.jsonl.sha256`, `finetune/data/val.jsonl.sha256` |
-| 6 | GGUF đã tinh chỉnh | repo `dangnguyen254/thesis-graphrag-gguf`; file `gguf/ft04-5k-2ep-20260729-2122-Q4_K_M.gguf`; sha256 `c115e6a79299d1fe0e41eb5f6720955108df1e869676dc96f0b7ba61c37ce5d0` | `finetune/reports/ft06_artifacts.json`; `finetune/kaggle_ft06.py:150-154` |
-| 7 | Ghim GPU (mỗi ô một card) | ô 1 → `CUDA_VISIBLE_DEVICES=0` · ô 2 → `0` · ô 3 → `0` · ô 4 → `1` · ô 5 → `1` · ô 6 → `1` | `finetune/reports/ft06_gpu_info.json` (`ghim_cuda_visible_devices`); `finetune/reports/ft06_matrix.md` §3; lệnh thật in trong `finetune/logs/ft06_gpu{0,1}.log` |
+| 6 | GGUF đã tinh chỉnh | repo `dangnguyen254/thesis-graphrag-gguf`; file `gguf/ft04-5k-2ep-20260729-2122-Q4_K_M.gguf`; sha256 `c115e6a79299d1fe0e41eb5f6720955108df1e869676dc96f0b7ba61c37ce5d0` | `finetune/reports/ft06b_artifacts.json`; `finetune/kaggle_ft06.py:232` |
+| 7 | Ghim GPU (mỗi ô một card) | ô 1 → `CUDA_VISIBLE_DEVICES=0` · ô 2 → `0` · ô 3 → `0` · ô 4 → `1` · ô 5 → `1` · ô 6 → `1` | `finetune/reports/ft06b_run_status.json` (khoá `gpu` của từng ô — **ghi lúc chạy**); `finetune/reports/ft06b_matrix.md` §3; lệnh thật in trong `finetune/logs/ft06b_gpu{0,1}.log` |
+| 8 | **Nguồn ngữ cảnh + sha256 của nó** | GraphRAG `data/evaluation/results_graphrag_final1_20260729-022916.json` sha256 `7deda57ef145b8a779483a2132cd1d929dc6244807bf7a113bd29f6c1092b7f8` · Naive `data/evaluation/results_baseline_20260710-085236.json` sha256 `37fca8d026443e4cfc5f759f6f98712f638468a58d9a177adbd01dba30bcb38c` | `finetune/reports/ft06b_run_status.json` (`src_file`, `src_sha256` của cả sáu ô); cũng lưu trong `replay.src_sha256` của từng file kết quả |
 
-Bộ ghim phiên bản gói (phiên 3) — `../results/ft06_constraints.txt`, đối chiếu `finetune/kaggle_ft06.py:111-120` và `finetune/run.sh:174-181`:
+> **Cảnh báo về `ft06b_gpu_info.json`.** File đó ghi `"che_do": "tuần tự, mọi ô trên card 0"`, `"song_song": false`, `ghim_cuda_visible_devices` = card 0 cho cả sáu ô — nhưng khoá `"nguon": "prep — dự kiến"` nói rõ đó là **dự kiến lúc chặng `prep`**, không phải cái đã chạy. Cái đã chạy nằm ở `ft06b_run_status.json`: card 0 cho ô 1/2/3, card 1 cho ô 4/5/6, đúng như `ft06b_matrix.md` §3 ghi (*"ghi nhận lúc: run — thực tế"*). **Dùng `ft06b_run_status.json`, không dùng `ft06b_gpu_info.json`, cho giá trị ghim thứ bảy.**
+
+Bộ ghim phiên bản gói (phiên 3) — `../results/ft06_constraints.txt`, đối chiếu `finetune/run.sh:174-181`:
 
 ```
 torch==2.10.0
@@ -421,110 +486,251 @@ llama_cpp_python==0.3.16
 
 ## 5. KẾT QUẢ HUẤN LUYỆN
 
-> ### ⚠️ KHÔNG CÓ TRONG REPO
+> **Nguồn của toàn bộ §5:** `finetune/logs/ft04-5k-2ep-20260729-2122.log` (1 807 dòng) —
+> log đầy đủ của phiên 2, nay đã có trong repo. Mỗi giá trị dưới đây kèm **số dòng**.
+> Bổ sung: `adapter/ft04-5k-2ep-20260729-2122/checkpoint-588/adapter_config.json` cho
+> cấu hình adapter (§2.1, §2.3).
 >
-> Toàn bộ số liệu định lượng của phiên huấn luyện nằm trong bốn hiện vật, **không hiện vật nào có trong repo**:
->
-> | File | Sinh bởi | Chứa gì |
-> |---|---|---|
-> | `adapter/train_result.json` | `train_qlora.py:360-368` | `loss` (= `training_loss`), toàn bộ `st.metrics` (gồm `train_runtime`, `train_samples_per_second`, `train_steps_per_second`, `total_flos`, `train_tokens_per_second`), `eval_history` (list `{epoch, step, eval_loss}`), `eval_loss_final`, `max_seq_length`, `max_steps`, `limit_samples`, `longest_first` |
-> | `adapter/length_stats.json` | `train_qlora.py:107-135` | `n_samples`, `p50`, `p95`, `max`, `mean`, `total_tokens`, `over_limit`, `limit` cho tập train |
-> | `adapter/val_length_stats.json` | `train_qlora.py:300-301` | như trên, cho tập val |
-> | Hai file log huấn luyện | `run.sh:94` (`$WORK/${RUN_NAME}.log`), đẩy HF ở `run.sh:113` | dòng `XONG: loss=… runtime=…s` (`train_qlora.py:341`), thông lượng tok/s (`:342`), bảng `--- EVAL LOSS THEO EPOCH ---` (`:348-351`), tỉ lệ token bị che (`:333-335`), tên GPU + compute cap + `bf16 gốc` (`:226-228`) |
->
-> **Đã tìm ở:** `finetune/results/`, `finetune/reports/`, `finetune/logs/`, `finetune/models/`, `finetune/data/`, `finetune/notebooks/`, thư mục gốc repo, và `../results/` (bản tải về của **phiên 3**).
-> Lệnh đã chạy: `find . -iname "train_result*.json" -o -iname "*length_stats*.json" -o -iname "adapter_config.json" -o -iname "trainer_state.json"` → **0 kết quả**.
-> Hai file duy nhất trong `finetune/logs/` là `ft06_gpu0.log` và `ft06_gpu1.log` — **log của phiên 3 (đánh giá)**, không phải phiên 2.
+> Ba file `adapter/train_result.json`, `adapter/length_stats.json`,
+> `adapter/val_length_stats.json` **vẫn không có trong repo** — nhưng nội dung của chúng
+> được in nguyên vẹn ra log, nên §5 không còn chỗ trống nào ngoài chuỗi `log_history`
+> đầy đủ (§5.5) và `total_flos`.
 
-### 5.1 Hai con số duy nhất còn lại — không có file gốc
+### 5.1 Bảng kết quả huấn luyện
 
-| Đại lượng | Giá trị | Nguồn | Cảnh báo |
-|---|---:|---|---|
-| `eval_loss` sau epoch 1 | **0.3129** | `docs/FT_SYNTHESIS_B_KHOKHAN.md:576` | Đây là **tài liệu tóm tắt**, không phải file kết quả. Không đối chiếu được với `train_result.json` |
-| `eval_loss` sau epoch 2 | **0.3082** | `docs/FT_SYNTHESIS_B_KHOKHAN.md:577` | như trên |
-| Mức cải thiện | −0.0047 tuyệt đối = **1.50 %** tương đối | tính từ hai dòng trên | |
+| Đại lượng | Giá trị | Dòng log |
+|---|---:|---|
+| `train_loss` (= `training_loss`) | **0.4054** | `:370`, nhắc lại `:373` |
+| `train_runtime` | **19 480 s** (log in `1.948e+04`) = **5 giờ 24 phút 40 giây** | `:370`, `:373`; thanh tiến trình `:367` in `5:24:40` |
+| `train_samples_per_second` | **0.482** | `:370` |
+| `train_steps_per_second` | **0.03** | `:370` |
+| `eval_loss` sau **epoch 1** (step 294) | **0.3129** | `:377` |
+| `eval_loss` sau **epoch 2** (step 588) | **0.3082** | `:378`; cùng giá trị in ở `:366`, `:369` |
+| Mức cải thiện eval_loss | **−0.0047** tuyệt đối = **1.50 %** tương đối | tính từ hai dòng trên |
+| `eval_runtime` / `eval_samples_per_second` (epoch 2) | 41.94 s / 1.526 | `:366` |
+| Tổng số bước | **588** | `:87` (`Total steps = 588`) |
+| Số mẫu / epoch / batch hiệu dụng | 4 690 / 2 / **16** (= 1 × 16 × 1) | `:87-89` |
+| Tỉ lệ token bị che | **5 623 / 5 707 = 98.5 %** | `:84` |
+| Tham số huấn luyện được / tổng | **33 030 144 / 4 055 498 240 = 0.81 %** | `:90` |
+| Số layer được vá | **36** (36 QKV + 36 O + 36 MLP) | `:47` |
+| `total_flos` | **KHÔNG CÓ TRONG REPO** — `st.metrics` có khoá này nhưng script chỉ in bốn giá trị ở `:370`, không in `total_flos`; `train_result.json` (nơi ghi trọn `st.metrics`) không có trong repo | — |
 
-### 5.2 Bảng loss theo mốc bước
+*Kiểm chéo hai giá trị thông lượng của HF Trainer, cả hai khớp:*
+`4 690 × 2 ÷ 19 480 = 0.4815` ≈ `train_samples_per_second 0.482` ·
+`588 ÷ 19 480 = 0.03019` ≈ `train_steps_per_second 0.03`.
 
-`logging_steps = 5` (`train_qlora.py:177`) nghĩa là log_history CÓ ghi loss mỗi 5 bước, nhưng chuỗi đó chỉ tồn tại trong `trainer.state.log_history` và trong log huấn luyện — **KHÔNG CÓ TRONG REPO**. Không dựng được bảng loss theo bước, **không xuất CSV**.
+### 5.2 Bộ phiên bản tại thời điểm chạy — đọc từ log, không từ file ghim
 
-### 5.3 Suy được từ cấu hình (KHÔNG phải số đo)
+| Hạng mục | Giá trị | Dòng log |
+|---|---|---|
+| GPU | **NVIDIA GeForce RTX 4090**, `sm89`, **Num GPUs = 1**, Max memory **23.516 GB**, Platform Linux | `:39`, `:41` |
+| bf16 gốc | **True** (`bf16 goc = True` ở `:39`; `Bfloat16 = TRUE` ở `:43`) | `:39`, `:43` |
+| Attention backend | **Xformers 0.0.35**, **FA2 = False** | `:43` |
+| Torch | **2.10.0+cu128** | `:42` |
+| CUDA (compute capability) | **8.9** | `:42` |
+| CUDA Toolkit | **12.8** | `:42` |
+| Triton | **3.6.0** | `:42` |
+| Transformers | **5.5.0** | `:40` |
+| Unsloth | **2026.7.5** | `:40`, `:47` |
 
-| Đại lượng | Cách suy | Giá trị |
-|---|---|---:|
-| Bước tối ưu mỗi epoch | ⌊4 690 mẫu ÷ 16 (batch hiệu dụng)⌋ | ≈ 293 |
-| Bước tối ưu tổng, 2 epoch | ≈ 293 × 2 | ≈ 586 |
-| Lượt forward/backward tổng | 4 690 × 2 epoch (batch = 1) | 9 380 |
-| Số lần eval | `eval_strategy="epoch"` × 2 epoch | 2 |
-| Số mẫu eval mỗi lần | `--val-limit 64` | 64 |
+Bốn dòng `:40-43` chính là khối banner của Unsloth; chúng lặp lại nguyên văn ở `:388-391`
+khi chặng `merge` nạp lại mô hình — nên đây là hai lần ghi độc lập cho cùng bộ phiên bản.
 
-> Ba dòng đầu là **phép chia trên hai hằng số cấu hình**, không đọc từ `train_result.json`. Nếu HF Trainer làm tròn khác (drop_last, resume, …) thì con số thật lệch. **Chỉ dùng khi không lấy lại được file gốc, và phải ghi rõ là suy ra.**
+**Đối chiếu với bộ ghim §4.6:** `torch==2.10.0` ✅ · `transformers==5.5.0` ✅ ·
+`unsloth==2026.7.5` ✅. Ba dòng còn lại của bộ ghim (`trl`, `peft`, `huggingface_hub`)
+không in ra log; `peft` được xác nhận gián tiếp qua `adapter_config.json` →
+`"peft_version": "0.20.0"` ✅.
+
+### 5.3 Audit độ dài — số đo bằng tokenizer thật
+
+| Tập | dòng | n_samples | p50 | mean | p95 | max | limit | over_limit | total_tokens |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| train | `:51-60` | 4 690 | 6 869 | 7 530 | 11 009 | 12 968 | 16 384 | **0** | **35 316 237** |
+| val (64/310 đã cắt) | `:62-73` | 64 | 6 542 | 7 286 | 10 956 | 12 062 | 16 384 | **0** | **466 358** |
+
+Dòng `:60` in `OK: 0/4690 mau vuot tran.` và `:73` in `OK: 0/64 mau vuot tran.` — cổng
+`audit_lengths` (`train_qlora.py:124-131`) đã qua ở cả hai tập. Đối chiếu với bản đo bằng
+tokenizer Qwen2.5 lúc dựng dữ liệu: xem §3.4 (lệch ≤ 0.75 %).
+
+### 5.4 Thông lượng — TÍNH LẠI vì log ghi `nan`
+
+Dòng `:374` in `thong luong ~ nan tok/s`. **Đây không phải triệu chứng mô hình chạy
+hỏng.** `train_qlora.py:342` gọi `st.metrics.get("train_tokens_per_second", float("nan"))`,
+và `transformers 5.5.0` không đặt khoá `train_tokens_per_second` vào `st.metrics`, nên
+giá trị mặc định `nan` được in ra. Ba giá trị khác trên cùng dòng `:370` (`train_runtime`,
+`train_samples_per_second`, `train_steps_per_second`) đều bình thường và khớp nhau (§5.1).
+
+**Phép tính lại:**
+
+```
+total_tokens (train, đo bằng tokenizer thật)  = 35 316 237      (log :59)
+× số epoch                                    = 2               (log :87)
+= khối lượng token thật đã đi qua             = 70 632 474
+÷ train_runtime                               = 19 480 s        (log :370)
+= 3 625.9 token/giây
+```
+
+> **Ghi rõ khi trích dẫn: đây là giá trị TÍNH LẠI, không phải số đo do thư viện báo.**
+> Ba đầu vào đều đọc trực tiếp từ log. Hai giới hạn của phép tính: (a) nó đếm **mọi**
+> token của chuỗi, kể cả 98.5 % token bị che khỏi hàm mất mát — chúng vẫn tốn tính toán
+> ở lượt truyền xuôi nên đưa vào là đúng, nhưng con số này **không** phải "token có
+> tín hiệu huấn luyện mỗi giây"; (b) `train_runtime` gồm cả hai lần eval (≈ 42 s mỗi
+> lần, `:366`), tức thông lượng huấn luyện thuần cao hơn khoảng 0.4 %.
+
+### 5.5 Bảng loss theo mốc bước
+
+`logging_steps = 5` (`train_qlora.py:177`), và log **có** in chuỗi đó: 117 dòng dạng
+`{'loss': …, 'grad_norm': …, 'learning_rate': …, 'epoch': …}` xen giữa thanh tiến trình,
+từ `:94` (`loss 1.183`, step 5) tới hết. Vài mốc đầu để thấy dạng đường cong:
+
+| step | loss | grad_norm | learning_rate | dòng |
+|---:|---:|---:|---:|---|
+| 5 | 1.183 | 1.395 | 4.444e-05 | `:94` |
+| 10 | 0.9717 | 0.6951 | 1.0e-04 | `:95` |
+| 15 | 0.7609 | 0.4246 | 1.556e-04 | `:96` |
+| 20 | 0.676 | 0.3893 | 2.0e-04 | `:97` |
+| 25 | 0.6033 | 0.343 | 1.999e-04 | `:98` |
+| 30 | 0.5537 | 0.3607 | 1.998e-04 | `:99` |
+
+Bốn mốc đầu cho thấy `warmup_ratio = 0.03` hoạt động đúng: learning rate leo từ
+4.444e-05 lên đúng 2e-04 ở step 20 (≈ 3 % của 588 bước là 17.6 bước) rồi bắt đầu
+giảm theo cosine.
+
+**Không xuất CSV.** Chuỗi đầy đủ nằm lẫn trong dòng thanh tiến trình `tqdm` của log,
+phải bóc bằng regex mới dựng được bảng — việc đó chưa làm, và bảng loss theo bước
+không phải số liệu mà mục 4.7 cần.
+
+### 5.6 Số bước — nay là SỐ ĐO, không còn là phép suy
+
+| Đại lượng | Giá trị | Nguồn |
+|---|---:|---|
+| Bước tối ưu tổng, 2 epoch | **588** | `…2122.log:87` — số đo |
+| Bước tối ưu mỗi epoch | **294** | `…2122.log:377` (`step 294` tại `epoch 1.00`) — số đo |
+| Lượt forward/backward tổng | 4 690 × 2 = **9 380** | tính từ `Num examples` và `Num Epochs` (`:87`), batch = 1 |
+| Số lần eval | **2** | `…2122.log:377-378` — hai dòng |
+| Số mẫu eval mỗi lần | **64** | `…2122.log:62`, `:80` (`Eval: 64 mau, strategy=epoch`) |
+
+> Bản trước của tài liệu này suy ra `≈ 586` bước bằng phép chia `⌊4 690 ÷ 16⌋ × 2`.
+> Số thật là **588**: HF Trainer làm tròn **lên** (`⌈4 690 ÷ 16⌉ = 294`), không làm tròn
+> xuống. Chênh 2 bước. Giữ ghi chú này lại vì nó chỉ đúng cách một phép suy hợp lý vẫn
+> lệch — và đó là lý do phải ghim log, không ghim suy luận.
 
 ---
 
 ## 6. KẾT QUẢ ĐÁNH GIÁ — SÁU Ô
 
-Mọi con số ở §6 tính bằng `src/evaluation/metrics.py::aggregate` chạy trực tiếp trên sáu file `finetune/results/results_*.json`. Nguồn ngữ cảnh của cả sáu ô: `data/evaluation/results_graphrag_20260710-085236.json` (cột GraphRAG) và `data/evaluation/results_baseline_20260710-085236.json` (cột Naive) — trường `replay.nguon` của từng file kết quả.
+Mọi con số ở §6 tính bằng `src/evaluation/metrics.py::aggregate` chạy trực tiếp trên các file `finetune/results/results_*_ft06b-*.json` và `data/evaluation/results_*.json` — **không chép từ bảng viết sẵn**, kể cả từ `ft06b_matrix.md`.
+
+Nguồn ngữ cảnh (trường `replay.nguon` / `replay.src_file` của từng file kết quả):
+
+| Cột | File nguồn | sha256 |
+|---|---|---|
+| GraphRAG (ô 1, 3, 5) | `data/evaluation/results_graphrag_final1_20260729-022916.json` | `7deda57ef145b8a779483a2132cd1d929dc6244807bf7a113bd29f6c1092b7f8` |
+| Naive RAG (ô 2, 4, 6) | `data/evaluation/results_baseline_20260710-085236.json` | `37fca8d026443e4cfc5f759f6f98712f638468a58d9a177adbd01dba30bcb38c` |
+
+Hai mẻ khác nhau, có chủ ý — lý do ở §0 (đầu tài liệu) và `ft06b_matrix.md` đầu file.
 
 ### 6.1 Ma trận đầy đủ
 
-| Ô | Mô hình sinh | Hệ truy hồi | F1 Khoản | F1 Điều | Norm Recall | Từ chối đúng | Δ (F1 Khoản) |
-|---:|---|---|---:|---:|---:|---:|---:|
-| — | Gemini 2.5 Pro *(cặp file đã đóng băng)* | Naive RAG | 0.426975 | 0.448386 | 0.594282 | 0.785714 (11/14) | |
-| — | Gemini 2.5 Pro *(cặp file đã đóng băng)* | GraphRAG | 0.581423 | 0.598472 | 0.793187 | 0.928571 (13/14) | **+0.154448** |
-| — | Gemini 2.5 Pro *(mean N=3, `V2_RESULTS.md`)* | Naive RAG | 0.435 | — | 0.588 | — | |
-| — | Gemini 2.5 Pro *(mean N=3, `V2_RESULTS.md`)* | GraphRAG | 0.578 | — | 0.771 | — | **+0.143** |
-| 6 | Cục bộ gốc, 0-shot | Naive RAG | 0.153771 | 0.170195 | 0.264599 | 0.928571 (13/14) | |
-| 5 | Cục bộ gốc, 0-shot | GraphRAG | 0.136253 | 0.136253 | 0.137470 | 0.928571 (13/14) | **−0.017518** |
-| 4 | Cục bộ gốc, 2-shot | Naive RAG | 0.239092 | 0.315247 | 0.599148 | 0.500000 (7/14) | |
-| 3 | Cục bộ gốc, 2-shot | GraphRAG | 0.492631 | 0.536427 | 0.630170 | 0.857143 (12/14) | **+0.253540** |
-| 2 | Cục bộ đã tinh chỉnh, 0-shot | Naive RAG | 0.300765 | 0.344317 | 0.609489 | 0.571429 (8/14) | |
-| 1 | Cục bộ đã tinh chỉnh, 0-shot | GraphRAG | 0.402433 | 0.444769 | 0.541363 | 0.928571 (13/14) | **+0.101668** |
+| Ô | Mô hình sinh | Hệ truy hồi | N | F1 Khoản | F1 Điều | Norm Recall | Từ chối đúng | Δ (F1 Khoản) |
+|---:|---|---|---:|---:|---:|---:|---:|---:|
+| — | Gemini 2.5 Pro | Naive RAG | 4 ⚠️ | 0.435819 ± 0.008 | 0.458698 ± 0.008 | 0.585158 ± 0.008 | 0.785714 (11/14) | |
+| — | Gemini 2.5 Pro | GraphRAG | 3 | **0.617136 ± 0.001** | 0.637692 ± 0.003 | 0.828873 ± 0.006 | 0.928571 (13/14) | **+0.181317** |
+| 6 | Cục bộ gốc, 0-shot | Naive RAG | 1 | 0.153771 | 0.170195 | 0.264599 | 0.928571 (13/14) | |
+| 5 | Cục bộ gốc, 0-shot | GraphRAG | 1 | 0.131387 | 0.131387 | 0.133820 | 0.928571 (13/14) | **−0.022384** |
+| 4 | Cục bộ gốc, 2-shot | Naive RAG | 1 | 0.239092 | 0.315247 | 0.599148 | 0.500000 (7/14) | |
+| 3 | Cục bộ gốc, 2-shot | GraphRAG | 1 | **0.510879** | 0.561974 | 0.655718 | 0.857143 (12/14) | **+0.271788** |
+| 2 | Cục bộ đã tinh chỉnh, 0-shot | Naive RAG | 1 | 0.300765 | 0.344317 | 0.609489 | 0.571429 (8/14) | |
+| 1 | Cục bộ đã tinh chỉnh, 0-shot | GraphRAG | 1 | **0.401703** | 0.448905 | 0.566910 | 0.928571 (13/14) | **+0.100938** |
 
-*Bốn hàng cục bộ khớp `finetune/reports/ft06_matrix.md` §1 tới ba chữ số thập phân (bảng đó làm tròn: 0.402 / 0.301 / 0.493 / 0.239 / 0.136 / 0.154).*
-*Hai hàng Gemini: xem §0 mục 1. `ft06_matrix.md` §1 chỉ in hàng mean N=3 và để `—` ở ba cột còn lại.*
+*Sáu hàng cục bộ khớp `finetune/reports/ft06b_matrix.md` §1 tới ba chữ số thập phân (bảng đó làm tròn: 0.402 / 0.301 / 0.511 / 0.239 / 0.131 / 0.154).*
+
+**Hàng Gemini · GraphRAG — ba mẻ, giá trị lẻ** (`aggregate` trên từng file):
+
+| Mẻ | F1 Khoản | F1 Điều | Norm Recall | Từ chối đúng |
+|---|---:|---:|---:|---:|
+| `results_graphrag_final1_20260729-022916.json` | 0.616235 | 0.639367 | 0.827251 | 0.928571 (13/14) |
+| `results_graphrag_final2_20260729-032225.json` | 0.617178 | 0.634488 | 0.835766 | 0.928571 (13/14) |
+| `results_graphrag_final3_20260729-041450.json` | 0.617996 | 0.639222 | 0.823601 | 0.928571 (13/14) |
+| **trung bình ± σ mẫu** | **0.617136 ± 0.001** | **0.637692 ± 0.003** | **0.828873 ± 0.006** | 0.928571 ± 0.000 |
+
+Ba mẻ này là **ba lần SINH trên cùng một ngữ cảnh đông cứng** (`context` trùng khít 137/137 — `kaggle_ft06.py:125-131`), nên σ ở đây đo đúng một thứ: dao động của mô hình sinh, không lẫn dao động của truy hồi. σ là **độ lệch chuẩn MẪU** (`statistics.stdev`, chia n−1); `docs/V3_RESULTS.md` §2 dùng độ lệch chuẩn tổng thể (chia n) nên chữ số cuối lệch — NormR 0.006 ở đây so với 0.005 ở đó. Cùng dữ liệu, khác quy ước.
+
+**Hàng Gemini · Naive RAG — bốn mẻ đủ 137 câu:**
+
+| Mẻ | F1 Khoản | F1 Điều | Norm Recall | Từ chối đúng |
+|---|---:|---:|---:|---:|
+| `results_baseline_20260709-073933.json` | 0.438149 | 0.456647 | 0.577251 | 0.785714 (11/14) |
+| `results_baseline_20260710-001154.json` | 0.432507 | 0.464022 | 0.580900 | 0.785714 (11/14) |
+| `results_baseline_20260710-085236.json` | 0.426975 | 0.448386 | 0.594282 | 0.785714 (11/14) |
+| `results_baseline_20260710-104109.json` | 0.445645 | 0.465736 | 0.588200 | 0.785714 (11/14) |
+| **trung bình ± σ mẫu** | **0.435819 ± 0.008** | **0.458698 ± 0.008** | **0.585158 ± 0.008** | 0.785714 ± 0.000 |
+
+> ### ⚠️ HÀNG NAIVE RAG PHẢI ĐƯỢC XÁC NHẬN TRƯỚC KHI VÀO KHOÁ LUẬN
+>
+> `docs/V3_RESULTS.md` §3 viết *"trung bình từng câu qua cả **3 mẻ của mỗi hệ**"* nhưng
+> **không ghi ba mẻ baseline nào**. Chặng `table` KHÔNG tự chọn ba mẻ — nó lọc theo số
+> câu (137), và phép lọc đó ra **4** mẻ chứ không phải 3. Nếu ba mẻ đúng là ba trong số
+> đó thì mẫu số của Δ và của cột tỉ lệ sẽ đổi. **Người phụ trách phải chỉ đúng ba mẻ.**
+> Ký hiệu ⚠️ ở cột N của hàng đó nhắc lại đúng điều này. Chi tiết + toàn bộ 13 mẻ
+> baseline tìm được: `ft06b_matrix.md` §1.4.
+
+**Cơ sở của Δ và của cột tỉ lệ — MỘT cơ sở duy nhất cho mọi hàng:** `aggregate.f1_mean`
+tính trên **toàn bộ 137 câu** của file kết quả, gồm cả 14 câu phủ định. Hàng Gemini lấy
+trung bình `f1_mean` của các mẻ **rồi mới** trừ/chia. Chọn cơ sở này vì đó là đại lượng
+mà cả sáu ô cục bộ đều có sẵn — không phải vì nó tốt hơn cơ sở 123 câu ghép cặp. Muốn
+đổi sang cơ sở ghép cặp thì phải đổi cho **cả bảng** (`ft06b_matrix.md` §1.1). Mức ý
+nghĩa thống kê (+0.187, CI [0.108, 0.264], p = 0.00003) chỉ tồn tại ở cơ sở ghép cặp —
+xem §0 mục 1.
 
 **Precision / Recall tách riêng** (cấp Khoản, từ `aggregate`):
 
 | Ô | precision_mean | recall_mean | f1_mean | precision_dieu | recall_dieu | f1_dieu |
 |---:|---:|---:|---:|---:|---:|---:|
-| 1 | 0.435523 | 0.402676 | 0.402433 | 0.482968 | 0.442214 | 0.444769 |
+| 1 | 0.435523 | 0.401460 | 0.401703 | 0.490268 | 0.444647 | 0.448905 |
 | 2 | 0.333333 | 0.340511 | 0.300765 | 0.388078 | 0.382117 | 0.344317 |
-| 3 | 0.534550 | 0.507056 | 0.492631 | 0.580779 | 0.549635 | 0.536427 |
+| 3 | 0.557664 | 0.524574 | 0.510879 | 0.611192 | 0.574453 | 0.561974 |
 | 4 | 0.267397 | 0.290024 | 0.239092 | 0.350122 | 0.366058 | 0.315247 |
-| 5 | 0.142336 | 0.142336 | 0.136253 | 0.142336 | 0.142336 | 0.136253 |
+| 5 | 0.135036 | 0.138686 | 0.131387 | 0.135036 | 0.138686 | 0.131387 |
 | 6 | 0.151460 | 0.177616 | 0.153771 | 0.167275 | 0.195864 | 0.170195 |
-| Gemini graphrag (085236) | 0.585366 | 0.605691 | 0.581423 | — | — | 0.598472 |
+| Gemini graphrag (`final1`) | 0.600878 | 0.702798 | 0.616235 | 0.621802 | 0.731387 | 0.639367 |
+| Gemini naive (`085236`) | 0.433484 | 0.513139 | 0.426975 | 0.452340 | 0.539294 | 0.448386 |
 
-*(Hai cột `precision_dieu`/`recall_dieu` của hàng Gemini không in ở đây vì `aggregate` có tính, chi tiết xem lại file nguồn nếu cần.)*
+*(Hai hàng Gemini in giá trị của **một** mẻ để đối chiếu được với file; hàng của bảng §6.1 là trung bình nhiều mẻ.)*
+
+> **Cảnh báo khi trình bày precision** (`docs/V3_RESULTS.md` §2): `metrics.py` tính `precision = 0` khi hệ không đưa ra trích dẫn nào — quy ước mặc định của scikit-learn. Naive RAG bỏ trống 31/123 câu còn GraphRAG chỉ 5/123, nên quy ước này **phạt baseline nặng hơn**. F1 không bị ảnh hưởng. **Lấy F1 làm thang so sánh, đừng xây lập luận trên precision.**
 
 ### 6.2 Sức khoẻ từng ô
 
 | Ô | Mô hình | n_shot | Hệ | `format_ok_rate` | **mẫu số** | `format_ok` đếm | `n_hit_token_cap` | `soft_article_hit` | Qua mô hình / tổng | Sao chép hằng số | `total_elapsed_s` | Card |
 |---:|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | ft | 0 | graphrag | **0.731707** | **123** | 90 | 0 | 0.972464 | **127/137** | 10 | 1 583.69 | 0 |
-| 2 | ft | 0 | baseline | **0.894309** | **123** | 110 | **1** (`V020`) | 0.965290 | **137/137** | 0 | 1 182.74 | 0 |
-| 3 | base | 2 | graphrag | **0.813008** | **123** | 100 | 0 | 1.000000 | **127/137** | 10 | 2 328.05 | 0 |
-| 4 | base | 2 | baseline | **0.894309** | **123** | 110 | 0 | 0.945519 | **137/137** | 0 | 1 294.76 | 1 |
-| 5 | base | 0 | graphrag | **0.073171** | **123** | 9 | 0 | 0.991361 | **127/137** | 10 | 2 653.86 | 1 |
-| 6 | base | 0 | baseline | **0.211382** | **123** | 26 | 0 | 0.927839 | **137/137** | 0 | 1 594.96 | 1 |
+| 1 | ft | 0 | graphrag | **0.756098** | **123** | 93 | 0 | 0.980351 | **127/137** | 10 | 1 656.88 | 0 |
+| 2 | ft | 0 | baseline | **0.894309** | **123** | 110 | **1** (`V020`) | 0.965290 | **137/137** | 0 | 1 229.49 | 0 |
+| 3 | base | 2 | graphrag | **0.853659** | **123** | 105 | 0 | 1.000000 | **127/137** | 10 | 2 393.09 | 0 |
+| 4 | base | 2 | baseline | **0.894309** | **123** | 110 | 0 | 0.945519 | **137/137** | 0 | 1 412.73 | 1 |
+| 5 | base | 0 | graphrag | **0.065041** | **123** | 8 | 0 | 0.991437 | **127/137** | 10 | 2 879.36 | 1 |
+| 6 | base | 0 | baseline | **0.211382** | **123** | 26 | 0 | 0.927839 | **137/137** | 0 | 1 742.01 | 1 |
+
+Tổng `total_elapsed_s` sáu ô = **11 313.56 s ≈ 3 giờ 8 phút** (hai luồng song song, nên thời gian tường thấp hơn).
 
 - **Mẫu số `format_ok_rate` là 123 ở cả sáu ô** — số câu có `ground_truth_citations` khác rỗng (`FINETUNE_EXECUTION_PLAN.md` §3.1 và §9.4).
 - 10 câu sao chép hằng số của cột GraphRAG: **V106, V107, V108, V109, V110, V111, V112, V113, V115, V116** (`frozen_copy = true`, `elapsed_seconds = 0.0`) — giống hệt ở cả ba ô GraphRAG.
-- `soft_article_hit` mẫu số (số cụm bắt được) và số câu có nhắc: ô 1 = 331 cụm / 92 câu; ô 2 = 417 / 117; ô 3 = 522 / 111; ô 4 = 501 / 123; ô 5 = 422 / 113; ô 6 = 413 / 121 (khoá `soft_article_mentions_tong`, `soft_article_hit_do_duoc`).
+- `soft_article_hit` mẫu số (số cụm bắt được) và số câu có nhắc: ô 1 = 343 cụm / 95 câu; ô 2 = 417 / 117; ô 3 = 519 / 114; ô 4 = 501 / 123; ô 5 = 420 / 114; ô 6 = 413 / 121 (khoá `soft_article_mentions_tong`, `soft_article_hit_do_duoc`).
 
 **Prompt token đo được mỗi ô:**
 
 | Ô | tự đếm min | tự đếm max | backend min | backend max | `prompt_len_lech` (mọi câu) |
 |---:|---:|---:|---:|---:|---:|
-| 1 | 5 429 | 12 033 | 5 407 | 12 011 | 22 |
+| 1 | 5 368 | 12 033 | 5 346 | 12 011 | 22 |
 | 2 | 5 471 | 6 454 | 5 449 | 6 432 | 22 |
-| 3 | 5 841 | 12 445 | 5 785 | 12 389 | 56 |
+| 3 | 5 780 | 12 445 | 5 724 | 12 389 | 56 |
 | 4 | 5 883 | 6 866 | 5 827 | 6 810 | 56 |
-| 5 | 5 429 | 12 033 | 5 407 | 12 011 | 22 |
+| 5 | 5 368 | 12 033 | 5 346 | 12 011 | 22 |
 | 6 | 5 471 | 6 454 | 5 449 | 6 432 | 22 |
 
 `prompt_len_lech` **bất biến trong từng ô** (một giá trị duy nhất): 22 ở mọi cấu hình 0-shot, 56 ở mọi cấu hình 2-shot. Chênh 2-shot − 0-shot = **34** token ở cả hai khuôn.
+
+*Ba ô GraphRAG có prompt **ngắn nhất** đi từ 5 429 (lượt trước) xuống 5 368 token: đó là hệ quả trực tiếp của việc đổi nguồn ngữ cảnh — 17 câu nhận ngữ cảnh khác. Cột Naive không đổi một token nào, đúng như dự đoán ở §0.*
 
 **Câu trả lời sai ở cột "Từ chối đúng":**
 
@@ -536,19 +742,21 @@ Mọi con số ở §6 tính bằng `src/evaluation/metrics.py::aggregate` chạ
 | 4 | 7/14 | `V005`, `V105`, `V107`, `V109`, `V113`, `V115`, `V116` |
 | 5 | 13/14 | `V105` |
 | 6 | 13/14 | `V107` |
-| Gemini graphrag (085236) | 13/14 | `V005` |
-| Gemini baseline (085236) | 11/14 | `V005`, `V107`, `V116` |
+| Gemini graphrag (`final1`) | 13/14 | `V005` |
+| Gemini baseline (`085236`) | 11/14 | `V005`, `V107`, `V116` |
 
-**Độ trễ mỗi câu** (`ft06_matrix.md` §4; tính lại khớp — trung bình `elapsed_seconds` **chỉ trên câu đi qua mô hình**, loại 10 câu hằng số):
+**Độ trễ mỗi câu** (`ft06b_matrix.md` §4; tính lại khớp — trung bình `elapsed_seconds` **chỉ trên câu đi qua mô hình**, loại 10 câu hằng số):
 
 | Cặp ô | GraphRAG s/câu | Naive s/câu | Lệch | Card | Cảnh báo |
 |---|---:|---:|---:|---|---|
-| ô 1 + 2 · ft 0-shot | 12.469992 | 8.633168 | 44 % | 0 vs 0 | cùng card |
-| ô 3 + 4 · base 2-shot | 18.331134 | 9.450774 | 94 % | 0 vs 1 | ⚠️ vượt ngưỡng 25 % trên hai card khác nhau |
-| ô 5 + 6 · base 0-shot | 20.896496 | 11.642044 | 79 % | 1 vs 1 | cùng card |
+| ô 1 + 2 · ft 0-shot | 13.046307 | 8.974372 | 45 % | 0 vs 0 | cùng card |
+| ô 3 + 4 · base 2-shot | 18.843228 | 10.311934 | 83 % | 0 vs 1 | ⚠️ vượt ngưỡng 25 % trên hai card khác nhau |
+| ô 5 + 6 · base 0-shot | 22.672134 | 12.715372 | 78 % | 1 vs 1 | cùng card |
 
-`latency_mean_s` từ `aggregate` (tính trên **cả 137 câu**, gồm 10 câu `elapsed = 0.0`): ô 1 = 11.559774 · ô 2 = 8.633168 · ô 3 = 16.993095 · ô 4 = 9.450774 · ô 5 = 19.371204 · ô 6 = 11.642044.
-`latency_p95_s`: ô 1 = 20.163 · ô 2 = 15.579 · ô 3 = 42.316 · ô 4 = 17.336 · ô 5 = 40.939 · ô 6 = 22.338.
+`latency_mean_s` từ `aggregate` (tính trên **cả 137 câu**, gồm 10 câu `elapsed = 0.0`): ô 1 = 12.094022 · ô 2 = 8.974372 · ô 3 = 17.467810 · ô 4 = 10.311934 · ô 5 = 21.017234 · ô 6 = 12.715372.
+`latency_p95_s`: ô 1 = 20.367 · ô 2 = 16.157 · ô 3 = 41.28 · ô 4 = 19.314 · ô 5 = 42.135 · ô 6 = 24.401.
+
+*Cảnh báo 83 % ở cặp 3+4 là **dương tính giả**: hai cặp chạy trên cùng một card lệch 45 % và 78 %, tức 83 % nằm trong dải quan sát được ngay trên một card. Ngưỡng 25 % đặt sai — lập luận đầy đủ ở Phần B §7.2.*
 
 ### 6.3 Tỉ lệ Δ TƯƠNG ĐỐI (GraphRAG / Naive), 3 chữ số thập phân
 
@@ -556,77 +764,98 @@ Tính từ giá trị `aggregate` chưa làm tròn.
 
 | Hàng | F1 Khoản G / N | **Tỉ lệ F1 Khoản** | Tỉ lệ F1 Điều | Tỉ lệ NormR |
 |---|---|---:|---:|---:|
-| Gemini 2.5 Pro *(cặp file 085236, N=1)* | 0.581423 / 0.426975 | **1.362** | 1.335 | 1.335 |
-| Gemini 2.5 Pro *(mean N=3, `V2_RESULTS.md`)* | 0.578 / 0.435 | **1.329** | — | 1.311 |
-| Cục bộ đã tinh chỉnh, 0-shot | 0.402433 / 0.300765 | **1.338** | 1.292 | 0.888 |
-| Cục bộ gốc, 2-shot | 0.492631 / 0.239092 | **2.060** | 1.702 | 1.052 |
-| Cục bộ gốc, 0-shot | 0.136253 / 0.153771 | **0.886** | 0.801 | 0.520 |
+| Gemini 2.5 Pro | 0.617136 / 0.435819 | **1.416** | 1.390 | 1.417 |
+| Cục bộ đã tinh chỉnh, 0-shot | 0.401703 / 0.300765 | **1.336** | 1.304 | 0.930 |
+| Cục bộ gốc, 2-shot | 0.510879 / 0.239092 | **2.137** | 1.783 | 1.094 |
+| Cục bộ gốc, 0-shot | 0.131387 / 0.153771 | **0.854** | 0.772 | 0.506 |
 
 Δ tuyệt đối tương ứng:
 
 | Hàng | Δ F1 Khoản | Δ F1 Điều | Δ NormR |
 |---|---:|---:|---:|
-| Gemini *(cặp file 085236)* | +0.154448 | +0.150086 | +0.198905 |
-| Cục bộ đã tinh chỉnh, 0-shot | +0.101668 | +0.100452 | **−0.068127** |
-| Cục bộ gốc, 2-shot | +0.253540 | +0.221179 | +0.031022 |
-| Cục bộ gốc, 0-shot | **−0.017518** | **−0.033942** | **−0.127129** |
+| Gemini 2.5 Pro | +0.181317 | +0.178994 | +0.243715 |
+| Cục bộ đã tinh chỉnh, 0-shot | +0.100938 | +0.104588 | **−0.042579** |
+| Cục bộ gốc, 2-shot | +0.271788 | +0.246727 | +0.056569 |
+| Cục bộ gốc, 0-shot | **−0.022384** | **−0.038808** | **−0.130779** |
+
+**Cách đọc cột tỉ lệ.** Δ dương ở ba trên bốn hàng, và hàng thứ tư (gốc 0-shot) là hiệu
+ứng sàn chứ không phải phản chứng — `format_ok_rate` của ô đó chỉ **0.065**, tức 8 trên
+123 câu phân tích được, thang đo không còn phân giải. Hàng **gốc 2-shot có tỉ lệ cao
+nhất (2.137)**; đọc con số đó phải kèm cảnh báo: **mẫu số của nó rất thấp (0.239092)**
+nên tỉ lệ nhạy với nhiễu — một thay đổi nhỏ ở mẫu số kéo tỉ lệ đi rất xa. Không được
+diễn giải nó thành *"mô hình yếu hưởng lợi nhiều hơn"*. Lập luận đầy đủ ở Phần B §7.4.
 
 ### 6.4 Phân tách theo `gap_type` và `theme` — ô 1 và ô 3
 
-**Ô 1 — ft, 0-shot, GraphRAG** (`aggregate.by_gap` / `by_theme` trên `results_graphrag_ft06-ft-s0.json`):
+**Ô 1 — ft, 0-shot, GraphRAG** (`aggregate.by_gap` / `by_theme` trên `results_graphrag_ft06b-ft-s0.json`):
 
 | `gap_type` | n | F1 Khoản | F1 Điều | NormR |
 |---|---:|---:|---:|---:|
-| gap1 | 32 | 0.442708 | 0.486458 | 0.671875 |
-| gap2 | 31 | 0.247312 | 0.247312 | 0.387097 |
-| gap3 | 30 | 0.338889 | 0.372222 | 0.400000 |
-| gap4 | 30 | 0.337778 | 0.451111 | 0.522222 |
+| gap1 | 32 | 0.432292 | 0.476042 | 0.703125 |
+| gap2 | 31 | 0.247312 | 0.268817 | 0.467742 |
+| gap3 | 30 | 0.335556 | 0.368889 | 0.400000 |
+| gap4 | 30 | 0.348889 | 0.462222 | 0.522222 |
 | negative | 14 | 0.928571 | 0.928571 | 0.928571 |
 
 | `theme` | n | F1 Khoản | NormR |
 |---|---:|---:|---:|
 | dat-dai | 61 | 0.349180 | 0.519126 |
-| ho-tich | 39 | 0.447009 | 0.512821 |
+| ho-tich | 39 | 0.444444 | 0.602564 |
 | nuoi-con-nuoi | 29 | 0.324138 | 0.534483 |
 | `None` | 8 | 0.875000 | 0.875000 |
 
-**Ô 3 — base, 2-shot, GraphRAG** (`results_graphrag_ft06-base-s2.json`):
+**Ô 3 — base, 2-shot, GraphRAG** (`results_graphrag_ft06b-base-s2.json`):
 
 | `gap_type` | n | F1 Khoản | F1 Điều | NormR |
 |---|---:|---:|---:|---:|
-| gap1 | 32 | 0.473958 | 0.567708 | 0.796875 |
-| gap2 | 31 | 0.470507 | 0.470507 | 0.483871 |
+| gap1 | 32 | 0.505208 | 0.598958 | 0.828125 |
+| gap2 | 31 | 0.594163 | 0.594163 | 0.629032 |
 | gap3 | 30 | 0.336825 | 0.370159 | 0.461111 |
-| gap4 | 30 | 0.521111 | 0.587778 | 0.666667 |
+| gap4 | 30 | 0.443333 | 0.543333 | 0.600000 |
 | negative | 14 | 0.857143 | 0.857143 | 0.857143 |
 
 | `theme` | n | F1 Khoản | NormR |
 |---|---:|---:|---:|
-| dat-dai | 61 | 0.491101 | 0.620219 |
-| ho-tich | 39 | 0.552137 | 0.628205 |
+| dat-dai | 61 | 0.485636 | 0.603825 |
+| ho-tich | 39 | 0.624786 | 0.743590 |
 | nuoi-con-nuoi | 29 | 0.310345 | 0.586207 |
 | `None` | 8 | 0.875000 | 0.875000 |
 
-**Đối chiếu — hàng Gemini, cùng nguồn ngữ cảnh** (`aggregate` trên `data/evaluation/results_graphrag_20260710-085236.json`):
+**Đối chiếu — hàng Gemini, ĐÚNG file cấp ngữ cảnh cho ba ô GraphRAG** (`aggregate` trên `data/evaluation/results_graphrag_final1_20260729-022916.json`):
 
 | `gap_type` | n | F1 Khoản | F1 Điều | NormR |
 |---|---:|---:|---:|---:|
-| gap1 | 32 | 0.518824 | 0.551190 | 0.890625 |
-| gap2 | 31 | 0.515086 | 0.515086 | 0.661290 |
-| gap3 | 30 | 0.498386 | 0.541720 | 0.777778 |
-| gap4 | 30 | 0.637778 | 0.637778 | 0.777778 |
+| gap1 | 32 | 0.533408 | 0.581399 | 0.859375 |
+| gap2 | 31 | 0.667775 | 0.667775 | 0.838710 |
+| gap3 | 30 | 0.540904 | 0.584238 | 0.805556 |
+| gap4 | 30 | 0.580899 | 0.592011 | 0.755556 |
 | negative | 14 | 0.928571 | 0.928571 | 0.928571 |
-
-*(Khớp `docs/V2_RESULTS.md` §3 dòng "FULL v2 per-gap: gap1 0.519 · gap2 0.515 · gap3 0.498 · gap4 0.638".)*
 
 | `theme` | n | F1 Khoản | NormR |
 |---|---:|---:|---:|
-| dat-dai | 61 | 0.617412 | 0.789617 |
-| ho-tich | 39 | 0.580342 | 0.743590 |
-| nuoi-con-nuoi | 29 | 0.391708 | 0.810345 |
+| dat-dai | 61 | 0.593019 | 0.759563 |
+| ho-tich | 39 | 0.729630 | 0.935897 |
+| nuoi-con-nuoi | 29 | 0.406705 | 0.775862 |
 | `None` | 8 | 1.000000 | 1.000000 |
 
-*(Khớp `docs/V2_RESULTS.md` §4.)*
+*Đây là **một mẻ** (`final1`); `docs/V3_RESULTS.md` §4 và §5 báo trung bình ba mẻ nên chữ số lẻ lệch chút — vd `V3_RESULTS.md` §4 ghi gap2 0.667 (ở đây 0.667775), §5 ghi ho-tich 0.707 (ở đây 0.729630, mẻ `final1` cao hơn trung bình). Cùng dữ liệu, khác số mẻ.*
+
+**Và hàng Gemini · Naive RAG, đúng file cấp ngữ cảnh cho ba ô Naive** (`results_baseline_20260710-085236.json`):
+
+| `gap_type` | n | F1 Khoản | F1 Điều | NormR |
+|---|---:|---:|---:|---:|
+| gap1 | 32 | 0.489732 | 0.518899 | 0.750000 |
+| gap2 | 31 | 0.404455 | 0.468971 | 0.612903 |
+| gap3 | 30 | 0.366044 | 0.366044 | 0.469444 |
+| gap4 | 30 | 0.276825 | 0.276825 | 0.444444 |
+| negative | 14 | 0.785714 | 0.785714 | 0.785714 |
+
+| `theme` | n | F1 Khoản | NormR |
+|---|---:|---:|---:|
+| dat-dai | 61 | 0.340581 | 0.547814 |
+| ho-tich | 39 | 0.489361 | 0.615385 |
+| nuoi-con-nuoi | 29 | 0.401209 | 0.586207 |
+| `None` | 8 | 0.875000 | 0.875000 |
 
 Nhóm `theme = None` (8 câu) là phần con của 14 câu negative — nhóm negative có 14 câu, trong đó 6 câu vẫn mang `theme` cụ thể.
 
@@ -636,7 +865,9 @@ Nhóm `theme = None` (8 câu) là phần con của 14 câu negative — nhóm ne
 |---|---:|---|---:|---:|---:|---:|
 | **V020** | **2** | ft · 0-shot · baseline | **2 048** (= `max_new_tokens`) | 6 082 | 6 060 | **6 276 ký tự** |
 
-Đây là **câu duy nhất** chạm trần trong toàn bộ 822 lượt sinh: năm ô còn lại đều có `n_hit_token_cap = 0` và `ids_hit_token_cap = []`. Nguồn: trường `hit_token_cap` của từng item + khoá `replay.ids_hit_token_cap`; cảnh báo in ở `finetune/reports/ft06_matrix.md` §2 và `finetune/logs/ft06_gpu0.log`.
+Đây là **câu duy nhất** chạm trần trong toàn bộ 822 lượt sinh: năm ô còn lại đều có `n_hit_token_cap = 0` và `ids_hit_token_cap = []`. Nguồn: trường `hit_token_cap` của từng item + khoá `replay.ids_hit_token_cap`; cảnh báo in ở `finetune/reports/ft06b_matrix.md` §2 và `finetune/logs/ft06b_gpu0.log`.
+
+*V020 thuộc **cột Naive**, mà cột đó không đổi nguồn ngữ cảnh — nên đây đúng là cùng một ca đã gặp ở lượt trước, không phải ca mới.*
 
 ---
 
@@ -646,13 +877,13 @@ Nhóm `theme = None` (8 câu) là phần con của 14 câu negative — nhóm ne
 |---|---|---|---|
 | Ngày | 29/07/2026 | 29/07/2026 *(suy từ `RUN_NAME` = `ft04-5k-2ep-20260729-2122`)* | 30/07/2026 |
 | Nền | Kaggle | RunPod Community Cloud | Kaggle Notebooks |
-| Mô hình | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` (bartowski) | huấn luyện từ `unsloth/Qwen3-4B-Instruct-2507` | base GGUF (bartowski) **+** `ft04-5k-2ep-20260729-2122-Q4_K_M.gguf` |
+| Mô hình | `Qwen3-4B-Instruct-2507-Q4_K_M.gguf` (bartowski) | huấn luyện từ **`unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit`** (Unsloth chuyển hướng từ tên `unsloth/Qwen3-4B-Instruct-2507` truyền vào CLI — §0 mục 3) | base GGUF (bartowski) **+** `ft04-5k-2ep-20260729-2122-Q4_K_M.gguf` |
 | Số câu | **15** (`finetune/data/gate_ids.json`) | — (4 690 mẫu train / 64 mẫu val) | **137** × 6 ô = **822 lượt** |
 | Số ô | 4 (2 × 2) | 1 lần chạy | 6 |
-| Phần cứng | Kaggle GPU — **loại card KHÔNG CÓ TRONG REPO** (`gate_base_model.md` chỉ ghi "Kaggle") | RTX 4090 dự kiến (`run.sh:6`); **card thực tế KHÔNG CÓ TRONG REPO** | **Tesla T4 × 2**, 15 360 MiB mỗi card |
-| Commit code | `eecdc7b7dc533f2c564d74e795704fb4dcbb81a2` **+ bản vá ngoài git** | **KHÔNG CÓ TRONG REPO** | `2a712adf7707164b7302afa42cf98ea06c99b417` |
-| Thời gian chạy | **KHÔNG CÓ TRONG REPO** | **KHÔNG CÓ TRONG REPO** | 10 638.06 s tổng sáu ô (2 luồng song song) |
-| Kết quả lưu ở | `finetune/reports/gate_base_model.md` (**4 file results JSON KHÔNG CÓ TRONG REPO**) | `train_result.json` — **KHÔNG CÓ TRONG REPO** | 6 file `finetune/results/results_*.json` |
+| Phần cứng | Kaggle GPU — **loại card KHÔNG CÓ TRONG REPO** (`gate_base_model.md` chỉ ghi "Kaggle") | **NVIDIA GeForce RTX 4090 · sm89 · 1 card · 23.516 GB** (`…2122.log:39`, `:41`) | **Tesla T4 × 2**, 15 360 MiB mỗi card |
+| Commit code | `eecdc7b7dc533f2c564d74e795704fb4dcbb81a2` **+ bản vá ngoài git** | **KHÔNG CÓ TRONG REPO** — log không in commit hash | `2a712adf7707164b7302afa42cf98ea06c99b417` |
+| Thời gian chạy | **KHÔNG CÓ TRONG REPO** | chặng `train` **19 480 s = 5 giờ 24 phút 40 giây** (`…2122.log:370`); tổng bảy chặng không có | 11 313.56 s tổng sáu ô (2 luồng song song) |
+| Kết quả lưu ở | `finetune/reports/gate_base_model.md` (**4 file results JSON KHÔNG CÓ TRONG REPO**) | `finetune/logs/ft04-5k-2ep-20260729-2122.log` (`train_result.json` vẫn không có) | 6 file `finetune/results/results_*_ft06b-*.json` |
 
 ### 7.1 Tám tham số sinh — từng phiên
 
@@ -665,7 +896,7 @@ Nhóm `theme = None` (8 câu) là phần con của 14 câu negative — nhóm ne
 | 5 | `presence_penalty` | **1.0 ở 2 ô · 0 ở 2 ô** (đây là trục thí nghiệm) | không áp dụng | **0 ở cả 6 ô** | ⚠️ **KHÁC** — phiên 1 quét hai giá trị để chốt; phiên 3 dùng giá trị đã chốt |
 | 6 | `seed` | 42 | 42 (`train_qlora.py:67`, `:180`, `:247`) | 42 | — |
 | 7 | `max_new_tokens` | 2 048 | không áp dụng | 2 048 | — |
-| 8 | `n_ctx` | 16 384 | (`max_seq_length` = 16 384) | 16 384 | — |
+| 8 | `n_ctx` | 16 384 | (`max_seq_length` = 16 384, xác nhận `…2122.log:57` `limit 16,384`) | 16 384 | — |
 | + | `n_gpu_layers` | **KHÔNG CÓ TRONG REPO** (không ghi ở `gate_base_model.md`) | không áp dụng | **−1** (mọi layer lên GPU) | ⚠️ không đối chiếu được |
 | + | `greedy` | `false` (suy từ temperature 0.7) | không áp dụng | `false` (khoá `gen_params.greedy`) | — |
 
@@ -685,13 +916,13 @@ Trong phiên 3, **chỉ hai giá trị khác nhau giữa các ô**: `model` (bas
 | Nguồn | Đại lượng | 0-shot | 2-shot | Chênh |
 |---|---|---:|---:|---:|
 | Phiên 1 — `gate_base_model.md` §1 | **prompt max** trên 15 câu, khuôn GraphRAG | **11 211** | **11 623** | **412** |
-| Phiên 3 — cổng chặn B, `results_graphrag_ft06-gate-prompt-s{0,2}.json` | prompt của **câu V001**, khuôn GraphRAG | **10 144** | **10 556** | **412** |
+| Phiên 3 — cổng chặn B, `results_graphrag_ft06b-gate-prompt-s{0,2}.json` | prompt của **câu V001**, khuôn GraphRAG | **10 144** | **10 556** | **412** |
 | Phiên 3 — cổng chặn B, khuôn baseline | prompt của câu V001 | **6 182** | **6 594** | **412** |
-| Phiên 3 — ô 1 / ô 5 và ô 3, `finetune/logs/ft06_gpu{0,1}.log` | prompt của câu V001 trong lần chạy đủ 137 câu | **10 144** | **10 556** | **412** |
+| Phiên 3 — ô 1 / ô 5 và ô 3, `finetune/logs/ft06b_gpu{0,1}.log` | prompt của câu V001 trong lần chạy đủ 137 câu | **10 144** | **10 556** | **412** |
 
 **Kết luận của phép kiểm:**
 
-1. **KHÔNG so được trực tiếp.** Phiên 1 chỉ ghi lại **giá trị lớn nhất trên bộ 15 câu**, phiên 3 ghi giá trị **của câu V001**. Bốn file results JSON của phiên 1 — nguồn duy nhất có độ dài prompt từng câu — **KHÔNG CÓ TRONG REPO** (`finetune/results/` chỉ chứa file `ft06-*`; đã kiểm toàn bộ thư mục). Không có file dump prompt của phiên 1 (`prompt_gate-s0-pp10.txt`, `prompt_gate-s2-pp10.txt` nêu ở `gate_base_model.md` §5 và `finetune/README.md`) trong repo.
+1. **KHÔNG so được trực tiếp.** Phiên 1 chỉ ghi lại **giá trị lớn nhất trên bộ 15 câu**, phiên 3 ghi giá trị **của câu V001**. Bốn file results JSON của phiên 1 — nguồn duy nhất có độ dài prompt từng câu — **KHÔNG CÓ TRONG REPO** (`finetune/results/` chỉ chứa file `ft06-*` và `ft06b-*`; đã kiểm toàn bộ thư mục). Không có file dump prompt của phiên 1 (`prompt_gate-s0-pp10.txt`, `prompt_gate-s2-pp10.txt` nêu ở `gate_base_model.md` §5 và `finetune/README.md`) trong repo.
 2. **Cái so được, và nó khớp:** phụ trội của việc thêm hai cặp ví dụ là **đúng 412 token** ở cả ba phép đo độc lập — phiên 1 (trên giá trị max), phiên 3 khuôn GraphRAG, phiên 3 khuôn baseline. Cùng với `prompt_len_lech` bất biến 22 (0-shot) và 56 (2-shot) ở cả hai phiên (`gate_base_model.md` §5 mục 3 ghi đúng 22 và 56), đây là bằng chứng khuôn prompt không đổi giữa hai phiên. *(Con số 412 và 34 là phép trừ trên các giá trị đã đọc từ file, không phải số đọc trực tiếp.)*
 3. Con số **10 556** mà `docs/FT_SYNTHESIS_B_KHOKHAN.md:509-512` mô tả là "trùng khít con số của phiên cổng FT-03" **không đối chiếu được** với `gate_base_model.md`, vì báo cáo đó chỉ ghi 11 623 (max). Chỗ này cần một nguồn khác nếu muốn phát biểu trong khoá luận.
 
@@ -702,28 +933,30 @@ Trong phiên 3, **chỉ hai giá trị khác nhau giữa các ô**: `model` (bas
 **Bảng 4.5 (bốn hệ tham chiếu) — KHÔNG CÓ TRONG REPO ở dạng bốn thang đo đầy đủ.**
 Đã tìm ở: `docs/` (không có thư mục `docs/thesis/` — `ls docs/thesis` → không tồn tại), `thesis/` (thư mục rỗng), `docs/V2_RESULTS.md`, `docs/PROJECT_STATUS.md`, `docs/EVALUATION_ARCHITECTURE.md`, `CLAUDE.md`. Bản khoá luận `baocao.docx` nằm **ngoài repo** (`../baocao.docx`).
 
-**Cái repo CÓ** — `docs/V2_RESULTS.md` §2 "Bậc thang baseline (E2a)", **chỉ hai trong bốn thang đo**:
+**Bốn thang đo đầy đủ cho hai hệ GraphRAG và Naive RAG** — tính lại bằng `aggregate` trên chính hai file cấp ngữ cảnh cho sáu ô:
+
+| Hệ (Gemini 2.5 Pro) | Mẻ | F1 Khoản | F1 Điều | Norm Recall | Từ chối đúng |
+|---|---|---:|---:|---:|---:|
+| GraphRAG | `results_graphrag_final1_20260729-022916.json` | **0.616235** | **0.639367** | **0.827251** | **0.928571 (13/14)** |
+| Naive RAG | `results_baseline_20260710-085236.json` | **0.426975** | **0.448386** | **0.594282** | **0.785714 (11/14)** |
+
+Nếu Bảng 4.13 cần giá trị trung bình nhiều mẻ (khớp hàng Gemini của ma trận §6.1):
+GraphRAG **0.617136 ± 0.001 / 0.637692 ± 0.003 / 0.828873 ± 0.006 / 13-14** (N=3) ·
+Naive RAG **0.435819 ± 0.008 / 0.458698 ± 0.008 / 0.585158 ± 0.008 / 11-14** (N=4 ⚠️, xem cảnh báo §6.1).
+
+Số phụ của hai file: `total_elapsed_s` graphrag `final1` = 722.23 (chạy song song nên thấp hơn tổng `elapsed_seconds` 3 526.30) · baseline 3 440.7; `latency_mean_s` graphrag 25.739416 · baseline 25.113504; số câu có GT khác rỗng = **123** ở cả hai; số câu trong 123 đó thực sự sinh ra ≥ 1 citation: graphrag **117**, baseline **92**.
+
+**Ba bậc còn lại của bậc thang — chỉ có ở bộ số v2, CHƯA chạy lại sau khi sửa lỗi phân loại địa phương** (`docs/V2_RESULTS.md` §2; `docs/V3_RESULTS.md` §7.1 vẫn dùng cùng giá trị đó):
 
 | Hệ | F1 Khoản | NormR | F1 Điều | Từ chối đúng |
 |---|---:|---:|---:|---:|
 | oracle (trần) | 0.858 | 0.955 | KHÔNG CÓ | KHÔNG CÓ |
-| **GraphRAG v2** | **0.578** | 0.771 | KHÔNG CÓ | KHÔNG CÓ |
 | bm25 | 0.571 | 0.808 | KHÔNG CÓ | KHÔNG CÓ |
-| baseline (naive RAG) | 0.435 | 0.588 | KHÔNG CÓ | KHÔNG CÓ |
 | closed-book | 0.102 | 0.102 | KHÔNG CÓ | KHÔNG CÓ |
 
-*Nguồn: `docs/V2_RESULTS.md` §2. Ghi chú tại chỗ: "oracle/bm25/closed-book lấy từ mẻ v1 — Fix A không đụng các hệ này."*
-
-**Bốn thang đo đầy đủ cho hai hệ GraphRAG và Naive RAG** — tính lại bằng `aggregate` trên chính cặp file mà sáu ô dùng làm nguồn ngữ cảnh:
-
-| Hệ (Gemini 2.5 Pro, mẻ `20260710-085236`) | F1 Khoản | F1 Điều | Norm Recall | Từ chối đúng |
-|---|---:|---:|---:|---:|
-| GraphRAG | **0.581423** | **0.598472** | **0.793187** | **0.928571 (13/14)** |
-| Naive RAG | **0.426975** | **0.448386** | **0.594282** | **0.785714 (11/14)** |
-
-Số phụ của cặp file này: `total_elapsed_s` graphrag 3 012.8 · baseline 3 440.7; `latency_mean_s` graphrag 21.989927 · baseline 25.113504; số câu có GT khác rỗng = 123 ở cả hai; số câu trong 123 đó thực sự sinh ra ≥ 1 citation: graphrag **117**, baseline **92**.
-
-> **Oracle / BM25 / closed-book: KHÔNG CÓ F1 Điều và Từ chối đúng trong repo.** Nếu Bảng 4.13 cần bốn cột cho cả năm hệ thì hai cột đó phải lấy từ **Bảng 4.5 của `baocao.docx`**, hoặc tính lại từ results JSON của mẻ v1 nếu file còn trong `data/evaluation/`.
+> **Ba bậc này KHÔNG so trực tiếp được với hai hàng trên.** Chúng đo trên mẻ v1/v2, còn hai hàng trên là mẻ v3 (sau khi sửa `query_planner`). Lỗi đã sửa nằm trong `query_planner`, mà `bm25` / `closed-book` / `oracle` không đi qua tầng đó — nên **kỳ vọng** chúng không đổi, nhưng **kỳ vọng không phải số đo**. Nếu Bảng 4.13 xếp cả năm hệ cạnh nhau thì phải hoặc chạy lại ba bậc này, hoặc ghi chú rõ chúng thuộc mẻ khác.
+>
+> **Oracle / BM25 / closed-book cũng KHÔNG CÓ F1 Điều và Từ chối đúng trong repo.** Hai cột đó phải lấy từ **Bảng 4.5 của `baocao.docx`**, hoặc tính lại từ results JSON của mẻ v1 nếu file còn trong `data/evaluation/`.
 
 ---
 
@@ -735,27 +968,27 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 
 | Giá trị | Ý nghĩa | Nguồn |
 |---:|---|---|
-| 0.402 | F1 Khoản — ft, 0-shot, GraphRAG (ô 1) | `finetune/results/results_graphrag_ft06-ft-s0.json` → `aggregate.f1_mean` |
-| 0.445 | F1 Điều — ô 1 | như trên, `f1_dieu_mean` |
-| 0.541 | Norm Recall — ô 1 | như trên, `norm_recall_mean` |
+| 0.402 | F1 Khoản — ft, 0-shot, GraphRAG (ô 1) | `finetune/results/results_graphrag_ft06b-ft-s0.json` → `aggregate.f1_mean` |
+| 0.449 | F1 Điều — ô 1 | như trên, `f1_dieu_mean` |
+| 0.567 | Norm Recall — ô 1 | như trên, `norm_recall_mean` |
 | 13/14 = 0.929 | Từ chối đúng — ô 1 | như trên, `negative_correct_rate` |
-| 0.301 | F1 Khoản — ft, 0-shot, Naive (ô 2) | `finetune/results/results_baseline_ft06-ft-s0.json` |
+| 0.301 | F1 Khoản — ft, 0-shot, Naive (ô 2) | `finetune/results/results_baseline_ft06b-ft-s0.json` |
 | 0.344 | F1 Điều — ô 2 | như trên |
 | 0.609 | Norm Recall — ô 2 | như trên |
 | 8/14 = 0.571 | Từ chối đúng — ô 2 | như trên |
-| 0.493 | F1 Khoản — base, 2-shot, GraphRAG (ô 3) | `finetune/results/results_graphrag_ft06-base-s2.json` |
-| 0.536 | F1 Điều — ô 3 | như trên |
-| 0.630 | Norm Recall — ô 3 | như trên |
+| 0.511 | F1 Khoản — base, 2-shot, GraphRAG (ô 3) | `finetune/results/results_graphrag_ft06b-base-s2.json` |
+| 0.562 | F1 Điều — ô 3 | như trên |
+| 0.656 | Norm Recall — ô 3 | như trên |
 | 12/14 = 0.857 | Từ chối đúng — ô 3 | như trên |
-| 0.239 | F1 Khoản — base, 2-shot, Naive (ô 4) | `finetune/results/results_baseline_ft06-base-s2.json` |
+| 0.239 | F1 Khoản — base, 2-shot, Naive (ô 4) | `finetune/results/results_baseline_ft06b-base-s2.json` |
 | 0.315 | F1 Điều — ô 4 | như trên |
 | 0.599 | Norm Recall — ô 4 | như trên |
 | 7/14 = 0.500 | Từ chối đúng — ô 4 | như trên |
-| 0.136 | F1 Khoản — base, 0-shot, GraphRAG (ô 5) | `finetune/results/results_graphrag_ft06-base-s0.json` |
-| 0.136 | F1 Điều — ô 5 | như trên |
-| 0.137 | Norm Recall — ô 5 | như trên |
+| 0.131 | F1 Khoản — base, 0-shot, GraphRAG (ô 5) | `finetune/results/results_graphrag_ft06b-base-s0.json` |
+| 0.131 | F1 Điều — ô 5 | như trên |
+| 0.134 | Norm Recall — ô 5 | như trên |
 | 13/14 = 0.929 | Từ chối đúng — ô 5 | như trên |
-| 0.154 | F1 Khoản — base, 0-shot, Naive (ô 6) | `finetune/results/results_baseline_ft06-base-s0.json` |
+| 0.154 | F1 Khoản — base, 0-shot, Naive (ô 6) | `finetune/results/results_baseline_ft06b-base-s0.json` |
 | 0.170 | F1 Điều — ô 6 | như trên |
 | 0.265 | Norm Recall — ô 6 | như trên |
 | 13/14 = 0.929 | Từ chối đúng — ô 6 | như trên |
@@ -764,18 +997,17 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 
 | Giá trị | Ý nghĩa | Nguồn |
 |---:|---|---|
-| +0.102 | Δ F1 Khoản — hàng ft 0-shot | ô 1 − ô 2 |
-| +0.254 | Δ F1 Khoản — hàng base 2-shot | ô 3 − ô 4 |
-| −0.018 | Δ F1 Khoản — hàng base 0-shot | ô 5 − ô 6 |
-| +0.143 | Δ F1 Khoản — hàng Gemini (mean N=3) | `docs/V2_RESULTS.md` §1 |
-| +0.154 | Δ F1 Khoản — hàng Gemini (cặp file đã đóng băng) | `aggregate` trên `data/evaluation/results_*_20260710-085236.json` |
-| 1.338 | Tỉ lệ GraphRAG/Naive — hàng ft 0-shot | tính từ ô 1 / ô 2 |
-| 2.060 | Tỉ lệ GraphRAG/Naive — hàng base 2-shot | ô 3 / ô 4 |
-| 0.886 | Tỉ lệ GraphRAG/Naive — hàng base 0-shot | ô 5 / ô 6 |
-| 1.329 | Tỉ lệ GraphRAG/Naive — Gemini (mean N=3) | 0.578 / 0.435 |
-| 1.362 | Tỉ lệ GraphRAG/Naive — Gemini (cặp file đã đóng băng) | 0.581423 / 0.426975 |
-| −0.068 | Δ Norm Recall — hàng ft 0-shot (**âm**) | ô 1 − ô 2 |
-| −0.091 | Δ F1 Khoản: ft 0-shot GraphRAG so với base 2-shot GraphRAG (**tinh chỉnh thua**) | 0.402433 − 0.492631 |
+| +0.101 | Δ F1 Khoản — hàng ft 0-shot | ô 1 − ô 2 |
+| +0.272 | Δ F1 Khoản — hàng base 2-shot | ô 3 − ô 4 |
+| −0.022 | Δ F1 Khoản — hàng base 0-shot | ô 5 − ô 6 |
+| +0.181 | Δ F1 Khoản — hàng Gemini (**cơ sở aggregate 137 câu**, dùng cho ma trận) | 0.617136 − 0.435819 |
+| +0.187 | Δ F1 Khoản — hàng Gemini (**cơ sở ghép cặp 123 câu**, có mức ý nghĩa) | `docs/V3_RESULTS.md` §3 |
+| 1.336 | Tỉ lệ GraphRAG/Naive — hàng ft 0-shot | tính từ ô 1 / ô 2 |
+| 2.137 | Tỉ lệ GraphRAG/Naive — hàng base 2-shot (**mẫu số thấp → nhạy nhiễu**) | ô 3 / ô 4 |
+| 0.854 | Tỉ lệ GraphRAG/Naive — hàng base 0-shot (**hiệu ứng sàn**) | ô 5 / ô 6 |
+| 1.416 | Tỉ lệ GraphRAG/Naive — Gemini | 0.617136 / 0.435819 |
+| −0.043 | Δ Norm Recall — hàng ft 0-shot (**âm**) | ô 1 − ô 2 |
+| −0.109 | Δ F1 Khoản: ft 0-shot GraphRAG so với base 2-shot GraphRAG (**tinh chỉnh thua**) | 0.401703 − 0.510879 |
 
 ### 9.3 Sức khoẻ và mẫu số
 
@@ -789,14 +1021,15 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 | 14 | Số câu `gap_type = negative` (mẫu số cột Từ chối đúng) | `aggregate.negative_count` |
 | 4 | Số câu negative thực sự đi qua mô hình sinh ở cột GraphRAG | 14 − 10, `dataset_stats.md` §4.2 |
 | 822 | Tổng lượt sinh (6 ô × 137) | `FINETUNE_EXECUTION_PLAN.md:635` |
-| 0.073 | `format_ok_rate` thấp nhất (ô 5) | `results_graphrag_ft06-base-s0.json` |
+| 0.065 | `format_ok_rate` thấp nhất (ô 5) | `results_graphrag_ft06b-base-s0.json` |
 | 0.894 | `format_ok_rate` cao nhất (ô 2 và ô 4) | hai file baseline tương ứng |
-| 0.732 | `format_ok_rate` ô 1 | `results_graphrag_ft06-ft-s0.json` |
-| 0.813 | `format_ok_rate` ô 3 | `results_graphrag_ft06-base-s2.json` |
+| 0.756 | `format_ok_rate` ô 1 | `results_graphrag_ft06b-ft-s0.json` |
+| 0.854 | `format_ok_rate` ô 3 | `results_graphrag_ft06b-base-s2.json` |
 | 1.000 | `soft_article_hit` ô 3 (giá trị cao nhất) | như trên |
-| 0.928 | `soft_article_hit` ô 6 (giá trị thấp nhất) | `results_baseline_ft06-base-s0.json` |
+| 0.928 | `soft_article_hit` ô 6 (giá trị thấp nhất) | `results_baseline_ft06b-base-s0.json` |
 | 1 | Số câu chạm trần token trong 822 lượt (`V020`, ô 2) | `replay.ids_hit_token_cap` |
-| 2 048 | `n_tokens_out` của `V020` = `max_new_tokens` | item `V020` trong `results_baseline_ft06-ft-s0.json` |
+| 2 048 | `n_tokens_out` của `V020` = `max_new_tokens` | item `V020` trong `results_baseline_ft06b-ft-s0.json` |
+| 11 313.56 s | Tổng `total_elapsed_s` sáu ô ≈ 3 giờ 8 phút | cộng từ sáu file kết quả |
 
 ### 9.4 Cấu hình huấn luyện
 
@@ -811,18 +1044,33 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 | 135 | `refusal_out_of_scope` | `dataset_stats.md` §4 |
 | 2 529 | Mẫu khuôn GraphRAG (50.6 %) | `dataset_stats.md` §3 |
 | 2 471 | Mẫu khuôn baseline (49.4 %) | `dataset_stats.md` §3 |
-| 16 | LoRA `r` | `finetune/run.sh:290` |
-| 32 | LoRA `alpha` | `finetune/run.sh:291` |
-| 0.0 | LoRA dropout | `finetune/train_qlora.py:240` |
-| 7 | Số `target_modules` | `finetune/train_qlora.py:243-244` |
-| 2e-4 | Learning rate | `finetune/train_qlora.py:62` |
+| 16 | LoRA `r` | `finetune/run.sh:290`; `adapter_config.json` → `"r"` |
+| 32 | LoRA `alpha` | `finetune/run.sh:291`; `adapter_config.json` → `"lora_alpha"` |
+| 0.0 | LoRA dropout | `finetune/train_qlora.py:240`; `adapter_config.json` → `"lora_dropout"` |
+| 7 | Số `target_modules` | `finetune/train_qlora.py:243-244`; `adapter_config.json` → `"target_modules"` |
+| 36 | Số layer được vá (36 QKV + 36 O + 36 MLP) | `…2122.log:47` |
+| 33 030 144 | Tham số huấn luyện được | `…2122.log:90` |
+| 4 055 498 240 | Tổng tham số | `…2122.log:90` |
+| 0.81 % | Tỉ lệ tham số huấn luyện được | `…2122.log:90` |
+| 2e-4 | Learning rate | `finetune/train_qlora.py:62`; xác nhận `…2122.log:97` (đạt đúng 2e-04 sau warmup) |
 | 0.03 | `warmup_ratio` | `finetune/train_qlora.py:170` |
 | 0.01 | `weight_decay` | `finetune/train_qlora.py:173` |
-| 2 | Số epoch | `finetune/run.sh:67` |
-| 1 | `per_device_train_batch_size` | `finetune/train_qlora.py:165` |
-| 16 | `gradient_accumulation_steps` (batch hiệu dụng = 16) | `finetune/train_qlora.py:65` |
-| 16 384 | `max_seq_length` | `finetune/run.sh:66` |
+| 2 | Số epoch | `finetune/run.sh:67`; `…2122.log:87` |
+| 588 | Tổng số bước tối ưu (294 mỗi epoch) | `…2122.log:87`, `:377-378` |
+| 1 | `per_device_train_batch_size` | `finetune/train_qlora.py:165`; `…2122.log:88` |
+| 16 | `gradient_accumulation_steps` (batch hiệu dụng = 16) | `finetune/train_qlora.py:65`; `…2122.log:88-89` |
+| 16 384 | `max_seq_length` | `finetune/run.sh:66`; `…2122.log:57` |
 | 42 | Seed (dữ liệu, LoRA init, trainer, sinh văn bản) | `build_dataset.py:87`; `train_qlora.py:67`; `replay` `gen_params.seed` |
+| 0.4054 | `train_loss` | `…2122.log:370`, `:373` |
+| 0.3129 / 0.3082 | `eval_loss` epoch 1 / epoch 2 | `…2122.log:377-378` |
+| 1.50 % | Mức cải thiện eval_loss giữa hai epoch | tính từ hai dòng trên |
+| 19 480 s | `train_runtime` = 5 giờ 24 phút 40 giây | `…2122.log:370`, `:373` |
+| 0.482 / 0.03 | `train_samples_per_second` / `train_steps_per_second` | `…2122.log:370` |
+| 3 625.9 tok/s | Thông lượng — **TÍNH LẠI** (log ghi `nan`) | §5.4 |
+| 98.5 % | Tỉ lệ token bị che (5 623 / 5 707) | `…2122.log:84` |
+| 35 316 237 | `total_tokens` tập train (tokenizer thật) | `…2122.log:59` |
+| 466 358 | `total_tokens` tập val 64 mẫu | `…2122.log:72` |
+| `unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit` | **Kho mô hình gốc thật đã nạp** | `adapter_config.json` → `base_model_name_or_path` |
 
 ### 9.5 Độ dài chuỗi
 
@@ -835,12 +1083,15 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 | 30 | Khung cố định của user prompt (ký tự) | `api_contract.md` §1.2 |
 | 46 % | Tỉ trọng system prompt trong ngân sách ở câu trung vị | `token_budget.md` §2.2 |
 | 12 950 | Độ dài token lớn nhất của mẫu huấn luyện (Qwen2.5) | `dataset_stats.md` §2.2 |
-| 7 498 / 6 818 / 11 001 | mean / p50 / p95 độ dài tổng chuỗi huấn luyện | `dataset_stats.md` §2.2 |
-| 0 | Số mẫu huấn luyện vượt trần 16 384 | `dataset_stats.md` §2.2 |
+| **12 968** | Độ dài token lớn nhất, **tokenizer Qwen3 thật** | `…2122.log:56` |
+| 7 498 / 6 818 / 11 001 | mean / p50 / p95 độ dài tổng chuỗi huấn luyện (Qwen2.5) | `dataset_stats.md` §2.2 |
+| **7 530 / 6 869 / 11 009** | mean / p50 / p95, **tokenizer Qwen3 thật**, 4 690 mẫu train | `…2122.log:53-55` |
+| **7 286 / 6 542 / 10 956 / 12 062** | mean / p50 / p95 / max tập val 64 mẫu, tokenizer thật | `…2122.log:66-69` |
+| 0 | Số mẫu huấn luyện vượt trần 16 384 | `dataset_stats.md` §2.2; **xác nhận** `…2122.log:58`, `:71` |
 | 12 011 | Prompt dài nhất trên 127 câu GraphRAG (Qwen2.5) | `token_budget.md` §2.1 |
 | 12 011 | Prompt dài nhất backend đo được ở ô 1 / ô 5 | `n_tokens_prompt_backend` trong hai file results |
 | 6 432 | Prompt dài nhất backend ở ô 2 / ô 6 | như trên |
-| 12 389 | Prompt dài nhất backend ở ô 3 (2-shot) | `results_graphrag_ft06-base-s2.json` |
+| 12 389 | Prompt dài nhất backend ở ô 3 (2-shot) | `results_graphrag_ft06b-base-s2.json` |
 | 10 144 | Prompt câu V001, GraphRAG, 0-shot | cổng chặn B + log phiên 3 |
 | 10 556 | Prompt câu V001, GraphRAG, 2-shot | cổng chặn B + log phiên 3 |
 | 412 | Phụ trội token của hai ví dụ few-shot (ổn định qua ba phép đo) | tính từ §7.2 |
@@ -867,23 +1118,27 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 
 | Giá trị | Ý nghĩa | Nguồn |
 |---:|---|---|
-| 0.581423 | F1 Khoản GraphRAG, mẻ `20260710-085236` | `aggregate` trên `data/evaluation/results_graphrag_20260710-085236.json` |
-| 0.598472 | F1 Điều GraphRAG, mẻ đó | như trên |
-| 0.793187 | Norm Recall GraphRAG, mẻ đó | như trên |
+| 0.616235 | F1 Khoản GraphRAG, mẻ `final1_20260729-022916` (**đúng file cấp ngữ cảnh cho ô 1/3/5**) | `aggregate` trên `data/evaluation/results_graphrag_final1_20260729-022916.json` |
+| 0.639367 | F1 Điều GraphRAG, mẻ đó | như trên |
+| 0.827251 | Norm Recall GraphRAG, mẻ đó | như trên |
 | 13/14 | Từ chối đúng GraphRAG, mẻ đó | như trên |
-| 0.426975 | F1 Khoản Naive, mẻ đó | `data/evaluation/results_baseline_20260710-085236.json` |
+| 0.426975 | F1 Khoản Naive, mẻ `20260710-085236` (**đúng file cấp ngữ cảnh cho ô 2/4/6**) | `data/evaluation/results_baseline_20260710-085236.json` |
 | 0.448386 | F1 Điều Naive, mẻ đó | như trên |
 | 0.594282 | Norm Recall Naive, mẻ đó | như trên |
 | 11/14 | Từ chối đúng Naive, mẻ đó | như trên |
-| 0.578 ± 0.004 | F1 Khoản GraphRAG, mean ± σ N=3 | `docs/V2_RESULTS.md` §1 |
-| 0.435 ± 0.008 | F1 Khoản Naive, mean ± σ N=3 | `docs/V2_RESULTS.md` §1 |
-| 0.771 ± 0.016 | Norm Recall GraphRAG, N=3 | `docs/V2_RESULTS.md` §1 |
-| [0.061, 0.225] | CI 95 % của Δ F1 Khoản (bootstrap 10 000, seed 42) | `docs/V2_RESULTS.md` §1 |
-| 0.0015 | Wilcoxon p | `docs/V2_RESULTS.md` §1 |
-| 65 / 36 / 22 | Win / Loss / Tie trên 123 câu | `docs/V2_RESULTS.md` §1 |
-| 0.858 / 0.955 | F1 Khoản / NormR — oracle | `docs/V2_RESULTS.md` §2 |
-| 0.571 / 0.808 | F1 Khoản / NormR — bm25 | `docs/V2_RESULTS.md` §2 |
-| 0.102 / 0.102 | F1 Khoản / NormR — closed-book | `docs/V2_RESULTS.md` §2 |
+| 0.617136 ± 0.001 | F1 Khoản GraphRAG, mean ± σ mẫu, **N=3** (`final1/2/3`) | `aggregate` trên ba file; khớp `docs/V3_RESULTS.md` §2 (0.617 ± 0.001) |
+| 0.637692 ± 0.003 | F1 Điều GraphRAG, N=3 | như trên |
+| 0.828873 ± 0.006 | Norm Recall GraphRAG, N=3 | như trên; `V3_RESULTS.md` §2 ghi ± 0.005 vì dùng σ tổng thể |
+| 0.435819 ± 0.008 | F1 Khoản Naive, mean ± σ mẫu, **N=4 ⚠️** | `aggregate` trên bốn mẻ baseline đủ 137 câu — xem cảnh báo §6.1 |
+| 0.458698 ± 0.008 | F1 Điều Naive, N=4 ⚠️ | như trên |
+| 0.585158 ± 0.008 | Norm Recall Naive, N=4 ⚠️ | như trên |
+| +0.187 | Δ F1 Khoản, cơ sở ghép cặp 123 câu | `docs/V3_RESULTS.md` §3 |
+| [0.108, 0.264] | CI 95 % của Δ F1 Khoản (bootstrap 10 000, seed 42) | `docs/V3_RESULTS.md` §3 |
+| 0.00003 | Wilcoxon p (\*\*\*) | `docs/V3_RESULTS.md` §3 |
+| 67 / 32 / 24 | Win / Loss / Tie trên 123 câu | `docs/V3_RESULTS.md` §3 |
+| 0.858 / 0.955 | F1 Khoản / NormR — oracle (**mẻ v2, chưa chạy lại**) | `docs/V2_RESULTS.md` §2; xem cảnh báo §8 |
+| 0.571 / 0.808 | F1 Khoản / NormR — bm25 (**mẻ v2, chưa chạy lại**) | như trên |
+| 0.102 / 0.102 | F1 Khoản / NormR — closed-book (**mẻ v2, chưa chạy lại**) | như trên |
 
 ---
 
@@ -897,7 +1152,8 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 |---|---|
 | `docs/FINETUNE_EXECUTION_PLAN.md` (v2.3.4, 970 dòng) | toàn bộ |
 | `docs/FT_SYNTHESIS_B_KHOKHAN.md` | toàn bộ (để xác định ranh giới) |
-| `docs/V2_RESULTS.md` | toàn bộ |
+| `docs/V3_RESULTS.md` (176 dòng) | toàn bộ — **bộ số thay thế V2 cho Chương 4/5** |
+| `docs/V2_RESULTS.md` | toàn bộ (chỉ để đối chiếu lịch sử, không lấy số) |
 | `finetune/README.md` (286 dòng) | toàn bộ |
 | `CLAUDE.md` | phần trạng thái + Decision Log |
 
@@ -911,17 +1167,29 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 | `dataset_stats.md` (205 dòng) | toàn bộ |
 | `dataset_build.json` (243 dòng) | toàn bộ |
 | `gate_base_model.md` (213 dòng) | toàn bộ |
-| `ft06_matrix.md` (102 dòng) | toàn bộ |
-| `ft06_gpu_info.json` | toàn bộ |
-| `ft06_artifacts.json` | toàn bộ |
-| `ft06_run_status.json`, `…_gpu0.json`, `…_gpu1.json` | toàn bộ |
-| `ft06_chat_template_base.jinja`, `…_ft.jinja` | độ dài + sha256 (theo yêu cầu) |
-| `ft06_prompt_{graphrag,baseline}_s{0,2}.txt` | kích thước file; nội dung đối chiếu qua results JSON tương ứng |
+| `ft06b_matrix.md` (261 dòng) | toàn bộ |
+| `ft06b_gpu_info.json` | toàn bộ (và **loại bỏ** khỏi giá trị ghim thứ bảy — xem cảnh báo §4.6) |
+| `ft06b_artifacts.json` | toàn bộ |
+| `ft06b_run_status.json`, `…_gpu0.json`, `…_gpu1.json` | toàn bộ |
+| `ft06b_chat_template_base.jinja`, `…_ft.jinja` | độ dài + sha256 (tính lại) |
+| `ft06b_prompt_{graphrag,baseline}_s{0,2}.txt` | kích thước file; nội dung đối chiếu qua results JSON tương ứng |
 | `samples_20.txt` | chỉ kích thước (319 152 B) |
 
-**Kết quả `finetune/results/` — 10 file JSON, tất cả đã chạy qua `metrics.aggregate`**
+**Kết quả `finetune/results/` — 10 file JSON `ft06b-*`, tất cả đã chạy qua `metrics.aggregate`**
 
-`results_graphrag_ft06-ft-s0.json` · `results_baseline_ft06-ft-s0.json` · `results_graphrag_ft06-base-s2.json` · `results_baseline_ft06-base-s2.json` · `results_graphrag_ft06-base-s0.json` · `results_baseline_ft06-base-s0.json` · `results_graphrag_ft06-gate-prompt-s0.json` · `results_graphrag_ft06-gate-prompt-s2.json` · `results_baseline_ft06-gate-prompt-s0.json` · `results_baseline_ft06-gate-prompt-s2.json`
+`results_graphrag_ft06b-ft-s0.json` · `results_baseline_ft06b-ft-s0.json` · `results_graphrag_ft06b-base-s2.json` · `results_baseline_ft06b-base-s2.json` · `results_graphrag_ft06b-base-s0.json` · `results_baseline_ft06b-base-s0.json` · `results_graphrag_ft06b-gate-prompt-s0.json` · `results_graphrag_ft06b-gate-prompt-s2.json` · `results_baseline_ft06b-gate-prompt-s0.json` · `results_baseline_ft06b-gate-prompt-s2.json`
+
+**Nguồn ngữ cảnh `data/evaluation/` — 7 file JSON, đều chạy qua `metrics.aggregate`**
+
+`results_graphrag_final{1,2,3}_20260729-*.json` · `results_baseline_2026070{9,}…json` (bốn mẻ đủ 137 câu: `20260709-073933`, `20260710-001154`, `20260710-085236`, `20260710-104109`)
+
+**Log huấn luyện phiên 2**
+
+`finetune/logs/ft04-5k-2ep-20260729-2122.log` (1 807 dòng) — đọc dòng 30-100, 355-400; đếm 117 dòng `{'loss': …}`
+
+**Cấu hình adapter**
+
+`adapter/ft04-5k-2ep-20260729-2122/checkpoint-588/adapter_config.json` — toàn bộ 54 dòng
 
 **Mã nguồn**
 
@@ -929,7 +1197,7 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 |---|---|
 | `finetune/train_qlora.py` | toàn bộ (373 dòng) |
 | `finetune/run.sh` | toàn bộ (407 dòng) |
-| `finetune/kaggle_ft06.py` | dòng 1-115, 190-260, 659-720; grep toàn bộ cấu trúc chặng |
+| `finetune/kaggle_ft06.py` | dòng 1-145 (chú thích nguồn ngữ cảnh + hằng số), 208-260 (hiện vật ghim), 331-336 (`LANES`), 700-760 (cổng A), 763-900 (cổng B); grep toàn bộ cấu trúc chặng |
 | `finetune/build_dataset.py` | hằng số (76-182), `to_record` (632-650), `build`/`make` (656-800), `kiem_tra` (887-915), `tach_train_val` (921-936); danh sách hàm đầy đủ |
 | `finetune/replay.py` | `GenParams` (155-175) |
 | `finetune/slug.py` | danh sách hàm |
@@ -937,43 +1205,44 @@ Mỗi dòng một con số. Cột "Nguồn" là file đọc ra nó.
 
 **Dữ liệu và hiện vật khác**
 
-`finetune/data/train.jsonl` (đếm dòng) · `finetune/data/val.jsonl` (đếm dòng) · `finetune/data/train.jsonl.sha256` · `finetune/data/val.jsonl.sha256` · `finetune/logs/ft06_gpu0.log` · `finetune/logs/ft06_gpu1.log` · `data/evaluation/results_graphrag_20260710-085236.json` · `data/evaluation/results_baseline_20260710-085236.json` · `../results/ft06_constraints.txt` · `../results/__huggingface_repos__.json` · `../results/repo/.git/{refs,logs,packed-refs}` · git log của repo chính.
+`finetune/data/train.jsonl` (đếm dòng) · `finetune/data/val.jsonl` (đếm dòng) · `finetune/data/train.jsonl.sha256` · `finetune/data/val.jsonl.sha256` · `finetune/logs/ft04-5k-2ep-20260729-2122.log` · `finetune/logs/ft06b_gpu0.log` · `finetune/logs/ft06b_gpu1.log` · `data/evaluation/results_graphrag_final{1,2,3}_20260729-*.json` · `data/evaluation/results_baseline_{20260709-073933,20260710-001154,20260710-085236,20260710-104109}.json` · `adapter/ft04-5k-2ep-20260729-2122/checkpoint-588/adapter_config.json` · `../results/ft06_constraints.txt` · `../results/__huggingface_repos__.json` · `../results/repo/.git/{refs,logs,packed-refs}` · git log của repo chính.
 
 ### B. File KHÔNG tìm được
 
 | File | Đã tìm ở | Ảnh hưởng tới mục nào |
 |---|---|---|
-| `adapter/train_result.json` | `finetune/{results,reports,logs,models,data,notebooks}/`, gốc repo, `../results/`; `find . -iname "train_result*.json"` | **§5 gần như trống** — mất `train_loss`, `train_runtime`, `samples/s`, `steps/s`, `total_flos`, `eval_history` |
-| `adapter/length_stats.json` | như trên; `find . -iname "*length_stats*.json"` | §3.4 chỉ có nguồn A (tokenizer Qwen2.5), không đối chiếu được với tokenizer thật |
-| `adapter/val_length_stats.json` | như trên | như trên |
-| Hai file log huấn luyện (`$WORK/{RUN_NAME}.log`) | `finetune/logs/` chỉ có `ft06_gpu{0,1}.log` (log **phiên 3**); `find . -iname "*.log"` → đúng hai file đó | §2.3 (số layer vá, số tham số huấn luyện, tỉ lệ token bị che), §4.1 (GPU thật, thời gian), §5 (loss theo bước) |
-| `adapter/adapter_config.json` | `find . -iname "adapter_config.json"` → chỉ khớp hai dòng log HTTP 404 trong notebook cũ | §0 mục 3 — không xác nhận được `r`/`alpha` thực nạp |
-| 4 file results JSON của phiên 1 (FT-03) | `finetune/results/` (chỉ có 10 file `ft06-*`) | §7.2 — không so được độ dài prompt ở cấp câu |
+| `adapter/train_result.json` | `finetune/{results,reports,logs,models,data,notebooks}/`, gốc repo, `../results/`; `find . -iname "train_result*.json"` | **Chỉ còn mất `total_flos`** — mọi giá trị khác của file này đều được in ra log (§5.1) |
+| `adapter/length_stats.json`, `adapter/val_length_stats.json` | như trên; `find . -iname "*length_stats*.json"` | **Không ảnh hưởng nữa** — cùng bảng đó in nguyên vẹn ra log, `…2122.log:51-73` (§5.3) |
+| `trainer.state.log_history` dạng cấu trúc | chỉ nằm trong `trainer_state.json` (không có) | §5.5 — chuỗi loss lẫn trong dòng `tqdm` của log, phải bóc bằng regex mới dựng bảng; chưa làm |
+| 4 file results JSON của phiên 1 (FT-03) | `finetune/results/` (chỉ có file `ft06-*` và `ft06b-*`) | §7.2 — không so được độ dài prompt ở cấp câu |
 | `finetune/results/prompt_gate-s0-pp10.txt`, `prompt_gate-s2-pp10.txt` | `finetune/results/`, `finetune/reports/` | §7.2 |
-| Bảng 4.5 với bốn thang đo đầy đủ | `docs/` (không có `docs/thesis/`), `thesis/` (rỗng), `docs/V2_RESULTS.md` | §8 — F1 Điều và Từ chối đúng của oracle/bm25/closed-book |
+| Commit code của phiên 2 | log huấn luyện không in commit hash; không file nào khác ghi | §7 — giá trị ghim thứ tư thiếu cho phiên 2 |
+| Chi phí thuê máy phiên 2 | không file nào trong repo ghi giá | §4.1 |
+| Bảng 4.5 với bốn thang đo đầy đủ | `docs/` (không có `docs/thesis/`), `thesis/` (rỗng), `docs/V2_RESULTS.md`, `docs/V3_RESULTS.md` | §8 — F1 Điều và Từ chối đúng của oracle/bm25/closed-book |
+| Số liệu v3 cho oracle / bm25 / closed-book | `docs/V3_RESULTS.md` (chỉ có số v2 ở §7.1) | §8 — ba bậc đó chưa chạy lại sau khi sửa `query_planner` |
 | Giấy phép bộ dữ liệu `thangvip/vietnamese-legal-qa` | `finetune/README.md`, `dataset_stats.md`, `dataset_build.json`, `build_dataset.py`, kế hoạch | §3.1 |
 
 ### C. Mọi chỗ hai nguồn lệch nhau
 
-Bốn chỗ, liệt kê đầy đủ ở **§0**:
+Năm chỗ, liệt kê đầy đủ ở **§0**:
 
-1. Hàng Gemini: 0.578 / 0.435 (mean N=3) so với 0.581423 / 0.426975 (cặp file đã đóng băng) — Δ +0.143 so với +0.154448.
-2. Δ và mức ý nghĩa của Bảng 4.3: `CLAUDE.md` ghi +0.156 / p = 0.001 \*\*\*; `V2_RESULTS.md` đính chính ngày 28/07/2026 thành +0.143 / p = 0.0015 \*\* — **bản đính chính là số mới nhất**.
-3. LoRA `r`/`alpha`: mặc định script 32/64 so với `run.sh` truyền 16/32 — giá trị đã chạy là 16/32, chưa xác minh được bằng `adapter_config.json`.
-4. Phân bố độ dài mẫu huấn luyện: chỉ có bản đo bằng tokenizer Qwen2.5; bản đo bằng tokenizer thật (`length_stats.json`) thiếu.
+1. Δ hàng Gemini: **+0.181317** (cơ sở aggregate 137 câu, dùng cho ma trận) so với **+0.187** (cơ sở ghép cặp 123 câu, `V3_RESULTS.md` §3) — hai cơ sở khác nhau, không mâu thuẫn.
+2. Δ và mức ý nghĩa của Bảng 4.3: `CLAUDE.md` +0.156 / p = 0.001; `V2_RESULTS.md` +0.143 / p = 0.0015; `V3_RESULTS.md` **+0.187 / p = 0.00003** — **V3 là số mới nhất**.
+3. Tên kho mô hình gốc: `run.sh` truyền `unsloth/Qwen3-4B-Instruct-2507`, `adapter_config.json` ghi `unsloth/qwen3-4b-instruct-2507-unsloth-bnb-4bit` — **kho thật là bản 4-bit**.
+4. Phân bố độ dài mẫu: Qwen2.5 (dựng dữ liệu) so với Qwen3 thật (huấn luyện) — nay **đã đối chiếu được**, lệch ≤ 0.75 %.
+5. Thông lượng: log ghi `nan`, giá trị **TÍNH LẠI** ≈ 3 625.9 tok/s.
 
-Chỗ **không** lệch, đã kiểm chéo và khớp: sáu con số `aggregate` của `ft06_matrix.md` §1 khớp kết quả tính lại tới ba chữ số; `ft06_run_status.json` khớp cả sáu ô; ba cặp độ trễ ở `ft06_matrix.md` §4 khớp phép tính lại; per-gap và per-theme của mẻ Gemini khớp `V2_RESULTS.md` §3 và §4; `dataset_build.json` khớp `dataset_stats.md` §1; system prompt 3 936 token khớp giữa `token_budget.md` §2.2 và `dataset_stats.md` §2; max prompt 12 011 token khớp giữa `token_budget.md` §2.1 và backend phiên 3.
+Chỗ **không** lệch, đã kiểm chéo và khớp: sáu con số `aggregate` của `ft06b_matrix.md` §1 khớp kết quả tính lại tới ba chữ số; `ft06b_run_status.json` khớp cả sáu ô; ba cặp độ trễ ở `ft06b_matrix.md` §4 khớp phép tính lại; `0.617 ± 0.001` của `V3_RESULTS.md` §2 khớp `aggregate` chạy lại trên ba mẻ `final1/2/3`; **`36 × 57 344 × 16 = 33 030 144` khớp số tham số huấn luyện được in ở log** (§2.3); `train_samples_per_second` và `train_steps_per_second` khớp phép chia tay (§5.1); `dataset_build.json` khớp `dataset_stats.md` §1; system prompt 3 936 token khớp giữa `token_budget.md` §2.2 và `dataset_stats.md` §2; max prompt 12 011 token khớp giữa `token_budget.md` §2.1 và backend phiên 3; sha256 chat template `40c21f34…` khớp giữa hai file `.jinja` và giữa hai lượt đánh giá.
 
 ### D. Chỗ phải dừng vì không đủ dữ kiện
 
 | # | Việc | Lý do dừng |
 |---:|---|---|
-| 1 | §5 — bảng `train_loss` / `eval_loss` theo epoch, `runtime`, `samples/s`, `steps/s`, `total_flos`, tỉ lệ token bị che | Bốn hiện vật nguồn đều không có trong repo (mục B). Hai giá trị `eval_loss` duy nhất còn lại (0.3129 / 0.3082) **chỉ tồn tại trong tài liệu tóm tắt Phần B**, không có file gốc để xác minh |
-| 2 | §5 — bảng loss theo mốc ~50 bước và file CSV | Chuỗi `log_history` không có trong repo |
-| 3 | §2 — số layer được vá, số tham số huấn luyện được so với tổng | Chỉ in ra log huấn luyện, log không có |
-| 4 | §2 — xác nhận `r`/`alpha` thực nạp | `adapter_config.json` không có |
-| 5 | §4.1 — loại GPU thật và thời gian của phiên 2, chi phí thuê | Không file nào trong repo ghi |
-| 6 | §7 — commit code của phiên 2, loại card của phiên 1 | Không file nào trong repo ghi |
-| 7 | §7.2 — so độ dài prompt 2-shot phiên 1 với phiên 3 **ở cấp câu** | Phiên 1 chỉ ghi giá trị max trên 15 câu; 4 file results và 2 file dump prompt của phiên 1 không có trong repo. Chỉ so được phụ trội few-shot (412 token, khớp) |
-| 8 | §8 — F1 Điều và Từ chối đúng cho oracle / bm25 / closed-book | Repo chỉ có hai trong bốn thang đo cho ba hệ này |
-| 9 | §3.1 — giấy phép bộ dữ liệu nguồn | Không ghi ở bất kỳ file nào |
+| 1 | §5 — `total_flos` | `st.metrics` có khoá này nhưng script không in nó ra log; `train_result.json` (nơi ghi trọn `st.metrics`) không có trong repo |
+| 2 | §5.5 — bảng loss theo bước dạng bảng đầy đủ và file CSV | 117 mốc loss có trong log nhưng lẫn trong dòng `tqdm`; phải bóc bằng regex, và mục 4.7 không cần bảng đó |
+| 3 | §4.1 — chi phí thuê máy phiên 2 | Không file nào trong repo ghi |
+| 4 | §7 — commit code của phiên 2, loại card của phiên 1 | Log huấn luyện không in commit hash; `gate_base_model.md` chỉ ghi "Kaggle" |
+| 5 | §7.2 — so độ dài prompt 2-shot phiên 1 với phiên 3 **ở cấp câu** | Phiên 1 chỉ ghi giá trị max trên 15 câu; 4 file results và 2 file dump prompt của phiên 1 không có trong repo. Chỉ so được phụ trội few-shot (412 token, khớp) |
+| 6 | §8 — F1 Điều và Từ chối đúng cho oracle / bm25 / closed-book; và số v3 cho ba bậc đó | Repo chỉ có hai trong bốn thang đo, và chỉ ở mẻ v2 |
+| 7 | §6.1 — chỉ đúng **ba** mẻ baseline mà `V3_RESULTS.md` §3 dùng | Báo cáo đó không ghi tên mẻ; phép lọc theo số câu ra 4 mẻ. Người phụ trách phải chỉ định |
+| 8 | §3.1 — giấy phép bộ dữ liệu nguồn | Không ghi ở bất kỳ file nào |
