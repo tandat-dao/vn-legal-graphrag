@@ -14,19 +14,21 @@ Bộ câu hỏi 137 câu đã đóng băng, 3 lĩnh vực, mô hình Gemini, tru
 
 | Thước đo | GraphRAG | Naive RAG |
 |---|---:|---:|
-| **F1 cấp Khoản** | **0.578 ± 0.004** | 0.435 ± 0.008 |
-| F1 cấp Điều | 0.596 ± 0.006 | 0.459 ± 0.008 |
-| Norm Recall | 0.771 ± 0.016 | 0.588 ± 0.005 |
+| **F1 cấp Khoản** | **0.617 ± 0.001** | 0.435 ± 0.008 |
+| F1 cấp Điều | 0.638 ± 0.002 | 0.459 ± 0.008 |
+| Norm Recall | 0.829 ± 0.005 | 0.588 ± 0.005 |
 
-Chênh lệch ghép cặp theo từng câu (123 câu có đáp án tham chiếu): **Δ +0.143**, khoảng tin cậy 95% **[0.061, 0.225]**, Wilcoxon **p = 0.0015** → có ý nghĩa thống kê. *(bootstrap 10000 lần lấy mẫu lại, seed cố định)*
+Chênh lệch ghép cặp theo từng câu (123 câu có đáp án tham chiếu): **Δ +0.187**, khoảng tin cậy 95% **[0.108, 0.264]**, Wilcoxon **p = 0.00003**, thắng/thua/hòa 67/32/24 → có ý nghĩa thống kê. *(bootstrap 10000 lần lấy mẫu lại, seed cố định)*
 
-Bậc thang hệ tham chiếu (F1 cấp Khoản): oracle 0.858 > **graphrag 0.578** ≈ bm25 0.571 > naive RAG 0.435 > closed-book 0.102.
+Bậc thang hệ tham chiếu (F1 cấp Khoản): gold-context 0.858 > **graphrag 0.617** > bm25 0.571 > naive RAG 0.435 > llm-only 0.102.
 
-Ablation phân ly kép chứng minh bước duyệt đồ thị cần thiết cho thách thức đa tầng và đa phiên bản (gỡ bước duyệt: −0.091 / −0.130).
+Ablation phân ly kép: bước duyệt đồ thị cần thiết cho thách thức đa tầng và đa phiên bản (gỡ bước duyệt: −0.101 / −0.122), bộ lọc lĩnh vực cần thiết cho thách thức đa lĩnh vực (−0.039) và không gây gánh nặng cho ba thách thức còn lại. Hai bộ lọc cứng theo địa phương và theo thời gian **chưa** chứng minh được đóng góp riêng — khi bị cô lập, chúng làm tăng điểm ở chính thách thức của mình (+0.050 và +0.045); đây là kết quả phủ định và được báo cáo nguyên trạng.
 
-Tính trung thực của trích dẫn: tỉ lệ tồn tại 880/881 = 99.9% (kiểm tra tất định, không gọi mô hình); tỉ lệ được hậu thuẫn 247/296 = 83.5% (giám khảo `gemini-2.5-pro` — lưu ý hạn chế tự-đánh-giá vì hệ cũng chạy Gemini).
+Tính trung thực của trích dẫn: tỉ lệ tồn tại 295/296 = 99.7% (kiểm tra tất định, không gọi mô hình); tỉ lệ được hậu thuẫn 230/295 = 78.0% (giám khảo `gemini-2.5-flash`, khác mô hình sinh `gemini-2.5-pro`). Đo lại bằng giám khảo của nhà cung cấp khác cho 88.1%, tức con số 78.0% không bị thổi phồng do tự-đánh-giá.
 
-Toàn bộ số liệu chốt: [`docs/V2_RESULTS.md`](docs/V2_RESULTS.md). Tài liệu đánh giá cũ (bộ 26 câu, F1 0.539) chỉ còn giá trị lịch sử.
+Độ vững khi đổi mô hình sinh: ưu thế của kiến trúc giữ dấu dương ở cả mô hình thương mại lẫn mô hình mã nguồn mở chạy cục bộ (ΔF1 +0.182 / +0.101 / +0.272).
+
+Toàn bộ số liệu chốt: [`docs/V3_RESULTS.md`](docs/V3_RESULTS.md). [`docs/V2_RESULTS.md`](docs/V2_RESULTS.md) là bộ số trước khi sửa lỗi phân loại địa phương, chỉ còn giá trị lịch sử.
 
 ---
 

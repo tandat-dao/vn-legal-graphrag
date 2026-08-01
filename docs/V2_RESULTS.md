@@ -1,7 +1,12 @@
 # KẾT QUẢ ĐÁNH GIÁ v2 — dữ liệu cho Chương 4
 
-> **Chốt 2026-07-10.** Nguồn số liệu chính cho báo cáo. Mọi số dưới đây từ result JSON
-> đã lưu trong `data/evaluation/` — có thể tính lại metric bất kỳ lúc nào ($0, không gọi API).
+> ⚠️ **TÀI LIỆU LỊCH SỬ — ĐÃ BỊ THAY THẾ.** Bộ số dưới đây đo trước khi sửa lỗi phân
+> loại địa phương trong bộ lập kế hoạch truy vấn (xem mục 1 của `V3_RESULTS.md`). Số
+> chốt cho báo cáo nằm ở [`V3_RESULTS.md`](V3_RESULTS.md). Giữ tệp này để đối chiếu
+> trước/sau khi sửa lỗi, **không dùng làm nguồn trích dẫn**.
+
+> **Chốt 2026-07-10.** Mọi số dưới đây từ result JSON đã lưu trong `data/evaluation/`
+> — có thể tính lại metric bất kỳ lúc nào ($0, không gọi API).
 
 ## 0. Thiết lập
 
