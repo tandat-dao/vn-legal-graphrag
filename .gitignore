@@ -83,3 +83,6 @@ finetune/results/*_mock_*.json
 # ngoài Kaggle thì LOG_DIR lùi về finetune/results/. Nội dung đã được in gộp vào
 # output notebook nên không cần commit.
 finetune/results/*.log
+
+# Tài liệu nội bộ, không đưa lên repo công khai
+docs/Instruction.md

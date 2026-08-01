@@ -208,9 +208,3 @@ Ba kết quả này cùng nhóm với các kết quả phủ định đã có (D
 - [ ] **Poster** — bảng kết quả, bậc thang, tỉ lệ câu thua
 - [ ] **README** (repo công khai) và **docs/V2_RESULTS.md**
 - [ ] Tóm tắt đề tài trên ELIT nếu có nêu số
-
-## 10. Điểm đáng nói khi bảo vệ
-
-Lỗi này được tìm ra bằng **truy ngược có phương pháp**, không phải tình cờ: ablation cho kết quả nghịch lý (+0.182 ở nhóm đa địa phương) → không chấp nhận kết luận "cơ chế vô dụng" → truy từng câu → phát hiện hệ chỉ trích dẫn văn bản toàn quốc → đối chiếu mã nguồn → tìm ra giả định lỗi thời.
-
-Câu chuyện *một giả định đúng ở giai đoạn đơn lĩnh vực trở thành sai khi hệ mở rộng đa lĩnh vực* chính là minh chứng cho giá trị của kiến trúc hướng Ontology: lược đồ tường minh khiến lỗi loại này **truy ra được**, thay vì chìm trong một mô hình hộp đen.
