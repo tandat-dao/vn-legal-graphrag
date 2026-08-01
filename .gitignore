@@ -71,6 +71,7 @@ data/evaluation/e2c/
 docs/thesis/
 docs/report.md
 docs/FT_SYNTHESIS_D_DIENGIAI.md
+docs/presentation
 
 # Finetune (TASK-FT-*): weights GGUF/LoRA + dataset sinh ra — nặng, tái tạo được
 # bằng code trong finetune/. Report + notebook + kết quả JSON vẫn được commit.
