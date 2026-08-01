@@ -354,4 +354,4 @@ Kết quả đánh giá của hai bản là **như nhau** vì mọi số liệu 
 ## Nhóm thực hiện
 
 Đào Nguyễn Tấn Đạt, Nguyễn Duy Minh Đăng — ngành Khoa học Máy tính.
-Giảng viên hướng dẫn: Lê Anh Cường, Khoa Công nghệ thông tin.
+Giảng viên hướng dẫn: PGS.TS Lê Anh Cường, Khoa Công nghệ thông tin.
