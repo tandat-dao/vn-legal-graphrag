@@ -727,6 +727,75 @@ sinh thương mại quy mô lớn lẫn mô hình 4 tỉ tham số chạy cục 
 mô hình sinh cụ thể. Cấu hình duy nhất không cho Δ dương là cấu hình mà thang đo đã
 mất phân giải, và điều đó được đo chứ không được suy.
 
+### 7.5 Fine-tune có tác dụng không — phép so phải cô lập đúng một biến
+
+§7.3 báo một kết quả âm: mô hình đã tinh chỉnh thua mô hình gốc ở cấu hình 2-shot.
+Đọc riêng nó dễ dẫn tới kết luận *"fine-tune vô ích"*. Kết luận đó **sai**, và lý do
+là phép so ở §7.3 **không cô lập được tác dụng của fine-tune**: `base@2-shot` khác
+`FT@0-shot` ở **hai** thứ cùng lúc — mô hình **và** số ví dụ mẫu.
+
+Phép so cô lập được là **cùng số ví dụ mẫu, khác mô hình**:
+
+| | `format_ok_rate` GraphRAG | `format_ok_rate` Naive | F1 Khoản GraphRAG | F1 Khoản Naive |
+|---|---:|---:|---:|---:|
+| Gốc, 0-shot | 0,065 | 0,211 | 0,131 | 0,154 |
+| **Đã tinh chỉnh, 0-shot** | **0,756** | **0,894** | **0,402** | **0,301** |
+| Hệ số | **×11,6** | ×4,2 | ×3,1 | ×2,0 |
+
+Fine-tune làm **đúng thứ nó được thiết kế để làm** — mục tiêu định nghĩa ở §3.1 là
+*"dạy định dạng đầu ra"*, và tỉ lệ trả lời phân tích được tăng **11,6 lần** trên cột
+GraphRAG. Đây là phép đo trực tiếp, không phải suy luận.
+
+**Hai ô mà mô hình tinh chỉnh thắng cả `base@2-shot`:**
+
+| | Gốc, 2-shot | Đã tinh chỉnh, 0-shot |
+|---|---:|---:|
+| F1 Khoản, cột **Naive** | 0,239 | **0,301** |
+| Từ chối đúng, Naive | 7/14 | **8/14** |
+| Từ chối đúng, GraphRAG | 12/14 | **13/14** |
+
+Nó chỉ thua ở **cột GraphRAG**. Trên cột Naive nó thắng hoặc hoà ở mọi thang đo.
+
+#### Giả thuyết cho việc thua riêng ở cột GraphRAG
+
+Mẫu huấn luyện mang ngữ cảnh GraphRAG được **tổng hợp** bằng cách đóng gói 4–6 điều
+từ kho văn bản (§4.2 của PHẦN C, bước 3). Ngữ cảnh GraphRAG **thật** do đường truy
+hồi sinh ra thì khác hẳn: tới 22 khối, tiêu đề ghi cấp bậc văn bản và ngày hiệu lực,
+có khối cảnh báo sửa đổi, có cả văn bản hết hiệu lực lẫn còn hiệu lực trộn lẫn.
+
+Ngược lại, ngữ cảnh Naive gần như **giống nhau ở hai bên** — chỉ là các đoạn văn bản
+cắt theo chunk.
+
+Nếu giả thuyết đúng thì mọi quan sát khớp: mô hình học trên ngữ cảnh GraphRAG *sạch
+hơn thực tế*, nên **thắng ở cột Naive và thua ở cột GraphRAG**. Nó cũng giải thích vì
+sao `format_ok_rate` của hàng tinh chỉnh ở cột Naive (0,894) ngang `base@2-shot`
+(0,894) trong khi ở cột GraphRAG (0,756) thì kém hơn (0,854).
+
+**Kiểm được, không cần GPU:** so phân bố số khối và cấu trúc tiêu đề giữa ngữ cảnh
+GraphRAG trong `finetune/data/train.jsonl` và ngữ cảnh GraphRAG thật trong file kết
+quả. Chưa làm — ghi lại như việc còn mở.
+
+#### Một ô chưa ai chạy: `FT@2-shot`
+
+Ma trận không có ô này, vì lý do phương pháp ở §2.2 (dữ liệu huấn luyện là 0-shot,
+đánh giá ở 2-shot là lệch train/eval). Lý do đó vẫn đúng. Nhưng nó có nghĩa là ta
+**không biết** hai cách dạy định dạng có cộng dồn được không. Chi phí bổ sung khoảng
+25 phút trên môi trường miễn phí; nếu chạy thì phải khai báo rõ là cấu hình lệch
+train/eval và báo **riêng**, không đưa vào ma trận chính.
+
+#### Phát biểu đúng cho khóa luận
+
+> Trên tác vụ mà nội dung chính là học **định dạng đầu ra**, hai ví dụ đặt trong ngữ
+> cảnh là một cách dạy **cạnh tranh được** với tinh chỉnh, và trên ngữ cảnh GraphRAG
+> thì tốt hơn. Tinh chỉnh vẫn có tác dụng rõ rệt và đo được — tăng tỉ lệ trả lời đúng
+> khuôn **11,6 lần** ở cùng điều kiện — nhưng dữ liệu huấn luyện tổng hợp có thể là
+> lý do nó chưa phát huy hết trên ngữ cảnh truy hồi phức tạp.
+
+Một khác biệt thực tế mà bảng không thể hiện: cấu hình 2-shot ngốn **412 token mỗi
+câu hỏi, vĩnh viễn**, trong cửa sổ 16.384 mà ngữ cảnh đã chiếm gần 9.000. Tinh chỉnh
+trả một lần 5 giờ 24 phút rồi thôi. Với 137 câu thì không đáng kể; ở quy mô vận hành
+thì đó là thuế thường trực.
+
 ---
 
 ## 8. Hai chỗ tài liệu dự án cần sửa

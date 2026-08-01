@@ -1,0 +1,19 @@
+{
+  "nvidia_smi_csv": [
+    "index, name, memory.total [MiB]",
+    "0, Tesla T4, 15360 MiB",
+    "1, Tesla T4, 15360 MiB"
+  ],
+  "n_card_nhin_thay": 2,
+  "che_do": "tuần tự, mọi ô trên card 0",
+  "song_song": false,
+  "ghim_cuda_visible_devices": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0
+  },
+  "nguon": "prep — dự kiến"
+}

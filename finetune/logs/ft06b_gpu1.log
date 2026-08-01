@@ -1,0 +1,499 @@
+
+==============================================================================
+CHẶNG run — SÁU Ô, tuần tự, CUDA_VISIBLE_DEVICES=1
+==============================================================================
+
+==============================================================================
+CỔNG CHẶN NGUỒN — file mang tag hiện tại phải sinh trên ĐÚNG SRC hiện tại
+==============================================================================
+  SRC baseline = data/evaluation/results_baseline_20260710-085236.json
+      sha256 37fca8d026443e4cfc5f759f6f98712f638468a58d9a177adbd01dba30bcb38c
+  SRC graphrag = data/evaluation/results_graphrag_final1_20260729-022916.json
+      sha256 7deda57ef145b8a779483a2132cd1d929dc6244807bf7a113bd29f6c1092b7f8
+
+  ✅ QUA — 3 ô, không file nào mang tag hiện tại mà lại sinh trên nguồn khác.
+
+==============================================================================
+ô 5: base n_shot=0 graphrag  card 1  → finetune/results/results_graphrag_ft06b-base-s0.json
+==============================================================================
+  (không kéo được partial từ HF: RemoteEntryNotFoundError — coi như chạy mới)
+  $ CUDA_VISIBLE_DEVICES=1 /usr/bin/python3 -m finetune.replay --input data/evaluation/results_graphrag_final1_20260729-022916.json --model finetune/models/Qwen3-4B-Instruct-2507-Q4_K_M.gguf --n-shot 0 --resume --tag ft06b-base-s0 --out finetune/results/results_graphrag_ft06b-base-s0.json --presence-penalty 0
+
+llama_context: n_ctx_per_seq (16384) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+backend=llama-cpp:Qwen3-4B-Instruct-2507-Q4_K_M.gguf n_shot=0 n_ctx=16384 INCLUDE_SCHEMA_B=False
+  tham số sinh: {"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0.0, "presence_penalty": 0.0, "seed": 42, "max_new_tokens": 2048, "greedy": false}
+  kiểm tràn n_ctx: BẬT (phương pháp gguf-chat-template-jinja2, ngưỡng 16384 - 2048 = 14336 token cho prompt)
+  [1/137] V001 mode=general prompt=10144tok cit=0 F1=0.00
+  [2/137] V002 mode=general prompt=10053tok cit=0 F1=0.00
+  [3/137] V003 mode=general prompt=8536tok cit=0 F1=0.00
+  [4/137] V004 mode=general prompt=10095tok cit=0 F1=0.00
+  [5/137] V005 mode=irac    prompt=9737tok cit=0 F1=1.00
+  [6/137] V006 mode=general prompt=8392tok cit=0 F1=0.00
+  [7/137] V007 mode=general prompt=8890tok cit=0 F1=0.00
+  [8/137] V008 mode=general prompt=8464tok cit=0 F1=0.00
+  [9/137] V011 mode=general prompt=11695tok cit=0 F1=0.00
+  [10/137] V012 mode=general prompt=11469tok cit=0 F1=0.00
+  [11/137] V013 mode=general prompt=11008tok cit=0 F1=0.00
+  [12/137] V014 mode=general prompt=10962tok cit=0 F1=0.00
+  [13/137] V015 mode=general prompt=11591tok cit=0 F1=0.00
+  [14/137] V016 mode=general prompt=11023tok cit=0 F1=0.00
+  [15/137] V017 mode=general prompt=10653tok cit=0 F1=0.00
+  [16/137] V018 mode=general prompt=10695tok cit=0 F1=0.00
+  [17/137] V019 mode=general prompt=9026tok cit=0 F1=0.00
+  [18/137] V020 mode=general prompt=6365tok cit=0 F1=0.00
+  [19/137] V021 mode=general prompt=10057tok cit=1 F1=1.00
+  [20/137] V022 mode=general prompt=8203tok cit=0 F1=0.00
+  [21/137] V023 mode=general prompt=7893tok cit=0 F1=0.00
+  [22/137] V024 mode=general prompt=7575tok cit=0 F1=0.00
+  [23/137] V025 mode=general prompt=5942tok cit=0 F1=0.00
+  [24/137] V026 mode=general prompt=7615tok cit=0 F1=0.00
+  [25/137] V027 mode=general prompt=7967tok cit=0 F1=0.00
+  [26/137] V028 mode=general prompt=7683tok cit=0 F1=0.00
+  [27/137] V029 mode=general prompt=7980tok cit=0 F1=0.00
+  [28/137] V030 mode=general prompt=7902tok cit=0 F1=0.00
+  [29/137] V031 mode=irac    prompt=9018tok cit=1 F1=0.67
+  [30/137] V032 mode=general prompt=9133tok cit=0 F1=0.00
+  [31/137] V033 mode=general prompt=9484tok cit=0 F1=0.00
+  [32/137] V035 mode=general prompt=8307tok cit=0 F1=0.00
+  [33/137] V036 mode=general prompt=7947tok cit=0 F1=0.00
+  [34/137] V037 mode=general prompt=8023tok cit=0 F1=0.00
+  [35/137] V038 mode=general prompt=8016tok cit=0 F1=0.00
+  [36/137] V039 mode=general prompt=8415tok cit=0 F1=0.00
+  [37/137] V040 mode=general prompt=7866tok cit=0 F1=0.00
+  [38/137] V041 mode=general prompt=7428tok cit=0 F1=0.00
+  [39/137] V042 mode=general prompt=8014tok cit=0 F1=0.00
+  [40/137] V043 mode=general prompt=7833tok cit=0 F1=0.00
+  [41/137] V044 mode=general prompt=5368tok cit=0 F1=0.00
+  [42/137] V045 mode=general prompt=5429tok cit=0 F1=0.00
+  [43/137] V046 mode=general prompt=9704tok cit=0 F1=0.00
+  [44/137] V047 mode=general prompt=8752tok cit=0 F1=0.00
+  [45/137] V048 mode=general prompt=7901tok cit=0 F1=0.00
+  [46/137] V049 mode=general prompt=6623tok cit=0 F1=0.00
+  [47/137] V050 mode=general prompt=8562tok cit=0 F1=0.00
+  [48/137] V051 mode=irac    prompt=8541tok cit=0 F1=0.00
+  [49/137] V052 mode=general prompt=7457tok cit=0 F1=0.00
+  [50/137] V053 mode=general prompt=8592tok cit=0 F1=0.00
+  [51/137] V054 mode=general prompt=7724tok cit=1 F1=0.00
+  [52/137] V055 mode=general prompt=8745tok cit=0 F1=0.00
+  [53/137] V056 mode=general prompt=8447tok cit=0 F1=0.00
+  [54/137] V057 mode=general prompt=7377tok cit=0 F1=0.00
+  [55/137] V058 mode=general prompt=8643tok cit=0 F1=0.00
+  [56/137] V061 mode=general prompt=8497tok cit=0 F1=0.00
+  [57/137] V062 mode=general prompt=7800tok cit=1 F1=0.67
+  [58/137] V066 mode=general prompt=7745tok cit=0 F1=0.00
+  [59/137] V067 mode=general prompt=8690tok cit=0 F1=0.00
+  [60/137] V068 mode=general prompt=8583tok cit=0 F1=0.00
+  [61/137] V069 mode=general prompt=9042tok cit=0 F1=0.00
+  [62/137] V070 mode=general prompt=8849tok cit=0 F1=0.00
+  [63/137] V071 mode=irac    prompt=5686tok cit=0 F1=0.00
+  [64/137] V072 mode=general prompt=7907tok cit=0 F1=0.00
+  [65/137] V073 mode=general prompt=9295tok cit=0 F1=0.00
+  [66/137] V074 mode=general prompt=7912tok cit=0 F1=0.00
+  [67/137] V075 mode=general prompt=8016tok cit=0 F1=0.00
+  [68/137] V076 mode=general prompt=10547tok cit=0 F1=0.00
+  [69/137] V077 mode=general prompt=8172tok cit=0 F1=0.00
+  [70/137] V078 mode=general prompt=8605tok cit=2 F1=0.67
+  [71/137] V079 mode=general prompt=7478tok cit=0 F1=0.00
+  [72/137] V080 mode=general prompt=7629tok cit=0 F1=0.00
+  [73/137] V081 mode=general prompt=8241tok cit=0 F1=0.00
+  [74/137] V082 mode=general prompt=7376tok cit=0 F1=0.00
+  [75/137] V083 mode=general prompt=8718tok cit=0 F1=0.00
+  [76/137] V084 mode=general prompt=8442tok cit=0 F1=0.00
+  [77/137] V085 mode=general prompt=8291tok cit=0 F1=0.00
+  [78/137] V086 mode=general prompt=6451tok cit=0 F1=0.00
+  [79/137] V087 mode=general prompt=8071tok cit=0 F1=0.00
+  [80/137] V088 mode=general prompt=7883tok cit=0 F1=0.00
+  [81/137] V089 mode=general prompt=7621tok cit=0 F1=0.00
+  [82/137] V090 mode=general prompt=11047tok cit=0 F1=0.00
+  [83/137] V091 mode=general prompt=8819tok cit=0 F1=0.00
+  [84/137] V092 mode=general prompt=7860tok cit=0 F1=0.00
+  [85/137] V093 mode=general prompt=8010tok cit=0 F1=0.00
+  [86/137] V094 mode=general prompt=8077tok cit=1 F1=1.00
+  [87/137] V095 mode=general prompt=6604tok cit=0 F1=0.00
+  [88/137] V096 mode=general prompt=7608tok cit=0 F1=0.00
+  [89/137] V097 mode=general prompt=8343tok cit=0 F1=0.00
+  [90/137] V098 mode=general prompt=8253tok cit=0 F1=0.00
+  [91/137] V099 mode=general prompt=11694tok cit=0 F1=0.00
+  [92/137] V100 mode=general prompt=8200tok cit=0 F1=0.00
+  [93/137] V101 mode=general prompt=8735tok cit=0 F1=0.00
+  [94/137] V102 mode=general prompt=8176tok cit=0 F1=0.00
+  [95/137] V103 mode=general prompt=11965tok cit=0 F1=0.00
+  [96/137] V104 mode=general prompt=7338tok cit=0 F1=0.00
+  [97/137] V105 mode=general prompt=7473tok cit=4 F1=0.00
+  [98/137] V106 mode=general cit=0 F1=1.00
+  [99/137] V107 mode=general cit=0 F1=1.00
+  [100/137] V108 mode=general cit=0 F1=1.00
+  [101/137] V109 mode=general cit=0 F1=1.00
+  [102/137] V110 mode=general cit=0 F1=1.00
+  [103/137] V111 mode=general cit=0 F1=1.00
+  [104/137] V112 mode=general cit=0 F1=1.00
+  [105/137] V113 mode=general cit=0 F1=1.00
+  [106/137] V114 mode=general prompt=11636tok cit=0 F1=1.00
+  [107/137] V115 mode=general cit=0 F1=1.00
+  [108/137] V116 mode=general cit=0 F1=1.00
+  [109/137] V117 mode=general prompt=11211tok cit=0 F1=1.00
+  [110/137] V118 mode=general prompt=11224tok cit=0 F1=0.00
+  [111/137] V119 mode=general prompt=11800tok cit=0 F1=0.00
+  [112/137] V120 mode=general prompt=7911tok cit=0 F1=0.00
+  [113/137] V122 mode=general prompt=8764tok cit=0 F1=0.00
+  [114/137] V124 mode=general prompt=7786tok cit=0 F1=0.00
+  [115/137] V125 mode=irac    prompt=10625tok cit=0 F1=0.00
+  [116/137] V126 mode=irac    prompt=8969tok cit=0 F1=0.00
+  [117/137] V127 mode=irac    prompt=6610tok cit=0 F1=0.00
+  [118/137] V129 mode=irac    prompt=11300tok cit=0 F1=0.00
+  [119/137] V130 mode=general prompt=11210tok cit=0 F1=0.00
+  [120/137] V131 mode=irac    prompt=9847tok cit=0 F1=0.00
+  [121/137] V132 mode=irac    prompt=8369tok cit=4 F1=0.00
+  [122/137] V133 mode=general prompt=8890tok cit=0 F1=0.00
+  [123/137] V135 mode=general prompt=11642tok cit=0 F1=0.00
+  [124/137] V136 mode=irac    prompt=7951tok cit=0 F1=0.00
+  [125/137] V137 mode=general prompt=7570tok cit=0 F1=0.00
+  [126/137] V139 mode=general prompt=8152tok cit=0 F1=0.00
+  [127/137] V140 mode=general prompt=10772tok cit=0 F1=0.00
+  [128/137] V141 mode=irac    prompt=9825tok cit=0 F1=0.00
+  [129/137] V142 mode=general prompt=8484tok cit=0 F1=0.00
+  [130/137] V143 mode=general prompt=8716tok cit=0 F1=0.00
+  [131/137] V144 mode=general prompt=7896tok cit=0 F1=0.00
+  [132/137] V145 mode=general prompt=8370tok cit=0 F1=0.00
+  [133/137] V146 mode=general prompt=7833tok cit=1 F1=1.00
+  [134/137] V147 mode=irac    prompt=9344tok cit=0 F1=0.00
+  [135/137] V148 mode=general prompt=12033tok cit=0 F1=0.00
+  [136/137] V149 mode=general prompt=8018tok cit=0 F1=0.00
+  [137/137] V150 mode=general prompt=7435tok cit=0 F1=0.00
+
+Đã ghi finetune/results/results_graphrag_ft06b-base-s0.json
+  qua mô hình=127  sao chép hằng số=10
+  format_ok_rate=0.065 (mẫu số 123 câu GT khác rỗng)
+  soft_article_hit=0.991 (114 câu có nhắc điều luật, 420 cụm)
+  hit_token_cap: 0 câu
+  aggregate: F1_khoan=0.131 F1_dieu=0.131 NormR=0.134 tu_choi_dung=0.929 (14 câu)
+  metadata: src_file=data/evaluation/results_graphrag_final1_20260729-022916.json src_sha256=7deda57ef145b8a7… → finetune/results/results_graphrag_ft06b-base-s0.json
+
+  aggregate: F1_khoan=0.131 F1_dieu=0.131 NormR=0.134 tu_choi_dung=0.929 (14 câu)
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/results_graphrag_ft06b-base-s0.json
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/results_graphrag_ft06b-base-s0.partial.jsonl
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/ft06b_run_status_gpu1.json
+
+==============================================================================
+ô 4: base n_shot=2 baseline  card 1  → finetune/results/results_baseline_ft06b-base-s2.json
+==============================================================================
+  (không kéo được partial từ HF: RemoteEntryNotFoundError — coi như chạy mới)
+  $ CUDA_VISIBLE_DEVICES=1 /usr/bin/python3 -m finetune.replay --input data/evaluation/results_baseline_20260710-085236.json --model finetune/models/Qwen3-4B-Instruct-2507-Q4_K_M.gguf --n-shot 2 --resume --tag ft06b-base-s2 --out finetune/results/results_baseline_ft06b-base-s2.json --presence-penalty 0
+
+llama_context: n_ctx_per_seq (16384) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+backend=llama-cpp:Qwen3-4B-Instruct-2507-Q4_K_M.gguf n_shot=2 n_ctx=16384 INCLUDE_SCHEMA_B=False
+  tham số sinh: {"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0.0, "presence_penalty": 0.0, "seed": 42, "max_new_tokens": 2048, "greedy": false}
+  kiểm tràn n_ctx: BẬT (phương pháp gguf-chat-template-jinja2, ngưỡng 16384 - 2048 = 14336 token cho prompt)
+  [1/137] V001 mode=general prompt=6594tok cit=2 F1=0.00
+  [2/137] V002 mode=general prompt=6486tok cit=1 F1=1.00
+  [3/137] V003 mode=general prompt=6429tok cit=0 F1=0.00
+  [4/137] V004 mode=general prompt=6560tok cit=1 F1=0.00
+  [5/137] V005 mode=general prompt=6329tok cit=4 F1=0.00
+  [6/137] V006 mode=general prompt=6643tok cit=1 F1=0.00
+  [7/137] V007 mode=general prompt=6435tok cit=1 F1=0.00
+  [8/137] V008 mode=general prompt=6393tok cit=1 F1=0.00
+  [9/137] V011 mode=general prompt=6720tok cit=1 F1=0.00
+  [10/137] V012 mode=general prompt=6436tok cit=1 F1=0.00
+  [11/137] V013 mode=general prompt=6342tok cit=1 F1=1.00
+  [12/137] V014 mode=general prompt=6843tok cit=1 F1=0.00
+  [13/137] V015 mode=general prompt=6504tok cit=1 F1=0.00
+  [14/137] V016 mode=general prompt=6440tok cit=1 F1=0.00
+  [15/137] V017 mode=general prompt=6343tok cit=1 F1=0.00
+  [16/137] V018 mode=general prompt=6382tok cit=1 F1=1.00
+  [17/137] V019 mode=general prompt=6347tok cit=2 F1=0.00
+  [18/137] V020 mode=general prompt=6494tok cit=1 F1=0.67
+  [19/137] V021 mode=general prompt=6336tok cit=1 F1=1.00
+  [20/137] V022 mode=general prompt=6352tok cit=0 F1=0.00
+  [21/137] V023 mode=general prompt=6273tok cit=5 F1=0.22
+  [22/137] V024 mode=general prompt=6248tok cit=3 F1=0.33
+  [23/137] V025 mode=general prompt=6314tok cit=0 F1=0.00
+  [24/137] V026 mode=general prompt=6091tok cit=1 F1=0.67
+  [25/137] V027 mode=general prompt=6102tok cit=1 F1=0.67
+  [26/137] V028 mode=general prompt=6135tok cit=1 F1=0.00
+  [27/137] V029 mode=general prompt=6136tok cit=1 F1=0.00
+  [28/137] V030 mode=general prompt=6153tok cit=5 F1=0.00
+  [29/137] V031 mode=general prompt=6118tok cit=1 F1=0.00
+  [30/137] V032 mode=general prompt=6205tok cit=0 F1=0.00
+  [31/137] V033 mode=general prompt=6571tok cit=1 F1=0.50
+  [32/137] V035 mode=general prompt=6226tok cit=1 F1=0.00
+  [33/137] V036 mode=general prompt=6140tok cit=2 F1=0.00
+  [34/137] V037 mode=general prompt=6161tok cit=2 F1=0.00
+  [35/137] V038 mode=general prompt=6138tok cit=4 F1=0.00
+  [36/137] V039 mode=general prompt=6202tok cit=2 F1=0.40
+  [37/137] V040 mode=general prompt=6305tok cit=1 F1=0.00
+  [38/137] V041 mode=general prompt=6313tok cit=0 F1=0.00
+  [39/137] V042 mode=general prompt=6228tok cit=1 F1=0.00
+  [40/137] V043 mode=general prompt=6522tok cit=1 F1=0.00
+  [41/137] V044 mode=general prompt=6577tok cit=1 F1=0.50
+  [42/137] V045 mode=general prompt=6651tok cit=1 F1=0.00
+  [43/137] V046 mode=general prompt=6271tok cit=1 F1=0.00
+  [44/137] V047 mode=general prompt=6078tok cit=2 F1=0.00
+  [45/137] V048 mode=general prompt=6297tok cit=1 F1=0.00
+  [46/137] V049 mode=general prompt=6712tok cit=1 F1=0.00
+  [47/137] V050 mode=general prompt=6358tok cit=0 F1=0.00
+  [48/137] V051 mode=general prompt=6160tok cit=1 F1=0.00
+  [49/137] V052 mode=general prompt=6212tok cit=2 F1=0.00
+  [50/137] V053 mode=general prompt=6212tok cit=2 F1=0.00
+  [51/137] V054 mode=general prompt=6111tok cit=2 F1=0.00
+  [52/137] V055 mode=general prompt=6322tok cit=1 F1=1.00
+  [53/137] V056 mode=general prompt=6144tok cit=0 F1=0.00
+  [54/137] V057 mode=general prompt=6239tok cit=3 F1=0.00
+  [55/137] V058 mode=general prompt=6269tok cit=1 F1=1.00
+  [56/137] V061 mode=general prompt=6348tok cit=2 F1=0.50
+  [57/137] V062 mode=general prompt=6237tok cit=1 F1=0.67
+  [58/137] V066 mode=general prompt=6209tok cit=2 F1=0.00
+  [59/137] V067 mode=general prompt=6352tok cit=0 F1=0.00
+  [60/137] V068 mode=general prompt=6191tok cit=2 F1=0.00
+  [61/137] V069 mode=general prompt=6074tok cit=2 F1=0.00
+  [62/137] V070 mode=general prompt=6099tok cit=1 F1=0.00
+  [63/137] V071 mode=general prompt=6208tok cit=2 F1=0.00
+  [64/137] V072 mode=general prompt=6173tok cit=2 F1=0.50
+  [65/137] V073 mode=general prompt=6215tok cit=1 F1=0.00
+  [66/137] V074 mode=general prompt=6665tok cit=2 F1=0.40
+  [67/137] V075 mode=general prompt=6282tok cit=1 F1=0.00
+  [68/137] V076 mode=general prompt=6445tok cit=1 F1=0.00
+  [69/137] V077 mode=general prompt=6134tok cit=1 F1=0.00
+  [70/137] V078 mode=general prompt=6060tok cit=1 F1=0.00
+  [71/137] V079 mode=general prompt=6135tok cit=1 F1=0.67
+  [72/137] V080 mode=general prompt=6185tok cit=1 F1=0.67
+  [73/137] V081 mode=general prompt=6250tok cit=1 F1=0.00
+  [74/137] V082 mode=general prompt=6228tok cit=2 F1=0.00
+  [75/137] V083 mode=general prompt=6064tok cit=4 F1=0.00
+  [76/137] V084 mode=general prompt=6142tok cit=1 F1=1.00
+  [77/137] V085 mode=general prompt=6158tok cit=1 F1=0.00
+  [78/137] V086 mode=general prompt=6125tok cit=1 F1=1.00
+  [79/137] V087 mode=general prompt=6225tok cit=6 F1=0.00
+  [80/137] V088 mode=general prompt=6151tok cit=3 F1=0.50
+  [81/137] V089 mode=general prompt=6156tok cit=1 F1=1.00
+  [82/137] V090 mode=general prompt=6356tok cit=1 F1=0.00
+  [83/137] V091 mode=general prompt=6344tok cit=1 F1=0.00
+  [84/137] V092 mode=general prompt=6214tok cit=1 F1=0.50
+  [85/137] V093 mode=general prompt=6195tok cit=2 F1=0.00
+  [86/137] V094 mode=general prompt=6161tok cit=1 F1=0.00
+  [87/137] V095 mode=general prompt=6132tok cit=1 F1=0.00
+  [88/137] V096 mode=general prompt=6148tok cit=1 F1=1.00
+  [89/137] V097 mode=general prompt=6163tok cit=1 F1=1.00
+  [90/137] V098 mode=general prompt=6082tok cit=1 F1=1.00
+  [91/137] V099 mode=general prompt=6417tok cit=1 F1=0.00
+  [92/137] V100 mode=general prompt=6245tok cit=4 F1=0.40
+  [93/137] V101 mode=general prompt=6044tok cit=1 F1=0.67
+  [94/137] V102 mode=general prompt=6225tok cit=3 F1=0.00
+  [95/137] V103 mode=general prompt=6595tok cit=1 F1=0.00
+  [96/137] V104 mode=general prompt=6235tok cit=2 F1=0.00
+  [97/137] V105 mode=general prompt=6078tok cit=1 F1=0.00
+  [98/137] V106 mode=general prompt=6287tok cit=0 F1=1.00
+  [99/137] V107 mode=general prompt=6031tok cit=3 F1=0.00
+  [100/137] V108 mode=general prompt=6185tok cit=0 F1=1.00
+  [101/137] V109 mode=general prompt=6314tok cit=1 F1=0.00
+  [102/137] V110 mode=general prompt=5883tok cit=0 F1=1.00
+  [103/137] V111 mode=general prompt=6190tok cit=0 F1=1.00
+  [104/137] V112 mode=general prompt=6181tok cit=0 F1=1.00
+  [105/137] V113 mode=general prompt=6203tok cit=1 F1=0.00
+  [106/137] V114 mode=general prompt=6501tok cit=0 F1=1.00
+  [107/137] V115 mode=general prompt=6226tok cit=1 F1=0.00
+  [108/137] V116 mode=general prompt=6132tok cit=2 F1=0.00
+  [109/137] V117 mode=general prompt=6478tok cit=0 F1=1.00
+  [110/137] V118 mode=general prompt=6672tok cit=1 F1=0.00
+  [111/137] V119 mode=general prompt=6866tok cit=1 F1=0.00
+  [112/137] V120 mode=general prompt=6333tok cit=2 F1=0.00
+  [113/137] V122 mode=general prompt=6301tok cit=4 F1=0.33
+  [114/137] V124 mode=general prompt=6231tok cit=1 F1=0.00
+  [115/137] V125 mode=general prompt=6311tok cit=1 F1=0.00
+  [116/137] V126 mode=general prompt=6188tok cit=3 F1=0.50
+  [117/137] V127 mode=general prompt=6144tok cit=1 F1=0.50
+  [118/137] V129 mode=general prompt=6612tok cit=0 F1=0.00
+  [119/137] V130 mode=general prompt=6433tok cit=2 F1=0.00
+  [120/137] V131 mode=general prompt=6123tok cit=5 F1=0.22
+  [121/137] V132 mode=general prompt=6260tok cit=2 F1=0.00
+  [122/137] V133 mode=general prompt=6462tok cit=1 F1=0.00
+  [123/137] V135 mode=general prompt=6308tok cit=1 F1=1.00
+  [124/137] V136 mode=general prompt=6248tok cit=5 F1=0.44
+  [125/137] V137 mode=general prompt=6117tok cit=1 F1=0.00
+  [126/137] V139 mode=general prompt=6244tok cit=0 F1=0.00
+  [127/137] V140 mode=general prompt=6577tok cit=1 F1=0.00
+  [128/137] V141 mode=general prompt=6191tok cit=1 F1=0.00
+  [129/137] V142 mode=general prompt=6147tok cit=2 F1=0.00
+  [130/137] V143 mode=general prompt=6259tok cit=0 F1=0.00
+  [131/137] V144 mode=general prompt=6220tok cit=2 F1=0.00
+  [132/137] V145 mode=general prompt=6171tok cit=2 F1=0.67
+  [133/137] V146 mode=general prompt=6128tok cit=2 F1=0.67
+  [134/137] V147 mode=general prompt=6119tok cit=0 F1=0.00
+  [135/137] V148 mode=general prompt=6771tok cit=0 F1=0.00
+  [136/137] V149 mode=general prompt=6221tok cit=1 F1=0.00
+  [137/137] V150 mode=general prompt=6150tok cit=3 F1=0.00
+
+Đã ghi finetune/results/results_baseline_ft06b-base-s2.json
+  qua mô hình=137  sao chép hằng số=0
+  format_ok_rate=0.894 (mẫu số 123 câu GT khác rỗng)
+  soft_article_hit=0.946 (123 câu có nhắc điều luật, 501 cụm)
+  hit_token_cap: 0 câu
+  aggregate: F1_khoan=0.239 F1_dieu=0.315 NormR=0.599 tu_choi_dung=0.500 (14 câu)
+  metadata: src_file=data/evaluation/results_baseline_20260710-085236.json src_sha256=37fca8d026443e4c… → finetune/results/results_baseline_ft06b-base-s2.json
+
+  aggregate: F1_khoan=0.239 F1_dieu=0.315 NormR=0.599 tu_choi_dung=0.500 (14 câu)
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/results_baseline_ft06b-base-s2.json
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/results_baseline_ft06b-base-s2.partial.jsonl
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/ft06b_run_status_gpu1.json
+
+==============================================================================
+ô 6: base n_shot=0 baseline  card 1  → finetune/results/results_baseline_ft06b-base-s0.json
+==============================================================================
+  (không kéo được partial từ HF: RemoteEntryNotFoundError — coi như chạy mới)
+  $ CUDA_VISIBLE_DEVICES=1 /usr/bin/python3 -m finetune.replay --input data/evaluation/results_baseline_20260710-085236.json --model finetune/models/Qwen3-4B-Instruct-2507-Q4_K_M.gguf --n-shot 0 --resume --tag ft06b-base-s0 --out finetune/results/results_baseline_ft06b-base-s0.json --presence-penalty 0
+
+llama_context: n_ctx_per_seq (16384) < n_ctx_train (262144) -- the full capacity of the model will not be utilized
+backend=llama-cpp:Qwen3-4B-Instruct-2507-Q4_K_M.gguf n_shot=0 n_ctx=16384 INCLUDE_SCHEMA_B=False
+  tham số sinh: {"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0.0, "presence_penalty": 0.0, "seed": 42, "max_new_tokens": 2048, "greedy": false}
+  kiểm tràn n_ctx: BẬT (phương pháp gguf-chat-template-jinja2, ngưỡng 16384 - 2048 = 14336 token cho prompt)
+  [1/137] V001 mode=general prompt=6182tok cit=0 F1=0.00
+  [2/137] V002 mode=general prompt=6074tok cit=0 F1=0.00
+  [3/137] V003 mode=general prompt=6017tok cit=0 F1=0.00
+  [4/137] V004 mode=general prompt=6148tok cit=0 F1=0.00
+  [5/137] V005 mode=general prompt=5917tok cit=0 F1=1.00
+  [6/137] V006 mode=general prompt=6231tok cit=0 F1=0.00
+  [7/137] V007 mode=general prompt=6023tok cit=0 F1=0.00
+  [8/137] V008 mode=general prompt=5981tok cit=0 F1=0.00
+  [9/137] V011 mode=general prompt=6308tok cit=0 F1=0.00
+  [10/137] V012 mode=general prompt=6024tok cit=0 F1=0.00
+  [11/137] V013 mode=general prompt=5930tok cit=0 F1=0.00
+  [12/137] V014 mode=general prompt=6431tok cit=0 F1=0.00
+  [13/137] V015 mode=general prompt=6092tok cit=0 F1=0.00
+  [14/137] V016 mode=general prompt=6028tok cit=0 F1=0.00
+  [15/137] V017 mode=general prompt=5931tok cit=0 F1=0.00
+  [16/137] V018 mode=general prompt=5970tok cit=0 F1=0.00
+  [17/137] V019 mode=general prompt=5935tok cit=0 F1=0.00
+  [18/137] V020 mode=general prompt=6082tok cit=0 F1=0.00
+  [19/137] V021 mode=general prompt=5924tok cit=0 F1=0.00
+  [20/137] V022 mode=general prompt=5940tok cit=0 F1=0.00
+  [21/137] V023 mode=general prompt=5861tok cit=0 F1=0.00
+  [22/137] V024 mode=general prompt=5836tok cit=0 F1=0.00
+  [23/137] V025 mode=general prompt=5902tok cit=0 F1=0.00
+  [24/137] V026 mode=general prompt=5679tok cit=0 F1=0.00
+  [25/137] V027 mode=general prompt=5690tok cit=0 F1=0.00
+  [26/137] V028 mode=general prompt=5723tok cit=0 F1=0.00
+  [27/137] V029 mode=general prompt=5724tok cit=0 F1=0.00
+  [28/137] V030 mode=general prompt=5741tok cit=0 F1=0.00
+  [29/137] V031 mode=general prompt=5706tok cit=0 F1=0.00
+  [30/137] V032 mode=general prompt=5793tok cit=0 F1=0.00
+  [31/137] V033 mode=general prompt=6159tok cit=0 F1=0.00
+  [32/137] V035 mode=general prompt=5814tok cit=0 F1=0.00
+  [33/137] V036 mode=general prompt=5728tok cit=0 F1=0.00
+  [34/137] V037 mode=general prompt=5749tok cit=0 F1=0.00
+  [35/137] V038 mode=general prompt=5726tok cit=0 F1=0.00
+  [36/137] V039 mode=general prompt=5790tok cit=0 F1=0.00
+  [37/137] V040 mode=general prompt=5893tok cit=0 F1=0.00
+  [38/137] V041 mode=general prompt=5901tok cit=0 F1=0.00
+  [39/137] V042 mode=general prompt=5816tok cit=0 F1=0.00
+  [40/137] V043 mode=general prompt=6110tok cit=0 F1=0.00
+  [41/137] V044 mode=general prompt=6165tok cit=0 F1=0.00
+  [42/137] V045 mode=general prompt=6239tok cit=0 F1=0.00
+  [43/137] V046 mode=general prompt=5859tok cit=0 F1=0.00
+  [44/137] V047 mode=general prompt=5666tok cit=2 F1=0.00
+  [45/137] V048 mode=general prompt=5885tok cit=1 F1=0.00
+  [46/137] V049 mode=general prompt=6300tok cit=3 F1=0.50
+  [47/137] V050 mode=general prompt=5946tok cit=0 F1=0.00
+  [48/137] V051 mode=general prompt=5748tok cit=0 F1=0.00
+  [49/137] V052 mode=general prompt=5800tok cit=0 F1=0.00
+  [50/137] V053 mode=general prompt=5800tok cit=0 F1=0.00
+  [51/137] V054 mode=general prompt=5699tok cit=0 F1=0.00
+  [52/137] V055 mode=general prompt=5910tok cit=0 F1=0.00
+  [53/137] V056 mode=general prompt=5732tok cit=0 F1=0.00
+  [54/137] V057 mode=general prompt=5827tok cit=0 F1=0.00
+  [55/137] V058 mode=general prompt=5857tok cit=0 F1=0.00
+  [56/137] V061 mode=general prompt=5936tok cit=0 F1=0.00
+  [57/137] V062 mode=general prompt=5825tok cit=2 F1=1.00
+  [58/137] V066 mode=general prompt=5797tok cit=0 F1=0.00
+  [59/137] V067 mode=general prompt=5940tok cit=0 F1=0.00
+  [60/137] V068 mode=general prompt=5779tok cit=0 F1=0.00
+  [61/137] V069 mode=general prompt=5662tok cit=0 F1=0.00
+  [62/137] V070 mode=general prompt=5687tok cit=0 F1=0.00
+  [63/137] V071 mode=general prompt=5796tok cit=3 F1=0.00
+  [64/137] V072 mode=general prompt=5761tok cit=0 F1=0.00
+  [65/137] V073 mode=general prompt=5803tok cit=0 F1=0.00
+  [66/137] V074 mode=general prompt=6253tok cit=0 F1=0.00
+  [67/137] V075 mode=general prompt=5870tok cit=0 F1=0.00
+  [68/137] V076 mode=general prompt=6033tok cit=0 F1=0.00
+  [69/137] V077 mode=general prompt=5722tok cit=1 F1=0.00
+  [70/137] V078 mode=general prompt=5648tok cit=1 F1=0.00
+  [71/137] V079 mode=general prompt=5723tok cit=0 F1=0.00
+  [72/137] V080 mode=general prompt=5773tok cit=1 F1=0.67
+  [73/137] V081 mode=general prompt=5838tok cit=0 F1=0.00
+  [74/137] V082 mode=general prompt=5816tok cit=0 F1=0.00
+  [75/137] V083 mode=general prompt=5652tok cit=6 F1=0.25
+  [76/137] V084 mode=general prompt=5730tok cit=1 F1=1.00
+  [77/137] V085 mode=general prompt=5746tok cit=0 F1=0.00
+  [78/137] V086 mode=general prompt=5713tok cit=1 F1=1.00
+  [79/137] V087 mode=general prompt=5813tok cit=0 F1=0.00
+  [80/137] V088 mode=general prompt=5739tok cit=1 F1=0.00
+  [81/137] V089 mode=general prompt=5744tok cit=2 F1=0.67
+  [82/137] V090 mode=general prompt=5944tok cit=0 F1=0.00
+  [83/137] V091 mode=general prompt=5932tok cit=2 F1=0.67
+  [84/137] V092 mode=general prompt=5802tok cit=0 F1=0.00
+  [85/137] V093 mode=general prompt=5783tok cit=0 F1=0.00
+  [86/137] V094 mode=general prompt=5749tok cit=0 F1=0.00
+  [87/137] V095 mode=general prompt=5720tok cit=0 F1=0.00
+  [88/137] V096 mode=general prompt=5736tok cit=4 F1=0.40
+  [89/137] V097 mode=general prompt=5751tok cit=0 F1=0.00
+  [90/137] V098 mode=general prompt=5670tok cit=1 F1=0.00
+  [91/137] V099 mode=general prompt=6005tok cit=0 F1=0.00
+  [92/137] V100 mode=general prompt=5833tok cit=2 F1=0.67
+  [93/137] V101 mode=general prompt=5632tok cit=1 F1=0.67
+  [94/137] V102 mode=general prompt=5813tok cit=1 F1=0.00
+  [95/137] V103 mode=general prompt=6183tok cit=0 F1=0.00
+  [96/137] V104 mode=general prompt=5823tok cit=0 F1=0.00
+  [97/137] V105 mode=general prompt=5666tok cit=0 F1=1.00
+  [98/137] V106 mode=general prompt=5875tok cit=0 F1=1.00
+  [99/137] V107 mode=general prompt=5619tok cit=3 F1=0.00
+  [100/137] V108 mode=general prompt=5773tok cit=0 F1=1.00
+  [101/137] V109 mode=general prompt=5902tok cit=0 F1=1.00
+  [102/137] V110 mode=general prompt=5471tok cit=0 F1=1.00
+  [103/137] V111 mode=general prompt=5778tok cit=0 F1=1.00
+  [104/137] V112 mode=general prompt=5769tok cit=0 F1=1.00
+  [105/137] V113 mode=general prompt=5791tok cit=0 F1=1.00
+  [106/137] V114 mode=general prompt=6089tok cit=0 F1=1.00
+  [107/137] V115 mode=general prompt=5814tok cit=0 F1=1.00
+  [108/137] V116 mode=general prompt=5720tok cit=0 F1=1.00
+  [109/137] V117 mode=general prompt=6066tok cit=0 F1=1.00
+  [110/137] V118 mode=general prompt=6260tok cit=0 F1=0.00
+  [111/137] V119 mode=general prompt=6454tok cit=0 F1=0.00
+  [112/137] V120 mode=general prompt=5921tok cit=0 F1=0.00
+  [113/137] V122 mode=general prompt=5889tok cit=6 F1=0.25
+  [114/137] V124 mode=general prompt=5819tok cit=0 F1=0.00
+  [115/137] V125 mode=general prompt=5899tok cit=0 F1=0.00
+  [116/137] V126 mode=general prompt=5776tok cit=0 F1=0.00
+  [117/137] V127 mode=general prompt=5732tok cit=3 F1=0.33
+  [118/137] V129 mode=general prompt=6200tok cit=0 F1=0.00
+  [119/137] V130 mode=general prompt=6021tok cit=0 F1=0.00
+  [120/137] V131 mode=general prompt=5711tok cit=6 F1=0.00
+  [121/137] V132 mode=general prompt=5848tok cit=0 F1=0.00
+  [122/137] V133 mode=general prompt=6050tok cit=0 F1=0.00
+  [123/137] V135 mode=general prompt=5896tok cit=1 F1=0.00
+  [124/137] V136 mode=general prompt=5836tok cit=0 F1=0.00
+  [125/137] V137 mode=general prompt=5705tok cit=0 F1=0.00
+  [126/137] V139 mode=general prompt=5832tok cit=0 F1=0.00
+  [127/137] V140 mode=general prompt=6165tok cit=0 F1=0.00
+  [128/137] V141 mode=general prompt=5779tok cit=0 F1=0.00
+  [129/137] V142 mode=general prompt=5735tok cit=0 F1=0.00
+  [130/137] V143 mode=general prompt=5847tok cit=0 F1=0.00
+  [131/137] V144 mode=general prompt=5808tok cit=4 F1=0.00
+  [132/137] V145 mode=general prompt=5759tok cit=1 F1=0.00
+  [133/137] V146 mode=general prompt=5716tok cit=0 F1=0.00
+  [134/137] V147 mode=general prompt=5707tok cit=1 F1=0.00
+  [135/137] V148 mode=general prompt=6359tok cit=0 F1=0.00
+  [136/137] V149 mode=general prompt=5809tok cit=0 F1=0.00
+  [137/137] V150 mode=general prompt=5738tok cit=0 F1=0.00
+
+Đã ghi finetune/results/results_baseline_ft06b-base-s0.json
+  qua mô hình=137  sao chép hằng số=0
+  format_ok_rate=0.211 (mẫu số 123 câu GT khác rỗng)
+  soft_article_hit=0.928 (121 câu có nhắc điều luật, 413 cụm)
+  hit_token_cap: 0 câu
+  aggregate: F1_khoan=0.154 F1_dieu=0.170 NormR=0.265 tu_choi_dung=0.929 (14 câu)
+  metadata: src_file=data/evaluation/results_baseline_20260710-085236.json src_sha256=37fca8d026443e4c… → finetune/results/results_baseline_ft06b-base-s0.json
+
+  aggregate: F1_khoan=0.154 F1_dieu=0.170 NormR=0.265 tu_choi_dung=0.929 (14 câu)
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/results_baseline_ft06b-base-s0.json
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/results_baseline_ft06b-base-s0.partial.jsonl
+  ĐÃ ĐẨY → dangnguyen254/thesis-graphrag-gguf/session3b_ft06/ft06b_run_status_gpu1.json
+
+  3/3 ô của lượt này xong (luồng card 1).

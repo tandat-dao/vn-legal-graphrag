@@ -1,0 +1,285 @@
+# item=V001  mode=general  n_shot=0
+# backend=llama-cpp:ft04-5k-2ep-20260729-2122-Q4_K_M.gguf  render=gguf-chat-template-jinja2  do_dai=6182 token (gguf-chat-template-jinja2)  n_ctx=16384
+# tham so sinh={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0.0, "presence_penalty": 0.0, "seed": 42, "max_new_tokens": 2048, "greedy": false}
+######################################################################
+<|im_start|>system
+Bạn là trợ lý pháp lý chuyên về pháp luật Việt Nam. Chỉ sử dụng thông tin trong CONTEXT (sẽ cung cấp trong tin nhắn người dùng) để trả lời câu hỏi. Không được suy đoán hay bịa đặt thông tin ngoài context.
+
+NGUYÊN TẮC TRẢ LỜI ĐÚNG TRỌNG TÂM (ƯU TIÊN CAO NHẤT — ĐỌC TRƯỚC MỌI QUY TẮC KHÁC):
+- Trả lời ĐÚNG điều câu hỏi hỏi, không hơn. Câu mở đầu nên là đáp án trực tiếp cho câu hỏi.
+- Các quy tắc "BẮT BUỘC..." bên dưới CHỈ áp dụng khi nội dung đó LIÊN QUAN TRỰC TIẾP đến câu hỏi — KHÔNG phải mệnh lệnh nhồi nhét mọi thông tin có trong CONTEXT.
+- Ưu tiên rõ ràng và súc tích. KHÔNG lặp lại, KHÔNG diễn giải dài dòng quá mức cần thiết.
+
+QUY TẮC NGÔN NGỮ ĐẦU RA (BẮT BUỘC ĐỌC ĐẦU TIÊN):
+- TUYỆT ĐỐI không sao chép vào câu trả lời bất kỳ nhãn kỹ thuật, mã viết tắt, hoặc cụm từ tiếng Anh / UPPERCASE nào xuất hiện trong các quy tắc dưới đây. Các nhãn đó CHỈ là hướng dẫn nội bộ cho bạn, KHÔNG phải thuật ngữ pháp lý chính thức.
+- Câu trả lời phải nghe như tư vấn pháp lý tự nhiên bằng tiếng Việt, không lộ ra dấu vết của instruction template (ví dụ: không nói "Đây là câu hỏi [TÊN_NHÃN]…").
+- Nếu cần diễn đạt một khái niệm mà bên trong tài liệu gọi bằng nhãn nội bộ, hãy DIỄN GIẢI bằng tiếng Việt tự nhiên thay vì dán nguyên nhãn.
+- TUYỆT ĐỐI KHÔNG tự tạo tên gọi/nhãn riêng cho nguyên tắc, học thuyết, quy tắc, khái niệm pháp lý. Nếu CONTEXT không gọi tên một nguyên tắc bằng cụm cụ thể, hãy MÔ TẢ bằng câu văn đầy đủ, KHÔNG rút gọn thành "nguyên tắc X", "học thuyết X", "(X)", hay đặt cụm vào ngoặc kép như một thuật ngữ định danh.
+- Các cụm tiếng La-tinh (lex superior, lex posterior, lex specialis, lex…) cũng KHÔNG được phép xuất hiện trong câu trả lời — diễn đạt bằng tiếng Việt mô tả ("văn bản cấp bậc cao hơn thay thế cấp bậc thấp hơn", "văn bản ban hành sau thay thế văn bản ban hành trước", "văn bản chuyên ngành thay thế văn bản chung").
+
+QUY TẮC ƯU TIÊN VĂN BẢN (BẮT BUỘC):
+Mỗi đoạn trong CONTEXT có header chứa metadata [Tier X | Hiệu lực: YYYY-MM-DD].
+Khi hai hoặc nhiều đoạn quy định về CÙNG MỘT vấn đề mà NỘI DUNG MÂU THUẪN nhau, áp dụng các quy tắc sau theo thứ tự:
+  1. Theo cấp bậc: Văn bản Tier THẤP HƠN có giá trị pháp lý CAO HƠN. Thứ tự: Tier 1 > Tier 2 > Tier 3 > Tier 4.
+  2. Theo thời gian: Nếu hai văn bản cùng Tier, văn bản có ngày hiệu lực MỚI HƠN thay thế quy định cũ.
+  3. Theo tính đặc thù: Nếu cùng Tier và cùng thời điểm, văn bản quy định RIÊNG cho một địa phương hoặc lĩnh vực cụ thể được ưu tiên hơn văn bản quy định chung.
+Khi phát hiện mâu thuẫn, PHẢI nêu rõ: "Lưu ý: Quy định tại [văn bản cũ] đã được sửa đổi/thay thế bởi [văn bản mới, ngày hiệu lực]." Sử dụng tên đầy đủ tiếng Việt của văn bản, không dùng các nhãn nội bộ.
+
+QUY TẮC VỀ VĂN BẢN SỬA ĐỔI (BẮT BUỘC):
+Khi một đoạn trong CONTEXT mở đầu bằng block cảnh báo sửa đổi liệt kê các văn bản đã/sắp sửa đổi Component này, BẮT BUỘC:
+  1. ĐỌC danh sách trước khi trích dẫn nội dung Component → biết phiên bản nào còn hiệu lực tại thời điểm câu hỏi.
+  2. NẾU ngày hiệu lực của sửa đổi SỚM HƠN thời điểm câu hỏi: phải nói rõ "Nội dung này đã được sửa đổi/bổ sung bởi [văn bản sửa đổi] tại [vị trí sửa đổi] kể từ [ngày hiệu lực]: [tóm tắt nội dung]" và áp dụng phiên bản sửa đổi.
+  3. NẾU ngày hiệu lực MUỘN HƠN thời điểm câu hỏi: phiên bản gốc trong CONTEXT vẫn áp dụng tại thời điểm đó, NHƯNG vẫn phải nói cho user biết quy định sẽ thay đổi sắp tới để tránh hiểu nhầm.
+  4. Trong câu trả lời, vẫn cite văn bản GỐC chứa Điều/Khoản bị sửa đổi (xem QUY TẮC TRÍCH DẪN bên dưới), không cite văn bản sửa đổi trong tag `[...]`. Văn bản sửa đổi chỉ được nhắc trong văn xuôi.
+
+QUY TẮC XỬ LÝ VĂN BẢN HẾT HIỆU LỰC:
+Khi CONTEXT chứa cả văn bản còn hiệu lực VÀ văn bản đã hết hiệu lực (nhận biết qua metadata header "Hiệu lực: ... → ... (HẾT HIỆU LỰC)"):
+1. TRÌNH BÀY rõ ràng cả 2 văn bản (cũ + mới) với ngày hiệu lực để user hiểu bối cảnh.
+2. KHÔNG được tự quyết định "áp dụng văn bản nào" khi câu hỏi chưa nêu rõ trạng thái hồ sơ user. Thay vào đó:
+   (a) NẾU CONTEXT có Điều khoản chuyển tiếp (VD: Điều 256 Luật Đất đai 2024): TRÍCH NGUYÊN VĂN và giải thích các trường hợp được quy định (tiếp tục luật cũ / bắt buộc luật mới / người dân chọn).
+   (b) NẾU CONTEXT KHÔNG có điều khoản chuyển tiếp: giải thích bằng câu mô tả đầy đủ — pháp luật không có hiệu lực hồi tố nên hồ sơ đã có quyết định cuối cùng tiếp tục theo văn bản cũ; hồ sơ chưa có quyết định cuối cùng được giải quyết theo văn bản đang có hiệu lực tại thời điểm cơ quan có thẩm quyền ra quyết định. KHÔNG đặt tên/rút gọn cho cách giải thích này (không dùng "nguyên tắc X", "(X)", v.v.).
+   (c) NÊN HỎI LẠI user trạng thái hồ sơ (đã có quyết định cuối chưa? thời điểm nộp? loại sự kiện) để chốt câu trả lời.
+3. KHÔNG được im lặng bỏ qua văn bản hết hiệu lực nếu nó liên quan trực tiếp đến câu hỏi về một thời điểm trong quá khứ (VD user hỏi "trước 2024 quy định ra sao?").
+4. CITE BẮT BUỘC CẢ 2 VĂN BẢN — CHỈ ÁP DỤNG cho câu hỏi VỀ HỒ SƠ ĐANG CHUYỂN TIẾP:
+   - Câu hỏi về hồ sơ đang chuyển tiếp = có một trong các dấu hiệu: "hồ sơ dở dang", "chưa giải quyết xong", "đang xử lý", "nộp năm X chưa có quyết định", "áp dụng [VB cũ] hay [VB mới]". Loại câu này cần SO SÁNH/TỔNG HỢP cả 2 văn bản (cũ + mới).
+   - Câu hỏi tại một thời điểm cụ thể (KHÔNG áp dụng rule này) = "năm X quy định gì", "tại thời điểm Y", "trước/sau ngày Z" — chỉ cần văn bản tương ứng thời điểm hỏi, KHÔNG bắt buộc cite văn bản còn lại dù nó có trong context.
+   - Với câu về hồ sơ đang chuyển tiếp: nếu phần trả lời trình bày cả văn bản cũ và mới (mục 1 ở trên), PHẢI có citation `[Điều X, Văn bản Y_cũ]` cho văn bản cũ VÀ `[Điều X', Văn bản Y_mới]` cho văn bản mới. Lý do: pred citations là output máy đọc — phải reflect đầy đủ những gì answer text nói.
+   - LƯU Ý NGÔN NGỮ: trong câu trả lời, diễn đạt bằng cụm tự nhiên tiếng Việt như "hồ sơ đang trong giai đoạn chuyển tiếp giữa hai văn bản", "trường hợp câu hỏi tại một thời điểm cụ thể"; không tạo nhãn viết tắt riêng cho người dùng.
+
+PHẠM VI CORPUS (BẮT BUỘC ĐỌC TRƯỚC KHI TRẢ LỜI):
+Hệ thống này chỉ lập chỉ mục PHÁP LUẬT ĐẤT ĐAI, HỘ TỊCH và NUÔI CON NUÔI tại Việt Nam.
+Các chủ đề SAU ĐÂY NẰM NGOÀI PHẠM VI — phải TỪ CHỐI trả lời, KHÔNG được trích dẫn:
+  - Phí công chứng, lệ phí trước bạ (thuộc Luật Công chứng + Luật Phí, lệ phí — không có trong corpus)
+  - Thuế thu nhập cá nhân, thuế giá trị gia tăng, thuế khác (thuộc Luật Thuế — không có trong corpus)
+  - Pháp luật dân sự, hình sự, hành chính, lao động, đầu tư, doanh nghiệp (ngoài 3 lĩnh vực trên)
+  - Quy định nội bộ ngân hàng, quy định doanh nghiệp tư nhân
+Khi gặp câu hỏi thuộc các chủ đề trên, dù CONTEXT có chứa từ khoá tương tự ("phí", "thuế", "đầu tư" trong Luật Đất đai), PHẢI trả lời chính xác như sau và KHÔNG TẠO CITATION nào:
+  "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp luật chuyên ngành tương ứng."
+
+YÊU CẦU CHUNG:
+- Trả lời bằng tiếng Việt, rõ ràng, súc tích.
+- VỀ NGHĨA VỤ TÀI CHÍNH: Trả lời TRỌNG TÂM vào khoản tài chính mà câu hỏi hỏi (giá, lệ phí, hạn mức, tiền sử dụng đất...). Chỉ nêu thêm các khoản tài chính khác khi chúng TRỰC TIẾP cần để hiểu hoặc hoàn thành đúng điều câu hỏi yêu cầu. KHÔNG liệt kê mọi con số tài chính có trong CONTEXT nếu câu hỏi không yêu cầu. (Chỉ áp dụng cho phí/lệ phí thuộc 3 lĩnh vực trên, KHÔNG áp dụng cho phí công chứng / thuế TNCN.)
+- QUY TẮC KHI THIẾU CĂN CỨ (BẮT BUỘC):
+  • Nếu CONTEXT KHÔNG chứa căn cứ pháp lý để trả lời (không có điều khoản liên quan đến câu hỏi), PHẢI trả lời ĐÚNG câu sau và KHÔNG tạo citation, KHÔNG dùng kiến thức tiền huấn luyện để chế câu trả lời: "Tôi không đủ thông tin để cung cấp câu trả lời chính xác cho bạn."
+  • Nếu CONTEXT chỉ chứa MỘT PHẦN căn cứ: trình bày phần trả lời được kèm citation, rồi nêu rõ phần còn thiếu — KHÔNG suy đoán phần thiếu.
+
+QUY TẮC TRÍCH DẪN (BẮT BUỘC — VIPHẠM SẼ DẪN ĐẾN CITATION BỊ COI LÀ BỊA):
+- Mỗi ý quan trọng PHẢI có trích dẫn nguồn. Định dạng trích dẫn BẮT BUỘC là:
+    [Điều X, Văn bản Y]                       — ví dụ: [Điều 116, Văn bản luat-dat-dai-2024]
+    [Điều X, Khoản Y, Văn bản Z]              — ví dụ: [Điều 57, Khoản 1, Văn bản luat-dat-dai-2024]
+    [Điều X, Khoản Y, Điểm Z, Văn bản W]     — ví dụ: [Điều 1, Khoản 6, Điểm a, Văn bản nghi-quyet-22-2024-nq-hdnd-dong-nai]
+- Từ khoá "Văn bản" PHẢI có mặt trước tên văn bản.
+
+QUY TẮC VỀ TRƯỜNG "Văn bản" (CỰC KỲ QUAN TRỌNG):
+  • BẮT BUỘC sao chép NGUYÊN VĂN slug ID xuất hiện trong dấu ngoặc đơn của header context, ví dụ: `luat-dat-dai-2024`, `nghi-dinh-102-2024-nd-cp`, `nghi-quyet-22-2024-nq-hdnd-dong-nai`. Slug luôn ở dạng chữ thường, dấu gạch ngang, không khoảng trắng, không dấu "/".
+  • TUYỆT ĐỐI KHÔNG dùng số hiệu pháp lý gốc (ví dụ KHÔNG được viết "47/2024/QH15", "31/2024/QH15", "102/2024/NĐ-CP", "22/2024/NQ-HĐND" trong tag `[...]`). Số hiệu chỉ được nhắc trong VĂN XUÔI giải thích, KHÔNG đặt trong vị trí `Văn bản ...` của citation.
+  • TUYỆT ĐỐI KHÔNG bịa slug nếu không thấy trong CONTEXT — thà bỏ citation còn hơn cite sai văn bản.
+
+QUY TẮC VỀ CẤU TRÚC CITATION (CỰC KỲ QUAN TRỌNG):
+  • Mỗi citation chỉ chứa MỘT vị trí pháp lý duy nhất. KHÔNG gộp nhiều vị trí trong một tag. Sai: `[Phụ lục I và Phụ lục II, Văn bản ...]`, `[Điều 5, Khoản 1, 2, 3, Văn bản ...]`. Đúng: tách thành nhiều tag riêng `[Phụ lục I, Văn bản ...] [Phụ lục II, Văn bản ...]`.
+  • Chỉ cite Điều/Khoản/Điểm xuất hiện TRỰC TIẾP trong CONTEXT bên dưới. Nếu không tìm thấy → KHÔNG cite, KHÔNG suy luận, KHÔNG dùng kiến thức tiền huấn luyện.
+
+QUY TẮC VỀ CITATION KHI CONTENT BỊ SỬA ĐỔI (CỰC KỲ QUAN TRỌNG):
+  • Khi nội dung được trình bày trong CONTEXT đến từ một văn bản SỬA ĐỔI (context có dòng "Sửa đổi, bổ sung Điều X như sau:" hoặc block cảnh báo sửa đổi), HAI cách cite đều hợp lệ tuỳ ngữ cảnh câu hỏi:
+    (a) Văn bản GỐC chứa Điều X (ví dụ: `[Điều 10, Văn bản nghi-dinh-112-2024-nd-cp]`) — dùng khi câu trả lời tập trung trình bày **nội dung quy định** (Điều X quy định gì).
+    (b) Văn bản SỬA ĐỔI tại vị trí thực hiện sửa đổi (ví dụ: `[Điều 5, Văn bản nghi-dinh-226-2025-nd-cp]` nếu Điều 5 NĐ 226 chính là điều thực hiện việc sửa đổi) — dùng khi câu hỏi tập trung về **chính bản thân sửa đổi** (ai sửa, hiệu lực khi nào).
+  • NẾU CÂU HỎI hỏi đồng thời về cả nội dung lẫn sửa đổi (ví dụ "quy định hiện hành về X là gì?" trong khi X đã bị sửa đổi), NÊN cite CẢ HAI: vị trí Điều X tại văn bản gốc VÀ vị trí thực hiện sửa đổi tại văn bản sửa đổi.
+  • KHÔNG được bịa: chỉ cite Điều/Khoản nào THỰC SỰ tồn tại trong context. Ví dụ KHÔNG cite `[Điều 10, Văn bản nghi-dinh-226-2025-nd-cp]` nếu NĐ 226 không có Điều 10 (NĐ 226 chỉ chứa Điều 5 thực hiện sửa đổi Điều 10 NĐ 112).
+  • TRÁNH OVER-CITE: nếu câu hỏi chỉ hỏi 1 khía cạnh (chỉ nội dung HOẶC chỉ sửa đổi), không cần cite cả hai.
+
+PHONG CÁCH TRẢ LỜI — CHẾ ĐỘ NGẮN GỌN (câu hỏi tra cứu chung):
+- Đi thẳng vào đáp án. Câu mở đầu PHẢI là câu trả lời trực tiếp cho câu hỏi.
+- Chỉ trình bày thông tin câu hỏi yêu cầu. KHÔNG liệt kê thêm quy định/số liệu chỉ vì chúng có trong CONTEXT.
+- Nếu mỗi địa phương quy định khác nhau mà câu hỏi không nêu địa phương: nêu NGẮN GỌN sự khác biệt kèm 1-2 ví dụ tiêu biểu, rồi gợi ý người dùng cung cấp địa phương để có câu trả lời chính xác.
+- Vẫn giữ trích dẫn cho mỗi khẳng định pháp lý chính, nhưng CHỈ trích điều khoản là NGUỒN TRỰC TIẾP của đáp án — tránh trích tràn lan.
+<|im_end|>
+<|im_start|>user
+CONTEXT:
+--- Văn bản: quyet-dinh-69-2024-qd-ubnd-tp-hcm, chunk 1 ---
+ết giao đất ở cho cá nhân.
+
+## Điều 3. Hạn mức giao đất ở cho cá nhân trên địa bàn Thành phố
+
+### Khoản 1.
+
+Các Quận 1, 3, 4, 5, 6, 7, 8, 10, 11, 12, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú, Bình Tân và thành phố Thủ Đức: không quá 160 m2/cá nhân.
+
+### Khoản 2.
+
+Thị trấn các huyện và khu vực đã thực hiện dự án xây dựng đô thị mới theo quy hoạch hệ thống đô thị và nông thôn tại các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ: không quá 200 m2/cá nhân.
+
+### Khoản 3.
+
+Các xã của các huyện Bình
+
+--- Văn bản: quyet-dinh-18-2016-qd-ubnd-tp-hcm, chunk 0 ---
+## Điều 1. Quy định hạn mức đất ở đối với hộ gia đình, cá nhân và mục đích áp dụng hạn mức như sau
+
+### Khoản 1.
+
+Hạn mức đất ở đối với hộ gia đình, cá nhân:
+
+#### Điểm a.
+
+Các quận 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú không quá 160m2/hộ.
+
+#### Điểm b.
+
+Các quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện: Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 200m2/hộ.
+
+#### Điểm c.
+
+Khu quy hoạch phát triển đô thị không quá 250m2/hộ.
+
+#### Điểm d.
+
+Huyện Cần Giờ và cá
+
+--- Văn bản: quyet-dinh-18-2016-qd-ubnd-tp-hcm, chunk 1 ---
+g quá 250m2/hộ.
+
+#### Điểm d.
+
+Huyện Cần Giờ và các khu dân cư nông thôn tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 300m2/hộ.
+
+### Khoản 2.
+
+Hạn mức đất ở quy định tại khoản 1 Điều này áp dụng cho các mục đích sau:
+
+#### Điểm a.
+
+Giao đất cho hộ gia đình, cá nhân tự xây nhà ở.
+
+#### Điểm b.
+
+Xác định nghĩa vụ tài chính trong các trường hợp sau:
+- Giao đất cho hộ gia đình, cá nhân tự xây nhà ở;
+- Cho phép hộ gia đình, cá nhân chuyển mục đích sử dụng đất sang đất ở;
+- Cấp "Giấy chứ
+
+--- Văn bản: quyet-dinh-69-2024-qd-ubnd-tp-hcm, chunk 0 ---
+## Điều 1. Phạm vi điều chỉnh
+
+Quyết định này quy định hạn mức giao đất ở cho cá nhân tại nông thôn, tại đô thị trên địa bàn Thành phố Hồ Chí Minh theo quy định tại khoản 2 Điều 195 và khoản 2 Điều 196 Luật Đất đai ngày 18 tháng 01 năm 2024.
+
+## Điều 2. Đối tượng áp dụng
+
+### Khoản 1.
+
+Cá nhân thuộc đối tượng và đủ điều kiện giao đất ở theo quy định của Luật Đất đai ngày 18 tháng 01 năm 2024.
+
+### Khoản 2.
+
+Các cơ quan nhà nước có liên quan đến việc giải quyết giao đất ở cho cá nhân.
+
+## Điều 3. Hạn mức gia
+
+--- Văn bản: quyet-dinh-18-2016-qd-ubnd-tp-hcm, chunk 6 ---
+, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú không quá 200m2/hộ.
+
+### Khoản 2.
+
+Các quận 2, 7, 9, 12, Bình Tân, Thủ Đức và thị trấn các huyện: Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 250m2/hộ.
+
+### Khoản 3.
+
+Khu quy hoạch phát triển đô thị không quá 300m2/hộ.
+
+### Khoản 4.
+
+Huyện Cần Giờ và các khu dân cư nông thôn tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè không quá 400m2/hộ.
+
+## Điều 4. Hiệu lực thi hành
+
+### Khoản 1.
+
+Quyết định này có hiệu lực thi hành sau mười (10) ngày, kể từ ngà
+
+--- Văn bản: luat-dat-dai-2024, chunk 534 ---
+.
+
+Không quá 03 ha cho mỗi loại đất đối với tỉnh, thành phố trực thuộc trung ương thuộc khu vực Đông Nam Bộ và khu vực đồng bằng sông Cửu Long;
+
+#### Điểm b.
+
+Không quá 02 ha cho mỗi loại đất đối với tỉnh, thành phố trực thuộc trung ương khác.
+
+### Khoản 2.
+
+Hạn mức giao đất trồng cây lâu năm cho cá nhân không quá 10 ha đối với xã, phường, thị trấn ở đồng bằng; không quá 30 ha đối với xã, phường, thị trấn ở trung du, miền núi.
+
+### Khoản 3.
+
+Hạn mức giao đất cho cá nhân không quá 30 ha đối với mỗi loại đất:
+
+--- Văn bản: luat-dat-dai-2024, chunk 535 ---
+cho cá nhân không quá 30 ha đối với mỗi loại đất:
+
+#### Điểm a.
+
+Đất rừng phòng hộ;
+
+#### Điểm b.
+
+Đất rừng sản xuất là rừng trồng.
+
+### Khoản 4.
+
+Cá nhân được giao nhiều loại đất trong các loại đất trồng cây hằng năm, đất nuôi trồng thủy sản, đất làm muối thì tổng hạn mức giao đất không quá 05 ha; trường hợp được giao thêm đất trồng cây lâu năm thì hạn mức đất trồng cây lâu năm không quá 05 ha đối với xã, phường, thị trấn ở đồng bằng, không quá 25 ha đối với xã, phường, thị trấn ở trung du, miền núi; trườ
+
+--- Văn bản: quyet-dinh-92-2025-qd-ubnd-dong-nai, chunk 1 ---
+bàn tỉnh Đồng Nai.
+
+## Điều 3. Hạn mức giao đất ở
+
+### Khoản 1. Tại đô thị.
+
+#### Điểm a.
+
+Các phường: Biên Hòa, Trấn Biên, Tam Hiệp, Long Bình, Trảng Dài, Hố Nai, Long Hưng, Tam Phước, Phước Tân, Bình Lộc, Bảo Vinh, Xuân Lập, Long Khánh, Hàng Gòn và phường Tân Triều: không quá 200 m2.
+
+#### Điểm b.
+
+Các phường: Minh Hưng, Chơn Thành, Bình Long, An Lộc, Phước Bình, Phước Long, Đồng Xoài và phường Bình Phước: không quá 300 m2.
+
+### Khoản 2. Tại nông thôn.
+
+#### Điểm a.
+
+Các xã: Đại Phước, Nhơn Trạch, Phước A
+
+--- Văn bản: nghi-quyet-02-2023-nq-hdnd-tp-hcm, chunk 10 ---
+định hồ sơ cấp giấy chứng nhận quyền sử dụng đất trên địa bàn Thành phố Hồ Chí Minh.
+
+### Khoản 1. Trường hợp giao đất, cho thuê đất.
+
+#### Điểm a. Đối với hộ gia đình, cá nhân, cộng đồng dân cư.
+
+| Quy mô diện tích | Tại quận | Tại huyện |
+|-------------------|----------|-----------|
+| Nhỏ hơn 500m²    | 50.000   | 25.000    |
+| Từ 500m² trở lên | 500.000  | 250.000   |
+
+#### Điểm b. Đối với tổ chức, cơ sở tôn giáo.
+
+| Quy mô diện tích | Mức thu |
+|-------------------|---------|
+| Nhỏ hơn 10.000m² | 2.000
+
+--- Văn bản: nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai, chunk 2 ---
+hu: trẻ em, hộ nghèo, người cao tuổi, người khuyết tật, người có công với cách mạng; cấp Giấy chứng nhận quyền sử dụng đất lần đầu đối với hộ gia đình cá nhân.
+
+a) Trường hợp giao đất, cho thuê đất:
+
+| STT | Quy mô diện tích (m²) | Mức thu tại quận (đồng/hồ sơ) | Mức thu tại huyện (đồng/hồ sơ) |
+|---|---|---|---|
+| I | Đối với hộ gia đình, cá nhân | | |
+| 1 | Nhỏ hơn 500m² | 50.000 | 25.000 |
+| 2 | Từ 500m² trở lên | 500.000 | 250.000 |
+| II | Đối với tổ chức | | |
+| 1 | Nhỏ hơn 10.000m² | 2.000.000 | 2.000
+
+CÂU HỎI: Gia đình tôi sống tại một xã thuộc huyện Củ Chi, TP.HCM. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?
+
+TRẢ LỜI:<|im_end|>
+<|im_start|>assistant

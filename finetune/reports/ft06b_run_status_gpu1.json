@@ -1,0 +1,38 @@
+{
+  "ft06b-base-s0|graphrag": {
+    "o": 5,
+    "model": "base",
+    "n_shot": 0,
+    "system": "graphrag",
+    "returncode": 0,
+    "gpu": 1,
+    "out": "finetune/results/results_graphrag_ft06b-base-s0.json",
+    "aggregate": "aggregate: F1_khoan=0.131 F1_dieu=0.131 NormR=0.134 tu_choi_dung=0.929 (14 câu)",
+    "src_file": "data/evaluation/results_graphrag_final1_20260729-022916.json",
+    "src_sha256": "7deda57ef145b8a779483a2132cd1d929dc6244807bf7a113bd29f6c1092b7f8"
+  },
+  "ft06b-base-s2|baseline": {
+    "o": 4,
+    "model": "base",
+    "n_shot": 2,
+    "system": "baseline",
+    "returncode": 0,
+    "gpu": 1,
+    "out": "finetune/results/results_baseline_ft06b-base-s2.json",
+    "aggregate": "aggregate: F1_khoan=0.239 F1_dieu=0.315 NormR=0.599 tu_choi_dung=0.500 (14 câu)",
+    "src_file": "data/evaluation/results_baseline_20260710-085236.json",
+    "src_sha256": "37fca8d026443e4cfc5f759f6f98712f638468a58d9a177adbd01dba30bcb38c"
+  },
+  "ft06b-base-s0|baseline": {
+    "o": 6,
+    "model": "base",
+    "n_shot": 0,
+    "system": "baseline",
+    "returncode": 0,
+    "gpu": 1,
+    "out": "finetune/results/results_baseline_ft06b-base-s0.json",
+    "aggregate": "aggregate: F1_khoan=0.154 F1_dieu=0.170 NormR=0.265 tu_choi_dung=0.929 (14 câu)",
+    "src_file": "data/evaluation/results_baseline_20260710-085236.json",
+    "src_sha256": "37fca8d026443e4cfc5f759f6f98712f638468a58d9a177adbd01dba30bcb38c"
+  }
+}
