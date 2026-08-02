@@ -2,7 +2,8 @@
 
 > **Đối tượng đọc:** thành viên giữ máy có Neo4j + Qdrant + credentials LLM (máy B).
 > **Vai trò máy B:** đây là **máy trình diễn**, chạy `DEMO_MODE=live` — đường chính lúc bảo vệ.
-> `replay` là **lưới an toàn** khi `live` hỏng giữa buổi, không phải kịch bản chính (`ui/docs/UI_DEMO_SPEC.md` mục 0).
+> **Dự phòng khi `live` hỏng giữa buổi: bản ghi màn hình một lượt chạy `live` thật, quay sẵn ở nhà.**
+> Bạn **không cần đụng tới `replay`** — chế độ đó chỉ để dựng giao diện trên máy KHÔNG có dữ liệu.
 > **Ngày:** 2026-08-02
 
 Mọi lệnh và tên biến dưới đây đọc từ code thật trong repo, không viết theo trí nhớ.
@@ -40,8 +41,7 @@ Chép `.env.example` → `.env` rồi điền. Bảng dưới chỉ liệt kê k
 | `GEMINI_API_KEY` | — | chỉ khi dùng Gemini Developer API | `make_llm_client` |
 | `GEMINI_USE_VERTEX` | — | `true` → dùng Vertex qua ADC, **không** nhận api_key | `make_llm_client` |
 | `GEMINI_VERTEX_PROJECT` / `GEMINI_VERTEX_LOCATION` | — | chỉ khi `GEMINI_USE_VERTEX=true` | `src/utils/gemini_fallback.py` |
-| `DEMO_MODE` | — | `live` \| `replay` — **mode lúc khởi động** | `ui/server.tao_adapter` |
-| `REPLAY_SPEED` | — | mặc định `4.0` | `ui/adapters._doc_speed` |
+| `DEMO_MODE` | — | đặt `live` để khởi động thẳng vào chế độ chạy thật | `ui/server.tao_adapter` |
 | `INGEST_LLM_MODE` | — | LLM cho ontology mapping lúc ingest | `src/ingestion/graph_builder.py` |
 
 Hai điểm dễ nhầm:
@@ -100,7 +100,7 @@ python scripts/preflight.py --nhanh    # bỏ bước nạp thử model
 
 Script chỉ đọc, **không sửa gì trong database**. Nó kiểm: Docker + hai container, kết nối Neo4j và
 số Norm/Component/CTV/TextUnit + số cạnh, collection `legal_texts` (tồn tại / số điểm / số chiều),
-các khóa `.env` còn thiếu, các package bắt buộc, cache BGE-M3, và số fixture trong `ui/fixtures/`.
+các khóa `.env` còn thiếu, các package bắt buộc, và cache BGE-M3.
 
 Mỗi mục hỏng đều in kèm một câu chỉ cách sửa. **Exit code 1 nếu có mục bắt buộc hỏng**, 0 nếu chỉ
 còn cảnh báo — dùng được trong script:
@@ -111,86 +111,7 @@ python scripts/preflight.py --nhanh && echo "SẴN SÀNG" || echo "CÒN LỖI, x
 
 ---
 
-## 4. Ghi fixture (lưới an toàn)
-
-Làm **trước** buổi bảo vệ, trên chính máy B:
-
-```bash
-# Một câu
-python -m ui.record "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu?"
-
-# Cả tệp danh sách (bỏ dòng trống và dòng bắt đầu bằng #)
-python -m ui.record data/evaluation/demo_questions.txt --jurisdiction tp-hcm
-```
-
-Cờ có thật (`python -m ui.record --help`):
-
-| Cờ | Giá trị |
-|---|---|
-| `--jurisdiction` | `toan-quoc` \| `tp-hcm` \| `dong-nai` |
-| `--mode` | `general` \| `irac` (bỏ trống = để planner tự quyết) |
-| `--verify` | bật Verifier agent |
-| `--verify-tier` | `0` \| `1` \| `2` |
-| `--llm-mode` | `claude` \| `claude-fallback` \| `gemini` \| `gemini-fallback` |
-| `--llm-cache-dir` | mặc định `data/evaluation/.llm_cache` |
-| `--no-llm-cache` | ép gọi LLM tươi |
-| `--out-dir` | mặc định `ui/fixtures/` |
-| `--overwrite` | ghi đè fixture đã có (mặc định bỏ qua nếu trùng tên) |
-
-> ### ⚠ Cờ lúc ghi PHẢI khớp cờ lúc demo
->
-> Hai lý do, cả hai đều làm hỏng buổi bảo vệ theo cách khác nhau:
->
-> 1. **Cache LLM.** Khóa cache tính theo nội dung prompt, mà prompt phụ thuộc `--jurisdiction`,
->    `--mode`, `--verify`, `--llm-mode`. Ghi bằng một bộ cờ rồi demo bằng bộ khác → **cache MISS**,
->    câu hỏi phải gọi API thật ngay giữa buổi (chậm, và dính rủi ro 429/529). Ghi đúng cờ thì lúc
->    demo là **cache HIT, $0, gần như tức thì**.
-> 2. **Khớp fixture lúc fallback.** `ReplayAdapter` tra fixture theo **câu hỏi** đã chuẩn hóa
->    (lowercase, bỏ dấu câu, gộp khoảng trắng, **giữ dấu tiếng Việt**). Câu nào chưa ghi thì lúc
->    bấm sang `replay` sẽ báo "chưa có fixture cho câu hỏi này".
->
-> Nói gọn: **bộ cờ lúc `ui.record` = bộ cờ lúc demo = danh sách câu sẽ hỏi.**
-
-Kiểm lại bằng `python scripts/preflight.py --nhanh` — mục 6 liệt kê fixture đang có, đánh dấu
-fixture viết tay tạm, và chỉ ra câu nào trong `demo_questions.txt` còn thiếu fixture.
-
-`ui/fixtures/*.json` **phải commit** (`ui/fixtures/` không nằm trong `.gitignore`) để máy A cũng
-replay được.
-
-### 4.1 Xóa fixture tạm sau khi đã ghi fixture thật — BẮT BUỘC
-
-Trong repo có sẵn fixture **viết tay tạm** từ Task 3 (mang cờ `"tam": true`), dựng khi chưa có máy
-nào chạy `live` được. Nội dung của nó là **số liệu bịa để test giao diện**, không phải một lượt
-chạy thật.
-
-**Vì sao phải xóa, chứ không chỉ để đó:**
-
-Danh sách **chip gợi ý** hiện trên trang lấy thẳng từ `ui/fixtures/` (`ReplayAdapter.cau_hoi_co_san()`
-→ `/api/mode` → `#goi-y`). Fixture tạm vì thế hiện thành **một chip trông y hệt chip thật** ngay
-cạnh các câu đã chuẩn bị. Giữa buổi bảo vệ, bấm nhầm vào nó — hoặc để hội đồng bấm — sẽ trình ra
-một câu trả lời bịa kèm trích dẫn bịa, đúng lúc không thể giải thích. Dải cảnh báo vàng
-"FIXTURE TẠM" có hiện, nhưng đó là thứ dễ bỏ qua nhất trên màn hình khi đang nói.
-
-```bash
-# 1. Xem fixture nào đang mang cờ tạm
-python scripts/preflight.py --nhanh      # mục 6 đánh dấu "(VIẾT TAY TẠM)"
-
-# 2. Ghi đè bằng lượt chạy thật (khuyến nghị — giữ được câu hỏi đó)
-python -m ui.record "<đúng câu hỏi trong fixture tạm>" --overwrite   # + cờ demo
-
-# 3. Hoặc xóa hẳn nếu không định hỏi câu đó
-git rm ui/fixtures/<tên-tệp>.json
-
-# 4. Kiểm lại: mục 6 KHÔNG còn dòng "(VIẾT TAY TẠM)" nào
-python scripts/preflight.py --nhanh
-```
-
-Chỉ nên còn fixture do `ui.record` sinh (`"mode": "live"`, có `recorded_at`, **không** có `"tam"`).
-Việc này nằm trong danh sách kiểm ở mục 8.
-
----
-
-## 5. Chạy demo
+## 4. Chạy demo
 
 ```bash
 DEMO_MODE=live uvicorn ui.server:app --port 8000
@@ -222,26 +143,27 @@ chưa khớp log thật — báo lại để sửa `ui/trace.py` (**không sửa
 
 ---
 
-## 6. Khi `live` hỏng giữa buổi — chuyển sang `replay`
+## 5. Quay bản ghi dự phòng
 
-Trên thanh trạng thái (dải màu tầng hai) có hai nút **`TRỰC TIẾP`** / **`PHÁT LẠI`**.
-Bấm `PHÁT LẠI` → server đổi adapter tại chỗ, **không cần restart**.
+Sau khi mục 4 chạy ngon, quay màn hình **một lượt `live` thật cho từng câu sẽ trình bày**, rồi để
+tệp ngay trên máy này. Đó là dự phòng khi buổi bảo vệ gặp sự cố (mục 6).
 
-- Badge đổi sang **PHÁT LẠI** nền vàng, kèm dải cảnh báo nói rõ đang phát lại từ fixture — hội đồng
-  phải thấy được điều đó, không được để tưởng là chạy thật.
-- Nhóm nút **tốc độ** `×1 ×2 ×4 ×8` hiện ra; tốc độ gửi kèm mỗi câu hỏi.
-- Đổi ngược lại `TRỰC TIẾP` cũng bằng một nút.
+Quay toàn màn hình, thấy rõ URL `127.0.0.1:8000` và đủ 7 bước chạy từ đầu tới cuối.
 
-Ba điều cần biết trước khi bấm:
+> Không cần đụng tới `replay` hay `ui/fixtures/`. Chế độ đó chỉ dùng để dựng giao diện trên máy
+> KHÔNG có dữ liệu; máy bạn có dữ liệu nên chạy thẳng `live`.
 
-1. **Không bấm được khi đang chạy một câu** — server trả `409` kèm "đợi câu đó chạy xong". Đợi câu
-   hiện tại xong đã.
-2. **Đổi hụt thì không mất gì.** Nếu dựng adapter mới hỏng, server **giữ nguyên adapter đang chạy**
-   và chỉ hiện lỗi ra bảng lỗi.
-3. **Chỉ những câu đã ghi fixture mới phát lại được.** Đây là lý do mục 4 phải làm trước.
+---
 
-Đường cứu cuối cùng nếu UI cũng không phản hồi: tắt server, chạy lại bằng
-`DEMO_MODE=replay uvicorn ui.server:app --port 8000`.
+## 6. Khi `live` hỏng giữa buổi
+
+1. **Thử chữa tại chỗ trước** — phần lớn sự cố ở mục 7 chữa được trong một phút: Neo4j rớt thì
+   `docker compose up -d`, LLM 429/529 thì hỏi lại (SDK đã tự thử lại 8 lần).
+2. **Không chữa được thì mở bản ghi màn hình** đã quay ở mục 5 và trình bày tiếp.
+
+Nói thẳng khi chuyển sang bản ghi: *"đây là bản ghi một lượt chạy thật, máy hiện không kết nối được
+DB nên tôi trình bằng bản ghi"*. Trung thực và dễ chấp nhận. Đổi lại, bản ghi **không trả lời được**
+câu hội đồng hỏi ngoài kịch bản — cứ nói rõ như vậy.
 
 ---
 
@@ -253,11 +175,12 @@ Triệu chứng: bảng lỗi hiện "LLM trả lỗi 529…" hoặc 429; bướ
 
 - SDK Anthropic đã tự thử lại: `ANTHROPIC_MAX_RETRIES = 8` (`src/utils/llm_config.py`) — nhiều hơn
   mặc định 2 của SDK. Hết 8 lần vẫn lỗi mới hiện ra UI.
-- Cách xử lý ngay: **bấm `PHÁT LẠI`** (mục 6). Câu đã ghi fixture chạy lại được ngay.
+- Cách xử lý ngay: hỏi lại sau vài giây; không được thì dùng bản ghi màn hình (mục 6).
 - Đổi nhà cung cấp: khởi động lại với `LLM_MODE=claude-fallback` (Claude chính, Gemini đỡ khi
   Claude drop) hoặc `gemini-fallback` (Gemini chính, Claude đỡ khi Vertex hết quota — D-26).
-- 429 phía Vertex thường là **hết quota**, chờ không giải quyết được; đổi sang `claude` hoặc dùng replay.
-- Phòng ngừa: ghi fixture trước bằng đúng cờ demo → câu demo là cache HIT, gần như không gọi API.
+- 429 phía Vertex thường là **hết quota**, chờ không giải quyết được; đổi sang `claude`.
+- Phòng ngừa tốt nhất: **chạy trước ở nhà đúng những câu sẽ hỏi với đúng bộ cờ sẽ dùng** → lúc demo
+  là cache LLM HIT, gần như không gọi API nên không dính 429/529.
 
 ### 7.2 Docker không lên
 
@@ -284,7 +207,7 @@ pip install -r requirements.txt
 ```
 
 - `No module named 'sentence_transformers'` → `_build_clients()` chết, `LiveAdapter` không dựng
-  được, server **tự lùi về `replay`** (xem log `ui.server`). Đây chính xác là tình trạng máy A.
+  được, server **tự lùi về chế độ không-DB** (xem log `ui.server`) — badge sẽ KHÔNG phải `TRỰC TIẾP`.
 - `No module named 'google.genai'` → chỉ ảnh hưởng `--llm-mode gemini*`: `pip install google-genai`.
 - Cài nhiều môi trường Python thì kiểm đúng cái đang chạy: preflight in `sys.executable` ở mục 5.
 
@@ -318,8 +241,8 @@ Hai việc phải làm trước, khi còn mạng:
 # 1. Nạp model một lần cho nó vào cache (preflight bỏ --nhanh sẽ làm việc này)
 python scripts/preflight.py
 
-# 2. Ghi fixture + làm nóng cache LLM cho đúng các câu sẽ hỏi
-python -m ui.record data/evaluation/demo_questions.txt --jurisdiction tp-hcm
+# 2. Làm nóng cache LLM: chạy trước đúng các câu sẽ hỏi, với đúng bộ cờ sẽ dùng
+#    (mở UI và hỏi từng câu một lượt là đủ)
 ```
 
 Khi đã có cache, ép chế độ offline cho HuggingFace để nó khỏi thử gọi hub và treo:
@@ -336,7 +259,7 @@ Preflight cảnh báo nếu thư mục cache `models--BAAI--bge-m3` chưa có ho
 khoảng 2,2 GB — nhỏ hơn nhiều nghĩa là tải dở).
 
 **Không có mạng thì `live` chỉ chạy được câu đã cache LLM.** Câu mới sẽ lỗi ở bước 7. Nếu biết
-chắc phòng bảo vệ không có mạng, kịch bản an toàn là chạy thẳng `replay`.
+chắc phòng bảo vệ không có mạng, hãy chuẩn bị sẵn bản ghi màn hình ở mục 5.
 
 ---
 
@@ -344,10 +267,11 @@ chắc phòng bảo vệ không có mạng, kịch bản an toàn là chạy th�
 
 - [ ] `docker compose ps` — Neo4j và Qdrant đều đang chạy
 - [ ] `python scripts/preflight.py` — exit code 0, không còn mục ❌
-- [ ] Fixture phủ **hết** câu sẽ hỏi, ghi bằng **đúng bộ cờ** sẽ dùng (preflight mục 6)
-- [ ] **Không còn fixture nào mang cờ `tam`** — preflight mục 6 sạch dòng "(VIẾT TAY TẠM)" (mục 4.1). Nếu còn, nó sẽ hiện thành một chip gợi ý trông như thật trên UI.
-- [ ] `git status` sạch, `ui/fixtures/*.json` đã commit và đẩy để máy A có
+- [ ] **`DEMO_DEVMODE` đã TẮT** (preflight mục 2 kiểm). Bật nó thì `live` chỉ là giả lập —
+      trang hiện `TRỰC TIẾP` trong khi không hề gọi Neo4j/Qdrant/LLM.
+- [ ] **Đã quay sẵn bản ghi màn hình** một lượt `live` thật cho từng câu sẽ trình (mục 5), và
+      bản ghi nằm ngay trên máy trình diễn — không phải trên cloud cần mạng mới mở được
 - [ ] Server đã bật sẵn, log có "client + BGE-M3 đã sẵn sàng" đúng một lần
 - [ ] Hỏi thử một câu: đủ 7 bước, bước 3 có điểm, bước 4 có norm, bước 6 có phân bổ pass
-- [ ] Bấm thử `PHÁT LẠI` rồi `TRỰC TIẾP` một lượt cho quen tay
+- [ ] `git status` sạch
 - [ ] Nếu phòng có thể không có mạng: đặt `HF_HUB_OFFLINE=1` và xác nhận model nạp được

@@ -270,12 +270,22 @@ def test_fixture_bat_fixture_viet_tay_tam(monkeypatch, tmp_path):
     assert any("VIẾT TAY" in m[1] or "viết tay" in m[1] for m in kq.muc)
 
 
-def test_fixture_khong_co_thu_muc(monkeypatch, tmp_path):
+def test_fixture_khong_co_thu_muc_KHONG_con_chan(monkeypatch, tmp_path):
+    """Replay nay là dự phòng PHỤ (dự phòng chính là bản ghi màn hình) → thiếu
+    fixture KHÔNG được chặn buổi bảo vệ."""
     monkeypatch.setattr(preflight, "GOC", tmp_path)
     kq = preflight.KetQua()
     preflight.kiem_fixture(kq)
-    assert kq.so_hong == 1
-    assert any("ui.record" in (m[3] or "") for m in kq.muc)
+    assert kq.so_hong == 0, kq.muc
+    assert any("tùy chọn" in m[2] for m in kq.muc)
+
+
+def test_fixture_rong_cung_khong_chan(monkeypatch, tmp_path):
+    (tmp_path / "ui" / "fixtures").mkdir(parents=True)
+    monkeypatch.setattr(preflight, "GOC", tmp_path)
+    kq = preflight.KetQua()
+    preflight.kiem_fixture(kq)
+    assert kq.so_hong == 0, kq.muc
 
 
 def test_exit_code_theo_so_muc_hong():
@@ -309,3 +319,21 @@ def test_neo4j_khong_co_canh(monkeypatch):
     preflight.kiem_neo4j(kq)
     assert kq.so_hong >= 1
     assert any("0 cạnh" in m[2] and m[3] for m in kq.muc)
+
+
+def test_preflight_bat_devmode_bo_quen(monkeypatch):
+    """Quên tắt devmode = trang hiện TRỰC TIẾP với dữ liệu giả → phải là lỗi CHẶN."""
+    for k, v in [("NEO4J_URI", "bolt://x"), ("NEO4J_USER", "u"),
+                 ("NEO4J_PASSWORD", "p"), ("ANTHROPIC_API_KEY", "sk-x")]:
+        monkeypatch.setenv(k, v)
+    monkeypatch.setenv("DEMO_DEVMODE", "1")
+    kq = preflight.KetQua()
+    preflight.kiem_env(kq)
+    hong = [m for m in kq.muc if m[0] == preflight.HONG and "DEVMODE" in m[1]]
+    assert hong, "preflight không bắt được devmode bỏ quên"
+    assert hong[0][3], "mục hỏng phải kèm cách sửa"
+
+    monkeypatch.setenv("DEMO_DEVMODE", "0")
+    kq2 = preflight.KetQua()
+    preflight.kiem_env(kq2)
+    assert not [m for m in kq2.muc if m[0] == preflight.HONG and "DEVMODE" in m[1]]

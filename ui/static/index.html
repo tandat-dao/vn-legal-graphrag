@@ -128,6 +128,9 @@ tailwind.config = {
 
   /* ---------- Chrome: chạy hoàn toàn bằng token vai trò ---------- */
   .chrome-1 { background: var(--chrome-bg);   color: var(--chrome-text); }
+  /* .chrome-2 (--chrome-bg-2) tạm không dùng: thanh trạng thái tầng 2 đã bỏ,
+     mọi thiết lập chuyển vào bảng ở bánh răng. Giữ định nghĩa vì --chrome-bg-2
+     nằm trong bộ 5 token vai trò của mục 1.3, dùng lại ngay khi cần dải thứ hai. */
   .chrome-2 { background: var(--chrome-bg-2); color: var(--chrome-text); }
   .dai-hero {
     background-color: var(--chrome-bg);
@@ -136,18 +139,50 @@ tailwind.config = {
       radial-gradient(circle at 85% 50%, rgba(255,255,255,.05) 0%, transparent 40%);
   }
 
-  /* ---------- Công tắc bảng màu A/B trên thanh trạng thái ---------- */
-  .nut-mau {
-    font-size: 11px; font-weight: 700; line-height: 1; padding: .3rem .55rem;
-    border-radius: 4px; color: rgba(255,255,255,.72);
-    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+  /* ---------- Bánh răng + bảng thiết lập (góc phải header) ---------- */
+  .nut-banh-rang {
+    display: grid; place-items: center; width: 38px; height: 38px;
+    border-radius: 6px; color: rgba(255,255,255,.85);
+    background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22);
     transition: background 150ms ease, color 150ms ease;
   }
-  .nut-mau:hover:not(:disabled) { background: rgba(255,255,255,.24); color: #fff; }
+  .nut-banh-rang:hover { background: rgba(255,255,255,.26); color: #fff; }
+  .nut-banh-rang[aria-expanded="true"] { background: #fff; color: var(--chrome-bg); border-color: #fff; }
+
+  .bang-setting {
+    position: absolute; right: 0; top: calc(100% + 10px); z-index: 40;
+    width: 300px; max-width: calc(100vw - 2rem);
+    background: var(--bg-card); color: var(--text-primary);
+    border: 1px solid var(--border-card); border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    padding: 1rem;
+  }
+  .nhom-setting { padding-top: .75rem; border-top: 1px solid var(--gray-100); }
+  .nhom-setting:first-of-type { padding-top: 0; border-top: none; }
+  .nhom-setting + .nhom-setting { margin-top: .75rem; }
+  .nhan-setting {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--text-muted); margin-bottom: .5rem;
+  }
+  .ghi-chu-setting { font-size: 11px; color: var(--text-muted); margin-top: .5rem; line-height: 1.5; }
+
+  /* Nút chọn trong bảng thiết lập — nền TRẮNG, không còn nằm trên dải chrome */
+  .nut-mau {
+    font-size: 12px; font-weight: 600; line-height: 1; padding: .4rem .65rem;
+    border-radius: 4px; color: var(--text-secondary);
+    background: var(--white); border: 1px solid var(--border-card);
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+  .nut-mau:hover:not(:disabled) { border-color: var(--accent); color: var(--navy); }
   .nut-mau:disabled { opacity: .45; cursor: not-allowed; }
-  /* Nút đang chọn đảo màu → tự đọc đúng ở cả hai chế độ */
   .nut-mau[aria-pressed="true"] {
-    background: #fff; color: var(--chrome-bg); border-color: #fff;
+    background: var(--navy); color: #fff; border-color: var(--navy);
+  }
+
+  /* Nhãn cho screen reader (Tailwind CDN có sr-only, khai lại cho chắc) */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
   }
 
   /* ---------- Dùng accent (đổi vai trò theo chế độ) ---------- */
@@ -250,46 +285,83 @@ tailwind.config = {
         <div class="text-xl font-semibold leading-tight truncate">Ontology-Driven GraphRAG cho Pháp luật Việt Nam</div>
         <div class="text-[13px] text-white/60 truncate">Trình diễn luồng xử lý: câu hỏi → 7 bước → câu trả lời có trích dẫn</div>
       </div>
+
+      <!-- Bánh răng góc phải: mọi thiết lập gom vào đây (chế độ chạy, tốc độ,
+           bảng màu). Thanh trạng thái bên dưới chỉ còn phần CHỈ-ĐỌC. -->
+      <div class="ml-auto relative shrink-0" id="boc-setting">
+        <button id="nut-setting" class="nut-banh-rang" aria-haspopup="dialog"
+                aria-expanded="false" aria-controls="bang-setting" title="Thiết lập">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3.2"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span class="sr-only">Thiết lập</span>
+        </button>
+
+        <!-- Bảng thiết lập — thả xuống từ bánh răng -->
+        <div id="bang-setting" class="bang-setting hidden" role="dialog" aria-label="Thiết lập">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-semibold text-navy uppercase tracking-wider">Thiết lập</h2>
+            <button id="nut-dong-setting"
+                    class="text-[var(--text-muted)] hover:text-navy text-lg leading-none px-1 rounded"
+                    title="Đóng">×</button>
+          </div>
+
+          <div class="nhom-setting" role="group" aria-label="Chế độ chạy">
+            <div class="nhan-setting">Chế độ chạy</div>
+            <!-- Trạng thái hiện hành (chỉ-đọc) — trước ở thanh tầng 2, nay gom vào đây -->
+            <div class="flex flex-wrap items-center gap-2 mb-2">
+              <span id="badge-mode" class="text-xs font-bold px-3 py-1 rounded-full bg-ink-100 text-ink-700">…</span>
+              <span id="tt-toc-do" class="text-[11px] text-[var(--text-muted)]"></span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button id="nut-mode-live" class="nut-mau" data-mode="live" aria-pressed="false"
+                      title="Chạy thật: gọi Neo4j + Qdrant + LLM">TRỰC TIẾP</button>
+              <button id="nut-mode-replay" class="nut-mau" data-mode="replay" aria-pressed="false"
+                      title="Phát lại fixture đã ghi sẵn — không cần DB">PHÁT LẠI</button>
+            </div>
+            <p class="ghi-chu-setting">Đổi ngay, không cần khởi động lại server. Không đổi được
+              trong lúc đang chạy một câu.</p>
+          </div>
+
+          <!-- Tốc độ phát lại: chỉ hiện ở replay, gửi kèm mỗi /api/ask -->
+          <div id="nhom-toc-do" class="nhom-setting hidden" role="group" aria-label="Tốc độ phát lại">
+            <div class="nhan-setting">Tốc độ phát lại</div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button class="nut-mau nut-toc-do" data-speed="1" aria-pressed="false" title="Thời gian thật">×1</button>
+              <button class="nut-mau nut-toc-do" data-speed="2" aria-pressed="false">×2</button>
+              <button class="nut-mau nut-toc-do" data-speed="4" aria-pressed="false">×4</button>
+              <button class="nut-mau nut-toc-do" data-speed="8" aria-pressed="false" title="Tua nhanh nhất">×8</button>
+            </div>
+            <p class="ghi-chu-setting">Mốc thời gian là thời gian thật của lượt đã ghi, được chia
+              cho hệ số này.</p>
+          </div>
+
+          <div class="nhom-setting" role="group" aria-label="Bảng màu">
+            <div class="nhan-setting">Bảng màu</div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button id="nut-mau-a" class="nut-mau" data-mau="a" aria-pressed="true"
+                      title="Terracotta làm màu chrome">A — Terracotta</button>
+              <button id="nut-mau-b" class="nut-mau" data-mau="b" aria-pressed="false"
+                      title="Navy làm màu chrome, terracotta chỉ làm accent">B — Navy</button>
+            </div>
+            <p class="ghi-chu-setting">Chỉ đổi lớp trình bày; không lưu lại, tải lại trang là về A.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- TẦNG 2 — THANH TRẠNG THÁI + điều khiển buổi bảo vệ (Task 5).
-       Ba nhóm: badge chế độ · nút chuyển TRỰC TIẾP⇄PHÁT LẠI (không restart
-       server) + tốc độ phát lại · công tắc bảng màu A/B. -->
-  <div class="chrome-2 border-b border-black/10">
-    <div class="max-w-[1600px] mx-auto px-6 min-h-12 py-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-      <span class="text-[11px] font-medium tracking-widest uppercase text-white/55">Chế độ chạy</span>
-      <span id="badge-mode" class="text-xs font-bold px-3 py-1 rounded-full bg-white/15 text-white ring-1 ring-white/25">…</span>
-
-      <!-- Chuyển mode: ở live mà lỗi thì bấm một nút là về replay -->
-      <div class="flex items-center gap-1" role="group" aria-label="Chuyển chế độ chạy">
-        <button id="nut-mode-live" class="nut-mau" data-mode="live" aria-pressed="false"
-                title="Chạy thật: gọi Neo4j + Qdrant + LLM">TRỰC TIẾP</button>
-        <button id="nut-mode-replay" class="nut-mau" data-mode="replay" aria-pressed="false"
-                title="Phát lại fixture đã ghi sẵn — không cần DB">PHÁT LẠI</button>
-      </div>
-
-      <!-- Tốc độ phát lại: chỉ hiện ở replay, gửi kèm mỗi /api/ask -->
-      <div id="nhom-toc-do" class="flex items-center gap-1 hidden" role="group" aria-label="Tốc độ phát lại">
-        <span class="text-[11px] font-medium tracking-widest uppercase text-white/55 mr-1 hidden md:inline">Tốc độ</span>
-        <button class="nut-mau nut-toc-do" data-speed="1" aria-pressed="false" title="Thời gian thật">×1</button>
-        <button class="nut-mau nut-toc-do" data-speed="2" aria-pressed="false">×2</button>
-        <button class="nut-mau nut-toc-do" data-speed="4" aria-pressed="false">×4</button>
-        <button class="nut-mau nut-toc-do" data-speed="8" aria-pressed="false" title="Tua nhanh nhất">×8</button>
-      </div>
-
-      <span id="tt-toc-do" class="text-xs text-white/70"></span>
-
-      <div class="ml-auto flex items-center gap-1" role="group" aria-label="Bảng màu">
-        <span class="text-[11px] font-medium tracking-widest uppercase text-white/55 mr-1 hidden md:inline">Bảng màu</span>
-        <button id="nut-mau-a" class="nut-mau" data-mau="a" aria-pressed="true"
-                title="Chế độ A — Terracotta làm màu chrome">A</button>
-        <button id="nut-mau-b" class="nut-mau" data-mau="b" aria-pressed="false"
-                title="Chế độ B — Navy làm màu chrome, terracotta chỉ làm accent">B</button>
-      </div>
-    </div>
-  </div>
+  <!-- Thanh trạng thái tầng 2 ĐÃ BỎ: badge chế độ + dòng tốc độ chuyển vào bảng
+       thiết lập. Tín hiệu "đang PHÁT LẠI" mà hội đồng nhìn thấy không cần mở
+       bảng nào nay là dải #canh-bao-fixture ngay bên dưới header. -->
 </header>
+
+<!-- Dải DEV: chỉ hiện khi server bật DEMO_DEVMODE. Bắt buộc phải có — DevAdapter
+     khai `mode="live"` nên nếu không có dải này thì trang trông y hệt chạy thật
+     trong khi dữ liệu là fixture. -->
+<div id="canh-bao-dev" class="hidden bg-deep-red text-white text-xs font-semibold px-6 py-2"></div>
 
 <div id="canh-bao-fixture" class="hidden bg-[#FFF7E6] border-b-2 border-cta text-[var(--gray-900)] text-xs px-6 py-2"></div>
 
@@ -371,14 +443,11 @@ tailwind.config = {
 </main>
 
 <!-- ===================== FOOTER ===================== -->
-<!-- TODO trước buổi bảo vệ: điền tên hai thành viên và tên GVHD vào dòng dưới. -->
 <footer class="chrome-1 text-white/80 text-xs py-4 mt-6">
   <div class="max-w-[1600px] mx-auto px-6 text-center leading-relaxed">
-    Ontology-Driven GraphRAG cho Pháp luật Việt Nam
+    Mô hình hỏi đáp thủ tục hành chính Việt Nam dựa trên GraphRAG
     <span class="text-white/35 px-1.5">|</span>
-    Khóa luận tốt nghiệp — nhóm thực hiện: [A] · [B]
-    <span class="text-white/35 px-1.5">|</span>
-    GVHD: [điền tên]
+    Khóa luận tốt nghiệp
     <span class="text-white/35 px-1.5">|</span>
     <span class="text-white">Sản phẩm nghiên cứu — không thay thế tư vấn pháp lý</span>
   </div>
@@ -534,6 +603,7 @@ function themLog(id, raw) {
 // ---------------------------------------------------------------- render từng bước
 function renderCauHoi(d) {
   if (d.fixture_tam) {
+    CANH_BAO_TAM = true;
     $("canh-bao-fixture").classList.remove("hidden");
     $("canh-bao-fixture").innerHTML =
       `<b>⚠ FIXTURE TẠM</b> (${esc(d.fixture_file || "")}) — ${esc(d.fixture_ghi_chu || "")}`;
@@ -1011,7 +1081,7 @@ async function hoi() {
   // Đổi adapter giữa luồng SSE sẽ cắt trace đang phát → khóa nút lại.
   $("nut-mode-live").disabled = $("nut-mode-replay").disabled = true;
   $("bang-loi").classList.add("hidden");
-  BLOCKS = []; PLAN = {}; HYBRID = {}; SEED_STAGE1 = [];
+  BLOCKS = []; PLAN = {}; HYBRID = {}; SEED_STAGE1 = []; CANH_BAO_TAM = false;
   TRA_LOI_HIEN_TAI = null; VERIFIER_HIEN_TAI = null; HIEN_NGUYEN_VAN_LLM = false;
   dungStepper();
 
@@ -1074,6 +1144,7 @@ $("o-cau-hoi").addEventListener("keydown", e => {
 
 // ---------------------------------------------------------------- chế độ chạy + tốc độ (Task 5)
 let TRANG_THAI = {};    // /api/mode gần nhất
+let CANH_BAO_TAM = false;   // đang hiện cảnh báo "FIXTURE TẠM" của câu hiện tại
 let TOC_DO = null;      // tốc độ phát lại đang chọn; null = để server tự quyết
 
 /** Vẽ lại thanh trạng thái + chip gợi ý theo dữ liệu `/api/mode`. */
@@ -1081,14 +1152,13 @@ function apDungTrangThai(m) {
   TRANG_THAI = m || {};
   const replay = m.mode === "replay";
 
-  // Badge "PHÁT LẠI" nền vàng CTA chữ đen — phải nhìn rõ từ cuối phòng.
-  // Vòng viền trắng là BẮT BUỘC: ở chế độ màu A thanh trạng thái là
-  // terracotta-dk, vàng CTA trên nền đó chỉ chênh 2.5:1 nên badge dễ chìm;
-  // viền trắng tách hẳn badge khỏi dải nền ở CẢ HAI chế độ.
+  // Badge nay nằm trên NỀN TRẮNG của bảng thiết lập (trước ở dải chrome tối),
+  // nên viền trắng cũ thành vô hình → dùng viền tối. Vàng CTA trên trắng chỉ
+  // chênh ~1.4:1 nên viền là thứ định hình badge, không được bỏ.
   // (className gán ở đây GHI ĐÈ class tĩnh trong HTML → phải kê đủ tại chỗ.)
   $("badge-mode").textContent = replay ? "PHÁT LẠI" : "TRỰC TIẾP";
   $("badge-mode").className = "text-xs font-bold px-3 py-1 rounded-full " +
-    (replay ? "bg-cta text-ink-900 ring-2 ring-white/80" : "bg-white/15 text-white ring-1 ring-white/25");
+    (replay ? "bg-cta text-ink-900 ring-1 ring-black/25" : "bg-ok text-white");
 
   $("nut-mode-live").setAttribute("aria-pressed", String(!replay));
   $("nut-mode-replay").setAttribute("aria-pressed", String(replay));
@@ -1101,18 +1171,23 @@ function apDungTrangThai(m) {
   // Tốc độ chỉ có nghĩa ở replay (LiveAdapter bỏ qua tham số này).
   $("nhom-toc-do").classList.toggle("hidden", !replay);
   if (replay && TOC_DO == null) TOC_DO = Number(m.replay_speed) || 4;
-  datTocDo(TOC_DO);
+  datTocDo(TOC_DO);          // gọi luôn capNhatDongTrangThai()
 
-  $("tt-toc-do").textContent = replay
-    ? "phát lại từ fixture đã ghi sẵn"
-    : "gọi Neo4j / Qdrant / LLM thật";
-
-  $("canh-bao-fixture").classList.toggle("hidden", !replay);
-  if (replay) {
-    $("canh-bao-fixture").innerHTML =
-      "Đang chạy <b>PHÁT LẠI</b> từ fixture đã ghi sẵn — không gọi Neo4j/Qdrant/LLM. " +
-      "Mốc thời gian là thời gian thật của lượt chạy đã ghi, được tua nhanh.";
+  // Dải này là tín hiệu "đang phát lại" DUY NHẤT nhìn thấy được mà không phải
+  // mở bảng thiết lập (badge đã chuyển vào trong đó) → không được bỏ.
+  // Dải DEV — luôn hiện khi server chạy DevAdapter, ở bất kỳ mode nào.
+  const dev = !!m.devmode;
+  $("canh-bao-dev").classList.toggle("hidden", !dev);
+  if (dev) {
+    $("canh-bao-dev").innerHTML =
+      "⚠ CHẾ ĐỘ DEV — giao diện đang giả lập <b>TRỰC TIẾP</b> bằng fixture đã ghi sẵn. " +
+      "KHÔNG gọi Neo4j/Qdrant/LLM, số liệu trên màn hình KHÔNG phải một lượt chạy thật. " +
+      "Tắt bằng cách bỏ <code>--devmode</code> / <code>DEMO_DEVMODE</code>.";
   }
+
+  CANH_BAO_TAM = false;
+  $("canh-bao-fixture").classList.toggle("hidden", !replay);
+  veDaiCanhBaoFixture();
   if (m.loi_doi_mode) {
     $("bang-loi").classList.remove("hidden");
     $("bang-loi").innerHTML = `<b>⚠️ ${esc(m.loi_doi_mode)}</b>`;
@@ -1133,12 +1208,61 @@ function datTocDo(v) {
   TOC_DO = v == null ? null : Number(v);
   document.querySelectorAll(".nut-toc-do").forEach(b =>
     b.setAttribute("aria-pressed", String(Number(b.dataset.speed) === TOC_DO)));
+  capNhatDongTrangThai();
 }
+
+/** Dòng chữ cạnh badge trong bảng thiết lập. */
+function capNhatDongTrangThai() {
+  const el = $("tt-toc-do");
+  if (el) {
+    if (TRANG_THAI.mode === "replay") {
+      el.textContent = (TOC_DO ? `tua ×${TOC_DO} · ` : "") + "từ fixture đã ghi sẵn";
+    } else if (TRANG_THAI.mode) {
+      el.textContent = "gọi Neo4j / Qdrant / LLM thật";
+    }
+  }
+  veDaiCanhBaoFixture();      // dải cảnh báo cũng in tốc độ → đổi theo
+}
+
+/** Dải vàng dưới header — tín hiệu "đang PHÁT LẠI" DUY NHẤT thấy được mà không
+ *  phải mở bảng thiết lập, vì badge đã chuyển vào trong đó. Vì vậy nó phải mang
+ *  đủ thông tin: đang phát lại, không gọi DB/LLM, và đang tua bao nhiêu. */
+function veDaiCanhBaoFixture() {
+  const el = $("canh-bao-fixture");
+  if (!el || TRANG_THAI.mode !== "replay" || el.classList.contains("hidden")) return;
+  // KHÔNG đè lên cảnh báo "FIXTURE TẠM" — đó là cảnh báo dữ liệu BỊA, mất nó
+  // nguy hiểm hơn hẳn việc thiếu hệ số tua.
+  if (CANH_BAO_TAM) return;
+  el.innerHTML =
+    "Đang chạy <b>PHÁT LẠI</b> từ fixture đã ghi sẵn — không gọi Neo4j/Qdrant/LLM. " +
+    "Mốc thời gian là thời gian thật của lượt chạy đã ghi, được tua nhanh"
+    + (TOC_DO ? ` <b>×${TOC_DO}</b>.` : ".");
+}
+
+// ---------------------------------------------------------------- bảng thiết lập
+function moSetting(mo) {
+  const bang = $("bang-setting"), nut = $("nut-setting");
+  if (!bang || !nut) return;
+  const dang_mo = mo === undefined ? bang.classList.contains("hidden") : mo;
+  bang.classList.toggle("hidden", !dang_mo);
+  nut.setAttribute("aria-expanded", String(dang_mo));
+}
+
+$("nut-setting").onclick = (e) => { e.stopPropagation(); moSetting(); };
+$("nut-dong-setting").onclick = () => moSetting(false);
+// Bấm ra ngoài hoặc Esc thì đóng — bảng che mất nội dung bên dưới.
+document.addEventListener("click", (e) => {
+  if (!$("bang-setting").classList.contains("hidden")
+      && !e.target.closest("#boc-setting")) moSetting(false);
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") moSetting(false);
+});
 
 function _matKetNoi(msg) {
   $("badge-mode").textContent = "MẤT KẾT NỐI";
   $("badge-mode").className =
-    "text-xs font-bold px-3 py-1 rounded-full bg-deep-red text-white ring-2 ring-white/80";
+    "text-xs font-bold px-3 py-1 rounded-full bg-deep-red text-white";
   $("tt-toc-do").textContent = msg;
 }
 

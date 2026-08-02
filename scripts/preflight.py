@@ -158,6 +158,16 @@ def kiem_env(kq: KetQua) -> str:
         else:
             kq.canh_bao(f"  {ten}", f"chưa đặt — {mo_ta}", "")
 
+    # Dev mode bỏ quên = trang hiện "TRỰC TIẾP" trong khi dữ liệu là fixture.
+    # Đây là mục BẮT BUỘC hỏng: nó phá đúng thứ buổi bảo vệ cần chứng minh.
+    if (os.getenv("DEMO_DEVMODE") or "").strip().lower() in {"1", "true", "yes"}:
+        kq.hong("  DEMO_DEVMODE", "ĐANG BẬT — `live` sẽ bị GIẢ LẬP bằng fixture, "
+                                  "không gọi Neo4j/Qdrant/LLM",
+                "Bỏ DEMO_DEVMODE khỏi .env (và đừng chạy `python -m ui.run --devmode`). "
+                "Cờ này chỉ để dựng giao diện ở máy không có DB.")
+    else:
+        kq.dat("  DEMO_DEVMODE", "tắt (đúng cho buổi bảo vệ)")
+
     # LLM: chỉ bắt buộc đúng bộ khóa mà mode đang chọn cần tới.
     llm_mode = (os.getenv("LLM_MODE") or "claude").strip().lower()
     kq.dat("  LLM_MODE", f"{llm_mode} (cờ --llm-mode lúc chạy sẽ đè giá trị này)")
@@ -414,12 +424,14 @@ def kiem_package(kq: KetQua, nhanh: bool) -> None:
 # ---------------------------------------------------------------------------
 
 def kiem_fixture(kq: KetQua) -> None:
-    tieu_de("6. Fixture (lưới an toàn khi live hỏng giữa buổi)")
+    tieu_de("6. Fixture (TÙY CHỌN — dự phòng phụ)")
 
+    # Dự phòng chính lúc bảo vệ là BẢN GHI MÀN HÌNH một lượt `live` thật
+    # (ui/docs/LIVE_GUIDE.md mục 6.1). `replay` chỉ là đường phụ, nên thiếu
+    # fixture KHÔNG chặn — chỉ nhắc.
     thu_muc = GOC / "ui" / "fixtures"
     if not thu_muc.is_dir():
-        kq.hong("ui/fixtures/", "không có thư mục",
-                "Chạy `python -m ui.record data/evaluation/demo_questions.txt`.")
+        kq.dat("ui/fixtures/", "không có thư mục — bỏ qua (replay là tùy chọn)")
         return
 
     try:
@@ -431,9 +443,8 @@ def kiem_fixture(kq: KetQua) -> None:
     adapter = ReplayAdapter(fixtures_dir=thu_muc)
     ds = adapter.thong_tin_fixtures()
     if not ds:
-        kq.hong("ui/fixtures/", "0 fixture hợp lệ",
-                "Chạy `python -m ui.record data/evaluation/demo_questions.txt` "
-                "với ĐÚNG bộ cờ sẽ dùng lúc demo.")
+        kq.dat("ui/fixtures/", "0 fixture — bỏ qua (replay là tùy chọn; dự phòng "
+                               "chính là bản ghi màn hình)")
         return
 
     tam = [f for f in ds if f.get("tam")]
@@ -444,8 +455,9 @@ def kiem_fixture(kq: KetQua) -> None:
     if tam:
         kq.canh_bao(
             "Fixture viết tay tạm", f"{len(tam)}/{len(ds)} chưa phải lượt chạy thật",
-            "Ghi đè bằng lượt chạy thật: "
-            "`python -m ui.record \"<câu hỏi>\" --overwrite`.")
+            "Nó hiện thành CHIP GỢI Ý trông như thật trên UI. Ghi đè bằng lượt chạy "
+            "thật (`python -m ui.record \"<câu hỏi>\" --overwrite`), hoặc xóa hẳn nếu "
+            "không dùng replay (`git rm ui/fixtures/<tệp>.json`).")
 
     # Câu trong demo_questions.txt mà chưa có fixture → lúc fallback sẽ trắng tay.
     tep_cau = GOC / "data" / "evaluation" / "demo_questions.txt"
@@ -455,8 +467,8 @@ def kiem_fixture(kq: KetQua) -> None:
         if thieu:
             kq.canh_bao(
                 "Câu chưa có fixture", f"{len(thieu)} câu trong demo_questions.txt",
-                "Nếu live hỏng giữa buổi thì những câu này KHÔNG fallback được. "
-                f"Chạy `python -m ui.record {tep_cau.as_posix()}`.")
+                "Chỉ quan trọng nếu bạn dùng replay làm dự phòng phụ. "
+                f"Muốn phủ thì chạy `python -m ui.record {tep_cau.as_posix()}`.")
             for q in thieu:
                 print(f"     · {q[:66]}")
         else:
@@ -498,9 +510,9 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(f"{DAT} Không có mục bắt buộc nào hỏng — chạy `live` được.")
         print("\nBước tiếp theo:")
-        print("  1. python -m ui.record data/evaluation/demo_questions.txt "
-              "[--jurisdiction ...]   (ghi lưới an toàn)")
-        print("  2. DEMO_MODE=live uvicorn ui.server:app --port 8000")
+        print("  1. DEMO_MODE=live uvicorn ui.server:app --port 8000")
+        print("  2. Quay sẵn bản ghi màn hình một lượt chạy thật cho từng câu sẽ "
+              "trình bày — đây là dự phòng chính (LIVE_GUIDE mục 6.1).")
 
     if kq.so_canh_bao:
         print(f"\n{CANH_BAO}{kq.so_canh_bao} cảnh báo (không chặn, nhưng nên xử lý "

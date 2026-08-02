@@ -13,7 +13,19 @@ uvicorn ui.server:app --port 8000
 
 # Chạy thật (chỉ ở máy có DB + credentials)
 DEMO_MODE=live uvicorn ui.server:app --port 8000
+
+# DEV: xem giao diện chế độ `live` trên máy KHÔNG có DB (dữ liệu vẫn là fixture)
+python -m ui.run --port 8000 --devmode
 ```
+
+> `uvicorn ui.server:app --devmode` **không chạy được** — `uvicorn` chỉ nhận cờ của chính nó và sẽ
+> báo `No such option: --devmode`. Dùng launcher `python -m ui.run` (nó bọc `uvicorn.run()`), hoặc
+> đặt thẳng biến: `DEMO_DEVMODE=1 uvicorn ui.server:app --port 8000`.
+
+**Dev mode làm gì:** `DevAdapter` khai `mode = "live"` để trang đi đúng các nhánh giao diện của
+`live` (badge `TRỰC TIẾP`, ẩn nhóm tốc độ, ẩn dải cảnh báo fixture, đổi mode qua lại được), nhưng
+dữ liệu vẫn phát lại từ `ui/fixtures/`. Vì nó nói dối về `mode`, trang **luôn hiện một dải đỏ**
+"CHẾ ĐỘ DEV" — đừng bỏ dải đó đi. `preflight.py` báo lỗi chặn nếu `DEMO_DEVMODE` còn bật.
 
 Mở http://127.0.0.1:8000 → bấm một chip gợi ý (hoặc gõ câu hỏi) → **Hỏi**.
 
@@ -22,9 +34,15 @@ Mở http://127.0.0.1:8000 → bấm một chip gợi ý (hoặc gõ câu hỏi)
 | `DEMO_MODE` | `replay` | Chế độ lúc khởi động: `replay` \| `live` |
 | `REPLAY_SPEED` | `4.0` | Hệ số tua nhanh mặc định (đổi được trên UI) |
 
-**Không cần restart để đổi chế độ.** Thanh trạng thái có nút `TRỰC TIẾP` / `PHÁT LẠI`
-và nút tốc độ `×1 ×2 ×4 ×8`. Nếu `live` dựng hỏng, server **giữ nguyên adapter đang chạy**
-và trả lỗi ra bảng lỗi — bấm nhầm giữa buổi bảo vệ không làm mất demo.
+**Mọi thiết lập nằm ở bánh răng ⚙ góc phải header** — chế độ chạy (`TRỰC TIẾP` / `PHÁT LẠI`),
+tốc độ phát lại (`×1 ×2 ×4 ×8`), bảng màu (A/B), cùng badge chế độ đang chạy. Thanh trạng
+thái tầng hai đã bỏ.
+
+> Vì badge nằm trong bảng thiết lập, **dải cảnh báo vàng dưới header là tín hiệu "đang phát
+> lại" duy nhất luôn nhìn thấy**. Đừng bỏ hay làm nhạt nó.
+
+**Không cần restart để đổi chế độ.** Nếu `live` dựng hỏng, server **giữ nguyên adapter đang
+chạy** và trả lỗi ra bảng lỗi — bấm nhầm giữa buổi bảo vệ không làm mất demo.
 
 ## Hai máy
 
@@ -33,7 +51,9 @@ và trả lỗi ra bảng lỗi — bấm nhầm giữa buổi bảo vệ không
 | Có | code, `data/raw/`, fixtures | Neo4j + Qdrant đã ingest, LLM credentials |
 | Chạy | `DEMO_MODE=replay` | `DEMO_MODE=live`, và `python -m ui.record` để ghi fixture |
 
-Quy trình: máy B ghi fixture → commit `ui/fixtures/*.json` → máy A pull về, trình diễn bằng replay.
+Dự phòng lúc bảo vệ là **bản ghi màn hình một lượt `live` thật** (xem `ui/docs/LIVE_GUIDE.md` mục 6.1),
+không phải `replay`. Ghi fixture nay là **tùy chọn** — chỉ làm nếu muốn thêm một đường dự phòng
+tương tác được. `replay` vẫn là cách chạy UI ở máy không có DB.
 
 ```bash
 # Ở MÁY B
@@ -136,6 +156,8 @@ mục 6 và 9. Ba cái dễ vấp nhất:
   `.buoc-xong`** → "đã xong" = *không có class nào*.
 - **Bảng màu A/B:** đổi vai trò token qua `data-theme` trên `<html>`. Cytoscape không đọc CSS var
   → mọi màu đồ thị đi qua `mauToken()` và phải `CY.style()` lại khi đổi chế độ.
+- **`.nut-mau` nằm trên nền TRẮNG** (trong bảng thiết lập), không phải trên dải chrome tối như
+  bản trước. Đừng bê lại kiểu `rgba(255,255,255,…)` cũ — trên nền trắng sẽ không đọc được.
 
 ## Trạng thái kiểm chứng
 

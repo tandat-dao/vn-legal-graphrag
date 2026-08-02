@@ -11,7 +11,7 @@
 Dựng một web UI **một process** để trình diễn hệ thống trong buổi bảo vệ khóa luận. Yêu cầu cốt lõi của người dùng:
 
 1. Showcase được **luồng xử lý từ câu hỏi ra câu trả lời** — 7 bước, hiện dần theo thời gian thực, tạo cảm giác "thinking process".
-2. Chạy được ở **hai chế độ**: `live` (có DB — **đường chính lúc bảo vệ**) và `replay` (không cần DB — **lưới an toàn** + môi trường phát triển) — cùng một codebase, đổi bằng biến môi trường **hoặc bấm nút trên UI, không cần restart** (Task 5).
+2. Chạy được ở **hai chế độ**: `live` (có DB — **đường chính lúc bảo vệ**) và `replay` (không cần DB — môi trường phát triển giao diện) — cùng một codebase, đổi bằng biến môi trường **hoặc bấm nút trên UI, không cần restart** (Task 5).
 3. Đây là **demo**, không phải sản phẩm. Không cần auth, không cần multi-user, không cần CI, không cần test coverage cao. Ưu tiên: chạy được, trông thuyết phục, không sập giữa buổi bảo vệ.
 
 ### Bối cảnh hai máy
@@ -23,8 +23,8 @@ Dựng một web UI **một process** để trình diễn hệ thống trong bu�
 
 Hệ quả:
 
-1. **`replay` là lưới an toàn, không phải đường trình diễn.** Vai trò của nó: (a) máy A phát triển UI không cần DB; (b) khi `live` hỏng giữa buổi (Neo4j rớt, LLM 429/529, mạng chết) thì bấm một nút trên thanh trạng thái là về `replay` chạy tiếp — xem Task 5. Fixture vì thế vẫn **bắt buộc phải ghi trước** và commit, dù kịch bản chính không dùng tới.
-2. **Fixture phải ghi trên chính máy B, với đúng bộ cờ sẽ dùng lúc demo.** Cờ lệch thì lúc fallback câu hỏi không khớp fixture, và cache LLM cũng không HIT.
+1. **`replay` KHÔNG còn là dự phòng bắt buộc** *(cập nhật 2026-08-02)*. Dự phòng khi `live` hỏng giữa buổi nay là **bản ghi màn hình một lượt chạy `live` thật, quay sẵn ở nhà** — nó là lượt chạy có thật nên đứng vững hơn trước hội đồng, đổi lại không tương tác được. Vai trò còn lại của `replay`: (a) phát triển giao diện ở máy không có DB; (b) dự phòng *phụ*, tương tác được, nếu có ghi fixture. Ghi fixture nay là **tùy chọn**.
+2. **Nếu có ghi fixture thì phải ghi trên chính máy B với đúng bộ cờ sẽ dùng.** Cờ lệch thì cache LLM không HIT và câu không khớp fixture. Lưu ý thêm: ba tùy chọn Địa phương/Chế độ trả lời/Verifier **không có tác dụng ở `replay`** (fixture dùng cờ lúc ghi), và khóa tra fixture chỉ là **câu hỏi** — muốn trình một tổ hợp cờ khác thì phải là một câu hỏi khác.
 3. **Máy B phải chạy `scripts/preflight.py` trước buổi bảo vệ** để biết Docker/Neo4j/Qdrant/`.env`/BGE-M3 đã sẵn sàng chưa. Quy trình dựng máy B từ đầu: `ui/docs/LIVE_GUIDE.md`.
 4. Phần lớn thứ **chưa kiểm chứng được ở máy A** đều nằm ở đường `live` (regex parse log thật, `_build_clients()`, lỗi LLM thật) — danh sách ở cuối `ui/README.md`, phải chạy ở máy B.
 

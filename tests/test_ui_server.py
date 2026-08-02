@@ -283,3 +283,96 @@ def test_loc_khong_vo_khi_record_khac_dang():
     assert loc.filter(r) is True
     r2 = logging.LogRecord("uvicorn.access", logging.INFO, "", 0, "%s", ("a",), None)
     assert loc.filter(r2) is True
+
+
+# ---------------------------------------------------------------------------
+# Dev mode — giả lập `live` bằng fixture (DEMO_DEVMODE=1)
+# ---------------------------------------------------------------------------
+
+def test_devmode_mac_dinh_TAT(monkeypatch):
+    """An toàn quan trọng nhất: không có biến môi trường thì KHÔNG bao giờ tự bật."""
+    monkeypatch.delenv("DEMO_DEVMODE", raising=False)
+    assert srv.devmode() is False
+    for gia_tri in ("", "0", "false", "no", "off", "  "):
+        monkeypatch.setenv("DEMO_DEVMODE", gia_tri)
+        assert srv.devmode() is False, gia_tri
+    for gia_tri in ("1", "true", "TRUE", "yes"):
+        monkeypatch.setenv("DEMO_DEVMODE", gia_tri)
+        assert srv.devmode() is True, gia_tri
+
+
+def test_devmode_tao_DevAdapter_khong_can_DB(monkeypatch, tmp_path):
+    """`live` trong devmode KHÔNG được đụng LiveAdapter (máy A không có DB)."""
+    import ui.adapters as adapters
+
+    def _no(*a, **k):
+        raise AssertionError("devmode vẫn gọi LiveAdapter — sai, phải bypass")
+
+    monkeypatch.setattr(adapters, "LiveAdapter", _no)
+    monkeypatch.setenv("DEMO_DEVMODE", "1")
+    ad = srv.tao_adapter("live")
+    assert ad.mode == "live"
+    assert getattr(ad, "devmode", False) is True
+
+
+def test_khong_devmode_thi_live_van_thu_LiveAdapter(monkeypatch):
+    """Tắt devmode thì hành vi cũ giữ nguyên: thử LiveAdapter, hỏng thì về replay."""
+    import ui.adapters as adapters
+    monkeypatch.delenv("DEMO_DEVMODE", raising=False)
+    da_goi = {"n": 0}
+
+    def _hong(*a, **k):
+        da_goi["n"] += 1
+        raise RuntimeError("không có DB")
+
+    monkeypatch.setattr(adapters, "LiveAdapter", _hong)
+    ad = srv.tao_adapter("live")
+    assert da_goi["n"] == 1
+    assert ad.mode == "replay"
+    assert getattr(ad, "devmode", False) is False
+
+
+def test_api_mode_bao_co_devmode(client, monkeypatch):
+    """Frontend dựa vào cờ này để hiện dải đỏ — thiếu nó là trang trông như chạy thật."""
+    assert client.get("/api/mode").json()["devmode"] is False
+
+    import ui.adapters as adapters
+    monkeypatch.setenv("DEMO_DEVMODE", "1")
+    monkeypatch.setattr(srv, "_adapter", adapters.DevAdapter(fixtures_dir=srv._adapter.fixtures_dir))
+    d = client.get("/api/mode").json()
+    assert d["mode"] == "live"
+    assert d["devmode"] is True
+    assert d["co_the_live"] is True
+
+
+def test_devmode_van_phat_du_event_nhu_live(monkeypatch, tmp_path):
+    """DevAdapter phải cho ra cùng chuỗi event như ReplayAdapter (để dựng giao diện)."""
+    import asyncio
+    import ui.adapters as adapters
+
+    (tmp_path / "c.json").write_text(json.dumps(FIXTURE, ensure_ascii=False), encoding="utf-8")
+    dev = adapters.DevAdapter(fixtures_dir=tmp_path, speed=1000)
+    rep = adapters.ReplayAdapter(fixtures_dir=tmp_path, speed=1000)
+
+    async def _gom(gen):
+        return [e async for e in gen]
+
+    ev_dev = asyncio.run(_gom(dev.ask(CAU_HOI)))
+    ev_rep = asyncio.run(_gom(rep.ask(CAU_HOI)))
+    assert [(e["step"], e["kind"]) for e in ev_dev] == [(e["step"], e["kind"]) for e in ev_rep]
+    assert dev.mode == "live" and rep.mode == "replay"
+
+
+def test_devmode_bao_loi_ro_khi_thieu_fixture(tmp_path):
+    """Câu không có fixture → thông báo phải nói rõ đang ở dev mode, không giả vờ live."""
+    import asyncio
+    import ui.adapters as adapters
+
+    dev = adapters.DevAdapter(fixtures_dir=tmp_path, speed=1000)
+
+    async def _gom(gen):
+        return [e async for e in gen]
+
+    ev = asyncio.run(_gom(dev.ask("câu chưa ghi bao giờ?")))
+    assert len(ev) == 1 and ev[0]["kind"] == "error"
+    assert "CHẾ ĐỘ DEV" in ev[0]["data"]["thong_bao"]

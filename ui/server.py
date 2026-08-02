@@ -78,10 +78,27 @@ _KHOA_ASK = threading.Lock()
 _adapter: BaseAdapter | None = None
 
 
+def devmode() -> bool:
+    """`DEMO_DEVMODE=1` → cho phép GIẢ LẬP `live` bằng fixture (không cần DB).
+
+    Chỉ để dựng giao diện ở máy A. Đọc mỗi lần gọi (không cache) để test đổi
+    biến môi trường được.
+    """
+    return (os.getenv("DEMO_DEVMODE") or "").strip().lower() in {"1", "true", "yes"}
+
+
 def tao_adapter(mode: str | None = None) -> BaseAdapter:
     """Khởi tạo adapter theo `mode` (mặc định `DEMO_MODE`); lỗi ở `live` → lùi về `replay`."""
     mode = (mode or os.getenv("DEMO_MODE") or "replay").strip().lower()
     if mode == "live":
+        if devmode():
+            # Dev mode: KHÔNG thử LiveAdapter thật — mục đích là xem giao diện
+            # `live` trên máy không có DB, nên phải đoán trước được kết quả.
+            from ui.adapters import DevAdapter
+            logger.warning(
+                "DEMO_DEVMODE bật — dùng DevAdapter: giao diện chạy như `live` "
+                "nhưng DỮ LIỆU LÀ FIXTURE. Không dùng khi bảo vệ.")
+            return DevAdapter()
         from ui.adapters import LiveAdapter
         try:
             return LiveAdapter()
@@ -175,6 +192,8 @@ def _trang_thai(adapter: BaseAdapter) -> dict:
         "loi_doi_mode": _LOI_DOI_MODE,
         # `live` sẵn sàng để bấm chuyển hay không (khỏi hiện nút chết).
         "co_the_live": _co_the_live(),
+        # Frontend PHẢI hiện dải đỏ khi cờ này bật — xem DevAdapter.
+        "devmode": bool(getattr(adapter, "devmode", False)),
         "fixtures": (adapter.thong_tin_fixtures()
                      if hasattr(adapter, "thong_tin_fixtures") else []),
     }
@@ -182,6 +201,8 @@ def _trang_thai(adapter: BaseAdapter) -> dict:
 
 def _co_the_live() -> bool:
     """Có đủ cấu hình để thử `live` không — KHÔNG kết nối, chỉ xem .env."""
+    if devmode():
+        return True     # dev mode giả lập được, không cần .env
     return bool(os.getenv("NEO4J_URI") and os.getenv("NEO4J_PASSWORD"))
 
 

@@ -271,6 +271,46 @@ def _doc_speed() -> float:
 
 
 # ---------------------------------------------------------------------------
+# DevAdapter — giả lập `live` để xem giao diện ở máy KHÔNG có DB
+# ---------------------------------------------------------------------------
+
+class DevAdapter(ReplayAdapter):
+    """Khai `mode = "live"` nhưng thực chất phát lại fixture — CHỈ để dựng giao diện.
+
+    Dùng khi cần xem trang trông thế nào ở chế độ `live` trên máy không có
+    Neo4j/Qdrant/LLM (máy A). Nó đi đúng các nhánh giao diện của `live`: badge
+    TRỰC TIẾP, ẩn nhóm tốc độ, `POST /api/mode` đổi qua lại được.
+
+    **KHÔNG PHẢI chạy thật.** Dữ liệu vẫn là fixture. Vì adapter này nói dối về
+    `mode`, nó tự khai `devmode = True` để `/api/mode` báo lên frontend, và
+    frontend BẮT BUỘC hiện một dải đỏ thường trực. Không có dải đó thì đây đúng
+    là thứ spec mục 1.3 cấm: trình bày dữ liệu giả như thể hệ đang chạy thật.
+
+    Chỉ bật được qua `DEMO_DEVMODE=1` (hoặc `python -m ui.run --devmode`) —
+    không bao giờ tự bật.
+    """
+
+    mode = "live"
+    devmode = True
+
+    def cau_hoi_co_san(self) -> list[str]:
+        return super().cau_hoi_co_san()
+
+    async def ask(self, question: str, **params) -> AsyncIterator[TraceEvent]:
+        fixture = self.tim_fixture(question)
+        if fixture is None:
+            yield su_kien_loi(
+                "CHẾ ĐỘ DEV: chưa có fixture cho câu này. Dev mode chỉ giả lập "
+                "giao diện `live` bằng fixture đã ghi, không gọi pipeline thật. "
+                "Chọn một câu trong danh sách gợi ý, hoặc chạy `live` thật ở máy B.",
+                data={"cau_hoi_co_san": self.cau_hoi_co_san(), "loai": "khong-co-fixture"},
+            )
+            return
+        async for ev in super().ask(question, **params):
+            yield ev
+
+
+# ---------------------------------------------------------------------------
 # LiveAdapter — Task 4
 # ---------------------------------------------------------------------------
 
