@@ -1,4 +1,4 @@
-"""Unit test cho `ui/trace.py` — Task 2 của `docs/UI_DEMO_SPEC.md`.
+"""Unit test cho `ui/trace.py` — Task 2 của `ui/docs/UI_DEMO_SPEC.md`.
 
 Mọi chuỗi log / context trong file này viết tay THEO ĐÚNG format sinh ra bởi
 `src/` (spec mục 5.1 và 5.2). Không cần Neo4j, Qdrant hay LLM.

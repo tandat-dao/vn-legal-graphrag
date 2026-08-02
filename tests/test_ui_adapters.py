@@ -1,4 +1,4 @@
-"""Unit test cho `ui/adapters.py` — Task 3 của `docs/UI_DEMO_SPEC.md`.
+"""Unit test cho `ui/adapters.py` — Task 3 của `ui/docs/UI_DEMO_SPEC.md`.
 
 Chạy ở máy A: không cần Neo4j/Qdrant/LLM.
 """

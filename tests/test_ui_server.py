@@ -1,10 +1,11 @@
-"""Unit test cho `ui/server.py` — Task 3 của `docs/UI_DEMO_SPEC.md`.
+"""Unit test cho `ui/server.py` — Task 3 của `ui/docs/UI_DEMO_SPEC.md`.
 
 Trọng tâm: quy tắc đồng thời ở mục 2.3 — `/api/ask` phải serialize, request thứ
 hai bị TỪ CHỐI ngay (không xếp hàng), và lock phải được nhả sau đó.
 Chạy ở máy A: mode `replay`, không cần Neo4j/Qdrant/LLM.
 """
 import json
+import logging
 import threading
 import time
 
@@ -138,3 +139,147 @@ def test_lock_duoc_nha_ca_khi_adapter_nem_loi(client, monkeypatch):
     assert events[0]["kind"] == "error"
     assert "hỏng giữa chừng" in events[0]["data"]["thong_bao"]
     assert srv._KHOA_ASK.locked() is False
+
+
+# ---------------------------------------------------------------------------
+# Task 5 — đổi live ⇄ replay không cần restart (POST /api/mode)
+# ---------------------------------------------------------------------------
+
+def test_doi_mode_tu_choi_gia_tri_la(client):
+    r = client.post("/api/mode", json={"mode": "xyz"})
+    assert r.status_code == 400
+    assert "live" in r.json()["detail"]
+
+
+def test_doi_mode_ve_chinh_no_la_no_op(client):
+    r = client.post("/api/mode", json={"mode": "replay"})
+    assert r.status_code == 200
+    d = r.json()
+    assert d["mode"] == "replay"
+    # Trạng thái dựng SAU khi nhả khóa — nếu không UI hiện "đang đổi…" mãi.
+    assert d["dang_doi_mode"] is False
+
+
+def test_doi_mode_sang_live_that_bai_van_giu_adapter_cu(client, monkeypatch):
+    """Dựng LiveAdapter hỏng → 503, nhưng adapter đang chạy KHÔNG được mất."""
+    import ui.adapters as adapters
+
+    def _hong(*a, **k):
+        raise RuntimeError("Neo4j chưa chạy")
+
+    monkeypatch.setattr(adapters, "LiveAdapter", _hong)
+    truoc = srv._adapter
+
+    r = client.post("/api/mode", json={"mode": "live"})
+    assert r.status_code == 503
+    assert "PHÁT LẠI" in r.json()["detail"]
+    assert srv._adapter is truoc, "mất adapter cũ khi đổi hụt"
+    assert client.get("/api/mode").json()["mode"] == "replay"
+    # Lý do hỏng được giữ lại để UI hiện ra
+    assert srv._LOI_DOI_MODE and "docker compose ps" in srv._LOI_DOI_MODE
+
+
+def test_doi_mode_sang_live_thanh_cong(client, monkeypatch):
+    """Dựng được LiveAdapter → adapter cũ bị `dong()`, mode đổi sang live."""
+    import ui.adapters as adapters
+
+    class _LiveGia(adapters.BaseAdapter):
+        mode = "live"
+
+        def cau_hoi_co_san(self):
+            return ["câu live"]
+
+    monkeypatch.setattr(adapters, "LiveAdapter", _LiveGia)
+    cu = srv._adapter
+    da_dong = {"n": 0}
+    monkeypatch.setattr(cu, "dong", lambda: da_dong.__setitem__("n", da_dong["n"] + 1))
+
+    d = client.post("/api/mode", json={"mode": "live"}).json()
+    assert d["mode"] == "live"
+    assert d["questions"] == ["câu live"]
+    assert d["replay_speed"] is None
+    assert da_dong["n"] == 1, "adapter cũ không được đóng → rò Neo4j driver"
+
+    # và quay lại replay được
+    assert client.post("/api/mode", json={"mode": "replay"}).json()["mode"] == "replay"
+
+
+def test_doi_mode_bi_chan_khi_dang_chay(client):
+    """Đang phát một câu thì KHÔNG được thay adapter (cắt luồng SSE đang chạy)."""
+    ket = {}
+
+    def _hoi():
+        ket["r"] = client.post("/api/ask", json={"question": CAU_HOI})
+
+    t = threading.Thread(target=_hoi)
+    t.start()
+    try:
+        for _ in range(200):            # đợi lock được giữ
+            if srv._KHOA_ASK.locked():
+                break
+            time.sleep(0.01)
+        assert srv._KHOA_ASK.locked()
+        r = client.post("/api/mode", json={"mode": "live"})
+        assert r.status_code == 409
+        assert "đợi câu đó chạy xong" in r.json()["detail"]
+    finally:
+        t.join(timeout=15)
+
+
+def test_tham_so_speed_di_vao_adapter(client, monkeypatch):
+    """Nút chỉnh tốc độ: `speed` trong body /api/ask phải tới được adapter."""
+    nhan = {}
+    goc = srv._adapter.ask
+
+    async def _bat(question, **params):
+        nhan.update(params)
+        async for ev in goc(question, **params):
+            yield ev
+
+    monkeypatch.setattr(srv._adapter, "ask", _bat)
+    client.post("/api/ask", json={"question": CAU_HOI, "speed": 8})
+    assert nhan["speed"] == 8
+
+
+# ---------------------------------------------------------------------------
+# Lọc log truy cập tài nguyên tĩnh (Task 5)
+# ---------------------------------------------------------------------------
+
+def _ban_ghi(duong_dan: str, ma: int) -> logging.LogRecord:
+    """Giả đúng dạng record của `uvicorn.access`: args = (host, method, path, http, code)."""
+    return logging.LogRecord(
+        name="uvicorn.access", level=logging.INFO, pathname="", lineno=0,
+        msg='%s - "%s %s HTTP/%s" %d', args=("127.0.0.1:1", "GET", duong_dan, "1.1", ma),
+        exc_info=None,
+    )
+
+
+def test_loc_bo_log_vendor_thanh_cong():
+    loc = srv._LocTaiNguyenTinh()
+    for p in ("/static/vendor/fonts/be-vietnam-pro-400-vietnamese.woff2",
+              "/static/vendor/fonts/be-vietnam-pro.css",
+              "/static/vendor/tailwind.min.js"):
+        assert loc.filter(_ban_ghi(p, 200)) is False, p
+    assert loc.filter(_ban_ghi("/static/vendor/tailwind.min.js", 304)) is False
+
+
+def test_loc_GIU_log_vendor_loi():
+    """404 vendor = quên copy thư mục vendor → phải nhìn thấy."""
+    loc = srv._LocTaiNguyenTinh()
+    assert loc.filter(_ban_ghi("/static/vendor/tailwind.min.js", 404)) is True
+    assert loc.filter(_ban_ghi("/static/vendor/fonts/x.woff2", 500)) is True
+
+
+def test_loc_khong_dung_toi_log_khac():
+    loc = srv._LocTaiNguyenTinh()
+    for p in ("/", "/api/mode", "/api/ask", "/api/norm-graph", "/static/index.html"):
+        assert loc.filter(_ban_ghi(p, 200)) is True, p
+
+
+def test_loc_khong_vo_khi_record_khac_dang():
+    """Đổi format log của uvicorn thì filter phải cho qua, không được ném."""
+    loc = srv._LocTaiNguyenTinh()
+    r = logging.LogRecord("uvicorn.access", logging.INFO, "", 0, "chuỗi thường", None, None)
+    assert loc.filter(r) is True
+    r2 = logging.LogRecord("uvicorn.access", logging.INFO, "", 0, "%s", ("a",), None)
+    assert loc.filter(r2) is True

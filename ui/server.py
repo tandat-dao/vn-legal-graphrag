@@ -1,4 +1,4 @@
-"""FastAPI server cho UI demo — Task 3 (`docs/UI_DEMO_SPEC.md`).
+"""FastAPI server cho UI demo — Task 3 (`ui/docs/UI_DEMO_SPEC.md`).
 
 Chạy:  uvicorn ui.server:app --port 8000
 Mode:  DEMO_MODE=replay (mặc định, không cần DB) | live (Task 4)
@@ -13,6 +13,7 @@ Mode:  DEMO_MODE=replay (mặc định, không cần DB) | live (Task 4)
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
@@ -38,6 +39,34 @@ logger = logging.getLogger(__name__)
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
+
+class _LocTaiNguyenTinh(logging.Filter):
+    """Bỏ log truy cập THÀNH CÔNG của `/static/vendor/…` (Task 5).
+
+    15 tệp font + Tailwind + Cytoscape sinh ra một tràng `GET
+    /static/vendor/fonts/... 200 OK` mỗi lần tải trang, đẩy hết log thật
+    (`LiveAdapter` khởi tạo, đổi mode, lỗi pipeline) ra khỏi màn hình đúng lúc
+    cần nhìn nhất.
+
+    CHỈ lọc 2xx/3xx: 404 vendor vẫn phải hiện, vì đó chính là triệu chứng
+    "quên copy thư mục vendor" — thứ làm trang trắng khi máy không có mạng.
+    """
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        args = record.args
+        if not isinstance(args, tuple) or len(args) < 5:
+            return True
+        duong_dan, ma = args[2], args[4]
+        try:
+            im_lang = (str(duong_dan).startswith("/static/vendor/")
+                       and 200 <= int(ma) < 400)
+        except (TypeError, ValueError):
+            return True
+        return not im_lang
+
+
+logging.getLogger("uvicorn.access").addFilter(_LocTaiNguyenTinh())
+
 # Lock cấp module: chỉ một câu hỏi được xử lý tại một thời điểm (mục 2.3).
 _KHOA_ASK = threading.Lock()
 
@@ -49,18 +78,49 @@ _KHOA_ASK = threading.Lock()
 _adapter: BaseAdapter | None = None
 
 
-def tao_adapter() -> BaseAdapter:
-    """Khởi tạo adapter theo `DEMO_MODE`; lỗi ở `live` thì lùi về `replay`."""
-    mode = (os.getenv("DEMO_MODE") or "replay").strip().lower()
+def tao_adapter(mode: str | None = None) -> BaseAdapter:
+    """Khởi tạo adapter theo `mode` (mặc định `DEMO_MODE`); lỗi ở `live` → lùi về `replay`."""
+    mode = (mode or os.getenv("DEMO_MODE") or "replay").strip().lower()
     if mode == "live":
         from ui.adapters import LiveAdapter
         try:
             return LiveAdapter()
-        except NotImplementedError as e:
-            logger.warning(f"{e} — lùi về replay.")
-        except Exception as e:
+        except Exception as e:                      # noqa: BLE001 — demo không được sập
             logger.error(f"Không khởi tạo được LiveAdapter ({e}) — lùi về replay.")
     return ReplayAdapter()
+
+
+# Task 5 — đổi mode lúc đang chạy, KHÔNG restart server.
+# `live` cần dựng client + BGE-M3 (hàng chục giây) nên phải chạy ở thread khác,
+# nếu không event loop đứng và trình duyệt tưởng server treo.
+_KHOA_DOI_MODE = threading.Lock()
+_LOI_DOI_MODE: str | None = None    # lý do lần đổi gần nhất thất bại (cho UI)
+
+
+def _doi_adapter(mode_moi: str) -> BaseAdapter:
+    """Dựng adapter mới rồi thay vào chỗ cũ; adapter cũ được `dong()`.
+
+    Chỉ đổi khi adapter mới dựng THÀNH CÔNG — hỏng thì giữ nguyên cái đang chạy,
+    vì giữa buổi bảo vệ mất luôn adapter cũ còn tệ hơn không đổi được.
+    """
+    global _adapter, _LOI_DOI_MODE
+    moi = tao_adapter(mode_moi)
+    if mode_moi == "live" and moi.mode != "live":
+        _LOI_DOI_MODE = (
+            "Không dựng được LiveAdapter (Neo4j/Qdrant/LLM chưa sẵn sàng) — "
+            "vẫn đang chạy PHÁT LẠI. Kiểm tra `docker compose ps` và .env."
+        )
+        moi.dong()
+        raise RuntimeError(_LOI_DOI_MODE)
+    cu, _adapter = _adapter, moi
+    _LOI_DOI_MODE = None
+    if cu is not None and cu is not moi:
+        try:
+            cu.dong()
+        except Exception as e:                      # noqa: BLE001
+            logger.warning(f"Lỗi khi đóng adapter cũ: {e}")
+    logger.info(f"Đã đổi mode sang {moi.mode}.")
+    return moi
 
 
 @asynccontextmanager
@@ -105,17 +165,69 @@ def trang_chu() -> FileResponse:
     return FileResponse(index)
 
 
-@app.get("/api/mode")
-def api_mode() -> dict:
-    adapter = lay_adapter()
+def _trang_thai(adapter: BaseAdapter) -> dict:
     return {
         "mode": adapter.mode,
         "questions": adapter.cau_hoi_co_san(),
         "replay_speed": getattr(adapter, "speed", None),
         "dang_ban": _KHOA_ASK.locked(),
+        "dang_doi_mode": _KHOA_DOI_MODE.locked(),
+        "loi_doi_mode": _LOI_DOI_MODE,
+        # `live` sẵn sàng để bấm chuyển hay không (khỏi hiện nút chết).
+        "co_the_live": _co_the_live(),
         "fixtures": (adapter.thong_tin_fixtures()
                      if hasattr(adapter, "thong_tin_fixtures") else []),
     }
+
+
+def _co_the_live() -> bool:
+    """Có đủ cấu hình để thử `live` không — KHÔNG kết nối, chỉ xem .env."""
+    return bool(os.getenv("NEO4J_URI") and os.getenv("NEO4J_PASSWORD"))
+
+
+@app.get("/api/mode")
+def api_mode() -> dict:
+    return _trang_thai(lay_adapter())
+
+
+class DoiModeRequest(BaseModel):
+    mode: str                          # "live" | "replay"
+
+
+@app.post("/api/mode")
+async def api_doi_mode(payload: DoiModeRequest) -> dict:
+    """Đổi live ⇄ replay KHÔNG cần restart (Task 5).
+
+    Chặn khi đang có câu chạy dở: thay adapter giữa chừng sẽ cắt luồng SSE đang
+    phát và làm trace dở dang trên màn hình.
+    """
+    mode_moi = (payload.mode or "").strip().lower()
+    if mode_moi not in {"live", "replay"}:
+        raise HTTPException(status_code=400,
+                            detail="mode chỉ nhận 'live' hoặc 'replay'.")
+
+    if _KHOA_ASK.locked():
+        raise HTTPException(
+            status_code=409,
+            detail="Đang xử lý một câu hỏi — đợi câu đó chạy xong rồi hãy đổi chế độ.")
+    if not _KHOA_DOI_MODE.acquire(blocking=False):
+        raise HTTPException(status_code=409, detail="Đang đổi chế độ, đợi một chút.")
+    try:
+        hien_tai = lay_adapter()
+        if hien_tai.mode == mode_moi:
+            moi = hien_tai
+        else:
+            # `live` dựng client + BGE-M3 rất lâu → chạy ở thread khác cho khỏi
+            # chặn event loop (các request khác vẫn trả lời được trong lúc chờ).
+            try:
+                moi = await asyncio.to_thread(_doi_adapter, mode_moi)
+            except Exception as e:                  # noqa: BLE001
+                raise HTTPException(status_code=503, detail=str(e))
+    finally:
+        _KHOA_DOI_MODE.release()
+    # Dựng trạng thái SAU khi nhả khóa, nếu không `dang_doi_mode` luôn trả về
+    # true và UI hiện "đang đổi…" ngay sau lượt đổi vừa thành công.
+    return _trang_thai(moi)
 
 
 class HoiRequest(BaseModel):

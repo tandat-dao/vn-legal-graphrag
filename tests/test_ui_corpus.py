@@ -1,4 +1,4 @@
-"""Unit test cho `ui/corpus.py` — Task 1 của `docs/UI_DEMO_SPEC.md`.
+"""Unit test cho `ui/corpus.py` — Task 1 của `ui/docs/UI_DEMO_SPEC.md`.
 
 Chạy được ở máy A: chỉ đọc `data/raw/*.md`, không cần Neo4j/Qdrant/LLM.
 """

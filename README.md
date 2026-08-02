@@ -326,7 +326,7 @@ Kết quả đánh giá của hai bản là **như nhau** vì mọi số liệu 
 | [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md) | Kiến trúc hệ thống, lược đồ ontology, hạn chế đã biết |
 | [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) | Nhật ký thay đổi và trạng thái công việc |
 | [`docs/FINETUNE_EXECUTION_PLAN.md`](docs/FINETUNE_EXECUTION_PLAN.md) | Kế hoạch nhánh tinh chỉnh (FT-00 → FT-07) |
-| [`docs/UI_DEMO_SPEC.md`](docs/UI_DEMO_SPEC.md) | Đặc tả giao diện demo |
+| [`ui/docs/UI_DEMO_SPEC.md`](docs/UI_DEMO_SPEC.md) | Đặc tả giao diện demo |
 | [`CLAUDE.md`](CLAUDE.md) | Quy ước mã nguồn, lược đồ tra nhanh, nhật ký quyết định D-01…D-26 |
 
 **Phân tích và kết quả phủ định** *(các hướng đã thử và bị loại — số liệu trên bộ 26 câu đời đầu)*

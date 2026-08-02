@@ -4,85 +4,385 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GraphRAG Pháp luật Việt Nam — Demo pipeline</title>
-<!-- CDN: Task 5 sẽ tải về ui/static/vendor/ và đổi sang tham chiếu local
-     (máy trình diễn có thể không có internet lúc bảo vệ). -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<!-- Task 5 — TẤT CẢ tài nguyên đã vendor về ui/static/vendor/, KHÔNG còn CDN.
+     Máy trình diễn có thể không có internet lúc bảo vệ; một thẻ script trỏ ra
+     ngoài là đủ làm trang trắng. Đường dẫn phải là /static/... (mount trong
+     server.py) — đường dẫn tương đối "vendor/..." sẽ hỏng vì "/" do FileResponse
+     phục vụ chứ không nằm dưới mount point.
+     Nguồn gốc + cách tải lại: xem ui/README.md. -->
+<link rel="stylesheet" href="/static/vendor/fonts/be-vietnam-pro.css">
+<script src="/static/vendor/tailwind.min.js"></script>
+<script src="/static/vendor/cytoscape.min.js"></script>
+<script>
+// UI_STYLE_SPEC mục 8 — cấu hình phải nằm TRƯỚC khi dùng class.
+tailwind.config = {
+  theme: {
+    screens: { sm: '768px', md: '992px', lg: '1200px', xl: '1280px' },
+    extend: {
+      colors: {
+        terracotta: { DEFAULT: '#CE7A58', dk: '#B8694A', lt: '#F0EBE6', faint: '#FAF5F2' },
+        navy:       { DEFAULT: '#1B2B4B', mid: '#2D4A7A', light: '#E8EDF5', faint: '#F0F3F8' },
+        warm:       { white: '#F8F6F3' },
+        ink:        { 50: '#F9F9F8', 100: '#F0EFED', 200: '#E2E0DC', 300: '#C8C5BF',
+                      500: '#8A8680', 700: '#4A4844', 900: '#1C1B19' },
+        cta:        { DEFAULT: '#FFC251', hover: '#F0B340' },
+        deep:       { red: '#903938' },
+        ok:         { DEFAULT: '#28A745' },
+        link:       { DEFAULT: '#2A6EBB' },
+      },
+      fontFamily: { sans: ['Be Vietnam Pro', 'Segoe UI', 'system-ui', 'sans-serif'] },
+      borderRadius: { DEFAULT: '4px', md: '4px', lg: '6px', xl: '12px' },
+      maxWidth: { container: '1170px' },
+    },
+  },
+}
+</script>
 <style>
-  .buoc-cho    { opacity: .45; }
-  .buoc-chay   { box-shadow: 0 0 0 2px #6366f1; }
-  .buoc-xong   { opacity: 1; }
-  .cit-chip    { cursor: pointer; }
-  #do-thi      { height: 320px; background: #f8fafc; border-radius: .5rem; }
+  /* ---------- Token màu (UI_STYLE_SPEC mục 1.1) ---------- */
+  :root {
+    --navy:             #1B2B4B;
+    --navy-mid:         #2D4A7A;
+    --navy-light:       #E8EDF5;
+    --navy-faint:       #F0F3F8;
+
+    --terracotta:       #CE7A58;
+    --terracotta-dk:    #B8694A;
+    --terracotta-lt:    #F0EBE6;
+    --terracotta-faint: #FAF5F2;
+
+    --white:            #FFFFFF;
+    --warm-white:       #F8F6F3;
+    --gray-50:          #F9F9F8;
+    --gray-100:         #F0EFED;
+    --gray-200:         #E2E0DC;
+    --gray-300:         #C8C5BF;
+    --gray-500:         #8A8680;
+    --gray-700:         #4A4844;
+    --gray-900:         #1C1B19;
+
+    --bg-page:        var(--warm-white);
+    --bg-card:        var(--white);
+    --bg-section:     var(--terracotta-faint);
+    --border-card:    var(--gray-200);
+    --border-accent:  var(--terracotta);
+    --text-primary:   var(--gray-900);
+    --text-secondary: var(--gray-700);
+    --text-muted:     var(--gray-500);
+
+    /* ====== VAI TRÒ (UI_STYLE_SPEC mục 1.3) — CHẾ ĐỘ A: Terracotta chrome ======
+       Token ở trên KHÔNG đổi giữa hai chế độ; chỉ vai trò dưới đây đảo.
+       Mọi chỗ dùng màu chrome/accent phải đi qua 5 biến này, không viết
+       hai bộ class Tailwind song song. */
+    --chrome-bg:     var(--terracotta);      /* header, footer */
+    --chrome-bg-2:   var(--terracotta-dk);   /* thanh trạng thái */
+    --chrome-text:   var(--white);
+    --accent:        var(--terracotta);      /* bước đang chạy, vạch nhãn, viền hover */
+    --accent-strong: var(--terracotta-dk);
+
+    /* Đồ thị bước 4 — Cytoscape KHÔNG đọc được CSS var, phải lấy qua
+       `mauToken()` rồi nạp lại bằng `CY.style()` mỗi lần đổi chế độ. */
+    --graph-bg:     var(--gray-50);
+    --node-t1:      #1B2B4B;
+    --node-t2:      #2D4A7A;
+    --node-t3:      #4A7AA8;
+    /* A: terracotta đang làm chrome → thang tier giữ nguyên họ navy, tier 4 là
+       sắc navy nhạt nhất. Đồ thị đơn sắc, không đụng màu chrome. */
+    --node-t4:      #7B9BC2;
+    --node-text:    #FFFFFF;
+    --node-t4-text: #16233D;
+    --node-seed:    #FFC251;
+    --edge:         var(--gray-300);
+    --edge-amends:  var(--terracotta);
+    --edge-text:    var(--gray-500);
+  }
+
+  /* ====== CHẾ ĐỘ B: Navy chrome — chỉ ghi đè phần vai trò ====== */
+  :root[data-theme="b"] {
+    --chrome-bg:     var(--navy);
+    --chrome-bg-2:   var(--navy-mid);
+    --chrome-text:   var(--white);
+    --accent:        var(--terracotta);      /* terracotta rảnh tay → thuần accent */
+    --accent-strong: var(--terracotta-dk);
+
+    /* B: navy đã làm chrome → terracotta được giải phóng, dùng cho tier 4
+       (văn bản địa phương) để tách hẳn khỏi thang navy của tier 1–3. */
+    --node-t4:      #CE7A58;
+    --node-t4-text: #FFFFFF;
+  }
+
+  /* KHÔNG dùng `body { zoom }` — hack đó làm lệch hệ tọa độ con trỏ của
+     Cytoscape (mục 7.1). Muốn chữ to hơn khi chiếu thì nâng con số dưới đây. */
+  body { font-size: 14px; }
+
+  /* ---------- Focus / selection / scrollbar (mục 3) ---------- */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  ::selection { background: var(--terracotta-lt); color: var(--navy); }
   .scroll-mong::-webkit-scrollbar { width: 6px; height: 6px; }
-  .scroll-mong::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+  .scroll-mong::-webkit-scrollbar-track { background: var(--gray-100); }
+  .scroll-mong::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+  .scroll-mong::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ---------- Chrome: chạy hoàn toàn bằng token vai trò ---------- */
+  .chrome-1 { background: var(--chrome-bg);   color: var(--chrome-text); }
+  .chrome-2 { background: var(--chrome-bg-2); color: var(--chrome-text); }
+  .dai-hero {
+    background-color: var(--chrome-bg);
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(255,255,255,.07) 0%, transparent 50%),
+      radial-gradient(circle at 85% 50%, rgba(255,255,255,.05) 0%, transparent 40%);
+  }
+
+  /* ---------- Công tắc bảng màu A/B trên thanh trạng thái ---------- */
+  .nut-mau {
+    font-size: 11px; font-weight: 700; line-height: 1; padding: .3rem .55rem;
+    border-radius: 4px; color: rgba(255,255,255,.72);
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .nut-mau:hover:not(:disabled) { background: rgba(255,255,255,.24); color: #fff; }
+  .nut-mau:disabled { opacity: .45; cursor: not-allowed; }
+  /* Nút đang chọn đảo màu → tự đọc đúng ở cả hai chế độ */
+  .nut-mau[aria-pressed="true"] {
+    background: #fff; color: var(--chrome-bg); border-color: #fff;
+  }
+
+  /* ---------- Dùng accent (đổi vai trò theo chế độ) ---------- */
+  .vach-accent  { background: var(--accent); }
+  .chu-accent   { color: var(--accent-strong); }
+  .the-buoc:hover { border-color: var(--accent); }
+  .the-buoc summary:hover { color: var(--accent-strong); }
+  .goi-y-loi:hover { color: var(--accent-strong); }
+  .thanh-token-fill { background: var(--accent); }
+  .nut-chinh { background: var(--accent); color: #fff; }
+  .nut-chinh:hover:not(:disabled) { background: var(--accent-strong); }
+  .nut-chinh:disabled { background: var(--gray-300); cursor: not-allowed; }
+  .o-nhap:hover, .o-nhap:focus { border-color: var(--accent); }
+  #o-verify { accent-color: var(--accent); }
+
+  /* ---------- Trạng thái 7 bước (tên class do JS gắn — chỉ đổi định nghĩa) ---------- */
+  .buoc-cho  { opacity: .45; }
+  .buoc-chay { opacity: 1; box-shadow: 0 0 0 2px var(--accent); }
+  .buoc-xong { opacity: 1; }
+  /* Bước đã xong = không còn `.buoc-cho` lẫn `.buoc-chay` (dispatch gỡ cả hai
+     ở sự kiện `done`), nên dấu ✓ bật theo trạng thái "không có class". */
+  .dau-xong { display: inline-block; color: #28A745; font-weight: 700; }
+  .buoc-cho .dau-xong, .buoc-chay .dau-xong { display: none; }
+
+  /* ---------- Đồ thị bước 4 ---------- */
+  #do-thi { height: 320px; background: var(--graph-bg); border-radius: 6px; border: 1px solid var(--border-card); }
+
+  /* ---------- Bảng tài liệu — copy nguyên từ repo cũ (mục 4.6) ---------- */
+  .procedure-doc-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+  .procedure-doc-table th {
+    background: var(--navy-faint); color: var(--navy);
+    font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+    padding: .625rem 1rem; text-align: left; border-bottom: 2px solid var(--border-card);
+    position: sticky; top: 0; z-index: 1;
+  }
+  .procedure-doc-table td {
+    padding: .75rem 1rem; border-bottom: 1px solid var(--gray-100);
+    vertical-align: top; color: var(--text-primary); line-height: 1.6;
+  }
+  .procedure-doc-table tr:last-child td { border-bottom: none; }
+  .procedure-doc-table tbody tr:hover td { background: var(--terracotta-faint); }
+  .procedure-doc-table a { color: var(--accent); font-size: .75rem; text-decoration: none; }
+  .procedure-doc-table a:hover { text-decoration: underline; }
+
+  /* ---------- Class mồ côi dựng lại (mục 4.8) ---------- */
+  .score-badge {
+    display: inline-block; background: #28A745; color: #fff;
+    font-size: .6875rem; font-weight: 700; padding: .125rem .375rem; border-radius: 3px;
+  }
+  .score-badge.loai { background: var(--gray-300); color: var(--gray-700); text-decoration: line-through; }
+
+  /* ---------- Chip trích dẫn — BA trạng thái `khop` (mục 1.2.1) ---------- */
+  .cit-chip {
+    cursor: pointer; display: inline-block; border: 1px solid transparent;
+    border-radius: 4px; transition: filter 150ms ease;
+  }
+  .cit-chip:hover { filter: brightness(.96); }
+  .cit-chinh-xac       { background: #EAF6EC; color: #1E7A34; border-color: #A8DDB5; }
+  .cit-gan-dung        { background: #FFF4DE; color: #8A5A12; border-color: #F0D08A; }
+  .cit-khong-tim-thay  { background: #FDECEC; color: #903938; border-color: #E8C4C4; }
+  /* Trạng thái thứ tư: chip trong văn xuôi không đối chiếu được với citation_links */
+  .cit-khong-doi-chieu { background: var(--gray-100); color: var(--text-secondary); border-color: var(--border-card); }
+
+  /* ---------- Khối ngữ nghĩa dùng lại nhiều nơi ---------- */
+  .badge-het-hieu-luc {
+    display: inline-block; background: #903938; color: #fff; font-size: 11px;
+    font-weight: 600; padding: .0625rem .375rem; border-radius: 3px; white-space: nowrap;
+  }
+  .khoi-loi { background: #FDECEC; border: 1px solid #E8C4C4; color: #903938; }
+  .khoi-canh-bao-sua-doi {
+    background: var(--terracotta-faint); border-left: 3px solid var(--accent);
+    color: var(--text-secondary);
+  }
+
+  /* ---------- Dải phân bổ pass của hybrid search ---------- */
+  .pass-struct   { background: #CE7A58; }
+  .pass-label    { background: #C8C5BF; }
+  .pass-dense    { background: #1B2B4B; }
+  .pass-breadth  { background: #4A7AA8; }
+  .pass-depth    { background: #3D9E8D; }
 </style>
 </head>
-<body class="bg-slate-100 text-slate-800">
+<body class="font-sans bg-[var(--bg-page)] text-[var(--text-primary)]">
 
-<!-- ===================== HEADER ===================== -->
-<header class="bg-slate-900 text-white px-6 py-3 flex items-center gap-4 sticky top-0 z-20">
-  <div>
-    <div class="font-semibold">Ontology-Driven GraphRAG cho Pháp luật Việt Nam</div>
-    <div class="text-xs text-slate-400">Trình diễn luồng xử lý: câu hỏi → 7 bước → câu trả lời có trích dẫn</div>
+<!-- ===================== CHROME: HEADER 2 TẦNG ===================== -->
+<header class="sticky top-0 z-20">
+
+  <!-- TẦNG 1 — nhận diện đề tài -->
+  <div class="chrome-1 border-b border-black/10">
+    <div class="max-w-[1600px] mx-auto px-6 py-3 flex items-center gap-4">
+      <div class="w-11 h-11 shrink-0 rounded-full bg-white/20 grid place-items-center text-white">
+        <!-- Biểu tượng đồ thị: 3 node nối cạnh (SVG inline — không dùng emoji, mục 7.4) -->
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="4.6" r="2.4"/><circle cx="4.8" cy="18" r="2.4"/><circle cx="19.2" cy="18" r="2.4"/>
+          <path d="M10.7 6.7 6.1 15.9M13.3 6.7l4.6 9.2M7.2 18h9.6"/>
+        </svg>
+      </div>
+      <div class="min-w-0">
+        <div class="text-xl font-semibold leading-tight truncate">Ontology-Driven GraphRAG cho Pháp luật Việt Nam</div>
+        <div class="text-[13px] text-white/60 truncate">Trình diễn luồng xử lý: câu hỏi → 7 bước → câu trả lời có trích dẫn</div>
+      </div>
+    </div>
   </div>
-  <span id="badge-mode" class="ml-auto text-xs font-bold px-3 py-1 rounded-full bg-slate-700">…</span>
+
+  <!-- TẦNG 2 — THANH TRẠNG THÁI + điều khiển buổi bảo vệ (Task 5).
+       Ba nhóm: badge chế độ · nút chuyển TRỰC TIẾP⇄PHÁT LẠI (không restart
+       server) + tốc độ phát lại · công tắc bảng màu A/B. -->
+  <div class="chrome-2 border-b border-black/10">
+    <div class="max-w-[1600px] mx-auto px-6 min-h-12 py-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+      <span class="text-[11px] font-medium tracking-widest uppercase text-white/55">Chế độ chạy</span>
+      <span id="badge-mode" class="text-xs font-bold px-3 py-1 rounded-full bg-white/15 text-white ring-1 ring-white/25">…</span>
+
+      <!-- Chuyển mode: ở live mà lỗi thì bấm một nút là về replay -->
+      <div class="flex items-center gap-1" role="group" aria-label="Chuyển chế độ chạy">
+        <button id="nut-mode-live" class="nut-mau" data-mode="live" aria-pressed="false"
+                title="Chạy thật: gọi Neo4j + Qdrant + LLM">TRỰC TIẾP</button>
+        <button id="nut-mode-replay" class="nut-mau" data-mode="replay" aria-pressed="false"
+                title="Phát lại fixture đã ghi sẵn — không cần DB">PHÁT LẠI</button>
+      </div>
+
+      <!-- Tốc độ phát lại: chỉ hiện ở replay, gửi kèm mỗi /api/ask -->
+      <div id="nhom-toc-do" class="flex items-center gap-1 hidden" role="group" aria-label="Tốc độ phát lại">
+        <span class="text-[11px] font-medium tracking-widest uppercase text-white/55 mr-1 hidden md:inline">Tốc độ</span>
+        <button class="nut-mau nut-toc-do" data-speed="1" aria-pressed="false" title="Thời gian thật">×1</button>
+        <button class="nut-mau nut-toc-do" data-speed="2" aria-pressed="false">×2</button>
+        <button class="nut-mau nut-toc-do" data-speed="4" aria-pressed="false">×4</button>
+        <button class="nut-mau nut-toc-do" data-speed="8" aria-pressed="false" title="Tua nhanh nhất">×8</button>
+      </div>
+
+      <span id="tt-toc-do" class="text-xs text-white/70"></span>
+
+      <div class="ml-auto flex items-center gap-1" role="group" aria-label="Bảng màu">
+        <span class="text-[11px] font-medium tracking-widest uppercase text-white/55 mr-1 hidden md:inline">Bảng màu</span>
+        <button id="nut-mau-a" class="nut-mau" data-mau="a" aria-pressed="true"
+                title="Chế độ A — Terracotta làm màu chrome">A</button>
+        <button id="nut-mau-b" class="nut-mau" data-mau="b" aria-pressed="false"
+                title="Chế độ B — Navy làm màu chrome, terracotta chỉ làm accent">B</button>
+      </div>
+    </div>
+  </div>
 </header>
 
-<div id="canh-bao-fixture" class="hidden bg-amber-100 border-b border-amber-300 text-amber-900 text-xs px-6 py-2"></div>
+<div id="canh-bao-fixture" class="hidden bg-[#FFF7E6] border-b-2 border-cta text-[var(--gray-900)] text-xs px-6 py-2"></div>
+
+<!-- ===================== DẢI HERO: Ô NHẬP CÂU HỎI ===================== -->
+<section class="dai-hero">
+  <div class="max-w-[1600px] mx-auto px-4 py-6">
+    <div class="text-xs font-medium tracking-widest uppercase text-white/55 mb-2">Đặt một câu hỏi pháp lý</div>
+
+    <div class="bg-white border border-[var(--border-card)] rounded-xl p-4 shadow-sm">
+      <textarea id="o-cau-hoi" rows="2" placeholder="Nhập câu hỏi pháp lý…"
+        class="o-nhap w-full bg-[var(--warm-white)] border border-[#DDDDDD] rounded-xl p-3 text-sm
+               text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+               focus:bg-white transition-colors duration-150"></textarea>
+
+      <div class="flex flex-wrap items-center gap-2 mt-2 text-sm">
+        <select id="o-juris"
+          class="o-nhap bg-white border border-[#DDDDDD] rounded-lg px-2 py-1.5 text-[var(--text-secondary)]
+                 transition-colors duration-150">
+          <option value="">Địa phương: (không ép)</option>
+          <option value="toan-quoc">toàn quốc</option>
+          <option value="tp-hcm">tp-hcm</option>
+          <option value="dong-nai">dong-nai</option>
+        </select>
+        <select id="o-mode"
+          class="o-nhap bg-white border border-[#DDDDDD] rounded-lg px-2 py-1.5 text-[var(--text-secondary)]
+                 transition-colors duration-150">
+          <option value="">Chế độ trả lời: tự động</option>
+          <option value="general">general (ngắn gọn)</option>
+          <option value="irac">irac (tư vấn chi tiết)</option>
+        </select>
+        <label class="flex items-center gap-1.5 text-[var(--text-secondary)] cursor-pointer">
+          <input type="checkbox" id="o-verify" class="rounded"> Verifier
+        </label>
+        <button id="nut-hoi"
+          class="nut-chinh ml-auto px-6 py-1.5 rounded-lg font-medium transition-colors duration-150">
+          Hỏi
+        </button>
+      </div>
+
+      <!-- Chip gợi ý: nội dung nút = ĐÚNG câu hỏi gửi đi (b.textContent).
+           Tuyệt đối không chèn ký tự trang trí dạng text vào bên trong nút. -->
+      <div id="goi-y" class="mt-3 flex flex-wrap gap-2 text-xs"></div>
+    </div>
+  </div>
+</section>
 
 <main class="p-4 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-4 max-w-[1600px] mx-auto">
 
   <!-- ===================== CỘT TRÁI ===================== -->
   <section class="space-y-3">
 
-    <!-- Ô nhập câu hỏi -->
-    <div class="bg-white rounded-xl p-4 shadow-sm">
-      <textarea id="o-cau-hoi" rows="2" placeholder="Nhập câu hỏi pháp lý…"
-        class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"></textarea>
-      <div class="flex flex-wrap items-center gap-2 mt-2 text-sm">
-        <select id="o-juris" class="border border-slate-300 rounded-lg px-2 py-1.5">
-          <option value="">Địa phương: (không ép)</option>
-          <option value="toan-quoc">toàn quốc</option>
-          <option value="tp-hcm">tp-hcm</option>
-          <option value="dong-nai">dong-nai</option>
-        </select>
-        <select id="o-mode" class="border border-slate-300 rounded-lg px-2 py-1.5">
-          <option value="">Chế độ trả lời: tự động</option>
-          <option value="general">general (ngắn gọn)</option>
-          <option value="irac">irac (tư vấn chi tiết)</option>
-        </select>
-        <label class="flex items-center gap-1.5 text-slate-600">
-          <input type="checkbox" id="o-verify" class="rounded"> Verifier
-        </label>
-        <button id="nut-hoi"
-          class="ml-auto bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white px-5 py-1.5 rounded-lg font-medium">
-          Hỏi
-        </button>
-      </div>
-      <div id="goi-y" class="mt-2 flex flex-wrap gap-2 text-xs"></div>
-    </div>
+    <div id="bang-loi" class="hidden khoi-loi rounded-xl p-3 text-sm"></div>
 
-    <div id="bang-loi" class="hidden bg-rose-50 border border-rose-300 text-rose-800 rounded-xl p-3 text-sm"></div>
+    <!-- Nhãn nhóm: vạch accent + chữ hoa (mục 4.5) -->
+    <div class="flex items-center gap-3 pt-1">
+      <div class="vach-accent w-1 h-5 rounded-full"></div>
+      <h2 class="text-sm font-semibold text-navy uppercase tracking-wider">Luồng xử lý bảy bước</h2>
+    </div>
 
     <!-- Stepper 7 bước -->
     <div id="cac-buoc" class="space-y-3"></div>
   </section>
 
   <!-- ===================== CỘT PHẢI: NGUYÊN VĂN ===================== -->
-  <aside class="xl:sticky xl:top-16 h-fit">
-    <div class="bg-white rounded-xl shadow-sm p-4">
-      <div class="flex items-center justify-between">
-        <h2 class="font-semibold text-sm">Nguyên văn điều khoản</h2>
-        <button id="nut-dong-panel" class="text-slate-400 hover:text-slate-700 text-lg leading-none">×</button>
+  <aside class="xl:sticky xl:top-[7.5rem] h-fit">
+    <div class="bg-white border border-[var(--border-card)] rounded-xl overflow-hidden">
+      <div class="flex items-center justify-between bg-navy-faint border-b border-[var(--border-card)] px-4 py-2.5">
+        <h2 class="text-sm font-semibold text-navy uppercase tracking-wider">Nguyên văn điều khoản</h2>
+        <button id="nut-dong-panel"
+          class="text-[var(--text-muted)] hover:text-navy text-lg leading-none px-1 rounded transition-colors duration-150"
+          title="Đóng">×</button>
       </div>
-      <div id="panel-nguyen-van" class="mt-3 text-sm text-slate-500">
+      <div id="panel-nguyen-van" class="p-4 text-sm text-[var(--text-muted)]">
         Bấm vào một trích dẫn ở bước 7 (hoặc một dòng ở bước 6) để xem nguyên văn lấy trực tiếp từ
-        <code class="text-xs">data/raw/*.md</code>.
+        <code class="text-xs font-mono text-[var(--text-secondary)]">data/raw/*.md</code>.
       </div>
     </div>
   </aside>
 </main>
+
+<!-- ===================== FOOTER ===================== -->
+<!-- TODO trước buổi bảo vệ: điền tên hai thành viên và tên GVHD vào dòng dưới. -->
+<footer class="chrome-1 text-white/80 text-xs py-4 mt-6">
+  <div class="max-w-[1600px] mx-auto px-6 text-center leading-relaxed">
+    Ontology-Driven GraphRAG cho Pháp luật Việt Nam
+    <span class="text-white/35 px-1.5">|</span>
+    Khóa luận tốt nghiệp — nhóm thực hiện: [A] · [B]
+    <span class="text-white/35 px-1.5">|</span>
+    GVHD: [điền tên]
+    <span class="text-white/35 px-1.5">|</span>
+    <span class="text-white">Sản phẩm nghiên cứu — không thay thế tư vấn pháp lý</span>
+  </div>
+</footer>
 
 <script>
 "use strict";
@@ -109,6 +409,36 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c =>
   ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const escRe = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// Bảng màu chip trích dẫn — BA trạng thái `khop` phải phân biệt được (spec 1.2.1).
+// Dùng CHUNG cho chip inline (`chipCitation`) và danh sách trích dẫn cuối bước 7.
+// ============================================================================
+// CÔNG TẮC BẢNG MÀU A/B (spec mục 1.3)
+// Chỉ đổi VAI TRÒ của token, không đổi token. Toàn bộ CSS đọc qua
+// --chrome-bg / --chrome-bg-2 / --chrome-text / --accent / --accent-strong,
+// nên đổi chế độ = đổi đúng một thuộc tính `data-theme` trên <html>.
+// KHÔNG lưu lựa chọn (spec mục 1.5 cấm localStorage/sessionStorage) → mặc định A.
+// ============================================================================
+/** Đọc giá trị THẬT của một CSS var (đã giải hết chuỗi var() lồng nhau). */
+const mauToken = (ten) =>
+  getComputedStyle(document.documentElement).getPropertyValue(ten).trim();
+
+function datBangMau(ma) {
+  const m = ma === "b" ? "b" : "a";
+  document.documentElement.dataset.theme = m;
+  ["a", "b"].forEach(x => {
+    const nut = $("nut-mau-" + x);
+    if (nut) nut.setAttribute("aria-pressed", String(x === m));
+  });
+  veLaiMauDoThi();   // Cytoscape vẽ trên canvas → CSS var không tự lan tới
+}
+
+const MAU_KHOP = {
+  "chinh-xac":      "cit-chinh-xac",
+  "gan-dung":       "cit-gan-dung",
+  "khong-tim-thay": "cit-khong-tim-thay",
+};
+const mauKhop = (khop) => MAU_KHOP[khop] || "cit-khong-doi-chieu";
 
 // ============================================================================
 // LỚP HIỂN THỊ TÊN VĂN BẢN (spec mục 3.3)
@@ -164,19 +494,23 @@ function doiTenTrongChuoi(text, bien_doi = (x) => x) {
 // ---------------------------------------------------------------- stepper
 function dungStepper() {
   $("cac-buoc").innerHTML = BUOC.map(b => `
-    <div id="buoc-${b.id}" class="buoc-cho bg-white rounded-xl shadow-sm p-4 transition">
+    <div id="buoc-${b.id}" class="the-buoc buoc-cho bg-white border border-[var(--border-card)] rounded-xl p-5 transition-all duration-200">
       <div class="flex items-center gap-3">
-        <span class="w-7 h-7 shrink-0 rounded-full bg-slate-200 text-slate-700 font-bold text-sm grid place-items-center">${b.so}</span>
-        <div>
-          <div class="font-semibold text-sm">${esc(b.ten)}</div>
-          <div class="text-xs text-slate-500">${esc(b.mo_ta)}</div>
+        <div class="vach-accent w-1 h-5 shrink-0 rounded-full"></div>
+        <span class="w-7 h-7 shrink-0 rounded-full bg-navy-faint text-navy font-bold text-sm grid place-items-center">${b.so}</span>
+        <div class="min-w-0">
+          <div class="text-sm font-semibold text-navy uppercase tracking-wider">${esc(b.ten)}</div>
+          <div class="text-xs text-[var(--text-muted)]">${esc(b.mo_ta)}</div>
         </div>
-        <span id="tg-${b.id}" class="ml-auto text-xs text-slate-400 font-mono"></span>
+        <div class="ml-auto flex items-center gap-2 shrink-0">
+          <span class="dau-xong text-sm" title="đã xong">✓</span>
+          <span id="tg-${b.id}" class="text-[11px] text-[var(--text-muted)] font-mono"></span>
+        </div>
       </div>
       <div id="noi-dung-${b.id}" class="mt-3 text-sm"></div>
       <details class="mt-2">
-        <summary class="text-xs text-slate-400 cursor-pointer">log gốc</summary>
-        <pre id="log-${b.id}" class="text-[11px] text-slate-500 whitespace-pre-wrap mt-1 scroll-mong max-h-40 overflow-auto"></pre>
+        <summary class="text-xs text-[var(--text-muted)] cursor-pointer transition-colors duration-150">log gốc</summary>
+        <pre id="log-${b.id}" class="text-[11px] text-[var(--text-secondary)] whitespace-pre-wrap mt-1 scroll-mong max-h-40 overflow-auto bg-[var(--gray-50)] rounded p-2"></pre>
       </details>
     </div>`).join("");
 }
@@ -205,7 +539,7 @@ function renderCauHoi(d) {
       `<b>⚠ FIXTURE TẠM</b> (${esc(d.fixture_file || "")}) — ${esc(d.fixture_ghi_chu || "")}`;
   }
   $("noi-dung-question").innerHTML = `
-    <div class="font-medium text-slate-800">${esc(d.question)}</div>
+    <div class="font-medium text-[var(--text-primary)]">${esc(d.question)}</div>
     <div class="mt-2 flex flex-wrap gap-2 text-xs">
       ${chip("Địa phương ép", d.force_jurisdiction || "không")}
       ${chip("Chế độ trả lời", d.response_mode || "tự động")}
@@ -214,8 +548,8 @@ function renderCauHoi(d) {
     </div>`;
 }
 
-function chip(nhan, gia_tri, mau = "bg-slate-100 text-slate-700") {
-  return `<span class="px-2 py-1 rounded ${mau}"><span class="text-slate-400">${esc(nhan)}:</span> <b>${esc(gia_tri)}</b></span>`;
+function chip(nhan, gia_tri, mau = "bg-ink-100 text-ink-700") {
+  return `<span class="px-2 py-1 rounded ${mau}"><span class="text-[var(--text-muted)]">${esc(nhan)}:</span> <b>${esc(gia_tri)}</b></span>`;
 }
 
 let PLAN = {};
@@ -225,34 +559,35 @@ function renderPlan(d) {
   const temporal = p.temporal ? p.temporal : (p.reason ? "broad (không neo ngày)" : "—");
   $("noi-dung-plan").innerHTML = `
     <div class="flex flex-wrap gap-2 text-xs">
-      ${chip("theme", p.theme || "—", "bg-indigo-50 text-indigo-700")}
-      ${chip("jurisdiction", p.jurisdiction || "—", "bg-indigo-50 text-indigo-700")}
-      ${chip("procedure", p.procedure || "—", "bg-indigo-50 text-indigo-700")}
+      ${chip("theme", p.theme || "—", "bg-navy-faint text-navy")}
+      ${chip("jurisdiction", p.jurisdiction || "—", "bg-navy-faint text-navy")}
+      ${chip("procedure", p.procedure || "—", "bg-navy-faint text-navy")}
       ${chip("response_mode", p.response_mode || "—")}
-      ${p.force_jurisdiction ? chip("ép jurisdiction", p.force_jurisdiction, "bg-amber-100 text-amber-800") : ""}
-      ${chip("temporal", temporal, "bg-slate-100 text-slate-700")}
-      ${p.cache_hit ? chip("planner", "cache HIT ($0)", "bg-emerald-100 text-emerald-800") : ""}
+      ${p.force_jurisdiction ? chip("ép jurisdiction", p.force_jurisdiction, "bg-[#FFF4DE] text-[#8A5A12]") : ""}
+      ${chip("temporal", temporal)}
+      ${p.cache_hit ? chip("planner", "cache HIT ($0)", "bg-[#E6F2F0] text-[#2C6E62]") : ""}
     </div>
-    ${p.reason ? `<div class="mt-2 text-xs text-slate-500">Quyết định temporal: <b>${esc(p.reason)}</b>
+    ${p.reason ? `<div class="mt-2 text-xs text-[var(--text-muted)]">Quyết định temporal: <b>${esc(p.reason)}</b>
        ${p.temporal_anchor ? ` (anchor <code>${esc(p.temporal_anchor)}</code>` : ""}${p.case_status ? `, case_status <code>${esc(p.case_status)}</code>)` : (p.temporal_anchor ? ")" : "")}</div>` : ""}`;
 }
 
 function renderStage1(d) {
   SEED_STAGE1 = d.norm_ids || [];
   const hang = (d.ranked || []).map(r => `
-    <tr class="${r.chon ? "" : "text-slate-400 line-through decoration-slate-300"}">
-      <td class="py-1 pr-2 font-mono text-xs">#${r.rank + 1}</td>
-      <td class="py-1 pr-2 font-mono text-xs">${r.score == null ? "—" : r.score.toFixed(3)}</td>
+    <tr class="${r.chon ? "" : "text-[var(--text-muted)] line-through decoration-ink-300"}">
+      <td class="py-1 pr-2 font-mono text-xs text-[var(--text-muted)]">${r.rank + 1}.</td>
+      <td class="py-1 pr-2"><span class="score-badge ${r.chon ? "" : "loai"}">${
+        r.score == null ? "—" : r.score.toFixed(3)}</span></td>
       <td class="py-1 pr-2" title="${esc(r.norm_id || "")}">${
         r.norm_id ? esc(tenVB(r.norm_id)) : "(dưới ngưỡng — bị loại)"}</td>
       <td class="py-1">${r.chon
-        ? `<span class="text-emerald-600 text-xs">giữ</span>`
-        : `<span class="text-rose-500 text-xs">loại</span>`}</td>
+        ? `<span class="text-ok text-xs font-semibold">giữ</span>`
+        : `<span class="text-deep-red text-xs font-semibold">loại</span>`}</td>
     </tr>`).join("");
   $("noi-dung-stage1").innerHTML = `
-    <div class="text-xs text-slate-500 mb-2">
+    <div class="text-xs text-[var(--text-muted)] mb-2">
       Ngưỡng similarity <b>${d.threshold ?? "—"}</b> · giữ <b>${d.n_norms}</b>/${d.top_n ?? (d.ranked || []).length} văn bản
-      ${d.no_theme ? " · <span class='text-amber-700'>chạy không lọc theme (ablation)</span>" : ""}
+      ${d.no_theme ? " · <span class='chu-accent font-medium'>chạy không lọc theme (ablation)</span>" : ""}
     </div>
     <table class="w-full text-sm"><tbody>${hang}</tbody></table>`;
 }
@@ -268,19 +603,29 @@ function renderStage2(d) {
     const m = meta[id] || {};
     const seed = SEED_STAGE1.includes(id);
     return `<span class="px-2 py-1 rounded text-xs border ${seed
-      ? "bg-indigo-50 border-indigo-300 text-indigo-800" : "bg-white border-slate-300 text-slate-700"}"
+      ? "bg-navy-faint text-navy" : "bg-white border-ink-300 text-ink-700"}"
+      style="${seed ? "border-color:var(--node-seed)" : ""}"
       title="${esc(id)}">
-      <span class="text-slate-400">T${m.tier ?? "?"}</span> ${esc(tenNgan(id))}${seed ? " ●" : ""}</span>`;
+      <span class="text-[var(--text-muted)]">T${m.tier ?? "?"}</span> ${esc(tenNgan(id))}${seed ? " ●" : ""}</span>`;
   }).join(" ");
   $("noi-dung-stage2").innerHTML = `
-    <div class="text-xs text-slate-500 mb-2">
+    <div class="text-xs text-[var(--text-muted)] mb-2">
       <b>${d.n_norms}</b> văn bản còn lại sau lọc — jurisdiction <b>${esc(d.jurisdiction || "—")}</b>,
       temporal <b>${esc(d.temporal || "None")}</b>.
-      <span class="text-slate-400">Đây là một tập hợp (sắp theo tier rồi tên để dễ đọc), không phải bảng xếp hạng —
+      <span>Đây là một tập hợp (sắp theo tier rồi tên để dễ đọc), không phải bảng xếp hạng —
       hệ thống không chấm điểm ở bước này. ● = văn bản seed từ Stage 1.</span>
     </div>
     <div class="flex flex-wrap gap-1.5 mb-3">${the}</div>
-    <div id="do-thi"></div>`;
+    <div id="do-thi"></div>
+    <div class="flex flex-wrap gap-3 mt-2 text-[11px] text-[var(--text-muted)]">
+      <span class="flex items-center gap-1"><i class="inline-block w-3 h-3 rounded-sm" style="background:var(--node-t1)"></i>tier 1</span>
+      <span class="flex items-center gap-1"><i class="inline-block w-3 h-3 rounded-sm" style="background:var(--node-t2)"></i>tier 2</span>
+      <span class="flex items-center gap-1"><i class="inline-block w-3 h-3 rounded-sm" style="background:var(--node-t3)"></i>tier 3</span>
+      <span class="flex items-center gap-1"><i class="inline-block w-3 h-3 rounded-sm" style="background:var(--node-t4)"></i>tier 4</span>
+      <span class="flex items-center gap-1"><i class="inline-block w-3 h-3 rounded-sm" style="background:var(--node-t1);border:2px solid var(--node-seed)"></i>seed Stage 1</span>
+      <span class="flex items-center gap-1"><i class="inline-block w-6 h-0" style="border-top:2px solid var(--edge)"></i>IMPLEMENTS</span>
+      <span class="flex items-center gap-1"><i class="inline-block w-6 h-0" style="border-top:2px dashed var(--edge-amends)"></i>AMENDS</span>
+    </div>`;
   veDoThi(norms);
 }
 
@@ -289,14 +634,14 @@ function renderStage3(d) {
   if (d.n_components != null && d.procedure !== undefined) {
     $("noi-dung-stage3").innerHTML = `
       <div class="flex flex-wrap gap-2 text-xs">
-        ${chip("procedure", d.procedure || "—", "bg-indigo-50 text-indigo-700")}
+        ${chip("procedure", d.procedure || "—", "bg-navy-faint text-navy")}
         ${chip("component được boost", d.n_components)}
       </div>
-      <div class="text-xs text-slate-500 mt-2">Component gắn với concept mà thủ tục này cần
+      <div class="text-xs text-[var(--text-muted)] mt-2">Component gắn với concept mà thủ tục này cần
       (<code>MAPS_TO_CONCEPT</code> / <code>REQUIRES_CONCEPT</code>) được cộng điểm ở Path 2 của hybrid search.</div>`;
   } else if (d.n_norm_ids != null) {
     $("noi-dung-stage3").innerHTML = cu +
-      `<div class="text-xs text-slate-500 mt-2">Tổng vào hybrid search: <b>${d.n_norm_ids}</b> norm ·
+      `<div class="text-xs text-[var(--text-muted)] mt-2">Tổng vào hybrid search: <b>${d.n_norm_ids}</b> norm ·
        <b>${d.n_graph_comp_ids}</b> component boost.</div>`;
   }
 }
@@ -315,34 +660,36 @@ function renderHybrid(d) {
   if (h.passes) {
     const p = h.passes, tong = Object.values(p).reduce((a, b) => a + b, 0) || 1;
     const dai = [
-      ["struct-cite", p.struct_cite, "bg-rose-400"],
-      ["label-keyword", p.label_keyword, "bg-slate-300"],
-      ["dense-floor", p.dense_floor, "bg-indigo-500"],
-      ["rrf-breadth", p.rrf_breadth, "bg-sky-400"],
-      ["depth", p.depth, "bg-emerald-400"],
+      ["struct-cite", p.struct_cite, "pass-struct"],
+      ["label-keyword", p.label_keyword, "pass-label"],
+      ["dense-floor", p.dense_floor, "pass-dense"],
+      ["rrf-breadth", p.rrf_breadth, "pass-breadth"],
+      ["depth", p.depth, "pass-depth"],
     ].filter(x => x[1] > 0);
     html += `
-      <div class="text-xs text-slate-500 mb-1">Phân bổ ${h.top_k} block theo pass (tổng hợp — hệ thống không lưu pass của từng dòng):</div>
-      <div class="flex h-4 rounded overflow-hidden mb-1">
+      <div class="text-xs text-[var(--text-muted)] mb-1">Phân bổ ${h.top_k} block theo pass (tổng hợp — hệ thống không lưu pass của từng dòng):</div>
+      <div class="flex h-4 rounded overflow-hidden mb-1 border border-[var(--border-card)]">
         ${dai.map(([ten, n, mau]) => `<div class="${mau}" style="width:${n / tong * 100}%" title="${ten}: ${n}"></div>`).join("")}
       </div>
-      <div class="flex flex-wrap gap-2 text-xs mb-2">
+      <div class="flex flex-wrap gap-2 text-xs mb-2 text-[var(--text-secondary)]">
         ${dai.map(([ten, n, mau]) => `<span class="flex items-center gap-1"><i class="${mau} w-3 h-3 inline-block rounded-sm"></i>${ten} ${n}</span>`).join("")}
       </div>
       <div class="flex flex-wrap gap-2 text-xs mb-2">
-        ${chip("best rrf", (h.best_rrf ?? 0).toFixed(4))}
-        ${chip("cap/norm", h.caps?.per_norm)}
-        ${chip("tier_dist", JSON.stringify(h.tier_dist || {}))}
+        ${chip("best rrf", (h.best_rrf ?? 0).toFixed(4), "bg-navy-faint text-navy")}
+        ${chip("cap/norm", h.caps?.per_norm, "bg-navy-faint text-navy")}
+        ${chip("tier_dist", JSON.stringify(h.tier_dist || {}), "bg-navy-faint text-navy")}
       </div>`;
   }
 
   if (h.n_blocks != null) {
     const tokens = h.tokens ?? h.context_tokens ?? 0, max = h.max_tokens || 6000;
+    const ty_le = Math.min(100, tokens / max * 100);
+    const bao_dong = h.bi_cat || ty_le > 90;          // >90% → đổi sang đỏ nâu (spec 6.1)
     html += `
-      <div class="text-xs text-slate-500 mt-2 mb-1">Token budget: <b>${tokens}</b>/${max}
-        ${h.bi_cat ? `<span class="text-amber-700">· context bị cắt tại ${h.n_blocks} block</span>` : ""}</div>
-      <div class="h-2 bg-slate-200 rounded overflow-hidden">
-        <div class="h-full ${h.bi_cat ? "bg-amber-500" : "bg-indigo-500"}" style="width:${Math.min(100, tokens / max * 100)}%"></div>
+      <div class="text-xs text-[var(--text-muted)] mt-2 mb-1">Token budget: <b>${tokens}</b>/${max}
+        ${h.bi_cat ? `<span class="text-deep-red font-medium">· context bị cắt tại ${h.n_blocks} block</span>` : ""}</div>
+      <div class="h-2 bg-ink-200 rounded overflow-hidden">
+        <div class="h-full ${bao_dong ? "bg-deep-red" : "thanh-token-fill"}" style="width:${ty_le}%"></div>
       </div>`;
   }
 
@@ -352,24 +699,28 @@ function renderHybrid(d) {
 
 function renderBangBlock() {
   const hang = BLOCKS.map(b => `
-    <tr class="border-t border-slate-100 hover:bg-slate-50 cursor-pointer" data-block="${b.index}">
-      <td class="py-1.5 pr-2 text-xs text-slate-400 font-mono">${b.index + 1}</td>
-      <td class="py-1.5 pr-2 text-xs">${b.tier != null ? `<span class="px-1.5 py-0.5 rounded bg-slate-200">T${b.tier}</span>` : ""}</td>
-      <td class="py-1.5 pr-2">
-        <div class="text-xs">${esc(b.vi_tri || "(cả văn bản)")}</div>
-        <div class="text-[11px] text-slate-500" title="${esc(b.norm_id)}">${esc(tenVB(b.norm_id))}</div>
+    <tr data-block="${b.index}" class="cursor-pointer">
+      <td>
+        <div class="text-xs font-medium">${esc(b.vi_tri || "(cả văn bản)")}</div>
+        <div class="text-[11px] text-[var(--text-muted)]" title="${esc(b.norm_id)}">${esc(tenVB(b.norm_id))}</div>
       </td>
-      <td class="py-1.5 text-xs whitespace-nowrap">
+      <td class="whitespace-nowrap">${b.tier != null
+        ? `<span class="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-navy-faint text-navy">T${b.tier}</span>` : ""}</td>
+      <td class="whitespace-nowrap text-xs">
         ${b.het_hieu_luc
-          ? `<span class="text-rose-600">HẾT HIỆU LỰC ${esc(b.valid_to || "")}</span>`
-          : `<span class="text-slate-500">${esc(b.valid_from || "")}</span>`}
-        ${b.amendments?.length ? `<div class="text-amber-700">⚠ ${b.amendments.length} sửa đổi</div>` : ""}
+          ? `<span class="badge-het-hieu-luc">HẾT HIỆU LỰC ${esc(b.valid_to || "")}</span>`
+          : `<span class="text-[var(--text-secondary)]">${esc(b.valid_from || "")}</span>`}
+        ${b.amendments?.length ? `<div class="chu-accent text-[11px] mt-0.5">⚠ ${b.amendments.length} sửa đổi</div>` : ""}
       </td>
+      <td class="text-[11px] font-mono text-[var(--text-muted)] whitespace-nowrap" title="${esc(b.norm_id)}">${esc(b.norm_id)}</td>
     </tr>`).join("");
   $("bang-block").innerHTML = `
-    <div class="text-xs text-slate-500 mb-1">${BLOCKS.length} block trong context (thứ tự = rrf giảm dần) — bấm để xem nguyên văn:</div>
-    <div class="max-h-72 overflow-auto scroll-mong border border-slate-200 rounded-lg">
-      <table class="w-full"><tbody>${hang}</tbody></table>
+    <div class="text-xs text-[var(--text-muted)] mb-1">${BLOCKS.length} block trong context (thứ tự = rrf giảm dần) — bấm một dòng để xem nguyên văn:</div>
+    <div class="max-h-72 overflow-auto scroll-mong border border-[var(--border-card)] rounded-lg">
+      <table class="procedure-doc-table">
+        <thead><tr><th>Vị trí</th><th>Tier</th><th>Hiệu lực</th><th>Norm</th></tr></thead>
+        <tbody>${hang}</tbody>
+      </table>
     </div>`;
   $("bang-block").querySelectorAll("tr[data-block]").forEach(tr =>
     tr.onclick = () => hienBlock(BLOCKS[+tr.dataset.block]));
@@ -378,8 +729,8 @@ function renderBangBlock() {
 // -- markdown tối giản (tránh thêm một CDN nữa phải vendor ở Task 5) --------
 function markdown(text) {
   let h = esc(text);
-  h = h.replace(/^### (.*)$/gm, '<h3 class="font-semibold mt-3 mb-1">$1</h3>');
-  h = h.replace(/^## (.*)$/gm, '<h2 class="font-bold mt-3 mb-1">$1</h2>');
+  h = h.replace(/^### (.*)$/gm, '<h3 class="font-semibold text-navy mt-3 mb-1">$1</h3>');
+  h = h.replace(/^## (.*)$/gm, '<h2 class="font-bold text-navy mt-3 mb-1">$1</h2>');
   h = h.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
   h = h.replace(/^\s*[-*] (.*)$/gm, '<li class="ml-5 list-disc">$1</li>');
   h = h.replace(/(<li[\s\S]*?<\/li>)(?!\s*<li)/g, "<ul class='my-1'>$1</ul>");
@@ -403,15 +754,13 @@ function chipCitation(noi_dung, links) {
     && String(l.citation.dieu ?? "") === dieu
     && String(l.citation.khoan ?? "") === khoan
     && String(l.citation.diem ?? "") === diem);
-  const mau = !link ? "bg-slate-100 text-slate-600 border-slate-300"
-    : link.khop === "chinh-xac" ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-    : link.khop === "gan-dung" ? "bg-amber-50 text-amber-800 border-amber-300"
-    : "bg-rose-50 text-rose-800 border-rose-300";
+  // Ba trạng thái `khop` giữ đủ; không có link → xám trung tính (trạng thái thứ tư).
+  const mau = link ? mauKhop(link.khop) : "cit-khong-doi-chieu";
   const chu = link ? link.chu_thich : "không đối chiếu được với context";
   // Nhãn hiện tên thật, nhưng `data-vb` GIỮ NGUYÊN slug — đây là giá trị thật
   // của `citation.van_ban`, dùng để tra nguyên văn (spec mục 3.3).
   const nhan = esc(noi_dung).replace(esc(van_ban), esc(tenVB(van_ban)));
-  return `<span class="cit-chip border rounded px-1.5 py-0.5 text-xs ${mau}"
+  return `<span class="cit-chip px-1.5 py-0.5 text-xs ${mau}"
     title="${esc(chu)} — ${esc(van_ban)}"
     data-vb="${esc(van_ban)}" data-dieu="${esc(dieu)}" data-khoan="${esc(khoan)}" data-diem="${esc(diem)}"
     >[${nhan}]</span>`;
@@ -439,34 +788,31 @@ function renderCauTraLoi(d) {
   }
 
   const than = HIEN_NGUYEN_VAN_LLM
-    ? `<div class="text-xs text-slate-500 mb-1">Chuỗi LLM trả về, chưa qua lớp hiển thị tên và chưa render markdown:</div>
-       <pre class="text-xs whitespace-pre-wrap bg-slate-50 rounded p-3 max-h-[60vh] overflow-auto scroll-mong">${esc(d.answer || "")}</pre>`
-    : `<div class="prose prose-sm max-w-none text-slate-800">${html}</div>`;
+    ? `<div class="text-xs text-[var(--text-muted)] mb-1">Chuỗi LLM trả về, chưa qua lớp hiển thị tên và chưa render markdown:</div>
+       <pre class="text-xs whitespace-pre-wrap bg-[var(--gray-50)] border border-[var(--border-card)] rounded-lg p-3 max-h-[60vh] overflow-auto scroll-mong">${esc(d.answer || "")}</pre>`
+    : `<div class="max-w-none leading-relaxed text-[var(--text-primary)]">${html}</div>`;
 
   const thong_ke = links.reduce((a, l) => (a[l.khop] = (a[l.khop] || 0) + 1, a), {});
   $("noi-dung-generate").innerHTML = `
     <div class="flex justify-end mb-1">
       <button id="nut-nguyen-van-llm"
-        class="text-xs border rounded px-2 py-1 ${HIEN_NGUYEN_VAN_LLM
-          ? "bg-slate-800 text-white border-slate-800" : "border-slate-300 text-slate-600 hover:bg-slate-50"}">
+        class="text-xs rounded px-2 py-1 border transition-colors duration-150 ${HIEN_NGUYEN_VAN_LLM
+          ? "bg-navy text-white border-navy" : "border-[var(--border-card)] text-link hover:bg-navy-faint"}">
         ${HIEN_NGUYEN_VAN_LLM ? "← Về bản hiển thị" : "Nguyên văn LLM"}
       </button>
     </div>
     ${than}
-    <div class="mt-3 pt-3 border-t border-slate-100">
-      <div class="text-xs text-slate-500 mb-1">${links.length} trích dẫn ·
-        ${thong_ke["chinh-xac"] || 0} khớp context ·
-        ${thong_ke["gan-dung"] || 0} khớp gần đúng ·
-        ${thong_ke["khong-tim-thay"] || 0} không có trong context</div>
+    <div class="mt-3 pt-3 border-t border-[var(--border-card)]">
+      <div class="text-xs text-[var(--text-muted)] mb-1.5">${links.length} trích dẫn ·
+        <b class="text-[#1E7A34]">${thong_ke["chinh-xac"] || 0}</b> khớp context ·
+        <b class="text-[#8A5A12]">${thong_ke["gan-dung"] || 0}</b> khớp gần đúng ·
+        <b class="text-deep-red">${thong_ke["khong-tim-thay"] || 0}</b> không có trong context</div>
       <div class="flex flex-wrap gap-1.5">
         ${links.map(l => {
           const c = l.citation;
           const nhan = [c.loai === "phu_luc" ? `Phụ lục ${c.dieu === "_default" ? "" : c.dieu}` : `Điều ${c.dieu}`,
             c.khoan ? `Khoản ${c.khoan}` : "", c.diem ? `Điểm ${c.diem}` : ""].filter(Boolean).join(", ");
-          const mau = l.khop === "chinh-xac" ? "bg-emerald-50 text-emerald-800 border-emerald-300"
-            : l.khop === "gan-dung" ? "bg-amber-50 text-amber-800 border-amber-300"
-            : "bg-rose-50 text-rose-800 border-rose-300";
-          return `<span class="cit-chip border rounded px-2 py-1 text-xs ${mau}"
+          return `<span class="cit-chip px-2 py-1 text-xs ${mauKhop(l.khop)}"
             title="${esc(l.chu_thich)} — ${esc(c.van_ban)}"
             data-vb="${esc(c.van_ban)}" data-dieu="${esc(c.dieu ?? "")}" data-khoan="${esc(c.khoan ?? "")}" data-diem="${esc(c.diem ?? "")}"
             >${esc(nhan)} · ${esc(tenNgan(c.van_ban))}</span>`;
@@ -486,7 +832,7 @@ function renderVerifier(v) {
   if (!v) return;
   VERIFIER_HIEN_TAI = v;
   $("noi-dung-generate").insertAdjacentHTML("beforeend", `
-    <div class="mt-2 text-xs text-slate-600">Verifier tier ${v.tier}:
+    <div class="mt-2 text-xs text-[var(--text-secondary)]">Verifier tier ${v.tier}:
       ${v.n_input} → ${v.n_kept} trích dẫn (bỏ ${v.n_dropped}, đánh dấu ${v.n_flagged}).</div>`);
 }
 
@@ -499,24 +845,24 @@ function ganSuKienChip() {
 function hienBlock(b) {
   if (!b) return;
   $("panel-nguyen-van").innerHTML = `
-    <div class="text-xs text-slate-600">${esc(tenVB(b.norm_id))}</div>
-    <div class="text-[11px] text-slate-400 font-mono">${esc(b.norm_id)}</div>
-    <div class="font-medium text-sm mt-1">${esc(b.vi_tri || "(cả văn bản)")}</div>
+    <div class="text-xs text-[var(--text-secondary)]">${esc(tenVB(b.norm_id))}</div>
+    <div class="text-[11px] text-[var(--text-muted)] font-mono">${esc(b.norm_id)}</div>
+    <div class="font-medium text-sm text-navy mt-1">${esc(b.vi_tri || "(cả văn bản)")}</div>
     <div class="flex flex-wrap gap-1.5 my-2 text-xs">
-      ${b.tier != null ? chip("tier", b.tier) : ""}
+      ${b.tier != null ? chip("tier", b.tier, "bg-navy-faint text-navy") : ""}
       ${b.valid_from ? chip("hiệu lực", b.valid_from + (b.valid_to ? ` → ${b.valid_to}` : "")) : ""}
-      ${b.het_hieu_luc ? `<span class="px-2 py-1 rounded bg-rose-100 text-rose-700">HẾT HIỆU LỰC</span>` : ""}
+      ${b.het_hieu_luc ? `<span class="badge-het-hieu-luc px-2 py-1">HẾT HIỆU LỰC</span>` : ""}
     </div>
-    ${b.amendments?.length ? `<div class="bg-amber-50 border border-amber-200 rounded p-2 text-xs mb-2">
+    ${b.amendments?.length ? `<div class="khoi-canh-bao-sua-doi rounded-r p-2 text-xs mb-2">
       <b>Cảnh báo sửa đổi</b><ul class="mt-1 space-y-1">${b.amendments.map(a =>
         `<li>• ${esc(a.amending_norm)} (${esc(a.amending_loc)}, hiệu lực ${esc(a.effective_date)}): ${esc(a.content_summary)}</li>`).join("")}</ul></div>` : ""}
-    <pre class="text-xs whitespace-pre-wrap bg-slate-50 rounded p-3 max-h-[55vh] overflow-auto scroll-mong">${esc(b.text)}</pre>
-    <div class="text-[11px] text-slate-400 mt-2">Nguồn: block context đã gửi cho LLM.</div>`;
+    <pre class="text-xs whitespace-pre-wrap bg-[var(--gray-50)] border border-[var(--border-card)] rounded-lg p-3 max-h-[55vh] overflow-auto scroll-mong">${esc(b.text)}</pre>
+    <div class="text-[11px] text-[var(--text-muted)] mt-2">Nguồn: block context đã gửi cho LLM.</div>`;
 }
 
 async function moNguyenVan(norm_id, dieu, khoan, diem) {
   if (!norm_id || !dieu) return;
-  $("panel-nguyen-van").innerHTML = `<div class="text-slate-400 text-sm">Đang tra…</div>`;
+  $("panel-nguyen-van").innerHTML = `<div class="text-[var(--text-muted)] text-sm">Đang tra…</div>`;
   const q = new URLSearchParams({ norm_id, dieu });
   if (khoan) q.set("khoan", khoan);
   if (diem) q.set("diem", diem);
@@ -525,24 +871,24 @@ async function moNguyenVan(norm_id, dieu, khoan, diem) {
     const d = await r.json();
     const vt = [`Điều ${dieu}`, khoan && `Khoản ${khoan}`, diem && `Điểm ${diem}`].filter(Boolean).join(", ");
     $("panel-nguyen-van").innerHTML = `
-      <div class="text-xs text-slate-600">${esc(tenVB(norm_id))}</div>
-      <div class="text-[11px] text-slate-400 font-mono">${esc(norm_id)}</div>
-      <div class="font-medium text-sm mt-1">${esc(vt)}</div>
-      ${d.norm ? `<div class="text-xs text-slate-500 mt-1">${esc(d.norm.title)} ${d.norm.so_hieu ? "· " + esc(d.norm.so_hieu) : ""}
+      <div class="text-xs text-[var(--text-secondary)]">${esc(tenVB(norm_id))}</div>
+      <div class="text-[11px] text-[var(--text-muted)] font-mono">${esc(norm_id)}</div>
+      <div class="font-medium text-sm text-navy mt-1">${esc(vt)}</div>
+      ${d.norm ? `<div class="text-xs text-[var(--text-muted)] mt-1">${esc(d.norm.title)} ${d.norm.so_hieu ? "· " + esc(d.norm.so_hieu) : ""}
         · tier ${d.norm.tier} · hiệu lực ${esc(d.norm.valid_from || "?")}${d.norm.valid_to ? " → " + esc(d.norm.valid_to) : ""}</div>` : ""}
       ${d.tim_thay
-        ? `<pre class="text-xs whitespace-pre-wrap bg-slate-50 rounded p-3 mt-2 max-h-[55vh] overflow-auto scroll-mong">${esc(d.text)}</pre>`
-        : `<div class="bg-rose-50 border border-rose-200 text-rose-700 rounded p-3 mt-2 text-xs">
+        ? `<pre class="text-xs whitespace-pre-wrap bg-[var(--gray-50)] border border-[var(--border-card)] rounded-lg p-3 mt-2 max-h-[55vh] overflow-auto scroll-mong">${esc(d.text)}</pre>`
+        : `<div class="khoi-loi rounded-lg p-3 mt-2 text-xs">
              Không tìm thấy vị trí này trong <code>data/raw/${esc(norm_id)}.md</code>.
              Đây là tín hiệu thật: trích dẫn trỏ tới điều khoản không tồn tại trong corpus.</div>`}
-      <div class="text-[11px] text-slate-400 mt-2">Nguồn: <code>data/raw/*.md</code> (không qua Neo4j).</div>`;
+      <div class="text-[11px] text-[var(--text-muted)] mt-2">Nguồn: <code>data/raw/*.md</code> (không qua Neo4j).</div>`;
   } catch (e) {
-    $("panel-nguyen-van").innerHTML = `<div class="text-rose-700 text-sm">Lỗi tra nguyên văn: ${esc(e.message)}</div>`;
+    $("panel-nguyen-van").innerHTML = `<div class="text-deep-red text-sm">Lỗi tra nguyên văn: ${esc(e.message)}</div>`;
   }
 }
 
 $("nut-dong-panel").onclick = () =>
-  $("panel-nguyen-van").innerHTML = `<div class="text-slate-500 text-sm">Bấm một trích dẫn để xem nguyên văn.</div>`;
+  $("panel-nguyen-van").innerHTML = `<div class="text-[var(--text-muted)] text-sm">Bấm một trích dẫn để xem nguyên văn.</div>`;
 
 // ---------------------------------------------------------------- đồ thị Cytoscape
 async function taiDoThi() {
@@ -569,22 +915,47 @@ function veDoThi(norms) {
   CY = cytoscape({
     container: el,
     elements: { nodes, edges },
-    style: [
-      { selector: "node", style: {
-        "label": "data(nhan)", "text-wrap": "wrap", "font-size": 9, "text-valign": "center",
-        "color": "#1e293b", "background-color": "#e2e8f0", "width": 130, "height": 42,
-        "shape": "round-rectangle", "text-max-width": 120 } },
-      { selector: "node[seed = 1]", style: { "background-color": "#c7d2fe", "border-width": 2, "border-color": "#4f46e5" } },
-      { selector: "edge", style: {
-        "label": "data(loai)", "font-size": 8, "color": "#64748b", "width": 1.5,
-        "line-color": "#94a3b8", "target-arrow-color": "#94a3b8",
-        "target-arrow-shape": "triangle", "curve-style": "bezier" } },
-      { selector: "edge[loai = 'AMENDS']", style: { "line-color": "#f59e0b", "target-arrow-color": "#f59e0b", "line-style": "dashed" } },
-    ],
+    style: styleDoThi(),
     layout: { name: "breadthfirst", directed: true, padding: 14, spacingFactor: 1.1 },
     wheelSensitivity: 0.2,
   });
   CY.on("tap", "node", (evt) => moNguyenVan(evt.target.id(), "1"));
+}
+
+/** Stylesheet Cytoscape dựng TƯƠI từ token — gọi lại mỗi lần đổi bảng màu.
+ *  Canvas không kế thừa CSS var nên mọi màu phải qua `mauToken()`. */
+function styleDoThi() {
+  const font = "Be Vietnam Pro, Segoe UI, system-ui, sans-serif";
+  const canh = mauToken("--edge");
+  const canhSua = mauToken("--edge-amends");
+  return [
+    { selector: "node", style: {
+      "label": "data(nhan)", "text-wrap": "wrap", "font-size": 9, "text-valign": "center",
+      "font-family": font, "color": mauToken("--node-text"),
+      "background-color": mauToken("--node-t2"), "width": 130, "height": 42,
+      "shape": "round-rectangle", "text-max-width": 120 } },
+    { selector: "node[tier = 1]", style: { "background-color": mauToken("--node-t1") } },
+    { selector: "node[tier = 2]", style: { "background-color": mauToken("--node-t2") } },
+    { selector: "node[tier = 3]", style: { "background-color": mauToken("--node-t3") } },
+    // Tier 4 đổi cả nền LẪN màu chữ giữa hai chế độ (nền nhạt ở A cần chữ đậm).
+    { selector: "node[tier = 4]", style: {
+      "background-color": mauToken("--node-t4"), "color": mauToken("--node-t4-text") } },
+    { selector: "node[seed = 1]", style: {
+      "border-width": 2, "border-color": mauToken("--node-seed") } },
+    { selector: "edge", style: {
+      "label": "data(loai)", "font-size": 8, "color": mauToken("--edge-text"), "width": 1.5,
+      "font-family": font, "line-color": canh, "target-arrow-color": canh,
+      "target-arrow-shape": "triangle", "curve-style": "bezier" } },
+    { selector: "edge[loai = 'AMENDS']", style: {
+      "line-color": canhSua, "target-arrow-color": canhSua, "line-style": "dashed" } },
+  ];
+}
+
+/** Nạp lại stylesheet cho đồ thị ĐANG hiện (giữ nguyên layout đã chạy). */
+function veLaiMauDoThi() {
+  if (!CY) return;
+  try { CY.style(styleDoThi()); }
+  catch (e) { console.warn("Không nạp lại được style đồ thị:", e); }
 }
 
 // ---------------------------------------------------------------- luồng SSE
@@ -594,9 +965,13 @@ function dispatch(ev) {
 
   if (ev.kind === "error") {
     $("bang-loi").classList.remove("hidden");
-    $("bang-loi").innerHTML = `<b>Lỗi:</b> ${esc(ev.data.thong_bao || ev.raw)}
+    $("bang-loi").innerHTML = `<b>⚠️ Lỗi:</b> ${esc(ev.data.thong_bao || ev.raw)}
+      <div class="mt-1 text-xs">Cách xử lý: kiểm tra server còn chạy không, hoặc khởi động lại ở chế độ
+        <code>replay</code> (<code>DEMO_MODE=replay</code>) để chạy từ fixture đã ghi sẵn.</div>
       ${(ev.data.cau_hoi_co_san || []).length
-        ? `<div class="mt-2 text-xs">Câu có sẵn: ${ev.data.cau_hoi_co_san.map(q => `<button class="underline goi-y-loi">${esc(q)}</button>`).join(" · ")}</div>` : ""}`;
+        ? `<div class="mt-2 text-xs">Câu có sẵn: ${ev.data.cau_hoi_co_san.map(q =>
+            `<button class="underline goi-y-loi">${esc(q)}</button>`).join(" · ")}</div>` : ""}`;
+    // Nội dung nút = câu hỏi gửi đi → không chèn ký tự trang trí vào bên trong.
     document.querySelectorAll(".goi-y-loi").forEach(b => b.onclick = () => { $("o-cau-hoi").value = b.textContent; });
     return;
   }
@@ -633,6 +1008,8 @@ async function hoi() {
   DANG_CHAY = true;
   $("nut-hoi").disabled = true;
   $("nut-hoi").textContent = "Đang chạy…";
+  // Đổi adapter giữa luồng SSE sẽ cắt trace đang phát → khóa nút lại.
+  $("nut-mode-live").disabled = $("nut-mode-replay").disabled = true;
   $("bang-loi").classList.add("hidden");
   BLOCKS = []; PLAN = {}; HYBRID = {}; SEED_STAGE1 = [];
   TRA_LOI_HIEN_TAI = null; VERIFIER_HIEN_TAI = null; HIEN_NGUYEN_VAN_LLM = false;
@@ -647,6 +1024,7 @@ async function hoi() {
         jurisdiction: $("o-juris").value || null,
         response_mode: $("o-mode").value || null,
         verify: $("o-verify").checked,
+        speed: TOC_DO,          // chỉ có tác dụng ở replay; live bỏ qua
       }),
     });
     // KHÔNG dùng EventSource (chỉ GET + tự kết nối lại) — đọc thẳng body stream.
@@ -668,11 +1046,16 @@ async function hoi() {
     }
   } catch (e) {
     $("bang-loi").classList.remove("hidden");
-    $("bang-loi").innerHTML = `<b>Mất kết nối tới server:</b> ${esc(e.message)}`;
+    $("bang-loi").innerHTML = `<b>⚠️ Mất kết nối tới server:</b> ${esc(e.message)}
+      <div class="mt-1 text-xs">Cách xử lý: kiểm tra tiến trình <code>ui/server.py</code> còn sống không,
+        rồi tải lại trang. Nếu backend thật (Neo4j/Qdrant/LLM) không sẵn sàng, khởi động lại với
+        <code>DEMO_MODE=replay</code> để chạy từ fixture đã ghi sẵn.</div>`;
   } finally {
     DANG_CHAY = false;
     $("nut-hoi").disabled = false;
     $("nut-hoi").textContent = "Hỏi";
+    $("nut-mode-replay").disabled = false;
+    $("nut-mode-live").disabled = !TRANG_THAI.co_the_live && TRANG_THAI.mode === "replay";
   }
 }
 
@@ -681,29 +1064,129 @@ $("o-cau-hoi").addEventListener("keydown", e => {
   if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) hoi();
 });
 
+// Công tắc bảng màu — chỉ đổi lớp trình bày, KHÔNG đụng pipeline nên bấm được
+// cả khi đang chạy. `datBangMau` gọi `veLaiMauDoThi()` để đồ thị đang hiện
+// đổi màu theo mà không phải vẽ lại layout.
+["a", "b"].forEach(x => {
+  const nut = $("nut-mau-" + x);
+  if (nut) nut.onclick = () => datBangMau(x);
+});
+
+// ---------------------------------------------------------------- chế độ chạy + tốc độ (Task 5)
+let TRANG_THAI = {};    // /api/mode gần nhất
+let TOC_DO = null;      // tốc độ phát lại đang chọn; null = để server tự quyết
+
+/** Vẽ lại thanh trạng thái + chip gợi ý theo dữ liệu `/api/mode`. */
+function apDungTrangThai(m) {
+  TRANG_THAI = m || {};
+  const replay = m.mode === "replay";
+
+  // Badge "PHÁT LẠI" nền vàng CTA chữ đen — phải nhìn rõ từ cuối phòng.
+  // Vòng viền trắng là BẮT BUỘC: ở chế độ màu A thanh trạng thái là
+  // terracotta-dk, vàng CTA trên nền đó chỉ chênh 2.5:1 nên badge dễ chìm;
+  // viền trắng tách hẳn badge khỏi dải nền ở CẢ HAI chế độ.
+  // (className gán ở đây GHI ĐÈ class tĩnh trong HTML → phải kê đủ tại chỗ.)
+  $("badge-mode").textContent = replay ? "PHÁT LẠI" : "TRỰC TIẾP";
+  $("badge-mode").className = "text-xs font-bold px-3 py-1 rounded-full " +
+    (replay ? "bg-cta text-ink-900 ring-2 ring-white/80" : "bg-white/15 text-white ring-1 ring-white/25");
+
+  $("nut-mode-live").setAttribute("aria-pressed", String(!replay));
+  $("nut-mode-replay").setAttribute("aria-pressed", String(replay));
+  // Không dựng nút chết: thiếu cấu hình Neo4j trong .env thì khóa nút TRỰC TIẾP.
+  $("nut-mode-live").disabled = !m.co_the_live && replay;
+  $("nut-mode-live").title = (!m.co_the_live && replay)
+    ? "Thiếu NEO4J_URI/NEO4J_PASSWORD trong .env — máy này không chạy live được"
+    : "Chạy thật: gọi Neo4j + Qdrant + LLM";
+
+  // Tốc độ chỉ có nghĩa ở replay (LiveAdapter bỏ qua tham số này).
+  $("nhom-toc-do").classList.toggle("hidden", !replay);
+  if (replay && TOC_DO == null) TOC_DO = Number(m.replay_speed) || 4;
+  datTocDo(TOC_DO);
+
+  $("tt-toc-do").textContent = replay
+    ? "phát lại từ fixture đã ghi sẵn"
+    : "gọi Neo4j / Qdrant / LLM thật";
+
+  $("canh-bao-fixture").classList.toggle("hidden", !replay);
+  if (replay) {
+    $("canh-bao-fixture").innerHTML =
+      "Đang chạy <b>PHÁT LẠI</b> từ fixture đã ghi sẵn — không gọi Neo4j/Qdrant/LLM. " +
+      "Mốc thời gian là thời gian thật của lượt chạy đã ghi, được tua nhanh.";
+  }
+  if (m.loi_doi_mode) {
+    $("bang-loi").classList.remove("hidden");
+    $("bang-loi").innerHTML = `<b>⚠️ ${esc(m.loi_doi_mode)}</b>`;
+  }
+
+  // Chip gợi ý: `textContent` của nút CHÍNH LÀ câu hỏi gửi vào pipeline —
+  // không được chèn số thứ tự, mũi tên, emoji hay bất kỳ ký tự trang trí nào
+  // vào bên trong nút (ở chế độ replay sẽ trượt khớp fixture). Trang trí bằng CSS.
+  $("goi-y").innerHTML = (m.questions || []).map(q =>
+    `<button class="goi-y-nut bg-cta hover:bg-cta-hover text-ink-900 font-semibold rounded px-3 py-1.5 transition-colors duration-150">${esc(q)}</button>`).join("");
+  document.querySelectorAll(".goi-y-nut").forEach(b =>
+    b.onclick = () => { $("o-cau-hoi").value = b.textContent; hoi(); });
+  if (!$("o-cau-hoi").value && (m.questions || []).length === 1)
+    $("o-cau-hoi").value = m.questions[0];
+}
+
+function datTocDo(v) {
+  TOC_DO = v == null ? null : Number(v);
+  document.querySelectorAll(".nut-toc-do").forEach(b =>
+    b.setAttribute("aria-pressed", String(Number(b.dataset.speed) === TOC_DO)));
+}
+
+function _matKetNoi(msg) {
+  $("badge-mode").textContent = "MẤT KẾT NỐI";
+  $("badge-mode").className =
+    "text-xs font-bold px-3 py-1 rounded-full bg-deep-red text-white ring-2 ring-white/80";
+  $("tt-toc-do").textContent = msg;
+}
+
+/** Đổi live ⇄ replay KHÔNG restart server (Task 5).
+ *  Server giữ nguyên adapter cũ nếu dựng cái mới hỏng → bấm nhầm không mất demo. */
+async function doiMode(mode) {
+  if (DANG_CHAY || TRANG_THAI.mode === mode) return;
+  const nut = mode === "live" ? $("nut-mode-live") : $("nut-mode-replay");
+  const chu_cu = nut.textContent;
+  nut.disabled = true;
+  nut.textContent = "đang đổi…";
+  try {
+    const r = await fetch("/api/mode", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.detail || `HTTP ${r.status}`);
+    $("bang-loi").classList.add("hidden");
+    if (mode === "live") TOC_DO = null;   // vào live thì quên tốc độ cũ
+    apDungTrangThai(d);
+  } catch (e) {
+    $("bang-loi").classList.remove("hidden");
+    $("bang-loi").innerHTML = `<b>⚠️ Không đổi được sang ${esc(mode)}:</b> ${esc(e.message)}
+      <div class="mt-1 text-xs">Chế độ đang chạy vẫn giữ nguyên, có thể trình bày tiếp.
+        Sang <code>live</code> cần Neo4j + Qdrant + credentials LLM (kiểm tra
+        <code>docker compose ps</code> và <code>.env</code>).</div>`;
+  } finally {
+    nut.textContent = chu_cu;
+    nut.disabled = false;
+  }
+}
+
+$("nut-mode-live").onclick = () => doiMode("live");
+$("nut-mode-replay").onclick = () => doiMode("replay");
+document.querySelectorAll(".nut-toc-do").forEach(b =>
+  b.onclick = () => datTocDo(b.dataset.speed));
+
 // ---------------------------------------------------------------- khởi động
 (async function khoiDong() {
+  datBangMau("a");     // mặc định A; không đọc/ghi storage (spec mục 1.5)
   dungStepper();
   await taiDoThi();   // xong trước khi hỏi để bước 3/4/6/7 có tên thật
   try {
-    const m = await (await fetch("/api/mode")).json();
-    const replay = m.mode === "replay";
-    $("badge-mode").textContent = replay ? `PHÁT LẠI ×${m.replay_speed ?? ""}` : "TRỰC TIẾP";
-    $("badge-mode").className = "ml-auto text-xs font-bold px-3 py-1 rounded-full " +
-      (replay ? "bg-amber-400 text-amber-950" : "bg-emerald-500 text-white");
-    if (replay) {
-      $("canh-bao-fixture").classList.remove("hidden");
-      $("canh-bao-fixture").innerHTML =
-        "Đang chạy <b>PHÁT LẠI</b> từ fixture đã ghi sẵn — không gọi Neo4j/Qdrant/LLM. " +
-        "Mốc thời gian là thời gian thật của lượt chạy đã ghi, được tua nhanh.";
-    }
-    $("goi-y").innerHTML = (m.questions || []).map(q =>
-      `<button class="goi-y-nut border border-slate-300 hover:border-indigo-400 hover:bg-indigo-50 rounded-full px-3 py-1">${esc(q)}</button>`).join("");
-    document.querySelectorAll(".goi-y-nut").forEach(b =>
-      b.onclick = () => { $("o-cau-hoi").value = b.textContent; hoi(); });
-    if ((m.questions || []).length === 1) $("o-cau-hoi").value = m.questions[0];
+    apDungTrangThai(await (await fetch("/api/mode")).json());
   } catch (e) {
-    $("badge-mode").textContent = "MẤT KẾT NỐI";
+    _matKetNoi("không đọc được /api/mode");
   }
 })();
 </script>

@@ -1,4 +1,4 @@
-"""Corpus reader cho UI demo — Task 1 (`docs/UI_DEMO_SPEC.md` mục 6).
+"""Corpus reader cho UI demo — Task 1 (`ui/docs/UI_DEMO_SPEC.md` mục 6).
 
 Đọc toàn bộ `data/raw/*.md` MỘT LẦN lúc startup, cache trong bộ nhớ, phục vụ:
   (a) dựng đồ thị Norm cho bước 4 (Stage 2 traversal) mà KHÔNG cần Neo4j —

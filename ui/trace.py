@@ -1,4 +1,4 @@
-"""Trace collector + parser cho UI demo — Task 2 (`docs/UI_DEMO_SPEC.md` mục 6).
+"""Trace collector + parser cho UI demo — Task 2 (`ui/docs/UI_DEMO_SPEC.md` mục 6).
 
 Ba nhóm chức năng, tất cả đều thuần đọc — KHÔNG gọi LLM, KHÔNG sửa `src/`:
 

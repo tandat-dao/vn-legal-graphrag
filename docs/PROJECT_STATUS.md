@@ -1,9 +1,9 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
 **Phiên bản 2.23 | Cập nhật 2026-07-26**
 
-> **v2.23 — Cập nhật 2026-07-26 (UI demo bảo vệ — Task 1 + 2 của `docs/UI_DEMO_SPEC.md`):**
+> **v2.23 — Cập nhật 2026-07-26 (UI demo bảo vệ — Task 1 + 2 của `ui/docs/UI_DEMO_SPEC.md`):**
 >
-> Bắt đầu dựng web UI trình diễn pipeline cho buổi bảo vệ (spec: **[docs/UI_DEMO_SPEC.md](UI_DEMO_SPEC.md)**, 7 task). Toàn bộ code mới nằm trong `ui/` — **KHÔNG sửa `src/`** (giữ tính tái lập của số liệu `docs/V2_RESULTS.md`).
+> Bắt đầu dựng web UI trình diễn pipeline cho buổi bảo vệ (spec: **[ui/docs/UI_DEMO_SPEC.md](../ui/docs/UI_DEMO_SPEC.md)**, 7 task). Toàn bộ code mới nằm trong `ui/` — **KHÔNG sửa `src/`** (giữ tính tái lập của số liệu `docs/V2_RESULTS.md`).
 >
 > **1. `ui/corpus.py` (Task 1).** Đọc `data/raw/*.md` một lần, cache in-memory: `load_corpus()` / `norm_graph()` / `get_component_text()`. Dựng đồ thị Norm cho bước Stage 2 **mà không cần Neo4j** (máy A DB rỗng vẫn vẽ được): 32 node, **40 cạnh** (29 IMPLEMENTS + 11 AMENDS), bỏ 23 cạnh trỏ ra ngoài corpus — đúng như Neo4j (`MATCH…MATCH…MERGE` không tạo cạnh treo). Xử lý `implements`/`amended_by_norms` dạng string \| list \| null (D-23).
 >

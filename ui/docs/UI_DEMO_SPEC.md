@@ -11,15 +11,22 @@
 Dựng một web UI **một process** để trình diễn hệ thống trong buổi bảo vệ khóa luận. Yêu cầu cốt lõi của người dùng:
 
 1. Showcase được **luồng xử lý từ câu hỏi ra câu trả lời** — 7 bước, hiện dần theo thời gian thực, tạo cảm giác "thinking process".
-2. Chạy được ở **hai chế độ**: `live` (có DB) và `replay` (không cần DB) — cùng một codebase, đổi bằng biến môi trường.
+2. Chạy được ở **hai chế độ**: `live` (có DB — **đường chính lúc bảo vệ**) và `replay` (không cần DB — **lưới an toàn** + môi trường phát triển) — cùng một codebase, đổi bằng biến môi trường **hoặc bấm nút trên UI, không cần restart** (Task 5).
 3. Đây là **demo**, không phải sản phẩm. Không cần auth, không cần multi-user, không cần CI, không cần test coverage cao. Ưu tiên: chạy được, trông thuyết phục, không sập giữa buổi bảo vệ.
 
 ### Bối cảnh hai máy
 
-- **Máy A** (người dùng, Windows): có code + `data/raw/` + `data/evaluation/`, **Neo4j và Qdrant rỗng**. Đây là máy sẽ trình diễn.
-- **Máy B** (bạn cùng nhóm): có Neo4j + Qdrant đã ingest + LLM credentials.
+> **Cập nhật 2026-08-02 — đảo vai trò so với bản đầu.** Bản đầu của spec này giả định máy A trình diễn bằng `replay`. Không còn đúng: **máy B là máy trình diễn và `live` là đường chính.**
 
-Nên: implement và test giao diện ở máy A bằng `replay`; máy B chạy `live` một lượt để **ghi fixture**; máy A trình diễn bằng fixture đó.
+- **Máy B** (bạn cùng nhóm) — **MÁY TRÌNH DIỄN**: có Neo4j + Qdrant đã ingest + LLM credentials. Buổi bảo vệ chạy `DEMO_MODE=live` trên máy này.
+- **Máy A** (Windows) — **MÁY PHÁT TRIỂN**: có code + `data/raw/` + `data/evaluation/`, **Neo4j và Qdrant rỗng**, thiếu cả `sentence_transformers`. Không chạy `live` được; dùng `replay` để dựng và test giao diện.
+
+Hệ quả:
+
+1. **`replay` là lưới an toàn, không phải đường trình diễn.** Vai trò của nó: (a) máy A phát triển UI không cần DB; (b) khi `live` hỏng giữa buổi (Neo4j rớt, LLM 429/529, mạng chết) thì bấm một nút trên thanh trạng thái là về `replay` chạy tiếp — xem Task 5. Fixture vì thế vẫn **bắt buộc phải ghi trước** và commit, dù kịch bản chính không dùng tới.
+2. **Fixture phải ghi trên chính máy B, với đúng bộ cờ sẽ dùng lúc demo.** Cờ lệch thì lúc fallback câu hỏi không khớp fixture, và cache LLM cũng không HIT.
+3. **Máy B phải chạy `scripts/preflight.py` trước buổi bảo vệ** để biết Docker/Neo4j/Qdrant/`.env`/BGE-M3 đã sẵn sàng chưa. Quy trình dựng máy B từ đầu: `ui/docs/LIVE_GUIDE.md`.
+4. Phần lớn thứ **chưa kiểm chứng được ở máy A** đều nằm ở đường `live` (regex parse log thật, `_build_clients()`, lỗi LLM thật) — danh sách ở cuối `ui/README.md`, phải chạy ở máy B.
 
 ---
 
@@ -61,7 +68,9 @@ ui/
 Chọn bằng env var, thêm vào `.env` và `.env.example`:
 
 ```
-DEMO_MODE=replay        # replay | live
+DEMO_MODE=replay        # replay | live — chỉ là mode LÚC KHỞI ĐỘNG.
+                        # Máy B (trình diễn) đặt live; máy A để replay.
+                        # Đổi lúc đang chạy bằng POST /api/mode (Task 5).
 UI_PORT=8000
 ```
 
@@ -69,9 +78,9 @@ Chạy: `uvicorn ui.server:app --port 8000`
 
 ### 2.1 Frontend
 
-Một file `ui/static/index.html`. Tailwind qua CDN, Cytoscape.js qua CDN cho đồ thị. **Không npm, không build step** — để copy thư mục sang máy khác là chạy được ngay.
+Một file `ui/static/index.html`. Tailwind và Cytoscape.js **đã vendor về `ui/static/vendor/`** (Task 5 đã làm — không còn CDN nào). **Không npm, không build step** — để copy thư mục sang máy khác là chạy được ngay, kể cả khi máy đó không có internet.
 
-Nếu cần thư viện khác, dùng CDN. Chú ý: máy trình diễn có thể không có internet lúc bảo vệ → tải các file CDN về `ui/static/vendor/` và tham chiếu local. Làm việc này ở Task 6.
+Nếu về sau cần thư viện khác: tải về `ui/static/vendor/` và tham chiếu `/static/vendor/…` (đường dẫn tương đối `vendor/…` sẽ 404 vì `/` do `FileResponse` phục vụ, không nằm dưới mount point). **Không thêm thẻ trỏ ra CDN** — máy trình diễn có thể không có mạng lúc bảo vệ.
 
 ### 2.2 Vòng đời client
 
@@ -189,7 +198,9 @@ Nguyên tắc: **`raw` luôn được giữ nguyên**. Nếu regex không khớp
 
 Fixture do `ui/record.py` sinh trên máy B. Commit vào git (`ui/fixtures/` KHÔNG được thêm vào `.gitignore`).
 
-`ReplayAdapter` phát lại đúng chuỗi `events` đó. Về thời gian: dùng `t` thật nhưng **chia cho `REPLAY_SPEED` (mặc định 4.0)**, vì một câu chạy thật mất ~22s. Frontend PHẢI hiện badge "PHÁT LẠI" khi ở chế độ này — không được để hội đồng tưởng là đang chạy live.
+Vì `live` là đường chính (mục 0), fixture tồn tại để **đỡ lúc `live` hỏng giữa buổi**. Do đó nó phải phủ **đúng những câu sẽ trình bày** và ghi bằng **đúng bộ cờ sẽ dùng** — lệch một cờ là lúc fallback không tìm thấy fixture.
+
+`ReplayAdapter` phát lại đúng chuỗi `events` đó. Về thời gian: dùng `t` thật nhưng **chia cho `REPLAY_SPEED` (mặc định 4.0)**, vì một câu chạy thật mất ~22s. Frontend PHẢI hiện badge "PHÁT LẠI" khi ở chế độ này — không được để hội đồng tưởng là đang chạy live. Điều này càng quan trọng khi `live` là mặc định: nếu giữa buổi phải fallback, hội đồng phải thấy ngay là hệ đã đổi sang phát lại.
 
 ---
 
@@ -298,7 +309,7 @@ Không dùng thư viện YAML nếu tránh được — frontmatter đơn giản
 
 ## 6. Task
 
-Làm theo thứ tự. Task 1–3 test được hoàn toàn ở máy A không cần DB — làm xong 3 task này là đã có UI xem được.
+Làm theo thứ tự. Task 1–3 test được hoàn toàn ở máy A không cần DB — làm xong 3 task này là đã có UI xem được. **Task 4–5 chỉ nghiệm thu trọn vẹn được ở máy B**, vì đó là nơi có DB và là máy sẽ trình diễn.
 
 Phạm vi UI là **luồng hỏi–đáp, một trang duy nhất**. Không có tab, không có dashboard đánh giá: số liệu Chương 4 đã nằm ở `docs/V2_RESULTS.md` và sẽ được trình bày bằng slide, dựng lại trong UI chỉ thêm đường sập mà không thêm bằng chứng nào.
 
@@ -346,11 +357,13 @@ python -m ui.record data/evaluation/demo_questions.txt      # bỏ dòng trống
 ```
 Cờ: `--jurisdiction`, `--mode {general,irac}`, `--verify`, `--llm-mode` — **phải khớp** với cờ dùng lúc demo. Ghi ra `ui/fixtures/`.
 
-**Xong khi:** máy B chạy `live` được end-to-end và `record.py` sinh JSON hợp lệ; máy A pull về, replay thấy đủ 7 bước.
+**Xong khi:** máy B chạy `live` được end-to-end (đây là kịch bản bảo vệ, không phải bước phụ) và `record.py` sinh JSON hợp lệ; máy A pull về, replay thấy đủ 7 bước.
+
+Trước khi chạy `live` lần đầu ở máy B: `python scripts/preflight.py` để kiểm Docker/Neo4j/Qdrant/`.env`/BGE-M3. Quy trình dựng máy B: `ui/docs/LIVE_GUIDE.md`.
 
 ### Task 5 — Chống sự cố buổi bảo vệ
 - Tải các file CDN về `ui/static/vendor/`, đổi sang tham chiếu local.
-- Nút chuyển `live` ⇄ `replay` ngay trên UI (không cần restart server) — ở `live` mà lỗi thì bấm một nút là fallback.
+- Nút chuyển `live` ⇄ `replay` ngay trên UI (không cần restart server) — **đây là cơ chế cứu buổi bảo vệ**: kịch bản chính chạy `live`, hỏng thì bấm một nút là về `replay` trình bày tiếp. Server phải GIỮ adapter cũ nếu dựng adapter mới hỏng.
 - Badge "PHÁT LẠI" khi ở replay, và nút điều chỉnh tốc độ.
 
 ---
