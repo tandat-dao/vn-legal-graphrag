@@ -21,6 +21,50 @@ Sửa gì đụng tới spec thì cập nhật spec luôn, đừng để log tha
 
 ---
 
+## 2026-08-03 — Demo live chạy nhầm nhà cung cấp; đồ thị không căn lại khi đổi kích thước
+
+**Tệp:** `ui/adapters.py` · `ui/static/index.html` · `scripts/preflight.py` · `tests/test_preflight.py` · `ui/README.md`
+
+Ba việc dưới đây phát hiện khi chạy thử một lượt đầu-cuối ở máy có đủ Neo4j + Qdrant +
+credentials, tức đúng cấu hình của buổi bảo vệ.
+
+### 1. `LiveAdapter` mặc định `claude` trong khi báo cáo đo bằng Gemini
+
+- **Triệu chứng:** khởi động `DEMO_MODE=live` ra log `LiveAdapter: khởi tạo client
+  (llm_mode=claude)`, request đi tới `api.anthropic.com`, và **giao diện hiện chip
+  `LLM: claude` ngay ở bước 1** — hội đồng nhìn thấy được.
+- **Nguyên nhân:** `adapters.py` lấy `os.getenv("LLM_MODE") or "claude"`, mà `LLM_MODE`
+  **không** nằm trong `.env.example` nên máy nào không tự thêm dòng đó sẽ rơi về Claude.
+  Bảng 3.6 của báo cáo ghi planner Gemini 2.5 Flash, generator Gemini 2.5 Pro.
+- **Sửa:** đổi mặc định thành `gemini` ở cả `LiveAdapter` lẫn `preflight.kiem_env` (hai chỗ
+  phải khớp nhau, không thì preflight báo xanh cho một cấu hình khác cái đang chạy).
+- **Kiểm chứng:** chạy lại `DEMO_MODE=live` → log `llm_mode=gemini`; hỏi một câu thật, log
+  request là `aiplatform.googleapis.com/.../gemini-2.5-flash` và `gemini-2.5-pro`, 24 event,
+  2 trích dẫn, 23,9s.
+
+### 2. Đồ thị bước 4 không căn lại khi cửa sổ đổi kích thước
+
+- **Triệu chứng:** cắm máy chiếu hoặc phóng to cửa sổ sau khi đã hỏi → đồ thị giữ nguyên vùng
+  vẽ cũ, chừa một mảng trống bên phải. Đo trên canvas: lấp **96% bề ngang ở cửa sổ 832px,
+  tụt còn 63% sau khi kéo lên 1600px**.
+- **Nguyên nhân:** `CY.resize() + CY.fit()` mới chỉ được gọi trong `datCoChu()` (đổi cỡ chữ).
+  Không có handler nào cho `window.resize`, mà Cytoscape thì không tự đo lại container.
+- **Sửa:** thêm listener `resize` gọi đúng cặp `CY.resize(); CY.fit(undefined, 14)` như
+  `datCoChu`, debounce 150ms vì sự kiện bắn liên tục lúc kéo cạnh cửa sổ.
+- **Kiểm chứng:** đo lại cùng cách — 94% ở 1280px, **97%** sau khi kéo lên 1600px.
+
+### 3. Hai test preflight đỏ trên máy vừa clone
+
+- **Triệu chứng:** `pytest tests/ -q` ở worktree sạch cho `2 failed, 603 passed`; cũng lệnh đó
+  trên máy đã cấu hình thì xanh. README đang ghi 574 pass.
+- **Nguyên nhân:** `kiem_env` tính "không có tệp `.env`" là lỗi chặn, mà `.env` bị gitignore.
+  Hai test chỉ monkeypatch biến môi trường nên vẫn dính lỗi đó → kết quả phụ thuộc máy chạy.
+- **Sửa:** helper `_goc_co_env` trỏ `preflight.GOC` sang `tmp_path` có sẵn `.env` giả. Thêm
+  `test_env_mac_dinh_la_gemini` khóa mặc định mới ở mục 1.
+- **Kiểm chứng:** xóa `.env` khỏi worktree rồi chạy lại → **606 passed, 2 skipped**.
+
+---
+
 ## 2026-08-02 — Xương sống bảy bước: sửa đè số, đổi hệ màu; gọn lại chip câu hỏi
 
 **Tệp:** `ui/static/index.html` · `ui/docs/UI_STYLE_SPEC.md`
