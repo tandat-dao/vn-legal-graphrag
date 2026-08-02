@@ -164,9 +164,10 @@ mục 6 và 9. Ba cái dễ vấp nhất:
 
 ## Trạng thái kiểm chứng
 
-`pytest tests/ -q` → **574 pass** ở máy A (không cần DB). Trong đó `tests/test_ui_live.py`
-(29 test) phủ `LiveAdapter` + `record.py` bằng client giả, và `tests/test_preflight.py`
-(20 test) phủ các nhánh "DB kết nối được" của preflight bằng Neo4j/Qdrant giả — những nhánh
+`pytest tests/ -q` → **606 pass, 2 skip** ở máy A (không cần DB, **không cần cả `.env`**).
+Trong đó `tests/test_ui_live.py`
+(35 test) phủ `LiveAdapter` + `record.py` bằng client giả, và `tests/test_preflight.py`
+(23 test) phủ các nhánh "DB kết nối được" của preflight bằng Neo4j/Qdrant giả — những nhánh
 chỉ thực sự chạy ở máy B.
 
 **Đã chạy thật ở máy A:** replay end-to-end đủ 7 bước; `POST /api/mode` (400/409/503 + giữ adapter
