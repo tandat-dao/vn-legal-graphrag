@@ -70,3 +70,10 @@ Sửa gì đụng tới spec thì cập nhật spec luôn, đừng để log tha
 - **Ràng buộc phải giữ:** `textContent` của nút = **đúng** câu hỏi gửi vào pipeline (mục 6.0 của
   style spec) → chỉ được cắt bằng CSS, tuyệt đối không cắt chuỗi trong JS, không chèn ký tự trang
   trí vào trong nút. Bảng "Câu hỏi mẫu" vẫn liệt kê đủ mọi nhóm nên không câu nào biến mất.
+
+### 4. Gỡ nhóm X khỏi `DEMO_QUESTIONS.md`
+
+Bốn câu "quậy mô hình" (prompt injection, mồi văn bản không tồn tại, tiền đề sai, đòi đổi vai) là
+câu để **chạy thử lúc kiểm tra**, không phải câu bày ra lúc bảo vệ — bảng câu hỏi mẫu là thứ hội
+đồng nhìn thấy. Tệp còn ba nhóm A/B/C. Test parser dùng tệp giả riêng nên không đụng tới;
+`test_tep_that_trong_repo_parse_duoc` chỉ đòi `>= 3` nhóm nên vẫn xanh (35 test pass).
