@@ -24,7 +24,7 @@ Dựng một web UI **một process** để trình diễn hệ thống trong bu�
 Hệ quả:
 
 1. **`replay` KHÔNG còn là dự phòng bắt buộc** *(cập nhật 2026-08-02)*. Dự phòng khi `live` hỏng giữa buổi nay là **bản ghi màn hình một lượt chạy `live` thật, quay sẵn ở nhà** — nó là lượt chạy có thật nên đứng vững hơn trước hội đồng, đổi lại không tương tác được. Vai trò còn lại của `replay`: (a) phát triển giao diện ở máy không có DB; (b) dự phòng *phụ*, tương tác được, nếu có ghi fixture. Ghi fixture nay là **tùy chọn**.
-2. **Nếu có ghi fixture thì phải ghi trên chính máy B với đúng bộ cờ sẽ dùng.** Cờ lệch thì cache LLM không HIT và câu không khớp fixture. Lưu ý thêm: ba tùy chọn Địa phương/Chế độ trả lời/Verifier **không có tác dụng ở `replay`** (fixture dùng cờ lúc ghi), và khóa tra fixture chỉ là **câu hỏi** — muốn trình một tổ hợp cờ khác thì phải là một câu hỏi khác.
+2. **Nếu có ghi fixture thì phải ghi trên chính máy B với đúng bộ cờ sẽ dùng.** Cờ lệch thì cache LLM không HIT và câu không khớp fixture. Lưu ý thêm: hai tùy chọn Địa phương/Chế độ trả lời **không có tác dụng ở `replay`** (fixture dùng cờ lúc ghi), và khóa tra fixture chỉ là **câu hỏi** — muốn trình một tổ hợp cờ khác thì phải là một câu hỏi khác.
 3. **Máy B phải chạy `scripts/preflight.py` trước buổi bảo vệ** để biết Docker/Neo4j/Qdrant/`.env`/BGE-M3 đã sẵn sàng chưa. Quy trình dựng máy B từ đầu: `ui/docs/LIVE_GUIDE.md`.
 4. Phần lớn thứ **chưa kiểm chứng được ở máy A** đều nằm ở đường `live` (regex parse log thật, `_build_clients()`, lỗi LLM thật) — danh sách ở cuối `ui/README.md`, phải chạy ở máy B.
 

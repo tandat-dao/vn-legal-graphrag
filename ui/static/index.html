@@ -79,6 +79,20 @@ tailwind.config = {
     --accent:        var(--terracotta);      /* bước đang chạy, vạch nhãn, viền hover */
     --accent-strong: var(--terracotta-dk);
 
+    /* ---- Xương sống bảy bước: hai màu ĐỐI NHAU, đảo vai trò theo chế độ ----
+       Vòng tròn số mang màu CHỦ ĐẠO của chế độ (A: terracotta), đường nối mang
+       màu CÒN LẠI (A: navy). Sang chế độ B hai vai trò hoán đổi. Nhờ vậy phần
+       chữ ký của trang luôn dùng đúng hai màu của bảng màu đang bật, và số bước
+       không bao giờ chìm vào đường nối. */
+    --buoc-tron:      var(--terracotta);     /* nền vòng tròn số */
+    /* Chữ số khi bước còn CHỜ (nằm trên nền pha loãng). Terracotta-dk trên nền
+       terracotta 20% chỉ đạt tương phản 3.1:1 — dưới ngưỡng 4.5:1, chiếu máy
+       chiếu là mất chữ; họ terracotta không có sắc nào đủ tối nên dùng mực
+       trung tính. Chế độ B giữ được navy vì navy vốn đã tối (8.9:1). */
+    --buoc-tron-chu:  var(--gray-900);
+    --buoc-ray:       var(--navy);           /* đoạn đường nối ĐÃ chạy qua */
+    --buoc-ray-nhat:  var(--navy-light);     /* đoạn CHƯA chạy tới */
+
     /* Đồ thị bước 4 — Cytoscape KHÔNG đọc được CSS var, phải lấy qua
        `mauToken()` rồi nạp lại bằng `CY.style()` mỗi lần đổi chế độ. */
     --graph-bg:     var(--gray-50);
@@ -104,6 +118,13 @@ tailwind.config = {
     --accent:        var(--terracotta);      /* terracotta rảnh tay → thuần accent */
     --accent-strong: var(--terracotta-dk);
 
+    /* Hoán đổi đúng cặp vai trò của xương sống: chủ đạo navy → vòng tròn navy,
+       đường nối trả về terracotta. */
+    --buoc-tron:      var(--navy);
+    --buoc-tron-chu:  var(--navy);
+    --buoc-ray:       var(--terracotta);
+    --buoc-ray-nhat:  var(--terracotta-lt);
+
     /* B: navy đã làm chrome → terracotta được giải phóng, dùng cho tier 4
        (văn bản địa phương) để tách hẳn khỏi thang navy của tier 1–3. */
     --node-t4:      #CE7A58;
@@ -111,8 +132,11 @@ tailwind.config = {
   }
 
   /* KHÔNG dùng `body { zoom }` — hack đó làm lệch hệ tọa độ con trỏ của
-     Cytoscape (mục 7.1). Muốn chữ to hơn khi chiếu thì nâng con số dưới đây. */
-  body { font-size: 14px; }
+     Cytoscape (mục 7.1). Cỡ chữ khi chiếu đổi bằng font-size của <html>: mọi
+     class Tailwind (text-sm, text-xs, p-4…) đều tính theo rem nên scale theo,
+     trong khi hệ tọa độ canvas của Cytoscape không bị đụng tới. */
+  html { font-size: 16px; }
+  body { font-size: .875rem; }
 
   /* ---------- Focus / selection / scrollbar (mục 3) ---------- */
   :focus-visible {
@@ -148,6 +172,59 @@ tailwind.config = {
   }
   .nut-banh-rang:hover { background: rgba(255,255,255,.26); color: #fff; }
   .nut-banh-rang[aria-expanded="true"] { background: #fff; color: var(--chrome-bg); border-color: #fff; }
+
+  /* Nút phụ + bảng thư viện câu hỏi mẫu */
+  .nut-phu {
+    font-size: 12px; font-weight: 600; line-height: 1; padding: .45rem .7rem;
+    border-radius: 4px; color: var(--text-secondary);
+    background: var(--white); border: 1px dashed var(--border-card);
+    transition: border-color 150ms ease, color 150ms ease;
+  }
+  .nut-phu:hover { border-color: var(--accent); color: var(--navy); }
+  .nut-phu[aria-expanded="true"] { border-style: solid; border-color: var(--navy);
+                                   background: var(--navy); color: #fff; }
+  .bang-cau-hoi {
+    position: absolute; left: 0; top: calc(100% + 8px); z-index: 40;
+    width: 620px; max-width: calc(100vw - 3rem); max-height: 60vh; overflow-y: auto;
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.18); padding: 1rem;
+  }
+  .nhan-nhom-cau-hoi {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--navy); margin: .85rem 0 .1rem;
+  }
+  .nhan-nhom-cau-hoi:first-child { margin-top: 0; }
+  .mo-ta-nhom { font-size: 11px; color: var(--text-muted); margin-bottom: .45rem; }
+  /* Nút câu hỏi: textContent PHẢI đúng bằng câu hỏi → ghi chú để ở title/anh em,
+     tuyệt đối không nhét vào trong nút. */
+  .nut-cau-hoi {
+    display: block; width: 100%; text-align: left; font-size: 12px;
+    color: var(--text-primary); background: var(--white);
+    border: 1px solid var(--border-card); border-radius: 6px;
+    padding: .4rem .6rem; line-height: 1.45;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+  .nut-cau-hoi:hover { border-color: var(--accent); background: var(--terracotta-faint); }
+  .ghi-chu-cau-hoi { font-size: 11px; color: var(--text-muted); margin: .15rem 0 .5rem .1rem; }
+
+  /* ---------- Chip gợi ý dưới ô nhập ----------
+     Trước: 4 chip nền vàng #FFC251 đặc, chữ đen đậm, câu dài tự xuống dòng →
+     một mảng vàng chói ngay dưới ô nhập, hút mắt hơn cả nút Hỏi và đẩy phần
+     bảy bước xuống sâu. Nay: HAI chip viền nhạt, một dòng, cắt bằng ellipsis
+     (textContent vẫn nguyên câu hỏi — chỉ CSS cắt, không đụng chuỗi gửi đi);
+     mọi câu còn lại nằm yên trong bảng "Câu hỏi mẫu". */
+  .nhan-goi-y {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .05em; color: var(--text-muted);
+  }
+  .goi-y-nut {
+    max-width: 32ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 12px; line-height: 1.2; padding: .45rem .7rem; border-radius: 999px;
+    color: var(--text-secondary); background: var(--gray-50);
+    border: 1px solid var(--border-card);
+    transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+  }
+  .goi-y-nut:hover { border-color: var(--accent); color: var(--navy); background: var(--white); }
 
   .bang-setting {
     position: absolute; right: 0; top: calc(100% + 10px); z-index: 40;
@@ -196,16 +273,110 @@ tailwind.config = {
   .nut-chinh:hover:not(:disabled) { background: var(--accent-strong); }
   .nut-chinh:disabled { background: var(--gray-300); cursor: not-allowed; }
   .o-nhap:hover, .o-nhap:focus { border-color: var(--accent); }
-  #o-verify { accent-color: var(--accent); }
 
-  /* ---------- Trạng thái 7 bước (tên class do JS gắn — chỉ đổi định nghĩa) ---------- */
-  .buoc-cho  { opacity: .45; }
-  .buoc-chay { opacity: 1; box-shadow: 0 0 0 2px var(--accent); }
-  .buoc-xong { opacity: 1; }
-  /* Bước đã xong = không còn `.buoc-cho` lẫn `.buoc-chay` (dispatch gỡ cả hai
-     ở sự kiện `done`), nên dấu ✓ bật theo trạng thái "không có class". */
+  /* ==========================================================================
+     XƯƠNG SỐNG BẢY BƯỚC — phần tử chữ ký của trang
+     --------------------------------------------------------------------------
+     Trước đây 7 bước là 7 thẻ rời xếp bằng `space-y-3`: không có gì diễn tả
+     "bước này chảy vào bước kia", và không đọc được tiến độ tổng thể nếu bước
+     đang chạy nằm dưới màn hình. Nay một đường dọc nối cả 7 số thứ tự; đoạn
+     đã chạy được tô bằng --accent và cao dần theo tiến trình.
+     Đánh số ở đây là chính đáng: nội dung THỰC SỰ là một chuỗi tuần tự.
+     ========================================================================== */
+  #cac-buoc { position: relative; }
+  /* Rãnh trái rộng 52px. Tâm số thứ tự nằm ở x=23px (mép trái thẻ 52px + viền
+     1px − offset 52px + bán kính 22px) → đường kẻ 2px đặt ở 22px thì trùng tâm.
+     z-index: 0 để đường kẻ LUÔN nằm dưới số thứ tự (.so-buoc z-index: 1). */
+  #cac-buoc::before, #cac-buoc::after {
+    content: ""; position: absolute; left: 22px; width: 2px; border-radius: 1px;
+    z-index: 0;
+  }
+  /* 39px = viền thẻ (1px) + padding-top (1rem) + bán kính số thứ tự (22px) →
+     đường kẻ bắt đầu đúng tâm số 1, không thò lên trên.
+     Đổi số này thì phải đổi RAY_TOP trong JS (datTienDo). */
+  #cac-buoc::before { top: 39px; bottom: 0; background: var(--buoc-ray-nhat); }
+  /* Đoạn đã chạy — chiều cao do JS đặt qua --tien-do (px), đo từ 39px xuống
+     tâm số thứ tự của bước đang chạy. */
+  #cac-buoc::after {
+    top: 39px; height: var(--tien-do, 0px); background: var(--buoc-ray);
+    transition: height 420ms cubic-bezier(.4, 0, .2, 1);
+  }
+  @media (prefers-reduced-motion: reduce) { #cac-buoc::after { transition: none; } }
+
+  .the-buoc {
+    position: relative; margin-left: 52px;
+    background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: 12px; padding: 1.15rem 1.25rem;
+    /* Thẻ trắng trên nền trắng-ấm gần như biến mất khi chiếu máy chiếu — viền
+       cộng bóng nhẹ là thứ giữ cho từng bước tách khỏi nền. */
+    box-shadow: 0 1px 2px rgba(28, 27, 25, .05);
+    transition: box-shadow 200ms ease, border-color 200ms ease;
+  }
+
+  /* Xóa phần đuôi đường kẻ thò xuống dưới số 7: thẻ cuối cao (chứa câu trả lời)
+     nên `bottom: 0` của đường kẻ rơi tận đáy thẻ. Che bằng nền trang, từ tâm số
+     7 xuống hết thẻ. Nằm trên đường kẻ (z-index 1) nhưng vẫn dưới `.so-buoc`
+     (cùng z-index, .so-buoc đứng sau trong cây → vẽ đè lên). */
+  .the-buoc:last-child::before {
+    content: ""; position: absolute; z-index: 1;
+    left: -35px; width: 8px; top: calc(1rem + 22px); bottom: -1px;
+    background: var(--bg-page);
+  }
+
+  /* Số thứ tự nằm TRÊN đường kẻ, trong rãnh trái. Nền ĐẶC (không alpha, không
+     opacity) để che đường kẻ — đây là dạng mặc định, cũng là dạng bước ĐÃ XONG. */
+  .so-buoc {
+    position: absolute; z-index: 1; left: -52px; top: 1rem;
+    width: 44px; height: 44px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums;
+    background: var(--buoc-tron); color: #fff;
+    border: 2px solid var(--buoc-tron);
+    transition: background 200ms ease, color 200ms ease,
+                border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .ten-buoc {
+    font-size: .875rem; font-weight: 600; color: var(--navy);
+    text-transform: uppercase; letter-spacing: .05em; line-height: 1.35;
+  }
+  .mo-ta-buoc { font-size: .75rem; color: var(--text-muted); margin-top: .1rem; }
+
+  /* ---------- Ba trạng thái (tên class do JS gắn — chỉ đổi định nghĩa) ---------- */
+  /* Chờ: mờ vừa phải. .45 cũ làm chữ gần như không đọc nổi khi chiếu.
+     KHÔNG đặt opacity lên cả thẻ: số thứ tự là con của thẻ, nền trắng của nó sẽ
+     mờ theo và để lộ đường kẻ chạy xuyên qua chữ số (đồng thời opacity < 1 tạo
+     stacking context mới, khóa luôn z-index của số). Chỉ làm mờ phần nội dung. */
+  .buoc-cho > :not(.so-buoc) { opacity: .6; transition: opacity 200ms ease; }
+  .buoc-chay { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+
+  /* Ba trạng thái của vòng tròn số — CÙNG một màu chủ đạo, khác ở độ đậm:
+       chờ  = pha loãng với nền trang (vẫn ĐỤC, không dùng alpha/opacity vì
+              đường nối sẽ lộ qua chữ số — xem ghi chú ở trên),
+       chạy = đặc + quầng sáng,
+       xong = đặc (chính là dạng mặc định của `.so-buoc`, kèm dấu ✓ trên thẻ).
+     `color-mix` cần Chrome ≥ 111; dòng khai báo đứng trước là bản dự phòng cho
+     trình duyệt cũ, không phải thừa. */
+  .buoc-cho .so-buoc {
+    background: var(--gray-100);
+    background: color-mix(in srgb, var(--buoc-tron) 20%, var(--bg-page));
+    border-color: var(--gray-200);
+    border-color: color-mix(in srgb, var(--buoc-tron) 42%, var(--bg-page));
+    color: var(--buoc-tron-chu);
+  }
+  .buoc-chay .so-buoc {
+    background: var(--buoc-tron); color: #fff; border-color: var(--buoc-tron);
+    box-shadow: 0 0 0 4px var(--gray-100);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--buoc-tron) 26%, var(--bg-page));
+  }
   .dau-xong { display: inline-block; color: #28A745; font-weight: 700; }
   .buoc-cho .dau-xong, .buoc-chay .dau-xong { display: none; }
+
+  /* ---------- Bước 7 là điểm rơi, không phải một thẻ như sáu thẻ kia ---------- */
+  .the-buoc-cuoi { border-left: 3px solid var(--accent); }
+  .the-buoc-cuoi .ten-buoc { font-size: 1rem; letter-spacing: .03em; }
+  /* Viền trái 3px (thay vì 1px) đẩy padding-box của thẻ sang phải 2px → số thứ
+     tự tuyệt đối bên trong lệch 2px khỏi xương sống. Bù lại đúng 2px. */
+  .the-buoc-cuoi .so-buoc { left: -54px; }
 
   /* ---------- Đồ thị bước 4 ---------- */
   #do-thi { height: 320px; background: var(--graph-bg); border-radius: 6px; border: 1px solid var(--border-card); }
@@ -348,6 +519,17 @@ tailwind.config = {
             </div>
             <p class="ghi-chu-setting">Chỉ đổi lớp trình bày; không lưu lại, tải lại trang là về A.</p>
           </div>
+
+          <div class="nhom-setting" role="group" aria-label="Cỡ chữ">
+            <div class="nhan-setting">Cỡ chữ</div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button class="nut-mau nut-co-chu" data-co="16" aria-pressed="true">Vừa</button>
+              <button class="nut-mau nut-co-chu" data-co="18" aria-pressed="false">Lớn</button>
+              <button class="nut-mau nut-co-chu" data-co="20" aria-pressed="false" title="Cho phòng rộng">Rất lớn</button>
+            </div>
+            <p class="ghi-chu-setting">Dùng khi chiếu máy chiếu. Đổi font-size của trang,
+              không dùng <code>zoom</code> — nên đồ thị bước 4 vẫn bấm đúng chỗ.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -371,19 +553,18 @@ tailwind.config = {
     <div class="text-xs font-medium tracking-widest uppercase text-white/55 mb-2">Đặt một câu hỏi pháp lý</div>
 
     <div class="bg-white border border-[var(--border-card)] rounded-xl p-4 shadow-sm">
-      <textarea id="o-cau-hoi" rows="2" placeholder="Nhập câu hỏi pháp lý…"
+      <textarea id="o-cau-hoi" rows="2" placeholder="Nhập câu hỏi pháp lý… (Enter để hỏi, Shift+Enter xuống dòng)"
         class="o-nhap w-full bg-[var(--warm-white)] border border-[#DDDDDD] rounded-xl p-3 text-sm
                text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
                focus:bg-white transition-colors duration-150"></textarea>
 
       <div class="flex flex-wrap items-center gap-2 mt-2 text-sm">
-        <select id="o-juris"
+        <select id="o-juris" aria-label="Địa phương" title="Địa phương áp dụng khi câu hỏi không tự nêu"
           class="o-nhap bg-white border border-[#DDDDDD] rounded-lg px-2 py-1.5 text-[var(--text-secondary)]
                  transition-colors duration-150">
-          <option value="">Địa phương: (không ép)</option>
-          <option value="toan-quoc">toàn quốc</option>
-          <option value="tp-hcm">tp-hcm</option>
-          <option value="dong-nai">dong-nai</option>
+          <option value="toan-quoc" selected>Toàn quốc</option>
+          <option value="tp-hcm">TP. Hồ Chí Minh</option>
+          <option value="dong-nai">Đồng Nai</option>
         </select>
         <select id="o-mode"
           class="o-nhap bg-white border border-[#DDDDDD] rounded-lg px-2 py-1.5 text-[var(--text-secondary)]
@@ -392,9 +573,6 @@ tailwind.config = {
           <option value="general">general (ngắn gọn)</option>
           <option value="irac">irac (tư vấn chi tiết)</option>
         </select>
-        <label class="flex items-center gap-1.5 text-[var(--text-secondary)] cursor-pointer">
-          <input type="checkbox" id="o-verify" class="rounded"> Verifier
-        </label>
         <button id="nut-hoi"
           class="nut-chinh ml-auto px-6 py-1.5 rounded-lg font-medium transition-colors duration-150">
           Hỏi
@@ -402,13 +580,32 @@ tailwind.config = {
       </div>
 
       <!-- Chip gợi ý: nội dung nút = ĐÚNG câu hỏi gửi đi (b.textContent).
-           Tuyệt đối không chèn ký tự trang trí dạng text vào bên trong nút. -->
-      <div id="goi-y" class="mt-3 flex flex-wrap gap-2 text-xs"></div>
+           Tuyệt đối không chèn ký tự trang trí dạng text vào bên trong nút.
+           CHỈ bày SO_CHIP_GOI_Y (=2) câu đầu của nhóm A — cặp tối thiểu đổi đúng
+           một biến địa phương; toàn bộ phần còn lại nằm trong bảng "Câu hỏi mẫu"
+           để dải nhập liệu không lấn phần bảy bước. -->
+      <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+        <span id="nhan-goi-y" class="nhan-goi-y hidden">Thử nhanh</span>
+        <div id="goi-y" class="flex flex-wrap gap-2"></div>
+        <div class="relative" id="boc-cau-hoi">
+          <button id="nut-cau-hoi-mau" class="nut-phu hidden" aria-haspopup="dialog"
+                  aria-expanded="false" aria-controls="bang-cau-hoi">Câu hỏi mẫu…</button>
+          <div id="bang-cau-hoi" class="bang-cau-hoi hidden" role="dialog" aria-label="Câu hỏi mẫu">
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-sm font-semibold text-navy uppercase tracking-wider">Câu hỏi mẫu</h2>
+              <button id="nut-dong-cau-hoi"
+                      class="text-[var(--text-muted)] hover:text-navy text-lg leading-none px-1 rounded"
+                      title="Đóng">×</button>
+            </div>
+            <div id="ds-cau-hoi" class="scroll-mong"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<main class="p-4 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-4 max-w-[1600px] mx-auto">
+<main id="khung-chinh" class="p-4 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-4 max-w-[1600px] mx-auto">
 
   <!-- ===================== CỘT TRÁI ===================== -->
   <section class="space-y-3">
@@ -426,7 +623,7 @@ tailwind.config = {
   </section>
 
   <!-- ===================== CỘT PHẢI: NGUYÊN VĂN ===================== -->
-  <aside class="xl:sticky xl:top-[7.5rem] h-fit">
+  <aside id="cot-nguyen-van" class="hidden xl:sticky xl:top-[7.5rem] h-fit">
     <div class="bg-white border border-[var(--border-card)] rounded-xl overflow-hidden">
       <div class="flex items-center justify-between bg-navy-faint border-b border-[var(--border-card)] px-4 py-2.5">
         <h2 class="text-sm font-semibold text-navy uppercase tracking-wider">Nguyên văn điều khoản</h2>
@@ -434,10 +631,7 @@ tailwind.config = {
           class="text-[var(--text-muted)] hover:text-navy text-lg leading-none px-1 rounded transition-colors duration-150"
           title="Đóng">×</button>
       </div>
-      <div id="panel-nguyen-van" class="p-4 text-sm text-[var(--text-muted)]">
-        Bấm vào một trích dẫn ở bước 7 (hoặc một dòng ở bước 6) để xem nguyên văn lấy trực tiếp từ
-        <code class="text-xs font-mono text-[var(--text-secondary)]">data/raw/*.md</code>.
-      </div>
+      <div id="panel-nguyen-van" class="p-4 text-sm text-[var(--text-muted)]">Đang tra…</div>
     </div>
   </aside>
 </main>
@@ -562,14 +756,15 @@ function doiTenTrongChuoi(text, bien_doi = (x) => x) {
 
 // ---------------------------------------------------------------- stepper
 function dungStepper() {
+  // `so-buoc` nằm ngoài luồng (absolute, trong rãnh trái) nên không còn trong
+  // flex header nữa. Mọi id giữ nguyên: buoc-* / tg-* / noi-dung-* / log-*.
   $("cac-buoc").innerHTML = BUOC.map(b => `
-    <div id="buoc-${b.id}" class="the-buoc buoc-cho bg-white border border-[var(--border-card)] rounded-xl p-5 transition-all duration-200">
+    <div id="buoc-${b.id}" class="the-buoc buoc-cho${b.id === "generate" ? " the-buoc-cuoi" : ""}">
+      <span class="so-buoc" aria-hidden="true">${b.so}</span>
       <div class="flex items-center gap-3">
-        <div class="vach-accent w-1 h-5 shrink-0 rounded-full"></div>
-        <span class="w-7 h-7 shrink-0 rounded-full bg-navy-faint text-navy font-bold text-sm grid place-items-center">${b.so}</span>
         <div class="min-w-0">
-          <div class="text-sm font-semibold text-navy uppercase tracking-wider">${esc(b.ten)}</div>
-          <div class="text-xs text-[var(--text-muted)]">${esc(b.mo_ta)}</div>
+          <div class="ten-buoc">${esc(b.ten)}</div>
+          <div class="mo-ta-buoc">${esc(b.mo_ta)}</div>
         </div>
         <div class="ml-auto flex items-center gap-2 shrink-0">
           <span class="dau-xong text-sm" title="đã xong">✓</span>
@@ -582,6 +777,22 @@ function dungStepper() {
         <pre id="log-${b.id}" class="text-[11px] text-[var(--text-secondary)] whitespace-pre-wrap mt-1 scroll-mong max-h-40 overflow-auto bg-[var(--gray-50)] rounded p-2"></pre>
       </details>
     </div>`).join("");
+  $("cac-buoc").style.setProperty("--tien-do", "0px");   // câu mới → xương sống rỗng lại
+}
+
+// Điểm bắt đầu của xương sống, tính từ đỉnh #cac-buoc = tâm số thứ tự bước 1.
+// Phải khớp với `top` của #cac-buoc::before / ::after trong CSS.
+const RAY_TOP = 39;
+
+/** Kéo đoạn đã-chạy của xương sống xuống tâm số thứ tự của `el`.
+ *  Đo bằng getBoundingClientRect để đúng cả khi thẻ trên đã phình ra vì nội dung
+ *  (bảng block, đồ thị) — không thể tính trước bằng số thứ tự bước. */
+function datTienDo(el) {
+  const wrap = $("cac-buoc"), badge = el && el.querySelector(".so-buoc");
+  if (!wrap || !badge) return;
+  const h = badge.getBoundingClientRect().top + badge.offsetHeight / 2
+          - wrap.getBoundingClientRect().top - RAY_TOP;
+  wrap.style.setProperty("--tien-do", Math.max(0, Math.round(h)) + "px");
 }
 
 function batBuoc(id, t) {
@@ -592,6 +803,7 @@ function batBuoc(id, t) {
   el.classList.add("buoc-chay");
   BUOC.forEach(b => { if (b.id !== key) $("buoc-" + b.id).classList.remove("buoc-chay"); });
   if (t != null) $("tg-" + key).textContent = t.toFixed(2) + "s";
+  datTienDo(el);
 }
 
 function themLog(id, raw) {
@@ -611,9 +823,8 @@ function renderCauHoi(d) {
   $("noi-dung-question").innerHTML = `
     <div class="font-medium text-[var(--text-primary)]">${esc(d.question)}</div>
     <div class="mt-2 flex flex-wrap gap-2 text-xs">
-      ${chip("Địa phương ép", d.force_jurisdiction || "không")}
+      ${chip("Địa phương", d.force_jurisdiction || "không")}
       ${chip("Chế độ trả lời", d.response_mode || "tự động")}
-      ${chip("Verifier", d.verify ? "bật" : "tắt")}
       ${d.llm_mode ? chip("LLM", d.llm_mode) : ""}
     </div>`;
 }
@@ -914,6 +1125,7 @@ function ganSuKienChip() {
 // ---------------------------------------------------------------- panel nguyên văn
 function hienBlock(b) {
   if (!b) return;
+  moPanelNguyenVan(true);
   $("panel-nguyen-van").innerHTML = `
     <div class="text-xs text-[var(--text-secondary)]">${esc(tenVB(b.norm_id))}</div>
     <div class="text-[11px] text-[var(--text-muted)] font-mono">${esc(b.norm_id)}</div>
@@ -932,6 +1144,7 @@ function hienBlock(b) {
 
 async function moNguyenVan(norm_id, dieu, khoan, diem) {
   if (!norm_id || !dieu) return;
+  moPanelNguyenVan(true);
   $("panel-nguyen-van").innerHTML = `<div class="text-[var(--text-muted)] text-sm">Đang tra…</div>`;
   const q = new URLSearchParams({ norm_id, dieu });
   if (khoan) q.set("khoan", khoan);
@@ -957,8 +1170,14 @@ async function moNguyenVan(norm_id, dieu, khoan, diem) {
   }
 }
 
-$("nut-dong-panel").onclick = () =>
-  $("panel-nguyen-van").innerHTML = `<div class="text-[var(--text-muted)] text-sm">Bấm một trích dẫn để xem nguyên văn.</div>`;
+/** Mở/đóng cột nguyên văn — CHỈ ẩn/hiện cột phải, KHÔNG đụng vào lưới.
+ *  Track 380px luôn được giữ chỗ, nên bề ngang cột 7 bước không đổi khi bật/tắt:
+ *  bảng block và câu trả lời không bị dàn lại, chữ không nhảy chỗ giữa lúc trình bày. */
+function moPanelNguyenVan(mo) {
+  $("cot-nguyen-van").classList.toggle("hidden", !mo);
+}
+
+$("nut-dong-panel").onclick = () => moPanelNguyenVan(false);
 
 // ---------------------------------------------------------------- đồ thị Cytoscape
 async function taiDoThi() {
@@ -1065,6 +1284,7 @@ function dispatch(ev) {
       if (ev.kind === "done") {
         BUOC.forEach(b => { $("buoc-" + b.id).classList.remove("buoc-chay", "buoc-cho"); });
         $("tg-generate").textContent = (d.elapsed_seconds ?? ev.t).toFixed(2) + "s";
+        datTienDo($("buoc-generate"));   // tô nốt xương sống tới bước 7
       }
       break;
   }
@@ -1082,6 +1302,7 @@ async function hoi() {
   $("nut-mode-live").disabled = $("nut-mode-replay").disabled = true;
   $("bang-loi").classList.add("hidden");
   BLOCKS = []; PLAN = {}; HYBRID = {}; SEED_STAGE1 = []; CANH_BAO_TAM = false;
+  moPanelNguyenVan(false);        // nguyên văn đang hiện là của câu TRƯỚC
   TRA_LOI_HIEN_TAI = null; VERIFIER_HIEN_TAI = null; HIEN_NGUYEN_VAN_LLM = false;
   dungStepper();
 
@@ -1093,7 +1314,6 @@ async function hoi() {
         question,
         jurisdiction: $("o-juris").value || null,
         response_mode: $("o-mode").value || null,
-        verify: $("o-verify").checked,
         speed: TOC_DO,          // chỉ có tác dụng ở replay; live bỏ qua
       }),
     });
@@ -1130,8 +1350,15 @@ async function hoi() {
 }
 
 $("nut-hoi").onclick = hoi;
+// Enter = Hỏi; Shift+Enter = xuống dòng. Ctrl/Cmd+Enter giữ lại cho quen tay.
+// `isComposing` là bắt buộc với tiếng Việt: bộ gõ dùng Enter để chốt từ đang
+// soạn, không chặn thì gõ "đất đai" có thể gửi câu hỏi giữa chừng.
 $("o-cau-hoi").addEventListener("keydown", e => {
-  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) hoi();
+  if (e.key !== "Enter") return;
+  if (e.isComposing || e.keyCode === 229) return;   // đang gõ dấu tiếng Việt
+  if (e.shiftKey) return;                            // Shift+Enter → xuống dòng
+  e.preventDefault();                                // chặn newline trong textarea
+  hoi();
 });
 
 // Công tắc bảng màu — chỉ đổi lớp trình bày, KHÔNG đụng pipeline nên bấm được
@@ -1141,6 +1368,19 @@ $("o-cau-hoi").addEventListener("keydown", e => {
   const nut = $("nut-mau-" + x);
   if (nut) nut.onclick = () => datBangMau(x);
 });
+
+// Cỡ chữ trình chiếu — đổi font-size gốc, KHÔNG dùng `zoom` (làm lệch tọa độ
+// con trỏ của Cytoscape). Không lưu lại (spec mục 1.5) → tải lại là về 16px.
+function datCoChu(px) {
+  document.documentElement.style.fontSize = Number(px) + "px";
+  document.querySelectorAll(".nut-co-chu").forEach(b =>
+    b.setAttribute("aria-pressed", String(Number(b.dataset.co) === Number(px))));
+  // Đồ thị đã vẽ rồi thì container vừa đổi kích thước → bảo Cytoscape đo lại,
+  // không thì canvas giữ kích thước cũ và vùng bấm lệch khỏi hình.
+  if (CY) { try { CY.resize(); CY.fit(undefined, 14); } catch (e) { /* đồ thị chưa sẵn */ } }
+}
+document.querySelectorAll(".nut-co-chu").forEach(b =>
+  b.onclick = () => datCoChu(b.dataset.co));
 
 // ---------------------------------------------------------------- chế độ chạy + tốc độ (Task 5)
 let TRANG_THAI = {};    // /api/mode gần nhất
@@ -1193,16 +1433,67 @@ function apDungTrangThai(m) {
     $("bang-loi").innerHTML = `<b>⚠️ ${esc(m.loi_doi_mode)}</b>`;
   }
 
-  // Chip gợi ý: `textContent` của nút CHÍNH LÀ câu hỏi gửi vào pipeline —
-  // không được chèn số thứ tự, mũi tên, emoji hay bất kỳ ký tự trang trí nào
-  // vào bên trong nút (ở chế độ replay sẽ trượt khớp fixture). Trang trí bằng CSS.
-  $("goi-y").innerHTML = (m.questions || []).map(q =>
-    `<button class="goi-y-nut bg-cta hover:bg-cta-hover text-ink-900 font-semibold rounded px-3 py-1.5 transition-colors duration-150">${esc(q)}</button>`).join("");
+  veCauHoiMau(m);
+}
+
+// Số chip bày ra ngoài ô nhập. Cố ý nhỏ: dải nhập liệu là chỗ đặt câu hỏi, không
+// phải chỗ trưng thư viện — mọi câu khác đã có bảng "Câu hỏi mẫu".
+const SO_CHIP_GOI_Y = 2;
+
+/** Chip gợi ý + bảng thư viện câu hỏi mẫu.
+ *  `textContent` của MỌI nút ở đây CHÍNH LÀ câu hỏi gửi vào pipeline — không
+ *  được chèn số thứ tự, mũi tên, emoji hay ký tự trang trí nào vào bên trong
+ *  nút (replay sẽ trượt khớp fixture). Ghi chú để ở thẻ anh em hoặc `title`. */
+function veCauHoiMau(m) {
+  const nhom = m.nhom_cau_hoi || [];
+  const tatCa = m.questions || [];
+  // Có phân nhóm (live) → lấy nhóm ĐẦU TIÊN (kịch bản chính), không có nhóm
+  // (fixture phẳng) → lấy danh sách phẳng; rồi cắt còn SO_CHIP_GOI_Y câu.
+  // Phần dôi ra KHÔNG mất đi: bảng "Câu hỏi mẫu" luôn liệt kê đủ mọi nhóm.
+  const chip = (nhom.length ? nhom[0].cau.map(c => c.question) : tatCa)
+    .slice(0, SO_CHIP_GOI_Y);
+
+  // `title` = nguyên câu, vì chip cắt bằng ellipsis khi câu dài.
+  $("goi-y").innerHTML = chip.map(q =>
+    `<button class="goi-y-nut" title="${esc(q)}">${esc(q)}</button>`).join("");
+  $("nhan-goi-y").classList.toggle("hidden", chip.length === 0);
   document.querySelectorAll(".goi-y-nut").forEach(b =>
     b.onclick = () => { $("o-cau-hoi").value = b.textContent; hoi(); });
-  if (!$("o-cau-hoi").value && (m.questions || []).length === 1)
-    $("o-cau-hoi").value = m.questions[0];
+
+  // Bảng thư viện: chỉ hiện khi thực sự có nhiều hơn số chip đang bày ra.
+  const con_lai = nhom.reduce((n, g) => n + g.cau.length, 0) - chip.length;
+  $("nut-cau-hoi-mau").classList.toggle("hidden", con_lai <= 0);
+  $("nut-cau-hoi-mau").textContent = `Câu hỏi mẫu… (${nhom.reduce((n, g) => n + g.cau.length, 0)})`;
+  $("ds-cau-hoi").innerHTML = nhom.map(g => `
+    <div class="nhan-nhom-cau-hoi">${esc(g.ten)}</div>
+    ${g.mo_ta ? `<div class="mo-ta-nhom">${esc(g.mo_ta)}</div>` : ""}
+    ${g.cau.map(c => `
+      <button class="nut-cau-hoi">${esc(c.question)}</button>
+      ${c.ghi_chu ? `<div class="ghi-chu-cau-hoi">${esc(c.ghi_chu)}</div>` : `<div class="mb-2"></div>`}
+    `).join("")}`).join("");
+  document.querySelectorAll(".nut-cau-hoi").forEach(b =>
+    b.onclick = () => {
+      $("o-cau-hoi").value = b.textContent;   // = đúng câu hỏi, không thêm gì
+      moBangCauHoi(false);
+      hoi();
+    });
+
+  if (!$("o-cau-hoi").value && chip.length === 1) $("o-cau-hoi").value = chip[0];
 }
+
+function moBangCauHoi(mo) {
+  const bang = $("bang-cau-hoi"), nut = $("nut-cau-hoi-mau");
+  const dang_mo = mo === undefined ? bang.classList.contains("hidden") : mo;
+  bang.classList.toggle("hidden", !dang_mo);
+  nut.setAttribute("aria-expanded", String(dang_mo));
+}
+
+$("nut-cau-hoi-mau").onclick = (e) => { e.stopPropagation(); moBangCauHoi(); };
+$("nut-dong-cau-hoi").onclick = () => moBangCauHoi(false);
+document.addEventListener("click", (e) => {
+  if (!$("bang-cau-hoi").classList.contains("hidden")
+      && !e.target.closest("#boc-cau-hoi")) moBangCauHoi(false);
+});
 
 function datTocDo(v) {
   TOC_DO = v == null ? null : Number(v);
@@ -1256,7 +1547,7 @@ document.addEventListener("click", (e) => {
       && !e.target.closest("#boc-setting")) moSetting(false);
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") moSetting(false);
+  if (e.key === "Escape") { moSetting(false); moBangCauHoi(false); }
 });
 
 function _matKetNoi(msg) {

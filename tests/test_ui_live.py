@@ -487,3 +487,79 @@ def test_fixture_ghi_ra_replay_lai_duoc(monkeypatch, tmp_path):
 
 async def _gom(gen) -> list[dict]:
     return [e async for e in gen]
+
+
+# ---------------------------------------------------------------------------
+# Câu hỏi mẫu có phân nhóm (ui/docs/DEMO_QUESTIONS.md)
+# ---------------------------------------------------------------------------
+
+def _viet_tep_cau_hoi(tmp_path):
+    p = tmp_path / "Q.md"
+    p.write_text(
+        "# ==== NHÓM A — Trình bày chính ====\n"
+        "# A1+A2 là cặp tối thiểu\n"
+        "Câu A một?\n"
+        "Câu A hai?\n"
+        "\n"
+        "# ==== NHÓM X — Câu quậy ----\n"
+        "# X1 — prompt injection\n"
+        "Câu X một?\n",
+        encoding="utf-8")
+    return p
+
+
+def test_doc_nhom_cau_hoi_giu_phan_nhom(tmp_path):
+    from ui.adapters import doc_nhom_cau_hoi
+    n = doc_nhom_cau_hoi(_viet_tep_cau_hoi(tmp_path))
+    assert [g["ten"] for g in n] == ["NHÓM A", "NHÓM X"]
+    assert n[0]["mo_ta"] == "Trình bày chính"
+    assert [c["question"] for c in n[0]["cau"]] == ["Câu A một?", "Câu A hai?"]
+    # đuôi "----" cũng phải nhận ra là tiêu đề nhóm
+    assert n[1]["ten"] == "NHÓM X" and n[1]["mo_ta"] == "Câu quậy"
+
+
+def test_ghi_chu_gan_cho_cau_ngay_duoi(tmp_path):
+    from ui.adapters import doc_nhom_cau_hoi
+    n = doc_nhom_cau_hoi(_viet_tep_cau_hoi(tmp_path))
+    assert n[0]["cau"][0]["ghi_chu"] == "A1+A2 là cặp tối thiểu"
+    assert n[0]["cau"][1]["ghi_chu"] == "", "ghi chú không được dính sang câu sau"
+    assert n[1]["cau"][0]["ghi_chu"] == "X1 — prompt injection"
+
+
+def test_cau_hoi_phang_van_dung_thu_tu(tmp_path):
+    from ui.adapters import doc_cau_hoi_goi_y
+    assert doc_cau_hoi_goi_y(_viet_tep_cau_hoi(tmp_path)) == [
+        "Câu A một?", "Câu A hai?", "Câu X một?"]
+
+
+def test_tep_phang_khong_co_nhom_van_doc_duoc(tmp_path):
+    """`demo_questions.txt` kiểu cũ (không có tiêu đề nhóm) phải vẫn chạy."""
+    from ui.adapters import doc_cau_hoi_goi_y, doc_nhom_cau_hoi
+    p = tmp_path / "cu.txt"
+    p.write_text("# ghi chú\nCâu một?\n\nCâu hai?\n", encoding="utf-8")
+    assert doc_cau_hoi_goi_y(p) == ["Câu một?", "Câu hai?"]
+    n = doc_nhom_cau_hoi(p)
+    assert len(n) == 1 and n[0]["ten"] == ""
+
+
+def test_tep_that_trong_repo_parse_duoc():
+    """`ui/docs/DEMO_QUESTIONS.md` là nguồn thật — hỏng là mất chip gợi ý lúc live."""
+    from ui.adapters import doc_nhom_cau_hoi
+    n = doc_nhom_cau_hoi("ui/docs/DEMO_QUESTIONS.md")
+    assert len(n) >= 3, "phải tách được nhiều nhóm"
+    assert n[0]["ten"] == "NHÓM A", "nhóm đầu tiên là kịch bản chính (thành chip)"
+    assert all(g["cau"] for g in n), "không nhóm nào được rỗng"
+    for g in n:
+        for c in g["cau"]:
+            q = c["question"]
+            assert q == q.strip() and not q.startswith("#")
+            assert len(q) > 20, f"câu quá ngắn, có thể parse nhầm dòng ghi chú: {q!r}"
+
+
+def test_devmode_dung_cau_hoi_mau_nhu_live(tmp_path, monkeypatch):
+    """Devmode để xem trước giao diện live → phải thấy cả chip nhóm A lẫn thư viện."""
+    import ui.adapters as adapters
+    monkeypatch.setattr(adapters, "DEMO_QUESTIONS_FILES", (_viet_tep_cau_hoi(tmp_path),))
+    dev = adapters.DevAdapter(fixtures_dir=tmp_path)
+    assert dev.cau_hoi_co_san() == ["Câu A một?", "Câu A hai?", "Câu X một?"]
+    assert [g["ten"] for g in dev.nhom_cau_hoi()] == ["NHÓM A", "NHÓM X"]

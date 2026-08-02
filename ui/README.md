@@ -4,6 +4,8 @@ Trang web **một câu hỏi → 7 bước → câu trả lời có trích dẫn
 Không có bước build, không có dependency npm, **không còn CDN** — copy thư mục sang máy khác là chạy.
 
 Spec: `ui/docs/UI_DEMO_SPEC.md` (chức năng) · `ui/docs/UI_STYLE_SPEC.md` (giao diện).
+Lịch sử chỉnh sửa: `ui/docs/UI_CHANGELOG.md` — **mỗi phiên sửa giao diện ghi một mục** (cái gì
+hỏng, vì sao sửa vậy, kiểm chứng thế nào).
 
 ## Chạy
 
@@ -92,6 +94,7 @@ corpus.py    load_corpus / norm_graph / get_component_text — đọc data/raw/*
 fixtures/    lượt chạy đã ghi, mỗi câu một .json {question, params, events, result}
 static/      index.html (toàn bộ frontend) + vendor/ (Tailwind, Cytoscape, font)
 docs/        UI_DEMO_SPEC.md (đặc tả chức năng) · UI_STYLE_SPEC.md (đặc tả giao diện)
+             DEMO_QUESTIONS.md — câu hỏi mẫu cho buổi bảo vệ, CHIA NHÓM (A/B/C/X)
 ```
 
 ### Sau khi clone, partner có gì

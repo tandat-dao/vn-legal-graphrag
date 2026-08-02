@@ -135,6 +135,16 @@ class BaseAdapter:
         """Danh sách câu hỏi gợi ý cho frontend ([] nếu không giới hạn)."""
         return []
 
+    def nhom_cau_hoi(self) -> list[dict]:
+        """Thư viện câu hỏi mẫu có phân nhóm — GIỐNG NHAU ở mọi mode.
+
+        Đây chỉ là một danh sách câu hỏi soạn sẵn, không phụ thuộc fixture hay
+        DB, nên `replay` cũng phải thấy: nó là chỗ tra câu để hỏi nhanh lúc
+        trình bày. Câu chưa có fixture khi bấm ở `replay` sẽ nhận thông báo
+        "chưa có fixture cho câu hỏi này" kèm danh sách câu đang có.
+        """
+        return doc_nhom_cau_hoi()
+
     async def ask(self, question: str, **params) -> AsyncIterator[TraceEvent]:
         raise NotImplementedError
 
@@ -294,7 +304,14 @@ class DevAdapter(ReplayAdapter):
     devmode = True
 
     def cau_hoi_co_san(self) -> list[str]:
-        return super().cau_hoi_co_san()
+        """Lấy từ TỆP CÂU HỎI MẪU như `live`, không phải từ fixture.
+
+        Devmode sinh ra để xem trước giao diện `live`; nếu danh sách gợi ý lại
+        lấy từ fixture thì đúng phần cần xem (chip nhóm A + thư viện câu hỏi)
+        lại không hiện. Câu chưa có fixture khi bấm sẽ báo lỗi "CHẾ ĐỘ DEV:
+        chưa có fixture" — rõ ràng, và dải đỏ vốn đã nói dữ liệu là giả.
+        """
+        return doc_cau_hoi_goi_y() or super().cau_hoi_co_san()
 
     async def ask(self, question: str, **params) -> AsyncIterator[TraceEvent]:
         fixture = self.tim_fixture(question)
@@ -388,7 +405,7 @@ class LiveAdapter(BaseAdapter):
             logger.warning(f"Lỗi khi đóng Neo4j driver: {e}")
 
     def cau_hoi_co_san(self) -> list[str]:
-        """Live không giới hạn câu hỏi; gợi ý lấy từ `demo_questions.txt` nếu có."""
+        """Live không giới hạn câu hỏi; gợi ý lấy từ tệp câu hỏi mẫu nếu có."""
         return doc_cau_hoi_goi_y()
 
     # -- chạy pipeline -----------------------------------------------------
@@ -540,21 +557,78 @@ def _loi_pipeline(e: Exception, seq: int, t: float) -> TraceEvent:
 # Câu hỏi gợi ý cho chế độ live
 # ---------------------------------------------------------------------------
 
-DEMO_QUESTIONS_FILE = Path("data/evaluation/demo_questions.txt")
+# Nguồn câu hỏi mẫu, xét theo thứ tự — tệp đầu tiên tồn tại thì dùng.
+# `ui/docs/DEMO_QUESTIONS.md` là bản có phân nhóm (A/B/C/X) + ghi chú từng câu;
+# `demo_questions.txt` là bản phẳng cũ, giữ lại cho tương thích.
+DEMO_QUESTIONS_FILES = (
+    Path("ui/docs/DEMO_QUESTIONS.md"),
+    Path("data/evaluation/demo_questions.txt"),
+)
+DEMO_QUESTIONS_FILE = DEMO_QUESTIONS_FILES[1]      # giữ tên cũ cho code cũ
+
+# "# ==== NHÓM A — Trình bày chính… ====" (đuôi có thể là ==== hoặc ----)
+_NHOM_RE = re.compile(r"^#\s*=+\s*(?P<ten>NHÓM\s+\S+)\s*(?:[—–-]\s*(?P<mo_ta>.*?))?\s*[=-]*\s*$")
 
 
-def doc_cau_hoi_goi_y(path: Path | str | None = None) -> list[str]:
-    """Đọc `demo_questions.txt` — bỏ dòng trống và dòng bắt đầu bằng `#`.
+def _tep_cau_hoi(path: Path | str | None = None) -> Path | None:
+    if path is not None:
+        p = Path(path)
+        return p if p.is_file() else None
+    for p in DEMO_QUESTIONS_FILES:
+        if p.is_file():
+            return p
+    return None
 
-    Cùng quy tắc với `ui/record.py` để danh sách gợi ý lúc `live` trùng đúng
-    danh sách câu đã ghi fixture cho `replay`.
+
+def doc_nhom_cau_hoi(path: Path | str | None = None) -> list[dict]:
+    """Đọc câu hỏi mẫu GIỮ NGUYÊN phân nhóm.
+
+    Quy ước trong tệp (đang dùng ở `ui/docs/DEMO_QUESTIONS.md`):
+      - `# ==== NHÓM A — mô tả ====` mở một nhóm mới;
+      - dòng `#` khác là **ghi chú cho câu ngay bên dưới** (VD "A3 — gap3, …");
+      - dòng không phải `#` và không rỗng là một câu hỏi.
+
+    Câu đứng trước mọi tiêu đề nhóm rơi vào nhóm không tên (tệp phẳng cũ vẫn đọc
+    được, chỉ là ra đúng một nhóm).
+
+    Returns:
+        list {ten, mo_ta, cau: [{question, ghi_chu}]} — chỉ nhóm có câu.
     """
-    p = Path(path or DEMO_QUESTIONS_FILE)
-    if not p.is_file():
+    p = _tep_cau_hoi(path)
+    if p is None:
         return []
     try:
         dong = p.read_text(encoding="utf-8").splitlines()
     except OSError as e:
         logger.warning(f"Không đọc được {p}: {e}")
         return []
-    return [d.strip() for d in dong if d.strip() and not d.strip().startswith("#")]
+
+    nhom: list[dict] = [{"ten": "", "mo_ta": "", "cau": []}]
+    ghi_chu = ""
+    for d in dong:
+        d = d.strip()
+        if not d:
+            continue
+        if d.startswith("#"):
+            m = _NHOM_RE.match(d)
+            if m:
+                nhom.append({"ten": m.group("ten").strip(),
+                             "mo_ta": (m.group("mo_ta") or "").strip(),
+                             "cau": []})
+                ghi_chu = ""
+            else:
+                # ghi chú cho câu ngay dưới; gộp nếu có nhiều dòng liền nhau
+                moi = d.lstrip("#").strip()
+                ghi_chu = f"{ghi_chu} {moi}".strip() if ghi_chu else moi
+            continue
+        nhom[-1]["cau"].append({"question": d, "ghi_chu": ghi_chu})
+        ghi_chu = ""
+    return [n for n in nhom if n["cau"]]
+
+
+def doc_cau_hoi_goi_y(path: Path | str | None = None) -> list[str]:
+    """Danh sách câu hỏi PHẲNG — bỏ dòng trống và dòng bắt đầu bằng `#`.
+
+    Cùng quy tắc với `ui/record.py`, và giữ đúng thứ tự trong tệp.
+    """
+    return [c["question"] for n in doc_nhom_cau_hoi(path) for c in n["cau"]]

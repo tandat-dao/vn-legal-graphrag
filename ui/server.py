@@ -194,6 +194,10 @@ def _trang_thai(adapter: BaseAdapter) -> dict:
         "co_the_live": _co_the_live(),
         # Frontend PHẢI hiện dải đỏ khi cờ này bật — xem DevAdapter.
         "devmode": bool(getattr(adapter, "devmode", False)),
+        # Câu hỏi mẫu có phân nhóm (chỉ `live`); replay dùng danh sách phẳng
+        # từ chính fixture nên trả [] và frontend tự lùi về chip phẳng.
+        "nhom_cau_hoi": (adapter.nhom_cau_hoi()
+                         if hasattr(adapter, "nhom_cau_hoi") else []),
         "fixtures": (adapter.thong_tin_fixtures()
                      if hasattr(adapter, "thong_tin_fixtures") else []),
     }
