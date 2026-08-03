@@ -52,12 +52,15 @@ done
                      "Cài bằng: python3 -m pip install -r requirements.txt"
 mo "  Python: $PY"
 
-# ── 2. Nhánh: bản UI mới nhất nằm ở develop, main chưa có ───────────────────
+# ── 2. Nhánh: cảnh báo nếu đang ở nhánh không mang bản UI ───────────────────
+# Từ 2026-08-03 cả `main` lẫn `develop` đều có UI (develop đã gộp vào main).
+# Nhánh khác hai cái đó thì có thể là bản cũ hoặc nhánh thử nghiệm.
 NHANH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo '?')"
-if [ "$NHANH" != "develop" ]; then
-  vang "⚠ Đang ở nhánh '$NHANH', không phải 'develop' — có thể đây là bản UI cũ."
-  echo "  → Chuyển: git checkout develop"
-fi
+case "$NHANH" in
+  main|develop) ;;
+  *) vang "⚠ Đang ở nhánh '$NHANH' — có thể không phải bản UI mới nhất."
+     echo "  → Chuyển: git checkout main" ;;
+esac
 
 # ── 3. .env ─────────────────────────────────────────────────────────────────
 if [ ! -f .env ]; then
