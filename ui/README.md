@@ -9,6 +9,19 @@ hỏng, vì sao sửa vậy, kiểm chứng thế nào).
 
 ## Chạy
 
+**Ngày bảo vệ — một lệnh duy nhất:**
+
+```bash
+./scripts/chay-demo.sh
+```
+
+Nó tự chọn đúng bản Python (bản `python3` mặc định của máy có thể thiếu deps), dựng Docker và
+**chờ** hai CSDL trả lời, kiểm `.env`, rồi mở trình duyệt khi server thật sự sẵn sàng. Cổng đang
+bận mà chính là UI này thì mở luôn thay vì dựng lại; bận bởi thứ khác thì báo rõ ai đang giữ.
+Thêm `replay` để chạy không cần DB, thêm số để đổi cổng: `./scripts/chay-demo.sh replay 8010`.
+
+Các lệnh thủ công bên dưới vẫn dùng được khi cần kiểm soát từng bước:
+
 ```bash
 # Chế độ mặc định — phát lại fixture đã ghi sẵn, KHÔNG cần Neo4j/Qdrant/LLM
 uvicorn ui.server:app --port 8000
