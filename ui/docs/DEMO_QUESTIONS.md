@@ -4,8 +4,12 @@ Gia đình tôi sống tại một xã thuộc huyện Củ Chi, TP.HCM. Hạn m
 Gia đình tôi sống tại xã Phú Lý, tỉnh Đồng Nai. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?
 # A3 — gap3, chuỗi vượt tầng Luật → QĐ tỉnh, đồ thị bước 4 nổi nhất
 Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?
-# A4 — gap4, văn bản hết hiệu lực: cờ HẾT HIỆU LỰC ở bước 6 + cạnh AMENDS ở bước 4
-Quyết định 18/2016/QĐ-UBND về hạn mức đất ở tại TP.HCM hiện nay còn hiệu lực áp dụng không?
+# A4 — gap4, khẩu ngữ, không nêu tên văn bản nào: cờ HẾT HIỆU LỰC ở bước 6 + cạnh AMENDS ở bước 4.
+# Thay cho câu cũ "Quyết định 18/2016/QĐ-UBND ... hiện nay còn hiệu lực áp dụng không?" — câu đó
+# kết luận đúng nhưng DẪN SAI ĐIỀU KHOẢN, ổn định qua cả ba mẻ chính thức (F1 = 0.00): nó dẫn
+# Điều 4 Khoản 2 của chính QĐ 18/2016, vốn là chỗ bãi bỏ QĐ 70/2014, chứ không phải Điều 5 Khoản 2
+# của QĐ 69/2024 là điều khoản thật sự thay thế nó. Câu mới dẫn đúng cả hai văn bản (F1 0.80).
+Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250? Người ta đổi quy định hồi nào vậy?
 
 # ==== NHÓM B — Dự phòng cho phần hỏi đáp ====
 # B1 — gap4 so sánh 2 chế độ cũ/mới cùng địa phương
