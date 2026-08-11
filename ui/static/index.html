@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="vi">
+<!-- data-theme="b" đặt NGAY tại thẻ html, không đợi JS: `datBangMau()` chỉ chạy
+     ở cuối `khoiDong()`, nên nếu chỉ đổi ở đó thì lần sơn đầu tiên vẫn là chế độ
+     A và người xem thấy header loé terracotta rồi mới nhảy sang navy. -->
+<html lang="vi" data-theme="b">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -283,7 +286,16 @@ tailwind.config = {
      đã chạy được tô bằng --accent và cao dần theo tiến trình.
      Đánh số ở đây là chính đáng: nội dung THỰC SỰ là một chuỗi tuần tự.
      ========================================================================== */
-  #cac-buoc { position: relative; }
+  /* `overflow: hidden` là chốt chặn cuối cho xương sống: `::after` định vị tuyệt
+     đối nên KHÔNG bị khung cắt, mà `transition: height 420ms` còn khiến chiều
+     cao THỰC VẼ đi qua những giá trị khổng lồ trên đường bò xuống — trong lúc
+     đó nó nới rộng vùng cuộn của trang và vẽ xuyên qua dưới footer. Kẹp trần
+     trong `datTienDo` chỉ chặn được giá trị ĐÍCH, không chặn được đường đi.
+     Ca thật 2026-08-06: biến đã về 2182px mà chiều cao vẽ vẫn 8081px, lòi ra
+     ngoài khung 4672px, đẻ ra 4581px trắng sau footer.
+     An toàn vì không có gì trong các thẻ bước cần tràn ra ngoài khung: số thứ
+     tự nằm trong rãnh trái 52px, bảng và đồ thị đều có khung cuộn riêng. */
+  #cac-buoc { position: relative; overflow: hidden; }
   /* Rãnh trái rộng 52px. Tâm số thứ tự nằm ở x=23px (mép trái thẻ 52px + viền
      1px − offset 52px + bán kính 22px) → đường kẻ 2px đặt ở 22px thì trùng tâm.
      z-index: 0 để đường kẻ LUÔN nằm dưới số thứ tự (.so-buoc z-index: 1). */
@@ -454,7 +466,6 @@ tailwind.config = {
       </div>
       <div class="min-w-0">
         <div class="text-xl font-semibold leading-tight truncate">Ontology-Driven GraphRAG cho Pháp luật Việt Nam</div>
-        <div class="text-[13px] text-white/60 truncate">Trình diễn luồng xử lý: câu hỏi → 7 bước → câu trả lời có trích dẫn</div>
       </div>
 
       <!-- Bánh răng góc phải: mọi thiết lập gom vào đây (chế độ chạy, tốc độ,
@@ -512,12 +523,12 @@ tailwind.config = {
           <div class="nhom-setting" role="group" aria-label="Bảng màu">
             <div class="nhan-setting">Bảng màu</div>
             <div class="flex flex-wrap items-center gap-1.5">
-              <button id="nut-mau-a" class="nut-mau" data-mau="a" aria-pressed="true"
+              <button id="nut-mau-a" class="nut-mau" data-mau="a" aria-pressed="false"
                       title="Terracotta làm màu chrome">A — Terracotta</button>
-              <button id="nut-mau-b" class="nut-mau" data-mau="b" aria-pressed="false"
+              <button id="nut-mau-b" class="nut-mau" data-mau="b" aria-pressed="true"
                       title="Navy làm màu chrome, terracotta chỉ làm accent">B — Navy</button>
             </div>
-            <p class="ghi-chu-setting">Chỉ đổi lớp trình bày; không lưu lại, tải lại trang là về A.</p>
+            <p class="ghi-chu-setting">Chỉ đổi lớp trình bày; không lưu lại, tải lại trang là về B.</p>
           </div>
 
           <div class="nhom-setting" role="group" aria-label="Cỡ chữ">
@@ -562,7 +573,10 @@ tailwind.config = {
         <select id="o-juris" aria-label="Địa phương" title="Địa phương áp dụng khi câu hỏi không tự nêu"
           class="o-nhap bg-white border border-[#DDDDDD] rounded-lg px-2 py-1.5 text-[var(--text-secondary)]
                  transition-colors duration-150">
-          <option value="toan-quoc" selected>Toàn quốc</option>
+          <!-- Chỉ gắn nhãn "Phạm vi:" vào lựa chọn mặc định, giống cách `o-mode`
+               chỉ gắn "Chế độ trả lời:" vào mục tự động: hai tên tỉnh còn lại đã
+               tự nói lên nó là phạm vi nào, lặp nhãn ở cả ba chỉ tổ dài dòng. -->
+          <option value="toan-quoc" selected>Phạm vi: Toàn quốc</option>
           <option value="tp-hcm">TP. Hồ Chí Minh</option>
           <option value="dong-nai">Đồng Nai</option>
         </select>
@@ -570,8 +584,8 @@ tailwind.config = {
           class="o-nhap bg-white border border-[#DDDDDD] rounded-lg px-2 py-1.5 text-[var(--text-secondary)]
                  transition-colors duration-150">
           <option value="">Chế độ trả lời: tự động</option>
-          <option value="general">general (ngắn gọn)</option>
-          <option value="irac">irac (tư vấn chi tiết)</option>
+          <option value="general">ngắn gọn</option>
+          <option value="irac">chi tiết</option>
         </select>
         <button id="nut-hoi"
           class="nut-chinh ml-auto px-6 py-1.5 rounded-lg font-medium transition-colors duration-150">
@@ -585,7 +599,7 @@ tailwind.config = {
            một biến địa phương; toàn bộ phần còn lại nằm trong bảng "Câu hỏi mẫu"
            để dải nhập liệu không lấn phần bảy bước. -->
       <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
-        <span id="nhan-goi-y" class="nhan-goi-y hidden">Thử nhanh</span>
+        <span id="nhan-goi-y" class="nhan-goi-y hidden">Câu hỏi thường gặp</span>
         <div id="goi-y" class="flex flex-wrap gap-2"></div>
         <div class="relative" id="boc-cau-hoi">
           <button id="nut-cau-hoi-mau" class="nut-phu hidden" aria-haspopup="dialog"
@@ -778,21 +792,47 @@ function dungStepper() {
       </details>
     </div>`).join("");
   $("cac-buoc").style.setProperty("--tien-do", "0px");   // câu mới → xương sống rỗng lại
+  // Quên luôn bước đã đo, nếu không ResizeObserver sẽ tô lại ray theo bước của
+  // CÂU TRƯỚC ngay khi khung co lại vì vừa dựng lại danh sách bước.
+  BUOC_DA_DO = null;
 }
 
 // Điểm bắt đầu của xương sống, tính từ đỉnh #cac-buoc = tâm số thứ tự bước 1.
 // Phải khớp với `top` của #cac-buoc::before / ::after trong CSS.
 const RAY_TOP = 39;
 
+// Bước được đo gần nhất — giữ lại để đo LẠI khi khung đổi chiều cao (xem dưới).
+let BUOC_DA_DO = null;
+
 /** Kéo đoạn đã-chạy của xương sống xuống tâm số thứ tự của `el`.
  *  Đo bằng getBoundingClientRect để đúng cả khi thẻ trên đã phình ra vì nội dung
- *  (bảng block, đồ thị) — không thể tính trước bằng số thứ tự bước. */
+ *  (bảng block, đồ thị) — không thể tính trước bằng số thứ tự bước.
+ *
+ *  KẸP TRẦN theo chiều cao khung: `#cac-buoc::after` định vị tuyệt đối nên KHÔNG
+ *  bị khung cắt. Giá trị quá lớn thì nó vẽ xuyên qua dưới footer VÀ nới rộng
+ *  vùng cuộn của trang, đẻ ra một mảng trắng ở cuối. Ca thật 2026-08-06: đo lúc
+ *  các khối ngữ cảnh bước 6 còn bung, ra 4005px; sau khi chúng thu lại thì khung
+ *  chỉ còn 3447px — thừa 597px, đúng bằng đoạn ray lòi ra. */
 function datTienDo(el) {
   const wrap = $("cac-buoc"), badge = el && el.querySelector(".so-buoc");
   if (!wrap || !badge) return;
+  BUOC_DA_DO = el;
   const h = badge.getBoundingClientRect().top + badge.offsetHeight / 2
           - wrap.getBoundingClientRect().top - RAY_TOP;
-  wrap.style.setProperty("--tien-do", Math.max(0, Math.round(h)) + "px");
+  const tran = Math.max(0, wrap.getBoundingClientRect().height - RAY_TOP);
+  wrap.style.setProperty(
+    "--tien-do", Math.min(Math.max(0, Math.round(h)), Math.round(tran)) + "px");
+}
+
+// Đo lại mỗi khi khung đổi chiều cao. Chỉ kẹp trần thôi thì hết lòi ra ngoài,
+// nhưng ray vẫn dài sai (dừng ở đáy khung thay vì tâm số 7); phải đo lại mới
+// đúng. Bắt được mọi nguyên nhân làm bố cục xê dịch SAU khi đo: khối ngữ cảnh
+// thu/bung, đồ thị vẽ xong, phông chữ nạp muộn, đổi cỡ cửa sổ khi chiếu.
+// Không sợ lặp vô hạn: `--tien-do` chỉ đổi chiều cao một phần tử định vị tuyệt
+// đối, không đụng tới chiều cao của chính khung.
+if (typeof ResizeObserver !== "undefined") {
+  new ResizeObserver(() => { if (BUOC_DA_DO) datTienDo(BUOC_DA_DO); })
+    .observe(document.getElementById("cac-buoc"));
 }
 
 function batBuoc(id, t) {
@@ -1284,7 +1324,15 @@ function dispatch(ev) {
       if (ev.kind === "done") {
         BUOC.forEach(b => { $("buoc-" + b.id).classList.remove("buoc-chay", "buoc-cho"); });
         $("tg-generate").textContent = (d.elapsed_seconds ?? ev.t).toFixed(2) + "s";
-        datTienDo($("buoc-generate"));   // tô nốt xương sống tới bước 7
+        // Tô nốt xương sống tới bước 7. Đo BA lần vì bố cục còn xê dịch sau khi
+        // sự kiện `done` tới: khối ngữ cảnh thu/bung, đồ thị vẽ xong, phông chữ
+        // nạp muộn. `ResizeObserver` ở trên chỉ bắt được thay đổi KÍCH THƯỚC
+        // khung, không bắt được việc số thứ tự bước 7 dịch chỗ mà khung vẫn cao
+        // như cũ — đó chính là ca để lọt sai số 4400px khi đo thử 2026-08-06.
+        const toRay = () => datTienDo($("buoc-generate"));
+        toRay();
+        requestAnimationFrame(toRay);
+        setTimeout(toRay, 600);
       }
       break;
   }
@@ -1608,7 +1656,7 @@ document.querySelectorAll(".nut-toc-do").forEach(b =>
 
 // ---------------------------------------------------------------- khởi động
 (async function khoiDong() {
-  datBangMau("a");     // mặc định A; không đọc/ghi storage (spec mục 1.5)
+  datBangMau("b");     // mặc định B (navy); không đọc/ghi storage (spec mục 1.5)
   dungStepper();
   await taiDoThi();   // xong trước khi hỏi để bước 3/4/6/7 có tên thật
   try {

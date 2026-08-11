@@ -179,7 +179,18 @@ def trang_chu() -> FileResponse:
     index = STATIC_DIR / "index.html"
     if not index.is_file():
         raise HTTPException(status_code=500, detail="Thiếu ui/static/index.html")
-    return FileResponse(index)
+    # `no-cache` KHÔNG phải "cấm lưu": trình duyệt vẫn giữ bản sao, nhưng buộc
+    # phải hỏi lại server mỗi lần rồi mới dùng — server so ETag và trả 304 nếu
+    # tệp không đổi, nên không tốn thêm gì trên localhost.
+    # Vì sao cần: `FileResponse` mặc định chỉ đặt ETag + Last-Modified, không
+    # đặt Cache-Control, nên Chrome tự suy ra thời hạn và có thể dùng bản cũ mà
+    # không hỏi lại. Cộng thêm việc `scripts/chay-demo.sh` gọi `open <url>` —
+    # trên macOS, URL đã mở sẵn thì `open` chỉ chuyển tab chứ KHÔNG tải lại —
+    # kết quả là sửa giao diện xong vẫn thấy bản cũ (đúng ca 2026-08-06: đổi
+    # bảng màu mặc định sang navy mà trang vẫn hiện terracotta).
+    # Chỉ áp cho trang chủ; tài nguyên trong /static (tailwind, cytoscape,
+    # font) là bản đã vendor, gần như không đổi — cứ để trình duyệt cache.
+    return FileResponse(index, headers={"Cache-Control": "no-cache"})
 
 
 def _trang_thai(adapter: BaseAdapter) -> dict:
