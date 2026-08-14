@@ -157,6 +157,16 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
         ("kw 0.7", "khoan", "fill", 12000, None, False, False, {"_KEYWORD_MIN_SCORE": 0.7}),
         ("kw 1.0", "khoan", "fill", 12000, None, False, False, {"_KEYWORD_MIN_SCORE": 1.0}),
     ],
+    # Cấu hình gộp cuối — dò quanh cấu hình tốt nhất đã đo, có cross-encoder.
+    "stack-cuoi": [
+        ("stack đầy đủ", "khoan", "fill", 12000, "trong-norm", False, False, {}),
+        ("+ ngân sách dẫn chiếu 10", "khoan", "fill", 12000, "trong-norm", False, False,
+         {"_REFERS_BUDGET": 10}),
+        ("+ pool xếp lại 120", "khoan", "fill", 12000, "trong-norm", False, False,
+         {"_RERANK_POOL": 120}),
+        ("+ cả hai", "khoan", "fill", 12000, "trong-norm", False, False,
+         {"_REFERS_BUDGET": 10, "_RERANK_POOL": 120}),
+    ],
     # Vòng 3 — phép so QUYẾT ĐỊNH: biến thể tốt nhất của mỗi việc, và cả hai
     # cùng lúc. Dùng để chốt cấu hình cuối.
     "ket-hop": [

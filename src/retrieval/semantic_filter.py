@@ -1196,7 +1196,11 @@ def hybrid_search(
     # đa dạng hoá phía trên — chỉ ở bước cuối mới bỏ trần để nạp cho đầy.
     if budget_mode == "fill":
         truoc = len(results)
-        for rrf_score_val, point in scored:
+        # Dùng CÙNG thứ tự đã xếp lại với Pass 2. Pass 2b là chỗ nạp NHIỀU đơn
+        # vị nhất (bỏ trần), nên để nó chạy theo RRF thô trong khi Pass 2 đã
+        # xếp lại là không nhất quán — phần lớn đơn vị thêm vào sẽ không được
+        # hưởng cross-encoder.
+        for rrf_score_val, point in scored_pass2:
             if len(results) >= top_k:
                 break
             if point.id in used_point_ids:
