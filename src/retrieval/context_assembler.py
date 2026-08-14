@@ -187,8 +187,24 @@ def assemble_context(
         Context string sẵn sàng đưa vào LLM prompt.
         Rỗng nếu không có text_unit nào.
     """
+    return assemble_context_chi_tiet(scored_text_units, neo4j_driver, max_tokens)[0]
+
+
+def assemble_context_chi_tiet(
+    scored_text_units: list[ScoredTextUnit],
+    neo4j_driver: Driver,
+    max_tokens: int = 6000,
+) -> tuple[str, list[ScoredTextUnit]]:
+    """Như assemble_context nhưng trả kèm DANH SÁCH đơn vị thực sự lọt vào.
+
+    Cần cho khâu đánh giá: hàm này sắp theo rrf_score giảm dần rồi DỪNG HẲN khi
+    vượt ngân sách token, nên đơn vị điểm thấp bị cắt trước. Các cơ chế nạp
+    thêm (bao đóng dẫn chiếu, tiêu ngân sách trống, điều khoản chuyển tiếp) đều
+    gán điểm thấp → nằm cuối → bị cắt đầu tiên. Đo độ bao phủ trên danh sách
+    ĐẦU VÀO thay vì danh sách sống sót sẽ thổi phồng kết quả.
+    """
     if not scored_text_units:
-        return ""
+        return "", []
 
     # Tôn trọng thứ tự RRF từ hybrid_search (đã tích hợp tier multiplier + graph boost).
     # Sort lại theo tier sẽ phá hoại boost: Tier 4 (NQ địa phương, NQ 254 với tier=1
@@ -206,6 +222,7 @@ def assemble_context(
 
     # Build context với token budget
     blocks: list[str] = []
+    giu_lai: list[ScoredTextUnit] = []
     used_tokens = 0
 
     for unit in sorted_units:
@@ -239,10 +256,11 @@ def assemble_context(
             break
 
         blocks.append(block)
+        giu_lai.append(unit)
         used_tokens += block_tokens
 
     logger.info(f"assemble_context: {len(blocks)} blocks, ~{used_tokens} tokens")
-    return "\n\n".join(blocks)
+    return "\n\n".join(blocks), giu_lai
 
 
 # ---------------------------------------------------------------------------

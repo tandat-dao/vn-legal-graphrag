@@ -1,0 +1,2906 @@
+[
+  {
+    "id": "V001",
+    "gap_type": "gap2",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V002",
+    "gap_type": "gap2",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V003",
+    "gap_type": "gap2",
+    "off": {
+      "n": 18,
+      "khoan": 0.8,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 18,
+      "khoan": 0.8,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 0.8,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 0.8,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V004",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 27,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 27,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V006",
+    "gap_type": "gap2",
+    "off": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 28,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 28,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V007",
+    "gap_type": "gap2",
+    "off": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 28,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 28,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V008",
+    "gap_type": "gap2",
+    "off": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V011",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V012",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V013",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V014",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V015",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V016",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V017",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V018",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V019",
+    "gap_type": "gap2",
+    "off": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V020",
+    "gap_type": "gap2",
+    "off": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V021",
+    "gap_type": "gap2",
+    "off": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V022",
+    "gap_type": "gap2",
+    "off": {
+      "n": 14,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 18,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 18,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V023",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.75
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.75
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 0.5,
+      "dieu": 0.75
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 0.5,
+      "dieu": 0.75
+    }
+  },
+  {
+    "id": "V024",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V025",
+    "gap_type": "gap3",
+    "off": {
+      "n": 10,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 10,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V026",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V027",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 0.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 0.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V028",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.75
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.75
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 0.75,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 0.75,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V029",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V030",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V033",
+    "gap_type": "gap3",
+    "off": {
+      "n": 19,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333
+    },
+    "ngân sách": {
+      "n": 19,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V035",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V036",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V037",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V038",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V039",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V040",
+    "gap_type": "gap4",
+    "off": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V041",
+    "gap_type": "gap4",
+    "off": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V042",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V043",
+    "gap_type": "gap4",
+    "off": {
+      "n": 10,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 10,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V044",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V045",
+    "gap_type": "gap4",
+    "off": {
+      "n": 19,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 19,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 0.5,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V046",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V047",
+    "gap_type": "gap4",
+    "off": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V048",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V049",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V050",
+    "gap_type": "gap4",
+    "off": {
+      "n": 13,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 13,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V051",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 0.5,
+      "dieu": 0.5
+    }
+  },
+  {
+    "id": "V052",
+    "gap_type": "gap4",
+    "off": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V053",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V054",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V055",
+    "gap_type": "gap4",
+    "off": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V056",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V057",
+    "gap_type": "gap3",
+    "off": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V058",
+    "gap_type": "gap4",
+    "off": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V061",
+    "gap_type": "gap3",
+    "off": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 18,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 18,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V062",
+    "gap_type": "gap2",
+    "off": {
+      "n": 18,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 18,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V066",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V067",
+    "gap_type": "gap2",
+    "off": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V068",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V069",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 0.5,
+      "dieu": 0.5
+    }
+  },
+  {
+    "id": "V070",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V071",
+    "gap_type": "gap3",
+    "off": {
+      "n": 10,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 10,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V072",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 0.5,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V073",
+    "gap_type": "gap4",
+    "off": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 13,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 13,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V074",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V075",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V076",
+    "gap_type": "gap4",
+    "off": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V077",
+    "gap_type": "gap4",
+    "off": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V078",
+    "gap_type": "gap1",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V079",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 0.5,
+      "dieu": 0.5
+    }
+  },
+  {
+    "id": "V080",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 0.5,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V081",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V082",
+    "gap_type": "gap1",
+    "off": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V083",
+    "gap_type": "gap1",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V084",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V085",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V086",
+    "gap_type": "gap1",
+    "off": {
+      "n": 12,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 12,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 13,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 13,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V087",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V088",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V089",
+    "gap_type": "gap1",
+    "off": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V090",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V091",
+    "gap_type": "gap1",
+    "off": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V092",
+    "gap_type": "gap1",
+    "off": {
+      "n": 15,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 15,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V093",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V094",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V095",
+    "gap_type": "gap1",
+    "off": {
+      "n": 13,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 13,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V096",
+    "gap_type": "gap1",
+    "off": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 11,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 12,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V097",
+    "gap_type": "gap1",
+    "off": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V098",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V099",
+    "gap_type": "gap1",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V100",
+    "gap_type": "gap1",
+    "off": {
+      "n": 14,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V101",
+    "gap_type": "gap1",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 19,
+      "khoan": 0.5,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V102",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V103",
+    "gap_type": "gap4",
+    "off": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 26,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 26,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V104",
+    "gap_type": "gap4",
+    "off": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 15,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V118",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V119",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V120",
+    "gap_type": "gap2",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V122",
+    "gap_type": "gap2",
+    "off": {
+      "n": 16,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 16,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 18,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 18,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V124",
+    "gap_type": "gap2",
+    "off": {
+      "n": 16,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 16,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V125",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 0.0,
+      "dieu": 0.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 0.0,
+      "dieu": 0.0
+    }
+  },
+  {
+    "id": "V126",
+    "gap_type": "gap2",
+    "off": {
+      "n": 23,
+      "khoan": 0.6,
+      "dieu": 0.6
+    },
+    "ngân sách": {
+      "n": 23,
+      "khoan": 0.6,
+      "dieu": 0.6
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 0.6,
+      "dieu": 0.6
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 0.6,
+      "dieu": 0.6
+    }
+  },
+  {
+    "id": "V127",
+    "gap_type": "gap3",
+    "off": {
+      "n": 11,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 11,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 12,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 12,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V129",
+    "gap_type": "gap4",
+    "off": {
+      "n": 22,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V130",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V131",
+    "gap_type": "gap3",
+    "off": {
+      "n": 22,
+      "khoan": 0.75,
+      "dieu": 0.75
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 0.75,
+      "dieu": 0.75
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 0.75,
+      "dieu": 0.75
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 0.75,
+      "dieu": 0.75
+    }
+  },
+  {
+    "id": "V132",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V133",
+    "gap_type": "gap2",
+    "off": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 17,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V135",
+    "gap_type": "gap1",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V136",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.25,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.25,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 0.25,
+      "dieu": 0.5
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 0.25,
+      "dieu": 0.5
+    }
+  },
+  {
+    "id": "V137",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V139",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V140",
+    "gap_type": "gap4",
+    "off": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan": {
+      "n": 27,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    },
+    "khoan+ngân sách": {
+      "n": 27,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V141",
+    "gap_type": "gap4",
+    "off": {
+      "n": 3,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 8,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 3,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan+ngân sách": {
+      "n": 8,
+      "khoan": 0.5,
+      "dieu": 0.5
+    }
+  },
+  {
+    "id": "V142",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    },
+    "khoan+ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 0.5
+    }
+  },
+  {
+    "id": "V143",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 25,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V144",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 0.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 0.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 0.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V145",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 23,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V146",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 21,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V147",
+    "gap_type": "gap1",
+    "off": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 14,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 16,
+      "khoan": 0.5,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 16,
+      "khoan": 0.5,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V148",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V149",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 24,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  },
+  {
+    "id": "V150",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "ngân sách": {
+      "n": 20,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    },
+    "khoan+ngân sách": {
+      "n": 22,
+      "khoan": 1.0,
+      "dieu": 1.0
+    }
+  }
+]

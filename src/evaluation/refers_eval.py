@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 import sys
 from pathlib import Path
 
@@ -34,6 +35,8 @@ from src.evaluation.retrieval_eval import (
     _chunk_to_citation,
     _fetch_chunk_meta,
 )
+from src.pipeline import CONTEXT_MAX_TOKENS
+from src.retrieval.context_assembler import assemble_context_chi_tiet
 from src.retrieval.query_planner import plan_query
 from src.retrieval.semantic_filter import hybrid_search
 from src.retrieval.subgraph_extractor import extract_subgraph
@@ -41,23 +44,60 @@ from src.retrieval.subgraph_extractor import extract_subgraph
 logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-# Bộ biến thể so sánh: tên → (refers_mode, per_norm_mode).
+# Bộ biến thể so sánh: tên → (refers_mode, budget_mode).
 # "off" LUÔN phải đứng đầu — mọi Δ đều tính so với nó.
-BO_BIEN_THE: dict[str, list[tuple[str, str | None, str | None]]] = {
+BO_BIEN_THE: dict[str, list[tuple]] = {
     # Việc 1 — bao đóng dẫn chiếu, kèm nhánh đối chứng "rrf" để tách bạch
     # "nhờ dẫn chiếu" với "nhờ được thêm ngữ cảnh".
     "refers": [
-        ("off", None, None),
-        ("khoan", "khoan", None),
-        ("all", "all", None),
-        ("rrf(đối chứng)", "rrf", None),
+        ("off", None, None, 6000),
+        ("khoan", "khoan", None, 6000),
+        ("all", "all", None, 6000),
+        ("rrf(đối chứng)", "rrf", None, 6000),
     ],
-    # Việc 2 — ngân sách chiều sâu theo đồ thị, và phối hợp với việc 1.
+    # Việc 2 — ngân sách theo đồ thị (đã cho kết quả âm, giữ để tái lập).
     "budget": [
-        ("off", None, None),
-        ("ngân sách", None, "graph"),
-        ("khoan", "khoan", None),
-        ("khoan+ngân sách", "khoan", "graph"),
+        ("off", None, None, 6000),
+        ("ngân sách", None, "graph", 6000),
+        ("khoan", "khoan", None, 6000),
+        ("khoan+ngân sách", "khoan", "graph", 6000),
+    ],
+    # Việc 2 vòng 2 — nhắm đúng ràng buộc đang chặn (trần TẦNG), và thử tiêu
+    # thẳng phần ngân sách bỏ trống. Đo cho thấy ứng viên thừa mứa (trung vị
+    # 2772) nhưng 0/38 câu lấy đủ 25 vì trần khoá.
+    "budget2": [
+        ("off", None, None, 6000),
+        ("nới trần văn bản", None, "norm", 6000),
+        ("nới trần tầng", None, "tier", 6000),
+        ("tiêu hết ngân sách", None, "fill", 6000),
+    ],
+    # Vòng 4 — nới chính NGƯỠNG TOKEN. Đo cho thấy trần top_k/per_norm/per_tier
+    # đều nằm TRÊN một nút thắt chặt hơn ở phía dưới: assemble_context cắt theo
+    # CONTEXT_MAX_TOKENS=6000 và cắt đúng các đơn vị điểm RRF thấp — tức đúng
+    # phần mà mọi cơ chế nạp thêm vừa đưa vào. 6000 là con số đặt từ thời tính
+    # tiền theo Claude; Gemini 2.5 Pro chịu tới 1 triệu token.
+    "token": [
+        ("off (6000)", None, None, 6000),
+        ("off + 12000", None, None, 12000),
+        ("khoan + 12000", "khoan", None, 12000),
+        ("khoan+tiêu hết + 12000", "khoan", "fill", 12000),
+    ],
+    # Vòng 5 — tìm điểm BÃO HOÀ của ngưỡng token. Độ bao phủ tăng đơn điệu theo
+    # lượng ngữ cảnh nên "nới thêm" luôn trông đẹp; điều cần biết là nới tới đâu
+    # thì hết thứ để lấy. Nếu 18000 không hơn 12000 thì 12000 đã vét hết.
+    "token-bao-hoa": [
+        ("khoan+fill 6000", "khoan", "fill", 6000),
+        ("khoan+fill 12000", "khoan", "fill", 12000),
+        ("khoan+fill 18000", "khoan", "fill", 18000),
+        ("khoan+fill 30000", "khoan", "fill", 30000),
+    ],
+    # Vòng 3 — phép so QUYẾT ĐỊNH: biến thể tốt nhất của mỗi việc, và cả hai
+    # cùng lúc. Dùng để chốt cấu hình cuối.
+    "ket-hop": [
+        ("off", None, None, 6000),
+        ("khoan", "khoan", None, 6000),
+        ("tiêu hết ngân sách", None, "fill", 6000),
+        ("khoan+tiêu hết", "khoan", "fill", 6000),
     ],
 }
 
@@ -99,24 +139,32 @@ def chay(test_set: list[dict], top_k: int = 25,
                 continue
 
             row = {"id": item["id"], "gap_type": item.get("gap_type")}
-            for ten, rmode, pmode in bien_the:
+            for ten, rmode, pmode, mtok in bien_the:
                 units = hybrid_search(
                     q, norm_ids, qdrant, model, top_k=top_k,
                     graph_component_ids=graph_comp_ids, neo4j_driver=neo4j,
                     procedure_id=plan.get("procedure"), refers_mode=rmode,
-                    per_norm_mode=pmode,
+                    budget_mode=pmode,
                 )
                 meta = _fetch_chunk_meta([u["text_unit_id"] for u in units], neo4j)
+                # Đơn vị THỰC SỰ lọt vào ngữ cảnh sau khi cắt theo ngưỡng token.
+                # Đây mới là thứ bộ sinh nhìn thấy — các cơ chế nạp thêm đều gán
+                # điểm RRF thấp nên nằm cuối và bị cắt trước.
+                ctx, giu = assemble_context_chi_tiet(
+                    units, neo4j, max_tokens=mtok)
                 row[ten] = {
                     "n": len(units),
-                    "khoan": _do_bao_phu(units, gt, meta, "khoan"),
-                    "dieu": _do_bao_phu(units, gt, meta, "dieu"),
+                    "n_ctx": len(giu),
+                    "token": int(len(ctx) / 3.5),
+                    "khoan": _do_bao_phu(giu, gt, meta, "khoan"),
+                    "dieu": _do_bao_phu(giu, gt, meta, "dieu"),
+                    "khoan_chon": _do_bao_phu(units, gt, meta, "khoan"),
                 }
             rows.append(row)
             print(
                 f"[{i}/{len(test_set)}] {item['id']}  "
                 + "  ".join(f"{t}={row[t]['khoan']:.2f}({row[t]['n']})"
-                            for t, _, _ in bien_the),
+                            for t, *_ in bien_the),
                 flush=True,
             )
     finally:
@@ -128,27 +176,37 @@ def tong_hop(rows: list[dict], bien_the) -> None:
     if not rows:
         print("Không có câu nào chạy được.")
         return
-    tens = [t for t, _, _ in bien_the]
+    tens = [t for t, *_ in bien_the]
     print(f"\n{'='*70}")
     print(f"ĐỘ BAO PHỦ ĐIỀU KHOẢN ĐÁP ÁN TRONG NGỮ CẢNH — {len(rows)} câu")
     print(f"{'='*70}")
-    print(f"{'biến thể':<20}{'cấp Khoản':>12}{'cấp Điều':>12}{'số đơn vị':>12}{'Δ Khoản':>10}")
+    print("Cột 'cấp Khoản' đo trên đơn vị THỰC SỰ lọt vào ngữ cảnh (sau cắt token).")
+    print(f"\n{'biến thể':<20}{'cấp Khoản':>11}{'Δ':>9}{'(nếu ko cắt)':>14}"
+          f"{'cấp Điều':>10}{'chọn':>7}{'lọt':>7}{'token':>8}{'bị cắt':>8}")
     goc = None
     for ten in tens:
         kh = sum(r[ten]["khoan"] for r in rows) / len(rows)
         di = sum(r[ten]["dieu"] for r in rows) / len(rows)
         n = sum(r[ten]["n"] for r in rows) / len(rows)
+        nc = sum(r[ten]["n_ctx"] for r in rows) / len(rows)
+        tk = sum(r[ten]["token"] for r in rows) / len(rows)
+        cat = sum(1 for r in rows if r[ten]["n_ctx"] < r[ten]["n"])
         delta = "" if goc is None else f"{kh - goc:+.3f}"
         if goc is None:
             goc = kh
-        print(f"{ten:<20}{kh:>12.3f}{di:>12.3f}{n:>12.1f}{delta:>10}")
+        kc = sum(r[ten]["khoan_chon"] for r in rows) / len(rows)
+        print(f"{ten:<20}{kh:>11.3f}{delta:>9}{kc:>14.3f}"
+              f"{di:>10.3f}{n:>7.1f}{nc:>7.1f}{tk:>8.0f}{cat:>8}")
+    print("  '(nếu ko cắt)' = đo trên đơn vị được CHỌN. Chênh với cột đầu chính"
+          " là phần bị ngưỡng token nuốt mất.")
 
-    # Đếm câu thắng/thua so với off — quan trọng hơn trung bình khi N nhỏ
-    print(f"\n{'so với off':<20}{'thắng':>8}{'thua':>8}{'hoà':>8}")
+    # Đếm câu thắng/thua so với MỐC (biến thể đầu tiên, không cứng tên "off")
+    moc = tens[0]
+    print(f"\n{'so với ' + moc:<24}{'thắng':>8}{'thua':>8}{'hoà':>8}")
     for ten in tens[1:]:
-        t = sum(1 for r in rows if r[ten]["khoan"] > r["off"]["khoan"])
-        th = sum(1 for r in rows if r[ten]["khoan"] < r["off"]["khoan"])
-        print(f"{ten:<20}{t:>8}{th:>8}{len(rows)-t-th:>8}")
+        t = sum(1 for r in rows if r[ten]["khoan"] > r[moc]["khoan"])
+        th = sum(1 for r in rows if r[ten]["khoan"] < r[moc]["khoan"])
+        print(f"{ten:<24}{t:>8}{th:>8}{len(rows)-t-th:>8}")
 
     # Tách theo gap để biết cơ chế ăn vào loại câu hỏi nào
     gaps = sorted({r.get("gap_type") or "—" for r in rows})
@@ -156,9 +214,10 @@ def tong_hop(rows: list[dict], bien_the) -> None:
         print(f"\n{'theo gap (Δ Khoản so với off)':<28}" + "".join(f"{t:>17}" for t in tens[1:]))
         for g in gaps:
             sub = [r for r in rows if (r.get("gap_type") or "—") == g]
-            base = sum(r["off"]["khoan"] for r in sub) / len(sub)
+            base = sum(r[tens[0]]["khoan"] for r in sub) / len(sub)
             cells = "".join(
-                f"{sum(r[t]['khoan'] for r in sub)/len(sub) - base:>+17.3f}" for t in tens[1:]
+                f"{sum(r[t]['khoan'] for r in sub)/len(sub) - base:>+17.3f}"
+                for t in tens[1:]
             )
             print(f"  {g:<26}" + cells + f"   (n={len(sub)})")
 

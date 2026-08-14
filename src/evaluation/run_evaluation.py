@@ -47,7 +47,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                       response_mode: str = "auto",
                       verify: bool = False, verify_tier: int = 1,
                       ablation=None, refers_mode: str | None = None,
-                      per_norm_mode: str | None = None) -> dict:
+                      budget_mode: str | None = None) -> dict:
     """Chạy GraphRAG, inject ground-truth jurisdiction từ test_set.
 
     Eval mode: `force_jurisdiction` bơm jurisdiction từ test_set khi câu hỏi không
@@ -74,7 +74,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         verify_tier=verify_tier,
         ablation=ablation or FULL,
         refers_mode=refers_mode,
-        per_norm_mode=per_norm_mode,
+        budget_mode=budget_mode,
     )
 
     return {
@@ -181,7 +181,7 @@ def run_system_on_test_set(
     verify_tier: int = 1,
     ablation=None,
     refers_mode: str | None = None,
-    per_norm_mode: str | None = None,
+    budget_mode: str | None = None,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -228,7 +228,7 @@ def run_system_on_test_set(
                 # Verifier + ablation chỉ áp dụng cho GraphRAG (component hệ thống ta).
                 runner_kwargs.update(verify=verify, verify_tier=verify_tier,
                                      ablation=ablation, refers_mode=refers_mode,
-                                     per_norm_mode=per_norm_mode)
+                                     budget_mode=budget_mode)
             elif system == "oracle":
                 runner_kwargs.update(text_index=oracle_text_index)
             sys_out = runner(item, clients, **runner_kwargs)
@@ -394,7 +394,7 @@ def main() -> int:
              "Mặc định tắt (hành vi cũ).",
     )
     parser.add_argument(
-        "--per-norm-mode", default=None, choices=["graph"],
+        "--budget-mode", default=None, choices=["graph"],
         help="Trần đơn vị mỗi văn bản (chỉ GraphRAG): mặc định cố định 3 | "
              "graph = chia ngân sách theo số văn bản Giai đoạn 2 trả về "
              "(sàn 3 — chỉ nới cho chuỗi hẹp, không bao giờ siết).",
@@ -538,7 +538,7 @@ def main() -> int:
                 verify_tier=args.verify_tier,
                 ablation=ablation_cfg,
                 refers_mode=args.refers_mode,
-                per_norm_mode=args.per_norm_mode,
+                budget_mode=args.budget_mode,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
@@ -548,8 +548,8 @@ def main() -> int:
             abl_tag = "" if ablation_cfg.name == "full" else f"_{ablation_cfg.name}"
             if args.refers_mode and system == "graphrag":
                 abl_tag += f"_refers-{args.refers_mode}"
-            if args.per_norm_mode and system == "graphrag":
-                abl_tag += f"_pernorm-{args.per_norm_mode}"
+            if args.budget_mode and system == "graphrag":
+                abl_tag += f"_budget-{args.budget_mode}"
             out_path = args.out_dir / f"results_{system}{abl_tag}_{timestamp}.json"
             out_path.write_text(
                 json.dumps(

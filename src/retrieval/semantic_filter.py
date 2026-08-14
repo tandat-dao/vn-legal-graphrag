@@ -359,31 +359,50 @@ def _keyword_score(query_tokens: set[str], payload: dict) -> float:
 
 _RARITY_ALPHA = 1.5
 
-# --- Ngân sách chiều sâu do đồ thị quyết định (việc 2) ---
+# --- Ngân sách ngữ cảnh (việc 2) ---
 #
-# Đo trên 137 câu: top_k=25 KHÔNG BAO GIỜ đầy (cao nhất 23) và ngưỡng 6000
-# token chỉ cắn 11% số câu. Ràng buộc thật sự chi phối là _MAX_PER_NORM=3 —
-# 99% số câu có ít nhất một văn bản đụng trần. Nó không phải van an toàn mà là
-# CHÍNH SÁCH đang định hình mọi câu trả lời.
+# Đo trên 137 câu:
+#   top_k = 25            0/137 câu chạm tới (cao nhất 23)  → số chết
+#   CONTEXT_MAX_TOKENS    14/127 câu (11%)
+#   _MAX_PER_NORM = 3     126/127 câu (99%) có văn bản đụng trần
+#   _MAX_PER_TIER         36/38 câu có TẦNG đụng trần        → chặn thật sự
+# Và 0/38 câu hết ứng viên — kho có trung vị 2772 đơn vị khả dụng trong phạm
+# vi Giai đoạn 2. Tức ngân sách còn trống mà bị trần khoá, không phải cạn hàng.
 #
-# Trần cố định giả định mọi câu hỏi cần bề rộng như nhau. Thực tế không vậy:
-# "hạn mức đất ở Quận 1" nằm gọn trong MỘT quyết định tỉnh (trải mỏng ra 10
-# văn bản là tự pha loãng), còn "trình tự chuyển mục đích" thì trải Luật → NĐ
-# → TT → QĐ (bề rộng đúng).
-#
-# Quy tắc: chia ngân sách cho số văn bản mà Giai đoạn 2 trả về — tất định,
-# miễn phí, không cần dò tham số trên tập kiểm thử.
-#   SÀN = _MAX_PER_NORM (3) → CHỈ NỚI cho chuỗi hẹp, KHÔNG BAO GIỜ siết so với
-#   hành vi hiện tại. Nhờ vậy mọi hồi quy (nếu có) chắc chắn không do mất bề rộng.
+# Các chế độ (mặc định None = giữ nguyên hằng số cũ):
+#   graph  Chia ngân sách theo số văn bản Giai đoạn 2 trả về.
+#          → KẾT QUẢ ÂM, +0,000 trên 121 câu, 0 thắng 0 thua. Nguyên nhân:
+#          bề rộng Giai đoạn 2 gần như HẰNG SỐ (min 9, trung vị 10) vì traversal
+#          [:IMPLEMENTS|AMENDS*1..4] luôn kéo về vùng lân cận cỡ như nhau, nên
+#          ⌈25/n⌉ = 3 = đúng hằng số cũ và công thức không bao giờ kích hoạt.
+#          Giữ lại để tái lập kết quả âm này.
+#   norm   Nới trần theo văn bản lên _PER_NORM_NOI.
+#   tier   Nới trần theo tầng lên _PER_TIER_NOI (nhắm đúng ràng buộc đang chặn).
+#   fill   Giữ nguyên mọi trần trong các pass đa dạng, rồi ở BƯỚC CUỐI bỏ trần
+#          và nạp thêm theo thứ tự RRF cho đến khi đầy top_k. Đây là cách trực
+#          tiếp nhất để tiêu phần ngân sách đang bỏ không, mà KHÔNG đổi logic
+#          đa dạng hoá phía trước.
 _PER_NORM_TRAN = 8
+_PER_NORM_NOI = 6
+_PER_TIER_NOI = 12
+_BUDGET_MODES = ("graph", "norm", "tier", "fill")
 
 
 def _tinh_per_norm(top_k: int, so_norm: int, che_do: str | None) -> int:
     """Trần số đơn vị mỗi văn bản. che_do=None → giữ hằng số cũ (3)."""
+    if che_do == "norm":
+        return _PER_NORM_NOI
     if che_do != "graph" or so_norm <= 0:
         return _MAX_PER_NORM
     import math
     return max(_MAX_PER_NORM, min(_PER_NORM_TRAN, math.ceil(top_k / so_norm)))
+
+
+def _tinh_per_tier(tier, che_do: str | None) -> int:
+    """Trần số đơn vị mỗi tầng."""
+    if che_do == "tier":
+        return _PER_TIER_NOI
+    return _MAX_PER_TIER.get(tier, _MAX_PER_TIER_DEFAULT)
 
 
 # Pass 3 — bao đóng dẫn chiếu ([:REFERS_TO], hướng 1).
@@ -665,7 +684,7 @@ def hybrid_search(
     neo4j_driver=None,
     procedure_id: str | None = None,
     refers_mode: str | None = None,
-    per_norm_mode: str | None = None,
+    budget_mode: str | None = None,
     extra_component_ids: list[str] | None = None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
@@ -878,7 +897,7 @@ def hybrid_search(
     norm_count: dict[str, int] = {}
     tier_count: dict[int | None, int] = {}
     used_point_ids: set = set()
-    per_norm_cap = _tinh_per_norm(top_k, len(norm_ids), per_norm_mode)
+    per_norm_cap = _tinh_per_norm(top_k, len(norm_ids), budget_mode)
 
     def _try_add(rrf_score_val, point) -> bool:
         """Thêm point vào results nếu thỏa cả 2 cap. Trả True nếu thêm thành công."""
@@ -889,7 +908,7 @@ def hybrid_search(
         tier = payload.get("tier")
         if norm_count.get(nid, 0) >= per_norm_cap:
             return False
-        tier_max = _MAX_PER_TIER.get(tier, _MAX_PER_TIER_DEFAULT)
+        tier_max = _tinh_per_tier(tier, budget_mode)
         if tier_count.get(tier, 0) >= tier_max:
             return False
         norm_count[nid] = norm_count.get(nid, 0) + 1
@@ -1011,6 +1030,26 @@ def hybrid_search(
             continue
         _try_add(rrf_score_val, point)
 
+    # Pass 2b (TIÊU NGÂN SÁCH CÒN TRỐNG) — chỉ khi budget_mode="fill".
+    #
+    # Đo cho thấy 0/38 câu lấy đủ 25 đơn vị, mà cũng 0/38 câu hết ứng viên
+    # (trung vị 2772 đơn vị khả dụng). Phần ngân sách bỏ không là do trần
+    # per_norm/per_tier khoá. Pass này giữ NGUYÊN các trần trong toàn bộ logic
+    # đa dạng hoá phía trên — chỉ ở bước cuối mới bỏ trần để nạp cho đầy.
+    if budget_mode == "fill":
+        truoc = len(results)
+        for rrf_score_val, point in scored:
+            if len(results) >= top_k:
+                break
+            if point.id in used_point_ids:
+                continue
+            used_point_ids.add(point.id)
+            results.append(_to_scored_unit(rrf_score_val, point))
+        logger.info(
+            f"hybrid_search Pass 2b (fill): nạp thêm {len(results) - truoc} đơn vị "
+            f"vào phần ngân sách bỏ trống"
+        )
+
     # Pass 3 (BAO ĐÓNG DẪN CHIẾU) — mặc định TẮT, hành vi cũ không đổi.
     #
     # Điều khoản pháp luật thường đặt điều kiện ở nơi khác: "... theo quy định
@@ -1087,7 +1126,7 @@ def hybrid_search(
             f"pass-0.5(label-keyword)={pass_neg05_count}, pass0(dense-floor)={pass0_count}, "
             f"pass1(rrf-breadth)={pass1_count}, "
             f"pass2(depth)={len(results) - pass_neg1_count - pass_neg05_count - pass0_count - pass1_count} | "
-            f"caps: per_norm={per_norm_cap} (mode={per_norm_mode or 'cố định'}, "
+            f"caps: per_norm={per_norm_cap} (mode={budget_mode or 'cố định'}, "
             f"{len(norm_ids)} norm), per_tier={_MAX_PER_TIER} | "
             f"best rrf={results[0]['rrf_score']:.4f} | tier_dist={tier_dist} | norm_dist={norm_dist}"
         )
