@@ -41,6 +41,44 @@ vị THỰC SỰ lọt vào ngữ cảnh sau khi cắt theo ngưỡng token.
 Guard phạm vi đo riêng (harness mới, ghép cặp 123 câu): **+0,016 đến +0,026**,
 4 câu từ 0 lên trọn vẹn, 2 câu thua một phần.
 
+### Quét tham số (137 câu là tập phát triển — xem §6)
+
+| tham số | kết quả | ghi chú |
+|---|---|---|
+| **Hệ số độ hiếm khái niệm → TẮT** | **+0,041** | Lớn nhất. Xem cảnh báo bên dưới |
+| **Pool dense 50 → 100** | **+0,017** | Bão hoà tại 100 (200/400 không hơn) |
+| **Ngân sách dẫn chiếu 5 → 10** | **+0,008** | Bão hoà tại 10; giảm còn 3 thì −0,008 |
+| Hằng số RRF (10/30/60/150) | +0,000 | Hoà tuyệt đối 123/123 |
+| Trần tầng | +0,000 | Nới đều lên 10 thì **−0,010**, 4 câu thua |
+| Ngưỡng từ khoá (0,3–1,0) | +0,000 | Hoà tuyệt đối 123/123 |
+
+**Bốn trong sáu núm hoàn toàn không ảnh hưởng** — bản thân điều đó là một phát
+biểu về hệ: nó không nhạy với tinh chỉnh vặt, các mức tăng thật đến từ cơ chế
+chứ không từ dò tham số.
+
+#### ⚠️ Về hệ số độ hiếm — đọc kỹ trước khi báo cáo
+
+Tắt hẳn `_RARITY_ALPHA` cho **+0,041**, mức tăng lớn nhất từ mọi tham số. Nhưng
+đây là cơ chế mà luận văn ghi là đóng góp (D-13 / TASK-15: nút `Concept`, cạnh
+`MAPS_TO_CONCEPT`, ánh xạ bản thể luận bằng LLM).
+
+**Đừng phát biểu "cơ chế đó tệ".** Phân rã theo gap cho thấy đánh đổi có cấu trúc:
+
+| gap | Δ khi tắt độ hiếm |
+|---|---|
+| gap1 đa lĩnh vực | **+0,159** |
+| gap3 đa tầng | **−0,011** |
+| gap2 / gap4 | +0,008 / +0,000 |
+
+11 câu thắng **toàn bộ nằm ở gap1**; 4 câu thua **toàn bộ nằm ở gap3**.
+
+Diễn giải đúng: **hệ số độ hiếm không vô dụng, nó bị đặt sai chỗ** — có ích khi
+khái niệm thật sự phân biệt được (câu đa tầng), làm méo khi không (câu đa lĩnh
+vực). Gap1 đông hơn nên tổng là dương khi tắt.
+
+Hướng sửa đúng là **bật độ hiếm có điều kiện** thay vì bỏ hẳn — chưa thử, để
+vòng sau.
+
 ### Cấu hình tốt nhất
 
 ```

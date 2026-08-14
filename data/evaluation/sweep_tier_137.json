@@ -1,0 +1,4430 @@
+[
+  {
+    "id": "V001",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5182,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5921,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5317,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V002",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5638,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5298,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6287,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5298,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V003",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V004",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6279,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5875,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6279,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5952,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V006",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4427,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4427,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4364,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4427,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V007",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4900,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V008",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4780,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4550,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4638,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4550,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V011",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6464,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5946,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 7101,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5738,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V012",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7416,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6806,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6650,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V013",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5576,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6246,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5430,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V014",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6024,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7001,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5922,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V015",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7106,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6570,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7010,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6375,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V016",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6846,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6616,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6830,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6460,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V017",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6655,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6472,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6606,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5515,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V018",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6365,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6146,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5557,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5086,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V019",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4440,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4440,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V020",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V021",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7392,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7105,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7105,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V022",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7484,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V023",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4578,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V024",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3837,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3837,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3790,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3837,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V025",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V026",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4310,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V027",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4430,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4430,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4356,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4430,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V028",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4204,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V029",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4252,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V030",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5812,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5812,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V031",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8302,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8076,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8302,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8076,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V032",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7005,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7094,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6964,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7094,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V033",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5337,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4746,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5337,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4746,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V035",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5011,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5011,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4588,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5011,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V036",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4635,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V037",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4545,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V038",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V039",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4833,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V040",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5741,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5741,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V041",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5177,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5837,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5177,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5837,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V042",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4179,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4179,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4048,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4179,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V043",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8281,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8281,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7599,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8281,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V044",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4544,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4544,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4544,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4544,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V045",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5757,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5402,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6038,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5402,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V046",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9547,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9312,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9547,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9312,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V047",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8552,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V048",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7208,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7169,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7208,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7169,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V049",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4224,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4234,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4224,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V050",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8361,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8484,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8270,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8484,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V051",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8152,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 7862,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8152,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 7862,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V052",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V053",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4748,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4748,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4601,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4748,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V054",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5557,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5742,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5557,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5742,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V055",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6277,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6277,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V056",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5118,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V057",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V058",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6201,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6047,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6201,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6047,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V061",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5143,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5143,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5250,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5143,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V062",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4275,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V066",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3961,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V067",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4167,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4167,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4177,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4167,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V068",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4864,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V069",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8364,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8472,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8364,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8472,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V070",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V071",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V072",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4111,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V073",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7294,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V074",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5577,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V075",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4774,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4774,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4838,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4774,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V076",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7418,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7265,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7042,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V077",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6397,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V078",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6491,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6491,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V079",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4002,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V080",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3674,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V081",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4368,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4368,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4378,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4368,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V082",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V083",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7807,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7657,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7807,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7657,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V084",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5004,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V085",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4466,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V086",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V087",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4435,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V088",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5009,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V089",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V090",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8943,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8943,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 9099,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8943,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V091",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4424,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V092",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5254,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4936,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5445,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4936,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V093",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4315,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4315,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4393,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4315,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V094",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4506,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V095",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V096",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6648,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V097",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6048,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5857,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6505,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5857,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V098",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4267,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V099",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7176,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7600,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5980,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5510,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V100",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6420,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6203,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6420,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6203,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V101",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6639,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6359,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6639,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6359,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V102",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4197,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V103",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V104",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V118",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6910,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6784,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6653,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V119",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7545,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7820,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7611,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7621,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V120",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4472,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4472,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4638,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4472,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V122",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V124",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4655,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4775,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5005,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4775,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V125",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5545,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5471,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5358,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4619,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V126",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4911,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5123,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4497,
+      "khoan": 0.4,
+      "dieu": 0.6,
+      "khoan_chon": 0.4
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5123,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V127",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4832,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4975,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4524,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4975,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V129",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7245,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6961,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7081,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6457,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V130",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7950,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7772,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7880,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6735,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V131",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5017,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5041,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5066,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4656,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V132",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4923,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4923,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4352,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4923,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V133",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5693,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5693,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V135",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5583,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5252,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5485,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5112,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V136",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4540,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4540,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4332,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4540,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    }
+  },
+  {
+    "id": "V137",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 3854,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V139",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5245,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5245,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5312,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5245,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V140",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6771,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6522,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7192,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6522,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V141",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 7997,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8104,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8229,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8104,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V142",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7836,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7601,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7836,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7601,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V143",
+    "gap_type": "gap4",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4781,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4831,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4714,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4831,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V144",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4069,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4069,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4078,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4069,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V145",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5102,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V146",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4024,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V147",
+    "gap_type": "gap1",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier đều 10": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V148",
+    "gap_type": "gap2",
+    "mốc": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6292,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6022,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6624,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V149",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4846,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V150",
+    "gap_type": "gap3",
+    "mốc": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 6": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier đều 10": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 3915,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tier ưu tiên 4": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]
