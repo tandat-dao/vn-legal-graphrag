@@ -428,6 +428,60 @@ RETURN a.id AS nguon, b.id AS dich, r.muc AS muc
 """
 
 
+# --- Hạn ngạch theo khía cạnh bản thể luận (việc 5) ---
+#
+# Trần _MAX_PER_NORM đảm bảo đa dạng THEO VĂN BẢN, nhưng không gì đảm bảo đa dạng
+# THEO KHÍA CẠNH: câu hỏi "điều kiện VÀ hồ sơ cần những gì" có thể nhận về toàn
+# đoạn nói điều kiện, không đoạn nào nói hồ sơ.
+#
+# Vì sao không lấy khía cạnh từ `required_concepts` của thủ tục: hầu hết thủ tục
+# trong core_v1.json đòi GẦN NHƯ CẢ 6 khái niệm, nên nó giống nhau ở mọi câu hỏi
+# cùng thủ tục — không phân biệt được gì. Khía cạnh phải nhận từ CHÍNH câu hỏi.
+#
+# Từ khoá phần đầu mỗi nhóm lấy thẳng từ mô tả khái niệm trong
+# data/ontology/core_v1.json (không tự bịa), phần sau là biến thể khẩu ngữ mà
+# người dân thực sự dùng. Nhận diện bằng từ khoá TẤT ĐỊNH, không gọi mô hình
+# ngôn ngữ — tránh thêm một điểm hỏng không tất định vào đường truy hồi.
+_KHIA_CANH_TU_KHOA: dict[str, tuple[str, ...]] = {
+    "nghia-vu-tai-chinh": (
+        "nghĩa vụ tài chính", "tiền sử dụng đất", "lệ phí", "phí thẩm định",
+        "thuế", "tiền bảo vệ đất trồng lúa",
+        "bao nhiêu tiền", "chi phí", "đóng bao nhiêu", "nộp bao nhiêu", "miễn giảm",
+    ),
+    "han-muc": (
+        "hạn mức", "diện tích tối thiểu", "diện tích tối đa",
+        "bao nhiêu mét", "mét vuông", "m2", "m²", "tối đa bao nhiêu",
+    ),
+    "ho-so-giay-to": (
+        "hồ sơ", "giấy tờ", "tài liệu", "biểu mẫu", "thành phần hồ sơ",
+        "cần những gì", "chuẩn bị gì", "gồm những gì",
+    ),
+    "trinh-tu-thu-tuc": (
+        "trình tự", "các bước", "thời gian giải quyết", "thời hạn",
+        "thủ tục", "bao lâu", "mấy ngày", "làm như thế nào", "nộp ở đâu",
+    ),
+    "tham-quyen": (
+        "thẩm quyền", "cơ quan tiếp nhận", "cơ quan nhà nước",
+        "cơ quan nào", "ai có quyền", "ai quyết định", "ai cấp", "do ai",
+    ),
+    "dieu-kien": (
+        "điều kiện", "yêu cầu", "căn cứ pháp lý", "đối tượng áp dụng",
+        "có được", "được phép", "trường hợp nào", "khi nào thì",
+    ),
+}
+
+# Tối đa số chỗ dành riêng cho việc phủ khía cạnh. Đây là TÁI PHÂN BỔ chỗ trong
+# top_k (chạy trước Pass 2 lấp chiều sâu), KHÔNG nới thêm ngân sách — nên không
+# đụng tới nút thắt ngưỡng token.
+_ASPECT_BUDGET = 3
+
+
+def _nhan_dien_khia_canh(question: str) -> set[str]:
+    """Khía cạnh mà câu hỏi nhắm tới, theo từ khoá tất định."""
+    q = (question or "").lower()
+    return {cid for cid, tu in _KHIA_CANH_TU_KHOA.items() if any(t in q for t in tu)}
+
+
 _RERANK_POOL = 60  # số ứng viên đầu (theo RRF) đưa qua cross-encoder
 
 
@@ -751,6 +805,7 @@ def hybrid_search(
     extra_component_ids: list[str] | None = None,
     rerank_mode: str | None = None,
     rerank_model=None,
+    aspect_mode: bool = False,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -1086,6 +1141,37 @@ def hybrid_search(
         if _try_add(rrf_score_val, point):
             seen_norms_in_pass1.add(nid)
     pass1_count = len(results) - pass0_count
+
+    # Pass 1b (HẠN NGẠCH THEO KHÍA CẠNH) — mặc định TẮT.
+    #
+    # Chạy TRƯỚC Pass 2: nó giành chỗ mà Pass 2 sẽ lấp bằng chiều sâu chung, tức
+    # TÁI PHÂN BỔ chứ không nới ngân sách. Nhờ vậy không đụng nút thắt ngưỡng token.
+    pass1b_count = 0
+    if aspect_mode:
+        can = _nhan_dien_khia_canh(question)
+        if can:
+            cc = component_concepts
+            if not cc and neo4j_driver is not None:
+                cc = _fetch_component_concepts(
+                    list({p.payload.get("component_id", "") for _, p in scored
+                          if p.payload.get("component_id")}), neo4j_driver)
+            da_co = {k for u in results for k in cc.get(u["component_id"], [])}
+            thieu = [k for k in can if k not in da_co]
+            for khia_canh in thieu:
+                if pass1b_count >= _ASPECT_BUDGET:
+                    break
+                for rrf_score_val, point in scored:
+                    if point.id in used_point_ids:
+                        continue
+                    if khia_canh not in cc.get(point.payload.get("component_id", ""), []):
+                        continue
+                    if _try_add(rrf_score_val, point):
+                        pass1b_count += 1
+                    break
+            logger.info(
+                f"hybrid_search Pass 1b (khía cạnh): câu hỏi cần {sorted(can)}, "
+                f"thiếu {sorted(thieu)} → thêm {pass1b_count} đơn vị"
+            )
 
     # Pass 2: fill remaining by RRF order (skip already used)
     #
