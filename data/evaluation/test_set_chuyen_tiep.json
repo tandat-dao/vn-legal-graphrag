@@ -1,0 +1,217 @@
+[
+  {
+    "id": "CT001",
+    "question": "Nhà tôi bị thu hồi đất, đã có quyết định thu hồi và phương án bồi thường được duyệt từ trước khi nghị định mới có hiệu lực. Giờ có phải làm lại theo quy định mới không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không phải làm lại. Theo Khoản 1 Điều 19 Nghị định 49/2026/NĐ-CP, trường hợp đã có quyết định thu hồi đất và quyết định phê duyệt phương án bồi thường, hỗ trợ, tái định cư trước ngày Nghị định này có hiệu lực thi hành thì tiếp tục thực hiện theo phương án đã phê duyệt.",
+    "ground_truth_citations": [
+      {"dieu": "19", "khoan": "1", "diem": null, "van_ban": "nghi-dinh-49-2026-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "Neo vào NĐ 49/2026 Điều 19 Khoản 1 — trường hợp đã phê duyệt phương án trước ngày hiệu lực.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT002",
+    "question": "Tôi đã trích đo bản đồ địa chính để làm thủ tục đất đai nhưng chưa ký xác nhận kết quả thì quy định mới có hiệu lực. Vậy ký xác nhận theo quy định nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 21 Nghị định 49/2026/NĐ-CP, trường hợp đã trích đo hoặc đo đạc chỉnh lý bản đồ địa chính để thực hiện thủ tục đất đai trước ngày Nghị định có hiệu lực mà chưa hoàn thành việc ký xác nhận kết quả thì tiếp tục ký xác nhận theo quy định trước ngày Nghị định này có hiệu lực thi hành.",
+    "ground_truth_citations": [
+      {"dieu": "21", "khoan": null, "diem": null, "van_ban": "nghi-dinh-49-2026-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "Neo vào NĐ 49/2026 Điều 21 — điều khoản chuyển tiếp không chia khoản.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT003",
+    "question": "Tôi được cho thuê đất từ tháng 8 năm 2025 nhưng đến giờ vẫn chưa ký hợp đồng thuê đất. Bây giờ tôi còn ký được không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Còn ký được nếu có nhu cầu. Theo Khoản 2 Điều 18 Nghị định 49/2026/NĐ-CP, người sử dụng đất được cho thuê đất từ ngày 01/7/2025 đến trước ngày Nghị định này có hiệu lực thi hành mà chưa ký hợp đồng thuê đất thì được ký hợp đồng thuê đất nếu có nhu cầu.",
+    "ground_truth_citations": [
+      {"dieu": "18", "khoan": "2", "diem": null, "van_ban": "nghi-dinh-49-2026-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "Mốc 01/7/2025 trong câu hỏi được diễn đạt thành 'tháng 8 năm 2025' để buộc hệ đối chiếu khoảng thời gian.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT004",
+    "question": "Hồ sơ xác định giá đất cụ thể của khu đất nhà tôi đang làm dở từ trước khi nghị định mới có hiệu lực thì tính theo quy định nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Khoản 1 Điều 17 Nghị định 49/2026/NĐ-CP, các trường hợp đang xác định giá đất cụ thể trước ngày Nghị định này có hiệu lực thi hành mà tiếp tục áp dụng xác định giá đất cụ thể thì thực hiện theo quy định của Luật Đất đai và Nghị định số 71/2024/NĐ-CP (được sửa đổi, bổ sung tại Nghị định số 151/2025/NĐ-CP, Nghị định số 226/2025/NĐ-CP).",
+    "ground_truth_citations": [
+      {"dieu": "17", "khoan": "1", "diem": null, "van_ban": "nghi-dinh-49-2026-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "Đáp án dẫn tới NĐ 71/2024 — văn bản NGOÀI kho. Kiểm hệ có nêu đúng điều khoản chuyển tiếp mà không bịa nội dung văn bản không có.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT005",
+    "question": "Sổ đỏ của tôi có ghi quyền sở hữu rừng sản xuất là rừng trồng. Giờ tôi đi làm thủ tục cấp đổi sổ thì phần rừng đó xử lý thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Khoản 2 Điều 65 Nghị định 101/2024/NĐ-CP, đối với trường hợp Giấy chứng nhận đã cấp có nội dung chứng nhận quyền sở hữu rừng sản xuất là rừng trồng, quyền sở hữu cây lâu năm mà người sử dụng đất thực hiện thủ tục đăng ký biến động và cấp mới, cấp đổi, cấp lại Giấy chứng nhận thì áp dụng quy định chuyển tiếp tại khoản này.",
+    "ground_truth_citations": [
+      {"dieu": "65", "khoan": "2", "diem": null, "van_ban": "nghi-dinh-101-2024-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "Câu hỏi dùng từ khẩu ngữ 'sổ đỏ' thay cho 'Giấy chứng nhận'.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT006",
+    "question": "Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250? Đổi từ hồi nào và theo văn bản nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "subtype": "doi-phien-ban",
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Quy định cũ tại Điểm d Khoản 1 Điều 1 Quyết định 18/2016/QĐ-UBND TP.HCM cho phép tối đa 300 m²/hộ tại huyện Cần Giờ và khu dân cư nông thôn một số huyện. Từ ngày 30/9/2024, Quyết định 18/2016 hết hiệu lực và được thay thế bởi Quyết định 69/2024/QĐ-UBND, theo Khoản 3 Điều 3 hạn mức tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ là không quá 250 m²/cá nhân.",
+    "ground_truth_citations": [
+      {"dieu": "1", "khoan": "1", "diem": "d", "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm", "loai": "dieu"},
+      {"dieu": "3", "khoan": "3", "diem": null, "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "Đây là ĐỔI PHIÊN BẢN, không phải điều khoản chuyển tiếp. Buộc nêu CẢ HAI văn bản và mốc 30/9/2024. Trùng câu demo A4.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT007",
+    "question": "Tôi nộp hồ sơ đăng ký khai sinh vào cuối năm 2015, sang đầu năm 2016 cơ quan mới giải quyết xong. Vậy hồ sơ của tôi áp dụng quy định cũ hay Luật Hộ tịch mới?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Áp dụng quy định tại thời điểm tiếp nhận. Theo Khoản 1 Điều 76 Luật Hộ tịch 2014, hồ sơ đăng ký hộ tịch được thụ lý trước ngày Luật này có hiệu lực mà chưa giải quyết xong thì tiếp tục được giải quyết theo quy định của pháp luật về hộ tịch tại thời điểm tiếp nhận.",
+    "ground_truth_citations": [
+      {"dieu": "76", "khoan": "1", "diem": null, "van_ban": "luat-ho-tich-2014", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "LĨNH VỰC CỦA [B] — cần [B] duyệt.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT008",
+    "question": "Hồ sơ hộ tịch của tôi được cơ quan tiếp nhận trước ngày 01/01/2016 mà chưa giải quyết xong thì giải quyết theo nghị định nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Khoản 1 Điều 44 Nghị định 123/2015/NĐ-CP, hồ sơ yêu cầu đăng ký hộ tịch được tiếp nhận trước ngày 01/01/2016 mà chưa giải quyết xong thì tiếp tục được giải quyết theo quy định của Nghị định số 158/2005/NĐ-CP và Nghị định số 126/2014/NĐ-CP.",
+    "ground_truth_citations": [
+      {"dieu": "44", "khoan": "1", "diem": null, "van_ban": "nghi-dinh-123-2015-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "LĨNH VỰC CỦA [B] — cần [B] duyệt. Đáp án dẫn tới NĐ 158/2005 và 126/2014, đều NGOÀI kho.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT009",
+    "question": "Hồ sơ xin nhận con nuôi trong nước tôi nộp ở xã trước ngày 01/01/2011 mà chưa giải quyết xong thì theo quy định nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Khoản 1 Điều 50 Nghị định 19/2011/NĐ-CP, hồ sơ xin nhận con nuôi trong nước do Ủy ban nhân dân cấp xã tiếp nhận trước ngày 01/01/2011 mà chưa giải quyết xong thì tiếp tục được giải quyết theo quy định của Luật Hôn nhân và gia đình năm 2000, Nghị định số 158/2005/NĐ-CP và các văn bản liên quan khác.",
+    "ground_truth_citations": [
+      {"dieu": "50", "khoan": "1", "diem": null, "van_ban": "nghi-dinh-19-2011-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "LĨNH VỰC CỦA [B] — cần [B] duyệt.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT010",
+    "question": "Hai vợ chồng tôi nhận nuôi một cháu từ lâu rồi nhưng chưa đăng ký ở cơ quan nào cả. Giờ còn đăng ký được không và cần điều kiện gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Theo Khoản 1 Điều 50 Luật Nuôi con nuôi 2010, việc nuôi con nuôi giữa công dân Việt Nam với nhau trước ngày Luật này có hiệu lực mà chưa đăng ký thì được đăng ký trong thời hạn 05 năm kể từ ngày Luật có hiệu lực, nếu đáp ứng các điều kiện tại các điểm a, b, c: các bên có đủ điều kiện nuôi con nuôi tại thời điểm phát sinh quan hệ; quan hệ cha mẹ và con vẫn đang tồn tại và cả hai bên còn sống; giữa cha mẹ nuôi và con nuôi có quan hệ chăm sóc, nuôi dưỡng, giáo dục nhau như cha mẹ và con.",
+    "ground_truth_citations": [
+      {"dieu": "50", "khoan": "1", "diem": null, "van_ban": "luat-nuoi-con-nuoi-2010", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "LĨNH VỰC CỦA [B] — cần [B] duyệt. Câu này cần tổng hợp cả 3 điểm a/b/c dưới khoản 1.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT011",
+    "question": "Tôi đã nộp lệ phí đăng ký nuôi con nuôi trước ngày 01/01/2017 thì khoản lệ phí đó được quản lý theo quy định nào?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Điều 9 Nghị định 114/2016/NĐ-CP, trường hợp người nộp hồ sơ xin nhận con nuôi đã nộp lệ phí đăng ký nuôi con nuôi trước ngày 01/01/2017 thì số lệ phí thu được được quản lý, sử dụng theo quy định tại Nghị định trước đó.",
+    "ground_truth_citations": [
+      {"dieu": "9", "khoan": null, "diem": null, "van_ban": "nghi-dinh-114-2016-nd-cp", "loai": "dieu"}
+    ],
+    "relevant_component_ids": null,
+    "notes": "LĨNH VỰC CỦA [B] — cần [B] duyệt.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  },
+  {
+    "id": "CT012",
+    "question": "Hồ sơ xin cấp phép xây dựng nhà ở tôi nộp trước khi luật xây dựng mới có hiệu lực thì xử lý chuyển tiếp ra sao?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "subtype": "ngoai-pham-vi",
+    "pair_id": null,
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không đủ căn cứ để trả lời. Cấp phép xây dựng thuộc pháp luật về xây dựng, nằm ngoài phạm vi ba lĩnh vực của hệ thống (đất đai, hộ tịch, nuôi con nuôi). Hệ thống phải từ chối thay vì suy đoán.",
+    "ground_truth_citations": [],
+    "relevant_component_ids": null,
+    "notes": "Câu ÂM. Đặt cạnh các câu chuyển tiếp thật để kiểm hệ không bịa điều khoản chuyển tiếp khi câu hỏi có dạng tương tự nhưng ngoài phạm vi.",
+    "review": {"nguoi_soan": "claude-postdoc", "da_duyet": false}
+  }
+]

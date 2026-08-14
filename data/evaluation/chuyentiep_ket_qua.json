@@ -1,0 +1,398 @@
+[
+  {
+    "id": "CT001",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6656,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6656,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT002",
+    "gap_type": "gap4",
+    "off": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 3234,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6835,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6835,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 3234,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT003",
+    "gap_type": "gap4",
+    "off": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4145,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6829,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7343,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT004",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3234,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7764,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7764,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3234,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT005",
+    "gap_type": "gap4",
+    "off": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2482,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7474,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7474,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2482,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT006",
+    "gap_type": "gap4",
+    "off": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4739,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6680,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 33,
+      "n_ctx": 33,
+      "token": 7428,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 5487,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT007",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3432,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4944,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4944,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3432,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT008",
+    "gap_type": "gap4",
+    "off": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3199,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3199,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT009",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3272,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4159,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4159,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3272,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT010",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4394,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4394,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "CT011",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3343,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+fill 12k": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4448,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ điều khoản chuyển tiếp": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4448,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ điều khoản chuyển tiếp": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3343,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]
