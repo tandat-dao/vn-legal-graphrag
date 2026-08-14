@@ -108,3 +108,46 @@ def test_nhieu_cap_thi_bao_them_so_luong():
 def test_mot_cap_thi_khong_nhac_van_ban_khac():
     s = mo_ta_thay_doi(_cap_mau(), False)
     assert "văn bản khác" not in s
+
+
+# ---------------------------------------------------------------------------
+# Lớp thời gian — mốc quá khứ là ngày SỰ VIỆC hay ngày tra luật?
+# ---------------------------------------------------------------------------
+
+def test_hoi_ve_hien_tai_bat_dung_cac_dau_hieu():
+    from src.pipeline import _hoi_ve_hien_tai
+    assert _hoi_ve_hien_tai("lấn đất từ 2010, nay quy hoạch đã điều chỉnh")
+    assert _hoi_ve_hien_tai("sử dụng từ 1990 và hiện có nhà ở")
+    assert _hoi_ve_hien_tai("nộp hồ sơ cuối 2024, tới giờ chưa trả kết quả")
+    assert not _hoi_ve_hien_tai("Hạn mức giao đất ở tại Củ Chi là bao nhiêu?")
+    assert not _hoi_ve_hien_tai("")
+
+
+def test_cau_hoi_hien_tai_thi_KHONG_lot_theo_moc_qua_khu():
+    """V031/V032: mốc 2010/1990 là ngày sự việc — lọc theo đó sẽ loại sạch đáp án."""
+    from src.pipeline import ap_dung_lop_thoi_gian
+    plan = {"temporal_intent": {"has_temporal_context": True,
+                                "case_status": "khac", "temporal_anchor": "2010"}}
+    ra = ap_dung_lop_thoi_gian(plan, "lấn đất từ năm 2010, nay quy hoạch đã điều chỉnh")
+    assert ra["temporal"] is None
+
+
+def test_cau_hoi_ve_qua_khu_thi_VAN_lot_chat():
+    from src.pipeline import ap_dung_lop_thoi_gian
+    plan = {"temporal_intent": {"has_temporal_context": True,
+                                "case_status": "khac", "temporal_anchor": "2016"}}
+    ra = ap_dung_lop_thoi_gian(plan, "Năm 2016 hạn mức đất ở là bao nhiêu?")
+    assert ra["temporal"] == "2016-12-31"
+
+
+def test_ho_so_do_dang_luon_rong():
+    from src.pipeline import ap_dung_lop_thoi_gian
+    plan = {"temporal_intent": {"has_temporal_context": True,
+                                "case_status": "do-dang", "temporal_anchor": "2024"}}
+    assert ap_dung_lop_thoi_gian(plan, "hồ sơ nộp 2024")["temporal"] is None
+
+
+def test_khong_co_yeu_to_thoi_gian_thi_giu_nguyen():
+    from src.pipeline import ap_dung_lop_thoi_gian
+    plan = {"temporal_intent": {"has_temporal_context": False}, "temporal": "giu-nguyen"}
+    assert ap_dung_lop_thoi_gian(plan, "câu hỏi thường")["temporal"] == "giu-nguyen"

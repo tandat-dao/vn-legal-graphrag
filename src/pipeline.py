@@ -57,6 +57,28 @@ _TEMPORAL_ISO_PATTERNS = [
 ]
 
 
+# Dấu hiệu câu hỏi đang hỏi về HIỆN TẠI, dù có nhắc một mốc quá khứ.
+# Mốc quá khứ trong câu hỏi của người dân thường là NGÀY SỰ VIỆC XẢY RA, không
+# phải ngày cần tra luật: V031 "lỡ lấn đất từ năm 2010 … NAY quy hoạch đã điều
+# chỉnh" bị chốt mốc 2010 nên Giai đoạn 2 loại sạch Luật Đất đai 2024 và NĐ
+# 101/2024 — đúng hai văn bản là đáp án. V032 "sử dụng ổn định từ năm 1990"
+# cũng vậy.
+# Khi thấy dấu hiệu hiện tại, chuyển sang truy hồi rộng (không lọc thời gian):
+# rộng là lựa chọn AN TOÀN vì nó kéo cả văn bản cũ lẫn mới, còn lọc chặt mới là
+# hành vi mạo hiểm.
+_DAU_HIEU_HIEN_TAI = (
+    "hiện nay", "hiện tại", "bây giờ", "đến nay", "tới nay", "tới giờ",
+    "đến giờ", "ngày nay", "nay ", " nay,", " nay.", "giờ ",
+    "hiện có", "hiện đang", "hiện là", "hiện nắm", "còn hiệu lực không",
+)
+
+
+def _hoi_ve_hien_tai(question: str) -> bool:
+    """Câu hỏi có dấu hiệu hỏi về hiện tại (dù nhắc mốc quá khứ)."""
+    q = (question or "").lower()
+    return any(t in q for t in _DAU_HIEU_HIEN_TAI)
+
+
 def _resolve_temporal_anchor(anchor: str | None) -> str | None:
     """Convert temporal_anchor từ planner thành ISO date cho Cypher filter.
 
@@ -81,6 +103,42 @@ def _resolve_temporal_anchor(anchor: str | None) -> str | None:
         if pattern.match(anchor):
             return fmt(anchor)
     return None  # unrecognized → broad
+
+
+def ap_dung_lop_thoi_gian(query_plan: dict, question: str) -> dict:
+    """Điều chỉnh query_plan["temporal"] theo ý định thời gian của câu hỏi.
+
+    TÁCH RIÊNG để khâu đánh giá dùng CHUNG với pipeline. Trước đây harness gọi
+    thẳng extract_subgraph nên bỏ qua lớp này và lọc chặt hơn hệ thật — mọi con
+    số tuyệt đối đo được đều thấp hơn thực tế (các Δ thì không ảnh hưởng vì mọi
+    biến thể trong một mẻ dùng chung norm_ids).
+
+    Ba nhánh, đều dẫn tới truy hồi RỘNG (không lọc thời gian) khi cần kéo cả văn
+    bản cũ lẫn mới; rộng là lựa chọn an toàn, lọc chặt mới là mạo hiểm:
+      - hồ sơ dở dang / sự kiện mới  → có thể vắt qua hai khung quy định
+      - câu hỏi có dấu hiệu hiện tại → mốc quá khứ là ngày SỰ VIỆC, không phải
+        ngày tra luật
+      - mốc mơ hồ                     → không chốt được ngày
+    """
+    ti = query_plan.get("temporal_intent", {}) or {}
+    if not ti.get("has_temporal_context"):
+        return query_plan
+    case_status = ti.get("case_status")
+    anchor = ti.get("temporal_anchor")
+    if case_status in ("do-dang", "moi"):
+        resolved, reason = None, f"span-regime (case_status={case_status})"
+    elif _hoi_ve_hien_tai(question):
+        resolved = None
+        reason = f"broad (mốc {anchor} là ngày sự việc, câu hỏi hỏi về hiện tại)"
+    else:
+        resolved = _resolve_temporal_anchor(anchor)
+        reason = f"strict date={resolved}" if resolved else "broad (mốc mơ hồ)"
+    out = dict(query_plan)
+    out["temporal"] = resolved
+    logger.info(
+        f"TEMPORAL MODE — anchor='{anchor}' status='{case_status}' → {reason}"
+    )
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -199,27 +257,7 @@ def run_pipeline(
             )
 
         # --- TEMPORAL LAYER (Option C Phần 2) ---
-        # Khi câu hỏi có yếu tố thời gian/dở dang/regime change, điều chỉnh
-        # query_plan["temporal"] để retrieval bao gồm VB hết hiệu lực.
-        ti = query_plan.get("temporal_intent", {}) or {}
-        if ti.get("has_temporal_context"):
-            case_status = ti.get("case_status")
-            anchor = ti.get("temporal_anchor")
-            # Hồ sơ dở dang / sự kiện mới phát sinh có thể span 2 regime → broad retrieve
-            # để pull CẢ VB lúc nộp lẫn VB hiện hành. Hệ thống sẽ trình bày 2 khung
-            # cho user, không tự quyết áp dụng cái nào (xem prompt rule TEMPORAL).
-            if case_status in ("do-dang", "moi"):
-                resolved = None
-                reason = f"span-regime (case_status={case_status})"
-            else:
-                resolved = _resolve_temporal_anchor(anchor)
-                reason = f"strict date={resolved}" if resolved else "broad (vague anchor)"
-            query_plan = dict(query_plan)  # immutable copy
-            query_plan["temporal"] = resolved
-            logger.info(
-                f"run_pipeline: TEMPORAL MODE — anchor='{anchor}' "
-                f"status='{case_status}' → {reason}"
-            )
+        query_plan = ap_dung_lop_thoi_gian(query_plan, question)
 
         # --- TASK-11: Sub-graph Extraction ---
         logger.info("run_pipeline: extract_subgraph")

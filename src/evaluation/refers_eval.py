@@ -35,7 +35,7 @@ from src.evaluation.retrieval_eval import (
     _chunk_to_citation,
     _fetch_chunk_meta,
 )
-from src.pipeline import CONTEXT_MAX_TOKENS
+from src.pipeline import CONTEXT_MAX_TOKENS, ap_dung_lop_thoi_gian
 from src.retrieval.context_assembler import assemble_context_chi_tiet
 from src.retrieval.query_planner import plan_query
 from src.retrieval.semantic_filter import hybrid_search
@@ -167,6 +167,9 @@ def chay(test_set: list[dict], top_k: int = 25,
             # Giai đoạn 1+2 KHÔNG phụ thuộc chế độ → tính một lần, dùng chung.
             plan = dict(plan_query(q, llm, neo4j_driver=neo4j))
             plan["jurisdiction"] = item.get("jurisdiction") or plan.get("jurisdiction")
+            # DÙNG CHUNG lớp thời gian với pipeline — nếu bỏ qua, harness lọc
+            # chặt hơn hệ thật và mọi mức tuyệt đối đo được đều thấp hơn thực tế.
+            plan = ap_dung_lop_thoi_gian(plan, q)
             norm_ids, graph_comp_ids = extract_subgraph(
                 q, plan, neo4j, qdrant, model, summary_type=summary_type)
             if not norm_ids:
