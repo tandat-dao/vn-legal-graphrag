@@ -86,3 +86,25 @@ def test_thieu_ban_ke_nhiem_van_mo_ta_duoc():
     s = mo_ta_thay_doi(cap, False)
     assert "x" in s and "2024-09-30" in s
     assert "None" not in s
+
+
+# ---------------------------------------------------------------------------
+# Ưu tiên văn bản cụ thể nhất khi có nhiều thay đổi cùng lúc
+# ---------------------------------------------------------------------------
+
+def test_nhieu_cap_thi_bao_them_so_luong():
+    cap = [
+        {"cu": "qd-18", "cu_tier": 4, "cu_tu": "2016-05-26", "cu_den": "2024-09-30",
+         "moi": "qd-69", "moi_tu": "2024-09-30"},
+        {"cu": "luat-2013", "cu_tier": 1, "cu_tu": "2014-07-01", "cu_den": "2025-01-01",
+         "moi": "luat-2024", "moi_tu": "2024-08-01"},
+    ]
+    s = mo_ta_thay_doi(cap, False)
+    # Nêu cái đầu danh sách (đã sắp theo tầng) và cho biết còn cái khác
+    assert "qd-18" in s
+    assert "1 văn bản khác" in s
+
+
+def test_mot_cap_thi_khong_nhac_van_ban_khac():
+    s = mo_ta_thay_doi(_cap_mau(), False)
+    assert "văn bản khác" not in s

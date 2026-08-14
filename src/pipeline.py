@@ -31,6 +31,7 @@ from src.retrieval.query_planner import QueryPlan, plan_query
 from src.retrieval.semantic_filter import hybrid_search
 from src.retrieval.ablation_config import FULL, AblationConfig
 from src.retrieval.subgraph_extractor import extract_subgraph
+from src.retrieval.transitional import mo_ta_thay_doi, thu_thap_chuyen_tiep
 from src.retrieval.verifier import verify_citations
 
 load_dotenv()
@@ -99,6 +100,12 @@ class PipelineResult(TypedDict):
     context_used: bool
     elapsed_seconds: float
     verifier: dict | None        # thống kê Verifier agent (None nếu verify=False)
+    # Câu mô tả khi quy định đã thay đổi trong tập văn bản ứng viên (việc 3).
+    # "" khi không có thay đổi hoặc khi tắt cờ. CỐ Ý để riêng, KHÔNG nhét vào
+    # prompt: prompt đã được tinh chỉnh kỹ chống thuật ngữ giả và rò nhãn
+    # (D-14/D-16), thêm chữ vào đó là rủi ro không cần thiết. Tầng trình bày
+    # (demo/UI) tự ghép câu này lên trước câu trả lời.
+    canh_bao_thay_doi: str
 
 
 # ---------------------------------------------------------------------------
@@ -146,6 +153,7 @@ def run_pipeline(
     ablation: AblationConfig = FULL,
     refers_mode: str | None = None,
     per_norm_mode: str | None = None,
+    chuyen_tiep: bool = False,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -237,7 +245,22 @@ def run_pipeline(
                 context_used=False,
                 elapsed_seconds=round(elapsed, 2),
                 verifier=None,
+                canh_bao_thay_doi="",
             )
+
+        # --- Việc 3: phát hiện quy định đã thay đổi + điều khoản chuyển tiếp ---
+        # Tất định, chỉ 2 truy vấn Neo4j. Cảnh báo CHỈ nổ khi tập ứng viên thật
+        # sự có văn bản đã hết hiệu lực — nổ ở mọi câu sẽ thành lời rào đón.
+        canh_bao, chuyen_tiep_comp_ids = "", None
+        if chuyen_tiep:
+            cap, comp_ids = thu_thap_chuyen_tiep(norm_ids, neo4j_driver)
+            if cap:
+                chuyen_tiep_comp_ids = comp_ids or None
+                canh_bao = mo_ta_thay_doi(cap, bool(comp_ids))
+                logger.info(
+                    f"run_pipeline: phát hiện {len(cap)} văn bản đã bị thay thế, "
+                    f"{len(comp_ids)} điều khoản chuyển tiếp"
+                )
 
         # --- TASK-12: Hybrid Search ---
         logger.info("run_pipeline: hybrid_search")
@@ -252,6 +275,7 @@ def run_pipeline(
             procedure_id=query_plan.get("procedure"),
             refers_mode=refers_mode,
             per_norm_mode=per_norm_mode,
+            extra_component_ids=chuyen_tiep_comp_ids,
         )
         logger.info(f"run_pipeline: {len(scored_units)} scored units")
 
@@ -307,6 +331,7 @@ def run_pipeline(
             context_used=result["context_used"],
             elapsed_seconds=round(elapsed, 2),
             verifier=verifier_info,
+            canh_bao_thay_doi=canh_bao,
         )
 
     finally:

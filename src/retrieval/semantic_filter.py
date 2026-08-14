@@ -398,11 +398,50 @@ _REFERS_BUDGET = 5
 # tách bạch "nhờ dẫn chiếu" với "nhờ được thêm ngữ cảnh".
 _REFERS_MODES = ("khoan", "all", "rrf")
 
+# Pass 4 — điều khoản chuyển tiếp (việc 3). Ngân sách nhỏ hơn Pass 3 vì một
+# văn bản có thể có tới 12 điều chuyển tiếp, nạp hết sẽ lấn ngữ cảnh.
+_CHUYEN_TIEP_BUDGET = 3
+
 _CYPHER_REFERS = """
 MATCH (a:Component)-[r:REFERS_TO]->(b:Component)
 WHERE a.id IN $ids AND ($muc IS NULL OR r.muc = $muc)
 RETURN a.id AS nguon, b.id AS dich, r.muc AS muc
 """
+
+
+def _them_theo_component(
+    comp_ids: list[str], norm_ids: list[str], qdrant_client,
+    used_point_ids: set, results: list, rrf_fn, ngan_sach: int,
+) -> int:
+    """Nạp TextUnit của các Component chỉ định vào results. Trả số đơn vị đã thêm.
+
+    Dùng chung cho Pass 3 (bao đóng dẫn chiếu) và Pass 4 (điều khoản chuyển
+    tiếp). Giữ đúng thứ tự ưu tiên do bên gọi truyền vào, và giới hạn trong
+    norm_ids để không phá bảo đảm lọc địa phương/thời gian của Giai đoạn 2.
+    """
+    if not comp_ids:
+        return 0
+    pts, _ = qdrant_client.scroll(
+        "legal_texts",
+        scroll_filter=Filter(must=[
+            FieldCondition(key="content_type", match=MatchValue(value="text_unit")),
+            FieldCondition(key="norm_id", match=MatchAny(any=norm_ids)),
+            FieldCondition(key="component_id", match=MatchAny(any=comp_ids[:200])),
+        ]),
+        limit=300, with_payload=True, with_vectors=False,
+    )
+    thu_tu = {c: i for i, c in enumerate(comp_ids)}
+    pts.sort(key=lambda p: thu_tu.get(p.payload.get("component_id", ""), 10**6))
+    dem = 0
+    for point in pts:
+        if dem >= ngan_sach:
+            break
+        if point.id in used_point_ids:
+            continue
+        used_point_ids.add(point.id)
+        results.append(_to_scored_unit(rrf_fn(point), point))
+        dem += 1
+    return dem
 
 
 def _to_scored_unit(rrf_score_val: float, point) -> "ScoredTextUnit":
@@ -627,6 +666,7 @@ def hybrid_search(
     procedure_id: str | None = None,
     refers_mode: str | None = None,
     per_norm_mode: str | None = None,
+    extra_component_ids: list[str] | None = None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -1008,32 +1048,29 @@ def hybrid_search(
                         if t not in da_co and t not in muon:
                             muon.append(t)
                 if muon:
-                    pts, _ = qdrant_client.scroll(
-                        "legal_texts",
-                        scroll_filter=Filter(must=[
-                            FieldCondition(key="content_type",
-                                           match=MatchValue(value="text_unit")),
-                            FieldCondition(key="norm_id", match=MatchAny(any=norm_ids)),
-                            FieldCondition(key="component_id",
-                                           match=MatchAny(any=muon[:200])),
-                        ]),
-                        limit=300, with_payload=True, with_vectors=False,
+                    pass3_count = _them_theo_component(
+                        muon, norm_ids, qdrant_client, used_point_ids,
+                        results, _rrf_for, _REFERS_BUDGET,
                     )
-                    thu_tu = {c: i for i, c in enumerate(muon)}
-                    pts.sort(key=lambda p: thu_tu.get(
-                        p.payload.get("component_id", ""), 10**6))
-                    for point in pts:
-                        if pass3_count >= _REFERS_BUDGET:
-                            break
-                        if point.id in used_point_ids:
-                            continue
-                        used_point_ids.add(point.id)
-                        results.append(_to_scored_unit(_rrf_for(point), point))
-                        pass3_count += 1
         logger.info(
             f"hybrid_search Pass 3 (refers_mode={refers_mode}): "
             f"thêm {pass3_count} đơn vị (ngân sách {_REFERS_BUDGET})"
         )
+
+    # Pass 4 (ĐIỀU KHOẢN CHUYỂN TIẾP) — mặc định TẮT.
+    #
+    # Khi tập ứng viên có văn bản đã bị thay thế, điều khoản chuyển tiếp của
+    # các văn bản liên quan là thứ trả lời "việc đang dở thì theo bản nào".
+    # Truy hồi thường KHÔNG tìm ra chúng: nhan đề "Quy định chuyển tiếp về giá
+    # đất" nằm rất xa câu hỏi của người dân về mặt ngữ nghĩa.
+    # Danh sách component do pipeline tính (src/retrieval/transitional.py).
+    pass4_count = 0
+    if extra_component_ids:
+        pass4_count = _them_theo_component(
+            list(extra_component_ids), norm_ids, qdrant_client, used_point_ids,
+            results, _rrf_for, _CHUYEN_TIEP_BUDGET,
+        )
+        logger.info(f"hybrid_search Pass 4 (chuyển tiếp): thêm {pass4_count} đơn vị")
 
     # Sắp xếp output cuối cùng theo rrf_score giảm dần — khớp docstring + đúng thứ tự
     # mà assemble_context() dùng. Các pass -1/0/1/2 ở trên chỉ quyết định CHỌN point

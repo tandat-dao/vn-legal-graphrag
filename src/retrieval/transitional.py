@@ -50,8 +50,8 @@ WHERE moi.id <> cu.id
   AND moi.tier = cu.tier
   AND (moi.valid_to IS NULL OR moi.valid_to = $sentinel)
   AND moi.valid_from >= cu.valid_from
-RETURN cu.id AS cu, cu.valid_from AS cu_tu, cu.valid_to AS cu_den,
-       moi.id AS moi, moi.valid_from AS moi_tu
+RETURN cu.id AS cu, cu.tier AS cu_tier, cu.valid_from AS cu_tu,
+       cu.valid_to AS cu_den, moi.id AS moi, moi.valid_from AS moi_tu
 """
 
 
@@ -85,8 +85,8 @@ def tim_cap_thay_the(norm_ids: list[str], neo4j_driver) -> list[dict]:
         for r in s.run(_CYPHER_HET_HIEU_LUC, norm_ids=norm_ids, sentinel=_SENTINEL):
             cu = r["cu"]
             muc = gom.setdefault(cu, {
-                "cu": cu, "cu_tu": r["cu_tu"], "cu_den": r["cu_den"],
-                "moi": None, "moi_tu": None,
+                "cu": cu, "cu_tier": r["cu_tier"], "cu_tu": r["cu_tu"],
+                "cu_den": r["cu_den"], "moi": None, "moi_tu": None,
             })
             if not r["moi"]:
                 continue
@@ -101,7 +101,13 @@ def tim_cap_thay_the(norm_ids: list[str], neo4j_driver) -> list[dict]:
             mm = _khoang_cach_ngay(r["moi_tu"], r["cu_den"])
             if muc["moi"] is None or mm < _khoang_cach_ngay(muc["moi_tu"], r["cu_den"]):
                 muc["moi"], muc["moi_tu"] = r["moi"], r["moi_tu"]
-    return list(gom.values())
+
+    # Sắp theo tầng GIẢM DẦN: văn bản càng cụ thể càng sát câu hỏi. Một câu hỏi
+    # về hạn mức đất ở TP.HCM có thể kéo về CẢ hai thay đổi đã hết hiệu lực —
+    # Quyết định 18/2016 (tầng 4) và Luật Đất đai 2013 (tầng 1). Thay đổi người
+    # dân đang hỏi là cái ở tầng 4; nếu báo cái tầng 1 thì đúng sự thật nhưng
+    # trả lời lạc câu hỏi.
+    return sorted(gom.values(), key=lambda c: -(c.get("cu_tier") or 0))
 
 
 def tim_dieu_khoan_chuyen_tiep(norm_id: str, neo4j_driver) -> list[dict]:
@@ -148,6 +154,8 @@ def mo_ta_thay_doi(cap: list[dict], co_dieu_khoan_chuyen_tiep: bool) -> str:
     if c.get("moi"):
         s += f", được thay thế bởi {c['moi']} (hiệu lực từ {c['moi_tu']})"
     s += ". Nội dung ở từng thời điểm được nêu bên dưới."
+    if len(cap) > 1:
+        s += f" (Trong phạm vi câu hỏi còn {len(cap) - 1} văn bản khác đã được thay thế.)"
     if co_dieu_khoan_chuyen_tiep:
         s += (
             " Việc xác định quy định nào áp dụng cho một trường hợp cụ thể phụ "

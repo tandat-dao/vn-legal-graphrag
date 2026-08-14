@@ -163,6 +163,18 @@ def _render_result(question: str, result: dict, total_time: float,
         console.print()
         console.print(_build_trace_tree(trace_records))
 
+    # Cảnh báo quy định đã thay đổi (việc 3) — đặt TRƯỚC câu trả lời vì nó đổi
+    # cách người đọc hiểu con số bên dưới. Chỉ hiện khi thật sự có thay đổi.
+    canh_bao = result.get("canh_bao_thay_doi") or ""
+    if canh_bao:
+        console.print()
+        console.print(Panel(
+            Text(canh_bao),
+            title="⏳ [bold yellow]QUY ĐỊNH ĐÃ THAY ĐỔI[/bold yellow]",
+            border_style="yellow",
+            padding=(1, 2),
+        ))
+
     # Answer panel — render markdown
     answer = result.get("answer", "(không có câu trả lời)")
     console.print()
@@ -230,6 +242,15 @@ def main() -> int:
                         help="Mode LLM: 'claude' thuần | 'claude-fallback' Claude + Gemini "
                              "khi drop (mặc định demo) | 'gemini' end-to-end. "
                              "Fallback tự degrade về Claude nếu thiếu cấu hình Gemini.")
+    parser.add_argument("--refers-mode", choices=["khoan", "all", "rrf"], default=None,
+                        help="Bao đóng dẫn chiếu [:REFERS_TO]. 'khoan' là lựa chọn "
+                             "đã đo tốt nhất; mặc định tắt.")
+    parser.add_argument("--per-norm-mode", choices=["graph"], default=None,
+                        help="Ngân sách đơn vị mỗi văn bản chia theo số văn bản "
+                             "Giai đoạn 2 trả về; mặc định trần cố định.")
+    parser.add_argument("--chuyen-tiep", action="store_true",
+                        help="Phát hiện quy định đã thay đổi + nạp điều khoản "
+                             "chuyển tiếp, kèm câu cảnh báo.")
     args = parser.parse_args()
 
     # Setup logging
@@ -264,6 +285,9 @@ def main() -> int:
                 verify=args.verify,
                 verify_tier=args.verify_tier,
                 llm_mode=args.llm_mode,
+                refers_mode=args.refers_mode,
+                per_norm_mode=args.per_norm_mode,
+                chuyen_tiep=args.chuyen_tiep,
             )
         except _anthropic.APIStatusError as e:
             elapsed = time.perf_counter() - t_start
