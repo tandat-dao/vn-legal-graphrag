@@ -128,7 +128,8 @@ def _do_bao_phu(units: list[dict], gt: list[dict], meta: dict, level: str) -> fl
 
 
 def chay(test_set: list[dict], top_k: int = 25,
-         bien_the: list[tuple[str, str | None, str | None]] | None = None) -> list[dict]:
+         bien_the: list[tuple] | None = None,
+         summary_type: str = "summary") -> list[dict]:
     bien_the = bien_the or BO_BIEN_THE["refers"]
     neo4j, qdrant, llm, model = _build_clients()
     # Cross-encoder ~600MB, chạy CPU (D-20: MPS treo) → tải MỘT LẦN, dùng lại.
@@ -150,7 +151,8 @@ def chay(test_set: list[dict], top_k: int = 25,
             # Giai đoạn 1+2 KHÔNG phụ thuộc chế độ → tính một lần, dùng chung.
             plan = dict(plan_query(q, llm, neo4j_driver=neo4j))
             plan["jurisdiction"] = item.get("jurisdiction") or plan.get("jurisdiction")
-            norm_ids, graph_comp_ids = extract_subgraph(q, plan, neo4j, qdrant, model)
+            norm_ids, graph_comp_ids = extract_subgraph(
+                q, plan, neo4j, qdrant, model, summary_type=summary_type)
             if not norm_ids:
                 continue
 
@@ -248,6 +250,10 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=0, help="N câu đầu")
     ap.add_argument("--top-k", type=int, default=25)
     ap.add_argument("--out", type=Path, default=None, help="Ghi kết quả JSON")
+    ap.add_argument("--summary-type", default="summary",
+                    choices=["summary", "summary_auto"],
+                    help="Nguồn tóm tắt cho Giai đoạn 1: summary (người viết, mặc "
+                         "định) | summary_auto (máy sinh — việc 4, đo độ nhạy).")
     ap.add_argument("--bo", default="refers", choices=list(BO_BIEN_THE),
                     help="Bộ biến thể: refers (việc 1) | budget (việc 2)")
     args = ap.parse_args()
@@ -264,7 +270,8 @@ def main() -> int:
         ts = ts[: args.limit]
 
     bien_the = BO_BIEN_THE[args.bo]
-    rows = chay(ts, top_k=args.top_k, bien_the=bien_the)
+    rows = chay(ts, top_k=args.top_k, bien_the=bien_the,
+                summary_type=args.summary_type)
     tong_hop(rows, bien_the)
     if args.out:
         args.out.write_text(json.dumps(rows, ensure_ascii=False, indent=2),

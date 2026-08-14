@@ -138,6 +138,7 @@ def stage1_norm_ids(
     top_n: int = 5,
     min_score: float = 0.3,
     ablation: AblationConfig = FULL,
+    summary_type: str = "summary",
 ) -> list[str]:
     """Stage 1: encode câu hỏi → search summary vectors → trả về top-N norm_ids.
 
@@ -149,6 +150,9 @@ def stage1_norm_ids(
         top_n: Số norm_ids tối đa trả về.
         min_score: Ngưỡng similarity tối thiểu; kết quả dưới ngưỡng bị loại.
                    Fallback: luôn giữ ít nhất top-1 dù dưới ngưỡng.
+        summary_type: "summary" (do người viết, mặc định) | "summary_auto"
+                   (do máy sinh — dùng cho phép đo độ nhạy ở việc 4). Hai loại
+                   nằm CÙNG collection nhưng khác content_type nên không đè nhau.
 
     Returns:
         List norm_ids được sắp xếp theo độ liên quan giảm dần.
@@ -158,7 +162,7 @@ def stage1_norm_ids(
     if ablation.no_theme:
         vector = encode_text(model, question)
         must_conditions = [
-            FieldCondition(key="content_type", match=MatchValue(value="summary")),
+            FieldCondition(key="content_type", match=MatchValue(value=summary_type)),
         ]
         results = qdrant_client.query_points(
             "legal_texts", query=vector, limit=top_n,
@@ -177,7 +181,7 @@ def stage1_norm_ids(
     vector = encode_text(model, question)
 
     must_conditions = [
-        FieldCondition(key="content_type", match=MatchValue(value="summary")),
+        FieldCondition(key="content_type", match=MatchValue(value=summary_type)),
         FieldCondition(key="theme", match=MatchValue(value=theme)),
     ]
 
@@ -377,6 +381,7 @@ def extract_subgraph(
     model,
     top_n: int = 5,
     ablation: AblationConfig = FULL,
+    summary_type: str = "summary",
 ) -> tuple[list[str], list[str]]:
     """Orchestrator: Stage 1 + Stage 2 + Stage 3.
 
@@ -394,7 +399,7 @@ def extract_subgraph(
         - graph_component_ids: Các điều khoản được Soft Boost qua Ontology Mapping.
     """
     seed_norm_ids = stage1_norm_ids(question, query_plan, qdrant_client, model, top_n,
-                                    ablation=ablation)
+                                    ablation=ablation, summary_type=summary_type)
     # Ablation dense-only (sàn): bỏ toàn bộ mở rộng graph + graph-boost, chỉ seed Stage 1
     if ablation.dense_only:
         logger.info("extract_subgraph [dense-only]: bỏ Stage 2/3, chỉ seed norms")
