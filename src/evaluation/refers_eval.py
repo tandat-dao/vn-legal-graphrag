@@ -167,6 +167,14 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
         ("+ cả hai", "khoan", "fill", 12000, "trong-norm", False, False,
          {"_REFERS_BUDGET": 10, "_RERANK_POOL": 120}),
     ],
+    # MẺ CHỐT — gộp mọi phát hiện, đo cộng dồn từng bước trên cùng harness.
+    "chot": [
+        ("mốc hiện tại", None, None, 6000, None, False, False, {}),
+        ("+ dẫn chiếu + token + fill", "khoan", "fill", 12000, None, False, False, {}),
+        ("+ cross-encoder", "khoan", "fill", 12000, "trong-norm", False, False, {}),
+        ("+ pool 100 + tắt độ hiếm", "khoan", "fill", 12000, "trong-norm", False, False,
+         {"_DENSE_POOL_MIN": 100, "_RARITY_ALPHA": 0.0}),
+    ],
     # Vòng 3 — phép so QUYẾT ĐỊNH: biến thể tốt nhất của mỗi việc, và cả hai
     # cùng lúc. Dùng để chốt cấu hình cuối.
     "ket-hop": [
