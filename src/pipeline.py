@@ -105,6 +105,43 @@ def _resolve_temporal_anchor(anchor: str | None) -> str | None:
     return None  # unrecognized → broad
 
 
+# Tên tỉnh/huyện xuất hiện trong kho (3 phạm vi hiệu lực). Dùng để phát hiện
+# câu hỏi CÓ nêu địa phương hay không.
+_TEN_DIA_PHUONG = (
+    "tp.hcm", "tp hcm", "tphcm", "hồ chí minh", "thành phố hồ chí minh",
+    "đồng nai", "biên hòa", "thủ đức", "củ chi", "bình chánh", "hóc môn",
+    "nhà bè", "cần giờ", "long thành", "trảng bom", "nhơn trạch", "phú lý",
+)
+
+
+def _co_neu_dia_phuong(question: str) -> bool:
+    q = (question or "").lower()
+    return any(t in q for t in _TEN_DIA_PHUONG)
+
+
+def ap_dung_guard_pham_vi(query_plan: dict, question: str) -> dict:
+    """Câu KHÔNG nêu địa phương thì 'toan-quoc' là cam kết quá tay.
+
+    Trạng thái đúng là CHƯA XÁC ĐỊNH (None), và _resolve_allowed_jurisdictions
+    đã xử lý trạng thái đó chính xác từ Fix A (09/07/2026): None → cho phép mọi
+    tỉnh. Bộ lập kế hoạch tự chốt 'toan-quoc' cho câu không nêu tỉnh sẽ loại sạch
+    văn bản cấp tỉnh — mà nhiều câu (lệ phí, hạn mức, bảng giá đất) lại có đáp án
+    nằm đúng ở cấp tỉnh. V120 "lệ phí khai sinh muộn bao nhiêu" là ca điển hình.
+
+    CẢNH BÁO PHẠM VI: guard này chạm 55/137 câu (40%). Nó KHÔNG phải bản vá
+    phẫu thuật mà là đổi chính sách phạm vi truy hồi — phải đo trước khi bật.
+    Mặc định TẮT.
+    """
+    if query_plan.get("jurisdiction") != "toan-quoc":
+        return query_plan
+    if _co_neu_dia_phuong(question):
+        return query_plan
+    out = dict(query_plan)
+    out["jurisdiction"] = None
+    logger.info("GUARD PHẠM VI — câu không nêu địa phương: toan-quoc → None")
+    return out
+
+
 def ap_dung_lop_thoi_gian(query_plan: dict, question: str) -> dict:
     """Điều chỉnh query_plan["temporal"] theo ý định thời gian của câu hỏi.
 

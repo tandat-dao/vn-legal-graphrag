@@ -35,7 +35,8 @@ from src.evaluation.retrieval_eval import (
     _chunk_to_citation,
     _fetch_chunk_meta,
 )
-from src.pipeline import CONTEXT_MAX_TOKENS, ap_dung_lop_thoi_gian
+from src.pipeline import (CONTEXT_MAX_TOKENS, ap_dung_guard_pham_vi,
+                          ap_dung_lop_thoi_gian)
 from src.retrieval.context_assembler import assemble_context_chi_tiet
 from src.retrieval.query_planner import plan_query
 from src.retrieval.semantic_filter import hybrid_search
@@ -117,6 +118,45 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
         ("+ điều khoản chuyển tiếp", "khoan", "fill", 12000, None, False, True),
         ("chỉ điều khoản chuyển tiếp", None, None, 12000, None, False, True),
     ],
+    # === QUÉT THAM SỐ (được phép dò trên 137 câu; 137 câu là TẬP PHÁT TRIỂN,
+    # tập kiểm thử là GT mới sẽ soạn sau) ===
+    # Mốc chung: khoan + fill + 12000 — cấu hình tốt nhất đã đo.
+    "sweep-pool": [
+        ("mốc (pool 50)", "khoan", "fill", 12000, None, False, False, {}),
+        ("pool 100", "khoan", "fill", 12000, None, False, False, {"_DENSE_POOL_MIN": 100}),
+        ("pool 200", "khoan", "fill", 12000, None, False, False, {"_DENSE_POOL_MIN": 200}),
+        ("pool 400", "khoan", "fill", 12000, None, False, False, {"_DENSE_POOL_MIN": 400}),
+    ],
+    "sweep-rrf": [
+        ("mốc (k=60)", "khoan", "fill", 12000, None, False, False, {}),
+        ("k=10", "khoan", "fill", 12000, None, False, False, {"_RRF_K": 10}),
+        ("k=30", "khoan", "fill", 12000, None, False, False, {"_RRF_K": 30}),
+        ("k=150", "khoan", "fill", 12000, None, False, False, {"_RRF_K": 150}),
+    ],
+    "sweep-rarity": [
+        ("mốc (alpha 1.5)", "khoan", "fill", 12000, None, False, False, {}),
+        ("alpha 0 (tắt)", "khoan", "fill", 12000, None, False, False, {"_RARITY_ALPHA": 0.0}),
+        ("alpha 3", "khoan", "fill", 12000, None, False, False, {"_RARITY_ALPHA": 3.0}),
+        ("alpha 6", "khoan", "fill", 12000, None, False, False, {"_RARITY_ALPHA": 6.0}),
+    ],
+    "sweep-refers": [
+        ("mốc (ngân sách 5)", "khoan", "fill", 12000, None, False, False, {}),
+        ("ngân sách 3", "khoan", "fill", 12000, None, False, False, {"_REFERS_BUDGET": 3}),
+        ("ngân sách 10", "khoan", "fill", 12000, None, False, False, {"_REFERS_BUDGET": 10}),
+        ("ngân sách 20", "khoan", "fill", 12000, None, False, False, {"_REFERS_BUDGET": 20}),
+    ],
+    "sweep-tier": [
+        ("mốc", "khoan", "fill", 12000, None, False, False, {}),
+        ("tier đều 6", "khoan", "fill", 12000, None, False, False, {"_MAX_PER_TIER": {1: 6, 2: 6, 3: 6, 4: 6}}),
+        ("tier đều 10", "khoan", "fill", 12000, None, False, False, {"_MAX_PER_TIER": {1: 10, 2: 10, 3: 10, 4: 10}}),
+        ("tier ưu tiên 4", "khoan", "fill", 12000, None, False, False, {"_MAX_PER_TIER": {1: 6, 2: 6, 3: 6, 4: 12}}),
+    ],
+    "sweep-keyword": [
+        ("mốc (kw 0.5)", "khoan", "fill", 12000, None, False, False, {}),
+        ("kw 0.3", "khoan", "fill", 12000, None, False, False, {"_KEYWORD_MIN_SCORE": 0.3}),
+        ("kw 0.7", "khoan", "fill", 12000, None, False, False, {"_KEYWORD_MIN_SCORE": 0.7}),
+        ("kw 1.0", "khoan", "fill", 12000, None, False, False, {"_KEYWORD_MIN_SCORE": 1.0}),
+    ],
     # Vòng 3 — phép so QUYẾT ĐỊNH: biến thể tốt nhất của mỗi việc, và cả hai
     # cùng lúc. Dùng để chốt cấu hình cuối.
     "ket-hop": [
@@ -126,6 +166,22 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
         ("khoan+tiêu hết", "khoan", "fill", 6000, None, False, False),
     ],
 }
+
+
+def _dat_hang_so(ghi_de: dict | None):
+    """Tạm ghi đè hằng số module semantic_filter; trả về hàm khôi phục.
+
+    Các hằng số (_RRF_K, _DENSE_POOL_MIN, _RARITY_ALPHA…) được đọc BÊN TRONG
+    hybrid_search tại thời điểm gọi, nên ghi đè thuộc tính module có hiệu lực
+    ngay. Nhờ vậy một mẻ đo được nhiều cấu hình thay vì phải chạy lại từ đầu.
+    """
+    import src.retrieval.semantic_filter as sf
+    if not ghi_de:
+        return lambda: None
+    cu = {k: getattr(sf, k) for k in ghi_de}
+    for k, v in ghi_de.items():
+        setattr(sf, k, v)
+    return lambda: [setattr(sf, k, v) for k, v in cu.items()]
 
 
 def _do_bao_phu(units: list[dict], gt: list[dict], meta: dict, level: str) -> float:
@@ -145,7 +201,7 @@ def _do_bao_phu(units: list[dict], gt: list[dict], meta: dict, level: str) -> fl
 
 def chay(test_set: list[dict], top_k: int = 25,
          bien_the: list[tuple] | None = None,
-         summary_type: str = "summary") -> list[dict]:
+         summary_type: str = "summary", guard_juris: bool = False) -> list[dict]:
     bien_the = bien_the or BO_BIEN_THE["refers"]
     neo4j, qdrant, llm, model = _build_clients()
     # Cross-encoder ~600MB, chạy CPU (D-20: MPS treo) → tải MỘT LẦN, dùng lại.
@@ -169,6 +225,8 @@ def chay(test_set: list[dict], top_k: int = 25,
             plan["jurisdiction"] = item.get("jurisdiction") or plan.get("jurisdiction")
             # DÙNG CHUNG lớp thời gian với pipeline — nếu bỏ qua, harness lọc
             # chặt hơn hệ thật và mọi mức tuyệt đối đo được đều thấp hơn thực tế.
+            if guard_juris:
+                plan = ap_dung_guard_pham_vi(plan, q)
             plan = ap_dung_lop_thoi_gian(plan, q)
             norm_ids, graph_comp_ids = extract_subgraph(
                 q, plan, neo4j, qdrant, model, summary_type=summary_type)
@@ -183,7 +241,9 @@ def chay(test_set: list[dict], top_k: int = 25,
                 ct_comp_ids = cids if cap else None
 
             row = {"id": item["id"], "gap_type": item.get("gap_type")}
-            for ten, rmode, pmode, mtok, rrmode, aspect, ct in bien_the:
+            for bt in bien_the:
+                ten, rmode, pmode, mtok, rrmode, aspect, ct = bt[:7]
+                khoi_phuc = _dat_hang_so(bt[7] if len(bt) > 7 else None)
                 units = hybrid_search(
                     q, norm_ids, qdrant, model, top_k=top_k,
                     graph_component_ids=graph_comp_ids, neo4j_driver=neo4j,
@@ -192,6 +252,7 @@ def chay(test_set: list[dict], top_k: int = 25,
                     aspect_mode=aspect,
                     extra_component_ids=(ct_comp_ids if ct else None),
                 )
+                khoi_phuc()
                 meta = _fetch_chunk_meta([u["text_unit_id"] for u in units], neo4j)
                 # Đơn vị THỰC SỰ lọt vào ngữ cảnh sau khi cắt theo ngưỡng token.
                 # Đây mới là thứ bộ sinh nhìn thấy — các cơ chế nạp thêm đều gán
@@ -278,6 +339,9 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=0, help="N câu đầu")
     ap.add_argument("--top-k", type=int, default=25)
     ap.add_argument("--out", type=Path, default=None, help="Ghi kết quả JSON")
+    ap.add_argument("--guard-juris", action="store_true",
+                    help="Bật guard phạm vi: câu không nêu địa phương thì đổi "
+                         "toan-quoc → None (cho phép mọi tỉnh). Chạm 40%% số câu.")
     ap.add_argument("--summary-type", default="summary",
                     choices=["summary", "summary_auto"],
                     help="Nguồn tóm tắt cho Giai đoạn 1: summary (người viết, mặc "
@@ -299,7 +363,8 @@ def main() -> int:
 
     bien_the = BO_BIEN_THE[args.bo]
     rows = chay(ts, top_k=args.top_k, bien_the=bien_the,
-                summary_type=args.summary_type)
+                summary_type=args.summary_type,
+                guard_juris=args.guard_juris)
     tong_hop(rows, bien_the)
     if args.out:
         args.out.write_text(json.dumps(rows, ensure_ascii=False, indent=2),
