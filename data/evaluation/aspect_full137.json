@@ -1,0 +1,4358 @@
+[
+  {
+    "id": "V001",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4785,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4785,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V002",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5638,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5638,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4763,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4763,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V003",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3503,
+      "khoan": 0.8,
+      "dieu": 1.0,
+      "khoan_chon": 0.8
+    },
+    "off (6000)": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3503,
+      "khoan": 0.8,
+      "dieu": 1.0,
+      "khoan_chon": 0.8
+    }
+  },
+  {
+    "id": "V004",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6279,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6279,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4732,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4732,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V006",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4427,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4427,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3522,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3522,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V007",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4010,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4010,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V008",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4780,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4780,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3618,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3618,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V011",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6464,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6464,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5905,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5905,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V012",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7416,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7416,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 6589,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 20,
+      "token": 5721,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V013",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4620,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4620,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V014",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5795,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5795,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V015",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7106,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7106,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V016",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6846,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6846,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 6199,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 21,
+      "token": 5792,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V017",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6655,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6655,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5646,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5646,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V018",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6365,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6365,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4680,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4680,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V019",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4077,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4077,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V020",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1888,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1888,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V021",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7392,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7392,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 4998,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 4998,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V022",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3304,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3304,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V023",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3153,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3153,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V024",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3837,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3837,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2999,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2999,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V025",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1576,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1576,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V026",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2892,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2892,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V027",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4430,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4430,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3265,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3265,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V028",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2950,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2950,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V029",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3425,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3425,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V030",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V033",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5337,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5337,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4281,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "off (6000)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4281,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V035",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5011,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5011,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3575,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3575,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V036",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3353,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3353,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V037",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3418,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3418,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V038",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3333,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3333,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V039",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3747,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3747,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V040",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5741,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5741,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V041",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5177,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5177,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V042",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4179,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4179,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3391,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3391,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V043",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8281,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8281,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 2962,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 2962,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V044",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5946,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5946,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4290,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4290,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V045",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5757,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5757,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4126,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4126,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V046",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9547,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9547,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4511,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4511,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V047",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 4317,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 4317,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V048",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7208,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7208,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3155,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3155,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V049",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2023,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2023,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V050",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8361,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8361,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 3896,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 3896,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V051",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8152,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8152,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4108,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4108,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V052",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2649,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2649,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V053",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4748,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4748,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3754,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3754,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V054",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5557,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5557,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2959,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2959,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V055",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4000,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4000,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V056",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V057",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V058",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6201,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6201,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3724,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3724,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V061",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5143,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5143,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3643,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3643,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V062",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 2962,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 2962,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V066",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3061,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3061,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V067",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4167,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4167,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3817,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3817,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V068",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3904,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3904,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V069",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8364,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8364,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4310,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4310,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V070",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4215,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4215,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V071",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1217,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1217,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V072",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3229,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3229,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V073",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4116,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4116,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V074",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2989,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2989,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V075",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4774,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4774,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3272,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3272,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V076",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7418,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7418,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4615,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4615,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V077",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3543,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3543,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V078",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V079",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3024,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3024,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V080",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2941,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2941,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V081",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4368,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4368,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3435,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3435,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V082",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2763,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2763,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V083",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7807,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7807,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3814,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3814,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V084",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V085",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3622,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3622,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V086",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1993,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1993,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V087",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3345,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3345,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V088",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3233,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3233,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V089",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2383,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2383,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V090",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8943,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8943,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 7357,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 13,
+      "token": 5775,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V091",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3825,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3825,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V092",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5254,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5254,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3187,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3187,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V093",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4315,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4315,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3306,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3306,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V094",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3500,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3500,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V095",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 2237,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 2237,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V096",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 2789,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 2789,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V097",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6048,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6048,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V098",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3610,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3610,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V099",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7176,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7176,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5329,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5329,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V100",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6420,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6420,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2748,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2748,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V101",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6639,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6639,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3674,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3674,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V102",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3463,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3463,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V103",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7330,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7330,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 5581,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 5581,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V104",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2699,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2699,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V118",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5684,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5684,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V119",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7545,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7545,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 6836,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 19,
+      "token": 5440,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V120",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4472,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4472,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3252,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3252,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V122",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3852,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3852,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V124",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4655,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4655,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3230,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3230,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V125",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5545,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5545,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4208,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4208,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V126",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4911,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4911,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4011,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "off (6000)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4011,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V127",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4832,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4832,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1940,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1940,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V129",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7245,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7245,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 6444,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 20,
+      "token": 5357,
+      "khoan": 0.0,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V130",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7950,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7950,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 6937,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 19,
+      "token": 5928,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V131",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5017,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5017,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4046,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4046,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V132",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4923,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4923,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3486,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3486,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V133",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5693,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5693,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3979,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3979,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V135",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5583,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5583,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5071,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5071,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V136",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4540,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4540,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3159,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3159,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    }
+  },
+  {
+    "id": "V137",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2913,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2913,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V139",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5245,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5245,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3536,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3536,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V140",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6771,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6771,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5225,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5225,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V141",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5730,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5730,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 3,
+      "n_ctx": 3,
+      "token": 830,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 3,
+      "n_ctx": 3,
+      "token": 848,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V142",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7836,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7836,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3528,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3528,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V143",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4781,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4781,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V144",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4069,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4069,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3136,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3136,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V145",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3804,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3804,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V146",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3210,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3210,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V147",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4317,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "off (6000)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4317,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V148",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6292,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6292,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5904,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5904,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V149",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3488,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3488,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V150",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ hạn ngạch khía cạnh": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ hạn ngạch khía cạnh": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2917,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "off (6000)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2917,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]

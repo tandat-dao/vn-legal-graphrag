@@ -37,11 +37,42 @@ Bản sao nằm ở `data/neo4j-thu-nghiem/` (523MB, đã gitignore). CSDL demo 
 
 | # | việc | trạng thái |
 |---|---|---|
-| 1 | Dẫn chiếu `REFERS_TO` | **XONG, kết quả dương** |
+| 1 | Dẫn chiếu `REFERS_TO` | **XONG, kết quả dương** (+0,050 một mình) |
 | 2 | Ngân sách ngữ cảnh | **XONG** — hai vòng âm, vòng ba dương nhờ nới ngưỡng token |
 | 3 | Phiên bản kề + điều khoản chuyển tiếp | **XONG phần cơ chế**, chưa đo (GT không có câu nào cần) |
-| 4 | Ablation summary do máy sinh | **CHƯA LÀM** |
-| 5 | Hạn ngạch theo khía cạnh | **CHƯA LÀM** (dự kiến cắt) |
+| 4 | Ablation summary do máy sinh | **XONG — không tụt, 0 câu thua** |
+| 5 | Hạn ngạch theo khía cạnh | **XONG phần code**, đang đo |
+| + | Cross-encoder xếp lại trong văn bản | **Đang đo đủ 137 câu** (mẫu 40 cho +0,029) |
+
+### Việc 4 — kết quả
+
+Sinh 32 summary bằng Gemini (chỉ cho máy thứ tự động lấy được, KHÔNG cho xem
+summary người viết) → so ghép cặp trên 121 câu:
+
+| cấu hình | người | máy | Δ | thắng/thua/hoà |
+|---|---|---|---|---|
+| off | 0,747 | 0,751 | +0,004 | 1 / **0** / 120 |
+| khoan | 0,784 | 0,788 | +0,004 | 1 / **0** / 120 |
+| tiêu hết ngân sách | 0,743 | 0,747 | +0,004 | 1 / **0** / 120 |
+| khoan+tiêu hết | 0,751 | 0,771 | +0,021 | 3 / **0** / 118 |
+
+**Không câu nào tệ đi**, 120/121 câu y hệt. Phát biểu đúng là **"không tụt"**,
+không phải "tốt hơn" — chênh +0,004 chỉ do 1 câu đổi.
+
+Kết luận cho hội đồng: tín hiệu định tuyến mà summary người viết cung cấp là thứ
+máy tái tạo được → không phải cái nạng giấu mặt, và khâu đó tự động hoá được.
+Đáp CẢ HAI góp ý của cô (tính đúng đắn của phần người làm + tự động hoá).
+
+**Phạm vi:** chỉ nói về định tuyến ở Giai đoạn 1 — cũng là công dụng duy nhất
+của trường `summary` trong hệ.
+
+Quan sát ngược trực giác: máy nêu số Điều đích danh **nhiều gấp 16 lần** người
+(158 so với 9 trên toàn corpus). Khác biệt thật là người đưa **nội dung**
+(QĐ 69/2024: "tối đa 160 m² tại các quận"), máy đưa **con trỏ** ("đối tượng nêu
+tại Điều 2"). Số liệu cho thấy khác biệt đó không đổi kết quả định tuyến.
+
+Chạy lại: `--summary-type summary_auto` (sinh lại bằng
+`python -m src.evaluation.summary_ablation --sinh`).
 
 ---
 
