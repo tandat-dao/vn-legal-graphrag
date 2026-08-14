@@ -428,6 +428,69 @@ RETURN a.id AS nguon, b.id AS dich, r.muc AS muc
 """
 
 
+_RERANK_POOL = 60  # số ứng viên đầu (theo RRF) đưa qua cross-encoder
+
+
+def _xep_lai_trong_norm(question: str, scored: list, neo4j_driver, model=None) -> list:
+    """Xếp lại ứng viên BÊN TRONG mỗi văn bản bằng cross-encoder.
+
+    Vì sao chỉ trong văn bản: đo trên 121 câu cho thấy 87% trích dẫn đáp án còn
+    thiếu thuộc về văn bản ĐÃ được truy hồi đúng — chỉ là điều khoản đáp án
+    thua các điều khoản khác của chính văn bản đó. Tức phần còn lại KHÔNG phải
+    bài toán định tuyến văn bản.
+
+    Đây cũng là lý do cách cắm này không lặp lại thất bại D-20: ở đó
+    cross-encoder được cắm vào khâu truy hồi nên kéo đoạn "đúng từ vựng nhưng
+    SAI văn bản" lên, làm độ bao phủ văn bản tụt 0,071. Ở đây thứ tự GIỮA các
+    văn bản được giữ nguyên theo RRF — cross-encoder chỉ được quyền đổi thứ tự
+    bên trong một văn bản đã chọn, nên cơ chế hỏng đó không thể xảy ra.
+
+    Trả về `scored` đã xếp lại; lỗi/thiếu phụ thuộc → trả nguyên bản.
+    """
+    if not scored or neo4j_driver is None:
+        return scored
+    try:
+        from src.retrieval.context_assembler import fetch_texts
+        from src.retrieval.reranker import rerank as _rerank
+    except ImportError:
+        logger.warning("_xep_lai_trong_norm: thiếu phụ thuộc — bỏ qua")
+        return scored
+
+    dau = scored[:_RERANK_POOL]
+    duoi = scored[_RERANK_POOL:]
+
+    # Thứ tự GIỮA các văn bản: theo vị trí ứng viên tốt nhất của văn bản đó.
+    vi_tri_norm: dict[str, int] = {}
+    theo_norm: dict[str, list] = {}
+    for i, (rrf, p) in enumerate(dau):
+        nid = p.payload.get("norm_id", "")
+        vi_tri_norm.setdefault(nid, i)
+        theo_norm.setdefault(nid, []).append((rrf, p))
+
+    ids = [_qdrant_id_to_hex(p.id) for _, p in dau]
+    text_map = fetch_texts(ids, neo4j_driver)
+
+    xep: list[tuple[int, int, tuple]] = []
+    for nid, items in theo_norm.items():
+        if len(items) < 2:
+            xep.append((vi_tri_norm[nid], 0, items[0]))
+            continue
+        cands = [{
+            "i": k,
+            "text": (text_map.get(_qdrant_id_to_hex(p.id), {}) or {}).get("text", ""),
+        } for k, (_, p) in enumerate(items)]
+        try:
+            xong = _rerank(question, cands, model=model)
+        except Exception as e:  # model lỗi/không tải được → giữ nguyên
+            logger.warning(f"_xep_lai_trong_norm: cross-encoder lỗi ({e}) — giữ nguyên")
+            return scored
+        for hang, c in enumerate(xong):
+            xep.append((vi_tri_norm[nid], hang, items[c["i"]]))
+
+    xep.sort(key=lambda x: (x[0], x[1]))
+    return [it for _, _, it in xep] + duoi
+
+
 def _them_theo_component(
     comp_ids: list[str], norm_ids: list[str], qdrant_client,
     used_point_ids: set, results: list, rrf_fn, ngan_sach: int,
@@ -686,6 +749,8 @@ def hybrid_search(
     refers_mode: str | None = None,
     budget_mode: str | None = None,
     extra_component_ids: list[str] | None = None,
+    rerank_mode: str | None = None,
+    rerank_model=None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -1023,7 +1088,14 @@ def hybrid_search(
     pass1_count = len(results) - pass0_count
 
     # Pass 2: fill remaining by RRF order (skip already used)
-    for rrf_score_val, point in scored:
+    #
+    # rerank_mode="trong-norm": xếp lại ứng viên BÊN TRONG mỗi văn bản bằng
+    # cross-encoder trước khi lấp chiều sâu. Chỉ áp ở đây — Pass 0 (dense floor,
+    # D-10) và Pass 1 (bề rộng) giữ nguyên, nên việc chọn VĂN BẢN không đổi.
+    scored_pass2 = scored
+    if rerank_mode == "trong-norm":
+        scored_pass2 = _xep_lai_trong_norm(question, scored, neo4j_driver, rerank_model)
+    for rrf_score_val, point in scored_pass2:
         if len(results) >= top_k:
             break
         if point.id in used_point_ids:

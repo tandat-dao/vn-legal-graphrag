@@ -50,26 +50,26 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
     # Việc 1 — bao đóng dẫn chiếu, kèm nhánh đối chứng "rrf" để tách bạch
     # "nhờ dẫn chiếu" với "nhờ được thêm ngữ cảnh".
     "refers": [
-        ("off", None, None, 6000),
-        ("khoan", "khoan", None, 6000),
-        ("all", "all", None, 6000),
-        ("rrf(đối chứng)", "rrf", None, 6000),
+        ("off", None, None, 6000, None),
+        ("khoan", "khoan", None, 6000, None),
+        ("all", "all", None, 6000, None),
+        ("rrf(đối chứng)", "rrf", None, 6000, None),
     ],
     # Việc 2 — ngân sách theo đồ thị (đã cho kết quả âm, giữ để tái lập).
     "budget": [
-        ("off", None, None, 6000),
-        ("ngân sách", None, "graph", 6000),
-        ("khoan", "khoan", None, 6000),
-        ("khoan+ngân sách", "khoan", "graph", 6000),
+        ("off", None, None, 6000, None),
+        ("ngân sách", None, "graph", 6000, None),
+        ("khoan", "khoan", None, 6000, None),
+        ("khoan+ngân sách", "khoan", "graph", 6000, None),
     ],
     # Việc 2 vòng 2 — nhắm đúng ràng buộc đang chặn (trần TẦNG), và thử tiêu
     # thẳng phần ngân sách bỏ trống. Đo cho thấy ứng viên thừa mứa (trung vị
     # 2772) nhưng 0/38 câu lấy đủ 25 vì trần khoá.
     "budget2": [
-        ("off", None, None, 6000),
-        ("nới trần văn bản", None, "norm", 6000),
-        ("nới trần tầng", None, "tier", 6000),
-        ("tiêu hết ngân sách", None, "fill", 6000),
+        ("off", None, None, 6000, None),
+        ("nới trần văn bản", None, "norm", 6000, None),
+        ("nới trần tầng", None, "tier", 6000, None),
+        ("tiêu hết ngân sách", None, "fill", 6000, None),
     ],
     # Vòng 4 — nới chính NGƯỠNG TOKEN. Đo cho thấy trần top_k/per_norm/per_tier
     # đều nằm TRÊN một nút thắt chặt hơn ở phía dưới: assemble_context cắt theo
@@ -77,27 +77,37 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
     # phần mà mọi cơ chế nạp thêm vừa đưa vào. 6000 là con số đặt từ thời tính
     # tiền theo Claude; Gemini 2.5 Pro chịu tới 1 triệu token.
     "token": [
-        ("off (6000)", None, None, 6000),
-        ("off + 12000", None, None, 12000),
-        ("khoan + 12000", "khoan", None, 12000),
-        ("khoan+tiêu hết + 12000", "khoan", "fill", 12000),
+        ("off (6000)", None, None, 6000, None),
+        ("off + 12000", None, None, 12000, None),
+        ("khoan + 12000", "khoan", None, 12000, None),
+        ("khoan+tiêu hết + 12000", "khoan", "fill", 12000, None),
     ],
     # Vòng 5 — tìm điểm BÃO HOÀ của ngưỡng token. Độ bao phủ tăng đơn điệu theo
     # lượng ngữ cảnh nên "nới thêm" luôn trông đẹp; điều cần biết là nới tới đâu
     # thì hết thứ để lấy. Nếu 18000 không hơn 12000 thì 12000 đã vét hết.
     "token-bao-hoa": [
-        ("khoan+fill 6000", "khoan", "fill", 6000),
-        ("khoan+fill 12000", "khoan", "fill", 12000),
-        ("khoan+fill 18000", "khoan", "fill", 18000),
-        ("khoan+fill 30000", "khoan", "fill", 30000),
+        ("khoan+fill 6000", "khoan", "fill", 6000, None),
+        ("khoan+fill 12000", "khoan", "fill", 12000, None),
+        ("khoan+fill 18000", "khoan", "fill", 18000, None),
+        ("khoan+fill 30000", "khoan", "fill", 30000, None),
+    ],
+    # Vòng 6 — lever cuối cùng. Đo cho thấy 87% trích dẫn còn thiếu thuộc văn bản
+    # ĐÃ truy hồi đúng, chỉ là điều khoản thua các điều khoản khác cùng văn bản.
+    # Cross-encoder xếp lại BÊN TRONG văn bản — không lặp lại thất bại D-20 vì
+    # thứ tự giữa các văn bản giữ nguyên.
+    "rerank": [
+        ("mốc (khoan+fill 12k)", "khoan", "fill", 12000, None),
+        ("+ xếp lại trong norm", "khoan", "fill", 12000, "trong-norm"),
+        ("chỉ xếp lại (ko fill)", "khoan", None, 12000, "trong-norm"),
+        ("xếp lại, ko dẫn chiếu", None, None, 12000, "trong-norm"),
     ],
     # Vòng 3 — phép so QUYẾT ĐỊNH: biến thể tốt nhất của mỗi việc, và cả hai
     # cùng lúc. Dùng để chốt cấu hình cuối.
     "ket-hop": [
-        ("off", None, None, 6000),
-        ("khoan", "khoan", None, 6000),
-        ("tiêu hết ngân sách", None, "fill", 6000),
-        ("khoan+tiêu hết", "khoan", "fill", 6000),
+        ("off", None, None, 6000, None),
+        ("khoan", "khoan", None, 6000, None),
+        ("tiêu hết ngân sách", None, "fill", 6000, None),
+        ("khoan+tiêu hết", "khoan", "fill", 6000, None),
     ],
 }
 
@@ -121,6 +131,12 @@ def chay(test_set: list[dict], top_k: int = 25,
          bien_the: list[tuple[str, str | None, str | None]] | None = None) -> list[dict]:
     bien_the = bien_the or BO_BIEN_THE["refers"]
     neo4j, qdrant, llm, model = _build_clients()
+    # Cross-encoder ~600MB, chạy CPU (D-20: MPS treo) → tải MỘT LẦN, dùng lại.
+    rr_model = None
+    if any(v[4] for v in bien_the):
+        from src.retrieval.reranker import load_reranker
+        print("Đang tải cross-encoder (CPU, ~600MB)...", flush=True)
+        rr_model = load_reranker()
     rows: list[dict] = []
     try:
         for i, item in enumerate(test_set, 1):
@@ -139,12 +155,12 @@ def chay(test_set: list[dict], top_k: int = 25,
                 continue
 
             row = {"id": item["id"], "gap_type": item.get("gap_type")}
-            for ten, rmode, pmode, mtok in bien_the:
+            for ten, rmode, pmode, mtok, rrmode in bien_the:
                 units = hybrid_search(
                     q, norm_ids, qdrant, model, top_k=top_k,
                     graph_component_ids=graph_comp_ids, neo4j_driver=neo4j,
                     procedure_id=plan.get("procedure"), refers_mode=rmode,
-                    budget_mode=pmode,
+                    budget_mode=pmode, rerank_mode=rrmode, rerank_model=rr_model,
                 )
                 meta = _fetch_chunk_meta([u["text_unit_id"] for u in units], neo4j)
                 # Đơn vị THỰC SỰ lọt vào ngữ cảnh sau khi cắt theo ngưỡng token.

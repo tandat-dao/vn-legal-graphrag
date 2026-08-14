@@ -1,0 +1,1226 @@
+[
+  {
+    "id": "V007",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5040,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4093,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V079",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4569,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3662,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3114,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V071",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3678,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1136,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1136,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V066",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4136,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3451,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3200,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V039",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5419,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4639,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4083,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V029",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4837,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4006,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3613,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V025",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4070,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1640,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1587,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V011",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6464,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6168,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5609,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5609,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V004",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6279,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6258,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5798,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4808,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V014",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6416,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 5842,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5635,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V030",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3195,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2988,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V073",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6967,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4016,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4016,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V086",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3387,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 1886,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1823,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V140",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6771,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6784,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6324,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5333,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V080",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ xếp lại trong norm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3952,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3076,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3076,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V028",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4540,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3522,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3173,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V100",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6420,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6448,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3341,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2687,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V092",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5254,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5508,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3176,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3035,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V098",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5102,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4440,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3884,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V078",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6705,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4954,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3600,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V057",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5607,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2791,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V150",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4439,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2951,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V146",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3991,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3454,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3356,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V084",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5196,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3822,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3636,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V145",
+    "gap_type": "gap1",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5222,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4376,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3719,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V001",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5760,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4759,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V142",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7836,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7683,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3601,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3601,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V023",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "+ xếp lại trong norm": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4510,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3791,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3208,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V126",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4911,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5320,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4687,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3826,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V058",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6201,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6386,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4314,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3723,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V047",
+    "gap_type": "gap4",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8028,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 4264,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 4264,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V118",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7267,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V022",
+    "gap_type": "gap2",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7676,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4108,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3476,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V137",
+    "gap_type": "gap3",
+    "mốc (khoan+fill 12k)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ xếp lại trong norm": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4256,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "chỉ xếp lại (ko fill)": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3384,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "xếp lại, ko dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3076,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]
