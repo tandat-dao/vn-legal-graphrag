@@ -359,6 +359,33 @@ def _keyword_score(query_tokens: set[str], payload: dict) -> float:
 
 _RARITY_ALPHA = 1.5
 
+# --- Ngân sách chiều sâu do đồ thị quyết định (việc 2) ---
+#
+# Đo trên 137 câu: top_k=25 KHÔNG BAO GIỜ đầy (cao nhất 23) và ngưỡng 6000
+# token chỉ cắn 11% số câu. Ràng buộc thật sự chi phối là _MAX_PER_NORM=3 —
+# 99% số câu có ít nhất một văn bản đụng trần. Nó không phải van an toàn mà là
+# CHÍNH SÁCH đang định hình mọi câu trả lời.
+#
+# Trần cố định giả định mọi câu hỏi cần bề rộng như nhau. Thực tế không vậy:
+# "hạn mức đất ở Quận 1" nằm gọn trong MỘT quyết định tỉnh (trải mỏng ra 10
+# văn bản là tự pha loãng), còn "trình tự chuyển mục đích" thì trải Luật → NĐ
+# → TT → QĐ (bề rộng đúng).
+#
+# Quy tắc: chia ngân sách cho số văn bản mà Giai đoạn 2 trả về — tất định,
+# miễn phí, không cần dò tham số trên tập kiểm thử.
+#   SÀN = _MAX_PER_NORM (3) → CHỈ NỚI cho chuỗi hẹp, KHÔNG BAO GIỜ siết so với
+#   hành vi hiện tại. Nhờ vậy mọi hồi quy (nếu có) chắc chắn không do mất bề rộng.
+_PER_NORM_TRAN = 8
+
+
+def _tinh_per_norm(top_k: int, so_norm: int, che_do: str | None) -> int:
+    """Trần số đơn vị mỗi văn bản. che_do=None → giữ hằng số cũ (3)."""
+    if che_do != "graph" or so_norm <= 0:
+        return _MAX_PER_NORM
+    import math
+    return max(_MAX_PER_NORM, min(_PER_NORM_TRAN, math.ceil(top_k / so_norm)))
+
+
 # Pass 3 — bao đóng dẫn chiếu ([:REFERS_TO], hướng 1).
 # Ngân sách RIÊNG, cộng thêm ngoài top_k: đo trên 137 câu cho thấy top_k=25
 # KHÔNG BAO GIỜ đầy (cao nhất 23), nên nếu Pass 3 dùng chung ngân sách thì nó
@@ -599,6 +626,7 @@ def hybrid_search(
     neo4j_driver=None,
     procedure_id: str | None = None,
     refers_mode: str | None = None,
+    per_norm_mode: str | None = None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -810,6 +838,7 @@ def hybrid_search(
     norm_count: dict[str, int] = {}
     tier_count: dict[int | None, int] = {}
     used_point_ids: set = set()
+    per_norm_cap = _tinh_per_norm(top_k, len(norm_ids), per_norm_mode)
 
     def _try_add(rrf_score_val, point) -> bool:
         """Thêm point vào results nếu thỏa cả 2 cap. Trả True nếu thêm thành công."""
@@ -818,7 +847,7 @@ def hybrid_search(
         payload = point.payload
         nid = payload.get("norm_id", "")
         tier = payload.get("tier")
-        if norm_count.get(nid, 0) >= _MAX_PER_NORM:
+        if norm_count.get(nid, 0) >= per_norm_cap:
             return False
         tier_max = _MAX_PER_TIER.get(tier, _MAX_PER_TIER_DEFAULT)
         if tier_count.get(tier, 0) >= tier_max:
@@ -1021,7 +1050,8 @@ def hybrid_search(
             f"pass-0.5(label-keyword)={pass_neg05_count}, pass0(dense-floor)={pass0_count}, "
             f"pass1(rrf-breadth)={pass1_count}, "
             f"pass2(depth)={len(results) - pass_neg1_count - pass_neg05_count - pass0_count - pass1_count} | "
-            f"caps: per_norm={_MAX_PER_NORM}, per_tier={_MAX_PER_TIER} | "
+            f"caps: per_norm={per_norm_cap} (mode={per_norm_mode or 'cố định'}, "
+            f"{len(norm_ids)} norm), per_tier={_MAX_PER_TIER} | "
             f"best rrf={results[0]['rrf_score']:.4f} | tier_dist={tier_dist} | norm_dist={norm_dist}"
         )
     return results
