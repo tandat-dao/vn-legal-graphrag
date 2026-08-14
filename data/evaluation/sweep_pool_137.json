@@ -1,0 +1,4430 @@
+[
+  {
+    "id": "V001",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5786,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6629,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6892,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7022,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V002",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5638,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6835,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7322,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V003",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7617,
+      "khoan": 0.8,
+      "dieu": 1.0,
+      "khoan_chon": 0.8
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8141,
+      "khoan": 0.6,
+      "dieu": 1.0,
+      "khoan_chon": 0.6
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8141,
+      "khoan": 0.6,
+      "dieu": 1.0,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V004",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6279,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6621,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6669,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6758,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V006",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4427,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4673,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4828,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4864,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V007",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5160,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5315,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5352,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V008",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4780,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4712,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4690,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4451,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V011",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6464,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6755,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7398,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7630,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V012",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7416,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9056,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9056,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V013",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6660,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7826,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7874,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V014",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6688,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7594,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8299,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V015",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7106,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7276,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7574,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7788,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V016",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6846,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6967,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7837,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V017",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6655,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7153,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8862,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V018",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6365,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6862,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7155,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7265,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V019",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4669,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5309,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5309,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V020",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5770,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6548,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6587,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V021",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7392,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7428,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6923,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7981,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V022",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7528,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7807,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7768,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7768,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V023",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4613,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5063,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5171,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5171,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V024",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3837,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4772,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4670,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4856,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V025",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4132,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 3905,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4005,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 3930,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V026",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4171,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4158,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4096,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V027",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4430,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4447,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4253,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4334,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V028",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4462,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4327,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4375,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V029",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4320,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5262,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5412,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V030",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6665,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V031",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8302,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8200,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8200,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8200,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V032",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7005,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7156,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8544,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8708,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V033",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5337,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5832,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5832,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6339,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V035",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5011,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5041,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5274,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V036",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5338,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5346,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5389,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V037",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5372,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5226,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5712,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V038",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6818,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6818,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6818,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V039",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4885,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5491,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5530,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5843,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V040",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5741,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5848,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5752,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5752,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V041",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5177,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4901,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4827,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4841,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V042",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4179,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5410,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5594,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5582,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V043",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8281,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8206,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8376,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V044",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4544,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4526,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4526,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4526,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V045",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5757,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6287,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6345,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V046",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9547,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 9200,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 9542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 9542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V047",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 9157,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8523,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8871,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8871,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V048",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7208,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7307,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7307,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7424,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V049",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V050",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8361,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8082,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8345,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8327,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V051",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8152,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8070,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8248,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8597,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V052",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4654,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V053",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4748,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5641,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6486,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V054",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5557,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4895,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4958,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6046,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V055",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6418,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V056",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5625,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5669,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5669,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V057",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5644,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5644,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5686,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V058",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6201,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6328,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6255,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6255,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V061",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5143,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5618,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5830,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5240,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V062",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4414,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4632,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4493,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V066",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3956,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4648,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4842,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4842,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V067",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4167,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4082,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4199,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4406,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V068",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5239,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5312,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5480,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V069",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8364,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8856,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8856,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8856,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V070",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7452,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8007,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8007,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8262,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V071",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3799,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3848,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4219,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4130,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V072",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4242,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4688,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5284,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5498,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V073",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6972,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V074",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5052,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5446,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5374,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5453,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V075",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4774,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5384,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5425,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5425,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V076",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7418,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7810,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7605,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7484,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V077",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6115,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6196,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6196,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6196,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V078",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6708,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6423,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6505,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6642,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V079",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4535,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4353,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4863,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4907,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V080",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3817,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4663,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4628,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4867,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V081",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4368,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4903,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4982,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5356,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V082",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4731,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4520,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4366,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4236,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V083",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7807,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7460,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8124,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8124,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V084",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5014,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5276,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5955,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5955,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V085",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5346,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5441,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5724,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V086",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3496,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3916,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 3773,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V087",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4676,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4751,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5195,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V088",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5342,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5596,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5441,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V089",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6104,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6516,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6516,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V090",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8943,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8345,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8345,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 8345,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V091",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4422,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4421,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4685,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4608,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V092",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5254,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5343,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5343,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5337,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V093",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4315,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5141,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5235,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5791,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V094",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5394,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5260,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5420,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V095",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5777,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5989,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V096",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6761,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6717,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 6717,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V097",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6048,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6048,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6151,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6151,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V098",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4330,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5219,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5271,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5622,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V099",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7176,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7530,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7738,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7983,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V100",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6420,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6591,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7288,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7448,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V101",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6639,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6891,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6919,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7352,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V102",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4326,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4536,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4664,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4796,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V103",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8396,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V104",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5507,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5597,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5147,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5168,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V118",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 9623,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 9595,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 10122,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V119",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7545,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7832,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8784,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 9481,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V120",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4472,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4883,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5049,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5049,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V122",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 6898,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6025,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5895,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6241,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V124",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4655,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4861,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4861,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4861,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V125",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5545,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 6375,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8121,
+      "khoan": 0.0,
+      "dieu": 0.25,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 8094,
+      "khoan": 0.25,
+      "dieu": 0.25,
+      "khoan_chon": 0.25
+    }
+  },
+  {
+    "id": "V126",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4911,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5031,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5267,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5484,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V127",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4832,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 4480,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4256,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4379,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V129",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7245,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7453,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 7725,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8554,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V130",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7950,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 9423,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 9470,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 9580,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V131",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5017,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "pool 100": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5482,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6149,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "pool 400": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 7600,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V132",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4923,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4618,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4895,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5027,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V133",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5693,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6826,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7237,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7040,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V135",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5583,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6377,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6377,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6377,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V136",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4540,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4697,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4697,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4762,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V137",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4164,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4440,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4282,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4316,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V139",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5245,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5847,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5988,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6033,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V140",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6771,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6801,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7418,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 7418,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V141",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 7997,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7922,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8064,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 8338,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V142",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 7836,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7573,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7901,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7901,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V143",
+    "gap_type": "gap4",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4781,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5921,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5910,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 6057,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V144",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4069,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5085,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5184,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5113,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V145",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5125,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5865,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5879,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 5879,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V146",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 3973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4776,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4805,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4805,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V147",
+    "gap_type": "gap1",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 8771,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 100": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8638,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 200": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8638,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "pool 400": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 8638,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V148",
+    "gap_type": "gap2",
+    "mốc (pool 50)": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 6292,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7016,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7376,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 7376,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V149",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5305,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5652,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5987,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5860,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V150",
+    "gap_type": "gap3",
+    "mốc (pool 50)": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4402,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 100": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4605,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 200": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4584,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "pool 400": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4464,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]

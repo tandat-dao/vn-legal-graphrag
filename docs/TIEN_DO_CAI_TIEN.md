@@ -1,12 +1,12 @@
 # Tiến độ cải tiến sau phản biện
 
-**Nhánh:** `cai-tien-sau-phan-bien` · **Cập nhật:** 2026-08-14
+**Nhánh:** `cai-tien-sau-phan-bien` · **Cập nhật:** 2026-08-15 (đêm)
 
-> File này để mở lại phiên làm việc sau khi tắt máy. Đọc §1 trước.
+> Đọc §1 nếu vừa bật máy. Đọc §2 nếu chỉ muốn biết kết quả.
 
 ---
 
-## 1. KHÔI PHỤC MÔI TRƯỜNG SAU KHI BẬT MÁY
+## 1. KHÔI PHỤC MÔI TRƯỜNG
 
 ```bash
 cd ~/Documents/University/2526_Sem2/Thesis/vn-legal-graphrag
@@ -14,193 +14,178 @@ docker compose up -d                    # neo4j 7687 + qdrant 6333 (tự bật l
 docker start graphrag-neo4j-thunghiem   # BẢN SAO 7688 — KHÔNG tự bật lại
 ```
 
-**Quan trọng:** container `graphrag-neo4j-thunghiem` tạo bằng `docker run`, không
-có `restart: unless-stopped` như hai container trong `docker-compose.yml`, nên
-**phải bật tay** sau mỗi lần khởi động máy. Kiểm bằng:
+Container bản sao tạo bằng `docker run` nên không có `restart: unless-stopped`
+— **phải bật tay** sau mỗi lần khởi động máy.
 
-```bash
-docker ps --format "{{.Names}} {{.Status}}"
-```
-
-Mọi lệnh đo đều phải trỏ vào bản sao, KHÔNG đụng CSDL demo:
-
-```bash
-NEO4J_URI=bolt://localhost:7688 <lệnh>
-```
-
-Bản sao nằm ở `data/neo4j-thu-nghiem/` (523MB, đã gitignore). CSDL demo ở
-`data/neo4j/` — **không được ghi vào**.
+Mọi lệnh đo trỏ vào bản sao: `NEO4J_URI=bolt://localhost:7688 <lệnh>`.
+CSDL demo ở `data/neo4j/` **chưa bao giờ bị ghi vào**.
 
 ---
 
-## 2. TRẠNG THÁI 5 VIỆC
+## 2. KẾT QUẢ — ĐỘ BAO PHỦ ĐIỀU KHOẢN ĐÁP ÁN TRONG NGỮ CẢNH
 
-| # | việc | trạng thái |
-|---|---|---|
-| 1 | Dẫn chiếu `REFERS_TO` | **XONG, kết quả dương** (+0,050 một mình) |
-| 2 | Ngân sách ngữ cảnh | **XONG** — hai vòng âm, vòng ba dương nhờ nới ngưỡng token |
-| 3 | Phiên bản kề + điều khoản chuyển tiếp | **XONG phần cơ chế**, chưa đo (GT không có câu nào cần) |
-| 4 | Ablation summary do máy sinh | **XONG — không tụt, 0 câu thua** |
-| 5 | Hạn ngạch theo khía cạnh | **XONG phần code**, đang đo |
-| + | Cross-encoder xếp lại trong văn bản | **Đang đo đủ 137 câu** (mẫu 40 cho +0,029) |
+Đo trên 121–123 câu có đáp án, **tất định, không gọi bộ sinh**. Số đo trên đơn
+vị THỰC SỰ lọt vào ngữ cảnh sau khi cắt theo ngưỡng token.
 
-### Việc 4 — kết quả
+### Chuỗi cộng dồn (cùng harness)
 
-Sinh 32 summary bằng Gemini (chỉ cho máy thứ tự động lấy được, KHÔNG cho xem
-summary người viết) → so ghép cặp trên 121 câu:
-
-| cấu hình | người | máy | Δ | thắng/thua/hoà |
+| bước | cấu hình | cấp Khoản | Δ tích luỹ | thắng/thua |
 |---|---|---|---|---|
-| off | 0,747 | 0,751 | +0,004 | 1 / **0** / 120 |
-| khoan | 0,784 | 0,788 | +0,004 | 1 / **0** / 120 |
-| tiêu hết ngân sách | 0,743 | 0,747 | +0,004 | 1 / **0** / 120 |
-| khoan+tiêu hết | 0,751 | 0,771 | +0,021 | 3 / **0** / 118 |
+| 0 | hiện tại | **0,747** | — | — |
+| 1 | + bao đóng dẫn chiếu `khoan` | 0,797 | +0,050 | 11 / **0** |
+| 2 | + ngưỡng token 12000 + tiêu ngân sách trống | 0,814 | +0,067 | 17 / **0** |
+| 3 | + cross-encoder xếp lại trong văn bản | **0,849** | **+0,102** | 8 / **0** |
 
-**Không câu nào tệ đi**, 120/121 câu y hệt. Phát biểu đúng là **"không tụt"**,
-không phải "tốt hơn" — chênh +0,004 chỉ do 1 câu đổi.
+**Mỗi bước 0 câu thua.** Cả bốn gap đều dương.
 
-Kết luận cho hội đồng: tín hiệu định tuyến mà summary người viết cung cấp là thứ
-máy tái tạo được → không phải cái nạng giấu mặt, và khâu đó tự động hoá được.
-Đáp CẢ HAI góp ý của cô (tính đúng đắn của phần người làm + tự động hoá).
+Guard phạm vi đo riêng (harness mới, ghép cặp 123 câu): **+0,016 đến +0,026**,
+4 câu từ 0 lên trọn vẹn, 2 câu thua một phần.
 
-**Phạm vi:** chỉ nói về định tuyến ở Giai đoạn 1 — cũng là công dụng duy nhất
-của trường `summary` trong hệ.
-
-Quan sát ngược trực giác: máy nêu số Điều đích danh **nhiều gấp 16 lần** người
-(158 so với 9 trên toàn corpus). Khác biệt thật là người đưa **nội dung**
-(QĐ 69/2024: "tối đa 160 m² tại các quận"), máy đưa **con trỏ** ("đối tượng nêu
-tại Điều 2"). Số liệu cho thấy khác biệt đó không đổi kết quả định tuyến.
-
-Chạy lại: `--summary-type summary_auto` (sinh lại bằng
-`python -m src.evaluation.summary_ablation --sinh`).
-
----
-
-## 3. CẤU HÌNH TỐT NHẤT HIỆN TẠI
+### Cấu hình tốt nhất
 
 ```
-refers_mode = "khoan"          # bao đóng dẫn chiếu, chỉ dẫn chiếu đích danh khoản
-budget_mode = "fill"           # tiêu phần ngân sách top_k còn trống ở bước cuối
+refers_mode = "khoan"          # chỉ dẫn chiếu đích danh khoản
+budget_mode = "fill"           # tiêu ngân sách top_k còn trống ở bước cuối
+rerank_mode = "trong-norm"     # cross-encoder xếp lại TRONG văn bản đã chọn
 CONTEXT_MAX_TOKENS = 12000     # thay 6000
-rerank_mode = "trong-norm"     # cross-encoder xếp lại trong văn bản (CHƯA đủ bằng chứng)
+guard phạm vi = bật            # câu không nêu địa phương → cho phép mọi tỉnh
 ```
 
-Độ bao phủ điều khoản đáp án trong ngữ cảnh, **121 câu**, đo trên đơn vị THỰC SỰ
-sống sót sau khi cắt token:
-
-| cấu hình | cấp Khoản | Δ | thắng/thua |
-|---|---|---|---|
-| hiện tại (6000) | 0,747 | — | — |
-| chỉ nới token 12000 | 0,761 | +0,014 | 3 / 0 |
-| khoan + 12000 | 0,797 | +0,050 | 11 / 0 |
-| **khoan + fill + 12000** | **0,814** | **+0,067** | **17 / 0** |
-
-Theo gap (cấu hình tốt nhất): gap1 +0,073 · gap2 +0,066 · gap3 +0,122 · gap4 +0,011.
-**Cả bốn gap đều dương, không câu nào thua.**
+**Mặc định tất cả vẫn TẮT** — hành vi demo và mọi số cũ không đổi.
 
 ---
 
-## 4. NHỮNG GÌ ĐÃ CHỨNG MINH ĐƯỢC
+## 3. NHỮNG GÌ ĐÃ CHỨNG MINH
 
-**Ngưỡng token đã bão hoà.** 12000 / 18000 / 30000 cho kết quả y hệt (0,814) và
-dùng token y hệt (5674). 12000 KHÔNG phải giá trị dò ra — nó chỉ là "đủ lớn để
-không cắt gì". Phía truy hồi đã chạm trần với các cơ chế hiện có.
+**Nút thắt thật là ngưỡng token, không phải trần phân bổ.** Chuỗi chẩn đoán ba
+vòng: `top_k=25` chưa bao giờ chạm (số chết) → `_MAX_PER_NORM=3` cắn 99% câu
+nhưng nới ra vô ích → `_MAX_PER_TIER` cắn 36/38 câu nhưng nới ra thì **tệ đi**
+→ thủ phạm là `CONTEXT_MAX_TOKENS=6000`, cắt theo `rrf_score` tăng dần tức cắt
+ĐÚNG phần mọi cơ chế vừa nạp vào.
 
-**Nút thắt thật là `CONTEXT_MAX_TOKENS`, không phải trần phân bổ.** Chuỗi chẩn
-đoán qua ba vòng:
-- `top_k = 25` — 0/137 câu chạm tới. Số chết.
-- `_MAX_PER_NORM = 3` — 99% câu đụng, nhưng nới ra không giúp.
-- `_MAX_PER_TIER` — 36/38 câu đụng; nới ra thì **tệ đi** (−0,005, có câu thua),
-  vì một tầng lấn và mất đa dạng đa tầng.
-- `CONTEXT_MAX_TOKENS = 6000` — cắt theo `rrf_score` tăng dần, tức cắt ĐÚNG phần
-  mà mọi cơ chế nạp thêm vừa đưa vào. Đây mới là ràng buộc điều khiển.
+**Ngưỡng token đã bão hoà.** 12000 / 18000 / 30000 cho kết quả y hệt và dùng
+token y hệt (5674). 12000 **không phải giá trị dò ra**, nó chỉ là "đủ lớn để
+không cắt gì" → câu hỏi "sao chọn 12000" tự tan.
 
-**Phần còn thiếu nằm ở đâu** (54/216 trích dẫn đáp án vẫn không lấy được):
-- 13% — văn bản không vào được Giai đoạn 2 (vấn đề định tuyến)
-- **87% — văn bản ĐÚNG đã có, nhưng điều khoản đáp án thua các điều khoản khác
-  của chính văn bản đó** → đây là lever lớn nhất còn lại
+**Đảo ngược được D-20.** Ở đó cross-encoder cắm vào khâu truy hồi nên kéo đoạn
+đúng từ vựng nhưng SAI văn bản lên, làm độ bao phủ văn bản tụt 0,071 và bị loại.
+Cùng mô hình đó đặt **bên trong văn bản đã chọn** thì +0,034 và 0 câu thua.
+*Kết quả âm cũ cho biết cơ chế không được đặt ở đâu; phép đo mới cho biết nó
+phải đặt ở đâu.* Đây là lập luận mạnh nhất của cả đợt.
 
----
+**Ba cơ chế cộng hưởng, không độc lập.** Cross-encoder dùng một mình có 6 câu
+thua; bỏ luôn dẫn chiếu thì 12 câu thua và Δ âm. Phải trình bày như một khối.
 
-## 5. VIỆC ĐANG DỞ — LÀM TIẾP TỪ ĐÂY
+**Việc 4 — summary máy sinh không làm tụt gì.** So ghép cặp 121 câu, **0 câu
+thua** ở cả 4 cấu hình, 120/121 câu y hệt. Đáp cả hai góp ý của cô: tín hiệu
+định tuyến của summary người viết là thứ máy tái tạo được → không phải nạng
+giấu mặt, và khâu đó tự động hoá được.
 
-### 5.1 Chạy đủ 121 câu cho cross-encoder xếp lại trong văn bản
-
-Mẫu 40 câu (34 có đáp án) cho **+0,029, 1 thắng 0 thua**, gap1 +0,100. Dương
-nhưng **chỉ 1/34 câu đổi** — quá mỏng để kết luận. Bài học từ chính buổi này:
-mẫu nhỏ đã hai lần dẫn tới kết luận sai.
-
-```bash
-RERANKER_DEVICE=cpu NEO4J_URI=bolt://localhost:7688 \
-/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 \
-  -m src.evaluation.refers_eval --test-set data/evaluation/test_set_v2.json \
-  --bo rerank --out data/evaluation/rerank_full137.json
-```
-
-Chạy CPU nên chậm — mẫu 40 mất ~45 phút, đủ 137 câu dự kiến **2,5–3 giờ**.
-Nên chạy nền qua đêm.
-
-### 5.2 Bắt buộc: chạy qua BỘ SINH
-
-Thang độ bao phủ **tăng đơn điệu theo lượng ngữ cảnh** nên không dùng làm tiêu
-chí dừng được, và nó **không đo độ chính xác**. Mà nút thắt F1 của hệ là **trích
-dẫn thừa** (D-18). Nhồi ngữ cảnh có thể làm precision tụt → F1 tụt dù bao phủ tăng.
-
-Chưa chạy lần nào. Cần chạy `run_evaluation` với cấu hình tốt nhất trên một tập
-con, so với mốc. Lưu ý Gemini **không tất định** (D-24) nên tập nhỏ sẽ nhiễu.
-
-### 5.3 Việc 4 — ablation summary do máy sinh
-
-Chưa động tới. Sinh lại 35 summary bằng máy → collection Qdrant RIÊNG (đừng đụng
-`legal_texts`) → chạy lại → xem lệch bao nhiêu.
+**Hai lỗi thật đã tìm ra và sửa:**
+- Bộ lập kế hoạch lấy **năm sự việc xảy ra** làm mốc lọc hiệu lực. V031 "lấn
+  đất từ 2010 … NAY quy hoạch đã điều chỉnh" → chốt mốc 2010 → loại sạch Luật
+  ĐĐ 2024. Hai câu V031/V032 trước đây có `norm_ids` **rỗng hoàn toàn**.
+- Câu không nêu địa phương bị chốt `toan-quoc` → loại sạch văn bản cấp tỉnh,
+  mà nhiều câu (lệ phí, hạn mức) có đáp án nằm đúng ở cấp tỉnh.
 
 ---
 
-## 6. BẪY ĐO LƯỜNG ĐÃ GẶP — ĐỪNG LẶP LẠI
+## 4. KẾT QUẢ ÂM — 8 cái, đều có chẩn đoán
 
-**Đo sai chỗ.** Harness ban đầu đo đơn vị `hybrid_search` CHỌN, không phải đơn vị
-SỐNG SÓT sau khi `assemble_context` cắt theo token. Sai số rất lớn: `+0,053` thật
-ra là `+0,004`, và biến thể tưởng thắng hoá ra có 7 câu thua. Đã sửa bằng
-`assemble_context_chi_tiet()` trả kèm danh sách đơn vị giữ lại.
+| # | hướng | vì sao âm |
+|---|---|---|
+| 1 | Chia ngân sách theo số văn bản Giai đoạn 2 | Bề rộng Giai đoạn 2 gần như HẰNG SỐ (min 9, trung vị 10) → công thức không bao giờ kích hoạt |
+| 2 | Nới trần tầng | −0,005, có câu thua. Trần tầng đang làm đúng việc; nới ra thì một tầng lấn, mất đa dạng đa tầng |
+| 3 | Hạn ngạch theo khía cạnh | Khía cạnh ĐÃ được phủ sẵn ở 22/23 câu — cơ chế không có gì để sửa |
+| 4 | Nới `top_n` Giai đoạn 1 (5→10) | 11/220 thiếu ở CẢ HAI mức, y hệt. Giai đoạn 2 vốn đã mở rộng theo đồ thị |
+| 5 | Dẫn chiếu cấp Điều (nở ra các khoản) | 2975 cạnh không đóng góp gì mà còn tốn ngữ cảnh; toàn bộ giá trị ở 496 cạnh đích danh khoản |
+| 6 | Bậc vào REFERS_TO làm tín hiệu "điều khoản nền" | Phân bố quá tập trung (Điều 137 chiếm 13–17, TB 2,4); tín hiệu không phụ thuộc câu hỏi → thiên lệch tĩnh, D-10 cảnh báo |
+| 7 | Mở rộng truy vấn khẩu ngữ → thuật ngữ | Lệch từ vựng gần như không có: câu hỏi GT đã dùng đúng từ của kho |
+| 8 | Tập bổ sung điều khoản chuyển tiếp | Mốc gốc đã 1,000 — tập không phân biệt được gì (lỗi soạn đề: viết câu hỏi TỪ nguyên văn điều khoản) |
 
-**Mẫu nhỏ dẫn tới kết luận sai — hai lần.**
-- 26 câu: nhánh đối chứng được +0,000 → tôi kết luận toàn bộ cải thiện nhờ dẫn
-  chiếu. Chạy đủ 121 câu thì đối chứng được +0,014, tức ~40% mức tăng chỉ là do
-  thêm ngữ cảnh.
-- 38 câu: "tiêu hết ngân sách" được +0,035 → hoá ra là ảo do đo sai chỗ.
-
-**Luôn phải có nhánh đối chứng.** Không có nó thì không tách được "nhờ cơ chế" với
-"nhờ được thêm ngữ cảnh".
-
-**Không dò tham số trên GT đã đóng băng.** `docs/GT_FREEZE.md`, tag `gt-v2-freeze`.
-Dò trên đó rồi báo cáo trên đó là hỏng con số chính của khoá luận.
+Cộng với D-12 / D-19 / D-20 cũ → dự án có **11 kết quả âm có chẩn đoán**. Đây
+là tài sản khi bảo vệ, không phải điểm yếu.
 
 ---
 
-## 7. FILE KẾT QUẢ ĐÃ LƯU
+## 5. CÒN LẠI — VIỆC QUAN TRỌNG NHẤT CHƯA LÀM
+
+**CHƯA CHẠY QUA BỘ SINH LẦN NÀO.** Toàn bộ số trên là **độ bao phủ** — trần của
+những gì bộ sinh *có thể* trích dẫn, không phải thứ nó *thực sự* trích. Thang
+này **không đo độ chính xác**, mà nút thắt F1 của hệ là **trích dẫn thừa**
+(D-18). Nhồi thêm ngữ cảnh hoàn toàn có thể làm precision tụt và F1 đi xuống dù
+bao phủ đi lên.
+
+Đây là việc duy nhất còn lại giữa "+0,102 độ bao phủ" và một con số F1 trình
+bày được. Lưu ý Gemini **không tất định** (D-24) nên tập nhỏ sẽ nhiễu.
+
+**Việc 3 (phát hiện thay đổi + điều khoản chuyển tiếp)** không đo bằng thang
+này được — nó là đóng góp về **hành vi**, không phải truy hồi. Trình bày bằng
+câu demo + bộ số đếm: cảnh báo nổ 12/125 câu (9,6%), im ở 113 câu; 2 cặp phát
+hiện đều là cặp thay thế thật; kho có 53 điều khoản chuyển tiếp mà hệ chưa
+trích dẫn cái nào trong 137 câu.
+
+---
+
+## 6. LƯU Ý PHƯƠNG PHÁP — ĐỌC KỸ
+
+Chủ nhiệm đề tài đã quyết định dùng **137 câu GT làm TẬP PHÁT TRIỂN** và soạn
+GT mới làm tập kiểm thử. Hệ quả bắt buộc:
+
+- **Số trong `V3_RESULTS.md` KHÔNG còn dùng để báo cáo cho hệ đã tinh chỉnh.**
+  Phải đo lại trên tập mới.
+- **Tập GT mới phải soạn mà KHÔNG nhìn vào chỗ hệ đã tinh chỉnh thắng/thua**,
+  nếu không thì lặp lại đúng vấn đề.
+- Trong báo cáo phải nói rõ: 137 câu là tập phát triển, tập mới là tập kiểm thử.
+- Khi soạn tập mới, **cố ý viết khẩu ngữ hơn** — tập hiện tại do nhóm soạn nên
+  thừa hưởng từ vựng chính quy của nhóm, không phản ánh người dùng thật.
+
+### Bẫy đo lường đã gặp — đừng lặp lại
+
+**Đo sai chỗ.** Harness ban đầu đo đơn vị `hybrid_search` CHỌN, không phải đơn
+vị SỐNG SÓT sau khi cắt token. Sai số rất lớn: `+0,053` thật ra là `+0,004`, và
+biến thể tưởng thắng hoá ra có 7 câu thua.
+
+**Harness lệch pipeline.** Harness gọi thẳng `extract_subgraph` nên bỏ qua lớp
+thời gian → lọc chặt hơn hệ thật. Đã tách `ap_dung_lop_thoi_gian()` dùng chung.
+
+**Mẫu nhỏ dẫn tới kết luận sai — hai lần.** 26 câu: đối chứng +0,000 → kết luận
+sai rằng toàn bộ cải thiện nhờ dẫn chiếu; đủ 121 câu thì đối chứng +0,014.
+38 câu: "tiêu hết ngân sách" +0,035 → hoá ra ảo do đo sai chỗ.
+
+**Luôn phải có nhánh đối chứng.** Không có nó thì không tách được "nhờ cơ chế"
+với "nhờ được thêm ngữ cảnh".
+
+---
+
+## 7. FILE KẾT QUẢ
 
 | file | nội dung |
 |---|---|
-| `data/evaluation/refers_full137.json` | việc 1, 4 chế độ dẫn chiếu + đối chứng |
-| `data/evaluation/budget_full137.json` | việc 2 vòng 1 (kết quả âm) |
-| `data/evaluation/kethop_full137.json` | vòng 3, đo SAI chỗ (giữ để đối chiếu) |
-| `data/evaluation/kethop_thuc137.json` | vòng 3, đo ĐÚNG trên đơn vị sống sót |
-| `data/evaluation/token_full137.json` | vòng 4, nới ngưỡng token |
-| `data/evaluation/tokenbaohoa_full137.json` | vòng 5, chứng minh bão hoà |
-| `data/evaluation/rerank_sample40.json` | vòng 6, cross-encoder (mẫu, chưa đủ) |
+| `refers_full137.json` | việc 1, 4 chế độ dẫn chiếu + đối chứng |
+| `budget_full137.json` | việc 2 vòng 1 (âm) |
+| `kethop_thuc137.json` | vòng 3, đo đúng trên đơn vị sống sót (harness cũ) |
+| `token_full137.json` | vòng 4, nới ngưỡng token |
+| `tokenbaohoa_full137.json` | vòng 5, chứng minh bão hoà |
+| `rerank_full137.json` | cross-encoder đủ 121 câu |
+| `aspect_full137.json` | việc 5 (âm) |
+| `summaryauto_full137.json` | việc 4 |
+| `kethop_moc_moi.json` | mốc sạch harness mới |
+| `guardjuris_full137.json` | guard phạm vi |
+| `chuyentiep_ket_qua.json` | tập bổ sung chuyển tiếp |
+| `test_set_chuyen_tiep.json` | 12 câu bổ sung — **5 câu lĩnh vực [B] cần [B] duyệt** |
 
-Bộ biến thể chạy lại được qua `--bo`: `refers` `budget` `budget2` `token`
-`token-bao-hoa` `rerank` `ket-hop` (xem `src/evaluation/refers_eval.py`).
+Chạy lại: `--bo {refers,budget,budget2,token,token-bao-hoa,rerank,ket-hop,aspect,chuyen-tiep,sweep-*,stack-cuoi}`
+và cờ `--summary-type`, `--guard-juris`.
 
 ---
 
-## 8. CHƯA LÀM — QUYẾT ĐỊNH CÒN TREO
+## 8. QUYẾT ĐỊNH CÒN TREO
 
-- **Chưa đổi mặc định.** Cả ba cơ chế và ngưỡng 12000 đều **mặc định TẮT**; hành
-  vi demo và mọi số liệu cũ KHÔNG đổi. Chỉ bật khi đã chạy qua bộ sinh và chắc
+- **Bật cấu hình mới làm mặc định?** Chưa nên — phải chạy bộ sinh trước để chắc
   precision không tụt.
-- **Việc 2 giữ hay gỡ?** Chế độ `graph` đã chứng minh không kích hoạt (+0,000).
-  Theo tiền lệ D-20 thì nên gỡ khỏi đường chạy chính, nhưng đang giữ để tái lập
-  kết quả âm. Cần chốt.
-- **Suy đoán bản kế nhiệm theo thời gian** (việc 3) là heuristic — đồ thị không có
-  cạnh "thay thế" tường minh. Cách chắc hơn là khai báo trong frontmatter.
+- **Gỡ hay giữ ba cơ chế âm** (`budget_mode="graph"`, hạn ngạch khía cạnh, dẫn
+  chiếu cấp Điều)? Tiền lệ D-20 nói nên gỡ khỏi đường chạy chính.
+- **Guard phạm vi**: 4 thắng trọn vẹn đổi 2 thua một phần — bật hay không.
+- **Suy đoán bản kế nhiệm** (việc 3) là heuristic theo thời gian; đồ thị chưa
+  có cạnh "thay thế" tường minh. Cách chắc hơn là khai báo trong frontmatter.
