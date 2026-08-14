@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
                       response_mode: str = "auto",
                       verify: bool = False, verify_tier: int = 1,
-                      ablation=None) -> dict:
+                      ablation=None, refers_mode: str | None = None) -> dict:
     """Chạy GraphRAG, inject ground-truth jurisdiction từ test_set.
 
     Eval mode: `force_jurisdiction` bơm jurisdiction từ test_set khi câu hỏi không
@@ -72,6 +72,7 @@ def _run_one_graphrag(item: dict, clients, llm_cache_dir: Path | None = None,
         verify=verify,
         verify_tier=verify_tier,
         ablation=ablation or FULL,
+        refers_mode=refers_mode,
     )
 
     return {
@@ -177,6 +178,7 @@ def run_system_on_test_set(
     verify: bool = False,
     verify_tier: int = 1,
     ablation=None,
+    refers_mode: str | None = None,
 ) -> list[dict]:
     """Chạy 1 hệ thống trên test set, tính metric per-question.
 
@@ -222,7 +224,7 @@ def run_system_on_test_set(
             if system == "graphrag":
                 # Verifier + ablation chỉ áp dụng cho GraphRAG (component hệ thống ta).
                 runner_kwargs.update(verify=verify, verify_tier=verify_tier,
-                                     ablation=ablation)
+                                     ablation=ablation, refers_mode=refers_mode)
             elif system == "oracle":
                 runner_kwargs.update(text_index=oracle_text_index)
             sys_out = runner(item, clients, **runner_kwargs)
@@ -379,6 +381,14 @@ def main() -> int:
              "no-implements | no-amends | no-temporal | no-traversal | dense-only | "
              "graphrag-basic (giữ 3 giai đoạn, tắt đồng thời 3 bộ lọc — bậc E2).",
     )
+    parser.add_argument(
+        "--refers-mode", default=None,
+        choices=["khoan", "all", "rrf"],
+        help="Pass 3 bao đóng dẫn chiếu [:REFERS_TO] (chỉ GraphRAG). "
+             "khoan = chỉ dẫn chiếu đích danh khoản | all = cả dẫn chiếu cấp Điều | "
+             "rrf = ĐỐI CHỨNG, thêm cùng số đơn vị nhưng chọn theo RRF. "
+             "Mặc định tắt (hành vi cũ).",
+    )
     args = parser.parse_args()
 
     if not args.test_set.exists():
@@ -517,6 +527,7 @@ def main() -> int:
                 verify=args.verify,
                 verify_tier=args.verify_tier,
                 ablation=ablation_cfg,
+                refers_mode=args.refers_mode,
             )
             all_results[system] = results
             elapsed = time.perf_counter() - t0
@@ -524,6 +535,8 @@ def main() -> int:
 
             # Lưu per-question (gắn tên ablation vào filename để không ghi đè run full)
             abl_tag = "" if ablation_cfg.name == "full" else f"_{ablation_cfg.name}"
+            if args.refers_mode and system == "graphrag":
+                abl_tag += f"_refers-{args.refers_mode}"
             out_path = args.out_dir / f"results_{system}{abl_tag}_{timestamp}.json"
             out_path.write_text(
                 json.dumps(

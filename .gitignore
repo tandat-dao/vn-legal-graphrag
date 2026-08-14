@@ -15,6 +15,7 @@ build/
 # Docker volumes (data persisted locally, not in git)
 data/neo4j/
 data/qdrant/
+data/neo4j-thu-nghiem/
 
 # Source documents (PDF/DOCX) — lưu cục bộ, không commit lên git
 # manifest.md vẫn được track để có audit trail

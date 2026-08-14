@@ -144,6 +144,7 @@ def run_pipeline(
     verify_tier: int = 1,
     llm_mode: str = "claude",
     ablation: AblationConfig = FULL,
+    refers_mode: str | None = None,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -248,6 +249,7 @@ def run_pipeline(
             graph_component_ids=graph_comp_ids,
             neo4j_driver=neo4j_driver,
             procedure_id=query_plan.get("procedure"),
+            refers_mode=refers_mode,
         )
         logger.info(f"run_pipeline: {len(scored_units)} scored units")
 

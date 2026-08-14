@@ -357,7 +357,54 @@ def _keyword_score(query_tokens: set[str], payload: dict) -> float:
 # RRF
 # ---------------------------------------------------------------------------
 
-_RARITY_ALPHA = 1.5            # hệ số trọng số cho concept rarity boost
+_RARITY_ALPHA = 1.5
+
+# Pass 3 — bao đóng dẫn chiếu ([:REFERS_TO], hướng 1).
+# Ngân sách RIÊNG, cộng thêm ngoài top_k: đo trên 137 câu cho thấy top_k=25
+# KHÔNG BAO GIỜ đầy (cao nhất 23), nên nếu Pass 3 dùng chung ngân sách thì nó
+# gần như không có chỗ, và phép đo sẽ ra âm vì hết slot chứ không phải vì ý
+# tưởng sai. Tách ngân sách để đo đúng thứ cần đo.
+_REFERS_BUDGET = 5
+# Các chế độ: "khoan" chỉ nhận dẫn chiếu đích danh khoản (chính xác cao);
+# "all" nhận cả dẫn chiếu cấp Điều (đã nở ra các khoản con — nhiều nhưng loãng);
+# "rrf" là ĐỐI CHỨNG: cũng thêm _REFERS_BUDGET đơn vị nhưng chọn theo RRF, để
+# tách bạch "nhờ dẫn chiếu" với "nhờ được thêm ngữ cảnh".
+_REFERS_MODES = ("khoan", "all", "rrf")
+
+_CYPHER_REFERS = """
+MATCH (a:Component)-[r:REFERS_TO]->(b:Component)
+WHERE a.id IN $ids AND ($muc IS NULL OR r.muc = $muc)
+RETURN a.id AS nguon, b.id AS dich, r.muc AS muc
+"""
+
+
+def _to_scored_unit(rrf_score_val: float, point) -> "ScoredTextUnit":
+    """Dựng ScoredTextUnit từ 1 Qdrant point (dùng chung cho _try_add và Pass 3)."""
+    payload = point.payload
+    return ScoredTextUnit(
+        text_unit_id=_qdrant_id_to_hex(point.id),
+        rrf_score=round(rrf_score_val, 6),
+        norm_id=payload.get("norm_id", ""),
+        component_id=payload.get("component_id", ""),
+        jurisdiction=payload.get("jurisdiction", ""),
+        tier=payload.get("tier"),
+        theme=payload.get("theme", ""),
+        valid_from=payload.get("valid_from"),
+        valid_to=payload.get("valid_to"),
+    )
+
+
+def _fetch_refers_to(
+    comp_ids: list[str], muc: str | None, neo4j_driver
+) -> dict[str, list[str]]:
+    """{component_id nguồn: [component_id đích, ...]} theo quan hệ REFERS_TO."""
+    if not comp_ids or neo4j_driver is None:
+        return {}
+    out: dict[str, list[str]] = {}
+    with neo4j_driver.session() as s:
+        for row in s.run(_CYPHER_REFERS, ids=list(set(comp_ids)), muc=muc):
+            out.setdefault(row["nguon"], []).append(row["dich"])
+    return out            # hệ số trọng số cho concept rarity boost
                               # multiplier = 1 + α × rarity_score
                               # α=1.5 đủ mạnh để pull Điều chuyên sâu (ít concept hiếm
                               # trong norm) lên trên Điều tổng quát (concept phổ biến)
@@ -551,6 +598,7 @@ def hybrid_search(
     graph_component_ids: list[str] = None,
     neo4j_driver=None,
     procedure_id: str | None = None,
+    refers_mode: str | None = None,
 ) -> list[ScoredTextUnit]:
     """Hybrid search: Dense (BGE-M3) + Keyword (slug scroll) → RRF fusion → Top-k.
 
@@ -893,6 +941,70 @@ def hybrid_search(
         if point.id in used_point_ids:
             continue
         _try_add(rrf_score_val, point)
+
+    # Pass 3 (BAO ĐÓNG DẪN CHIẾU) — mặc định TẮT, hành vi cũ không đổi.
+    #
+    # Điều khoản pháp luật thường đặt điều kiện ở nơi khác: "... theo quy định
+    # tại khoản 2 Điều 143 của Luật này". Các pass trên chỉ tìm được Điều 143
+    # nếu ngữ nghĩa hoặc từ khoá tình cờ trúng. Pass này đi theo cạnh
+    # [:REFERS_TO] từ những đơn vị ĐÃ được chọn.
+    #
+    # Giới hạn phạm vi trong norm_ids (kết quả Giai đoạn 2) để KHÔNG phá vỡ
+    # bảo đảm lọc địa phương/thời gian đã áp ở Giai đoạn 2.
+    pass3_count = 0
+    if refers_mode in _REFERS_MODES and len(results) > 0:
+        if refers_mode == "rrf":
+            # ĐỐI CHỨNG: thêm đúng ngần ấy đơn vị nhưng chọn theo RRF, bỏ qua
+            # mọi trần — để biết cải thiện (nếu có) đến từ dẫn chiếu hay chỉ
+            # đơn giản là được thêm ngữ cảnh.
+            for rrf_score_val, point in scored:
+                if pass3_count >= _REFERS_BUDGET:
+                    break
+                if point.id in used_point_ids:
+                    continue
+                used_point_ids.add(point.id)
+                results.append(_to_scored_unit(rrf_score_val, point))
+                pass3_count += 1
+        elif neo4j_driver is not None:
+            muc = "khoan" if refers_mode == "khoan" else None
+            src_ids = [u["component_id"] for u in results if u["component_id"]]
+            ban_do = _fetch_refers_to(src_ids, muc, neo4j_driver)
+            if ban_do:
+                # Duyệt theo thứ hạng nguồn: dẫn chiếu từ đơn vị xếp cao đáng
+                # tin hơn dẫn chiếu từ đơn vị xếp thấp.
+                da_co = {u["component_id"] for u in results}
+                muon: list[str] = []
+                for u in sorted(results, key=lambda x: -x["rrf_score"]):
+                    for t in ban_do.get(u["component_id"], []):
+                        if t not in da_co and t not in muon:
+                            muon.append(t)
+                if muon:
+                    pts, _ = qdrant_client.scroll(
+                        "legal_texts",
+                        scroll_filter=Filter(must=[
+                            FieldCondition(key="content_type",
+                                           match=MatchValue(value="text_unit")),
+                            FieldCondition(key="norm_id", match=MatchAny(any=norm_ids)),
+                            FieldCondition(key="component_id",
+                                           match=MatchAny(any=muon[:200])),
+                        ]),
+                        limit=300, with_payload=True, with_vectors=False,
+                    )
+                    thu_tu = {c: i for i, c in enumerate(muon)}
+                    pts.sort(key=lambda p: thu_tu.get(
+                        p.payload.get("component_id", ""), 10**6))
+                    for point in pts:
+                        if pass3_count >= _REFERS_BUDGET:
+                            break
+                        if point.id in used_point_ids:
+                            continue
+                        used_point_ids.add(point.id)
+                        results.append(_to_scored_unit(_rrf_for(point), point))
+                        pass3_count += 1
+        logger.info(
+            f"hybrid_search Pass 3 (refers_mode={refers_mode}): "
+            f"thêm {pass3_count} đơn vị (ngân sách {_REFERS_BUDGET})"
+        )
 
     # Sắp xếp output cuối cùng theo rrf_score giảm dần — khớp docstring + đúng thứ tự
     # mà assemble_context() dùng. Các pass -1/0/1/2 ở trên chỉ quyết định CHỌN point
