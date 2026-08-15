@@ -146,16 +146,49 @@ là tài sản khi bảo vệ, không phải điểm yếu.
 
 ---
 
-## 5. CÒN LẠI — VIỆC QUAN TRỌNG NHẤT CHƯA LÀM
+## 5. ĐÃ CHẠY QUA BỘ SINH — F1 KHÔNG CẢI THIỆN
 
-**CHƯA CHẠY QUA BỘ SINH LẦN NÀO.** Toàn bộ số trên là **độ bao phủ** — trần của
-những gì bộ sinh *có thể* trích dẫn, không phải thứ nó *thực sự* trích. Thang
-này **không đo độ chính xác**, mà nút thắt F1 của hệ là **trích dẫn thừa**
-(D-18). Nhồi thêm ngữ cảnh hoàn toàn có thể làm precision tụt và F1 đi xuống dù
-bao phủ đi lên.
+**Đây là kết quả quan trọng nhất, và nó âm.** 40 câu ngẫu nhiên (seed 42),
+Gemini, ghép cặp:
 
-Đây là việc duy nhất còn lại giữa "+0,102 độ bao phủ" và một con số F1 trình
-bày được. Lưu ý Gemini **không tất định** (D-24) nên tập nhỏ sẽ nhiễu.
+| cấu hình | F1 | precision | recall | số trích dẫn |
+|---|---|---|---|---|
+| mốc | 0,633 | 0,615 | 0,728 | 2,17 |
+| mốc + verifier | 0,633 | 0,615 | 0,728 | 2,17 |
+| cải tiến | 0,627 | 0,600 | **0,773** | 2,83 |
+| **cải tiến + verifier** | **0,635** | 0,607 | **0,773** | 2,75 |
+
+Cải tiến + verifier so với mốc: **+0,002, thắng 9 thua 9 → nhiễu.**
+
+### Đọc đúng kết quả này
+
+**Truy hồi tốt lên thật.** Recall +0,046 khi chạy qua bộ sinh, đúng như độ bao
+phủ (+0,102) dự báo. Độ bao phủ văn bản +0,013.
+
+**Nhưng F1 không nhúc nhích**, vì bộ sinh nhận nhiều ngữ cảnh hơn thì **trích
+dẫn rộng tay hơn** — 2,17 → 2,83 trích dẫn/câu (+30%). Precision tụt vừa đủ để
+triệt tiêu recall tăng.
+
+**Verifier không cứu được.** Trên mốc nó không đổi gì (mọi trích dẫn đã có căn
+cứ); trên bản cải tiến chỉ vớt lại 0,007 precision. Lý do: các trích dẫn thừa
+**đều có trong ngữ cảnh** — chúng đúng căn cứ nhưng không nằm trong đáp án
+chuẩn. Verifier tầng 1 kiểm tính *có căn cứ* nên không bắt được loại này. Đúng
+kết luận D-19: cần **bộ chấm mức liên quan / cần thiết**, không phải bộ chấm
+mức hỗ trợ. Giờ đã có số chứng minh đó là nút thắt thật.
+
+### Điều này KHÔNG phủ nhận cải tiến truy hồi
+
+Nó **định vị chính xác** nút thắt còn lại: nằm ở khâu **sinh**, không phải khâu
+truy hồi. Luận văn đã nói trích dẫn thừa là nguyên nhân trội của precision thấp
+(D-18); đợt này chứng minh thêm rằng **cải tiến truy hồi một mình không vượt
+qua được nó**.
+
+### Việc tiếp theo rõ ràng
+
+1. **Bộ chấm mức cần thiết** ở khâu sinh (D-19 đã đặt tên, chưa ai làm). Đây là
+   thứ duy nhất có khả năng biến +0,046 recall thành F1 dương.
+2. Hoặc **siết prompt** để bộ sinh trích dè dặt hơn khi ngữ cảnh rộng.
+3. Chạy N=3 để chắc, nhưng độ lớn hiệu ứng ~0 nên khó lật.
 
 **Việc 3 (phát hiện thay đổi + điều khoản chuyển tiếp)** không đo bằng thang
 này được — nó là đóng góp về **hành vi**, không phải truy hồi. Trình bày bằng
