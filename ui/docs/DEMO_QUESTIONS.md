@@ -32,3 +32,16 @@ Tôi muốn xin giấy phép xây dựng nhà ở trên mảnh đất của mìn
 Khi đăng ký sang tên nhà đất, tôi phải nộp lệ phí trước bạ bao nhiêu phần trăm?
 # C4 — bẫy: thuế TNCN chuyển nhượng bất động sản, ngoài corpus
 Bán mảnh đất được giá, tôi phải đóng thuế thu nhập cá nhân bao nhiêu phần trăm trên giá bán?
+
+# ==== NHÓM D — Gap 1 đa lĩnh vực: hệ tự chuyển sang hộ tịch, không cần khai báo ====
+# Ba nhóm trên đều là đất đai nên KHÔNG câu nào chứng minh được Gap 1. Hai câu dưới
+# lấp chỗ đó, và đều chạy qua kho hộ tịch — lĩnh vực của [B].
+# D1 — Gap 1 + chuỗi dẫn chiếu. Thông tư 04/2020 Điều 9 Khoản 3 mở đầu bằng "trường hợp
+# không có giấy tờ quy định tại khoản 1 và khoản 2 Điều này" — bản cũ chỉ lấy Khoản 3,
+# bản cải tiến lấy đủ Khoản 1+2+3. Không đọc Khoản 1,2 thì không biết Khoản 3 áp dụng khi nào.
+Đăng ký lại khai sinh mà không còn bản sao giấy khai sinh cũ thì cần giấy tờ gì?
+# D2 — Gap 1 + hai thứ cùng lúc: (a) "đăng ký giám hộ" KHÔNG nằm trong 6 thủ tục được lập
+# chỉ mục sâu; trước 15/08 bộ lập kế hoạch trả theme=null nên Giai đoạn 1 trả rỗng, hệ không
+# trả lời được. (b) Luật Hộ tịch Điều 21 Khoản 2 nói trình tự thực hiện theo Điều 20 Khoản 2 —
+# bản cải tiến lần được sang Điều 20, bản cũ dừng ở Điều 21 vốn không chứa nội dung trình tự.
+Tôi là bà nội, đương nhiên là người giám hộ của cháu. Thủ tục đăng ký giám hộ đương nhiên làm như thế nào?
