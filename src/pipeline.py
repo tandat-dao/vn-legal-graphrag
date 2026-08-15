@@ -201,6 +201,10 @@ class PipelineResult(TypedDict):
     # (D-14/D-16), thêm chữ vào đó là rủi ro không cần thiết. Tầng trình bày
     # (demo/UI) tự ghép câu này lên trước câu trả lời.
     canh_bao_thay_doi: str
+    # True khi câu trả lời lấy từ LLM cache (không gọi API). Cần cho việc hâm
+    # cache trước buổi demo: không có trường này thì không cách nào biết cache
+    # có ăn hay không, và `precache_demo` báo "cached mới" cho cả hai trường hợp.
+    cache_hit: bool
 
 
 # ---------------------------------------------------------------------------
@@ -322,6 +326,7 @@ def run_pipeline(
                 elapsed_seconds=round(elapsed, 2),
                 verifier=None,
                 canh_bao_thay_doi="",
+                cache_hit=False,
             )
 
         # --- Việc 3: phát hiện quy định đã thay đổi + điều khoản chuyển tiếp ---
@@ -409,6 +414,7 @@ def run_pipeline(
             elapsed_seconds=round(elapsed, 2),
             verifier=verifier_info,
             canh_bao_thay_doi=canh_bao,
+            cache_hit=bool(result.get("cache_hit")),
         )
 
     finally:
