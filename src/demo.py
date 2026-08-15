@@ -242,12 +242,11 @@ def main() -> int:
                         help="Mode LLM: 'claude' thuần | 'claude-fallback' Claude + Gemini "
                              "khi drop (mặc định demo) | 'gemini' end-to-end. "
                              "Fallback tự degrade về Claude nếu thiếu cấu hình Gemini.")
-    parser.add_argument("--refers-mode", choices=["khoan", "all", "rrf"], default=None,
-                        help="Bao đóng dẫn chiếu [:REFERS_TO]. 'khoan' là lựa chọn "
-                             "đã đo tốt nhất; mặc định tắt.")
-    parser.add_argument("--budget-mode", choices=["graph"], default=None,
-                        help="Ngân sách đơn vị mỗi văn bản chia theo số văn bản "
-                             "Giai đoạn 2 trả về; mặc định trần cố định.")
+    # 'all' (dẫn chiếu cấp Điều) và 'rrf' (nhánh đối chứng) chỉ phục vụ đo đạc,
+    # không dùng để trình bày → giữ trong harness, bỏ khỏi demo.
+    parser.add_argument("--refers-mode", choices=["khoan"], default=None,
+                        help="Bao đóng dẫn chiếu [:REFERS_TO] tới đích danh khoản. "
+                             "Mặc định tắt; bật để trình cơ chế chuỗi dẫn chiếu.")
     parser.add_argument("--chuyen-tiep", action="store_true",
                         help="Phát hiện quy định đã thay đổi + nạp điều khoản "
                              "chuyển tiếp, kèm câu cảnh báo.")
@@ -286,7 +285,6 @@ def main() -> int:
                 verify_tier=args.verify_tier,
                 llm_mode=args.llm_mode,
                 refers_mode=args.refers_mode,
-                budget_mode=args.budget_mode,
                 chuyen_tiep=args.chuyen_tiep,
             )
         except _anthropic.APIStatusError as e:

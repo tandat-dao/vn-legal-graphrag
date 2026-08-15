@@ -1145,6 +1145,9 @@ def hybrid_search(
 
     # Pass 1b (HẠN NGẠCH THEO KHÍA CẠNH) — mặc định TẮT.
     #
+    # ⛔ ĐÃ BÁC BỎ (D-27) — chỉ gọi được từ harness đo đạc, KHÔNG lộ ra CLI và
+    # KHÔNG bật ở đường chạy chính. Giữ lại để tái lập kết quả âm.
+    #
     # Chạy TRƯỚC Pass 2: nó giành chỗ mà Pass 2 sẽ lấp bằng chiều sâu chung, tức
     # TÁI PHÂN BỔ chứ không nới ngân sách. Nhờ vậy không đụng nút thắt ngưỡng token.
     pass1b_count = 0
