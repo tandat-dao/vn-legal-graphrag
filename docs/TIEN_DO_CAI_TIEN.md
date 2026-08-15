@@ -563,3 +563,34 @@ gap3: 0,551 → 0,821.
 > Mọi số bao phủ ghi ở §9–§10 đều đo bằng planner Claude. Chúng vẫn hợp lệ để so
 > **giữa các biến thể với nhau** (cùng planner), nhưng KHÔNG được đặt cạnh số F1
 > của các mẻ sinh Gemini như thể cùng một hệ. Từ nay dùng `LLM_MODE=gemini`.
+
+---
+
+## 14. HỆ QUẢ CỦA §13.2 — MỘT SỐ LIỆU ĐÃ BÁO CÁO BỊ LẬT
+
+Sau khi harness dùng đúng nhà cung cấp, đo lại `REFERS_TO` (mốc → +dẫn chiếu,
+trần 6000, không cross-encoder):
+
+| tập | planner Claude (SAI) | planner Gemini (ĐÚNG) |
+|---|---|---|
+| v2 — 123 câu chấm được | +0,050 | **+0,018** (10T/3B) |
+| v4 — 28 câu | +0,093 | **+0,125** |
+
+Trên v2, per-gap với planner đúng: gap1 **+0,078**, gap3 **+0,072**,
+gap4 **+0,000**, gap2 **−0,081**.
+
+### Vì sao v4 cao gấp bảy lần v2 — và vì sao KHÔNG được lấy v4 làm số chính
+
+v4 được soạn **từ chính các cạnh `REFERS_TO`** trong đồ thị (xem
+`docs/GT_V4_QUY_UOC.md` §4). Nó được xây để ghi công cho đúng cơ chế đang đo.
+Chênh lệch +0,125 so với +0,018 phản ánh **cách soạn tập**, không phải năng lực
+hệ thống.
+
+**Quy tắc trình bày:** lấy **v2 làm số chính** (+0,018). v4 chỉ được nêu kèm
+cảnh báo tự-ưu-ái này. Nói ngược lại là tự tô hồng.
+
+### Số cộng dồn §9 (+0,136 · 28T/0B) ĐANG BỊ NGHI NGỜ
+
+Số đó cũng đo bằng planner Claude. Đang chạy lại bộ chốt đầy đủ trên 137 câu với
+planner Gemini (`v2_chot_gemini.json`). **Không đưa +0,136 vào báo cáo cho tới
+khi có số đo lại.**
