@@ -397,7 +397,9 @@ def main() -> int:
         "--budget-mode", default=None, choices=["graph", "norm", "tier", "fill"],
         help="Trần đơn vị mỗi văn bản (chỉ GraphRAG): mặc định cố định 3 | "
              "graph = chia ngân sách theo số văn bản Giai đoạn 2 trả về "
-             "(sàn 3 — chỉ nới cho chuỗi hẹp, không bao giờ siết).",
+             "(sàn 3 — chỉ nới cho chuỗi hẹp, không bao giờ siết). "
+             "⛔ graph và fill ĐÃ BỊ BÁC BỎ (D-27) — chỉ dùng để tái lập kết "
+             "quả âm, KHÔNG dùng cho số liệu chính thức.",
     )
     parser.add_argument("--rerank-mode", default=None, choices=["trong-norm"],
         help="Cross-encoder xếp lại điều khoản TRONG văn bản đã chọn (chạy CPU, chậm).")

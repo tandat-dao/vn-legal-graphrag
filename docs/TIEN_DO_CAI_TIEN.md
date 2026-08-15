@@ -354,3 +354,70 @@ các cải tiến truy hồi hiện ra thành F1 dương hay không — trên v2
 
 **Tập v4 vẫn chưa có người rà** (`review.da_duyet=false` toàn bộ, 15 câu thuộc
 lĩnh vực [B]) → chưa dùng làm số chính thức được.
+
+---
+
+## 10. PHÉP TÁCH 15/08 — CÔ LẬP NGUYÊN NHÂN F1 GIẢM
+
+### 10.1 Mâu thuẫn cần giải thích
+
+Trên **cùng tập v4, cùng cấu hình**:
+
+| | Δ | thắng/thua |
+|---|---|---|
+| truy hồi (độ bao phủ) | **+0,167** | 9T/0B |
+| sinh (F1 Khoản) | **−0,070** | 6T/13B |
+
+Hệ lấy về đúng hơn hẳn rồi trích dẫn tệ đi.
+
+### 10.2 Năm nhánh tách (v4, 28 câu dương, Gemini)
+
+| nhánh | cấu hình | trích dẫn TB | Δ F1 | CI95 |
+|---|---|---|---|---|
+| mốc | — | 2,71 | — | — |
+| **C** | chỉ token 12000 | 2,71 | **0,000** | — |
+| **A** | chỉ `REFERS_TO` | 3,18 | −0,002 | chứa 0 |
+| **D** | A + pool 100 + tắt độ hiếm | 3,68 | −0,029 | chứa 0 |
+| **E** | **chỉ `fill`** | 4,04 | **−0,115** | **[−0,195; −0,038]** |
+| B | tất cả, token 6000 | 4,64 | −0,093 | [−0,161; −0,024] |
+| đủ bộ | B + token 12000 | 4,61 | −0,070 | [−0,137; −0,001] |
+
+### 10.3 Ba kết luận
+
+**Trần token KHÔNG phải thủ phạm.** Nhánh C giống mốc y hệt (0/0 khác biệt) vì
+trên v4 ngữ cảnh dài nhất chỉ 5146 token — trần 6000 chưa từng cắn. Giả thuyết
+ban đầu ("nới token cho mọi câu là nguyên nhân") **sai**, đã ghi lại để không
+lặp lại.
+
+**`fill` là thủ phạm duy nhất có ý nghĩa thống kê.** Một mình nó tệ hơn cả gói
+đầy đủ, trong khi độ bao phủ nó mua thêm là **+0,000**. Quan trọng nhất:
+`fill` làm **recall cũng giảm** (−0,018) và NormR −0,036 → đây không phải đánh
+đổi precision lấy recall mà là **đơn vị sai lấn chỗ đơn vị đúng**, vì bỏ trần
+per_norm cho phép một văn bản chiếm hết ngân sách. → **BÁC BỎ (D-27)**.
+
+**`REFERS_TO` giữ lại.** Hòa tổng thể (−0,002, CI chứa 0) nhưng lãi đúng chỗ
+nó được thiết kế cho: gap3 +0,041, gap4 +0,067; lỗ ở gap1/gap2 là nơi bao phủ
+vốn đã 1,00 và mọi thứ thêm vào đều là nhiễu.
+
+### 10.4 Nút thắt thật: bộ sinh chọn trích dẫn
+
+- đáp án chuẩn v4 cần trung bình **1,57** điều khoản
+- hệ ở cấu hình mốc đã trích **2,71** (thừa 1,7 lần)
+- quan hệ gần tuyến tính: **mỗi +1 trích dẫn ≈ −0,03 F1**
+
+Bộ sinh trích theo **lượng ngữ cảnh nhận được**, không theo **nhu cầu câu hỏi**.
+Vì vậy mọi cải thiện truy hồi đều bị chặn lại ở khâu này.
+
+**Đây là kết quả có giá trị cho khóa luận**: nó tách bạch được hai khâu và chỉ
+đúng khâu đang nghẽn, bằng số liệu có nhánh đối chứng — mạnh hơn một con F1
+nhích lên mà không giải thích được.
+
+### 10.5 Việc tiếp theo
+
+1. **Bản vá tiết chế trích dẫn** (`scratchpad/vá_tietche.md`) — tinh chỉnh trên
+   **v2**, chạy v4 **đúng một lần** để v4 giữ tư cách tập kiểm thử.
+2. **Lỗi bộ lập kế hoạch**: W007 "đăng ký giám hộ" → `theme=None` → giai đoạn 1
+   rỗng → bao phủ 0. Prompt chỉ mô tả 6 thủ tục, không mô tả phạm vi lĩnh vực.
+3. **v4 cần người rà** — 32/32 câu `da_duyet=false`, 15 câu thuộc lĩnh vực [B].
+   Tập do máy soạn và chính máy đó đã tinh chỉnh hệ trên v2 → chưa đủ tư cách
+   làm bằng chứng độc lập.

@@ -1191,10 +1191,21 @@ def hybrid_search(
 
     # Pass 2b (TIÊU NGÂN SÁCH CÒN TRỐNG) — chỉ khi budget_mode="fill".
     #
-    # Đo cho thấy 0/38 câu lấy đủ 25 đơn vị, mà cũng 0/38 câu hết ứng viên
-    # (trung vị 2772 đơn vị khả dụng). Phần ngân sách bỏ không là do trần
-    # per_norm/per_tier khoá. Pass này giữ NGUYÊN các trần trong toàn bộ logic
-    # đa dạng hoá phía trên — chỉ ở bước cuối mới bỏ trần để nạp cho đầy.
+    # ⛔ ĐÃ BÁC BỎ (D-27) — KHÔNG bật ở đường chạy chính, KHÔNG đặt làm mặc định.
+    # Giữ lại NGUYÊN VẸN chỉ để tái lập phép đo âm đã biện minh cho quyết định.
+    #
+    # Ý tưởng ban đầu: 0/38 câu lấy đủ 25 đơn vị mà cũng 0/38 câu hết ứng viên
+    # (trung vị 2772 đơn vị khả dụng) → phần ngân sách bỏ không là do trần
+    # per_norm/per_tier khoá, nên bước cuối bỏ trần để nạp cho đầy.
+    #
+    # Thực nghiệm bác bỏ (v4, 28 câu dương, Gemini):
+    #   - độ bao phủ:  +0,000  (không mua thêm được gì)
+    #   - F1 sinh:     −0,115  CI95 [−0,195; −0,038]  3T/16B
+    #   - trích dẫn:   2,71 → 4,04 mỗi câu
+    #   - recall CŨNG giảm (−0,018) và NormR giảm (−0,036)
+    # Recall giảm là điểm mấu chốt: đây KHÔNG phải đánh đổi precision lấy
+    # recall, mà là đơn vị SAI lấn chỗ đơn vị ĐÚNG — bỏ trần per_norm cho phép
+    # một văn bản chiếm hết ngân sách. Tiền lệ D-12/D-19/D-20.
     if budget_mode == "fill":
         truoc = len(results)
         # Dùng CÙNG thứ tự đã xếp lại với Pass 2. Pass 2b là chỗ nạp NHIỀU đơn
