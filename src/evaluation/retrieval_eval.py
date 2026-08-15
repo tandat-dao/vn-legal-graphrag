@@ -29,7 +29,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import FieldCondition, Filter, MatchAny, MatchValue
 
 from src.ingestion.vectorizer import encode_text, load_model
-from src.utils.llm_config import make_anthropic_client
+from src.utils.llm_config import make_llm_client
 from src.retrieval.query_planner import plan_query
 from src.retrieval.subgraph_extractor import extract_subgraph
 from src.retrieval.semantic_filter import _strip_jurisdiction_for_dense, _qdrant_id_to_hex
@@ -112,9 +112,13 @@ def _build_clients():
     )
     qdrant = QdrantClient(host=os.getenv("QDRANT_HOST", "localhost"),
                           port=int(os.getenv("QDRANT_PORT", "6333")))
-    anthropic_client = make_anthropic_client()
+    # Bộ lập kế hoạch PHẢI theo cùng nhà cung cấp với mẻ sinh đem ra so sánh.
+    # Trước đây hàm này cố định Anthropic trong khi các mẻ sinh chạy
+    # `--llm-mode gemini` → hai bên dùng KẾ HOẠCH TRUY VẤN KHÁC NHAU, nên
+    # "độ bao phủ" đo được không phải là ngữ cảnh mà bộ sinh thực sự nhận.
+    llm_client = make_llm_client(mode=os.getenv("LLM_MODE", "claude"))
     model = load_model()
-    return neo4j, qdrant, anthropic_client, model
+    return neo4j, qdrant, llm_client, model
 
 
 def run(test_set: list[dict], do_rerank: bool = True, pool: int = 50, ks=(5, 10)):

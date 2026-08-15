@@ -466,3 +466,100 @@ NEO4J_URI=bolt://localhost:7688 \
 ```
 
 So hai mẻ: `python -m src.evaluation.so_ket_qua <mốc.json> <tiết-chế.json>`
+
+---
+
+## 12. VIỆC 2 — TIẾT CHẾ TRÍCH DẪN: KẾT QUẢ ÂM, KÈM TRẦN ĐO ĐƯỢC
+
+Thiết kế: hai nhánh khác nhau **đúng một biến** (nội dung prompt), cùng mẫu 60
+câu v2 seed 42, cùng `--refers-mode khoan`. Nhánh mốc chạy TRƯỚC khi sửa prompt.
+
+### 12.1 Ba cách thử, cả ba đều không ăn
+
+| cách | F1 | CI95 | trích dẫn TB |
+|---|---|---|---|
+| mốc | 0,571 | — | 2,40 |
+| prompt tiết chế vòng 1 | 0,593 | [−0,026; +0,070] | 2,33 |
+| prompt tiết chế vòng 2 (bắt phân loại a/b/c) | 0,577 | [−0,032; +0,044] | 2,35 |
+
+Vòng 2 **kém hơn** vòng 1 dù chỉ thị chặt hơn. Số trích dẫn gần như không đổi
+qua cả ba → **bộ sinh không phản ứng với chỉ thị bằng lời**.
+
+### 12.2 Trần lý thuyết — phần quan trọng nhất
+
+Tính offline ($0) trên chính mẻ mốc:
+
+| chiến lược cắt tỉa | F1 |
+|---|---|
+| giữ nguyên | 0,571 |
+| giữ 1 / 2 / 3 / 4 trích dẫn đầu | 0,555 / 0,576 / 0,560 / 0,572 |
+| **cắt hoàn hảo ("bộ lọc thần thánh")** | **0,742** |
+
+Cắt theo **vị trí** vô giá trị (±0,005). Nhưng cắt **đúng** đáng giá **+0,171** —
+lớn hơn mọi thứ đợt cải tiến này đạt được. **Dư địa có thật và rất lớn**; cái
+thiếu là biết trích dẫn nào đúng.
+
+### 12.3 Tín hiệu rẻ có thay được bộ chấm không? — KHÔNG
+
+Kiểm tra thứ hạng truy hồi của từng trích dẫn (132 trích dẫn):
+
+- trích dẫn ĐÚNG: hạng trung vị **3,0**
+- trích dẫn SAI: hạng trung vị **5,0**
+
+Có tách biệt, nhưng quá yếu. Mô phỏng lọc theo ngưỡng hạng:
+
+| ngưỡng | <3 | <5 | <8 | <10 | <15 | <25 | không lọc |
+|---|---|---|---|---|---|---|---|
+| F1 | 0,369 | 0,433 | 0,452 | 0,458 | 0,519 | 0,601 | 0,604 |
+
+**Hại đơn điệu.** Mọi ngưỡng đều tệ hơn không lọc.
+
+### 12.4 Quyết định
+
+**Gỡ bản vá prompt.** Không chứng minh được thắng thì không đổi hệ — đổi sẽ làm
+mọi số liệu cũ mất khả năng so sánh mà chẳng đổi lấy được gì. Tiền lệ D-12/D-20.
+
+**Ghi lại +0,171 làm mục tiêu đo được cho hướng phát triển tiếp**: bộ chấm mức
+cần thiết của trích dẫn. D-19 đã cho thấy bộ chấm dạng "có được chứng minh
+không" KHÔNG làm được việc này (citation thừa vẫn "được chứng minh"). Bộ chấm
+phải hỏi **"có CẦN không"**, không phải "có ĐÚNG không".
+
+---
+
+## 13. VIỆC 3 — HAI LỖI THẬT ĐÃ SỬA
+
+### 13.1 Bộ lập kế hoạch bỏ trống lĩnh vực khi không khớp thủ tục
+
+Prompt chỉ liệt kê 6 thủ tục được lập chỉ mục sâu, **không mô tả phạm vi từng
+lĩnh vực**. Gặp việc hộ tịch nằm ngoài 6 thủ tục đó (giám hộ, khai tử, cải
+chính), model trả `theme=null` → Giai đoạn 1 không lọc được lĩnh vực → trả rỗng
+→ **bao phủ 0**. Tái lập 3/3 lần.
+
+Sửa: thêm mô tả phạm vi từng theme + quy tắc 0 "theme xác định ĐỘC LẬP với
+procedure, không được trả null chỉ vì không tìm thấy procedure".
+
+Kết quả (v4, planner Gemini): W007 từ **bị loại khỏi thống kê** → **0,50** ở mốc
+và **1,00** khi bật dẫn chiếu. Các câu đối chứng (khai sinh, đất đai, nuôi con
+nuôi) không xê dịch.
+
+### 13.2 Harness đo bao phủ dùng SAI nhà cung cấp
+
+`retrieval_eval._build_clients` **cố định Anthropic** cho bộ lập kế hoạch, trong
+khi mọi mẻ sinh chạy `--llm-mode gemini`. Hai bên do đó dùng **kế hoạch truy vấn
+khác nhau** → con số "độ bao phủ" KHÔNG phải ngữ cảnh mà bộ sinh thực sự nhận,
+và phép so "bao phủ +0,167 nhưng F1 −0,070" có một confound chưa được kiểm soát.
+
+Sửa: `_build_clients` đọc `LLM_MODE` (mặc định `claude`, không đổi hành vi cũ).
+
+**Số đo lại trên v4 với planner đồng bộ Gemini** (n=28, đã gồm W007):
+
+| cấu hình | bao phủ Khoản |
+|---|---|
+| mốc | 0,792 |
+| **+ REFERS_TO** | **0,917** (+0,125) |
+
+gap3: 0,551 → 0,821.
+
+> Mọi số bao phủ ghi ở §9–§10 đều đo bằng planner Claude. Chúng vẫn hợp lệ để so
+> **giữa các biến thể với nhau** (cùng planner), nhưng KHÔNG được đặt cạnh số F1
+> của các mẻ sinh Gemini như thể cùng một hệ. Từ nay dùng `LLM_MODE=gemini`.

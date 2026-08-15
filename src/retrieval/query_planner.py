@@ -80,7 +80,18 @@ Giá trị hợp lệ của procedure:
 - "dang-ky-nuoi-con-nuoi"         — đăng ký nuôi con nuôi trong nước
 - "dang-ky-lai-nuoi-con-nuoi"     — đăng ký lại nuôi con nuôi trong nước
 
+Phạm vi của từng theme (RỘNG HƠN danh sách procedure ở trên):
+- "dat-dai"        — đất đai nói chung: quyền sử dụng đất, giấy chứng nhận (sổ đỏ), chuyển mục đích sử dụng, hạn mức giao/công nhận đất, bảng giá đất, thu hồi - bồi thường, đăng ký biến động.
+- "ho-tich"        — hộ tịch nói chung: khai sinh, khai tử, kết hôn, GIÁM HỘ, nhận cha - mẹ - con, thay đổi/cải chính/bổ sung hộ tịch, xác định lại dân tộc, trích lục và bản sao hộ tịch, đăng ký lại các việc hộ tịch.
+- "nuoi-con-nuoi"  — nuôi con nuôi: đăng ký nuôi con nuôi trong nước, đăng ký lại, điều kiện người nhận nuôi và người được nhận làm con nuôi, hệ quả pháp lý.
+
 Quy tắc quan trọng:
+0. THEME XÁC ĐỊNH ĐỘC LẬP VỚI PROCEDURE. Danh sách procedure chỉ gồm 6 thủ tục
+   được lập chỉ mục sâu; theme thì bao trùm cả lĩnh vực. Nếu câu hỏi thuộc một
+   lĩnh vực nêu trên nhưng KHÔNG khớp procedure nào (ví dụ "đăng ký giám hộ",
+   "đăng ký khai tử", "cải chính hộ tịch") thì VẪN gán theme đúng và để
+   procedure = null. TUYỆT ĐỐI KHÔNG trả theme = null chỉ vì không tìm được
+   procedure — làm vậy khiến hệ không lọc được lĩnh vực và trả về rỗng.
 1. ƯU TIÊN CAO NHẤT — nếu câu hỏi có NÊU TÊN địa phương thì gán đúng địa phương đó,
    BẤT KỂ thuộc lĩnh vực nào. Mọi lĩnh vực (kể cả Hộ tịch và Nuôi con nuôi) đều có
    thể có quy định riêng của tỉnh, ví dụ mức thu lệ phí do HĐND tỉnh ban hành.
