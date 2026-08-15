@@ -353,7 +353,7 @@ Truyền `llm_cache_dir` (mặc định `data/llm_cache` — kiểm tra tên th�
 **`ui/record.py`:**
 ```
 python -m ui.record "một câu hỏi"
-python -m ui.record data/evaluation/demo_questions.txt      # bỏ dòng trống và dòng bắt đầu bằng #
+python -m ui.record      # nguồn: ui/docs/DEMO_QUESTIONS.md, bỏ dòng trống và dòng #
 ```
 Cờ: `--jurisdiction`, `--mode {general,irac}`, `--verify`, `--llm-mode` — **phải khớp** với cờ dùng lúc demo. Ghi ra `ui/fixtures/`.
 

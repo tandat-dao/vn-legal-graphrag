@@ -4,7 +4,7 @@
 `git pull` lấy `ui/fixtures/*.json` về rồi trình diễn bằng `DEMO_MODE=replay`.
 
     python -m ui.record "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu?"
-    python -m ui.record data/evaluation/demo_questions.txt
+    python -m ui.record            # tự lấy ui/docs/DEMO_QUESTIONS.md
 
 Cờ `--jurisdiction` / `--mode` / `--verify` / `--llm-mode` **phải khớp** với cờ
 sẽ dùng lúc demo: chúng đi thẳng vào `run_pipeline`, đổi cờ là đổi kết quả.
@@ -110,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "dau_vao",
         help="Một câu hỏi, hoặc đường dẫn tệp danh sách câu hỏi "
-             "(VD data/evaluation/demo_questions.txt).",
+             "(bỏ trống = ui/docs/DEMO_QUESTIONS.md).",
     )
     parser.add_argument("--jurisdiction", choices=["toan-quoc", "tp-hcm", "dong-nai"],
                         default=None, help="Ép jurisdiction — phải khớp lúc demo.")

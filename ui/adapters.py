@@ -568,8 +568,11 @@ def _loi_pipeline(e: Exception, seq: int, t: float) -> TraceEvent:
 # ---------------------------------------------------------------------------
 
 # Nguồn câu hỏi mẫu, xét theo thứ tự — tệp đầu tiên tồn tại thì dùng.
-# `ui/docs/DEMO_QUESTIONS.md` là bản có phân nhóm (A/B/C/X) + ghi chú từng câu;
-# `demo_questions.txt` là bản phẳng cũ, giữ lại cho tương thích.
+# `ui/docs/DEMO_QUESTIONS.md` là NGUỒN DUY NHẤT: có phân nhóm (A/B/C/X) + ghi
+# chú từng câu. `demo_questions.txt` là bản phẳng cũ ĐÃ XOÁ, chỉ còn trong danh
+# sách này để tệp cũ của ai đó vẫn chạy được.
+# `src/precache_demo.py` phải giữ ĐÚNG thứ tự này — hâm cache một danh sách mà
+# demo chạy danh sách khác thì cache trượt im lặng đúng lúc bảo vệ.
 DEMO_QUESTIONS_FILES = (
     Path("ui/docs/DEMO_QUESTIONS.md"),
     Path("data/evaluation/demo_questions.txt"),

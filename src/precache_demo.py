@@ -36,6 +36,21 @@ load_dotenv()
 
 _DEFAULT_CACHE_DIR = "data/evaluation/.llm_cache/"
 
+# CÙNG thứ tự ưu tiên với `ui.adapters.DEMO_QUESTIONS_FILES`. Bắt buộc phải
+# giống, nếu không sẽ hâm cache cho danh sách này mà demo lại chạy danh sách
+# kia — cache trượt im lặng đúng lúc bảo vệ.
+_TEP_CAU_HOI = (
+    Path("ui/docs/DEMO_QUESTIONS.md"),      # bản có phân nhóm + ghi chú (UI đọc)
+    Path("data/evaluation/demo_questions.txt"),
+)
+
+
+def _tep_mac_dinh() -> Path | None:
+    for p in _TEP_CAU_HOI:
+        if p.exists():
+            return p
+    return None
+
 
 def _read_questions(path: Path) -> list[str]:
     out = []
@@ -49,7 +64,10 @@ def _read_questions(path: Path) -> list[str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Pre-cache câu hỏi demo (Lớp 1)")
     parser.add_argument("questions_file", nargs="?",
-                        help="File .txt, mỗi dòng 1 câu hỏi (bỏ qua dòng # và trống).")
+                        help="Tệp câu hỏi, mỗi dòng 1 câu (bỏ dòng # và trống). "
+                             "Bỏ trống thì dùng ĐÚNG tệp giao diện đang đọc: "
+                             "ui/docs/DEMO_QUESTIONS.md, lùi về "
+                             "data/evaluation/demo_questions.txt.")
     parser.add_argument("--question", action="append", default=[],
                         help="Câu hỏi truyền thẳng (lặp được). Thay cho file.")
     parser.add_argument("--jurisdiction", choices=["toan-quoc", "tp-hcm", "dong-nai"],
@@ -72,8 +90,14 @@ def main() -> None:
     args = parser.parse_args()
 
     questions = list(args.question)
-    if args.questions_file:
-        questions += _read_questions(Path(args.questions_file))
+    tep = Path(args.questions_file) if args.questions_file else (
+        None if args.question else _tep_mac_dinh())
+    if tep:
+        if not tep.exists():
+            print("❌ Không thấy tệp câu hỏi: %s" % tep)
+            sys.exit(1)
+        questions += _read_questions(tep)
+        print("📄 Nguồn câu hỏi: %s" % tep)
     if not questions:
         print("❌ Không có câu hỏi. Truyền file hoặc --question.")
         sys.exit(1)

@@ -73,7 +73,7 @@ tương tác được. `replay` vẫn là cách chạy UI ở máy không có DB
 ```bash
 # Ở MÁY B
 python -m ui.record "Hạn mức giao đất ở cho cá nhân tại TP.HCM tối đa là bao nhiêu?"
-python -m ui.record data/evaluation/demo_questions.txt --jurisdiction tp-hcm
+python -m ui.record --jurisdiction tp-hcm
 ```
 
 Cờ: `--jurisdiction` `--mode {general,irac}` `--verify` `--verify-tier` `--llm-mode`
@@ -200,7 +200,7 @@ DEMO_MODE=live uvicorn ui.server:app --port 8000
 #      bước 6 có phân bổ pass. Bước nào chỉ hiện dòng log mờ = regex chưa khớp.
 
 # 3. record.py sinh fixture hợp lệ
-python -m ui.record data/evaluation/demo_questions.txt --jurisdiction tp-hcm
+python -m ui.record --jurisdiction tp-hcm
 #    → kiểm: ui/fixtures/*.json có events + result; commit; máy A pull về replay đủ 7 bước.
 
 # 4. Đổi live → replay → live trên UI khi đã có DB (máy A mới thử được chiều hỏng)
