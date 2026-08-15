@@ -383,6 +383,10 @@ class LiveAdapter(BaseAdapter):
         self.top_k = top_k
         self.max_tokens = max_tokens
         self.verify_tier = verify_tier
+        # Bao đóng dẫn chiếu `[:REFERS_TO]`. Mặc định TẮT để giữ đúng hành vi đã
+        # đo trong báo cáo; đặt UI_REFERS_MODE=khoan khi muốn demo cơ chế này.
+        # Cần đồ thị đã có cạnh REFERS_TO (chạy src.ingestion.reference_builder).
+        self.refers_mode = (os.getenv("UI_REFERS_MODE") or "").strip() or None
 
         # `clients` chỉ để test tiêm client giả — chạy thật luôn đi qua
         # `_build_clients` để đúng đường code của `src/`.
@@ -432,6 +436,8 @@ class LiveAdapter(BaseAdapter):
             kw["top_k"] = self.top_k
         if self.max_tokens is not None:
             kw["max_tokens"] = self.max_tokens
+        if self.refers_mode:
+            kw["refers_mode"] = self.refers_mode
         return kw
 
     def _du_lieu_cau_hoi(self, question: str, params: dict) -> dict:
