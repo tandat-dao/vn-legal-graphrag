@@ -249,6 +249,16 @@ def chay(test_set: list[dict], top_k: int = 25,
             norm_ids, graph_comp_ids = extract_subgraph(
                 q, plan, neo4j, qdrant, model, summary_type=summary_type)
             if not norm_ids:
+                # Giai đoạn 1/2 trả rỗng LÀ MỘT THẤT BẠI CỦA HỆ, không phải câu
+                # không đo được. Bỏ qua ở đây sẽ giấu lỗi và thổi phồng mọi mức
+                # bao phủ tuyệt đối → ghi 0 cho MỌI biến thể.
+                print("  ! %s: giai đoạn 1/2 rỗng → ghi 0" % item["id"], flush=True)
+                rows.append({
+                    "id": item["id"], "gap_type": item.get("gap_type"),
+                    **{bt[0]: {"n": 0, "n_ctx": 0, "token": 0,
+                               "khoan": 0.0, "dieu": 0.0, "khoan_chon": 0.0}
+                       for bt in bien_the},
+                })
                 continue
 
             # Điều khoản chuyển tiếp (việc 3) — tính một lần, dùng cho biến thể bật cờ

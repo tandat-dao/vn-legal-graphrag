@@ -260,3 +260,97 @@ và cờ `--summary-type`, `--guard-juris`.
 - **Guard phạm vi**: 4 thắng trọn vẹn đổi 2 thua một phần — bật hay không.
 - **Suy đoán bản kế nhiệm** (việc 3) là heuristic theo thời gian; đồ thị chưa
   có cạnh "thay thế" tường minh. Cách chắc hơn là khai báo trong frontmatter.
+
+---
+
+## 9. PHIÊN 15/08 — MẺ CHỐT 137 CÂU + TẬP KIỂM THỬ v4
+
+### 9.1 Mẻ chốt cộng dồn — 123 câu (`chot_137.json`)
+
+Đo cộng dồn từng bước trên **cùng một harness**, tất định, không gọi mô hình:
+
+| bước | bao phủ Khoản | bao phủ Điều | so mốc |
+|---|---|---|---|
+| mốc hiện tại | 0,738 | 0,809 | — |
+| + dẫn chiếu + token 12000 + fill | 0,802 | 0,854 | +0,064 · 18T/0B |
+| + cross-encoder trong-norm | 0,835 | 0,892 | +0,098 · 21T/0B |
+| + pool 100 + tắt độ hiếm | **0,873** | **0,919** | **+0,136 · 28T/0B** |
+
+**28 thắng / 0 thua.** Đây là con số truy hồi mạnh nhất của đợt cải tiến.
+
+### 9.2 Tập kiểm thử v4 — 32 câu, quy ước "chuỗi dẫn chiếu"
+
+**Độ bao phủ** (`v4_baophu.json`, bộ `ket-hop`, **trần 6000 token**):
+
+| cấu hình | bao phủ Khoản |
+|---|---|
+| mốc | 0,790 |
+| + REFERS_TO | **0,883** (+0,093 · 5T/0B) |
+| + tiêu hết ngân sách | 0,790 (+0,000) |
+| + cả hai | 0,846 |
+
+Toàn bộ mức tăng nằm ở **gap3: 0,53 → 0,74**. Ba gap kia đã 1,00.
+
+REFERS_TO trên v2 được +0,050, trên v4 được +0,093 — quy ước mới ghi công gần
+gấp đôi cho **cùng một cơ chế**. **Nhưng đây là kết quả được kỳ vọng theo thiết
+kế**, vì v4 được soạn dựa trên chính các cạnh REFERS_TO. Nó chứng minh quy ước
+nhất quán, **không** chứng minh độc lập rằng hệ mạnh hơn. Hội đồng có quyền vặn
+điểm này — phải chủ động nêu trong báo cáo.
+
+**Sinh — mốc** (`results_graphrag_20260815-083636.json`, Gemini, 28 câu dương):
+
+| | |
+|---|---|
+| F1 Khoản | 0,574 |
+| F1 Điều | 0,614 |
+| NormR | 0,964 |
+| câu âm đúng | 4/4 |
+| trích dẫn TB | 2,71 |
+
+### 9.3 Hai lỗi phương pháp đã phát hiện và sửa
+
+**Bộ `ket-hop` chạy ở 6000 token.** "Tiêu hết ngân sách" chỉ ăn khi trần token
+đã nới lên 12000, nên mẻ v4 §9.2 đo nó trong điều kiện nó vốn không hoạt động →
++0,000 là **artefact của cấu hình**, không phải kết luận về cơ chế. Bộ `chot`
+(đủ 12000 + cross-encoder + pool 100 + tắt độ hiếm) đã xếp hàng nhưng **chưa
+chạy xong**.
+
+**Harness giấu lỗi hệ thống.** `refers_eval` bỏ qua câu có `norm_ids` rỗng →
+W007 (bộ lập kế hoạch trả `theme=None`) bị loại khỏi thống kê thay vì tính 0,
+thổi phồng mọi mức bao phủ tuyệt đối. **Đã sửa**: ghi 0 cho mọi biến thể và in
+cảnh báo. Các số v4 ở §9.2 là số **trước** khi sửa → còn cao hơn thực tế một
+chút; chạy lại sẽ ra thấp hơn.
+
+### 9.4 ĐANG DANG DỞ — CÁCH CHẠY TIẾP
+
+Máy tắt lúc mẻ **sinh · cải tiến trên v4** đang chạy → mẻ này **mất, phải chạy
+lại**. Hai lệnh còn thiếu (Docker + bản sao Neo4j cổng 7688 phải bật trước):
+
+```bash
+PIPE_CONTEXT_MAX_TOKENS=12000 SF_RARITY_ALPHA=0 SF_DENSE_POOL_MIN=100 \
+NEO4J_URI=bolt://localhost:7688 \
+/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 \
+  -m src.evaluation.run_evaluation \
+  --test-set data/evaluation/test_set_v4.json --systems graphrag \
+  --llm-mode gemini --faithfulness-tier 0 \
+  --refers-mode khoan --budget-mode fill --chuyen-tiep --verify --verify-tier 1
+```
+
+```bash
+NEO4J_URI=bolt://localhost:7688 \
+/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 \
+  -m src.evaluation.refers_eval \
+  --test-set data/evaluation/test_set_v4.json --bo chot \
+  --out data/evaluation/v4_chot.json
+```
+
+So kết quả mẻ 1 với mốc `results_graphrag_20260815-083636.json` (F1 0,574),
+ghép theo `id`. **Câu hỏi quyết định vẫn chưa có lời đáp:** quy ước v4 có làm
+các cải tiến truy hồi hiện ra thành F1 dương hay không — trên v2 chúng chỉ được
++0,002.
+
+**Lưu ý về mẫu:** 28 câu dương là tập nhỏ và Gemini không tất định. Chênh dưới
+±0,03 thì **không kết luận**, phải chạy N=3.
+
+**Tập v4 vẫn chưa có người rà** (`review.da_duyet=false` toàn bộ, 15 câu thuộc
+lĩnh vực [B]) → chưa dùng làm số chính thức được.

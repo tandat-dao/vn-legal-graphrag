@@ -1,0 +1,974 @@
+[
+  {
+    "id": "W001",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3038,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4234,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 21,
+      "token": 5910,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 21,
+      "token": 5910,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W002",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3698,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 5140,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 17,
+      "token": 5948,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 15,
+      "token": 5724,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "W003",
+    "gap_type": "gap3",
+    "off": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3819,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4239,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 24,
+      "token": 5799,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 27,
+      "token": 5967,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W004",
+    "gap_type": "gap3",
+    "off": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 2790,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3176,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4178,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4385,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W005",
+    "gap_type": "gap3",
+    "off": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4060,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4796,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 20,
+      "token": 5993,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 20,
+      "token": 5993,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W006",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3179,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3886,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3940,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4819,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W008",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3062,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "khoan": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3947,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3760,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4696,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "W009",
+    "gap_type": "gap3",
+    "off": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1684,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 2169,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5176,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 29,
+      "token": 5936,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W010",
+    "gap_type": "gap3",
+    "off": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1822,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 2009,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4582,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5324,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W011",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3483,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4538,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4310,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5364,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W012",
+    "gap_type": "gap1",
+    "off": {
+      "n": 6,
+      "n_ctx": 6,
+      "token": 604,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1287,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4332,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5040,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W013",
+    "gap_type": "gap2",
+    "off": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4184,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5188,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5503,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W014",
+    "gap_type": "gap1",
+    "off": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 2514,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3292,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4401,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5654,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W015",
+    "gap_type": "gap1",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3347,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4295,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4114,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5062,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W016",
+    "gap_type": "gap1",
+    "off": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 3204,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3643,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5625,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 26,
+      "token": 5831,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W017",
+    "gap_type": "gap1",
+    "off": {
+      "n": 7,
+      "n_ctx": 7,
+      "token": 1235,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1893,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4675,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5166,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W018",
+    "gap_type": "gap2",
+    "off": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4226,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5103,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5444,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W019",
+    "gap_type": "gap2",
+    "off": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4346,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4699,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5317,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5594,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W020",
+    "gap_type": "gap2",
+    "off": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4412,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4830,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5327,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 29,
+      "n_ctx": 29,
+      "token": 6022,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W021",
+    "gap_type": "gap2",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4519,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 5580,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5038,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 29,
+      "n_ctx": 28,
+      "token": 6023,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W022",
+    "gap_type": "gap2",
+    "off": {
+      "n": 22,
+      "n_ctx": 21,
+      "token": 5881,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 27,
+      "n_ctx": 20,
+      "token": 5860,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 22,
+      "token": 5982,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 21,
+      "token": 5893,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W023",
+    "gap_type": "gap4",
+    "off": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4490,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5382,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5271,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 29,
+      "token": 5884,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W024",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3292,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3711,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4070,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4489,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W025",
+    "gap_type": "gap4",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3434,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4458,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4082,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 5006,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "W026",
+    "gap_type": "gap3",
+    "off": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3476,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "khoan": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3928,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 0.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4275,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 0.0
+    },
+    "khoan+tiêu hết": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4726,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "W027",
+    "gap_type": "gap3",
+    "off": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3528,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4141,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4175,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4857,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "W028",
+    "gap_type": "gap3",
+    "off": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1926,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "khoan": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2351,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "tiêu hết ngân sách": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4513,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "khoan+tiêu hết": {
+      "n": 30,
+      "n_ctx": 30,
+      "token": 4958,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]
