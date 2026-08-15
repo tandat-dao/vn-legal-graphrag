@@ -421,3 +421,48 @@ nhích lên mà không giải thích được.
 3. **v4 cần người rà** — 32/32 câu `da_duyet=false`, 15 câu thuộc lĩnh vực [B].
    Tập do máy soạn và chính máy đó đã tinh chỉnh hệ trên v2 → chưa đủ tư cách
    làm bằng chứng độc lập.
+
+---
+
+## 11. ĐANG LÀM — VIỆC 2: TIẾT CHẾ TRÍCH DẪN
+
+**Trạng thái 15/08 trưa:** đang chạy nhánh mốc, CHƯA sửa prompt.
+
+### Thiết kế phép đo
+
+Hai nhánh khác nhau **đúng một biến** (nội dung prompt), cùng mẫu 60 câu v2
+seed 42, cùng cấu hình truy hồi `--refers-mode khoan`:
+
+| nhánh | prompt | trạng thái |
+|---|---|---|
+| mốc | hiện tại | đang chạy (chạy TRƯỚC khi sửa để không nhiễm) |
+| tiết chế | + quy tắc tiết chế | chưa chạy |
+
+Nội dung bản vá: `scratchpad/vá_tietche.md`. Chèn vào
+`context_assembler.py` sau khối "QUY TẮC VỀ CẤU TRÚC CITATION".
+
+### Kỷ luật tập dữ liệu — KHÔNG ĐƯỢC PHÁ
+
+- Tinh chỉnh **chỉ trên v2**. Người dùng đã cho phép dùng v2 làm tập phát triển.
+- **v4 chỉ chạy MỘT lần** sau khi prompt đã chốt. Nếu chỉnh prompt theo kết quả
+  v4 thì mất tập kiểm thử giữ kín duy nhất và mọi con số v4 hết giá trị.
+
+### Rủi ro phải theo dõi
+
+Quy tắc "quá 3 trích dẫn là dấu hiệu trích tràn lan" có thể **cắt mất** chuỗi
+dẫn chiếu dài hợp lệ (dạng W007 — điều khoản đáp án chỉ trỏ sang chỗ khác, không
+chứa nội dung nào). Phải xem **recall theo gap3 riêng**, không chỉ nhìn F1 tổng.
+Nếu recall gap3 tụt thì nới quy tắc, đừng giữ vì F1 tổng đẹp.
+
+### Lệnh chạy lại nếu mất phiên
+
+```bash
+NEO4J_URI=bolt://localhost:7688 \
+/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 \
+  -m src.evaluation.run_evaluation \
+  --test-set data/evaluation/test_set_v2.json --systems graphrag \
+  --llm-mode gemini --faithfulness-tier 0 --sample 60 --seed 42 \
+  --refers-mode khoan
+```
+
+So hai mẻ: `python -m src.evaluation.so_ket_qua <mốc.json> <tiết-chế.json>`
