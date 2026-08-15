@@ -188,3 +188,60 @@ def test_bo_qua_html_comment():
         refs = R.extract_from_file(p, idx, shm)
     # "khoản 1 Điều 13" nằm trong comment → không được tính
     assert [r for r in refs if r.dich_dieu == "13"] == []
+
+
+# ---------------------------------------------------------------------------
+# Dẫn chiếu KHOẢN/ĐIỂM ANH EM — "khoản 1 và khoản 2 Điều này"
+# ---------------------------------------------------------------------------
+
+def _trich_ngu_canh(text, dieu="9", khoan=None):
+    return R._extract_from_line(text, "n1", ["n1", "Điều %s." % dieu], {}, {}, {},
+                                (dieu, khoan))
+
+
+def test_khoan_anh_em_khong_phai_tu_tham_chieu():
+    """'khoản 1 và khoản 2 Điều này' trỏ sang khoản KHÁC, không phải tự trỏ."""
+    refs = [r for r in _trich_ngu_canh(
+        "không có giấy tờ quy định tại khoản 1 và khoản 2 Điều này thì")
+        if r.loai != "tu_than"]
+    assert {r.dich_khoan for r in refs} == {"1", "2"}
+    assert all(r.dich_dieu == "9" for r in refs)
+
+
+def test_khoan_anh_em_dang_rut_gon():
+    refs = [r for r in _trich_ngu_canh("quy định tại khoản 1, 2 và 3 Điều này")
+            if r.loai != "tu_than"]
+    assert {r.dich_khoan for r in refs} == {"1", "2", "3"}
+
+
+def test_khoan_anh_em_don_le():
+    refs = [r for r in _trich_ngu_canh("theo khoản 4 Điều này")
+            if r.loai != "tu_than"]
+    assert [r.dich_khoan for r in refs] == ["4"]
+
+
+def test_diem_anh_em_trong_cung_khoan():
+    refs = [r for r in _trich_ngu_canh("quy định tại điểm a và điểm b khoản này",
+                                       dieu="9", khoan="3")
+            if r.loai != "tu_than"]
+    assert {r.dich_diem for r in refs} == {"a", "b"}
+    assert all(r.dich_khoan == "3" for r in refs)
+
+
+def test_dieu_nay_tron_van_la_tu_tham_chieu():
+    """'Điều này' đứng một mình KHÔNG tạo cạnh."""
+    refs = _trich_ngu_canh("theo quy định tại Điều này")
+    assert all(r.loai == "tu_than" or r.dich_khoan is None for r in refs)
+
+
+def test_khong_co_ngu_canh_thi_bo_qua():
+    """Không biết đang ở Điều nào thì không đoán bừa."""
+    refs = [r for r in R._extract_from_line(
+        "quy định tại khoản 1 Điều này", "n1", ["n1"], {}, {}, {}, (None, None))
+        if r.loai != "tu_than"]
+    assert refs == []
+
+
+def test_tach_danh_sach_bo_tu_khoa_lap():
+    assert R._tach_danh_sach("1 và khoản 2") == ["1", "2"]
+    assert R._tach_danh_sach("a, điểm b") == ["a", "b"]

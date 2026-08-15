@@ -1,0 +1,882 @@
+[
+  {
+    "id": "W001",
+    "question": "Gia đình tôi đang ở trên thửa đất có vườn ao, có giấy tờ cũ về quyền sử dụng đất. Khi làm sổ đỏ thì phần diện tích được tính là đất ở xác định thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Điều 141 Luật Đất đai 2024 quy định cách xác định diện tích đất ở khi công nhận quyền sử dụng đất, và điều này áp dụng cho hộ gia đình, cá nhân đang sử dụng đất có một trong các loại giấy tờ quy định tại các khoản 1 đến 7 Điều 137. Muốn biết mình có thuộc diện áp dụng hay không thì phải đối chiếu giấy tờ đang có với danh mục tại Điều 137.",
+    "ground_truth_citations": [
+      {
+        "dieu": "141",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "137",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI: Điều 141 tự xác định phạm vi áp dụng bằng cách dẫn tới danh mục giấy tờ ở Điều 137. Không đọc Điều 137 thì không biết mình có thuộc diện không.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W002",
+    "question": "Đất nhà tôi là đất nhận khoán của nông trường. Loại đất này có được cấp Giấy chứng nhận không?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Theo điểm d khoản 1 Điều 151 Luật Đất đai 2024, đất nhận khoán thuộc trường hợp không cấp Giấy chứng nhận, TRỪ trường hợp được công nhận quyền sử dụng đất tại điểm a khoản 2 Điều 181. Muốn biết mình có rơi vào ngoại lệ hay không thì phải đọc Điều 181.",
+    "ground_truth_citations": [
+      {
+        "dieu": "151",
+        "khoan": "1",
+        "diem": "d",
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "181",
+        "khoan": "2",
+        "diem": "a",
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dạng NGOẠI LỆ: quy định cấm kèm 'trừ trường hợp quy định tại…'. Chỉ đọc vế cấm sẽ trả lời SAI cho người thuộc ngoại lệ.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W003",
+    "question": "Chuyển mục đích sử dụng đất thì những trường hợp nào phải nộp tiền sử dụng đất?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 1 Điều 156 Luật Đất đai 2024 quy định nghĩa vụ nộp tiền sử dụng đất khi chuyển mục đích, nhưng phạm vi các trường hợp lại được dẫn tới các điểm b, c, d, đ, e và g khoản 1 Điều 121. Phải đọc Điều 121 mới biết trường hợp của mình có thuộc diện phải nộp tiền không.",
+    "ground_truth_citations": [
+      {
+        "dieu": "156",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "121",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dạng XÁC ĐỊNH PHẠM VI: nghĩa vụ nêu ở một điều, danh mục trường hợp nằm ở điều khác.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W004",
+    "question": "Một cá nhân được nhận chuyển nhượng tối đa bao nhiêu đất nông nghiệp?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 1 Điều 177 Luật Đất đai 2024 quy định hạn mức nhận chuyển quyền không quá 15 lần hạn mức giao đất nông nghiệp của cá nhân. Con số tuyệt đối chỉ tính được khi đọc hạn mức giao đất tại Điều 176 — ví dụ khoản 3 quy định không quá 30 ha đối với mỗi loại đất.",
+    "ground_truth_citations": [
+      {
+        "dieu": "177",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "176",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dạng ĐỊNH NGHĨA: quy định nêu hệ số nhân (15 lần) nhưng số gốc nằm ở điều khác. Chỉ đọc Điều 177 thì KHÔNG ra được con số nào.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W005",
+    "question": "Đất nhà tôi không có giấy tờ gì cả nhưng ở ổn định lâu năm. Khi được cấp sổ thì phần đất ở được công nhận tối đa bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Điều 138 Luật Đất đai 2024 quy định việc cấp Giấy chứng nhận cho hộ gia đình, cá nhân đang sử dụng đất không có giấy tờ mà không vi phạm pháp luật đất đai. Diện tích đất ở được công nhận căn cứ hạn mức do Ủy ban nhân dân cấp tỉnh quy định theo khoản 5 Điều 141, nên con số cụ thể phụ thuộc quy định của tỉnh nơi có đất.",
+    "ground_truth_citations": [
+      {
+        "dieu": "138",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "141",
+        "khoan": "5",
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dẫn xuống cấp tỉnh: điều khoản trung ương uỷ quyền cho UBND tỉnh. Câu trả lời đầy đủ phải nêu cả hai.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W006",
+    "question": "Con tôi sinh ra mà cha là người nước ngoài. Đi đăng ký khai sinh cho cháu thì phải nộp những giấy tờ gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 1 Điều 36 Luật Hộ tịch 2014 quy định thủ tục đăng ký khai sinh có yếu tố nước ngoài: người đi đăng ký nộp giấy tờ theo quy định tại khoản 1 Điều 16 của Luật này, và trường hợp cha hoặc mẹ là người nước ngoài thì phải nộp thêm văn bản thỏa thuận về việc chọn quốc tịch cho con. Danh mục giấy tờ cơ bản nằm ở khoản 1 Điều 16 — tờ khai theo mẫu và giấy chứng sinh.",
+    "ground_truth_citations": [
+      {
+        "dieu": "36",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "16",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI: điều về yếu tố nước ngoài chỉ nêu PHẦN THÊM, danh mục gốc nằm ở điều về thủ tục thông thường.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W007",
+    "question": "Tôi là bà nội, đương nhiên là người giám hộ của cháu. Thủ tục đăng ký giám hộ đương nhiên làm như thế nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 2 Điều 21 Luật Hộ tịch 2014 quy định trình tự đăng ký giám hộ đương nhiên được thực hiện theo quy định tại khoản 2 Điều 20 của Luật này. Nội dung trình tự cụ thể — thời hạn 03 ngày làm việc kể từ ngày nhận đủ giấy tờ — nằm ở khoản 2 Điều 20.",
+    "ground_truth_citations": [
+      {
+        "dieu": "21",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "20",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dạng DẪN TOÀN BỘ: điều khoản đáp án KHÔNG chứa nội dung nào, nó chỉ trỏ sang chỗ khác. Đây là ca cực đoan nhất của quy ước — chỉ trích Điều 21 thì câu trả lời rỗng.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W008",
+    "question": "Tôi muốn đăng ký lại khai sinh nhưng không còn bản sao Giấy khai sinh cũ, cũng không có giấy tờ nào cấp trước 1975. Vậy dùng giấy tờ gì thay thế?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 3 Điều 9 Thông tư 04/2020/TT-BTP quy định trường hợp người yêu cầu không có giấy tờ quy định tại khoản 1 và khoản 2 Điều này thì được dùng các giấy tờ khác do cơ quan có thẩm quyền cấp: giấy chứng minh nhân dân, căn cước công dân hoặc hộ chiếu; giấy tờ chứng minh nơi cư trú; bằng tốt nghiệp, chứng chỉ, học bạ; và giấy tờ khác có thông tin về họ tên, ngày tháng năm sinh. Khoản 1 và khoản 2 là danh mục giấy tờ ưu tiên mà người yêu cầu phải không có thì mới áp dụng khoản 3.",
+    "ground_truth_citations": [
+      {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "9",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "9",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CA CHUẨN của quy ước v4 — chính là câu V025 mà GT v2 chỉ ghi khoản 3 và phạt hệ khi trích thêm khoản 1, 2. Khoản 3 tự định nghĩa điều kiện áp dụng bằng cách dẫn tới khoản 1 và 2.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W009",
+    "question": "Hồ sơ của trẻ em được giới thiệu làm con nuôi người nước ngoài gồm những giấy tờ gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Điểm a khoản 1 Điều 32 Luật Nuôi con nuôi 2010 quy định hồ sơ gồm các giấy tờ, tài liệu quy định tại khoản 1 Điều 18 của Luật này, cộng thêm các giấy tờ riêng cho trường hợp nước ngoài nêu ở các điểm còn lại. Danh mục gốc nằm ở khoản 1 Điều 18 về hồ sơ trẻ em làm con nuôi trong nước.",
+    "ground_truth_citations": [
+      {
+        "dieu": "32",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "18",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI: hồ sơ nước ngoài = hồ sơ trong nước + phần thêm. Chỉ trích Điều 32 thì thiếu toàn bộ danh mục gốc.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W010",
+    "question": "Nếu việc nuôi con nuôi bị chấm dứt và cháu được giao lại cho cha mẹ đẻ thì quyền và nghĩa vụ của cha mẹ đẻ có được khôi phục không?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 3 Điều 27 Luật Nuôi con nuôi 2010 quy định trường hợp con nuôi được giao cho cha mẹ đẻ thì các quyền, nghĩa vụ của cha mẹ đẻ đã chấm dứt theo quy định tại khoản 4 Điều 24 được khôi phục. Muốn biết những quyền, nghĩa vụ nào được khôi phục thì phải đọc khoản 4 Điều 24 — điều khoản đã làm chấm dứt chúng.",
+    "ground_truth_citations": [
+      {
+        "dieu": "27",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "24",
+        "khoan": "4",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dạng KHÔI PHỤC: 'được khôi phục' chỉ có nghĩa khi biết cái gì đã bị chấm dứt.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W011",
+    "question": "Đi đăng ký khai sinh cho con mới sinh thì cần mang theo giấy tờ gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo khoản 1 Điều 16 Luật Hộ tịch 2014, người đi đăng ký khai sinh nộp tờ khai theo mẫu quy định và giấy chứng sinh cho cơ quan đăng ký hộ tịch. Trường hợp không có giấy chứng sinh thì nộp văn bản của người làm chứng xác nhận về việc sinh.",
+    "ground_truth_citations": [
+      {
+        "dieu": "16",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG: đáp án trọn vẹn trong một khoản, không có tiền đề bắt buộc. Dùng để kiểm quy ước v4 KHÔNG làm phình mọi câu.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W012",
+    "question": "Nhóm đất phi nông nghiệp gồm những loại đất nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 3 Điều 9 Luật Đất đai 2024 liệt kê các loại đất thuộc nhóm đất phi nông nghiệp.",
+    "ground_truth_citations": [
+      {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG: điều khoản định nghĩa, tự đủ.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W013",
+    "question": "Hạn mức giao đất ở cho cá nhân tại các xã của huyện Củ Chi, TP.HCM là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Theo khoản 3 Điều 3 Quyết định 69/2024/QĐ-UBND TP.HCM, hạn mức giao đất ở cho cá nhân tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ là không quá 250 m2/cá nhân.",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG cấp tỉnh: con số nằm gọn trong một khoản.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W014",
+    "question": "Giấy chứng nhận kết hôn phải có những thông tin gì?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 2 Điều 17 Luật Hộ tịch 2014 liệt kê các thông tin bắt buộc phải có trên Giấy chứng nhận kết hôn.",
+    "ground_truth_citations": [
+      {
+        "dieu": "17",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W015",
+    "question": "Nội dung đăng ký khai sinh gồm những thông tin nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 1 Điều 14 Luật Hộ tịch 2014 quy định nội dung đăng ký khai sinh gồm các thông tin về người được đăng ký khai sinh, cha mẹ và các thông tin liên quan.",
+    "ground_truth_citations": [
+      {
+        "dieu": "14",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W016",
+    "question": "Đất sử dụng có thời hạn thì việc gia hạn được thực hiện vào lúc nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 3 Điều 172 Luật Đất đai 2024 quy định việc gia hạn sử dụng đất được thực hiện trong năm cuối của thời hạn sử dụng đất.",
+    "ground_truth_citations": [
+      {
+        "dieu": "172",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG. Khoản này có mệnh đề 'trừ trường hợp quy định tại điểm a khoản 1 Điều này' nhưng ngoại lệ đó ở CÙNG điều, không tạo chuỗi liên điều.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W017",
+    "question": "Hồ sơ của trẻ em được giới thiệu làm con nuôi trong nước gồm những giấy tờ gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 1 Điều 18 Luật Nuôi con nuôi 2010 liệt kê các giấy tờ trong hồ sơ của người được giới thiệu làm con nuôi trong nước.",
+    "ground_truth_citations": [
+      {
+        "dieu": "18",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG. Đây chính là điều khoản mà W009 dẫn tới — cặp W009/W017 kiểm được cả hai chiều của quy ước.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W018",
+    "question": "Đăng ký khai sinh muộn cho con tại xã ở Đồng Nai thì lệ phí bao nhiêu?",
+    "theme": "ho-tich",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": "doi-chung-khong-chuoi",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo Phụ lục Nghị quyết 11/2023/NQ-HĐND tỉnh Đồng Nai, mức thu lệ phí hộ tịch tại Ủy ban nhân dân cấp xã đối với khai sinh đăng ký không đúng hạn, đăng ký lại là 10.000 đồng.",
+    "ground_truth_citations": [
+      {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      }
+    ],
+    "notes": "ĐỐI CHỨNG cấp tỉnh, lĩnh vực hộ tịch. CẦN [B] DUYỆT.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W019",
+    "question": "Hạn mức giao đất ở cho cá nhân ở các phường thuộc thành phố Biên Hòa là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": "dia-phuong",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo điểm a khoản 1 Điều 3 Quyết định 92/2025/QĐ-UBND tỉnh Đồng Nai, hạn mức giao đất ở tại đô thị đối với các phường Biên Hòa, Trấn Biên, Tam Hiệp, Long Bình, Trảng Dài, Hố Nai và một số phường khác là không quá 200 m2.",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Phải chọn đúng tỉnh Đồng Nai, không lẫn sang TP.HCM.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W020",
+    "question": "Tôi ở một xã thuộc huyện Định Quán, tỉnh Đồng Nai. Hạn mức giao đất ở khu vực này bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "dong-nai",
+    "gap_type": "gap2",
+    "subtype": "dia-phuong",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Theo điểm a khoản 2 Điều 3 Quyết định 92/2025/QĐ-UBND tỉnh Đồng Nai, hạn mức giao đất ở tại nông thôn đối với các xã gồm Định Quán, La Ngà, Phú Vinh, Phú Hòa và một số xã khác là không quá 300 m2.",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": "a",
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Phân biệt đô thị / nông thôn trong CÙNG một tỉnh.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W021",
+    "question": "Cùng là đất ở tại xã nông thôn, hạn mức giao đất ở TP.HCM và ở Đồng Nai khác nhau thế nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "multi-juris",
+    "gap_type": "gap2",
+    "subtype": "so-sanh-lien-tinh",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Tại TP.HCM, theo khoản 3 Điều 3 Quyết định 69/2024/QĐ-UBND, hạn mức tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ là không quá 250 m2/cá nhân. Tại Đồng Nai, theo khoản 2 Điều 3 Quyết định 92/2025/QĐ-UBND, hạn mức tại nông thôn là không quá 300 m2 hoặc 400 m2 tùy khu vực. Như vậy hạn mức ở Đồng Nai cao hơn.",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "SO SÁNH LIÊN TỈNH — jurisdiction phải là multi-juris, không phải toan-quoc. Đây là lớp lỗi đã phát hiện ở GT v2 (câu V022 gán nhãn toan-quoc nên bị lọc mất văn bản tỉnh).",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W022",
+    "question": "Phí thẩm định hồ sơ cấp giấy chứng nhận quyền sử dụng đất ở TP.HCM thu theo mức nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap2",
+    "subtype": "dia-phuong",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Mức thu phí thẩm định hồ sơ cấp giấy chứng nhận quyền sử dụng đất trên địa bàn TP.HCM được quy định tại Phụ lục ban hành kèm Nghị quyết 02/2023/NQ-HĐND, phân biệt theo từng trường hợp hồ sơ.",
+    "ground_truth_citations": [
+      {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "phu_luc"
+      }
+    ],
+    "notes": "Văn bản tầng 4 TP.HCM, nội dung nằm ở Phụ lục.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W023",
+    "question": "Nghe nói hạn mức đất ở tại các xã ngoại thành TP.HCM trước đây là 300 m2, giờ còn 250. Đổi từ khi nào và theo văn bản nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "tp-hcm",
+    "gap_type": "gap4",
+    "subtype": "doi-phien-ban",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Quy định cũ tại điểm d khoản 1 Điều 1 Quyết định 18/2016/QĐ-UBND TP.HCM cho phép tối đa 300 m2/hộ tại một số khu vực. Từ ngày 30/9/2024, Quyết định 18/2016 hết hiệu lực và được thay thế bởi Quyết định 69/2024/QĐ-UBND; theo khoản 3 Điều 3 văn bản mới, hạn mức tại các xã của các huyện là không quá 250 m2/cá nhân.",
+    "ground_truth_citations": [
+      {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "d",
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Buộc nêu CẢ HAI văn bản và mốc chuyển giao 30/9/2024.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W024",
+    "question": "Hồ sơ đăng ký hộ tịch của tôi được tiếp nhận trước ngày Luật Hộ tịch có hiệu lực mà chưa giải quyết xong thì áp dụng quy định nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 1 Điều 76 Luật Hộ tịch 2014 quy định hồ sơ đăng ký hộ tịch được thụ lý trước ngày Luật này có hiệu lực mà chưa giải quyết xong thì tiếp tục được giải quyết theo quy định của pháp luật về hộ tịch tại thời điểm tiếp nhận.",
+    "ground_truth_citations": [
+      {
+        "dieu": "76",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Điều khoản chuyển tiếp. CẦN [B] DUYỆT.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W025",
+    "question": "Vợ chồng tôi nuôi một cháu từ nhiều năm trước nhưng chưa đăng ký ở đâu. Giờ đăng ký được không, cần điều kiện gì?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "subtype": "chuyen-tiep",
+    "difficulty": "hard",
+    "synthesis": false,
+    "ground_truth_answer": "Khoản 1 Điều 50 Luật Nuôi con nuôi 2010 quy định việc nuôi con nuôi giữa công dân Việt Nam với nhau phát sinh trước ngày Luật có hiệu lực mà chưa đăng ký thì được đăng ký trong thời hạn 05 năm kể từ ngày Luật có hiệu lực, nếu đáp ứng các điều kiện tại điểm a, b, c của khoản này.",
+    "ground_truth_citations": [
+      {
+        "dieu": "50",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Điều khoản chuyển tiếp. CẦN [B] DUYỆT.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W026",
+    "question": "Thẩm quyền đăng ký hộ tịch có yếu tố nước ngoài thuộc về cơ quan nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "da-tang",
+    "difficulty": "medium",
+    "synthesis": true,
+    "ground_truth_answer": "Theo điểm a khoản 2 Điều 7 Luật Hộ tịch 2014, Ủy ban nhân dân cấp huyện đăng ký các sự kiện hộ tịch quy định tại khoản 1 Điều 3 của Luật này có yếu tố nước ngoài. Danh mục sự kiện hộ tịch nằm ở khoản 1 Điều 3.",
+    "ground_truth_citations": [
+      {
+        "dieu": "7",
+        "khoan": "2",
+        "diem": "a",
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI: thẩm quyền định nghĩa phạm vi bằng cách dẫn tới danh mục sự kiện hộ tịch.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W027",
+    "question": "Người nước ngoài thường trú ở nước ngoài được nhận con nuôi đích danh trong những trường hợp nào, và hồ sơ nộp ở đâu?",
+    "theme": "nuoi-con-nuoi",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Khoản 3 Điều 31 Luật Nuôi con nuôi 2010 quy định hồ sơ của người nhận con nuôi được lập thành 02 bộ và nộp cho Bộ Tư pháp thông qua cơ quan trung ương về nuôi con nuôi của nước nơi người nhận con nuôi thường trú; trường hợp nhận con nuôi đích danh quy định tại khoản 2 Điều 28 thì có thể nộp trực tiếp. Các trường hợp được nhận đích danh nằm ở khoản 2 Điều 28.",
+    "ground_truth_citations": [
+      {
+        "dieu": "31",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "28",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI. CẦN [B] DUYỆT.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W028",
+    "question": "Đất rừng sản xuất là rừng trồng thì cá nhân được giao trong hạn mức bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "subtype": "chuoi-dan-chieu",
+    "difficulty": "hard",
+    "synthesis": true,
+    "ground_truth_answer": "Điểm a khoản 1 Điều 184 Luật Đất đai 2024 quy định cá nhân trực tiếp sản xuất nông nghiệp thường trú trên địa bàn cấp xã được giao đất rừng sản xuất là rừng trồng trong hạn mức giao đất quy định tại điểm b khoản 3 Điều 176. Con số hạn mức nằm ở Điều 176.",
+    "ground_truth_citations": [
+      {
+        "dieu": "184",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "176",
+        "khoan": "3",
+        "diem": "b",
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI dạng ĐỊNH NGHĨA HẠN MỨC.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W029",
+    "question": "Thủ tục xin cấp phép xây dựng nhà ở riêng lẻ gồm những bước nào?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "subtype": "ngoai-pham-vi",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không đủ căn cứ để trả lời. Cấp phép xây dựng thuộc pháp luật về xây dựng, nằm ngoài phạm vi ba lĩnh vực của hệ thống. Hệ thống phải từ chối thay vì suy đoán.",
+    "ground_truth_citations": [],
+    "notes": "ÂM — ngoài phạm vi lĩnh vực.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W030",
+    "question": "Mức phạt khi tự ý chuyển mục đích sử dụng đất nông nghiệp sang đất ở là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "subtype": "ngoai-pham-vi",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không đủ căn cứ để trả lời. Xử phạt vi phạm hành chính trong lĩnh vực đất đai do nghị định xử phạt riêng quy định, không có trong kho văn bản của hệ thống.",
+    "ground_truth_citations": [],
+    "notes": "ÂM — đúng lĩnh vực đất đai nhưng văn bản xử phạt không có trong kho. Kiểm hệ không bịa mức phạt.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W031",
+    "question": "Thủ tục ly hôn tại tòa án gồm những bước nào?",
+    "theme": "ho-tich",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "subtype": "ngoai-pham-vi",
+    "difficulty": "easy",
+    "synthesis": false,
+    "ground_truth_answer": "Không đủ căn cứ để trả lời. Ly hôn thuộc pháp luật hôn nhân và gia đình và tố tụng dân sự, không thuộc ba lĩnh vực của hệ thống.",
+    "ground_truth_citations": [],
+    "notes": "ÂM — dễ nhầm với hộ tịch.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "W032",
+    "question": "Hạn mức giao đất ở cho cá nhân tại thành phố Cần Thơ là bao nhiêu?",
+    "theme": "dat-dai",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "subtype": "ngoai-pham-vi",
+    "difficulty": "medium",
+    "synthesis": false,
+    "ground_truth_answer": "Không đủ căn cứ để trả lời. Hệ thống chỉ có văn bản của TP.HCM và Đồng Nai; không có quyết định hạn mức của Cần Thơ.",
+    "ground_truth_citations": [],
+    "notes": "ÂM — đúng loại câu hỏi, đúng lĩnh vực, nhưng SAI địa phương. Kiểm hệ không lấy hạn mức tỉnh khác trả lời thay.",
+    "review": {
+      "nguoi_soan": "claude-postdoc",
+      "da_duyet": false
+    }
+  }
+]

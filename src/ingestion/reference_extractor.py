@@ -48,8 +48,26 @@ _SCOPE_LIEN_VB = re.compile(
     rf"|(?P<ten>(?:\s*[^\s,.;:()]+){{1,5}}))"
 )
 
-# Dẫn chiếu tự thân: "Điều này", "khoản này", "điểm này"
+# Dẫn chiếu tự thân THUẦN: "Điều này", "khoản này", "điểm này" đứng một mình.
 _REF_TU_THAN = re.compile(r"\b(?P<cap>[ĐđKkĐđ]iều|khoản|điểm)\s+này\b")
+
+# Dẫn chiếu KHOẢN ANH EM trong cùng Điều: "khoản 1 và khoản 2 Điều này".
+# ĐÂY KHÔNG PHẢI TỰ THAM CHIẾU — nó trỏ sang khoản KHÁC của chính Điều đang
+# đứng. Bỏ sót loại này là bỏ sót 240 dẫn chiếu trên kho, và đúng loại tạo ra
+# chuỗi tiền đề rõ nhất: Thông tư 04/2020 Điều 9 Khoản 3 mở đầu bằng "trường
+# hợp không có giấy tờ quy định tại khoản 1 và khoản 2 Điều này thì…".
+# Cho phép chữ "khoản" LẶP LẠI: "khoản 1 và khoản 2 Điều này" cũng như dạng
+# rút gọn "khoản 1, 2 và 3 Điều này".
+_REF_KHOAN_ANH_EM = re.compile(
+    r"khoản\s+(?P<khoan>\d+(?:\s*,\s*(?:khoản\s+)?\d+)*"
+    r"(?:\s+và\s+(?:khoản\s+)?\d+)?)\s+[Đđ]iều\s+này"
+)
+
+# Dẫn chiếu ĐIỂM ANH EM trong cùng Khoản: "điểm a và điểm b khoản này".
+_REF_DIEM_ANH_EM = re.compile(
+    r"điểm\s+(?P<diem>[a-zđ](?:\s*,\s*(?:điểm\s+)?[a-zđ])*"
+    r"(?:\s+và\s+(?:điểm\s+)?[a-zđ])?)\s+khoản\s+này"
+)
 
 # Dẫn chiếu có địa chỉ cụ thể. Ba phần đều tùy chọn nhưng phải có ít nhất Điều
 # hoặc khoản. Cho phép dạng liệt kê: "các khoản 1, 2 và 3 Điều 100".
@@ -163,6 +181,17 @@ def build_norm_index(raw_dir: str) -> tuple[dict[str, NormIndex], dict[str, str]
     return indexes, so_hieu_map
 
 
+def _dieu_khoan_hien_tai(stack: list[tuple[int, str]]) -> tuple[str | None, str | None]:
+    """(số Điều, số Khoản) của vị trí đang đứng — để giải 'khoản X Điều này'."""
+    dieu = khoan = None
+    for _lvl, text in stack:
+        if (m := _DIEU_NUM.match(text)):
+            dieu, khoan = m.group(1), None
+        elif (m := _KHOAN_NUM.match(text)):
+            khoan = m.group(1)
+    return dieu, khoan
+
+
 def _path_to_key(stack: list[tuple[int, str]]) -> tuple | None:
     """Chuyển stack heading → khoá (dieu, khoan, diem). None nếu không phải Điều."""
     dieu = khoan = diem = None
@@ -252,7 +281,12 @@ def _tach_danh_sach(s: str | None) -> list[str]:
     """'1, 2 và 3' → ['1','2','3']. None → []."""
     if not s:
         return []
-    return [p for p in re.split(r"\s*,\s*|\s+và\s+", s.strip()) if p]
+    ra = []
+    for p in re.split(r"\s*,\s*|\s+và\s+", s.strip()):
+        p = re.sub(r"^(?:khoản|điểm)\s+", "", p.strip())
+        if p:
+            ra.append(p)
+    return ra
 
 
 def extract_from_file(
@@ -291,7 +325,8 @@ def extract_from_file(
 
         nguon_path = [norm_id] + [h[1] for h in stack]
         refs.extend(
-            _extract_from_line(body, norm_id, nguon_path, indexes, so_hieu_map, lexicon)
+            _extract_from_line(body, norm_id, nguon_path, indexes, so_hieu_map,
+                               lexicon, _dieu_khoan_hien_tai(stack))
         )
 
     return refs
@@ -304,8 +339,30 @@ def _extract_from_line(
     indexes: dict[str, NormIndex],
     so_hieu_map: dict[str, str],
     lexicon: dict[str, list[str]],
+    ngu_canh: tuple[str | None, str | None] = (None, None),
 ) -> list[Reference]:
     out: list[Reference] = []
+    dieu_ht, khoan_ht = ngu_canh
+
+    # 0) Khoản/điểm ANH EM — phải xử lý TRƯỚC _REF_TU_THAN vì cụm
+    # "khoản 1 Điều này" có chứa "Điều này".
+    if dieu_ht:
+        for m in _REF_KHOAN_ANH_EM.finditer(text):
+            for kh in _tach_danh_sach(m.group("khoan")):
+                r = Reference(nguon_norm=norm_id, nguon_path=nguon_path,
+                              loai="noi_bo", raw=m.group(0).strip(),
+                              dich_norm=norm_id, dich_dieu=dieu_ht, dich_khoan=kh)
+                _giai_chieu(r, norm_id, dieu_ht, kh, None, indexes)
+                out.append(r)
+        if khoan_ht:
+            for m in _REF_DIEM_ANH_EM.finditer(text):
+                for di in _tach_danh_sach(m.group("diem")):
+                    r = Reference(nguon_norm=norm_id, nguon_path=nguon_path,
+                                  loai="noi_bo", raw=m.group(0).strip(),
+                                  dich_norm=norm_id, dich_dieu=dieu_ht,
+                                  dich_khoan=khoan_ht, dich_diem=di)
+                    _giai_chieu(r, norm_id, dieu_ht, khoan_ht, di, indexes)
+                    out.append(r)
 
     # 1) Dẫn chiếu tự thân — trỏ về chính Component đang đứng, không tạo cạnh mới
     for m in _REF_TU_THAN.finditer(text):
