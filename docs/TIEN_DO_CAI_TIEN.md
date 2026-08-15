@@ -594,3 +594,45 @@ cảnh báo tự-ưu-ái này. Nói ngược lại là tự tô hồng.
 Số đó cũng đo bằng planner Claude. Đang chạy lại bộ chốt đầy đủ trên 137 câu với
 planner Gemini (`v2_chot_gemini.json`). **Không đưa +0,136 vào báo cáo cho tới
 khi có số đo lại.**
+
+---
+
+## 15. SỐ CHỐT CỦA ĐỢT CẢI TIẾN (planner đồng bộ Gemini, 123 câu v2)
+
+### 15.1 Cấu hình THỰC SỰ ĐEM DÙNG — bỏ `fill` theo D-27
+
+| bước | bao phủ Khoản | Δ | T/B |
+|---|---|---|---|
+| mốc hiện tại | 0,741 | — | — |
+| + dẫn chiếu `REFERS_TO` | 0,759 | +0,018 | 10/3 |
+| + cross-encoder trong-norm | 0,806 | +0,065 | 17/5 |
+| + pool 100 + tắt độ hiếm | **0,851** | **+0,109** | **25/4** |
+
+Per-gap: gap1 **+0,185**, gap3 **+0,169**, gap2 +0,069, gap4 +0,011.
+
+### 15.2 So với bản có `fill`
+
+| | bao phủ | Δ | token ngữ cảnh TB |
+|---|---|---|---|
+| mốc | 0,741 | — | 3520 |
+| đủ bộ, KHÔNG fill | 0,851 | +0,109 | 4343 |
+| đủ bộ, CÓ fill | 0,870 | +0,129 | 6253 |
+
+`fill` mua thêm **+0,020 bao phủ** bằng cách nhồi thêm **~1900 token**, và cái
+giá ở khâu sinh là **−0,115 F1** (§10). Đổi chác tệ → giữ nguyên quyết định bác
+bỏ ở D-27.
+
+### 15.3 Con số nên dùng trong báo cáo
+
+> **Độ bao phủ điều khoản đúng: 0,741 → 0,851 (+0,109), 25 thắng / 4 thua trên
+> 123 câu.** Đóng góp lớn nhất ở gap1 (+0,185) và gap3 (+0,169).
+
+Kèm theo BẮT BUỘC nêu: mức tăng bao phủ này **không chuyển thành F1** —
+xem §10 và §12. Đó mới là phát hiện chính.
+
+### 15.4 Ba cảnh báo phải nói trước hội đồng
+
+1. **Bao phủ ≠ F1.** Cùng tập, cùng cấu hình: bao phủ +0,167 (v4) / +0,109 (v2)
+   nhưng F1 −0,070. Nút thắt đã chuyển sang khâu chọn trích dẫn của bộ sinh.
+2. **v4 tự ưu ái.** Soạn từ chính các cạnh `REFERS_TO` → dùng v2 làm số chính.
+3. **v4 chưa có người rà**, 32/32 câu `da_duyet=false`.
