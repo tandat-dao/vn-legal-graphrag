@@ -175,6 +175,15 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
         ("+ pool 100 + tắt độ hiếm", "khoan", "fill", 12000, "trong-norm", False, False,
          {"_DENSE_POOL_MIN": 100, "_RARITY_ALPHA": 0.0}),
     ],
+    # MẺ CHỐT SAU D-27 — bỏ `fill` (đã bác bỏ) khỏi mọi bước. Đây mới là cấu
+    # hình THỰC SỰ ĐEM DÙNG, nên số của nó mới được đưa vào báo cáo.
+    "chot-khong-fill": [
+        ("mốc hiện tại", None, None, 6000, None, False, False, {}),
+        ("+ dẫn chiếu", "khoan", None, 6000, None, False, False, {}),
+        ("+ cross-encoder", "khoan", None, 6000, "trong-norm", False, False, {}),
+        ("+ pool 100 + tắt độ hiếm", "khoan", None, 6000, "trong-norm", False, False,
+         {"_DENSE_POOL_MIN": 100, "_RARITY_ALPHA": 0.0}),
+    ],
     # Vòng 3 — phép so QUYẾT ĐỊNH: biến thể tốt nhất của mỗi việc, và cả hai
     # cùng lúc. Dùng để chốt cấu hình cuối.
     "ket-hop": [
