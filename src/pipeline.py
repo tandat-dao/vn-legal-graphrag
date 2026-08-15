@@ -39,7 +39,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 DEFAULT_TOP_K = 25
-CONTEXT_MAX_TOKENS = 6000
+CONTEXT_MAX_TOKENS = int(os.getenv('PIPE_CONTEXT_MAX_TOKENS', '6000'))
 
 
 # ---------------------------------------------------------------------------
@@ -249,6 +249,7 @@ def run_pipeline(
     refers_mode: str | None = None,
     budget_mode: str | None = None,
     chuyen_tiep: bool = False,
+    rerank_mode: str | None = None,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
@@ -351,6 +352,7 @@ def run_pipeline(
             refers_mode=refers_mode,
             budget_mode=budget_mode,
             extra_component_ids=chuyen_tiep_comp_ids,
+            rerank_mode=rerank_mode,
         )
         logger.info(f"run_pipeline: {len(scored_units)} scored units")
 

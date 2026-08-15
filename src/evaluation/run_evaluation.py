@@ -394,11 +394,15 @@ def main() -> int:
              "Mặc định tắt (hành vi cũ).",
     )
     parser.add_argument(
-        "--budget-mode", default=None, choices=["graph"],
+        "--budget-mode", default=None, choices=["graph", "norm", "tier", "fill"],
         help="Trần đơn vị mỗi văn bản (chỉ GraphRAG): mặc định cố định 3 | "
              "graph = chia ngân sách theo số văn bản Giai đoạn 2 trả về "
              "(sàn 3 — chỉ nới cho chuỗi hẹp, không bao giờ siết).",
     )
+    parser.add_argument("--rerank-mode", default=None, choices=["trong-norm"],
+        help="Cross-encoder xếp lại điều khoản TRONG văn bản đã chọn (chạy CPU, chậm).")
+    parser.add_argument("--chuyen-tiep", action="store_true",
+        help="Phát hiện quy định đã thay đổi + nạp điều khoản chuyển tiếp.")
     args = parser.parse_args()
 
     if not args.test_set.exists():

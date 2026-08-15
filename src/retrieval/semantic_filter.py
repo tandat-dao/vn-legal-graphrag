@@ -17,6 +17,7 @@ BGE-M3 tự chọn TextUnit tốt nhất trong mỗi norm — không bị per-no
 ScoredTextUnit là output TypedDict — text_unit_id cho phép TASK-13 fetch text từ Neo4j.
 """
 import logging
+import os
 import re
 import unicodedata
 from typing import TypedDict
@@ -249,7 +250,7 @@ def _fetch_components_by_label_keywords(
 
 _RRF_K = 60
 _DENSE_POOL_MULTIPLIER = 2   # lấy 2*top_k từ dense search trước khi re-rank
-_DENSE_POOL_MIN = 50         # pool tối thiểu để đảm bảo đủ ứng viên dense
+_DENSE_POOL_MIN = int(os.getenv('SF_DENSE_POOL_MIN', '50'))          # pool tối thiểu để đảm bảo đủ ứng viên dense
 _KEYWORD_SCROLL_LIMIT = 200  # scroll tối đa cho keyword path
 _KEYWORD_MIN_SCORE = 0.5     # ngưỡng tối thiểu để text_unit được tham gia keyword path
                               # — tránh nhiễu khi query chứa "tp"/"hcm" match nhẹ với norm_id
@@ -357,7 +358,7 @@ def _keyword_score(query_tokens: set[str], payload: dict) -> float:
 # RRF
 # ---------------------------------------------------------------------------
 
-_RARITY_ALPHA = 1.5
+_RARITY_ALPHA = float(os.getenv('SF_RARITY_ALPHA', '1.5'))
 
 # --- Ngân sách ngữ cảnh (việc 2) ---
 #
@@ -410,7 +411,7 @@ def _tinh_per_tier(tier, che_do: str | None) -> int:
 # KHÔNG BAO GIỜ đầy (cao nhất 23), nên nếu Pass 3 dùng chung ngân sách thì nó
 # gần như không có chỗ, và phép đo sẽ ra âm vì hết slot chứ không phải vì ý
 # tưởng sai. Tách ngân sách để đo đúng thứ cần đo.
-_REFERS_BUDGET = 5
+_REFERS_BUDGET = int(os.getenv('SF_REFERS_BUDGET', '5'))
 # Các chế độ: "khoan" chỉ nhận dẫn chiếu đích danh khoản (chính xác cao);
 # "all" nhận cả dẫn chiếu cấp Điều (đã nở ra các khoản con — nhiều nhưng loãng);
 # "rrf" là ĐỐI CHỨNG: cũng thêm _REFERS_BUDGET đơn vị nhưng chọn theo RRF, để
