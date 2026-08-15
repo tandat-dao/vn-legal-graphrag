@@ -25,6 +25,7 @@ cache_hit=True (latency ~0.x s).
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import time
 from pathlib import Path
@@ -56,6 +57,18 @@ def main() -> None:
     parser.add_argument("--mode", choices=["auto", "general", "irac"], default="auto")
     parser.add_argument("--cache-dir", default=_DEFAULT_CACHE_DIR,
                         help=f"Thư mục LLM cache (mặc định {_DEFAULT_CACHE_DIR}).")
+    # Khoá cache = sha256(model | prompt). Hâm bằng nhà cung cấp KHÁC lúc demo
+    # thì mọi câu đều trượt cache — phải khớp `LLM_MODE` của giao diện.
+    parser.add_argument("--llm-mode",
+                        choices=["claude", "claude-fallback", "gemini", "gemini-fallback"],
+                        default=os.getenv("LLM_MODE") or "gemini",
+                        help="Nhà cung cấp dùng để hâm. PHẢI khớp lúc demo "
+                             "(giao diện mặc định gemini).")
+    # refers_mode đổi ngữ cảnh -> đổi prompt -> đổi khoá cache. Phải khớp
+    # UI_REFERS_MODE, nếu không demo vẫn gọi tươi.
+    parser.add_argument("--refers-mode", choices=["khoan", "all", "rrf"],
+                        default=os.getenv("UI_REFERS_MODE") or None,
+                        help="PHẢI khớp UI_REFERS_MODE lúc demo.")
     args = parser.parse_args()
 
     questions = list(args.question)
@@ -70,7 +83,10 @@ def main() -> None:
 
     cache_dir = Path(args.cache_dir)
     print(f"🔁 Pre-cache {len(questions)} câu → {cache_dir}")
-    print(f"   jurisdiction={args.jurisdiction} mode={args.mode}\n")
+    print(f"   jurisdiction={args.jurisdiction} mode={args.mode} "
+          f"llm_mode={args.llm_mode} refers_mode={args.refers_mode}")
+    print("   ⚠️  Lúc demo PHẢI đặt đúng LLM_MODE và UI_REFERS_MODE như trên, "
+          "khác đi là trượt cache.\n")
 
     ok = 0
     for i, q in enumerate(questions, 1):
@@ -81,7 +97,8 @@ def main() -> None:
                 force_jurisdiction=args.jurisdiction,
                 llm_cache_dir=cache_dir,
                 response_mode=None if args.mode == "auto" else args.mode,
-                llm_mode="claude",   # pre-cache dùng Claude THẬT để cache đúng
+                llm_mode=args.llm_mode,
+                **({"refers_mode": args.refers_mode} if args.refers_mode else {}),
             )
             dt = time.perf_counter() - t0
             hit = result.get("cache_hit")
