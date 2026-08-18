@@ -14,7 +14,7 @@
 |---|---|
 | Test set | `test_set_v2.json` — **137 câu**, FREEZE (SHA256 `bd2c5eaf…f146`, tag `gt-v2-freeze`) |
 | Hệ thống | GraphRAG **v2** (có Fix A: jurisdiction=None→mọi tỉnh, commit `3efd0e8`) |
-| LLM | Gemini end-to-end (generator `gemini-2.5-pro`, planner `gemini-2.5-flash`); judge Claude Haiku cố định |
+| LLM | Gemini end-to-end (generator `gemini-2.5-pro`, planner `gemini-2.5-flash`); judge Gemini 2.5 Pro cố định (theo Bảng 3.6 báo cáo) |
 | Metric | F1 Khoản (nghiêm) / F1 Điều (routing) / Norm Recall; `cit_matches` |
 | Lưu ý | mẻ đêm 09→10/07 dính Gemini 429 quota ở vài mẫu → đã lọc, chỉ dùng mẫu **0 lỗi 429** |
 

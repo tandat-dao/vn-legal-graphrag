@@ -175,6 +175,9 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 
 ## QUYẾT ĐỊNH THIẾT KẾ — DECISION LOG
 
+
+> **📕 Nguồn sự thật:** `baocao.pdf` là chuẩn duy nhất. Các mục D-24/D-25 mô tả trạng thái TẠI THỜI ĐIỂM ra quyết định (judge từng là Claude Haiku); **số liệu công bố theo Bảng 3.6 của báo cáo: `LLM - Faithfulness` = Gemini 2.5 Pro, Bảng 4.7 = 260/295 = 88.1%**. Tài liệu nào mâu thuẫn báo cáo thì tài liệu đó sai.
+
 | # | Quyết định | Lý do | Ngày |
 |---|---|---|---|
 | D-01 | Thu thập theo Chương/Mục thay vì từng Điều | Tiết kiệm thời gian Phase 1; dữ liệu thừa dùng làm noise test cho evaluation | 2026-04-27 |

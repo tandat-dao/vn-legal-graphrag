@@ -58,7 +58,7 @@ Theme: dat-dai 61 · ho-tich 39 · nuoi-con-nuoi 29 · (null) 8. Độ khó: eas
 
 **Ý nghĩa thống kê:** paired bootstrap 95% CI (10000 resample, seed=42) + Wilcoxon signed-rank. Với subset ~25/gap, ưu tiên **effect-size** hơn săn p<0.05.
 
-**LLM:** đo trên cả `claude` và `gemini` (LLM-agnostic). Judge (faithfulness) CỐ ĐỊNH Claude Haiku — thước đo độc lập.
+**LLM:** đo trên cả `claude` và `gemini` (LLM-agnostic). Judge (faithfulness) CỐ ĐỊNH Gemini 2.5 Pro theo Bảng 3.6 báo cáo — trùng mô hình sinh, hạn chế đã nêu ở mục 4.4.1.
 
 **Đánh giá người (E2c):** mẫu chung phân tầng, chấm mù đa hệ; nhóm A (pháp lý A1-A4) + nhóm B (người dùng B1-B2); validate LLM-judge qua kappa (Landis-Koch) trước khi mở rộng.
 

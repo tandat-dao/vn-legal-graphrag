@@ -133,16 +133,24 @@ Trước 31/07 **chưa từng có** kết quả Tầng 2 nào trong kho: mọi t
 
 Đo trên `results_graphrag_final1_20260729-022916.json`:
 
+> **⚠️ ĐÃ SỬA 18/08 CHO KHỚP BÁO CÁO.** Bản trước của mục này gán 88.1% cho
+> Claude Haiku 4.5 và kết luận "Bảng 3.6 của báo cáo phải ghi Flash" — **SAI**.
+> `baocao.pdf` là nguồn sự thật duy nhất: Bảng 3.6 ghi `LLM - Faithfulness` =
+> **Gemini 2.5 Pro**, Bảng 4.7 ghi **260/295 = 88.1%**, và mục 4.4.1 nêu rõ
+> mô-đun đánh giá TRÙNG mô hình sinh nên tỉ lệ hậu thuẫn phải đọc như chỉ báo
+> tương đối. Sai sót cũ ở tệp này từng khiến trợ lý kết luận nhầm rằng [B] gán
+> sai bộ chấm.
+
 | Bộ chấm | Tỉ lệ tồn tại | Tỉ lệ hậu thuẫn |
 |---|---|---|
-| **Gemini 2.5 Flash** (dùng cho báo cáo) | 295/296 = 99.7% | **230/295 = 78.0%** |
-| Claude Haiku 4.5 (đối chứng nhà cung cấp khác) | 295/296 = 99.7% | 260/295 = 88.1% |
+| **Gemini 2.5 Pro** (SỐ CỦA BÁO CÁO — Bảng 3.6 + 4.7) | 295/296 = 99.7% | **260/295 = 88.1%** |
+| Gemini 2.5 Flash (đo kiểm tra lại) | 295/296 = 99.7% | 230/295 = 78.0% |
 
 Theo nhóm (Gemini): đa lĩnh vực 0.873 · đa tầng 0.800 · đa phiên bản 0.721 · đa địa phương 0.716.
 
-⚠️ `JUDGE_MODEL` trong `faithfulness.py` mang tên Claude Haiku; khi chạy qua wrapper Gemini, hàm ánh xạ thấy chữ "haiku" nên chuyển sang `GEMINI_MODEL_PLANNER` = **Gemini 2.5 Flash**, không phải 2.5 Pro. Bảng 3.6 của báo cáo phải ghi Flash.
+Ghi chú kỹ thuật: hằng số `JUDGE_MODEL` trong `faithfulness.py` từng mang tên Claude Haiku dù hệ chạy Gemini — bẫy đặt tên này đã được khai báo tường minh qua `FAITHFULNESS_JUDGE_MODEL` (D-27). Điều đó KHÔNG đổi số của báo cáo.
 
-Bộ chấm cùng họ (Flash) **chặt hơn** bộ chấm nhà cung cấp khác (Haiku) — 78.0% so với 88.1% — nên lo ngại thiên lệch tự đề cao không được số liệu ủng hộ.
+Báo cáo (mục 4.4.1) tự nêu hạn chế: bộ chấm trùng mô hình sinh nên 88.1% có thể lệch theo hướng dễ dãi, con số thực nhiều khả năng thấp hơn. Phép đo bổ sung ngày 18/08 của [B] với ba bộ chấm (Gemini Pro 88.1% · Qwen3-4B 83.7% · Gemini Flash 79.0%) cho thấy điểm ổn định trong dải 79–88%, và bộ chấm cùng nhà lại chấm CHẶT nhất — tức lo ngại thiên lệch không được số liệu ủng hộ.
 
 ---
 
