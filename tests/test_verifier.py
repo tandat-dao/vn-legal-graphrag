@@ -37,8 +37,13 @@ _GROUNDED_2 = _cit(dieu="13", van_ban="nghi-dinh-102-2024-nd-cp")
 
 
 def _mock_judge_client(verdict: str):
-    """Anthropic client giả: messages.create trả JSON verdict cố định."""
-    client = MagicMock()
+    """Client kiểu Anthropic giả: messages.create trả JSON verdict cố định.
+
+    `spec=["messages"]` là CẦN THIẾT: `_judge_citation` phân biệt client
+    google-genai với client `.messages.create` bằng duck-typing, mà MagicMock
+    trần thì bịa ra cả `.models.generate_content` → bị nhận nhầm là client genai.
+    """
+    client = MagicMock(spec=["messages"])
     msg = MagicMock()
     block = MagicMock()
     block.text = f'{{"verdict": "{verdict}", "reason": "mock"}}'

@@ -29,15 +29,26 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
-from typing import TypedDict
-
-import anthropic
+from typing import Any, TypedDict
 
 logger = logging.getLogger(__name__)
 
-# Model nhẹ cho judge — Haiku 4.5 rẻ + nhanh
-JUDGE_MODEL = "claude-haiku-4-5-20251001"
+# Model nhẹ cho judge. Trước đây CỐ ĐỊNH Claude Haiku để thước đo độc lập với hệ
+# thống (D-24); dự án chuyển sang thuần Gemini nên judge cũng là Gemini Flash —
+# xem ghi chú về tự-chấm ở `evaluate_faithfulness`.
+DEFAULT_JUDGE_MODEL = "gemini-2.5-flash"
+JUDGE_MODEL = os.getenv("FAITHFULNESS_JUDGE_MODEL") or DEFAULT_JUDGE_MODEL
+
+# Gemini 2.5 là thinking model: thinking tiêu token TRONG max_output_tokens. Giữ
+# max_tokens=200 kiểu Claude sẽ khiến verdict bị cắt cụt/rỗng (bài học D-24).
+JUDGE_MAX_OUTPUT_TOKENS = 2048
+
+
+def _judge_model() -> str:
+    """Đọc env mỗi lần gọi (sau load_dotenv), fallback hằng số mặc định."""
+    return os.getenv("FAITHFULNESS_JUDGE_MODEL") or DEFAULT_JUDGE_MODEL
 
 
 class FaithfulnessResult(TypedDict):
@@ -210,11 +221,46 @@ def _extract_answer_snippet(citation: dict, answer: str, window: int = 200) -> s
     return answer[: window * 2]
 
 
+def _goi_judge(llm_client: Any, user_prompt: str) -> str:
+    """Gọi judge, trả text thô. Nhận CẢ HAI dạng client.
+
+    • client google-genai (`.models.generate_content`) — đường mới, `run_evaluation`
+      dựng bằng `_build_gemini_client`.
+    • client kiểu Anthropic (`.messages.create`) — `verifier.verify_citations`
+      (D-18) truyền thẳng client của pipeline (`make_llm_client`), vốn là
+      `GeminiClient`/`FallbackGeminiClient`/`anthropic.Anthropic`. Giữ nhánh này
+      để Verifier Tier 2 không vỡ.
+    """
+    models = getattr(llm_client, "models", None)
+    if callable(getattr(models, "generate_content", None)):
+        from google.genai import types
+
+        response = llm_client.models.generate_content(
+            model=_judge_model(),
+            contents=user_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=_JUDGE_SYSTEM_PROMPT,
+                temperature=0.0,
+                max_output_tokens=JUDGE_MAX_OUTPUT_TOKENS,
+            ),
+        )
+        return (response.text or "").strip()
+
+    message = llm_client.messages.create(
+        model=_judge_model(),
+        max_tokens=200,
+        temperature=0.0,
+        system=_JUDGE_SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": user_prompt}],
+    )
+    return message.content[0].text.strip()
+
+
 def _judge_citation(
     citation: dict,
     answer: str,
     chunk: str,
-    llm_client: anthropic.Anthropic,
+    llm_client: Any,
 ) -> dict:
     """Hỏi LLM judge: chunk có support claim quanh citation trong answer không?"""
     snippet = _extract_answer_snippet(citation, answer)
@@ -228,13 +274,7 @@ CONTEXT CHUNK được cite:
 
 Đoạn answer trên cite chunk này có được chunk THỰC SỰ support không?"""
     try:
-        message = llm_client.messages.create(
-            model=JUDGE_MODEL,
-            max_tokens=200,
-            system=_JUDGE_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_prompt}],
-        )
-        raw = message.content[0].text.strip()
+        raw = _goi_judge(llm_client, user_prompt)
         if raw.startswith("```"):
             raw = raw.split("```", 2)[1].lstrip("json").strip()
         # Robust JSON parse — handle multi-line reason strings từ LLM
@@ -272,17 +312,24 @@ def evaluate_faithfulness(
     citations: list[dict],
     answer: str,
     context: str,
-    llm_client: anthropic.Anthropic | None = None,
+    llm_client: Any | None = None,
     tier2: bool = True,
 ) -> FaithfulnessResult:
     """Đánh giá faithfulness của citations cho 1 câu trả lời.
+
+    ⚠️ Judge hiện là Gemini Flash — CÙNG NHÀ với hệ thống đang chấm (mode gemini).
+    D-24 cố tình giữ judge Claude Haiku để thước đo độc lập; nay dự án bỏ khóa
+    Anthropic nên không còn lựa chọn đó. Số Tier 2 vì thế mang rủi ro tự-chấm
+    (self-preference bias) và KHÔNG so trực tiếp được với số Tier 2 cũ. Tier 1
+    (deterministic, $0) không bị ảnh hưởng.
 
     Args:
         citations: list pred citations từ parse_citations.
         answer: full answer text từ generate_answer.
         context: full context từ assemble_context.
-        llm_client: Anthropic client cho Tier 2. Nếu None hoặc tier2=False,
-                    chỉ tính Tier 1.
+        llm_client: client cho Tier 2 — client google-genai, hoặc client kiểu
+                    Anthropic (`.messages.create`). None hoặc tier2=False → chỉ
+                    tính Tier 1.
         tier2: enable Tier 2 LLM judge.
 
     Returns:

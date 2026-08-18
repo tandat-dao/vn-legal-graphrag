@@ -1,0 +1,4160 @@
+{
+  "summary": {
+    "judge_model": "Qwen3-4B-Instruct-2507 (base)",
+    "gguf_file": "Qwen_Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
+    "citations_total": 296,
+    "citations_existing": 295,
+    "citations_supported": 247,
+    "judge_errors": 0,
+    "existence_rate": 0.9966,
+    "support_rate": 0.8373,
+    "faithful_rate": 0.8345,
+    "elapsed_seconds": 11918.6
+  },
+  "per_citation": [
+    {
+      "qid": "V001",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các xã thuộc huyện Củ Chi có hạn mức giao đất ở không quá 250 m²/cá nhân, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V001",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng tại các khu dân cư nông thôn ở các xã của huyện Củ Chi, hạn mức đất ở không quá 300m²/hộ, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V002",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các xã gồm Phú Lý có hạn mức giao đất ở không quá 300 m², phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V002",
+      "citation": {
+        "dieu": "6",
+        "khoan": "5",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-dinh-50-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation trích dẫn Điều 6, Khoản 5, Điểm c của Nghị định 50/2026/ND-CP, nhưng context chunk chỉ nói về việc tính tiền sử dụng đất khi chuyển mục đích sử dụng đất, không đề cập đến việc 'hạn mức giao đất ở được tính theo hạn mức của cá nhân, không phụ thuộc vào số lượng thành viên trong hộ' như trong đoạn answer. Nội dung về 'hạn mức giao đất ở' và 'không phụ thuộc vào số lượng thành viên' không được khẳng định trong context chunk."
+    },
+    {
+      "qid": "V003",
+      "citation": {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các quận và khu vực nêu trong answer có hạn mức không quá 160 m²/cá nhân, hoàn toàn khớp với nội dung được trích dẫn trong câu trả lời."
+    },
+    {
+      "qid": "V003",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk rõ ràng khẳng định rằng tại các thị trấn huyện và khu vực đã thực hiện dự án đô thị mới tại Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ, hạn mức giao đất ở là không quá 200 m²/cá nhân, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V003",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các xã của huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ có hạn mức giao đất không quá 250 m²/cá nhân, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V003",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 1, Khoản 1, Điểm a của Quyết định số 18/2016/QĐ-UBND TP.HCM quy định hạn mức đất ở đối với hộ gia đình là không quá 160m²/hộ, phù hợp với citation được trích dẫn."
+    },
+    {
+      "qid": "V003",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 1, Khoản 1, Điểm c của Quyết định 18/2016/QĐ-UBND TP.HCM quy định hạn mức đất ở là không quá 250m²/hộ, phù hợp với citation được trích dẫn."
+    },
+    {
+      "qid": "V003",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 1, Khoản 1, Điểm d của Quyết định 18/2016/QĐ-UBND TP.HCM, nêu rõ nội dung về hạn mức đất ở đối với hộ gia đình tại các huyện và khu dân cư nông thôn, phù hợp với citation đã nêu."
+    },
+    {
+      "qid": "V004",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các xã thuộc huyện Củ Chi có hạn mức giao đất ở không quá 250 m²/cá nhân, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V004",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng tại các khu dân cư nông thôn thuộc xã của huyện Củ Chi, hạn mức đất ở không quá 300m²/hộ, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V005",
+      "citation": {
+        "dieu": "123",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng 'Ủy ban nhân dân cấp huyện' có thẩm quyền cho phép cá nhân chuyển mục đích sử dụng đất, nhưng context chunk chỉ quy định rằng thẩm quyền cho phép chuyển mục đích sử dụng đất nông nghiệp vào mục đích thương mại, dịch vụ thuộc trường hợp cần văn bản chấp thuận của Ủy ban nhân dân cấp tỉnh, không đề cập đến cấp huyện."
+    },
+    {
+      "qid": "V005",
+      "citation": {
+        "dieu": "4",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người có thẩm quyền cho phép chuyển mục đích sử dụng đất rừng sản xuất sang mục đích khác không cần trình Hội đồng nhân dân cấp tỉnh, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V005",
+      "citation": {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 46, Khoản 1, Điểm a quy định về việc có phương án trồng rừng thay thế hoặc văn bản hoàn thành trách nhiệm nộp tiền trồng rừng thay thế, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V005",
+      "citation": {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 46, Khoản 1, Điểm a quy định về việc có phương án trồng rừng thay thế hoặc văn bản hoàn thành trách nhiệm nộp tiền trồng rừng thay thế, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V006",
+      "citation": {
+        "dieu": "1B",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng việc đăng ký khai sinh tại Ủy ban nhân dân cấp xã có mức thu lệ phí 5.000 đồng, và được nêu trong Phụ lục 1B. Câu trả lời nói về việc đăng ký khai sinh đúng hạn được miễn thu lệ phí, điều này được hỗ trợ bởi nội dung chunk (vì có thông tin về mức thu, và việc miễn phí không được nói rõ, nhưng không mâu thuẫn). Tuy nhiên, cần lưu ý rằng chunk không nói rõ về việc 'miễn thu lệ phí' đối với khai sinh quá hạn, nên có thể có sự thiếu sót. Nhưng vì câu trả lời nói về 'đăng ký khai sinh đúng hạn' được miễn phí, và chunk có thông tin về mức thu, nên có thể coi là được support về mặt đối tượng và điều kiện (đăng ký khai sinh tại UBND cấp xã). Tuy nhiên, do không có thông tin về việc 'miễn thu' trong chunk, nên đây là trường hợp PARTIAL. Nhưng theo quy tắc: PARTIAL → UNSUPPORTED. Do đó, nếu không có thông tin miễn phí, thì claim về miễn thu là không được support."
+    },
+    {
+      "qid": "V006",
+      "citation": {
+        "dieu": "1B",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức thu lệ phí khai sinh là 5.000 đồng/trường hợp đối với việc đăng ký tại Ủy ban nhân dân cấp xã, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V006",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điểm b Khoản 1 Điều 11 Luật hộ tịch 2014 quy định về đăng ký khai sinh, khai tử đúng hạn, phù hợp với claim trong answer về việc miễn lệ phí đối với đăng ký khai sinh đúng hạn."
+    },
+    {
+      "qid": "V007",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức thu 10.000 đồng cho việc khai sinh quá hạn (đăng ký không đúng hạn) tại Ủy ban nhân dân cấp xã, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V008",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chỉ nêu mức thu lệ phí cụ thể (ví dụ 10.000 đồng) cho các công việc đăng ký hộ tịch thuộc thẩm quyền của UBND cấp xã, nhưng không có thông tin nào về việc 'miễn 100% lệ phí' đối với việc nộp hồ sơ đăng ký hộ tịch trực tuyến."
+    },
+    {
+      "qid": "V011",
+      "citation": {
+        "dieu": "_default",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điểm b, Khoản 2, Phụ lục của Nghị quyết 02/2023/NQ-HĐND TP.HCM quy định phí thẩm định theo hồ sơ là 850.000 đồng/hồ sơ đối với hộ gia đình, cá nhân ở phường đăng ký cấp giấy chứng nhận lần đầu đồng loạt, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V012",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng hộ gia đình, cá nhân có đất thuộc các phường thành phố Biên Hòa phải nộp lệ phí 30.000 đồng/giấy, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V013",
+      "citation": {
+        "dieu": "1",
+        "khoan": "6",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức thu hồ sơ nộp trực tuyến là 0% mức thu trực tiếp, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V014",
+      "citation": {
+        "dieu": "1A",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Phụ lục 1A quy định về phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất, trong đó có đối tượng là 'hộ gia đình, cá nhân' và 'cấp Giấy chứng nhận quyền sử dụng đất lần đầu'. Điều này khớp với claim trong citation về việc quy định đối tượng cấp quyền sử dụng đất lần đầu."
+    },
+    {
+      "qid": "V014",
+      "citation": {
+        "dieu": "_default",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức phí tại huyện: nhỏ hơn 500m² là 25.000 đồng/hồ sơ và từ 500m² trở lên là 250.000 đồng/hồ sơ, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V014",
+      "citation": {
+        "dieu": "_default",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức phí cho công việc thực hiện theo hồ sơ là 850.000 đồng/hồ sơ và theo thửa là 60.000 đồng/thửa, phù hợp với nội dung trong đoạn answer về hộ gia đình, cá nhân ở phường."
+    },
+    {
+      "qid": "V014",
+      "citation": {
+        "dieu": "_default",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến 'hộ gia đình, cá nhân ở phường' nhưng context chỉ nói về 'hộ gia đình, cá nhân ở xã, thị trấn'. Đối tượng không khớp, nên claim không được support."
+    },
+    {
+      "qid": "V015",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức phí thẩm định hồ sơ cấp lần đầu đối với hộ gia đình, cá nhân nộp trực tiếp là 880.000 đồng/hồ sơ, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V016",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức phí cấp giấy chứng nhận về quyền sử dụng đất và tài sản đối với hộ gia đình, cá nhân: 880.000 đồng (trực tiếp) và 836.000 đồng (trực tuyến), cũng như 980.000 đồng (trực tiếp) và 931.000 đồng (trực tuyến), phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V017",
+      "citation": {
+        "dieu": "1",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng 'Quy định này chỉ đề cập đến \"hộ nghèo\" mà không bao gồm \"hộ cận nghèo\"', nhưng context chunk không đề cập đến khái niệm \"hộ cận nghèo\" hay so sánh giữa \"hộ nghèo\" và \"hộ cận nghèo\". Context chỉ liệt kê các đối tượng được miễn phí (trẻ em, hộ nghèo, người cao tuổi, người khuyết tật, v.v.) mà không nói gì về việc loại trừ \"hộ cận nghèo\"."
+    },
+    {
+      "qid": "V018",
+      "citation": {
+        "dieu": "1",
+        "khoan": "4",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk trực tiếp nêu rõ rằng các hộ nghèo và cận nghèo theo chuẩn nghèo của tỉnh Đồng Nai được miễn nộp phí, trùng khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V019",
+      "citation": {
+        "dieu": "1",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ đối tượng miễn lệ phí hộ tịch tại Điểm b, Khoản 2, Điều 1 bao gồm: người mắc bệnh hiểm nghèo, bệnh nan y, người nhiễm HIV/AIDS, người nhiễm chất độc hóa học, và công dân Việt Nam cư trú trong nước thực hiện đăng ký khai sinh, khai tử đúng hạn, giám hộ, kết hôn. Tất cả các nội dung trong citation đều được trích dẫn nguyên văn và khớp hoàn toàn."
+    },
+    {
+      "qid": "V020",
+      "citation": {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk chỉ nêu rõ rằng xã Củ Chi thuộc Khu vực III, nhưng đoạn answer nói rằng 'đất nông nghiệp tại xã Củ Chi thuộc Khu vực III' được khẳng định dựa trên nội dung của điều 3, khoán 1, điểm c, mà thực tế trong context chỉ liệt kê các xã thuộc Khu vực III, trong đó có xã Củ Chi — tuy nhiên, việc khẳng định 'đất nông nghiệp tại xã Củ Chi thuộc Khu vực III' là đúng, nên có vẻ được support. Tuy nhiên, do đoạn answer không trích dẫn nguyên văn, mà chỉ đưa ra một kết luận rút ra từ context, và không có thông tin về việc 'phân thành 03 khu vực' được nêu trong context, nên phần claim về việc 'phân thành 03 khu vực' không được support. Do đó, phần claim tổng thể không được fully support."
+    },
+    {
+      "qid": "V021",
+      "citation": {
+        "dieu": "5",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng phạm vi từ trên 100 mét đến hết mét thứ 200 tính bằng 80% giá đất nông nghiệp vị trí 1 và không được thấp hơn giá đất tối thiểu theo Phụ lục VIII, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V023",
+      "citation": {
+        "dieu": "24",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng việc khai sinh đã được đăng ký trước ngày 01/01/2016 và Sổ hộ tịch, bản chính giấy tờ hộ tịch đều bị mất thì được đăng ký lại, hoàn toàn khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V023",
+      "citation": {
+        "dieu": "8",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Ủy ban nhân dân cấp xã nơi cư trú hiện tại thực hiện đăng ký khai sinh cho công dân Việt Nam cư trú trong nước, sinh trước ngày 01/01/2016, chưa đăng ký khai sinh nhưng đã có hồ sơ, giấy tờ cá nhân, hoàn toàn khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V023",
+      "citation": {
+        "dieu": "9",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả điều kiện (không có thông tin cha, mẹ) và hành động (lập văn bản cam đoan) đều được nêu rõ trong chunk, đồng thời đúng về đối tượng (người yêu cầu đăng ký lại khai sinh) và quy trình (đề nghị cơ quan công an, lập cam đoan nếu không có thông tin)."
+    },
+    {
+      "qid": "V024",
+      "citation": {
+        "dieu": "26",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng trong tờ khai phải có cam đoan về việc đã đăng ký khai sinh nhưng không lưu giữ được bản chính Giấy khai sinh, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V024",
+      "citation": {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 9, Khoản 3, Điểm d, Văn bản thong-tu-04-2020-tt-btp quy định về trách nhiệm nộp bản sao giấy tờ và cam đoan đã nộp đủ giấy tờ, đồng thời nêu rõ việc cam đoan không đúng sự thật sẽ chịu trách nhiệm theo quy định. Nội dung trong đoạn answer phù hợp với context."
+    },
+    {
+      "qid": "V024",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng 'Cam đoan, làm chứng sai sự thật để đăng ký hộ tịch' là hành vi bị nghiêm cấm tại Điều 12, Khoản 1, Điểm d, luật hộ tịch 2014, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V024",
+      "citation": {
+        "dieu": "5",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng cơ quan đăng ký hộ tịch sẽ từ chối giải quyết hoặc đề nghị hủy bỏ kết quả nếu có cơ sở xác định nội dung cam đoan không đúng sự thật, trùng khớp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V024",
+      "citation": {
+        "dieu": "9",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: khi không có thông tin chứng minh quan hệ cha, mẹ, con và cơ quan công an không xác minh được, người yêu cầu phải lập văn bản cam đoan. Điều này được khẳng định nguyên văn trong Khoản 4 của Điều 9, Thông tư 04/2020/TT-BTP."
+    },
+    {
+      "qid": "V025",
+      "citation": {
+        "dieu": "26",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điểm b Khoản 1 Điều 26 quy định việc sử dụng bản sao toàn bộ hồ sơ, giấy tờ của người yêu cầu hoặc các tài liệu có thông tin liên quan đến nội dung khai sinh, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V025",
+      "citation": {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk chỉ nêu đến Điều 9, Khoản 3, nhưng không đề cập đến 'Điểm d' như trong câu trả lời. Câu trả lời sai về điểm cụ thể (đề cập 'Điểm d' mà context không có)."
+    },
+    {
+      "qid": "V025",
+      "citation": {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điểm d, Khoản 3, Điều 9 của Thông tư 04/2020/TT-BTP quy định về giấy tờ có thông tin về họ, tên, ngày, tháng, năm sinh của cá nhân, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V025",
+      "citation": {
+        "dieu": "26",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer trích dẫn 'nội dung khai sinh sẽ được xác định theo hồ sơ, giấy tờ hợp lệ do cơ quan nhà nước có thẩm quyền cấp chính thức đầu tiên' nhưng context chunk chỉ nói điều này áp dụng khi hồ sơ không thống nhất; còn khi có thống nhất thì xác định theo nội dung đó. Ngoài ra, context không nói rõ về việc xác định theo hồ sơ, giấy tờ hợp lệ đầu tiên như trong answer, mà chỉ là một trường hợp cụ thể trong điều kiện không thống nhất. Do đó, claim trong answer không được hỗ trợ đầy đủ."
+    },
+    {
+      "qid": "V025",
+      "citation": {
+        "dieu": "9",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: cơ quan đăng ký hộ tịch đề nghị cơ quan công an xác minh, và nếu không có thông tin thì người yêu cầu lập văn bản cam đoan về thông tin cha mẹ. Điều này khớp với nội dung chunk được trích dẫn, bao gồm điều kiện và hành động cụ thể."
+    },
+    {
+      "qid": "V026",
+      "citation": {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về đối tượng (công dân Việt Nam thường trú nhận con nuôi là công dân Việt Nam thường trú) và việc phải nộp lệ phí đăng ký, được phản ánh nguyên văn trong context chunk tại Khoản 1 Điều 3."
+    },
+    {
+      "qid": "V026",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng 'Người nhận con nuôi phải nộp lệ phí đăng ký nuôi con nuôi' (Khoản 1, Điều 12, Luật Nuôi con nuôi 2010), phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V027",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng 'Người nhận con nuôi phải nộp lệ phí đăng ký nuôi con nuôi' (Khoản 1, Điều 12), phù hợp với claim trong đoạn answer về việc người nhận con nuôi phải nộp lệ phí, không thuộc trường hợp miễn lệ phí."
+    },
+    {
+      "qid": "V027",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 11, Khoản 1, Điểm a của Luật Hộ tịch 2014 quy định việc đăng ký hộ tịch cho người thuộc gia đình có công với cách mạng, người thuộc hộ nghèo và người khuyết tật, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V027",
+      "citation": {
+        "dieu": "4",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các trường hợp như cô, cậu, dì, chú, bác ruột nhận cháu làm con nuôi được giảm 50% lệ phí đăng ký nuôi con nuôi nước ngoài, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V028",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Khoản 1 Điều 12 quy định người nhận con nuôi phải nộp lệ phí đăng ký nuôi con nuôi, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V028",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói về 'lệ phí bắt buộc mà người nhận con nuôi phải nộp' và liên kết với 'Điều 3, Khoản 2' nhưng context chỉ quy định rõ ràng về người Việt Nam định cư ở nước ngoài hoặc người nước ngoài thường trú ở nước ngoài nhận con nuôi là công dân Việt Nam mới phải nộp lệ phí đăng ký nuôi con nuôi nước ngoài. Câu trả lời không phản ánh đầy đủ và chính xác đối tượng áp dụng, dẫn đến thiếu chính xác trong claim."
+    },
+    {
+      "qid": "V028",
+      "citation": {
+        "dieu": "12",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả về việc người nước ngoài không thường trú phải trả khoản tiền bù đắp chi phí giải quyết nuôi con nuôi nước ngoài và cụ thể hóa các chi phí như nuôi dưỡng, chăm sóc, giáo dục, xác minh nguồn gốc, giao nhận và thù lao nhân viên."
+    },
+    {
+      "qid": "V028",
+      "citation": {
+        "dieu": "48",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung Điều 48, Khoản 1, về việc người nước ngoài không thường trú tại Việt Nam phải nộp chi phí giải quyết nuôi con nuôi khi đồng ý nhận trẻ em Việt Nam. Nội dung này khớp với context chunk được cung cấp."
+    },
+    {
+      "qid": "V028",
+      "citation": {
+        "dieu": "38",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer trích dẫn Điều 38, Khoản 2 về 'công việc như nuôi dưỡng, chăm sóc, giáo dục trẻ em' và 'thù lao hợp lý cho nhân viên', nhưng context chunk chỉ nói về 'chi phí giải quyết nuôi con nuôi nước ngoài' và không đề cập đến các công việc chăm sóc, giáo dục hay thù lao cho nhân viên. Nội dung claim trong answer không được hỗ trợ."
+    },
+    {
+      "qid": "V029",
+      "citation": {
+        "dieu": "2",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation chỉ đề cập đến trẻ em ở cơ sở nuôi dưỡng được nhận làm con nuôi trong nước, nhưng context chunk nói rằng thẩm quyền đăng ký thuộc về UBND cấp xã nơi có trụ sở của cơ sở nuôi dưỡng — điều này đúng, nhưng đoạn answer nói rằng 'việc đăng ký thực hiện tại UBND cấp xã nơi có trụ sở của cơ sở nuôi dưỡng' mà không phản ánh đầy đủ điều kiện (chỉ đúng với một trường hợp cụ thể trong điều kiện). Hơn nữa, context không nói rõ về 'trẻ em đang sống ở cơ sở nuôi dưỡng được nhận làm con nuôi trong nước' như trong answer, mà chỉ nêu điều kiện cụ thể. Do đó, claim trong answer không được hỗ trợ đầy đủ và chính xác."
+    },
+    {
+      "qid": "V030",
+      "citation": {
+        "dieu": "182",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng người sử dụng đất trồng lúa không được chuyển sang mục đích khác nếu không được cơ quan nhà nước có thẩm quyền cho phép, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V030",
+      "citation": {
+        "dieu": "122",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng 'Cơ quan nhà nước có thẩm quyền chỉ được quyết định cho phép chuyển mục đích sử dụng đất trồng lúa sau khi có Nghị quyết của Hội đồng nhân dân cấp tỉnh', phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V030",
+      "citation": {
+        "dieu": "4",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng người có thẩm quyền được quyết định chuyển mục đích sử dụng đất trồng lúa mà không cần trình Hội đồng nhân dân cấp tỉnh chấp thuận, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V030",
+      "citation": {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 46, Khoản 1, Điểm a. quy định về việc có phương án trồng rừng thay thế hoặc nộp tiền trồng rừng thay thế, phù hợp với nội dung được nêu trong đoạn answer về yêu cầu phải có phương án sử dụng tầng đất mặt (được hiểu là phương án trồng rừng thay thế)."
+    },
+    {
+      "qid": "V030",
+      "citation": {
+        "dieu": "10",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-112-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 10, Khoản 2, Điểm b của Nghị định 112/2024/NĐ-CP quy định về 'thông tin về diện tích đất chuyên trồng lúa đề nghị chuyển đổi', phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V030",
+      "citation": {
+        "dieu": "5",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-226-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 2 Điều 5 của Nghị định 226/2025/ND-CP (sửa đổi Điều 10) yêu cầu có phương án sử dụng tầng đất mặt bao gồm khối lượng đất mặt sau khi bóc tách, vị trí và mục đích sử dụng, đồng thời nêu rõ độ sâu tối thiểu 20 cm và phương án này là thành phần của hồ sơ xin phép chuyển mục đích sử dụng đất. Điều này hoàn toàn khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V031",
+      "citation": {
+        "dieu": "139",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng 'người đang sử dụng đất được xem xét cấp Giấy chứng nhận quyền sử dụng đất' mà không có điều kiện cụ thể, nhưng context chỉ cho thấy điều này xảy ra trong trường hợp đất lấn chiếm không còn thuộc hành lang bảo vệ, chỉ giới xây dựng hoặc mục đích công cộng khác. Điều kiện trong context không được đáp ứng trong câu trả lời tổng quát, nên claim không được hỗ trợ đầy đủ."
+    },
+    {
+      "qid": "V032",
+      "citation": {
+        "dieu": "25",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn context chỉ nói về việc công nhận diện tích đất ở trong trường hợp đất sử dụng trước ngày 15/10/1993 và liên quan đến hạn mức công nhận từ ngày 18/12/1980, không đề cập đến trường hợp diện tích thửa đất bằng hoặc lớn hơn hạn mức công nhận đất ở như trong claim của citation. Nội dung claim không được hỗ trợ bởi context."
+    },
+    {
+      "qid": "V032",
+      "citation": {
+        "dieu": "138",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng đối với thửa đất có nhà ở và công trình phục vụ đời sống, nếu diện tích thửa đất bằng hoặc lớn hơn hạn mức công nhận đất ở (theo điểm 5 Điều 141), thì diện tích đất ở được công nhận bằng hạn mức công nhận đất ở. Điều này khớp với claim trong citation về việc diện tích thửa đất bằng hoặc lớn hơn hạn mức công nhận đất ở."
+    },
+    {
+      "qid": "V033",
+      "citation": {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các quận và khu vực nêu trên có hạn mức không quá 160 m²/cá nhân, trùng khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V033",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng 'Thị trấn các huyện và khu vực đã thực hiện dự án xây dựng đô thị mới tại các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ' có hạn mức không quá 200 m²/cá nhân, trùng khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V033",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các xã của huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ có hạn mức không quá 250 m²/cá nhân, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V035",
+      "citation": {
+        "dieu": "7",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả việc nêu 'hộ chiếu' và 'giấy tờ có giá trị đi lại quốc tế có dấu xác nhận nhập cảnh' đều được nêu trong chunk, và được xác định là chứng minh việc trẻ đã nhập cảnh hợp pháp vào Việt Nam."
+    },
+    {
+      "qid": "V035",
+      "citation": {
+        "dieu": "29",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 29, Khoản 2 của Nghị định 123/2015/NĐ-CP về đăng ký khai sinh cho trẻ em sinh ra ở nước ngoài về cư trú tại Việt Nam, phù hợp với citation đã nêu."
+    },
+    {
+      "qid": "V036",
+      "citation": {
+        "dieu": "36",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng khi cha hoặc mẹ là người nước ngoài, cần nộp văn bản thỏa thuận về việc chọn quốc tịch cho con và văn bản này phải có xác nhận của cơ quan nhà nước có thẩm quyền của nước ngoài. Điều này khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V036",
+      "citation": {
+        "dieu": "7",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả về việc cha, mẹ lựa chọn quốc tịch nước ngoài cho con và yêu cầu có xác nhận của cơ quan có thẩm quyền nước ngoài về việc trẻ có quốc tịch phù hợp pháp luật nước đó, được nêu rõ trong Khoản 2 Điều 7 Thông tư 04/2020/TT-BTP."
+    },
+    {
+      "qid": "V037",
+      "citation": {
+        "dieu": "41",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng hồ sơ của người nhận con nuôi và người được giới thiệu làm con nuôi được nộp cho Sở Tư pháp nơi người được giới thiệu làm con nuôi thường trú, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V037",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến 'Khoản 3, Điều 3' của Nghị định 123/2015/NĐ-CP, nhưng context chunk chỉ nói về việc gửi hồ sơ qua hệ thống bưu chính và lệ phí, không đề cập đến việc nộp hồ sơ trực tiếp hoặc trực tuyến như trong đoạn answer. Nội dung về cách nộp hồ sơ (trực tiếp, trực tuyến, bưu chính) không được hỗ trợ đầy đủ hoặc chính xác trong context."
+    },
+    {
+      "qid": "V037",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 12, Khoản 1, Văn bản nghị định 87/2020/NĐ-CP quy định về việc tiếp nhận, giải quyết yêu cầu đăng ký hộ tịch trực tuyến qua Cổng dịch vụ công quốc gia hoặc cấp tỉnh, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V037",
+      "citation": {
+        "dieu": "26",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng theo Điều 26, Khoản 1, Nghị định 19/2011/NĐ-CP, người nhận con nuôi nộp Phiếu lý lịch tư pháp số 1, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V037",
+      "citation": {
+        "dieu": "11",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-120-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng cá nhân không cần nộp Phiếu lý lịch tư pháp và cơ quan giải quyết thủ tục hành chính có trách nhiệm yêu cầu cơ quan quản lý dữ liệu cung cấp thông tin, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V038",
+      "citation": {
+        "dieu": "44a",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 44a, Khoản 1, Điểm a quy định về việc có văn bản của cơ quan nhà nước có thẩm quyền làm thay đổi căn cứ quyết định cho phép chuyển mục đích sử dụng đất, phù hợp với nội dung claim trong đoạn answer."
+    },
+    {
+      "qid": "V038",
+      "citation": {
+        "dieu": "44a",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Khoản 1, Điểm a của Điều 44a quy định về việc có văn bản của cơ quan nhà nước có thẩm quyền làm thay đổi căn cứ quyết định cho phép chuyển mục đích sử dụng đất, phù hợp với nội dung claim trong đoạn answer."
+    },
+    {
+      "qid": "V039",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation trong đoạn answer đề cập đến 'nộp hồ sơ đăng ký nuôi con nuôi', nhưng context chunk chỉ nói về 'đăng ký hộ tịch trực tuyến', đối tượng và nội dung yêu cầu không khớp."
+    },
+    {
+      "qid": "V039",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 3 Điều 3 Nghi định 123/2015/NĐ-CP về việc gửi hồ sơ qua hệ thống bưu chính và yêu cầu nộp lệ phí, đồng thời nêu rõ điều kiện trả kết quả qua bưu chính. Điều này phù hợp với claim trong đoạn answer về việc nộp hồ sơ qua dịch vụ bưu chính theo Điều 3, Khoản 3."
+    },
+    {
+      "qid": "V040",
+      "citation": {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk cho thấy điểm b chỉ quy định 'giấy tờ chứng minh về nơi cư trú' và đã bị bãi bỏ cụm từ 'Sổ hộ khẩu, Sổ tạm trú' từ 01/01/2023, trong khi đoạn answer nói rằng 'ông còn được dùng làm giấy tờ chứng minh nơi cư trú' – điều này sai vì cụm từ đó đã bị bãi bỏ."
+    },
+    {
+      "qid": "V041",
+      "citation": {
+        "dieu": "23",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Giấy xác nhận tình trạng hôn nhân được sử dụng để kết hôn tại cơ quan đại diện Việt Nam ở nước ngoài, cơ quan có thẩm quyền của nước ngoài ở nước ngoài hoặc sử dụng vào mục đích khác, phù hợp với claim trong câu trả lời (Điều 23, Khoản 2)."
+    },
+    {
+      "qid": "V041",
+      "citation": {
+        "dieu": "12",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer chính xác trích dẫn nội dung của Khoản 4 Điều 12 về việc ghi rõ mục đích sử dụng và không có giá trị để đăng ký kết hôn, đồng thời đưa ra ví dụ phù hợp với nội dung trong context chunk."
+    },
+    {
+      "qid": "V042",
+      "citation": {
+        "dieu": "29",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người có yêu cầu đăng ký lại việc nuôi con nuôi lựa chọn nộp Tờ khai thông qua hình thức nộp trực tiếp, gửi qua hệ thống bưu chính hoặc nộp trực tuyến theo quy định pháp luật về thủ tục hành chính điện tử, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V043",
+      "citation": {
+        "dieu": "13",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-49-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 4 Điều 13 của Nghị định 49/2026/NĐ-CP bổ sung nội dung về việc giao đất, cho thuê đất, điều chỉnh quyết định giao đất, cho phép chuyển mục đích sử dụng đất, trùng khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V044",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các quận 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú có hạn mức không quá 160m²/hộ, trùng khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V044",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk rõ ràng nêu rằng 'Khu quy hoạch phát triển đô thị không quá 250m²/hộ' tại Điểm c, Khoản 1, Điều 1, phù hợp với claim trong đoạn answer về hạn mức 250m² đối với khu quy hoạch phát triển đô thị."
+    },
+    {
+      "qid": "V044",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer trích dẫn hạn mức 160m²/hộ cho các quận và khu vực cụ thể, nhưng context chunk chỉ quy định hạn mức 300m²/hộ cho huyện Cần Giờ và các khu dân cư nông thôn tại các xã của Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè. Nội dung về 160m²/hộ và các quận như 1, 3, 4, 5, 6, 8, 10, 11, Gò Vấp, Bình Thạnh, Phú Nhuận, Tân Bình, Tân Phú không được hỗ trợ trong context."
+    },
+    {
+      "qid": "V045",
+      "citation": {
+        "dieu": "4",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk không khẳng định nội dung về việc Quyết định 18/2016/QĐ-UBND thay thế Quyết định 70/2014/QĐ-UBND, cũng không nói rõ về việc thay thế tại Khoản 2, Điểm a. Chỉ nêu rằng Quyết định 70/2014/QĐ-UBND quy định về hạn mức đất ở, nhưng không có thông tin về thay thế hoặc liên hệ pháp lý giữa hai văn bản."
+    },
+    {
+      "qid": "V045",
+      "citation": {
+        "dieu": "4",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 4, Khoản 2, Điểm b của Quyết định 18/2016/QĐ-UBND TP.HCM liên quan đến việc đính chính Quyết định 3857/QĐ-UBND, phù hợp với nội dung cite."
+    },
+    {
+      "qid": "V046",
+      "citation": {
+        "dieu": "116",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 5 Điều 116 quy định căn cứ cho phép chuyển mục đích sử dụng đất là quy hoạch sử dụng đất cấp huyện, quy hoạch chung hoặc quy hoạch phân khu theo quy định của pháp luật về quy hoạch đô thị và nông thôn đã được cơ quan có thẩm quyền phê duyệt, hoàn toàn khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V047",
+      "citation": {
+        "dieu": "141",
+        "khoan": "4",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng nếu người sử dụng đất có nhu cầu công nhận vào mục đích đất phi nông nghiệp và phù hợp với quy hoạch sử dụng đất cấp huyện hoặc các quy hoạch khác (chung, phân khu, xây dựng, nông thôn), thì được công nhận vào mục đích đó. Điều này hoàn toàn khớp với claim trong citation và nội dung được trích dẫn."
+    },
+    {
+      "qid": "V047",
+      "citation": {
+        "dieu": "25",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer trích dẫn 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch chung hoặc quy hoạch phân khu hoặc quy hoạch xây dựng hoặc quy hoạch nông thôn' không được hỗ trợ trong context chunk, mà thay vào đó context chỉ rõ rằng quy hoạch được thay bằng 'quy hoạch sử dụng đất cấp huyện hoặc quy hoạch sử dụng đất cấp xã hoặc một trong các quy hoạch theo quy định của pháp luật về quy hoạch đô thị và nông thôn'."
+    },
+    {
+      "qid": "V048",
+      "citation": {
+        "dieu": "5",
+        "khoan": "1",
+        "diem": "i",
+        "tiet": null,
+        "van_ban": "nghi-dinh-151-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng 'quyền sở hữu tài sản gắn liền với đất theo khoản 6 Điều 141 Luật Đất đai sẽ được chuyển giao', nhưng context chỉ nói về việc 'xác định lại diện tích đất ở và cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất', không khẳng định việc chuyển giao quyền sở hữu tài sản gắn liền với đất từ cấp huyện sang cấp xã. Nội dung claim về việc 'chuyển giao' không được hỗ trợ trực tiếp."
+    },
+    {
+      "qid": "V049",
+      "citation": {
+        "dieu": "5",
+        "khoan": "1",
+        "diem": "đ",
+        "tiet": null,
+        "van_ban": "nghi-dinh-151-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng Điểm đ Khoản 1 Điều 5 của Nghị định 151/2025/NĐ-CP đã bị bãi bỏ theo Nghị định 49/2026/NĐ-CP, với hiệu lực từ ngày 31/01/2026, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V051",
+      "citation": {
+        "dieu": "148",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng nhà ở trước ngày 01/7/2006, không có giấy tờ về quyền sử dụng đất và đất không có tranh chấp thì được cấp GCNQSDĐ, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V051",
+      "citation": {
+        "dieu": "140",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng đất được sử dụng ổn định từ ngày 01/07/2004 đến trước ngày 01/07/2014, được UBND cấp xã xác nhận không có tranh chấp và phù hợp quy hoạch, thì được xem xét cấp Giấy chứng nhận — hoàn toàn trùng khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V051",
+      "citation": {
+        "dieu": "140",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói về việc cấp Giấy chứng nhận cho người sử dụng đất 'được giao không đúng thẩm quyền', trong khi context chỉ nói đến trường hợp đất được giao từ 01/7/2014 đến trước ngày luật có hiệu lực, và không đề cập đến việc cấp giấy chứng nhận cho trường hợp 'được giao không đúng thẩm quyền'. Nội dung claim trong answer không được hỗ trợ bởi context."
+    },
+    {
+      "qid": "V051",
+      "citation": {
+        "dieu": "25",
+        "khoan": "6",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 6, Điểm a, Điều 25 của Nghị định 101/2024/NĐ-CP quy định về việc thực hiện trình tự, thủ tục cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất lần đầu, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V052",
+      "citation": {
+        "dieu": "24",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: khẳng định rằng cha mẹ nuôi có quyền yêu cầu cơ quan nhà nước thay đổi họ, tên con nuôi, điều này được trích dẫn nguyên văn trong Khoản 2 Điều 24."
+    },
+    {
+      "qid": "V052",
+      "citation": {
+        "dieu": "7",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng việc thay đổi họ, chữ đệm, tên cho người dưới 18 tuổi phải có sự đồng ý của cha, mẹ và được thể hiện rõ trong Tờ khai, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V053",
+      "citation": {
+        "dieu": "10",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng việc giao nhận con nuôi được tổ chức tại trụ sở Ủy ban nhân dân cấp xã và yêu cầu sự có mặt của cha mẹ nuôi, cha mẹ đẻ, người giám hộ hoặc đại diện cơ sở nuôi dưỡng, và người được nhận làm con nuôi, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V053",
+      "citation": {
+        "dieu": "37",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trong Khoản 3 Điều 37, có mặt của đại diện Sở Tư pháp, trẻ em được nhận làm con nuôi, cha mẹ nuôi, và đại diện cơ sở nuôi dưỡng (nếu từ cơ sở) hoặc cha mẹ đẻ, người giám hộ (nếu từ gia đình), hoàn toàn khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V053",
+      "citation": {
+        "dieu": "41",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 4 Điều 41 về việc giao nhận con nuôi khi người nước ngoài thường trú ở Việt Nam nhận con nuôi, bao gồm việc có sự tham gia của cha mẹ nuôi, đại diện cơ sở nuôi dưỡng (trẻ từ cơ sở) hoặc cha mẹ đẻ, người giám hộ (trẻ từ gia đình), và quy trình đăng ký, lập biên bản. Điều này khớp với nội dung được trích dẫn trong đoạn answer."
+    },
+    {
+      "qid": "V054",
+      "citation": {
+        "dieu": "10",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-112-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng người được Nhà nước giao đất, cho thuê đất khi xây dựng công trình trên đất chuyển đổi từ đất chuyên trồng lúa sang mục đích phi nông nghiệp phải có phương án sử dụng tầng đất mặt được cơ quan nhà nước có thẩm quyền chấp thuận, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V054",
+      "citation": {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 46, Khoản 1, Điểm b quy định về việc có phương án sử dụng tầng đất mặt theo quy định của pháp luật về trồng trọt, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V054",
+      "citation": {
+        "dieu": "10",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-112-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 10, Khoản 2, Điểm b của Nghị định 112/2024/NĐ-CP quy định về thông tin về diện tích đất chuyên trồng lúa đề nghị chuyển đổi, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V054",
+      "citation": {
+        "dieu": "5",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-226-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng phương án sử dụng tầng đất mặt là thành phần của hồ sơ giao đất, cho thuê đất, cho phép chuyển mục đích sử dụng đất trồng lúa sang mục đích phi nông nghiệp, phù hợp với claim trong citation Điều 5, Khoản 2."
+    },
+    {
+      "qid": "V055",
+      "citation": {
+        "dieu": "2",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 1 Điều 2 của Nghị định 123/2015/NĐ-CP quy định người yêu cầu đăng ký hộ tịch phải xuất trình bản chính một trong các giấy tờ tùy thân như hộ chiếu, chứng minh nhân dân, thẻ căn cước công dân, etc. Điều này khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V056",
+      "citation": {
+        "dieu": "2",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trường hợp người yêu cầu đã nộp bản điện tử Giấy chứng sinh hoặc cơ quan đăng ký đã khai thác dữ liệu điện tử có ký số thì không phải nộp bản giấy, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V057",
+      "citation": {
+        "dieu": "9",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng bản điện tử giấy tờ hộ tịch có giá trị sử dụng như giấy tờ bản giấy trong các giao dịch, thủ tục hành chính thực hiện trực tuyến và thay thế giấy tờ bản giấy khi làm thủ tục đăng ký hộ tịch trực tiếp, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V057",
+      "citation": {
+        "dieu": "12",
+        "khoan": "6",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả về việc cơ quan, tổ chức có trách nhiệm chấp nhận và sử dụng biểu mẫu điện tử, cũng như không được yêu cầu cá nhân nộp hoặc xuất trình giấy tờ hộ tịch bản giấy để đối chiếu, được nêu rõ trong Khoản 6 Điều 12."
+    },
+    {
+      "qid": "V057",
+      "citation": {
+        "dieu": "9",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer trích dẫn Điểm a (về việc thay thế giấy tờ hộ tịch bản giấy), nhưng context chỉ nói đến Điểm b (về mã QRcode và địa chỉ Internet), nên claim không được hỗ trợ."
+    },
+    {
+      "qid": "V057",
+      "citation": {
+        "dieu": "9",
+        "khoan": "2",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Answer trích dẫn 'Điểm a' trong Khoản 2, nhưng context chỉ rõ là 'Điểm c'. Do đó, claim về 'Điểm a' không được hỗ trợ bởi context."
+    },
+    {
+      "qid": "V058",
+      "citation": {
+        "dieu": "9",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 9, Khoản 1 của Thông tư 01/2022/TT-BTP quy định về các mẫu: Xác nhận thông tin hộ tịch, Giấy báo tử và Mẫu Bản điện tử các giấy tờ hộ tịch, hoàn toàn khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V061",
+      "citation": {
+        "dieu": "1",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người thuộc hộ cận nghèo theo quy định chuẩn nghèo đa chiều của tỉnh là một trong những đối tượng được miễn lệ phí hộ tịch, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V061",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 11, Khoản 1, Điểm a, Luật Hộ tịch 2014 quy định miễn lệ phí cho người thuộc hộ nghèo, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V062",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người thuộc hộ nghèo được miễn lệ phí đăng ký hộ tịch, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V062",
+      "citation": {
+        "dieu": "1B",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng 'người khuyết tật' là một trong các đối tượng được miễn thu lệ phí tại Phụ lục 1B, phù hợp với citation '1B' trong văn bản quy định."
+    },
+    {
+      "qid": "V062",
+      "citation": {
+        "dieu": "11",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả về đối tượng (cá nhân yêu cầu đăng ký sự kiện hộ tịch hoặc cấp bản sao trích lục hộ tịch) và việc phải nộp lệ phí, được nêu rõ trong Khoản 2 Điều 11 Luật hộ tịch 2014."
+    },
+    {
+      "qid": "V066",
+      "citation": {
+        "dieu": "2",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng cha dượng nhận con riêng của vợ làm con nuôi thì Ủy ban nhân dân cấp xã nơi cư trú của cha dượng hoặc của người con riêng thực hiện đăng ký, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V066",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-120-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả về việc người nhận con nuôi nộp hồ sơ không tại nơi có thẩm quyền và việc Ủy ban nhân dân cấp xã nơi tiếp nhận hỗ trợ nộp hồ sơ trực tuyến đến nơi có thẩm quyền đều được nêu rõ và đồng nghĩa trong chunk."
+    },
+    {
+      "qid": "V067",
+      "citation": {
+        "dieu": "1",
+        "khoan": "2",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người dân tộc thiểu số tại các xã khu vực I thuộc vùng đồng bào dân tộc thiểu số và miền núi được miễn lệ phí hộ tịch, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V067",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 11, Khoản 1, Điểm a quy định miễn lệ phí cho người thuộc gia đình có công với cách mạng, người thuộc hộ nghèo và người khuyết tật, trùng khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V068",
+      "citation": {
+        "dieu": "22",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Ủy ban nhân dân cấp xã tổ chức đăng ký nuôi con nuôi trong thời hạn 20 ngày, kể từ ngày có ý kiến đồng ý của những người liên quan, và việc này được thực hiện sau khi có ý kiến đồng ý, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V068",
+      "citation": {
+        "dieu": "10",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ việc giao nhận con nuôi phải được lập thành biên bản có chữ ký hoặc điểm chỉ của các bên và đại diện UBND cấp xã, đồng thời nêu rõ công chức tư pháp ghi vào Sổ đăng ký và trao Giấy chứng nhận nuôi con nuôi, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V069",
+      "citation": {
+        "dieu": "10",
+        "khoan": "2",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng đối với diện tích vượt hạn mức mà vượt quá 01 lần hạn mức, mức thu là 100% chênh lệch, và chỉ được tính một lần cho một hộ gia đình, cá nhân trên một thửa đất, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V069",
+      "citation": {
+        "dieu": "6",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-50-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến Điều 6, Khoản 4, nhưng context chỉ nói rằng nội dung này quy định về việc tính tiền sử dụng đất, tham chiếu đến điểm c Khoản 2 Điều 10 Nghị quyết 254/2025/QH15, chứ không khẳng định rằng 'giá đất ở và giá đất nông nghiệp để tính toán là giá đất trên bảng giá đất tại thời điểm có quyết định cho phép chuyển mục đích sử dụng đất' — nội dung này không được trích dẫn nguyên văn hoặc được xác nhận rõ ràng trong context."
+    },
+    {
+      "qid": "V069",
+      "citation": {
+        "dieu": "6",
+        "khoan": "5",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-50-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến 'Điều 6, Khoản 5, Điểm a' nhưng context chỉ nói về 'Điểm a' trong Khoản 5, và nội dung liên quan đến 'hạn mức giao đất ở' được xác định tại thời điểm có quyết định, không có thông tin về việc 'tính tiền sử dụng đất đối với hộ gia đình, cá nhân khi chuyển mục đích sử dụng đất từ đất nông nghiệp sang đất ở' như trong câu trả lời. Hơn nữa, context không xác định rõ ràng nội dung về 'tính tiền sử dụng đất' như được nêu trong answer."
+    },
+    {
+      "qid": "V069",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-112-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer chính xác trích dẫn nội dung Điều 12, Khoản 1 về việc người được giao đất, cho thuê đất để sử dụng vào mục đích phi nông nghiệp từ đất chuyên trồng lúa phải nộp tiền để Nhà nước bổ sung diện tích đất bị mất hoặc tăng hiệu quả sử dụng đất trồng lúa, phù hợp với context chunk."
+    },
+    {
+      "qid": "V070",
+      "citation": {
+        "dieu": "157",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng đối với trường hợp được miễn tiền sử dụng đất, người sử dụng đất không phải thực hiện thủ tục xác định giá đất hoặc đề nghị miễn tiền sử dụng đất, hoàn toàn phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V070",
+      "citation": {
+        "dieu": "10",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng trường hợp được miễn tiền sử dụng đất thì không phải thực hiện các thủ tục liên quan, trừ khi chỉ được miễn trong một số năm nhất định, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V071",
+      "citation": {
+        "dieu": "13",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: việc đăng ký khai tử khi người chết đã lâu và không có Giấy báo tử yêu cầu cung cấp giấy tờ, tài liệu, chứng cứ hợp lệ để chứng minh sự kiện chết, phù hợp với nội dung Điều 13, Khoản 1 của Thông tư 04/2020/TT-BTP."
+    },
+    {
+      "qid": "V071",
+      "citation": {
+        "dieu": "13",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng nếu người yêu cầu không có giấy tờ hợp lệ hoặc giấy tờ không hợp lệ, cơ quan đăng ký hộ tịch sẽ từ chối đăng ký khai tử, phù hợp với claim trong câu trả lời về Khoản 2 Điều 13."
+    },
+    {
+      "qid": "V071",
+      "citation": {
+        "dieu": "33",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng trong thời hạn 15 ngày kể từ ngày có người chết, vợ, chồng, con, cha, mẹ hoặc người thân thích khác của người chết có trách nhiệm đi đăng ký khai tử, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V071",
+      "citation": {
+        "dieu": "32",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung Điều 32 về thẩm quyền đăng ký khai tử, cụ thể là Ủy ban nhân dân cấp xã nơi cư trú cuối cùng thực hiện việc đăng ký, và trong trường hợp không xác định được nơi cư trú cuối cùng thì thực hiện tại nơi người chết hoặc nơi phát hiện thi thể."
+    },
+    {
+      "qid": "V072",
+      "citation": {
+        "dieu": "31",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung của Điều 31, Khoản 1, quy định về hồ sơ của người Việt Nam định cư ở nước ngoài hoặc người nước ngoài thường trú ở nước ngoài nhận người Việt Nam làm con nuôi, và nêu rõ phải có các giấy tờ, tài liệu như trong context chunk."
+    },
+    {
+      "qid": "V072",
+      "citation": {
+        "dieu": "13",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer nêu rõ yêu cầu bản sao quyết định của cơ quan có thẩm quyền và giấy tờ chứng minh mối quan hệ anh, chị em ruột, hoàn toàn phù hợp với nội dung Điều 13, Khoản 3 của văn bản được trích dẫn."
+    },
+    {
+      "qid": "V073",
+      "citation": {
+        "dieu": "65",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng thành phố trực thuộc trung ương đã có quy hoạch chung được phê duyệt theo pháp luật về quy hoạch đô thị và nông thôn thì không phải lập quy hoạch sử dụng đất cấp tỉnh mà căn cứ vào quy hoạch chung để lập kế hoạch sử dụng đất cấp tỉnh, phù hợp với nội dung trong câu trả lời."
+    },
+    {
+      "qid": "V074",
+      "citation": {
+        "dieu": "1",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng Điều 1 quy định phạm vi điều chỉnh, trong đó nêu rõ việc quy định hạn mức giao đất ở cho cá nhân trên địa bàn tỉnh Đồng Nai. Điều này đồng nghĩa với việc Điều 1 của văn bản quy định về hạn mức giao đất ở cho cá nhân tại Đồng Nai, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V074",
+      "citation": {
+        "dieu": "195",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Khoản 2 Điều 195 Luật Đất đai 2024 quy định về việc Ủy ban nhân dân cấp tỉnh quy định hạn mức giao đất ở cho cá nhân tại nông thôn, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V074",
+      "citation": {
+        "dieu": "196",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Khoản 2 Điều 196 của Luật Đất đai 2024 quy định về việc Ủy ban nhân dân cấp tỉnh quy định hạn mức giao đất ở cho cá nhân tại đô thị, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V075",
+      "citation": {
+        "dieu": "13",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng 'Cơ quan có thẩm quyền cấp bản sao trích lục hộ tịch theo yêu cầu của cá nhân, không phụ thuộc vào nơi đã đăng ký việc hộ tịch và nơi cư trú của người có yêu cầu' — phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V075",
+      "citation": {
+        "dieu": "23",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng cơ quan đăng ký, quản lý hộ tịch đang lưu giữ Sổ hộ tịch hoặc quản lý Cơ sở dữ liệu hộ tịch điện tử có thẩm quyền cấp bản sao trích lục hộ tịch, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V075",
+      "citation": {
+        "dieu": "9",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng khi yêu cầu đăng ký hộ tịch, cá nhân có thể nộp hồ sơ trực tiếp, qua bưu chính hoặc qua hệ thống đăng ký hộ tịch trực tuyến, phù hợp với nội dung trong citation Điều 9, Khoản 1, Luật hộ tịch 2014."
+    },
+    {
+      "qid": "V076",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-02-2023-nq-hdnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 3, Khoản 2 của Nghị quyết 02/2023/NQ-HĐND TP.HCM có nội dung về việc giám sát quá trình triển khai thực hiện, đồng thời nêu rõ thời gian có hiệu lực và việc thay thế Nghị quyết 17/2017/NQ-HĐND. Điều này phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V077",
+      "citation": {
+        "dieu": "12",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về thời gian (ngay trong ngày làm việc), đối tượng (cơ quan đăng ký hộ tịch có thẩm quyền) và nội dung (kiểm tra tính đầy đủ và phù hợp của hồ sơ theo quy định pháp luật), trùng khớp với nội dung trong context chunk."
+    },
+    {
+      "qid": "V077",
+      "citation": {
+        "dieu": "6",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng trong thời hạn 01 ngày làm việc, người yêu cầu có trách nhiệm kiểm tra tính chính xác của thông tin, và nếu xác nhận hoặc không phản hồi, công chức sẽ tiến hành giải quyết hồ sơ — phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V077",
+      "citation": {
+        "dieu": "12",
+        "khoan": "3",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung của Điều 12, Khoản 3, Điểm c, nêu rõ rằng hồ sơ chỉ được tiếp nhận chính thức khi hoàn thiện, đầy đủ và phù hợp quy định pháp luật, điều này khớp với nội dung context chunk."
+    },
+    {
+      "qid": "V078",
+      "citation": {
+        "dieu": "123",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng việc cho cá nhân thuê đất hoặc cho phép chuyển mục đích sử dụng đất nông nghiệp để sử dụng vào mục đích thương mại, dịch vụ với diện tích từ 0,5 ha trở lên phải có văn bản chấp thuận của UBND cấp tỉnh trước khi quyết định, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V079",
+      "citation": {
+        "dieu": "15",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng khi có yêu cầu đăng ký nhận cha, mẹ, con, Ủy ban nhân dân cấp xã nơi cư trú của cha hoặc mẹ sẽ kết hợp giải quyết đăng ký khai sinh và nhận cha, mẹ, con, phù hợp với claim trong answer về cơ quan đăng ký khai sinh là UBND cấp xã nơi cư trú của cha hoặc mẹ."
+    },
+    {
+      "qid": "V079",
+      "citation": {
+        "dieu": "35",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Ủy ban nhân dân cấp huyện nơi cư trú của người cha hoặc người mẹ thực hiện đăng ký khai sinh, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V080",
+      "citation": {
+        "dieu": "2",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng đối với việc nuôi con nuôi trong nước, Ủy ban nhân dân cấp xã nơi cư trú của người nhận hoặc người được nhận thực hiện đăng ký, phù hợp với claim trong answer về thẩm quyền đăng ký do Ủy ban nhân dân cấp xã thực hiện."
+    },
+    {
+      "qid": "V080",
+      "citation": {
+        "dieu": "16",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung Điều 16 về việc đăng ký nhu cầu nhận con nuôi với Sở Tư pháp và việc giới thiệu trẻ em đến UBND cấp xã để xem xét, giải quyết."
+    },
+    {
+      "qid": "V081",
+      "citation": {
+        "dieu": "29",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: công dân Việt Nam nhận người nước ngoài làm con nuôi phải có đủ các điều kiện theo quy định tại Điều 14 và pháp luật của nước nơi người được nhận thường trú, hoàn toàn khớp với nội dung trong context chunk."
+    },
+    {
+      "qid": "V081",
+      "citation": {
+        "dieu": "18",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 18, Khoản 1, Điểm b, Văn bản nghị định 19/2011/NĐ-CP quy định về yêu cầu người nhận con nuôi nước ngoài đáp ứng đủ điều kiện nuôi con nuôi theo pháp luật Việt Nam, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V081",
+      "citation": {
+        "dieu": "II",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-120-2025-nd-cp",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến 'Điều 14 của Luật Nuôi con nuôi' như là cơ sở pháp lý cho điều kiện nhận con nuôi, nhưng context chunk chỉ nói về việc xác nhận điều kiện theo quy định tại Điều 14, không khẳng định rằng Điều 14 là điều kiện được áp dụng trong trường hợp này. Hơn nữa, chunk không nói gì về nội dung cụ thể của Điều 14, nên không có sự trích dẫn hoặc hỗ trợ trực tiếp về điều kiện nhận con nuôi như trong câu trả lời."
+    },
+    {
+      "qid": "V082",
+      "citation": {
+        "dieu": "7",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk khẳng định rõ rằng việc thay đổi họ, tên cho người dưới 18 tuổi cần sự đồng ý của cha, mẹ và đối với người từ đủ 9 tuổi trở lên còn cần sự đồng ý của chính người đó, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V082",
+      "citation": {
+        "dieu": "24",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng việc thay đổi họ, tên của con nuôi từ đủ 09 tuổi trở lên phải được sự đồng ý của người đó, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V082",
+      "citation": {
+        "dieu": "7",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng cải chính hộ tịch chỉ được thực hiện khi có đủ căn cứ để xác định có sai sót do lỗi của công chức hoặc người yêu cầu đăng ký hộ tịch, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V083",
+      "citation": {
+        "dieu": "227",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer nêu rõ rằng các trường hợp chuyển mục đích sử dụng đất phải được cơ quan nhà nước có thẩm quyền cho phép và thực hiện theo trình tự, thủ tục do pháp luật quy định, điều này hoàn toàn được khẳng định trong context chunk (Điều 227) với nội dung tương đương."
+    },
+    {
+      "qid": "V083",
+      "citation": {
+        "dieu": "123",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng thẩm quyền cho phép chuyển mục đích sử dụng đất đối với cá nhân thuộc về Ủy ban nhân dân cấp tỉnh, phù hợp với claim trong citation (Điều 123, Khoản 2, Điểm a)."
+    },
+    {
+      "qid": "V083",
+      "citation": {
+        "dieu": "121",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng việc chuyển mục đích sử dụng đất không thuộc các trường hợp quy định tại khoản 1 thì không cần xin phép cơ quan nhà nước có thẩm quyền, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V084",
+      "citation": {
+        "dieu": "15",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: khẳng định rằng trong thời hạn 60 ngày kể từ ngày sinh con, cha hoặc mẹ có trách nhiệm đăng ký khai sinh, và nêu rõ trường hợp không thể đăng ký thì có người thay thế. Nội dung này được trích dẫn nguyên văn và đồng nghĩa với context chunk."
+    },
+    {
+      "qid": "V085",
+      "citation": {
+        "dieu": "29",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng trong thời hạn 05 ngày làm việc kể từ ngày nhận đủ giấy tờ hợp lệ, Chủ tịch Ủy ban nhân dân cấp xã ký Giấy chứng nhận nuôi con nuôi trong nước, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V088",
+      "citation": {
+        "dieu": "16",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: cả việc nộp tờ khai và giấy chứng sinh, cũng như việc nộp văn bản thay thế khi không có giấy chứng sinh, đều được nêu trong Khoản 1 Điều 16 Luật hộ tịch 2014."
+    },
+    {
+      "qid": "V088",
+      "citation": {
+        "dieu": "9",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 2 Điều 9 Nghị định 123/2015/NĐ-CP quy định người yêu cầu đăng ký khai sinh phải xuất trình giấy tờ theo quy định tại khoản 1 Điều 2, điều này phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V088",
+      "citation": {
+        "dieu": "36",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng khi cha hoặc mẹ là người nước ngoài, phải nộp văn bản thỏa thuận về việc chọn quốc tịch cho con, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V090",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk chỉ nêu lệ phí trích lục bản đồ địa chính là 18.000 đồng/lần đối với một nhóm cụ thể (hộ gia đình, cá nhân có đất thuộc các phường thành phố Long Khánh và Biên Hòa), nhưng đoạn answer nói chung là '18.000 đồng/lần' mà không giới hạn điều kiện, dẫn đến sai lệch về phạm vi áp dụng."
+    },
+    {
+      "qid": "V091",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-11-2023-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Câu trả lời nói rằng lệ phí xin xác nhận hộ tịch là 20.000 đồng, nhưng trong context chỉ ghi rõ mức thu là 15.000 đồng cho việc cấp giấy xác nhận tình trạng hôn nhân và 10.000 đồng cho các công việc khác. Không có mục nào có mức phí 20.000 đồng, nên claim này không được hỗ trợ."
+    },
+    {
+      "qid": "V092",
+      "citation": {
+        "dieu": "9",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung Điều 9, Khoản 1, Luật hộ tịch 2014, cụ thể là việc cá nhân nộp hồ sơ trực tiếp hoặc qua bưu chính hoặc hệ thống đăng ký hộ tịch trực tuyến, phù hợp với nội dung trong context chunk."
+    },
+    {
+      "qid": "V092",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 12, Khoản 1, Văn bản nghị định 87/2020/NĐ-CP, nêu rõ người có yêu cầu đăng ký hộ tịch trực tuyến cung cấp thông tin theo biểu mẫu điện tử, đính kèm bản chụp hoặc bản sao điện tử giấy tờ, và nộp phí, lệ phí theo quy định, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V092",
+      "citation": {
+        "dieu": "12",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng sau khi hoàn tất việc nộp hồ sơ, người có yêu cầu đăng ký hộ tịch trực tuyến được cấp một mã số hồ sơ thủ tục hành chính để theo dõi, tra cứu tiến độ hoặc hoàn thiện hồ sơ — phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V092",
+      "citation": {
+        "dieu": "6",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng người yêu cầu có 01 ngày làm việc để kiểm tra tính chính xác và xác nhận thông tin, và nếu xác nhận hoặc không phản hồi, công chức sẽ tiến hành giải quyết hồ sơ — hoàn toàn khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V092",
+      "citation": {
+        "dieu": "12",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk khẳng định rõ rằng đối với các việc như thay đổi, cải chính hộ tịch, người có yêu cầu phải có mặt tại cơ quan đăng ký hộ tịch để ký vào Sổ hộ tịch và nhận kết quả, đồng thời phải xuất trình các giấy tờ, tài liệu gốc. Điều này phù hợp với claim trong citation và context."
+    },
+    {
+      "qid": "V093",
+      "citation": {
+        "dieu": "29",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người có yêu cầu lựa chọn nộp Tờ khai qua hình thức trực tiếp, gửi bưu chính hoặc nộp trực tuyến, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V093",
+      "citation": {
+        "dieu": "12",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": false,
+      "supported": false,
+      "reason": "citation_not_in_context"
+    },
+    {
+      "qid": "V093",
+      "citation": {
+        "dieu": "4",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Khoản 3 Điều 4 Nghị định 114/2016/NĐ-CP quy định miễn lệ phí đăng ký nuôi con nuôi trong trường hợp đăng ký lại việc nuôi con nuôi, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V094",
+      "citation": {
+        "dieu": "22",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: người nhận con nuôi, cha mẹ đẻ, người giám hộ hoặc đại diện cơ sở nuôi dưỡng; thời hạn 10 ngày kể từ ngày có ý kiến của những người có liên quan; được trích dẫn từ Điều 22, Khoản 2, Luật Nuôi con nuôi 2010, khớp với context chunk."
+    },
+    {
+      "qid": "V095",
+      "citation": {
+        "dieu": "12",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng cơ quan đăng ký hộ tịch từ chối giải quyết yêu cầu cấp Giấy xác nhận tình trạng hôn nhân trong trường hợp kết hôn với người cùng giới tính, hoàn toàn khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V095",
+      "citation": {
+        "dieu": "8",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trường hợp kết quả xác minh không có thông tin hoặc không thống nhất với giấy tờ người yêu cầu cung cấp sẽ dẫn đến việc từ chối cấp văn bản xác nhận thông tin hộ tịch, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V096",
+      "citation": {
+        "dieu": "19",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng cơ quan tiếp nhận hồ sơ phải xử lý khi hồ sơ không thuộc thẩm quyền, không đầy đủ thành phần, không thống nhất về nội dung thông tin giữa các giấy tờ, hoặc kê khai không đầy đủ thông tin theo quy định, phù hợp với claim trong citation và đoạn answer."
+    },
+    {
+      "qid": "V096",
+      "citation": {
+        "dieu": "19",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk không đề cập đến việc 'trả lại hồ sơ nếu hồ sơ không thuộc thẩm quyền, không đầy đủ thành phần, không thống nhất về nội dung thông tin giữa các giấy tờ, hoặc kê khai không đầy đủ thông tin'. Nội dung trong answer nói về việc 'không tiếp nhận hồ sơ hoặc dừng giải quyết thủ tục' và 'trả hồ sơ', nhưng không khẳng định các điều kiện cụ thể như trong answer."
+    },
+    {
+      "qid": "V097",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: người có yêu cầu đăng ký hộ tịch trực tuyến truy cập Cổng dịch vụ công quốc gia hoặc cấp tỉnh để đăng ký tài khoản và đăng nhập, điều này được khẳng định nguyên văn trong context chunk."
+    },
+    {
+      "qid": "V097",
+      "citation": {
+        "dieu": "9",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 1 Điều 9 Luật Hoạt tích 2014 quy định cá nhân có thể gửi hồ sơ qua hệ thống đăng ký hộ tịch trực tuyến, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V098",
+      "citation": {
+        "dieu": "41",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng hồ sơ của người nhận con nuôi và người được giới thiệu làm con nuôi được nộp cho Sở Tư pháp nơi người được giới thiệu làm con nuôi thường trú, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V098",
+      "citation": {
+        "dieu": "21",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk không đề cập đến việc nộp hồ sơ cho 'Ủy ban nhân dân cấp xã nơi trẻ em được nhận làm con nuôi thường trú' như trong đoạn answer, mà chỉ nói về việc nộp hồ sơ kèm theo giấy tờ và lệ phí. Nội dung về đối tượng nộp hồ sơ và địa điểm nộp không được hỗ trợ đầy đủ."
+    },
+    {
+      "qid": "V098",
+      "citation": {
+        "dieu": "17",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng khi người nhận con nuôi thường trú ở nước ngoài và không có tổ chức con nuôi được cấp phép hoạt động tại Việt Nam, thì họ nộp hồ sơ thông qua Cơ quan Trung ương về nuôi con nuôi của nước nơi thường trú, hoặc cơ quan đại diện ngoại giao/lãnh sự. Điều này khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V099",
+      "citation": {
+        "dieu": "1",
+        "khoan": "6",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức thu hồ sơ nộp trực tuyến là bằng 0% mức thu trực tiếp, phù hợp với claim trong answer về việc miễn hoàn toàn lệ phí cấp Giấy chứng nhận khi nộp trực tuyến."
+    },
+    {
+      "qid": "V099",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ phí thẩm định đối với hộ gia đình, cá nhân cấp lần đầu: 880.000 đồng (trực tiếp) và 836.000 đồng (trực tuyến), phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V100",
+      "citation": {
+        "dieu": "14",
+        "khoan": "2",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-dinh-49-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng 'đất đai sẽ là cơ quan cấp Giấy chứng nhận', nhưng context chunk chỉ rõ là 'Văn phòng đăng ký đất đai' cấp giấy chứng nhận, không phải 'đất đai' hay cơ quan đất đai tổng thể. Đối tượng cơ quan được sai."
+    },
+    {
+      "qid": "V101",
+      "citation": {
+        "dieu": "139",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trong trường hợp diện tích đất lấn, chiếm không còn thuộc hành lang bảo vệ an toàn công trình công cộng và đáp ứng các điều kiện khác, người sử dụng đất được xem xét cấp Giấy chứng nhận và phải thực hiện nghĩa vụ tài chính theo quy định pháp luật, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V102",
+      "citation": {
+        "dieu": "19",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng thời hạn giải quyết việc nuôi con nuôi là 30 ngày, kể từ ngày Ủy ban nhân dân cấp xã nhận đủ hồ sơ hợp lệ, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V102",
+      "citation": {
+        "dieu": "40",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ thời hạn 30 ngày để Bộ Tư pháp cấp giấy xác nhận, và trường hợp cần xác minh thì kéo dài không quá 60 ngày, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V102",
+      "citation": {
+        "dieu": "27",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trong thời hạn 20 ngày, kể từ ngày lấy ý kiến của những người liên quan, Cơ quan đại diện đăng ký việc nuôi con nuôi, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V102",
+      "citation": {
+        "dieu": "II",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-120-2025-nd-cp",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Ủy ban nhân dân cấp xã có thời hạn 10 ngày làm việc để kiểm tra và xác nhận đủ điều kiện nhận con nuôi kể từ ngày nhận được hồ sơ hợp lệ, phù hợp với citation Khoản 3, Phụ lục II."
+    },
+    {
+      "qid": "V102",
+      "citation": {
+        "dieu": "36",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Sở Tư pháp có thời hạn 30 ngày để xem xét và giới thiệu trẻ em làm con nuôi, sau đó báo cáo Ủy ban nhân dân cấp tỉnh, và Ủy ban nhân dân cấp tỉnh có 10 ngày để xem xét hồ sơ do Sở Tư pháp trình. Nội dung này khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V104",
+      "citation": {
+        "dieu": "19",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng khi con nuôi là trẻ bị bỏ rơi hoặc chưa xác định được cha, mẹ, thông tin cha, mẹ nuôi sẽ được bổ sung vào Giấy khai sinh và Sổ đăng ký khai sinh, và mục Ghi chú phải ghi rõ 'cha, mẹ nuôi'. Điều này khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V104",
+      "citation": {
+        "dieu": "19",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng nếu Giấy khai sinh và Sổ đăng ký khai sinh còn trống phần khai về cha hoặc mẹ, thì UBND sẽ bổ sung thông tin về cha dượng hoặc mẹ kế và ghi rõ 'cha nuôi' hoặc 'mẹ nuôi' trong mục Ghi chú. Điều này phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V104",
+      "citation": {
+        "dieu": "26",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng việc thay đổi thông tin về cha, mẹ trong nội dung khai sinh sau khi được nhận làm con nuôi là phạm vi được pháp luật cho phép, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V118",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức phí 880.000 đồng/hồ sơ cho hộ gia đình, cá nhân nộp trực tiếp và 1.260.000 đồng/hồ sơ cho tổ chức nộp trực tiếp, phù hợp với claim trong answer về Phụ lục I của Nghị quyết 22/2024/NQ-HĐND tỉnh Đồng Nai."
+    },
+    {
+      "qid": "V118",
+      "citation": {
+        "dieu": "1A",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ đối tượng miễn thu bao gồm 'hộ gia đình, cá nhân' và 'cấp Giấy chứng nhận quyền sử dụng đất lần đầu', phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V119",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức lệ phí 30.000 đồng/giấy cho hộ gia đình, cá nhân có đất thuộc các phường của thành phố Long Khánh và Biên Hòa, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V119",
+      "citation": {
+        "dieu": "1C",
+        "khoan": null,
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-datdai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng đối với cá nhân, hộ gia đình tại quận, mức thu lệ phí cấp Giấy chứng nhận lần đầu là 25.000 đồng/giấy, phù hợp với citation '1C, điểm a'."
+    },
+    {
+      "qid": "V120",
+      "citation": {
+        "dieu": "11",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến việc 'đăng ký khai sinh muộn' phải nộp lệ phí, nhưng context chỉ nói về việc đăng ký 'sự kiện hộ tịch khác' hoặc 'yêu cầu cấp bản sao trích lục hộ tịch', không đề cập đến khai sinh hay việc đăng ký muộn. Do đó, claim không được hỗ trợ."
+    },
+    {
+      "qid": "V120",
+      "citation": {
+        "dieu": "15",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến việc 'nộp lệ phí' và 'miễn lệ phí' theo Điều 15, Khoản 1, nhưng context chunk không đề cập đến lệ phí hay việc miễn lệ phí, chỉ nói về trách nhiệm đăng ký khai sinh. Do đó, claim về lệ phí không được hỗ trợ."
+    },
+    {
+      "qid": "V120",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điểm b, Khoản 1, Điều 11 quy định về đăng ký khai sinh đúng hạn, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "159",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng bảng giá đất được xây dựng theo khu vực và vị trí, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "7",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng bảng giá đất được xây dựng theo loại đất, khu vực, vị trí, và đối với khu vực có bản đồ địa chính dạng số thì được xây dựng đến từng thửa đất, phù hợp với claim trong câu trả lời về việc xác định giá đất nông nghiệp theo khu vực và vị trí."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "5",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung của Điều 5, Khoản 1, cụ thể là việc xác định giá đất nông nghiệp dựa trên loại đất, khu vực và vị trí, và nêu rõ bảng giá tương ứng, phù hợp với context chunk đã cung cấp."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "5",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation chỉ đến Khoản 2, nhưng đoạn answer đề cập đến 'loại đất (đất trồng cây hàng năm, đất trồng cây lâu năm)', 'khu vực (I, II, III, IV)' và 'vị trí (1, 2, 3)' theo Khoản 1, trong khi context chỉ nói về Khoản 2 và chỉ cụ thể cho đất trồng cây lâu năm. Do đó, claim về loại đất hàng năm không được hỗ trợ."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "5",
+        "khoan": "7",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-87-2025-nq-hdnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng đối với đất nông nghiệp trong Khu Nông nghiệp Công nghệ cao, giá đất là 320.000 đồng/m², phù hợp với claim trong câu trả lời về Điều 5, Khoản 7."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "5",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng phạm vi 1 (từ mốc đến hết 100m) tính bằng 100% giá đất nông nghiệp vị trí 1, và phạm vi 3 (trên 200m) tính bằng 60% giá đất nông nghiệp vị trí 1, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V122",
+      "citation": {
+        "dieu": "5",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-28-2025-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Answer citing 'Điểm b' nhưng nội dung context chỉ nói về giá đất vị trí 2 là 30% giá vị trí 1, trong khi đoạn answer nói về 'phạm vi 1' và 'phạm vi 3' với tỷ lệ 100% và 60%, điều này không được hỗ trợ bởi context."
+    },
+    {
+      "qid": "V124",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người yêu cầu đăng ký hộ tịch trực tuyến phải nộp phí, lệ phí qua chức năng thanh toán trực tuyến hoặc cách thức khác theo quy định, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V124",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn chính xác nội dung Điều 11, Khoản 1, Điểm a về việc miễn lệ phí cho người thuộc gia đình có công với cách mạng, người thuộc hộ nghèo, người khuyết tật, trùng khớp với context chunk."
+    },
+    {
+      "qid": "V124",
+      "citation": {
+        "dieu": "4",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 4, Khoản 2, Điểm a, Văn bản nghị định 114/2016/NĐ-CP quy định về việc giảm 50% lệ phí đăng ký nuôi con nuôi đối với cha dượng, mẹ kế nhận con riêng của vợ hoặc chồng làm con nuôi, hoàn toàn khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V125",
+      "citation": {
+        "dieu": "10",
+        "khoan": "2",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ trường hợp chuyển mục đích sử dụng đất vườn, ao trong cùng thửa đất có đất ở sang đất ở, và quy định về việc tính tiền sử dụng đất theo tỷ lệ phần trăm chênh lệch, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V125",
+      "citation": {
+        "dieu": "11",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-112-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ Điều 11, Khoản 1 của Nghị định 112/2024/NĐ-CP, nêu rằng người được giao đất có nhu cầu xây dựng công trình trên đất chuyển đổi từ đất chuyên trồng lúa sang đất phi nông nghiệp phải gửi hồ sơ đến UBND cấp huyện hoặc cấp tỉnh. Điều này phù hợp với claim trong answer về việc gửi hồ sơ đến UBND cấp huyện."
+    },
+    {
+      "qid": "V125",
+      "citation": {
+        "dieu": "1",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng Điều 1 quy định về phạm vi điều chỉnh, cụ thể là hạn mức giao đất ở cho cá nhân trên địa bàn tỉnh Đồng Nai, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V126",
+      "citation": {
+        "dieu": "15",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trong thời hạn 60 ngày kể từ ngày sinh, cha hoặc mẹ có trách nhiệm đăng ký khai sinh cho con, phù hợp với claim trong answer về thời hạn đăng ký."
+    },
+    {
+      "qid": "V126",
+      "citation": {
+        "dieu": "8",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng 'Ủy ban nhân dân cấp xã nơi cư trú hiện tại thực hiện việc đăng ký khai sinh' (Khoản 1, Điều 8, Thông tư 04/2020/TT-BTP), phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V126",
+      "citation": {
+        "dieu": "16",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng người đi đăng ký khai sinh nộp tờ khai theo mẫu và giấy chứng sinh, và nếu không có giấy chứng sinh thì nộp văn bản của người làm chứng hoặc giấy cam đoan – hoàn toàn phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V126",
+      "citation": {
+        "dieu": "1B",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng tại Phụ lục 1B, Khoản 1, mức thu lệ phí đăng ký khai sinh tại Ủy ban nhân dân cấp xã là 5.000 đồng/trường hợp, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V127",
+      "citation": {
+        "dieu": "4",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng 'cô, cậu, dì, chú, bác ruột nhận cháu làm con nuôi' được giảm 50% lệ phí, trùng khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V129",
+      "citation": {
+        "dieu": "25",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng hộ gia đình, cá nhân đang sử dụng đất nông nghiệp ổn định, không vượt hạn mức giao đất nông nghiệp thì được giao đất không thu tiền sử dụng đất, và nếu vượt hạn mức thì phải chuyển sang thuê đất, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V129",
+      "citation": {
+        "dieu": "1",
+        "khoan": "6",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 6, Điểm a của Điều 1 quy định về mức thu lệ phí đối với hồ sơ nộp trực tiếp, và nêu rõ đây là nội dung trong Phụ lục kèm theo, phù hợp với citation về Điều 1, Khoản 6, Điểm a, Văn bản nghi-quyet-21-2024-nq-hdnd-dong-nai."
+    },
+    {
+      "qid": "V129",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức lệ phí 30.000 đồng/giấy đối với trường hợp cấp Giấy chứng nhận quyền sử dụng đất (đối với cộng đồng dân cư, hộ gia đình, cá nhân có đất tại các phường thành phố Long Khánh và Biên Hòa), và 120.000 đồng/giấy đối với trường hợp cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất (đối với các nhóm đối tượng cụ thể). Điều này khớp với claim trong answer."
+    },
+    {
+      "qid": "V130",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói mức phí là 836.000 đồng cho hộ gia đình, cá nhân, nhưng trong context chỉ ghi rõ mức phí 836.000 đồng cho trường hợp nộp trực tuyến. Mức phí 836.000 đồng được nêu trong bảng là cho 'Hộ gia đình, cá nhân - Trực tuyến', không phải 'trực tiếp' như trong answer. Do đó, claim về mức phí không được hỗ trợ đầy đủ và chính xác."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-102-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk chỉ nêu rõ tiêu chí chuyển mục đích từ 02 ha trở lên, nhưng đoạn answer nói về 'việc chuyển mục đích trên 2 hecta đất trồng lúa' và 'yêu cầu liên quan đến tầng đất mặt' — phần latter không được đề cập trong context, và số liệu 'trên 2 hecta' trong answer không khớp với 'từ 02 ha trở lên' (vì 'trên 2 hecta' là khác với 'từ 02 ha trở lên')."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "10",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-112-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation chỉ đề cập đến Điều 10, Khoản 2, Điểm b. của Nghị định 112/2024/NĐ-CP, nhưng đoạn answer nói rằng 'người sử dụng đất phải có phương án sử dụng tầng đất mặt' là quy định được nêu tại Điều 10 mà không xác định rõ điều kiện (chuyển đổi từ đất chuyên trồng lúa sang mục đích phi nông nghiệp). Context không khẳng định hay hỗ trợ đầy đủ nội dung tổng quát như vậy, vì chỉ nói về trường hợp cụ thể và điều kiện nhất định."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "5",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-226-2025-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 2, Điều 5 của Nghị định 226/2025/NĐ-CP sửa đổi Điều 10, trong đó quy định người được giao đất phải có phương án sử dụng tầng đất mặt, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "I - Phần III - Mục I",
+        "khoan": "6",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-151-2025-nd-cp",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk rõ ràng nêu rõ Khoản 6 của Phụ lục I - Phần III - Mục I trong Nghị định 151/2025/NĐ-CP, quy định về việc nộp tiền bảo vệ, phát triển đất trồng lúa với mức không thấp hơn 50% số tiền tính theo diện tích và giá đất trồng lúa, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "1",
+        "khoan": "6",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 6, Điểm a của Điều 1 trong Văn bản nghị quyết 22/2024/NQ-HĐND Đồng Nai quy định về mức phí thẩm định hồ sơ cấp Giấy chứng nhận quyền sử dụng đất, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "1",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 5 của Điều 1 trong Văn bản nghị quyết 21/2024/NQ-HĐND Đồng Nai về 'Tổ chức thu lệ phí', phù hợp với claim trong citation về Khoản 5, Điều 1."
+    },
+    {
+      "qid": "V131",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức phí thẩm định hồ sơ cấp lần đầu cho tổ chức nộp trực tiếp tại Đồng Nai là 1.260.000 đồng/hồ sơ, khớp với claim trong answer."
+    },
+    {
+      "qid": "V132",
+      "citation": {
+        "dieu": "24",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng việc thay đổi họ, tên của con nuôi từ đủ 09 tuổi trở lên phải được sự đồng ý của người đó, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V132",
+      "citation": {
+        "dieu": "26",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng việc thay đổi thông tin về cha, mẹ trong nội dung khai sinh đã đăng ký sau khi được nhận làm con nuôi là một trong những trường hợp được pháp luật cho phép, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V132",
+      "citation": {
+        "dieu": "10",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Khoản 2 Điều 10 Nghi định 19/2011/NĐ-CP quy định việc thực hiện thủ tục đăng ký dựa trên Giấy chứng nhận nuôi con nuôi và yêu cầu sự đồng ý của con nuôi từ đủ chín tuổi trở lên, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V132",
+      "citation": {
+        "dieu": "19",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng khi trẻ bị bỏ rơi hoặc chưa xác định được cha mẹ, thông tin cha, mẹ nuôi được bổ sung vào Giấy khai sinh và Sổ đăng ký khai sinh, với ghi chú 'cha, mẹ nuôi', phù hợp với claim trong câu trả lời về việc bổ sung thông tin cha mẹ nuôi."
+    },
+    {
+      "qid": "V132",
+      "citation": {
+        "dieu": "19",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation đề cập đến Khoản 3, nhưng đoạn answer trích dẫn Khoản 2 và Khoản 3 cùng lúc, trong khi context chỉ xác định rõ nội dung của Khoản 3. Hơn nữa, đoạn answer nói về việc 'bổ sung hoặc thay đổi thông tin của cha mẹ nuôi' — điều này không được nêu trong context, mà context chỉ nói về việc bổ sung thông tin cho con nuôi khi Giấy khai sinh còn trống hoặc thay đổi khi có yêu cầu của cha nuôi/mẹ nuôi. Do đó, claim không được hỗ trợ đầy đủ."
+    },
+    {
+      "qid": "V133",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "quyet-dinh-92-2025-qd-ubnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng các xã gồm Phú Lý có hạn mức giao đất ở không quá 300 m2, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V135",
+      "citation": {
+        "dieu": "1",
+        "khoan": "6",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức thu lệ phí đối với hồ sơ nộp trực tuyến là 0% mức thu trực tiếp, phù hợp với claim trong answer về việc không phải đóng lệ phí khi nộp qua mạng tại Đồng Nai."
+    },
+    {
+      "qid": "V136",
+      "citation": {
+        "dieu": "26",
+        "khoan": "5",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng nếu hồ sơ, giấy tờ không thống nhất, nội dung khai sinh được xác định theo giấy tờ hợp lệ do cơ quan nhà nước có thẩm quyền cấp đầu tiên, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V136",
+      "citation": {
+        "dieu": "9",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng bản chính hoặc bản sao giấy tờ có giá trị thay thế Giấy khai sinh được cấp trước năm 1945 ở miền Bắc và trước năm 1975 ở miền Nam là cơ sở để đăng ký lại khai sinh, phù hợp với claim trong answer về người sinh trước năm 1975 ở miền Nam."
+    },
+    {
+      "qid": "V136",
+      "citation": {
+        "dieu": "9",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: khi không có thông tin từ cơ quan công an, người yêu cầu phải lập văn bản cam đoan về thông tin cha mẹ để xác định nội dung khai sinh, phù hợp với Điều 9, Khoản 4, Thông tư 04/2020/TT-BTP."
+    },
+    {
+      "qid": "V137",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng 'Người nhận con nuôi phải nộp lệ phí đăng ký nuôi con nuôi' (Khoản 1, Điều 12), phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V137",
+      "citation": {
+        "dieu": "3",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chỉ nói về việc nộp lệ phí theo điểm b khoản 1 Điều 6, không nêu rõ số tiền 9.000.000 đồng/trường hợp, và không khẳng định rõ ràng rằng lệ phí là 9.000.000 đồng cho trường hợp người Việt Nam định cư hoặc người nước ngoài thường trú nhận con nuôi là công dân Việt Nam."
+    },
+    {
+      "qid": "V137",
+      "citation": {
+        "dieu": "6",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức lệ phí 9.000.000 đồng/trường hợp đối với người nước ngoài thường trú ở nước ngoài nhận con nuôi là công dân Việt Nam, phù hợp với claim trong câu trả lời."
+    },
+    {
+      "qid": "V137",
+      "citation": {
+        "dieu": "12",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk không nêu rõ số tiền 50.000.000 đồng/trường hợp, chỉ nói về việc phải trả khoản tiền để bù đắp chi phí mà không cung cấp số liệu cụ thể."
+    },
+    {
+      "qid": "V137",
+      "citation": {
+        "dieu": "47",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức thu chi phí giải quyết nuôi con nuôi nước ngoài là 50.000.000 đồng/trường hợp, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V137",
+      "citation": {
+        "dieu": "12",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng Chính phủ quy định chi tiết về mức thu, việc miễn, giảm và quản lý lệ phí đăng ký nuôi con nuôi, phù hợp với claim trong answer rằng 'Chính phủ sẽ quy định chi tiết về mức thu lệ phí này'."
+    },
+    {
+      "qid": "V139",
+      "citation": {
+        "dieu": "9",
+        "khoan": "3",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ việc bãi bỏ cụm từ 'Sổ hộ khẩu, Sổ tạm trú' trong Điểm b, Khoản 3, Điều 9 của Thông tư 04/2020/TT-BTP, với hiệu lực từ ngày 01/01/2023, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V140",
+      "citation": {
+        "dieu": "1",
+        "khoan": "1",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "quyet-dinh-18-2016-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng tại Điểm d, Khoản 1, Điều 1 của Quyết định 18/2016/QĐ-UBND TP.HCM, hạn mức đất ở đối với huyện Cần Giờ và các khu dân cư nông thôn tại các xã của các huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè là không quá 300m²/hộ, hoàn toàn khớp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V140",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "quyet-dinh-69-2024-qd-ubnd-tp-hcm",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng hạn mức giao đất ở cho cá nhân tại các xã của huyện Bình Chánh, Hóc Môn, Củ Chi, Nhà Bè, Cần Giờ là không quá 250 m²/cá nhân, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V141",
+      "citation": {
+        "dieu": "101",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2013",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói về 'quan nhà nước có thẩm quyền ra quyết định giải quyết hồ sơ' mà context chunk không đề cập đến việc nhà nước ra quyết định giải quyết hồ sơ, chỉ nói về việc cấp Giấy chứng nhận quyền sử dụng đất cho hộ gia đình, cá nhân đang sử dụng đất mà không có giấy tờ. Nội dung claim không được hỗ trợ."
+    },
+    {
+      "qid": "V141",
+      "citation": {
+        "dieu": "101",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2013",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Khoản 1 Điều 101 Luật Đất đai 2013 quy định việc cấp Giấy chứng nhận cho hộ gia đình, cá nhân đang sử dụng đất mà không có giấy tờ về quyền sử dụng đất, đáp ứng đúng nội dung được trích trong citation."
+    },
+    {
+      "qid": "V141",
+      "citation": {
+        "dieu": "101",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2013",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 2 Điều 101 Luật Đất đai 2013 quy định việc cấp Giấy chứng nhận cho hộ gia đình, cá nhân đang sử dụng đất không có giấy tờ, nếu đất đã ổn định từ trước ngày 01/7/2004, không vi phạm pháp luật và được cơ quan có thẩm quyền xác nhận. Điều này khớp với claim trong answer về việc áp dụng Điều 101, Khoản 2 để xem xét cấp GCN cho trường hợp sử dụng đất không có giấy tờ."
+    },
+    {
+      "qid": "V141",
+      "citation": {
+        "dieu": "138",
+        "khoan": "2",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Điều 138, Khoản 2, Điểm d của Luật Đất đai 2024, và nêu rõ nội dung về việc công nhận đất nông nghiệp hoặc phi nông nghiệp theo hiện trạng sử dụng đất, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V141",
+      "citation": {
+        "dieu": "138",
+        "khoan": "3",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chỉ nêu rõ Khoản 3, Điểm d của Điều 138, nhưng không xác định rõ nội dung về việc áp dụng từ ngày 01/01/2025 hay điều kiện cụ thể liên quan đến thời điểm này. Claim trong answer nói về việc áp dụng từ ngày 01/01/2025, trong khi context không cung cấp thông tin về thời gian hiệu lực hoặc thời điểm áp dụng."
+    },
+    {
+      "qid": "V142",
+      "citation": {
+        "dieu": "10",
+        "khoan": "2",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "nghi-quyet-254-2025-qh15",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk rõ ràng nêu rõ việc tính 30% chênh lệch giữa tiền sử dụng đất theo giá đất ở và giá đất nông nghiệp đối với diện tích trong hạn mức giao đất ở, phù hợp với citation Điều 10, Khoản 2, Điểm c."
+    },
+    {
+      "qid": "V142",
+      "citation": {
+        "dieu": "6",
+        "khoan": "5",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-50-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Citation trích dẫn Điều 6, Khoản 5, Điểm a, nhưng context chỉ nói về việc áp dụng hạn mức giao đất ở theo quy định tại Điều 10 Nghị quyết 254/2025/QH15, không đề cập đến nội dung 'nộp bằng 100% chênh lệch' như trong đoạn answer, nên claim không được hỗ trợ."
+    },
+    {
+      "qid": "V142",
+      "citation": {
+        "dieu": "6",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-50-2026-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng việc tính tiền sử dụng đất chỉ áp dụng một lần cho hộ gia đình, cá nhân và tính trên một thửa đất do họ lựa chọn, và các lần chuyển mục đích sau (trên cùng thửa hoặc thửa khác) sẽ tính 100% chênh lệch tiền sử dụng đất, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "13",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-87-2020-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng cơ quan có thẩm quyền cấp bản sao trích lục hộ tịch theo yêu cầu của cá nhân, không phụ thuộc vào nơi đã đăng ký việc hộ tịch và nơi cư trú của người có yêu cầu, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "64",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Điều 64, Khoản 1, Luật Hộ tịch 2014 quy định về việc người yêu cầu cấp bản sao trích lục hộ tịch gửi tờ khai theo mẫu cho Cơ quan quản lý Cơ sở dữ liệu hộ tịch, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "7",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung Điều 7, Khoản 1, Văn bản thong-tu-01-2022-tt-btp, khẳng định trách nhiệm cung cấp thông tin như số, ngày tháng năm đăng ký và cơ quan đã đăng ký, phù hợp với nội dung chunk được trích dẫn."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "7",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-01-2022-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng khi không cung cấp đủ thông tin, người yêu cầu phải cung cấp thông tin cơ bản về họ tên, ngày tháng năm sinh của cha, mẹ, phù hợp với nội dung trong câu trả lời."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-123-2015-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ Khoản 3 Điều 3 Nghi định 123/2015/NĐ-CP quy định về việc gửi hồ sơ và nhận kết quả qua hệ thống bưu chính, bao gồm việc phải nộp lệ phí và ghi rõ phương thức trả kết quả, đồng thời nêu rõ trường hợp được trả kết quả qua bưu chính khi yêu cầu cấp bản sao trích lục hộ tịch. Điều này khớp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "11",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Khoản 2 Điều 11 Luật Hộ tịch 2014 quy định về việc cá nhân yêu cầu cấp bản sao trích lục hộ tịch phải nộp lệ phí, phù hợp với claim trong citation."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "1B",
+        "khoan": "3",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức thu lệ phí cấp bản sao trích lục hộ tịch tại Sở Tư pháp là 3.000 đồng/bản sao, phù hợp với claim trong đoạn answer về Phụ lục 1B, Khoản 3."
+    },
+    {
+      "qid": "V143",
+      "citation": {
+        "dieu": "1B",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-124-2016-nq-hdnd-tp-hcm-hotich",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức thu lệ phí cấp bản sao trích lục hộ tịch là 3.000 đồng/bản sao tại Ủy ban nhân dân cấp huyện, phù hợp với claim trong citation (Điều 1B, Khoản 2, Phụ lục)."
+    },
+    {
+      "qid": "V144",
+      "citation": {
+        "dieu": "18",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Khoản 2 Điều 18 quy định việc Bộ Tư pháp lấy ý kiến của chuyên gia tâm lý, y tế, gia đình, xã hội để xác định người nhận con nuôi có điều kiện tốt nhất để chăm sóc, nuôi dưỡng và giáo dục con nuôi, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V144",
+      "citation": {
+        "dieu": "8",
+        "khoan": "3",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer trích dẫn đúng nội dung của Điều 8, Khoản 3, Điểm a, trong đó nêu rõ việc lấy ý kiến của chuyên gia tâm lý, y tế, gia đình, xã hội để đánh giá điều kiện của người nhận con nuôi, phù hợp với nội dung được cung cấp trong context chunk."
+    },
+    {
+      "qid": "V144",
+      "citation": {
+        "dieu": "14",
+        "khoan": "2",
+        "diem": "d",
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng người nhận con nuôi không được có án tích chưa xóa về các tội cố ý xâm phạm tính mạng, sức khỏe, nhân phẩm, danh dự của người khác, điều này khớp với claim trong đoạn answer về tội cố ý xâm phạm tính mạng, sức khỏe, nhân phẩm."
+    },
+    {
+      "qid": "V145",
+      "citation": {
+        "dieu": "15",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng với nội dung chunk: khẳng định rằng trong thời hạn 60 ngày kể từ ngày sinh con, cha hoặc mẹ có trách nhiệm đăng ký khai sinh, và nêu rõ trường hợp không thể đăng ký thì có người thay thế. Nội dung này được trích dẫn nguyên văn và đồng nghĩa với context chunk."
+    },
+    {
+      "qid": "V146",
+      "citation": {
+        "dieu": "22",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer đúng về nội dung: Ủy ban nhân dân cấp xã phải trả lời bằng văn bản, nêu rõ lý do trong thời hạn 10 ngày, và liên quan đến việc từ chối đăng ký, điều này được khẳng định trong context chunk."
+    },
+    {
+      "qid": "V147",
+      "citation": {
+        "dieu": "139",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng trường hợp lấn, chiếm lòng đường, lề đường, vỉa hè hoặc đất sử dụng cho mục đích xây dựng trụ sở cơ quan, công trình công cộng sau khi Nhà nước công bố chỉ giới xây dựng sẽ dẫn đến việc thu hồi đất và không cấp GCN. Điều này khớp với claim trong answer về việc thu hồi đất và không cấp GCN đối với diện tích đã lấn, chiếm sau khi công bố chỉ giới xây dựng."
+    },
+    {
+      "qid": "V147",
+      "citation": {
+        "dieu": "139",
+        "khoan": "2",
+        "diem": "c",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói về '7 năm 2014' (có thể là lỗi đánh máy, nên hiểu là 2014), nhưng context chỉ rõ điều kiện là 'trước ngày 01 tháng 7 năm 2014', không đề cập đến '7 năm 2014'. Hơn nữa, đoạn answer nói người đang sử dụng đất 'được xem xét cấp Giấy chứng nhận' trong trường hợp vi phạm pháp luật đất đai trước ngày 01/7/2014, nhưng context chỉ nói rõ điều kiện cụ thể về lấn đất, chiếm đất và mục đích sử dụng đất, không khẳng định tổng quát như trong answer."
+    },
+    {
+      "qid": "V148",
+      "citation": {
+        "dieu": "_default",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-21-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức lệ phí 30.000 đồng/giấy và 120.000 đồng/giấy cho các đối tượng cụ thể khi cấp Giấy chứng nhận, phù hợp với nội dung được nêu trong đoạn answer."
+    },
+    {
+      "qid": "V148",
+      "citation": {
+        "dieu": "I",
+        "khoan": null,
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-quyet-22-2024-nq-hdnd-dong-nai",
+        "loai": "phu_luc"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ mức phí 880.000 đồng/hồ sơ cho việc cấp Giấy chứng nhận về quyền sử dụng đất (đối tượng phù hợp với citation), và cũng nêu rõ mức phí 1.250.000 đồng/hồ sơ khi cấp giấy chứng nhận đối với cả đất và tài sản gắn liền với đất, phù hợp với claim trong answer."
+    },
+    {
+      "qid": "V148",
+      "citation": {
+        "dieu": "159",
+        "khoan": "1",
+        "diem": "h",
+        "tiet": null,
+        "van_ban": "luat-dat-dai-2024",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điểm h, Khoản 1, Điều 159 của Luật Đất đai 2024 quy định về việc tính tiền sử dụng đất khi Nhà nước công nhận quyền sử dụng đất theo hình thức giao đất có thu tiền sử dụng đất, phù hợp với nội dung trong đoạn answer."
+    },
+    {
+      "qid": "V148",
+      "citation": {
+        "dieu": "18",
+        "khoan": "11",
+        "diem": "a",
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng đối tượng được ghi nợ tiền sử dụng đất khi cấp Giấy chứng nhận lần đầu là cá nhân, hộ gia đình đang sử dụng đất có nhu cầu ghi nợ, phù hợp với claim trong citation (Điều 18, Khoản 11, Điểm a)."
+    },
+    {
+      "qid": "V148",
+      "citation": {
+        "dieu": "18",
+        "khoan": "11",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-101-2024-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng mức tiền sử dụng đất được ghi nợ là toàn bộ số tiền phải nộp tại thời điểm cấp Giấy chứng nhận, phù hợp với claim trong câu trả lời về việc ghi nợ toàn bộ số tiền sử dụng đất."
+    },
+    {
+      "qid": "V149",
+      "citation": {
+        "dieu": "36",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rằng khi cha hoặc mẹ là người nước ngoài, phải nộp văn bản thỏa thuận về việc chọn quốc tịch cho con và văn bản này phải có xác nhận của cơ quan nhà nước có thẩm quyền của nước ngoài. Điều này phù hợp với nội dung trong câu trả lời về việc nộp văn bản thỏa thuận có xác nhận của cơ quan nhà nước có thẩm quyền của Nhật Bản khi làm thủ tục khai sinh tại Việt Nam."
+    },
+    {
+      "qid": "V149",
+      "citation": {
+        "dieu": "7",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "thong-tu-04-2020-tt-btp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng 'Nhật Bản không cấp văn bản xác nhận' và 'cơ quan đăng ký hộ tịch vẫn sẽ thực hiện đăng ký khai sinh nhưng để trống phần ghi về quốc tịch', nhưng context chỉ nói về trường hợp cần xác nhận từ cơ quan nước ngoài (không cụ thể là Nhật Bản), và không khẳng định việc Nhật Bản không cấp xác nhận. Ngoài ra, context không nói về việc để trống phần quốc tịch khi không có xác nhận từ nước ngoài, mà chỉ nói rằng nếu không có xác nhận thì vẫn đăng ký nhưng để trống phần quốc tịch — điều này không đồng nghĩa với việc 'không cấp văn bản xác nhận' như trong answer."
+    },
+    {
+      "qid": "V149",
+      "citation": {
+        "dieu": "16",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-ho-tich-2014",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng Điều 16, Khoản 1, Văn bản luat-ho-tich-2014 quy định về thủ tục đăng ký khai sinh, bao gồm việc nộp tờ khai theo mẫu và giấy chứng sinh, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V150",
+      "citation": {
+        "dieu": "6",
+        "khoan": "1",
+        "diem": "b",
+        "tiet": null,
+        "van_ban": "nghi-dinh-114-2016-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Context chunk nói về 'người Việt Nam định cư ở nước ngoài, người nước ngoài thường trú ở nước ngoài', nhưng đoạn answer nói về 'người nước ngoài không thường trú tại Việt Nam', điều này không khớp về đối tượng và dẫn đến sai lệch trong nội dung được trích dẫn."
+    },
+    {
+      "qid": "V150",
+      "citation": {
+        "dieu": "12",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ rằng Khoản 1 Điều 12 của Luật Nuôi con nuôi 2010 quy định người nhận con nuôi phải nộp lệ phí đăng ký nuôi con nuôi, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V150",
+      "citation": {
+        "dieu": "47",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác định rõ rằng Điều 47, Khoản 1 quy định mức thu chi phí giải quyết nuôi con nuôi nước ngoài là 50.000.000 đồng/trường hợp, phù hợp với claim trong đoạn answer."
+    },
+    {
+      "qid": "V150",
+      "citation": {
+        "dieu": "48",
+        "khoan": "1",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "nghi-dinh-19-2011-nd-cp",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": false,
+      "reason": "Đoạn answer nói rằng người nước ngoài không thường trú tại Việt Nam nộp khoản tiền '0.000.000 đồng/trường hợp' theo Điều 48, Khoản 1, nhưng context chunk không đề cập đến số tiền cụ thể nào. Hơn nữa, context chỉ nói về việc nộp chi phí giải quyết nuôi con nuôi, không khẳng định số tiền là 0.000.000 đồng hoặc liên quan đến việc 'bù đắp một phần'. Do đó, claim về số tiền và mục đích không được hỗ trợ."
+    },
+    {
+      "qid": "V150",
+      "citation": {
+        "dieu": "12",
+        "khoan": "2",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Đoạn answer chính xác trích dẫn nội dung của Khoản 2 Điều 12 Luật Nuôi Con Nuôi 2010, bao gồm các chi phí như nuôi dưỡng, chăm sóc, giáo dục, xác minh nguồn gốc và thù lao nhân viên, phù hợp với context chunk."
+    },
+    {
+      "qid": "V150",
+      "citation": {
+        "dieu": "12",
+        "khoan": "4",
+        "diem": null,
+        "tiet": null,
+        "van_ban": "luat-nuoi-con-nuoi-2010",
+        "loai": "dieu"
+      },
+      "existing": true,
+      "supported": true,
+      "reason": "Context chunk xác nhận rõ ràng rằng tổ chức, cá nhân có hoạt động liên quan đến nuôi con nuôi nước ngoài không được đặt ra bất kỳ khoản thu nào khác, đồng nhất với nội dung trong câu trả lời."
+    }
+  ]
+}
