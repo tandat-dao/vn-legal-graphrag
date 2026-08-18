@@ -636,3 +636,89 @@ xem §10 và §12. Đó mới là phát hiện chính.
    nhưng F1 −0,070. Nút thắt đã chuyển sang khâu chọn trích dẫn của bộ sinh.
 2. **v4 tự ưu ái.** Soạn từ chính các cạnh `REFERS_TO` → dùng v2 làm số chính.
 3. **v4 chưa có người rà**, 32/32 câu `da_duyet=false`.
+
+---
+
+## 16. PHIÊN 18/08 — GỘP HAI NHÁNH + CHỐT NGUỒN SỰ THẬT
+
+### 16.1 Đã xong
+
+**Gộp `origin/develop` (B) vào `cai-tien-sau-phan-bien` (A)** — `19a7806`.
+Xung đột chỉ 2 tệp văn bản, mã nguồn tự gộp sạch. Hai việc phải sửa tay:
+
+- **Trùng số hiệu D-27** giữa hai nhánh → mục của A đổi thành **D-29**
+  (B đã dùng tới D-28). Cập nhật 7 chỗ tham chiếu trong `src/` và `docs/`.
+- **`query_planner` thiếu mô tả phạm vi lĩnh vực lao động.** B thêm `"lao-dong"`
+  vào `VALID_THEMES` nhưng phần mô tả phạm vi (A thêm 15/08) chưa có lao động →
+  câu lao động sẽ dính đúng lỗi `theme=null` vừa chữa. Đã bổ sung.
+
+**689 test pass** (665 của A + 24 của B).
+
+**Xác minh sau gộp** — `82d1d62`. Mẫu 40 câu (36 chấm được), so từng câu:
+
+| cấu hình | trước gộp | sau gộp | số câu lệch |
+|---|---|---|---|
+| mốc | 0,727 | 0,741 | 1 (V150: 0,50→1,00) |
+| + dẫn chiếu | 0,741 | 0,748 | 1 |
+| + cross-encoder | 0,829 | 0,829 | **0** |
+| + pool + tắt độ hiếm | **0,845** | **0,845** | **0** |
+
+Cấu hình cuối KHÔNG xê dịch. Nhưng mốc tốt lên (nhờ bản vá bộ lập kế hoạch) mà
+đích không đổi → khoảng cách hẹp lại: **+0,118 → +0,104** trên mẫu này.
+
+**Chốt nguồn sự thật** — `32e0e69`. Người dùng đặt quy tắc: **`baocao.pdf` là
+nguồn sự thật DUY NHẤT**; tài liệu nào mâu thuẫn thì tài liệu đó sai.
+
+Mâu thuẫn đã sửa — bộ chấm faithfulness. Báo cáo Bảng 3.6 ghi
+`LLM - Faithfulness` = **Gemini 2.5 Pro** (TRÙNG mô hình sinh), Bảng 4.7 ghi
+**260/295 = 88,1%**, mục 4.4.1 tự nêu hạn chế thiên lệch tự đề cao.
+`V3_RESULTS.md` gán 88,1% cho Claude Haiku và kết luận "Bảng 3.6 phải ghi Flash"
+— SAI, và chính chỗ này khiến trợ lý kết luận nhầm rằng [B] gán sai bộ chấm.
+Đã sửa ở `V3_RESULTS.md`, `thesis/03_THIET_KE.md`, `thesis/04_DANH_GIA.md`,
+`V2_RESULTS.md`, `GT_FREEZE.md`.
+
+### 16.2 ĐANG CHẠY — sẽ MẤT khi tắt máy, phải chạy lại
+
+**(1) Số chốt sau gộp, 123 câu** — dừng ở lượt ~135/492.
+
+```bash
+LLM_MODE=gemini NEO4J_URI=bolt://localhost:7688 \
+/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 \
+  -m src.evaluation.refers_eval --test-set data/evaluation/test_set_v2.json \
+  --bo chot-khong-fill --out data/evaluation/v2_chot_sau_gop.json
+```
+
+So với `v2_chot_khongfill.json` (trước gộp) để lấy con số cuối cho báo cáo.
+Dự đoán: +0,109 sẽ nhích xuống khoảng +0,104 vì mốc tốt lên.
+
+**(2) Nạp 4 văn bản lao động vào BẢN SAO 7688** — chưa bắt đầu, đang chờ (1).
+KHÔNG chạy song song với (1): kho đổi từ 32 → 36 văn bản giữa chừng sẽ làm hỏng
+số liệu.
+
+```bash
+NEO4J_URI=bolt://localhost:7688 python -m src.ingestion.graph_builder
+NEO4J_URI=bolt://localhost:7688 python -m src.ingestion.vectorizer
+python -m src.ingestion.reference_builder --uri bolt://localhost:7688
+```
+
+Cảnh báo: Pass 4 gọi mô hình cho ~2659 component mới (1–2 giờ) — đúng chỗ B
+từng gặp lỗi 429 làm hỏng 237 component (D-27 của B đã vá: nay RAISE thay vì
+nuốt lỗi). **Chỉ nạp vào 7688, KHÔNG đụng CSDL demo 7687** cho tới khi biết
+chắc mất bao lâu và có lỗi không.
+
+### 16.3 Việc còn lại trước khi làm slide
+
+1. Lấy số chốt sau gộp từ (1) → cập nhật `docs/CAI_TIEN_SAU_PHAN_BIEN.md` §2
+2. Quyết định có nạp lao động vào CSDL demo hay không, dựa trên kết quả (2)
+3. Xác nhận với [B] con số 78,0% (Flash) ứng với mẻ đo nào — báo cáo chỉ có
+   88,1%, nên cần biết 78,0% là gì trước khi đưa vào slide
+4. [B] cần sửa báo cáo sơ bộ: "REPLACES", "4 vùng lương = đa địa phương",
+   "chạm đủ 4 thách thức" — chính D-28 của B đã ghi đúng, chỉ bản tóm tắt lỏng
+
+### 16.4 Trạng thái môi trường
+
+- Docker: `graphrag-neo4j` (7687, demo, 32 Norm + 3919 REFERS_TO),
+  `graphrag-neo4j-thunghiem` (7688, bản sao thí nghiệm), `graphrag-qdrant`
+- Cache demo: **đã hâm 15 câu cho CẢ HAI cấu hình** sau khi gộp
+- Nhánh: `cai-tien-sau-phan-bien`, **10 commit chưa push**
+- Mốc quay lui trước khi gộp: tag `truoc-khi-gop`
