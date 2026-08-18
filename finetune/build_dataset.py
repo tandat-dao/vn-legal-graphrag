@@ -139,8 +139,8 @@ P_AMENDMENT = 0.40      # 104/137 item thực tế có ít nhất một block c�
 #     src/retrieval/context_assembler.py:373.
 REFUSAL_OUT_OF_SCOPE = (
     "Câu hỏi này không thuộc phạm vi tài liệu pháp luật mà hệ thống đang lập chỉ "
-    "mục (đất đai, hộ tịch, nuôi con nuôi). Vui lòng tham khảo các văn bản pháp "
-    "luật chuyên ngành tương ứng."
+    "mục (đất đai, hộ tịch, nuôi con nuôi, lao động). Vui lòng tham khảo các văn "
+    "bản pháp luật chuyên ngành tương ứng."
 )
 # (2) Thiếu căn cứ trong CONTEXT. Nguyên văn quy tắc bắt buộc ở
 #     src/retrieval/context_assembler.py:379. Đây là ca mà mục D dựng ra: ngữ cảnh
