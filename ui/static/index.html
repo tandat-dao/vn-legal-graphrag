@@ -1382,6 +1382,19 @@ function datCoChu(px) {
 document.querySelectorAll(".nut-co-chu").forEach(b =>
   b.onclick = () => datCoChu(b.dataset.co));
 
+// Cửa sổ đổi kích thước (cắm máy chiếu giữa buổi, phóng to cửa sổ) → container
+// đồ thị rộng ra nhưng Cytoscape giữ nguyên vùng vẽ cũ: đo được lấp 96% bề ngang
+// ở 832px, tụt còn 63% sau khi kéo lên 1600px, chừa một mảng trống bên phải.
+// Xử lý giống `datCoChu`: bảo nó đo lại rồi căn khung. Gộp nhịp 150ms vì sự kiện
+// `resize` bắn liên tục suốt lúc kéo cạnh cửa sổ.
+let _hanCanKhung = null;
+window.addEventListener("resize", () => {
+  clearTimeout(_hanCanKhung);
+  _hanCanKhung = setTimeout(() => {
+    if (CY) { try { CY.resize(); CY.fit(undefined, 14); } catch (e) { /* đồ thị chưa sẵn */ } }
+  }, 150);
+});
+
 // ---------------------------------------------------------------- chế độ chạy + tốc độ (Task 5)
 let TRANG_THAI = {};    // /api/mode gần nhất
 let CANH_BAO_TAM = false;   // đang hiện cảnh báo "FIXTURE TẠM" của câu hiện tại

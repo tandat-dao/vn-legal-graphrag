@@ -9,6 +9,19 @@ hỏng, vì sao sửa vậy, kiểm chứng thế nào).
 
 ## Chạy
 
+**Ngày bảo vệ — một lệnh duy nhất:**
+
+```bash
+./scripts/chay-demo.sh
+```
+
+Nó tự chọn đúng bản Python (bản `python3` mặc định của máy có thể thiếu deps), dựng Docker và
+**chờ** hai CSDL trả lời, kiểm `.env`, rồi mở trình duyệt khi server thật sự sẵn sàng. Cổng đang
+bận mà chính là UI này thì mở luôn thay vì dựng lại; bận bởi thứ khác thì báo rõ ai đang giữ.
+Thêm `replay` để chạy không cần DB, thêm số để đổi cổng: `./scripts/chay-demo.sh replay 8010`.
+
+Các lệnh thủ công bên dưới vẫn dùng được khi cần kiểm soát từng bước:
+
 ```bash
 # Chế độ mặc định — phát lại fixture đã ghi sẵn, KHÔNG cần Neo4j/Qdrant/LLM
 uvicorn ui.server:app --port 8000
@@ -164,9 +177,10 @@ mục 6 và 9. Ba cái dễ vấp nhất:
 
 ## Trạng thái kiểm chứng
 
-`pytest tests/ -q` → **574 pass** ở máy A (không cần DB). Trong đó `tests/test_ui_live.py`
-(29 test) phủ `LiveAdapter` + `record.py` bằng client giả, và `tests/test_preflight.py`
-(20 test) phủ các nhánh "DB kết nối được" của preflight bằng Neo4j/Qdrant giả — những nhánh
+`pytest tests/ -q` → **606 pass, 2 skip** ở máy A (không cần DB, **không cần cả `.env`**).
+Trong đó `tests/test_ui_live.py`
+(35 test) phủ `LiveAdapter` + `record.py` bằng client giả, và `tests/test_preflight.py`
+(23 test) phủ các nhánh "DB kết nối được" của preflight bằng Neo4j/Qdrant giả — những nhánh
 chỉ thực sự chạy ở máy B.
 
 **Đã chạy thật ở máy A:** replay end-to-end đủ 7 bước; `POST /api/mode` (400/409/503 + giữ adapter

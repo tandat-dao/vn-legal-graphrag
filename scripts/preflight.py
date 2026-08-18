@@ -169,7 +169,7 @@ def kiem_env(kq: KetQua) -> str:
         kq.dat("  DEMO_DEVMODE", "tắt (đúng cho buổi bảo vệ)")
 
     # LLM: chỉ bắt buộc đúng bộ khóa mà mode đang chọn cần tới.
-    llm_mode = (os.getenv("LLM_MODE") or "claude").strip().lower()
+    llm_mode = (os.getenv("LLM_MODE") or "gemini").strip().lower()
     kq.dat("  LLM_MODE", f"{llm_mode} (cờ --llm-mode lúc chạy sẽ đè giá trị này)")
 
     can_claude = llm_mode in {"claude", "claude-fallback", "gemini-fallback"}

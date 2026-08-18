@@ -213,7 +213,19 @@ def test_qdrant_khong_ket_noi_duoc(monkeypatch):
 # .env
 # ---------------------------------------------------------------------------
 
-def test_env_du_khoa_cho_mode_claude(monkeypatch):
+def _goc_co_env(monkeypatch, tmp_path):
+    """Trỏ `preflight.GOC` sang thư mục tạm CÓ sẵn `.env`.
+
+    `kiem_env` tính "không có tệp .env" là lỗi chặn, mà `.env` thì bị gitignore →
+    hai test dưới đây từng đỏ trên máy vừa clone về và xanh trên máy đã cấu hình.
+    Neo gốc vào tmp_path để kết quả không phụ thuộc máy chạy.
+    """
+    (tmp_path / ".env").write_text("# tệp giả cho test\n", encoding="utf-8")
+    monkeypatch.setattr(preflight, "GOC", tmp_path)
+
+
+def test_env_du_khoa_cho_mode_claude(monkeypatch, tmp_path):
+    _goc_co_env(monkeypatch, tmp_path)
     for k, v in [("NEO4J_URI", "bolt://x"), ("NEO4J_USER", "u"),
                  ("NEO4J_PASSWORD", "p"), ("LLM_MODE", "claude"),
                  ("ANTHROPIC_API_KEY", "sk-x")]:
@@ -223,8 +235,9 @@ def test_env_du_khoa_cho_mode_claude(monkeypatch):
     assert kq.so_hong == 0, kq.muc
 
 
-def test_env_mode_gemini_khong_doi_khoa_claude(monkeypatch):
+def test_env_mode_gemini_khong_doi_khoa_claude(monkeypatch, tmp_path):
     """`--llm-mode gemini` không đụng Claude → thiếu ANTHROPIC_API_KEY không phải lỗi chặn."""
+    _goc_co_env(monkeypatch, tmp_path)
     for k, v in [("NEO4J_URI", "bolt://x"), ("NEO4J_USER", "u"),
                  ("NEO4J_PASSWORD", "p"), ("LLM_MODE", "gemini"),
                  ("GEMINI_USE_VERTEX", "true"), ("GEMINI_VERTEX_PROJECT", "prj")]:
@@ -234,6 +247,18 @@ def test_env_mode_gemini_khong_doi_khoa_claude(monkeypatch):
     kq = preflight.KetQua()
     assert preflight.kiem_env(kq) == "gemini"
     assert kq.so_hong == 0, kq.muc
+
+
+def test_env_mac_dinh_la_gemini(monkeypatch, tmp_path):
+    """Không đặt LLM_MODE → preflight phải báo `gemini`, khớp mặc định của LiveAdapter."""
+    _goc_co_env(monkeypatch, tmp_path)
+    for k, v in [("NEO4J_URI", "bolt://x"), ("NEO4J_USER", "u"),
+                 ("NEO4J_PASSWORD", "p"), ("GEMINI_USE_VERTEX", "true"),
+                 ("GEMINI_VERTEX_PROJECT", "prj")]:
+        monkeypatch.setenv(k, v)
+    monkeypatch.delenv("LLM_MODE", raising=False)
+    kq = preflight.KetQua()
+    assert preflight.kiem_env(kq) == "gemini"
 
 
 def test_env_thieu_mat_khau_neo4j(monkeypatch):

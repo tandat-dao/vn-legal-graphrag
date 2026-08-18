@@ -371,7 +371,11 @@ class LiveAdapter(BaseAdapter):
     ):
         from src.pipeline import _build_clients
 
-        self.llm_mode = (llm_mode or os.getenv("LLM_MODE") or "claude").strip()
+        # Mặc định `gemini`: mọi số liệu trong báo cáo đo bằng Gemini (planner
+        # 2.5 Flash, generator 2.5 Pro), nên demo phải chạy đúng nhà cung cấp đó.
+        # Trước đây mặc định là `claude` — máy nào không đặt LLM_MODE trong .env
+        # sẽ lặng lẽ demo bằng Claude, lệch với thứ đang trình bày.
+        self.llm_mode = (llm_mode or os.getenv("LLM_MODE") or "gemini").strip()
         self.llm_cache_dir = (
             None if no_llm_cache
             else Path(llm_cache_dir or DEFAULT_LLM_CACHE_DIR)
