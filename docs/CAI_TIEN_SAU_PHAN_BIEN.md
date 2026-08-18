@@ -1,6 +1,6 @@
 # Các cải tiến sau buổi phản biện
 
-**Thời gian thực hiện:** 12–16/08/2026
+**Thời gian thực hiện:** 12–18/08/2026 (gồm cả bước gộp công việc hai thành viên)
 **Đo trên:** 123 câu hỏi có đáp án chuẩn (bộ v2), mô hình Gemini 2.5 Pro
 **Số liệu:** đo lại sau khi gộp nhánh của [A] và [B] (18/08) — `v2_chot_sau_gop.json`
 **Chỉ số:** độ bao phủ điều khoản — hệ có lấy được đúng điều khoản chứa đáp án
@@ -15,7 +15,7 @@ vào ngữ cảnh hay không. Đo tất định, không phụ thuộc mô hình 
 | Tự động hoá khâu chuẩn bị văn bản được không? | Cho máy sinh phần tóm tắt văn bản thay người viết | Máy làm được, **không câu nào tệ đi** |
 | Khâu người làm (viết tóm tắt) làm sao đảm bảo đúng? | Cùng thí nghiệm trên | Tín hiệu định tuyến **không phụ thuộc người viết** |
 | Vấn đề hồi tố có nên xử lý sâu thêm? | Xây cơ chế phát hiện quy định đã thay đổi + nạp điều khoản chuyển tiếp | Đã chạy được, có cảnh báo cho người dùng |
-| Thêm module cải tiến mô hình sinh? | Giao cho [B] | — |
+| Thêm module cải tiến mô hình sinh? | [B] tinh chỉnh mô hình cục bộ + kiểm chứng bộ chấm | Xem §6 |
 | Thêm bước xử lý, lọc dữ liệu trước khi đưa vào ngữ cảnh? | **Ba cơ chế mới** ở khâu truy hồi | **+0,116 độ bao phủ** |
 
 ---
@@ -200,7 +200,104 @@ mới lần ra được.
 
 ---
 
-## 6. BỔ SUNG PHỤC VỤ ĐÁNH GIÁ VÀ DEMO
+## 6. PHẦN CỦA [B]
+
+### 6.1. Kiểm chứng độ tin cậy của thước đo
+
+**Vấn đề.** Báo cáo dùng Gemini 2.5 Pro để chấm tính trung thực, **trùng mô hình
+sinh câu trả lời**. Nghiên cứu về thiên lệch tự đề cao chỉ ra mô hình có xu hướng
+chấm đầu ra của chính nó cao hơn. Báo cáo đã tự nêu hạn chế này ở mục 4.4.1.
+
+**Cách làm.** Chấm lại trên **cùng một bộ kết quả đã lưu** (118 câu, 295 trích
+dẫn) bằng hai bộ chấm khác:
+
+| bộ chấm | quan hệ với mô hình sinh | tỉ lệ hậu thuẫn |
+|---|---|---|
+| Gemini 2.5 Pro | **trùng** | 88,1% |
+| Qwen3-4B-Instruct | khác nhà, khác kiến trúc | 83,7% |
+| Gemini 2.5 Flash | cùng nhà, khác mô hình | 79,0% |
+
+**Kết luận.** Điểm ổn định trong dải 79–88%, và bộ chấm **gần mô hình sinh nhất
+lại chấm chặt nhất** — ngược hẳn hướng mà thiên lệch tự đề cao dự đoán. Nghi ngờ
+đó không được số liệu ủng hộ.
+
+**Phát hiện phụ đáng giá.** Bản Qwen3-4B **đã tinh chỉnh** trên dữ liệu hỏi đáp
+pháp luật cho tỉ lệ 99,7% — gần như không phê phán gì. Nó được dạy *sinh câu trả
+lời có trích dẫn*, không được dạy *đánh giá trích dẫn*. Bài học: bộ chấm cần độc
+lập không chỉ về nhà phát triển mà cả về **tác vụ huấn luyện**.
+
+### 6.2. Tự động hoá nạp ngữ liệu
+
+Script chuyển văn bản từ vbpl.vn sang định dạng pipeline: ánh xạ class ngữ nghĩa
+của HTML thành cấp heading, suy bậc văn bản tự động từ loại văn bản, trích quan hệ
+giữa các văn bản từ tab lược đồ, xuất kèm danh sách phần cần người soát.
+
+**Tự động hoá ~60%.** Phần còn lại vẫn cần người: viết tóm tắt, điền heading bị
+thiếu do HTML nguồn, và ghi chú sửa đổi nội dòng.
+
+### 6.3. Lĩnh vực lao động — chứng minh tổng quát hoá
+
+Thêm 4 văn bản cho thủ tục chấm dứt hợp đồng lao động và trợ cấp thôi việc: Bộ
+luật Lao động 2012 (đã hết hiệu lực) và 2019, Nghị định 145/2020 (hướng dẫn chi
+tiết), Nghị định 293/2025 (lương tối thiểu vùng).
+
+---
+
+## 7. KẾT QUẢ NẠP LĨNH VỰC MỚI — ĐO THẬT
+
+Nạp lĩnh vực lao động vào đồ thị demo, đo trên máy thật:
+
+| chỉ số | trước | sau |
+|---|---|---|
+| Văn bản | 32 | **36** |
+| Điều khoản | 4 549 | **7 208** |
+| Cạnh dẫn chiếu | 3 919 | **5 366** |
+| Lĩnh vực | 3 | **4** |
+
+**Thời gian: 3 giờ 10 phút máy chạy**, trong đó 3 giờ là gán khái niệm bằng mô
+hình cho 2 659 điều khoản mới. Chỉ **một lần lỗi hạn ngạch API** trong hơn 2 600
+lượt gọi, và cơ chế thử lại xử lý đúng.
+
+**Các quan hệ tự hình thành, không khai báo tay:**
+
+- 2 cạnh *hướng dẫn thi hành* mới: NĐ 145/2020 và NĐ 293/2025 trỏ về Bộ luật Lao
+  động 2019 — quan hệ đa tầng của lĩnh vực mới
+- 1 447 cạnh *dẫn chiếu* mới trong kho lao động. Bộ trích xuất viết cho đất đai
+  và hộ tịch chạy thẳng trên văn bản lao động **không sửa một dòng nào**
+
+**Kiểm chứng không phá vỡ cái cũ:** 13 câu demo đất đai cho số trích dẫn **khớp y
+hệt** trước khi nạp, không văn bản lao động nào lọt vào, và ba câu ngoài phạm vi
+vẫn từ chối đúng.
+
+**Câu hỏi lao động chạy được:**
+
+> *"Tôi làm ở công ty được 6 năm rồi xin nghỉ việc, có được trợ cấp thôi việc
+> không, tính thế nào?"*
+
+Hệ nhận đúng lĩnh vực, lấy **Bộ luật Lao động 2019 Điều 46** cộng **Nghị định
+145/2020 Điều 8** hướng dẫn chi tiết — đúng chuỗi đa tầng — và bản cải tiến lần
+thêm sang Điều 34, 36 qua chuỗi dẫn chiếu.
+
+### Một sắc thái phải nói đúng
+
+Khẳng định *"không sửa dòng logic truy hồi nào"* là **đúng**. Nhưng **khâu sinh
+thì phải khai báo thêm**: prompt của bộ sinh có danh sách chủ đề ngoài phạm vi,
+trong đó ghi cứng "lao động", và câu từ chối liệt kê đúng ba lĩnh vực cũ. Trước
+khi sửa, hệ **từ chối** câu hỏi lao động dù ngữ cảnh đã có đủ căn cứ.
+
+Nên phát biểu chính xác là: **truy hồi tổng quát hoá không cần sửa; khâu sinh cần
+khai báo phạm vi lĩnh vực mới.** Nói "không sửa gì cả" là quá tay, và hội đồng
+kiểm tra được.
+
+### Hạn chế còn lại
+
+Câu hỏi có đáp án nằm trong **bảng biểu** (bảng lương tối thiểu 4 vùng) vẫn bị
+trả "không đủ thông tin", dù bảng nằm ở vị trí đầu tiên trong ngữ cảnh. Bộ sinh
+chưa nhận bảng markdown là căn cứ. Tránh dạng câu này khi trình diễn.
+
+---
+
+## 8. BỔ SUNG PHỤC VỤ ĐÁNH GIÁ VÀ DEMO
 
 **Tập kiểm thử mới (32 câu)** cùng quy ước chú giải "chuỗi dẫn chiếu": đáp án
 gồm điều khoản trả lời trực tiếp **cộng những điều khoản mà nó dẫn chiếu tường
@@ -222,7 +319,7 @@ câu chạy qua kho hộ tịch:
 
 ---
 
-## 7. CÁCH CHẠY DEMO SO SÁNH
+## 9. CÁCH CHẠY DEMO SO SÁNH
 
 Hai bản chạy song song trên hai cổng, chỉ khác đúng một biến:
 
@@ -248,7 +345,7 @@ Câu **A3** cho khác biệt rõ nhất và nên dùng làm ví dụ chính.
 
 ---
 
-## 8. HAI ĐIỀU CẦN NÊU RÕ KHI TRÌNH BÀY
+## 10. HAI ĐIỀU CẦN NÊU RÕ KHI TRÌNH BÀY
 
 **Phân biệt hai phép so sánh.** Kết quả chính của khóa luận là **hệ GraphRAG so
 với RAG thuần**: 67 thắng / 32 thua / 24 hoà, chênh lệch +0,187. Kết quả của đợt
@@ -262,7 +359,7 @@ lấy đủ điều khoản, cải tiến chữa được một nửa, nâng bao
 
 ---
 
-## 9. HƯỚNG PHÁT TRIỂN TIẾP
+## 11. HƯỚNG PHÁT TRIỂN TIẾP
 
 Đợt cải tiến này đã nâng đáng kể khả năng **lấy đúng điều khoản**. Bước tiếp
 theo là **tiết chế việc chọn trích dẫn** ở khâu sinh: hệ hiện trích trung bình
