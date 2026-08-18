@@ -1,0 +1,4430 @@
+[
+  {
+    "id": "V001",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4785,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5003,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4977,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 28,
+      "n_ctx": 26,
+      "token": 5813,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V002",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4763,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 5116,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4975,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 28,
+      "n_ctx": 26,
+      "token": 5996,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V003",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3503,
+      "khoan": 0.8,
+      "dieu": 1.0,
+      "khoan_chon": 0.8
+    },
+    "+ dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3720,
+      "khoan": 0.8,
+      "dieu": 1.0,
+      "khoan_chon": 0.8
+    },
+    "+ cross-encoder": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3719,
+      "khoan": 0.8,
+      "dieu": 1.0,
+      "khoan_chon": 0.8
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 28,
+      "n_ctx": 22,
+      "token": 5965,
+      "khoan": 0.6,
+      "dieu": 1.0,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V004",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4732,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5723,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5798,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5690,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V006",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3522,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4533,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4254,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V007",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4010,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4635,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4903,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4724,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V008",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3618,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4223,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4393,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 5162,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V011",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5905,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 22,
+      "token": 5734,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5750,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 18,
+      "token": 5948,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V012",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 20,
+      "token": 5721,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 22,
+      "token": 5796,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 21,
+      "token": 5758,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 16,
+      "token": 6006,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V013",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4620,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5797,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5976,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 18,
+      "token": 5940,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V014",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5795,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 24,
+      "token": 5968,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 26,
+      "n_ctx": 23,
+      "token": 5795,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 26,
+      "n_ctx": 21,
+      "token": 5893,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V015",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5658,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 23,
+      "token": 5800,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 22,
+      "token": 5658,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 19,
+      "token": 5966,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V016",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 21,
+      "token": 5792,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5908,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 24,
+      "token": 5934,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 20,
+      "token": 5992,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V017",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5646,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5787,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 24,
+      "token": 5797,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 20,
+      "token": 5906,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V018",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4680,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5723,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5562,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 24,
+      "token": 5970,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V019",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3537,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3716,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4064,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 5368,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V020",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1888,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1888,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1626,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4445,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V021",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 4998,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 4998,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 5092,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 5814,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V022",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3304,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4380,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4292,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4423,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V023",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 2379,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2712,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2451,
+      "khoan": 0.5,
+      "dieu": 0.75,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3935,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V024",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1626,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1688,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1663,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2323,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V025",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1576,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 1863,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2015,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 2891,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V026",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2892,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3405,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3688,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3448,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V027",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3265,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3962,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4078,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3465,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V028",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1842,
+      "khoan": 0.25,
+      "dieu": 0.75,
+      "khoan_chon": 0.25
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2453,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2650,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 2834,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V029",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3425,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4042,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4272,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4144,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V030",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3431,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3505,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4230,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V031",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4124,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4548,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4644,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4130,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V032",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3473,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4285,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4604,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 5100,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V033",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4281,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4634,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4376,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5321,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V035",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3575,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4413,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4230,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V036",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3353,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4166,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4067,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3975,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V037",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3418,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4047,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4372,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3994,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V038",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3333,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4453,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4694,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4735,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V039",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3747,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4261,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4639,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3796,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V040",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3851,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4442,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4667,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V041",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 6,
+      "n_ctx": 6,
+      "token": 1065,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 7,
+      "n_ctx": 7,
+      "token": 1173,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 7,
+      "n_ctx": 7,
+      "token": 958,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 7,
+      "n_ctx": 7,
+      "token": 958,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V042",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3391,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3914,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3968,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3996,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V043",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 2236,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3260,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3117,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3117,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V044",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 6,
+      "n_ctx": 6,
+      "token": 958,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ dẫn chiếu": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1732,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ cross-encoder": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1625,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1625,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V045",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4126,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 5044,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 5582,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 29,
+      "n_ctx": 26,
+      "token": 5810,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V046",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 3948,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 5482,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 5736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 3401,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V047",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 4317,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 5850,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 5798,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 17,
+      "token": 5998,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V048",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 2400,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3339,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3535,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4000,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V049",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2023,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2098,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2098,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2098,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V050",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 3896,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 4160,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3618,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4238,
+      "khoan": 0.25,
+      "dieu": 0.5,
+      "khoan_chon": 0.25
+    }
+  },
+  {
+    "id": "V051",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4108,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 5504,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 5195,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 5065,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V052",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2649,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2649,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2435,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2435,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V053",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3754,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4390,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4395,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4806,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V054",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2959,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3476,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3466,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3508,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V055",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4000,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4544,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4683,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4629,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V056",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3869,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4399,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5501,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5137,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V057",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3487,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3542,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3927,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V058",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3724,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4315,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4314,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4604,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V061",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3643,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3822,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3462,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4846,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V062",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 2962,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3141,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3702,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4217,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V066",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3061,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3368,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3570,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3843,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V067",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3190,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3284,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3012,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3689,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V068",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3904,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4591,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4699,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4605,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V069",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4310,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 5000,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4693,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4851,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V070",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4215,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 5525,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 18,
+      "token": 5965,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 18,
+      "token": 5804,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V071",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1217,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1488,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1136,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 1836,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V072",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3229,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4141,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4304,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3687,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V073",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4116,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 4664,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4016,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 4016,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V074",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2989,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3266,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3425,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3900,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V075",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3272,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3934,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4269,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3902,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V076",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 8,
+      "n_ctx": 8,
+      "token": 2269,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 8,
+      "n_ctx": 8,
+      "token": 2269,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 8,
+      "n_ctx": 8,
+      "token": 2038,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 8,
+      "n_ctx": 8,
+      "token": 2038,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V077",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3543,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4404,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4709,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5141,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V078",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3502,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4856,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4686,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4874,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V079",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3024,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3513,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3874,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3747,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V080",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2941,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3464,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3599,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3381,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V081",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 1913,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 2370,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1907,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 2184,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V082",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2763,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2882,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 2715,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3142,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V083",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3814,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 5020,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3958,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3389,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V084",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4921,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4506,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4377,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V085",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3622,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4499,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4495,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4749,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V086",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 1993,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2246,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2187,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 1881,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V087",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3345,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3941,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4248,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3438,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V088",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3233,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4288,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4550,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4334,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V089",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2383,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3056,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2948,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3039,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V090",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 13,
+      "token": 5775,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 13,
+      "token": 5775,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 23,
+      "n_ctx": 15,
+      "token": 5855,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 17,
+      "token": 5957,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V091",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3141,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3751,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3679,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 4223,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V092",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 3187,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3420,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3176,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3640,
+      "khoan": 0.6666666666666666,
+      "dieu": 1.0,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V093",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3306,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3847,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3572,
+      "khoan": 0.3333333333333333,
+      "dieu": 1.0,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3400,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V094",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3500,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4071,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4051,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4186,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V095",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 13,
+      "n_ctx": 13,
+      "token": 2237,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2928,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3685,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4940,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V096",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 2789,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 2896,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 2353,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3067,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V097",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3736,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 4270,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4566,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4398,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V098",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 9,
+      "n_ctx": 9,
+      "token": 2078,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2622,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2429,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 2803,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V099",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5329,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 25,
+      "token": 5772,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5957,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 23,
+      "n_ctx": 21,
+      "token": 5835,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V100",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2748,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3657,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3384,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3741,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V101",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 7,
+      "n_ctx": 7,
+      "token": 2340,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 2765,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 12,
+      "n_ctx": 12,
+      "token": 2649,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3551,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V102",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3463,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 3986,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4190,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3697,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V103",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 16,
+      "token": 5998,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 16,
+      "token": 5998,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 21,
+      "n_ctx": 15,
+      "token": 5738,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 16,
+      "token": 6006,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V104",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 15,
+      "n_ctx": 15,
+      "token": 2699,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2886,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3016,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 3251,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V118",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5684,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5352,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5696,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 14,
+      "token": 5995,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V119",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 19,
+      "token": 5440,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 21,
+      "token": 5790,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 21,
+      "token": 5790,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 15,
+      "token": 5793,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V120",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3252,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4022,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4236,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4625,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V122",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3852,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4204,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 19,
+      "n_ctx": 19,
+      "token": 4820,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5571,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V124",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 3230,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3527,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3734,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4045,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    }
+  },
+  {
+    "id": "V125",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4208,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4425,
+      "khoan": 0.0,
+      "dieu": 0.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4404,
+      "khoan": 0.25,
+      "dieu": 0.25,
+      "khoan_chon": 0.25
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 5136,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V126",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 23,
+      "n_ctx": 23,
+      "token": 4011,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 4830,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "+ cross-encoder": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 4698,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 28,
+      "n_ctx": 28,
+      "token": 5248,
+      "khoan": 0.6,
+      "dieu": 0.6,
+      "khoan_chon": 0.6
+    }
+  },
+  {
+    "id": "V127",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 11,
+      "n_ctx": 11,
+      "token": 1940,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2417,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 2634,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 3000,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V129",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 20,
+      "token": 5357,
+      "khoan": 0.0,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 22,
+      "token": 5905,
+      "khoan": 0.0,
+      "dieu": 0.3333333333333333,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 23,
+      "token": 5874,
+      "khoan": 0.0,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 18,
+      "token": 5914,
+      "khoan": 0.3333333333333333,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.3333333333333333
+    }
+  },
+  {
+    "id": "V130",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 19,
+      "token": 5928,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 18,
+      "token": 5825,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 19,
+      "token": 6008,
+      "khoan": 0.0,
+      "dieu": 0.5,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 15,
+      "token": 5840,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V131",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4046,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "+ dẫn chiếu": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 4637,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 27,
+      "token": 5023,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 26,
+      "n_ctx": 26,
+      "token": 5852,
+      "khoan": 0.75,
+      "dieu": 1.0,
+      "khoan_chon": 0.75
+    }
+  },
+  {
+    "id": "V132",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3076,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3582,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2950,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2913,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V133",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 3979,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4970,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 4744,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 28,
+      "n_ctx": 27,
+      "token": 5960,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V135",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5071,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 5381,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4562,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 27,
+      "n_ctx": 25,
+      "token": 5955,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V136",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 10,
+      "n_ctx": 10,
+      "token": 1688,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "+ dẫn chiếu": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 2082,
+      "khoan": 0.75,
+      "dieu": 0.75,
+      "khoan_chon": 0.75
+    },
+    "+ cross-encoder": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 1819,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 3356,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V137",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2913,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3487,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3600,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3448,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V139",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3536,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4550,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4873,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 5166,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V140",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5225,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ dẫn chiếu": {
+      "n": 27,
+      "n_ctx": 26,
+      "token": 6011,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ cross-encoder": {
+      "n": 27,
+      "n_ctx": 25,
+      "token": 5831,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 28,
+      "n_ctx": 25,
+      "token": 5947,
+      "khoan": 0.6666666666666666,
+      "dieu": 0.6666666666666666,
+      "khoan_chon": 0.6666666666666666
+    }
+  },
+  {
+    "id": "V141",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4738,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 21,
+      "n_ctx": 20,
+      "token": 5864,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 5962,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 21,
+      "n_ctx": 21,
+      "token": 5973,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V142",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 3528,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4076,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4150,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 16,
+      "n_ctx": 16,
+      "token": 4840,
+      "khoan": 0.5,
+      "dieu": 0.5,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V143",
+    "gap_type": "gap4",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3148,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4018,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4285,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4012,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V144",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3136,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4023,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4185,
+      "khoan": 0.0,
+      "dieu": 1.0,
+      "khoan_chon": 0.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3456,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V145",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3804,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4860,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4743,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4261,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V146",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3210,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3360,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3506,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 4090,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V147",
+    "gap_type": "gap1",
+    "mốc hiện tại": {
+      "n": 14,
+      "n_ctx": 14,
+      "token": 4317,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ dẫn chiếu": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 5403,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ cross-encoder": {
+      "n": 17,
+      "n_ctx": 17,
+      "token": 4811,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 18,
+      "n_ctx": 18,
+      "token": 4730,
+      "khoan": 0.5,
+      "dieu": 1.0,
+      "khoan_chon": 0.5
+    }
+  },
+  {
+    "id": "V148",
+    "gap_type": "gap2",
+    "mốc hiện tại": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5904,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5904,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 5969,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 24,
+      "n_ctx": 20,
+      "token": 5933,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V149",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 3488,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4218,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4369,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 4746,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  },
+  {
+    "id": "V150",
+    "gap_type": "gap3",
+    "mốc hiện tại": {
+      "n": 20,
+      "n_ctx": 20,
+      "token": 2917,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ dẫn chiếu": {
+      "n": 25,
+      "n_ctx": 25,
+      "token": 3704,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ cross-encoder": {
+      "n": 24,
+      "n_ctx": 24,
+      "token": 3687,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    },
+    "+ pool 100 + tắt độ hiếm": {
+      "n": 22,
+      "n_ctx": 22,
+      "token": 3088,
+      "khoan": 1.0,
+      "dieu": 1.0,
+      "khoan_chon": 1.0
+    }
+  }
+]

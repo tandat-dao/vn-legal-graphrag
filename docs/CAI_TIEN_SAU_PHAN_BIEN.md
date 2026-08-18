@@ -2,6 +2,7 @@
 
 **Thời gian thực hiện:** 12–16/08/2026
 **Đo trên:** 123 câu hỏi có đáp án chuẩn (bộ v2), mô hình Gemini 2.5 Pro
+**Số liệu:** đo lại sau khi gộp nhánh của [A] và [B] (18/08) — `v2_chot_sau_gop.json`
 **Chỉ số:** độ bao phủ điều khoản — hệ có lấy được đúng điều khoản chứa đáp án
 vào ngữ cảnh hay không. Đo tất định, không phụ thuộc mô hình sinh.
 
@@ -15,40 +16,40 @@ vào ngữ cảnh hay không. Đo tất định, không phụ thuộc mô hình 
 | Khâu người làm (viết tóm tắt) làm sao đảm bảo đúng? | Cùng thí nghiệm trên | Tín hiệu định tuyến **không phụ thuộc người viết** |
 | Vấn đề hồi tố có nên xử lý sâu thêm? | Xây cơ chế phát hiện quy định đã thay đổi + nạp điều khoản chuyển tiếp | Đã chạy được, có cảnh báo cho người dùng |
 | Thêm module cải tiến mô hình sinh? | Giao cho [B] | — |
-| Thêm bước xử lý, lọc dữ liệu trước khi đưa vào ngữ cảnh? | **Ba cơ chế mới** ở khâu truy hồi | **+0,109 độ bao phủ** |
+| Thêm bước xử lý, lọc dữ liệu trước khi đưa vào ngữ cảnh? | **Ba cơ chế mới** ở khâu truy hồi | **+0,116 độ bao phủ** |
 
 ---
 
 ## 2. KẾT QUẢ TỔNG HỢP
 
-**Độ bao phủ điều khoản đúng: 0,741 → 0,851**
+**Độ bao phủ điều khoản đúng: 0,737 → 0,853**
 
 | bước cộng dồn | độ bao phủ | mức tăng | thắng/thua |
 |---|---|---|---|
-| Hệ trước cải tiến | 0,741 | — | — |
-| + Lần theo dẫn chiếu | 0,759 | +0,018 | 10 / 3 |
-| + Xếp lại bằng cross-encoder | 0,806 | +0,065 | 17 / 5 |
-| + Mở rộng vùng tìm kiếm | **0,851** | **+0,109** | **25 / 4** |
+| Hệ trước cải tiến | 0,737 | — | — |
+| + Lần theo dẫn chiếu | 0,753 | +0,016 | 9 / 3 |
+| + Xếp lại bằng cross-encoder | 0,800 | +0,063 | 17 / 5 |
+| + Mở rộng vùng tìm kiếm | **0,853** | **+0,116** | **26 / 4** |
 
 Theo từng thách thức:
 
 | thách thức | mức tăng |
 |---|---|
-| Đa lĩnh vực (Gap 1) | **+0,185** |
-| Đa tầng văn bản (Gap 3) | **+0,169** |
+| Đa lĩnh vực (Gap 1) | **+0,216** |
+| Đa tầng văn bản (Gap 3) | **+0,153** |
 | Đa địa phương (Gap 2) | +0,069 |
-| Đa phiên bản (Gap 4) | +0,011 |
+| Đa phiên bản (Gap 4) | +0,019 |
 
-### Vì sao chỉ 25 câu thắng trên 123 câu
+### Vì sao chỉ 26 câu thắng trên 123 câu
 
 Vì **74 câu (60%) đã đạt bao phủ 1,00 từ trước** — hệ vốn đã lấy đúng hết, không
 còn chỗ để cải thiện.
 
 Chỉ có **49 câu còn dưới 1,00**. Trên đúng nhóm này:
 
-> **25/49 câu được cải thiện (51%), mức tăng trung bình +0,302.**
+> **26/49 câu được cải thiện (53%), mức tăng trung bình +0,317.**
 
-Con số +0,109 là mức tăng của **toàn hệ thống**; con số +0,302 cho biết **cơ chế
+Con số +0,116 là mức tăng của **toàn hệ thống**; con số +0,317 cho biết **cơ chế
 có thật sự hiệu lực hay không** khi gặp câu khó. Hai con số trả lời hai câu hỏi
 khác nhau, nên nêu cả hai.
 
@@ -104,7 +105,7 @@ quan trọng ngang với bản thân thành phần đó.*
 ### 3.3. Mở rộng vùng tìm kiếm
 
 Nâng số ứng viên lấy ra ở bước tìm kiếm ngữ nghĩa, và bỏ hệ số chấm theo độ
-hiếm của khái niệm. Hai điều chỉnh này cộng lại cho **+0,045**, riêng nhóm câu
+hiếm của khái niệm. Hai điều chỉnh này cộng lại cho **+0,053**, riêng nhóm câu
 đa lĩnh vực hưởng lợi nhiều nhất.
 
 ### 3.4. Phát hiện quy định đã thay đổi
@@ -251,13 +252,13 @@ Câu **A3** cho khác biệt rõ nhất và nên dùng làm ví dụ chính.
 
 **Phân biệt hai phép so sánh.** Kết quả chính của khóa luận là **hệ GraphRAG so
 với RAG thuần**: 67 thắng / 32 thua / 24 hoà, chênh lệch +0,187. Kết quả của đợt
-cải tiến là **bản mới so với chính hệ đã có**: 25 thắng / 4 thua. Hai con số đo
+cải tiến là **bản mới so với chính hệ đã có**: 26 thắng / 4 thua. Hai con số đo
 hai thứ khác nhau, đừng để bị nhầm là cùng một bảng.
 
 **Mức tăng bị pha loãng bởi trần.** 60% số câu đã đạt bao phủ tối đa từ trước
 nên cải tiến không thể tác động. Khi trình bày nên nói: *"trên 49 câu hệ chưa
 lấy đủ điều khoản, cải tiến chữa được một nửa, nâng bao phủ trung bình
-+0,302"* — mẫu số đó mới phản ánh đúng hiệu lực của cơ chế.
++0,317"* — mẫu số đó mới phản ánh đúng hiệu lực của cơ chế.
 
 ---
 
