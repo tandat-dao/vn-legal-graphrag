@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi"]
+VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi", "lao-dong"]
 
 VALID_PROCEDURES = [
     "chuyen-muc-dich-su-dung-dat",
@@ -50,7 +50,7 @@ VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 # KHÔNG có nghĩa là các theme này luôn thuộc phạm vi toàn quốc: hộ tịch vẫn có
 # nghị quyết lệ phí cấp tỉnh. Khi câu hỏi nêu tên tỉnh, giá trị từ planner được
 # giữ nguyên và mặc định này không áp dụng (xem _apply_jurisdiction_rules).
-_NATIONAL_THEMES = {"ho-tich", "nuoi-con-nuoi"}
+_NATIONAL_THEMES = {"ho-tich", "nuoi-con-nuoi", "lao-dong"}
 
 MODEL = "claude-haiku-4-5-20251001"
 
@@ -59,7 +59,7 @@ Bạn là bộ phân loại câu hỏi pháp lý Việt Nam. Nhiệm vụ: extra
 
 Trả về JSON với đúng 6 trường (không có trường nào khác):
 {
-  "theme": <"dat-dai" | "ho-tich" | "nuoi-con-nuoi" | null>,
+  "theme": <"dat-dai" | "ho-tich" | "nuoi-con-nuoi" | "lao-dong" | null>,
   "procedure": <một trong các giá trị dưới đây | null>,
   "jurisdiction": <"toan-quoc" | "tp-hcm" | "dong-nai" | null>,
   "temporal": <chuỗi ngày "YYYY-MM-DD" nếu câu hỏi đề cập thời điểm cụ thể | null>,

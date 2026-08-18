@@ -15,18 +15,24 @@
 
 ---
 
-## TRẠNG THÁI HIỆN TẠI (cập nhật 2026-07-10)
+## TRẠNG THÁI HIỆN TẠI (cập nhật 2026-08-18)
 
-**Phase 0-4 hoàn tất + KHÂU ĐÁNH GIÁ E0-E3 ĐÃ CHẠY XONG.** Corpus đa-domain 32 Norm; GT v2 freeze 137 câu (tag `gt-v2-freeze`, pre-register `docs/GT_FREEZE.md`); chiến dịch eval v1/v2 hoàn tất trên Gemini — **số chốt cho Chương 4 ở `docs/V2_RESULTS.md`** (GraphRAG N=3 F1 0.578±0.004 vs baseline 0.435, Δ+0.156 CI[0.070,0.242] p=0.001***; Gap3/4 vững qua double-dissociation, Gap2 = limitation). **Việc đang làm: VIẾT LUẬN VĂN** (`docs/thesis/` — đề cương + Chương 1 đã nháp) + E2c người chấm.
+**Phase 0-4 hoàn tất + KHÂU ĐÁNH GIÁ E0-E3 ĐÃ CHẠY XONG.** GT v2 freeze 137 câu (tag `gt-v2-freeze`, pre-register `docs/GT_FREEZE.md`); **số chốt cho Chương 4 ở `docs/V3_RESULTS.md`** — ⚠️ `V2_RESULTS.md` tự đánh dấu ĐÃ BỊ THAY THẾ, không dùng làm nguồn trích dẫn. **Việc đang làm: VIẾT LUẬN VĂN** (`docs/thesis/`) + E2c người chấm.
+
+**Corpus: 36 Norm / 4 lĩnh vực** (2026-08-18) — thêm `lao-dong` 4 văn bản (D-28). Neo4j: 7208 Component, 7210 TextUnit. Số eval hiện có đo trên **corpus 32 Norm cũ**, chưa chạy lại sau khi mở rộng.
+
+**Toàn hệ chạy thuần Gemini** (D-27): generator `gemini-2.5-pro`, planner + ontology mapper + faithfulness judge `gemini-2.5-flash`, qua Vertex ADC. Không còn phụ thuộc khóa Anthropic.
 
 **Trước khi bắt đầu bất kỳ task nào — ĐỌC 3 file này:**
-1. `docs/PROJECT_STATUS.md` — **đọc §1.0 "CẬP NHẬT MỚI NHẤT" TRƯỚC** (trạng thái + việc tiếp theo), rồi changelog v2.19 ở đầu file
+1. `docs/PROJECT_STATUS.md` — **đọc §1.0 "CẬP NHẬT MỚI NHẤT" TRƯỚC** (trạng thái + việc tiếp theo), rồi changelog mới nhất ở đầu file
 2. `docs/PROJECT_CONTEXT.md` — kiến trúc, schema, quyết định thiết kế
-3. Decision Log trong file này (D-01…D-26) — đặc biệt D-23 (implements đa-cha), D-24 (multi-LLM + Gemini-only), D-26 (gemini-fallback demo)
+3. Decision Log trong file này (D-01…D-28) — đặc biệt D-23 (implements đa-cha), D-24 (multi-LLM), D-27 (Gemini-only + không nuốt lỗi API), D-28 (corpus lao-dong)
 
 **⚠️ Gotchas môi trường (đọc trước khi chạy code):**
-- **Python:** cài gcloud đã đổi `python` sang bản thiếu deps → dùng `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3` cho MỌI lệnh demo/eval/pytest.
-- **Gemini** = Vertex AI qua ADC (`gcloud auth application-default login` đã setup); config trong `.env` (`GEMINI_USE_VERTEX=true`, project/location/model). Chạy `--llm-mode gemini`.
+- **Python:** máy Windows dùng `venv/Scripts/python.exe` của repo — `google-genai` và `sentence-transformers` từng THIẾU trong venv dù có trong `requirements.txt`; chạy `pip install -r requirements.txt` khi gặp `ModuleNotFoundError`. Máy macOS dùng `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3`.
+- **Gemini** = Vertex AI qua ADC (`gcloud auth application-default login`); config trong `.env`. Vertex của project này **CHỈ có `gemini-2.5-flash` / `gemini-2.5-pro`** — mọi model 3.x đều 404 (có trên Developer API nhưng không có trên Vertex).
+- **Free tier Developer API = 5 request/phút** → không đủ cho Pass 4 (2659 lượt). Phải dùng Vertex.
+- Console Windows là cp1252 → đặt `PYTHONIOENCODING=utf-8` khi chạy script in tiếng Việt.
 
 ---
 
@@ -78,6 +84,12 @@ graphrag-vn-law/
 │       ├── validate_metadata.py ← TASK-04
 │       ├── llm_config.py        ← make_llm_client(mode=) — 4 LLM mode (D-24, D-26)
 │       └── gemini_fallback.py   ← Gemini wrapper (Vertex ADC), FallbackLLMClient/GeminiClient (D-24)
+├── scripts/
+│   ├── preflight.py             ← kiểm tra máy trình diễn trước bảo vệ
+│   ├── html_to_markdown.py      ← HTML vbpl.vn → data/raw/*.md + TODO_review.md (D-28)
+│   ├── reset_ontology_flags.py  ← dọn cờ ontology_mapped bị đầu độc (D-27, dùng MỘT LẦN)
+│   └── rerun_faithfulness.py    ← chấm lại Tier 2 trên results JSON có sẵn (D-27)
+├── data/raw_html/               ← HTML thô lưu tay từ vbpl.vn (gitignore, tái tải được)
 ├── tests/
 │   ├── test_parser.py
 │   └── test_query_planner.py
@@ -190,6 +202,8 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 | D-23 | `implements` frontmatter chấp nhận **string \| list \| null** (đa văn bản cha) | Corpus [B] (Hộ tịch + Nuôi con nuôi) có văn bản hướng dẫn thi hành ĐỒNG THỜI nhiều cha — VD `thong-tu-04-2020-tt-btp` implements cả `nghi-dinh-123-2015-nd-cp` LẪN `luat-ho-tich-2014`; `nghi-dinh-120-2025-nd-cp` implements cả Luật Nuôi con nuôi lẫn Luật Hộ tịch. Đây là quan hệ pháp lý THẬT và chính là tín hiệu đa-tầng **Gap 3** → làm phẳng về 1 cha sẽ vứt mất cạnh `[:IMPLEMENTS]` thật. Schema cũ giả định 1 cha khiến `validate_metadata.py` crash (`unhashable list`) + `graph_builder` tạo edge hỏng. Fix: chuẩn hóa thành list ở 3 điểm — validator (type-check + global-ref), `graph_builder.create_edges` + Pass 2 (lặp qua từng cha). Đa-parent IMPLEMENTS vốn đã được đồ thị hỗ trợ (1 Norm có nhiều cạnh `[:IMPLEMENTS]`); chỉ frontmatter single-value là hẹp. **Kèm theo**: NQ 124/2016 TP.HCM (văn bản đa-**theme** đầu tiên — đụng P-03) xử lý theo hướng A (tách 2 Norm theo theme: id `-datdai` / `-hotich`), KHÔNG implement `[:BELONGS_TO]` (giữ P-03 hoãn). 243 test pass | 2026-06-30 |
 | D-24 | Multi-LLM provider — 3 mode `claude` \| `claude-fallback` \| `gemini`; hướng **Gemini-only** validated | (1) **Resilience demo**: Lớp 1 pre-cache + Lớp 2 Gemini fallback (`gemini_fallback.py`, `make_llm_client(mode=)`). Wrapper TRONG SUỐT (`.messages.create` y hệt → call site KHÔNG đổi). Mặc định `claude` → eval reproducible. (2) **Gemini chạy qua Vertex AI + ADC** (KHÔNG api_key — Vertex đòi OAuth/ADC; vùng VN không có free tier Developer API → 429 prepaid), `location=global`, dùng credit Cloud $300. Judge giữ Claude Haiku CỐ ĐỊNH (thước đo độc lập). (3) **Bug truncation fix**: Gemini 2.5/3.x là thinking model, `max_tokens` nhỏ Claude-tuned (128 ontology, 256 planner) → thinking ăn hết → output cụt; fix sàn `max_output_tokens=2048`. (4) **Bake-off generator** (đo, không đoán): `gemini-2.5-pro` ≈ Claude (F1 0.587 vs 0.539 trên 10 câu); `3.5-flash`/`3.1-pro-preview` KÉM hơn nhiều → "model mới ≠ tốt hơn". Lineup: planner+ontology `gemini-2.5-flash`, generator `gemini-2.5-pro`. (5) **Gemini-only validated** (full 26): GraphRAG-Gemini F1 **0.549** / NormR 0.766 vs Baseline-Gemini 0.356/0.554 → **Δ kiến trúc +0.193 F1 / +0.212 NormR** — ưu thế kiến trúc GIỮ trên Gemini (≈ Δ Claude +0.206) = bằng chứng LLM-agnostic. (6) **2 negative result tune NormR** (Gemini under-cite chuỗi đa tầng): prompt provider-aware (+0.004 F1, 0 NormR — trong nhiễu, Q018 "win" là Gemini non-determinism) + structural backfill (mọi ngưỡng NormR↑ ĐỔI LẤY F1↓) → cả hai đánh đổi F1, REJECT, **chấp nhận NormR 0.766** (đặc tính model, ghi Limitations). Giống D-12/19/20. Eval `--llm-mode`/`--sample`; judge Claude cố định. 266 test pass | 2026-06-30 |
 | D-25 | **Gỡ bỏ Confirmation Loop** (query_planner `is_complete`/`missing_fields`/`build_confirmation_prompt` + pipeline nhánh dừng-hỏi + demo/eval `bypass_completeness`) | Hệ là **1Q-1A, không đa lượt** → khi thiếu field, "hỏi lại" chỉ **dừng ở ngõ cụt** (không có cơ chế nhận câu trả lời tiếp và chạy lại với bối cảnh cũ) → không phải tính năng an toàn hoàn chỉnh. Ngoài ra nó **không đóng góp khoa học** (không cô lập gap nào) và eval **luôn bypass** nó (`bypass_completeness=True`) → đóng góp *số 0* cho mọi con số F1/NormR. **Bảo toàn kết quả canonical**: `force_jurisdiction` đổi điều kiện từ `not is_complete & jurisdiction∈missing` → `jurisdiction is None` (tương đương từng nhánh: đất đai không nêu tỉnh→bơm GT; ngoài đất đai→đã toan-quoc; có nêu→giữ) → eval Gemini/Claude KHÔNG xê dịch. Hệ quả: demo luôn chạy best-effort thay vì hỏi lại. Refactor 12 file, xóa 12 test cho tính năng gỡ, **254 test pass**. Kèm: vá `precache_demo` param cũ `llm_fallback=`→`llm_mode="claude"` (stale từ D-24). Ảnh hưởng GT: bỏ dạng câu "thiếu-field→hỏi-lại" khỏi kế hoạch test set | 2026-07-06 |
+| D-28 | Mở rộng corpus sang lĩnh vực **lao động** (4 văn bản) + pipeline HTML→markdown bán tự động | Cần bằng chứng kiến trúc tổng quát hóa sang lĩnh vực mới. Thêm BLLĐ 2012/2019 + NĐ 145/2020 + NĐ 293/2025 qua `scripts/html_to_markdown.py` (ánh xạ class `prov-article/clause/item` → heading; dự phòng nhận dạng theo mẫu chữ cho HTML cũ không có class). **Thay đổi code retrieval = 0 dòng logic**, chỉ thêm `"lao-dong"` vào `VALID_THEMES` (`validate_metadata.py`, `query_planner.py`) và `_NATIONAL_THEMES`. Corpus 32→36 Norm, +582 Điều, +2659 Component (37% tổng — vì Bộ luật Lao động 220-242 Điều, lớn hơn hẳn văn bản cũ; KHÔNG phải do cách thu thập khác). Ingestion idempotent xác nhận thực nghiệm: Pass 4 bỏ qua đúng 4549 component cũ, 0 lệnh xoá, snapshot cũ không giảm. **PHẠM VI CÓ CHỦ Ý**: nhóm lao động chỉ để chứng minh tính tổng quát hóa, **KHÔNG dùng đo Gap 2/3/4 và KHÔNG đưa vào bộ đánh giá** — số eval giữ nguyên trên corpus 32 Norm. `implements` đã khai cho NĐ 145 và NĐ 293 (→ `bo-luat-lao-dong-2019`), cạnh `[:IMPLEMENTS]` sẽ được tạo ở lần ingest trên máy chính. Lưu ý khi mô tả: cả 4 văn bản đều `jurisdiction: toan-quoc` (4 vùng lương không phải Jurisdiction node) và schema không có cạnh `REPLACES` | 2026-08-18 |
+| D-27 | **Gemini-only cho ontology mapper + faithfulness judge**; lỗi hạ tầng phải RAISE, không nuốt | (1) `ontology_mapper` bỏ Anthropic, gọi thẳng google-genai theo `GEMINI_MODEL_PLANNER`; `faithfulness` judge đọc `FAITHFULNESS_JUDGE_MODEL` (mặc định `gemini-2.5-flash`) — trước đây hằng số tên `claude-haiku` nhưng khi đi qua wrapper Gemini lại bị ánh xạ ngầm sang Flash (bẫy ghi ở V3 §6c), nay khai báo tường minh. (2) **Bài học đắt nhất**: bản cũ bắt `except Exception` rồi trả `[]` → khi Gemini trả 429, Pass 4 vẫn `SET ontology_mapped=true` cho component chưa map → **lỗ hổng câm** (237 component bị đầu độc, phải viết `scripts/reset_ontology_flags.py` để dọn). Nay: retry 3 lần có backoff (đọc `retry-after`/`retryDelay`, mặc định 15→30→60s), bắt cả `httpx.TransportError` (một mẻ đã chết vì `RemoteProtocolError` không được nhận là lỗi tạm thời), hết retry thì RAISE; chỉ lỗi parse JSON mới trả `[]`. Cờ + cạnh ghi trong CÙNG transaction nên rollback không để lại trạng thái nửa vời. (3) Judge Tier 2 giữ tương thích 2 dạng client (`models.generate_content` và `.messages.create`) để `verifier.py` (D-18) không vỡ; `max_output_tokens=2048` vì thinking model ăn hết budget 200 kiểu Claude. Đo lại faithfulness `final1` bằng Flash: **233/295 = 78.98%**, khớp 230/295 của V3 §6c (lệch 3 citation) → phép đo tái lập được | 2026-08-18 |
 | D-26 | Mode `gemini-fallback` — Gemini chính + Claude dự phòng, đối xứng `claude-fallback` (D-24) | Demo bảo vệ chạy Gemini end-to-end (mode `gemini`) KHÔNG có dự phòng — chính lỗi `429 RESOURCE_EXHAUSTED` (hết quota Vertex) đã từng làm hỏng mẻ eval đêm 09→10/07 có thể làm demo chết giữa buổi bảo vệ. `FallbackGeminiClient` (`src/utils/gemini_fallback.py`) bọc trong suốt: gọi Gemini trước, lỗi hạ tầng (429/5xx/timeout, `_should_fallback_gemini`) → tự chuyển sang Claude; lỗi logic (400/403) → re-raise. Mặc định TẮT — eval vẫn dùng `claude`/`gemini` thuần để reproducible, KHÔNG đụng số liệu `V2_RESULTS.md`. 19 test mới, 316 test pass | 2026-07-11 |
 
 ---
@@ -200,7 +214,7 @@ Sau khi hoàn thành một task (tất cả DoD items checked): cập nhật `do
 
 | Node | Mô tả | Key properties |
 |---|---|---|
-| `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi |
+| `Theme` | Lĩnh vực pháp lý | `name`: dat-dai \| ho-tich \| nuoi-con-nuoi \| lao-dong |
 | `Norm` | Văn bản quy phạm pháp luật | `id`, `title`, `tier` (1-4), `valid_from`, `summary` |
 | `Component` | Điều/Khoản/Điểm/Tiết (xuyên thời gian) | `id`, `label`, `ontology_mapped` (bool) |
 | `CTV` | Snapshot của Component tại thời điểm | `valid_from`, `valid_to` (sentinel `9999-12-31` khi còn hiệu lực), `status`, `amended_by`, `added_by` (optional) |
@@ -360,7 +374,7 @@ Ví dụ:
 Các trường sau **chỉ nhận giá trị trong danh sách này**, không có ngoại lệ:
 
 ```python
-VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi"]
+VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi", "lao-dong"]
 
 VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 
@@ -409,7 +423,7 @@ graph_builder.py   ← nhận TextUnit list từ parser.py
                      Pass 3: Amendment nodes + [:AMENDED_BY] edges (<!-- amended_by --> annotation)
                      Pass 4: Ontology Mapping LLM (TASK-15) — gán [:MAPS_TO_CONCEPT] cho Components
 
-ontology_mapper.py ← Claude Haiku 4.5 classification: Component label → Concept IDs
+ontology_mapper.py ← Gemini Flash classification (GEMINI_MODEL_PLANNER): Component label → Concept IDs
                    ← input: data/ontology/core_v1.json (Core Ontology — concepts + procedures)
                    → return list concept_ids cho mỗi Component (temperature=0, filter hallucinated)
 

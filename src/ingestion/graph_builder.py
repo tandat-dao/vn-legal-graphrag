@@ -26,7 +26,8 @@ from src.ingestion.ontology_mapper import map_component_to_concepts
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-_NON_NORM_FILES = {"crossref_decisions.md", "mapping_table.md", "review_log.md"}
+_NON_NORM_FILES = {"crossref_decisions.md", "mapping_table.md", "review_log.md",
+                   "TODO_review.md"}   # báo cáo của scripts/html_to_markdown.py
 
 
 # ---------------------------------------------------------------------------
