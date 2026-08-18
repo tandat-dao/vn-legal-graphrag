@@ -2,7 +2,9 @@
 
 Hệ thống hỏi–đáp pháp luật hành chính có trích dẫn, kết hợp Đồ thị tri thức (Neo4j) và Tìm kiếm ngữ nghĩa (Qdrant + BGE-M3).
 
-Phạm vi 3 lĩnh vực — **Đất đai**, **Hộ tịch**, **Nuôi con nuôi**; 6 thủ tục hành chính; 32 văn bản. Bốn thách thức được giải quyết: đa lĩnh vực, đa địa phương (TP.HCM, Đồng Nai), đa tầng văn bản (Luật → Nghị định → Thông tư → Quyết định UBND) và đa phiên bản (hiệu lực theo thời gian).
+Phạm vi 3 lĩnh vực được đánh giá đầy đủ — **Đất đai**, **Hộ tịch**, **Nuôi con nuôi**; 6 thủ tục hành chính; 32 văn bản. Bốn thách thức được giải quyết: đa lĩnh vực, đa địa phương (TP.HCM, Đồng Nai), đa tầng văn bản (Luật → Nghị định → Thông tư → Quyết định UBND) và đa phiên bản (hiệu lực theo thời gian).
+
+Từ 18/08/2026 corpus có thêm lĩnh vực thứ tư — **Lao động** (4 văn bản, nâng tổng lên 36) — nạp vào với mục đích duy nhất là kiểm chứng khả năng tổng quát hóa: mở rộng sang lĩnh vực mới **không sửa một dòng logic nào** trong `src/retrieval/`, chỉ thêm giá trị vào danh sách lĩnh vực hợp lệ. Nhóm này **không nằm trong bộ đánh giá** — mọi kết quả dưới đây đo trên corpus 32 văn bản của 3 lĩnh vực ban đầu.
 
 > Đây là repo phát triển của khóa luận. Bản mã nguồn nộp kèm báo cáo là bản chốt đã lược bớt, chỉ chạy Gemini; repo này giữ đầy đủ lịch sử phát triển và cả đường chạy Claude (xem mục [Khác biệt với bản nộp](#khác-biệt-với-bản-nộp)).
 
@@ -26,7 +28,17 @@ Bậc thang hệ tham chiếu (F1 cấp Khoản, 137 câu): gold-context 0.858 >
 
 **Ablation phân ly kép.** Bước duyệt đồ thị cần thiết cho thách thức đa tầng và đa phiên bản (gỡ bước duyệt: −0.101 / −0.122), bộ lọc lĩnh vực cần thiết cho thách thức đa lĩnh vực (−0.039) và không gây gánh nặng cho ba thách thức còn lại. Hai bộ lọc cứng theo địa phương và theo thời gian **chưa** chứng minh được đóng góp riêng — khi bị cô lập, chúng làm tăng điểm ở chính thách thức của mình (+0.050 và +0.045); đây là kết quả phủ định và được báo cáo nguyên trạng.
 
-**Tính trung thực của trích dẫn.** Tỉ lệ tồn tại 295/296 = 99.7% (kiểm tra tất định, không gọi mô hình, đo khi verifier đang **tắt**); tỉ lệ được hậu thuẫn 260/295 = 88.1%. Giám khảo là `gemini-2.5-pro`, **trùng mô hình sinh**, nên con số 88.1% chịu rủi ro thiên lệch tự-đánh-giá và chỉ nên đọc như chỉ báo tương đối; đo lại bằng giám khảo độc lập là việc chưa làm.
+**Tính trung thực của trích dẫn.** Tỉ lệ tồn tại 295/296 = 99.7% (kiểm tra tất định, không gọi mô hình, đo khi verifier đang **tắt**). Tỉ lệ được hậu thuẫn đã được đo lại bằng nhiều giám khảo trên **cùng một bộ kết quả** `results_graphrag_final1`:
+
+| Giám khảo | Quan hệ với mô hình sinh | Tỉ lệ hậu thuẫn |
+|---|---|---:|
+| `gemini-2.5-pro` (số báo cáo) | trùng mô hình sinh | 260/295 = 88.1% |
+| Qwen3-4B-Instruct (base) | độc lập hoàn toàn | 247/295 = 83.7% |
+| `gemini-2.5-flash` | cùng nhà, khác mô hình | 233/295 = **79.0%** |
+
+Ba phép đo nằm trong dải 79–88% và giám khảo cùng nhà lại chấm **chặt nhất**, nên lo ngại thiên lệch tự-đánh-giá không được số liệu ủng hộ. Phép đo bằng Flash tái lập được: lần đo độc lập ngày 18/08 cho 233/295, lệch đúng 3 trích dẫn so với 230/295 đo trước đó.
+
+Bản Qwen3-4B đã tinh chỉnh trên tác vụ **sinh** cho 99.7% — gần như không phê phán, không dùng làm giám khảo được. Giám khảo cần độc lập cả về nhà phát triển lẫn về tác vụ huấn luyện.
 
 **Nút thắt nằm ở khâu sinh, không phải khâu truy hồi.** Trong 32 câu thua Naive RAG, 26 câu có đủ văn bản đúng trong ngữ cảnh nhưng mô hình vẫn dẫn sai hoặc bỏ sót.
 
