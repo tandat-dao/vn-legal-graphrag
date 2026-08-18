@@ -67,7 +67,7 @@ sang đó mới hiểu.
 
 **Cách làm.** Đọc toàn bộ kho văn bản, nhận diện mọi câu dẫn chiếu bằng biểu
 thức chính quy, rồi phân giải xem nó trỏ đến điều khoản cụ thể nào. Kết quả tạo
-ra **3919 quan hệ mới** trong đồ thị — loại quan hệ thứ 11 của lược đồ.
+ra **3919 quan hệ mới** trên kho 3 lĩnh vực dùng để đo (32 văn bản), và **5366** sau khi thêm lĩnh vực lao động (§7) — loại quan hệ thứ 11 của lược đồ.
 
 Ba trường hợp phải xử lý riêng:
 
