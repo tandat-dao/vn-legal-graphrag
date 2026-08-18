@@ -274,7 +274,9 @@ def test_parse_raises_on_missing_frontmatter(tmp_path):
 DATA_RAW = Path(__file__).parents[1] / "data" / "raw"
 # Chỉ parse các file văn bản pháp luật (có YAML frontmatter với field 'id').
 # crossref_decisions.md và mapping_table.md là file dự án, không phải norm file.
-_NON_NORM_FILES = {"crossref_decisions.md", "mapping_table.md", "review_log.md"}
+# Dùng CHUNG danh sách với graph_builder thay vì chép lại — bản chép ở đây từng
+# lệch khi thêm TODO_review.md, làm test đỏ dù ingestion đã bỏ qua file đó.
+from src.ingestion.graph_builder import _NON_NORM_FILES  # noqa: E402
 REAL_MD_FILES = sorted(p for p in DATA_RAW.glob("*.md") if p.name not in _NON_NORM_FILES)
 
 

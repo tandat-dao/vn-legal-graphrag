@@ -19,7 +19,7 @@ import yaml
 # Các hằng số hợp lệ (theo CLAUDE.md — danh sách đóng)
 # ---------------------------------------------------------------------------
 
-VALID_THEMES = {"dat-dai", "ho-tich", "nuoi-con-nuoi"}
+VALID_THEMES = {"dat-dai", "ho-tich", "nuoi-con-nuoi", "lao-dong"}
 VALID_JURISDICTIONS = {"toan-quoc", "tp-hcm", "dong-nai"}
 VALID_TIERS = {1, 2, 3, 4}
 
@@ -30,6 +30,7 @@ NON_LEGAL_FILES = {
     "crossref_decisions.md",
     "review_log.md",
     "formatted_temp.md",
+    "TODO_review.md",       # báo cáo của scripts/html_to_markdown.py
 }
 
 REQUIRED_FIELDS = [

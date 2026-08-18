@@ -26,7 +26,8 @@ from src.ingestion.ontology_mapper import map_component_to_concepts
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-_NON_NORM_FILES = {"crossref_decisions.md", "mapping_table.md", "review_log.md"}
+_NON_NORM_FILES = {"crossref_decisions.md", "mapping_table.md", "review_log.md",
+                   "TODO_review.md"}   # báo cáo của scripts/html_to_markdown.py
 
 
 # ---------------------------------------------------------------------------
@@ -486,14 +487,13 @@ def run_ingestion(data_dir: str) -> None:
             logger.info(f"Pass 3 — {amends_count} [:AMENDS] edges đã xử lý.")
 
             # Pass 4: Ontology Mapping (Bottom-up LLM Classification)
-            # LLM client theo INGEST_LLM_MODE (mặc định LLM_MODE, fallback "claude").
-            # Gemini-only: INGEST_LLM_MODE=gemini → ontology mapper chạy gemini-2.5-flash.
+            # Chạy Gemini Flash (GEMINI_MODEL_PLANNER) — ontology_mapper tự khởi tạo
+            # client google-genai từ env (GEMINI_API_KEY hoặc Vertex ADC).
             ontology_path = Path("data/ontology/core_v1.json")
             if ontology_path.exists():
-                from src.utils.llm_config import make_llm_client
-                _ingest_mode = os.getenv("INGEST_LLM_MODE", os.getenv("LLM_MODE", "claude"))
-                logger.info(f"Pass 4 — Ontology Mapping (LLM Classification, mode={_ingest_mode})...")
-                anthropic_client = make_llm_client(mode=_ingest_mode)
+                _planner_model = os.getenv("GEMINI_MODEL_PLANNER", "gemini-2.5-flash")
+                logger.info(f"Pass 4 — Ontology Mapping (LLM Classification, model={_planner_model})...")
+                ontology_client = None  # None → ontology_mapper tự dựng client Gemini
                 with open(ontology_path, "r", encoding="utf-8") as f:
                     core_data = json.load(f)
 
@@ -530,7 +530,7 @@ def run_ingestion(data_dir: str) -> None:
                                 processed += 1
                                 continue
 
-                            mapped_concepts = map_component_to_concepts(anthropic_client, text, core_data)
+                            mapped_concepts = map_component_to_concepts(ontology_client, text, core_data)
 
                             # Đánh dấu đã quét LLM (dù có ra mảng rỗng hay không)
                             tx.run(

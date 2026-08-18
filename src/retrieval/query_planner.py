@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 # Constants
 # ---------------------------------------------------------------------------
 
-VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi"]
+VALID_THEMES = ["dat-dai", "ho-tich", "nuoi-con-nuoi", "lao-dong"]
 
 VALID_PROCEDURES = [
     "chuyen-muc-dich-su-dung-dat",
@@ -50,7 +50,7 @@ VALID_JURISDICTIONS = ["toan-quoc", "tp-hcm", "dong-nai"]
 # KHÔNG có nghĩa là các theme này luôn thuộc phạm vi toàn quốc: hộ tịch vẫn có
 # nghị quyết lệ phí cấp tỉnh. Khi câu hỏi nêu tên tỉnh, giá trị từ planner được
 # giữ nguyên và mặc định này không áp dụng (xem _apply_jurisdiction_rules).
-_NATIONAL_THEMES = {"ho-tich", "nuoi-con-nuoi"}
+_NATIONAL_THEMES = {"ho-tich", "nuoi-con-nuoi", "lao-dong"}
 
 MODEL = "claude-haiku-4-5-20251001"
 
@@ -59,7 +59,7 @@ Bạn là bộ phân loại câu hỏi pháp lý Việt Nam. Nhiệm vụ: extra
 
 Trả về JSON với đúng 6 trường (không có trường nào khác):
 {
-  "theme": <"dat-dai" | "ho-tich" | "nuoi-con-nuoi" | null>,
+  "theme": <"dat-dai" | "ho-tich" | "nuoi-con-nuoi" | "lao-dong" | null>,
   "procedure": <một trong các giá trị dưới đây | null>,
   "jurisdiction": <"toan-quoc" | "tp-hcm" | "dong-nai" | null>,
   "temporal": <chuỗi ngày "YYYY-MM-DD" nếu câu hỏi đề cập thời điểm cụ thể | null>,
@@ -84,12 +84,14 @@ Phạm vi của từng theme (RỘNG HƠN danh sách procedure ở trên):
 - "dat-dai"        — đất đai nói chung: quyền sử dụng đất, giấy chứng nhận (sổ đỏ), chuyển mục đích sử dụng, hạn mức giao/công nhận đất, bảng giá đất, thu hồi - bồi thường, đăng ký biến động.
 - "ho-tich"        — hộ tịch nói chung: khai sinh, khai tử, kết hôn, GIÁM HỘ, nhận cha - mẹ - con, thay đổi/cải chính/bổ sung hộ tịch, xác định lại dân tộc, trích lục và bản sao hộ tịch, đăng ký lại các việc hộ tịch.
 - "nuoi-con-nuoi"  — nuôi con nuôi: đăng ký nuôi con nuôi trong nước, đăng ký lại, điều kiện người nhận nuôi và người được nhận làm con nuôi, hệ quả pháp lý.
+- "lao-dong"      — lao động: hợp đồng lao động (giao kết, tạm hoãn, chấm dứt), trợ cấp thôi việc và mất việc, tiền lương và lương tối thiểu vùng, thời giờ làm việc, kỷ luật lao động, quyền và nghĩa vụ của người lao động và người sử dụng lao động.
 
 Quy tắc quan trọng:
 0. THEME XÁC ĐỊNH ĐỘC LẬP VỚI PROCEDURE. Danh sách procedure chỉ gồm 6 thủ tục
    được lập chỉ mục sâu; theme thì bao trùm cả lĩnh vực. Nếu câu hỏi thuộc một
    lĩnh vực nêu trên nhưng KHÔNG khớp procedure nào (ví dụ "đăng ký giám hộ",
-   "đăng ký khai tử", "cải chính hộ tịch") thì VẪN gán theme đúng và để
+   "đăng ký khai tử", "cải chính hộ tịch", và TOÀN BỘ lĩnh vực "lao-dong" vốn
+   chưa có procedure nào) thì VẪN gán theme đúng và để
    procedure = null. TUYỆT ĐỐI KHÔNG trả theme = null chỉ vì không tìm được
    procedure — làm vậy khiến hệ không lọc được lĩnh vực và trả về rỗng.
 1. ƯU TIÊN CAO NHẤT — nếu câu hỏi có NÊU TÊN địa phương thì gán đúng địa phương đó,
@@ -98,7 +100,7 @@ Quy tắc quan trọng:
    - TP.HCM / Thành phố Hồ Chí Minh / HCM → "tp-hcm"
    - Đồng Nai / tỉnh Đồng Nai → "dong-nai"
 2. Nếu câu hỏi KHÔNG nêu địa phương:
-   - Hộ tịch hoặc Nuôi con nuôi → "toan-quoc"
+   - Hộ tịch, Nuôi con nuôi, hoặc Lao động → "toan-quoc"
    - Đất đai → null
 3. Nếu không xác định được trường nào → trả null cho trường đó.
 

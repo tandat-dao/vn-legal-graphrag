@@ -17,6 +17,18 @@ data/neo4j/
 data/qdrant/
 data/neo4j-thu-nghiem/
 
+# Store cũ đổi tên khi reset DB (xóa tay khi chắc chắn không cần)
+data/neo4j.bak/
+data/qdrant.bak/
+
+# HTML thô lưu tay từ vbpl.vn (Ctrl+S, ~52MB) — nguồn tái tải được; thứ cần track
+# là markdown sinh ra ở data/raw/. Cùng tinh thần với data/sources/*.pdf bên dưới.
+data/raw_html/
+# Báo cáo soát tay do scripts/html_to_markdown.py sinh lại mỗi lần chạy
+data/raw/TODO_review.md
+# Báo cáo sơ bộ nội bộ theo phiên làm việc
+docs/bao-cao-so-bo-*.md
+
 # Source documents (PDF/DOCX) — lưu cục bộ, không commit lên git
 # manifest.md vẫn được track để có audit trail
 data/sources/*.pdf

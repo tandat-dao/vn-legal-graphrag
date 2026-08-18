@@ -1,5 +1,21 @@
 # Ontology-Driven GraphRAG cho Pháp luật Việt Nam — Trạng thái Dự án
-**Phiên bản 2.23 | Cập nhật 2026-07-26**
+**Phiên bản 2.24 | Cập nhật 2026-08-18**
+
+> **v2.24 — Cập nhật 2026-08-18 (Gemini-only + corpus lĩnh vực lao động + pipeline HTML→markdown):**
+>
+> Nguồn tổng hợp: [docs/bao-cao-so-bo-20260818.md](bao-cao-so-bo-20260818.md). Ba mục dưới đây ghi theo **số đã kiểm chứng lại trên repo**; chỗ nào lệch với báo cáo sơ bộ đều nêu rõ.
+>
+> **1. Chuyển thuần Gemini (D-27).** `ontology_mapper` bỏ Anthropic, gọi thẳng google-genai theo `GEMINI_MODEL_PLANNER`; faithfulness judge đọc `FAITHFULNESS_JUDGE_MODEL` (mặc định `gemini-2.5-flash`). Sửa lớp lỗi nghiêm trọng: bản cũ nuốt mọi exception rồi trả `[]` → 429 khiến Pass 4 đánh dấu `ontology_mapped=true` cho component chưa map (237 component bị đầu độc, dọn bằng `scripts/reset_ontology_flags.py`). Nay retry có backoff + bắt `httpx.TransportError` + RAISE khi hết retry. Đo lại Tier 2 trên `results_graphrag_final1` bằng Flash: **233/295 = 78.98%**, khớp 230/295 của V3 §6c → phép đo tái lập được. 631 test pass.
+>
+> **2. Corpus 32 → 36 Norm, thêm lĩnh vực `lao-dong` (D-28).** BLLĐ 2012/2019 + NĐ 145/2020 + NĐ 293/2025. Neo4j: 4549 → **7208 Component**, 4551 → **7210 TextUnit**, 6549 → concept edges tăng theo Pass 4. Thay đổi code retrieval = **0 dòng logic**, chỉ thêm `"lao-dong"` vào `VALID_THEMES` + `_NATIONAL_THEMES`. Idempotency xác nhận thực nghiệm: Pass 4 bỏ qua đúng **4549** component cũ, 0 lệnh DELETE/REMOVE, không con số nào giảm.
+>
+> **3. Pipeline HTML→markdown (`scripts/html_to_markdown.py`).** Ánh xạ class `prov-article/clause/item` → heading; dự phòng nhận dạng theo mẫu chữ cho HTML cũ (BLLĐ 2012 không có class `prov-*`); lọc khối bị trang render lặp bằng thuộc tính neo `id`/`parent-id`; chèn heading placeholder cho Điều bị mất heading trong nguồn (Điều 4/31/62 của NĐ 145 — Điều 31 tách được **chính xác** nhờ `parent-id`). Xuất kèm `data/raw/TODO_review.md`.
+>
+> **Phạm vi của nhóm lao động — CÓ CHỦ Ý, không phải thiếu sót:**
+>
+> - Lĩnh vực lao động nạp vào **chỉ để chứng minh tính tổng quát hóa** (thêm lĩnh vực mới không phải sửa kiến trúc), **không dùng để đo Gap 2/3/4** và **không đưa vào bộ đánh giá**. Vì vậy nhóm này không cần phủ đủ 4 thách thức.
+> - **Số eval giữ nguyên trên corpus 32 Norm** — không chạy lại sau khi mở rộng. Khi trích số vào luận văn phải nói rõ cơ sở này.
+> - `implements` đã khai trong frontmatter: NĐ 145/2020 và NĐ 293/2025 → `bo-luat-lao-dong-2019`. Máy này chỉ chạy thử nên đồ thị hiện chưa có cạnh; **lần ingest trên máy chính sẽ tạo 2 cạnh `[:IMPLEMENTS]`** (cả hai đích đều có trong corpus).
 
 > **v2.23 — Cập nhật 2026-07-26 (UI demo bảo vệ — Task 1 + 2 của `ui/docs/UI_DEMO_SPEC.md`):**
 >

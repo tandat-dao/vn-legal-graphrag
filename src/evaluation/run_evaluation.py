@@ -213,10 +213,12 @@ def run_system_on_test_set(
     if faithfulness_tier >= 1:
         from src.evaluation.faithfulness import evaluate_faithfulness
         if faithfulness_tier >= 2:
-            # Judge CỐ ĐỊNH Claude — thước đo độc lập với mode hệ thống (tránh
-            # Gemini tự chấm Gemini khi mode=gemini). Xem bàn về judge.
-            from src.utils.llm_config import make_anthropic_client
-            judge_client = make_anthropic_client()
+            # Judge = Gemini Flash (FAITHFULNESS_JUDGE_MODEL), tách khỏi generator
+            # (Pro) về model/tham số nhưng CÙNG NHÀ với hệ thống → không còn tính
+            # độc lập như judge Claude trước đây (D-24). Ghi rõ khi báo cáo số
+            # Tier 2; Tier 1 deterministic không dính rủi ro này.
+            from src.utils.gemini_fallback import _build_gemini_client
+            judge_client = _build_gemini_client(os.getenv("GEMINI_API_KEY"))
 
     results = []
     for i, item in enumerate(test_set, 1):
@@ -398,7 +400,7 @@ def main() -> int:
         help="Trần đơn vị mỗi văn bản (chỉ GraphRAG): mặc định cố định 3 | "
              "graph = chia ngân sách theo số văn bản Giai đoạn 2 trả về "
              "(sàn 3 — chỉ nới cho chuỗi hẹp, không bao giờ siết). "
-             "⛔ graph và fill ĐÃ BỊ BÁC BỎ (D-27) — chỉ dùng để tái lập kết "
+             "⛔ graph và fill ĐÃ BỊ BÁC BỎ (D-29) — chỉ dùng để tái lập kết "
              "quả âm, KHÔNG dùng cho số liệu chính thức.",
     )
     parser.add_argument("--rerank-mode", default=None, choices=["trong-norm"],

@@ -154,9 +154,20 @@ def test_suy_citation_diem_chi_gan_khi_khong_mo_ho():
 # ---------------------------------------------------------------------------
 # DoD 2 — lọc rò rỉ
 # ---------------------------------------------------------------------------
-def test_blocklist_doc_32_van_ban():
+def test_blocklist_phu_het_van_ban_corpus():
+    """Blocklist chống rò rỉ phải phủ MỌI văn bản trong data/raw/.
+
+    Trước đây chốt cứng `== 32`; corpus mở rộng (thêm lĩnh vực lao động) làm test
+    đỏ dù blocklist chạy đúng — phủ NHIỀU hơn là tốt hơn. Nay suy số lượng từ
+    chính corpus để không phải sửa test mỗi lần thêm văn bản.
+    """
+    from finetune.build_dataset import RAW_DIR
+
+    so_van_ban = sum(1 for p in RAW_DIR.glob("*.md")
+                     if p.read_text(encoding="utf-8").startswith("---"))
     names, so_hieu, rows = load_blocklist()
-    assert len(rows) == 32
+    assert len(rows) == so_van_ban
+    assert len(rows) >= 32, "corpus không được nhỏ đi so với mốc 32 văn bản"
     assert so_hieu, "phải bắt được số hiệu từ title"
     assert any("dat dai" in n for n in names)
 

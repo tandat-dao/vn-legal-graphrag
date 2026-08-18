@@ -251,7 +251,7 @@ Thang đo: so sánh GraphRAG với Baseline Naive RAG (chunking cố định 512
 
 | Edge | Từ | Đến | Vai trò |
 |---|---|---|---|
-| `[:MAPS_TO_CONCEPT]` | Component | Concept | **Bottom-up LLM classification** (TASK-15 — `ontology_mapper.py`) — Claude Haiku gán concept_ids cho mỗi Điều/Khoản dựa trên label. Dùng trong `hybrid_search._compute_rarity` để boost components giàu concept hiếm |
+| `[:MAPS_TO_CONCEPT]` | Component | Concept | **Bottom-up LLM classification** (TASK-15 — `ontology_mapper.py`) — Gemini Flash (`GEMINI_MODEL_PLANNER`) gán concept_ids cho mỗi Điều/Khoản dựa trên label. Dùng trong `hybrid_search._compute_rarity` để boost components giàu concept hiếm |
 | `[:REQUIRES_CONCEPT]` | Procedure | Concept | **Top-down mapping** — load từ `data/ontology/core_v1.json`. Identify concept thiết yếu cho mỗi thủ tục → boost components có MAPS_TO_CONCEPT trùng |
 
 **Production state (đo 2026-05-21):**

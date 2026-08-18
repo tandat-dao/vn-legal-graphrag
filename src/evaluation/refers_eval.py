@@ -175,7 +175,7 @@ BO_BIEN_THE: dict[str, list[tuple]] = {
         ("+ pool 100 + tắt độ hiếm", "khoan", "fill", 12000, "trong-norm", False, False,
          {"_DENSE_POOL_MIN": 100, "_RARITY_ALPHA": 0.0}),
     ],
-    # MẺ CHỐT SAU D-27 — bỏ `fill` (đã bác bỏ) khỏi mọi bước. Đây mới là cấu
+    # MẺ CHỐT SAU D-29 — bỏ `fill` (đã bác bỏ) khỏi mọi bước. Đây mới là cấu
     # hình THỰC SỰ ĐEM DÙNG, nên số của nó mới được đưa vào báo cáo.
     "chot-khong-fill": [
         ("mốc hiện tại", None, None, 6000, None, False, False, {}),

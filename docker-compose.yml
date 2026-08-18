@@ -8,9 +8,19 @@ services:
     volumes:
       - ./data/neo4j:/data
     environment:
-      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      # :?  → Compose BÁO LỖI khi thiếu biến, thay vì nội suy rỗng thành NEO4J_AUTH=/
+      # (lỗi đó chỉ lộ ra rất muộn dưới dạng "authentication failure").
+      - NEO4J_AUTH=${NEO4J_USER:?NEO4J_USER chưa đặt}/${NEO4J_PASSWORD:?NEO4J_PASSWORD chưa đặt}
       - NEO4J_PLUGINS=["apoc"]
     restart: unless-stopped
+    # Neo4j + plugin APOC mất ~15-30s mới mở Bolt. Không có healthcheck thì
+    # `up -d` trả về trước khi DB sẵn sàng → graph_builder gặp ServiceUnavailable.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
     networks:
       - graphrag-network
 
@@ -18,11 +28,17 @@ services:
     image: qdrant/qdrant:v1.13.6
     container_name: graphrag-qdrant
     ports:
-      - "6333:6333"   # HTTP API
-      - "6334:6334"   # gRPC
+      - "6333:6333"   # HTTP API (code chỉ dùng cổng này — không nơi nào bật prefer_grpc)
     volumes:
       - ./data/qdrant:/qdrant/storage
     restart: unless-stopped
+    # Image qdrant không có curl/wget → dùng /dev/tcp của bash để kiểm tra cổng 6333.
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
     networks:
       - graphrag-network
 

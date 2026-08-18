@@ -1145,7 +1145,7 @@ def hybrid_search(
 
     # Pass 1b (HẠN NGẠCH THEO KHÍA CẠNH) — mặc định TẮT.
     #
-    # ⛔ ĐÃ BÁC BỎ (D-27) — chỉ gọi được từ harness đo đạc, KHÔNG lộ ra CLI và
+    # ⛔ ĐÃ BÁC BỎ (D-29) — chỉ gọi được từ harness đo đạc, KHÔNG lộ ra CLI và
     # KHÔNG bật ở đường chạy chính. Giữ lại để tái lập kết quả âm.
     #
     # Chạy TRƯỚC Pass 2: nó giành chỗ mà Pass 2 sẽ lấp bằng chiều sâu chung, tức
@@ -1194,7 +1194,7 @@ def hybrid_search(
 
     # Pass 2b (TIÊU NGÂN SÁCH CÒN TRỐNG) — chỉ khi budget_mode="fill".
     #
-    # ⛔ ĐÃ BÁC BỎ (D-27) — KHÔNG bật ở đường chạy chính, KHÔNG đặt làm mặc định.
+    # ⛔ ĐÃ BÁC BỎ (D-29) — KHÔNG bật ở đường chạy chính, KHÔNG đặt làm mặc định.
     # Giữ lại NGUYÊN VẸN chỉ để tái lập phép đo âm đã biện minh cho quyết định.
     #
     # Ý tưởng ban đầu: 0/38 câu lấy đủ 25 đơn vị mà cũng 0/38 câu hết ứng viên

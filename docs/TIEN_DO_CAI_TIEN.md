@@ -393,7 +393,7 @@ lặp lại.
 đầy đủ, trong khi độ bao phủ nó mua thêm là **+0,000**. Quan trọng nhất:
 `fill` làm **recall cũng giảm** (−0,018) và NormR −0,036 → đây không phải đánh
 đổi precision lấy recall mà là **đơn vị sai lấn chỗ đơn vị đúng**, vì bỏ trần
-per_norm cho phép một văn bản chiếm hết ngân sách. → **BÁC BỎ (D-27)**.
+per_norm cho phép một văn bản chiếm hết ngân sách. → **BÁC BỎ (D-29)**.
 
 **`REFERS_TO` giữ lại.** Hòa tổng thể (−0,002, CI chứa 0) nhưng lãi đúng chỗ
 nó được thiết kế cho: gap3 +0,041, gap4 +0,067; lỗ ở gap1/gap2 là nơi bao phủ
@@ -599,7 +599,7 @@ khi có số đo lại.**
 
 ## 15. SỐ CHỐT CỦA ĐỢT CẢI TIẾN (planner đồng bộ Gemini, 123 câu v2)
 
-### 15.1 Cấu hình THỰC SỰ ĐEM DÙNG — bỏ `fill` theo D-27
+### 15.1 Cấu hình THỰC SỰ ĐEM DÙNG — bỏ `fill` theo D-29
 
 | bước | bao phủ Khoản | Δ | T/B |
 |---|---|---|---|
@@ -620,7 +620,7 @@ Per-gap: gap1 **+0,185**, gap3 **+0,169**, gap2 +0,069, gap4 +0,011.
 
 `fill` mua thêm **+0,020 bao phủ** bằng cách nhồi thêm **~1900 token**, và cái
 giá ở khâu sinh là **−0,115 F1** (§10). Đổi chác tệ → giữ nguyên quyết định bác
-bỏ ở D-27.
+bỏ ở D-29.
 
 ### 15.3 Con số nên dùng trong báo cáo
 

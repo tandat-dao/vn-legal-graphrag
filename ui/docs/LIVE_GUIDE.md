@@ -42,7 +42,7 @@ Chép `.env.example` → `.env` rồi điền. Bảng dưới chỉ liệt kê k
 | `GEMINI_USE_VERTEX` | — | `true` → dùng Vertex qua ADC, **không** nhận api_key | `make_llm_client` |
 | `GEMINI_VERTEX_PROJECT` / `GEMINI_VERTEX_LOCATION` | — | chỉ khi `GEMINI_USE_VERTEX=true` | `src/utils/gemini_fallback.py` |
 | `DEMO_MODE` | — | đặt `live` để khởi động thẳng vào chế độ chạy thật | `ui/server.tao_adapter` |
-| `INGEST_LLM_MODE` | — | LLM cho ontology mapping lúc ingest | `src/ingestion/graph_builder.py` |
+| `GEMINI_MODEL_PLANNER` | `gemini-2.5-flash` | model cho ontology mapping lúc ingest (Pass 4) | `src/ingestion/ontology_mapper.py` |
 
 Hai điểm dễ nhầm:
 
@@ -84,8 +84,8 @@ python -m src.ingestion.vectorizer
 → **Bị gián đoạn giữa chừng thì cứ chạy lại từ đầu bước đó.** Không cần xóa gì trước.
 
 Lưu ý về `graph_builder`: Pass 4 (ontology mapping) **gọi LLM** cho từng Component, nên bước này
-tốn khóa API và là phần chậm nhất. LLM dùng ở đây theo `INGEST_LLM_MODE` (mặc định lấy `LLM_MODE`,
-cuối cùng lùi về `claude`).
+tốn khóa API và là phần chậm nhất. LLM dùng ở đây là **Gemini Flash** (`GEMINI_MODEL_PLANNER`,
+mặc định `gemini-2.5-flash`) — không phụ thuộc `LLM_MODE` của retrieval/demo.
 
 Ước lượng thời gian ở trên là **khoảng chừng**, phụ thuộc máy và tốc độ API — chưa đo trên máy B.
 
