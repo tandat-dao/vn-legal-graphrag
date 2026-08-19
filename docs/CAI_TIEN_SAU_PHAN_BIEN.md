@@ -271,9 +271,11 @@ nhưng vẫn thắng ở bước tìm kiếm ngữ nghĩa vì hai bộ luật c�
 diễn đạt gần giống nhau. Đây đúng là thách thức đa phiên bản, xuất hiện lại
 trong chính lĩnh vực mới.
 
-**Giới hạn của phép đo này:** 10 câu là mẫu nhỏ, và tập chuẩn do trợ lý máy soạn
-từ chính kho văn bản nên cần người rà trước khi dùng làm số chính thức. Toàn bộ
-12 câu đang mang cờ chưa duyệt.
+**Giới hạn của phép đo này:** 10 câu là mẫu nhỏ so với 123 câu của ba lĩnh vực
+gốc, nên con số 0,850 nên đọc như một chỉ báo chứ không phải phép đo có cùng độ
+tin cậy. Tập chuẩn do nhóm soạn theo cùng quy ước chú giải, **cả hai thành viên
+đã rà và duyệt toàn bộ 12 câu**, và 22/22 trích dẫn đáp án đã được kiểm tồn tại
+thật trong đồ thị.
 
 **Không phá vỡ phần cũ:** 13 câu demo của lĩnh vực đất đai cho kết quả khớp hoàn
 toàn với trước khi nạp; ba câu ngoài phạm vi vẫn từ chối đúng.

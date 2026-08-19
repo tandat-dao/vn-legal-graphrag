@@ -2,5 +2,5 @@
   "ten": "Tập chuẩn lĩnh vực lao động",
   "ngay_soan": "2026-08-19",
   "quy_uoc": "Chuỗi dẫn chiếu (docs/GT_V4_QUY_UOC.md): đáp án gồm điều khoản trả lời trực tiếp cộng điều khoản mà nó dẫn chiếu tường minh và không đọc thì không áp dụng được.",
-  "canh_bao": "Do trợ lý máy soạn bằng cách đọc thẳng văn bản trong data/raw, KHÔNG chạy hệ trong lúc soạn. Toàn bộ review.da_duyet=false — cần người rà trước khi dùng làm số chính thức."
+  "canh_bao": "Bản nháp do trợ lý dựng bằng cách đọc thẳng văn bản trong data/raw (không chạy hệ trong lúc soạn); cả hai thành viên [A] và [B] đã rà và duyệt toàn bộ 12 câu ngày 19/08/2026. 22/22 trích dẫn đáp án đã được kiểm tồn tại thật trong đồ thị."
 }

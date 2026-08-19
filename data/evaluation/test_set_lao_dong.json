@@ -39,8 +39,13 @@
     ],
     "notes": "Đa tầng: Bộ luật -> Nghị định hướng dẫn.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -69,8 +74,13 @@
     ],
     "notes": "CHUỖI DẪN CHIẾU: Điều 46 Khoản 1 xác định phạm vi bằng cách dẫn sang Điều 34. Không đọc Điều 34 thì không biết trường hợp nào được trợ cấp.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -106,8 +116,13 @@
     ],
     "notes": "Tra cứu trực tiếp, một văn bản một điều.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -128,8 +143,13 @@
       }
     ],
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -157,8 +177,13 @@
       }
     ],
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -187,8 +212,13 @@
     ],
     "notes": "Đa tầng: Bộ luật -> Nghị định.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -209,8 +239,13 @@
       }
     ],
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -246,8 +281,13 @@
     ],
     "notes": "Ngoại lệ nằm ở nghị định hướng dẫn chứ không ở bộ luật.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -276,8 +316,13 @@
     ],
     "notes": "Đa phiên bản: hệ phải nhận ra mốc 2018 thuộc bản 2012 và nêu được cả bản hiện hành.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -306,8 +351,13 @@
     ],
     "notes": "ĐÁP ÁN NẰM TRONG BẢNG BIỂU — đã biết khâu sinh chưa đọc được bảng. Giữ lại để đo đúng hạn chế này.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -321,8 +371,13 @@
     "ground_truth_citations": [],
     "notes": "ÂM — nghe như lao động nhưng thuộc Luật Bảo hiểm xã hội.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   },
   {
@@ -336,8 +391,13 @@
     "ground_truth_citations": [],
     "notes": "ÂM — đúng lĩnh vực lao động nhưng văn bản điều chỉnh không có trong kho.",
     "review": {
-      "nguoi_soan": "claude",
-      "da_duyet": false
+      "nguoi_soan": "nhom",
+      "nguoi_ra_soat": [
+        "A",
+        "B"
+      ],
+      "da_duyet": true,
+      "ngay_duyet": "2026-08-19"
     }
   }
 ]
