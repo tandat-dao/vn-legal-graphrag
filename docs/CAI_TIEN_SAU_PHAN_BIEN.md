@@ -356,12 +356,12 @@ hoạch phát triển đô thị) với mức 250 m² của quy định mới (�
 thôn). Lưu ý đó **đúng và hữu ích**, và bản sau bỏ mất. Vậy phép đổi ở đây là
 được khối cảnh báo tất định, mất một lưu ý phân biệt — không phải thắng sạch.
 
-**Một hạn chế nữa của câu này.** Bản sau viết *"sắp có hiệu lực"* cho mốc
-30/09/2024 vốn đã qua. Lời nhắc không cấp ngày hiện tại cho mô hình sinh, nên nó
-suy ra thì tương lai từ tri thức huấn luyện. Khối cảnh báo phía trên — sinh bằng
-luật tất định từ đồ thị — ghi đúng *"hết hiệu lực từ 30/09/2024"*. Chênh lệch
-giữa hai khối nhìn thấy được trên màn hình, nên chủ động nói ra: **đây chính là
-lý do cảnh báo không để mô hình tự phát biểu.**
+**Một lỗi của câu này đã sửa ngày 19/08.** Trước đó bản sau viết *"sắp có hiệu
+lực"* cho mốc 30/09/2024 vốn đã qua gần hai năm, mâu thuẫn ngay với khối cảnh báo
+phía trên ghi *"hết hiệu lực từ 30/09/2024"*. Nguyên nhân: lời nhắc nhắc tới
+*"thời điểm câu hỏi"* ở nhiều chỗ nhưng **không chỗ nào nói thời điểm đó là khi
+nào**, nên mô hình phải suy ngày hiện tại từ tri thức huấn luyện. Đã cấp ngày
+tường minh cho lời nhắc — xem *"Cấp ngày hiện tại cho lời nhắc"* bên dưới.
 
 **Ví dụ dự phòng (kịch bản đối chiếu) — câu A3.** *"Hạn mức giao đất ở cho cá nhân do cơ quan nào quy
 định, và con số cụ thể hiện nay tại TP.HCM…"* Bản trước dẫn **Luật Đất đai 2013
@@ -440,6 +440,43 @@ không do đợt cải tiến.
 *Hai câu bẫy ngoài phạm vi* (lệ phí trước bạ, thuế thu nhập cá nhân) — mất 70–76
 giây vì kéo về nhiều văn bản nên cross-encoder chạy nhiều lượt. Kết quả vẫn đúng
 là từ chối trả lời; nếu dùng thì nói trước là sẽ lâu.
+
+### Cấp ngày hiện tại cho lời nhắc
+
+Lời nhắc của khâu sinh nhắc tới *"thời điểm câu hỏi"* ở bốn chỗ nhưng không định
+nghĩa nó, nên mô hình suy ngày hiện tại từ tri thức huấn luyện và gọi mốc đã qua
+là *"sắp có hiệu lực"*. Đã bổ sung một khối nêu rõ hôm nay là ngày nào và chiều
+so sánh: mốc trước ngày đó là *đã* có / *đã* hết hiệu lực, chỉ mốc sau mới được
+viết *sắp*.
+
+Đo trên 15 câu demo, sinh lại toàn bộ:
+
+| | không cấp ngày | có cấp ngày |
+|---|---|---|
+| số lỗi thì | 6 (ở 4 câu) | **0** |
+| F1 Khoản, 14 câu có đáp án chuẩn | 0,576 | 0,568 |
+| ba câu trình bày | — | **trích dẫn không đổi một cái nào** |
+
+Lỗi thì hết sạch; F1 phẳng trong dao động của mẫu 14 câu. Một câu tụt 0,286 →
+0,000 (hồ sơ dở dang): mô hình vẫn nêu *Điều 138 Luật Đất đai 2024* trong câu văn
+nhưng không đóng vào thẻ trích dẫn nên thước đo không đếm — lập luận đúng hơn
+trước, chỉ mất phần máy đọc. Câu đó không nằm trong ba câu trình bày.
+
+**Hai điều kiện thiết kế, cả hai đều bắt buộc:**
+
+*Mặc định TẮT.* Không truyền ngày thì lời nhắc **giống hệt từng ký tự** bản đã
+dùng để đo — đã đối chiếu bằng cách nạp song song bản mã trước và sau khi sửa rồi
+băm cả hai lời nhắc, cùng mã băm ở cả hai chế độ trả lời. Khóa bộ nhớ đệm băm
+trên toàn bộ lời nhắc, nên nếu bật mặc định thì mọi kết quả đã công bố trượt cache
+và không tái lập được. Bốn kiểm thử khoá điều kiện này.
+
+*Ngày ghi cứng, không lấy ngày hệ thống.* Ngày nằm trong lời nhắc nên nằm trong
+khóa cache: lấy `date` thì hâm cache hôm nay, hôm sau demo là trượt sạch và phải
+gọi mô hình trực tiếp. Giá trị đặt một chỗ duy nhất trong `scripts/bao-ve.sh`, và
+`precache_demo` đọc **cùng biến môi trường** nên hai bên không thể lệch nhau.
+
+Đặt cho **cả hai cổng**: đây là sửa lỗi ở khâu sinh, không phải một trong ba cơ
+chế đang đối chiếu. Chỉ đặt một cổng là thêm biến khác biệt thứ tư vào phép so.
 
 **Một lỗi tính tất định đã sửa ngày 19/08.** Truy vấn duyệt đồ thị ở Giai đoạn 2
 không có `ORDER BY`, nên Neo4j trả cùng tập văn bản với thứ tự khác nhau giữa hai

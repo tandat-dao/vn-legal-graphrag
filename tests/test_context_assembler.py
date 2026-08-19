@@ -10,6 +10,7 @@ from src.retrieval.context_assembler import (
     _estimate_tokens,
     _format_citation_label,
     assemble_context,
+    build_messages,
     build_prompt,
     fetch_texts,
 )
@@ -374,3 +375,46 @@ class TestGenerateAnswer:
         content = str(call_kwargs)
         assert "CÂU HỎI ĐẶC BIỆT" in content
         assert "CONTEXT ĐẶC BIỆT" in content
+
+
+# ---------------------------------------------------------------------------
+# Cấp ngày hiện tại cho lời nhắc
+#
+# Lời nhắc nhắc tới "thời điểm câu hỏi" ở nhiều chỗ nhưng không chỗ nào nói thời
+# điểm đó là khi nào, nên mô hình suy từ tri thức huấn luyện và viết "sắp có
+# hiệu lực" cho mốc đã qua. Tham số `ngay_hom_nay` cấp ngày để nó khỏi đoán.
+#
+# Mặc định TẮT là điều kiện bắt buộc: mọi mẻ đánh giá đã công bố được sinh bằng
+# lời nhắc không có khối này, và khóa bộ nhớ đệm băm trên toàn bộ lời nhắc — chèn
+# thêm một dòng là mọi kết quả cũ trượt cache và không tái lập được.
+# ---------------------------------------------------------------------------
+
+def test_mac_dinh_khong_chen_ngay():
+    """Không truyền ngày → lời nhắc không được đổi một ký tự nào."""
+    for mode in ("general", "irac"):
+        system, user = build_messages("câu hỏi thử", "ngữ cảnh thử", mode)
+        assert "THỜI ĐIỂM HIỆN TẠI" not in system
+        assert "THỜI ĐIỂM HIỆN TẠI" not in user
+
+
+def test_chen_ngay_khi_duoc_truyen():
+    system, _ = build_messages("câu hỏi thử", "ngữ cảnh thử", "general",
+                               ngay_hom_nay="19/08/2026")
+    assert "THỜI ĐIỂM HIỆN TẠI: hôm nay là ngày 19/08/2026." in system
+    # Phải nói rõ chiều so sánh, nếu không mô hình vẫn có thể viết sai thì
+    assert "sắp có hiệu lực" in system
+
+
+def test_ngay_rong_coi_nhu_khong_truyen():
+    """Chuỗi rỗng từ biến môi trường chưa đặt không được sinh khối méo."""
+    a, _ = build_messages("q", "c", "general")
+    for gia_tri in ("", None):
+        b, _ = build_messages("q", "c", "general", ngay_hom_nay=gia_tri)
+        assert a == b
+
+
+def test_ngay_lam_doi_loi_nhac_nen_doi_khoa_cache():
+    """Bật ngày PHẢI đổi lời nhắc — nếu không, câu trả lời cũ sẽ bị dùng lại."""
+    a, _ = build_messages("q", "c", "general")
+    b, _ = build_messages("q", "c", "general", ngay_hom_nay="19/08/2026")
+    assert a != b

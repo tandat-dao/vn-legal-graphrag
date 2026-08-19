@@ -1,0 +1,165 @@
+{
+ "mo_ta": "Tác động của việc cấp ngày hiện tại cho lời nhắc khâu sinh. Cấu hình: sau cải tiến (dẫn chiếu + cross-encoder + pool 100/tắt độ hiếm + chuyển tiếp), mô hình sinh gemini-2.5-pro, 15 câu demo, sinh lại toàn bộ.",
+ "ngay_do": "2026-08-19",
+ "ngay_cap_cho_loi_nhac": "19/08/2026",
+ "tong": {
+  "loi_thi_tat": 6,
+  "loi_thi_bat": 0,
+  "f1_khoan_tat": 0.5764,
+  "f1_khoan_bat": 0.5679,
+  "so_cau_cham_duoc": 14,
+  "so_cau_doi_trich_dan": 6
+ },
+ "theo_cau": [
+  {
+   "i": 1,
+   "id": "V001",
+   "cau_hoi": "Gia đình tôi sống tại một xã thuộc huyện Củ Chi, TP.HCM. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?",
+   "loi_thi_tat": 1,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.6666666666666666,
+   "f1_khoan_bat": 0.6666666666666666,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 2,
+   "id": "V002",
+   "cau_hoi": "Gia đình tôi sống tại xã Phú Lý, tỉnh Đồng Nai. Hạn mức giao đất ở cho cá nhân ở khu vực này là bao nhiêu?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.5,
+   "f1_khoan_bat": 0.6666666666666666,
+   "trich_dan_doi": true
+  },
+  {
+   "i": 3,
+   "id": "V033",
+   "cau_hoi": "Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.7499999999999999,
+   "f1_khoan_bat": 0.7499999999999999,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 4,
+   "id": "V140",
+   "cau_hoi": "Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250? Người ta đổi quy định hồi nào vậy?",
+   "loi_thi_tat": 3,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.8,
+   "f1_khoan_bat": 0.8,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 5,
+   "id": "V044",
+   "cau_hoi": "Hạn mức đất ở tại TP.HCM theo quy định cũ (Quyết định 18/2016) và quy định hiện hành (Quyết định 69/2024) khác nhau như thế nào?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.3333333333333333,
+   "f1_khoan_bat": 0.3333333333333333,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 6,
+   "id": "V051",
+   "cau_hoi": "Gia đình tôi nộp hồ sơ xin cấp Giấy chứng nhận cho đất không có giấy tờ từ cuối năm 2024 nhưng đến nay vẫn chưa được giải quyết. Trường hợp của tôi được xét theo quy định nào?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.28571428571428575,
+   "f1_khoan_bat": 0.0,
+   "trich_dan_doi": true
+  },
+  {
+   "i": 7,
+   "id": "V069",
+   "cau_hoi": "Khi được phép chuyển mục đích sử dụng đất nông nghiệp sang đất ở, tôi phải nộp tiền sử dụng đất tính như thế nào?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.3333333333333333,
+   "f1_khoan_bat": 0.4,
+   "trich_dan_doi": true
+  },
+  {
+   "i": 8,
+   "id": "V131",
+   "cau_hoi": "Doanh nghiệp gia đình tôi muốn chuyển 3 hecta đất chuyên trồng lúa ở Đồng Nai sang đất cơ sở sản xuất: cần những điều kiện gì, phải nộp những khoản tiền nào, và có yêu cầu gì về tầng đất mặt?",
+   "loi_thi_tat": 1,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.4,
+   "f1_khoan_bat": 0.16666666666666666,
+   "trich_dan_doi": true
+  },
+  {
+   "i": 9,
+   "id": "V133",
+   "cau_hoi": "Nhà tui ở xã Phú Lý trên Đồng Nai, nghe nói nhà nước chỉ cho mỗi người chừng đó đất thổ cư thôi — vậy tối đa tui được giao bao nhiêu mét vuông đất ở?",
+   "loi_thi_tat": 1,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.5,
+   "f1_khoan_bat": 0.5,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 10,
+   "id": "V003",
+   "cau_hoi": "Hạn mức giao đất ở cho cá nhân tối đa là bao nhiêu mét vuông?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.5,
+   "f1_khoan_bat": 0.6666666666666665,
+   "trich_dan_doi": true
+  },
+  {
+   "i": 11,
+   "id": "V105",
+   "cau_hoi": "Tôi muốn xin giấy phép xây dựng nhà ở trên mảnh đất của mình thì thủ tục như thế nào?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 1.0,
+   "f1_khoan_bat": 1.0,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 12,
+   "id": "V114",
+   "cau_hoi": "Khi đăng ký sang tên nhà đất, tôi phải nộp lệ phí trước bạ bao nhiêu phần trăm?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 1.0,
+   "f1_khoan_bat": 1.0,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 13,
+   "id": "V117",
+   "cau_hoi": "Bán mảnh đất được giá, tôi phải đóng thuế thu nhập cá nhân bao nhiêu phần trăm trên giá bán?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 1.0,
+   "f1_khoan_bat": 1.0,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 14,
+   "id": null,
+   "cau_hoi": "Đăng ký lại khai sinh mà không còn bản sao giấy khai sinh cũ thì cần giấy tờ gì?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": null,
+   "f1_khoan_bat": null,
+   "trich_dan_doi": false
+  },
+  {
+   "i": 15,
+   "id": "W007",
+   "cau_hoi": "Tôi là bà nội, đương nhiên là người giám hộ của cháu. Thủ tục đăng ký giám hộ đương nhiên làm như thế nào?",
+   "loi_thi_tat": 0,
+   "loi_thi_bat": 0,
+   "f1_khoan_tat": 0.0,
+   "f1_khoan_bat": 0.0,
+   "trich_dan_doi": true
+  }
+ ]
+}

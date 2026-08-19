@@ -202,6 +202,7 @@ def generate_answer(
     llm_client: anthropic.Anthropic,
     cache_dir: Path | None = None,
     mode: str = "general",
+    ngay_hom_nay: str | None = None,
 ) -> dict:
     """Gửi prompt vào Claude Sonnet 4.6, trả về answer + citations.
 
@@ -211,6 +212,8 @@ def generate_answer(
         llm_client: Anthropic client đã khởi tạo.
         cache_dir: Nếu set, lưu/đọc answer theo hash(prompt). Repeat call cùng
                    prompt → cache hit, không gọi API ($0 cost). Dùng cho eval/dev.
+        ngay_hom_nay: "DD/MM/YYYY" — cấp ngày hiện tại cho lời nhắc. None (mặc
+                   định) giữ nguyên lời nhắc đã dùng để đo. Xem build_messages().
 
     Returns:
         Dict với keys:
@@ -222,7 +225,7 @@ def generate_answer(
     if not context.strip():
         logger.warning("generate_answer: context rỗng — LLM sẽ trả lời không có nguồn")
 
-    system_prompt, user_prompt = build_messages(question, context, mode)
+    system_prompt, user_prompt = build_messages(question, context, mode, ngay_hom_nay)
     # Cache key hash trên cả system + user; system đã khác nhau theo mode → cache
     # tự phân biệt general vs irac, không cần thêm mode vào key.
     cache_key = _prompt_hash(system_prompt + "\n\n" + user_prompt, MODEL)

@@ -122,6 +122,26 @@ def main() -> int:
     else:
         canh_bao.append("chưa có v2_chot_kho36.json — bỏ qua kiểm thoái lui")
 
+    # ---- Lớp 1c: số của phép đo cấp ngày cho lời nhắc ----
+    nl = Path("data/evaluation/ngay_loi_nhac.json")
+    if nl.exists():
+        t = json.load(open(nl, encoding="utf-8"))["tong"]
+        # Số lỗi thì viết dạng chữ số trần trong tài liệu, F1 viết dạng dấu phẩy.
+        for ten, giatri in (("lỗi thì (tắt)", str(t["loi_thi_tat"])),
+                            ("F1 tắt ngày", _so_vn(t["f1_khoan_tat"])),
+                            ("F1 bật ngày", _so_vn(t["f1_khoan_bat"]))):
+            if giatri not in doc:
+                loi.append("thiếu số %s = %s" % (ten, giatri))
+            else:
+                print("   ✓ %-18s %s" % (ten, giatri))
+        if t["loi_thi_bat"] != 0:
+            loi.append("tài liệu khẳng định lỗi thì về 0 nhưng dữ liệu đo %d"
+                       % t["loi_thi_bat"])
+        else:
+            print("   ✓ %-18s %s" % ("lỗi thì (bật)", "0"))
+    else:
+        canh_bao.append("chưa có ngay_loi_nhac.json — bỏ qua kiểm phép đo cấp ngày")
+
     # ---- Lớp 2: số trích từ báo cáo ----
     print("\n── Lớp 2: tài liệu vs baocao.pdf")
     bc = _text_bao_cao()

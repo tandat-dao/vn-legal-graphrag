@@ -94,6 +94,11 @@ def main() -> None:
     parser.add_argument("--chuyen-tiep", action="store_true",
                         default=(os.getenv("UI_CHUYEN_TIEP") or "").lower() in ("1", "true", "yes"),
                         help="PHẢI khớp UI_CHUYEN_TIEP lúc demo.")
+    # Ngày nằm TRONG lời nhắc nên nằm trong khóa cache. Đọc cùng biến môi trường
+    # với giao diện để hai bên không thể lệch nhau.
+    parser.add_argument("--ngay-hom-nay", default=os.getenv("UI_NGAY_HOM_NAY") or None,
+                        help="Ngày dạng DD/MM/YYYY cấp cho lời nhắc. "
+                             "PHẢI khớp UI_NGAY_HOM_NAY lúc demo.")
     args = parser.parse_args()
 
     questions = list(args.question)
@@ -116,7 +121,8 @@ def main() -> None:
     print(f"🔁 Pre-cache {len(questions)} câu → {cache_dir}")
     print(f"   jurisdiction={args.jurisdiction} mode={args.mode} "
           f"llm_mode={args.llm_mode} refers={args.refers_mode} "
-          f"rerank={args.rerank_mode} chuyen_tiep={args.chuyen_tiep}")
+          f"rerank={args.rerank_mode} chuyen_tiep={args.chuyen_tiep} "
+          f"ngay={args.ngay_hom_nay}")
     print(f"   pool={os.getenv('SF_DENSE_POOL_MIN', '50')} "
           f"rarity_alpha={os.getenv('SF_RARITY_ALPHA', '1.5')}")
     print("   ⚠️  Lúc demo PHẢI đặt đúng LLM_MODE và UI_REFERS_MODE như trên, "
@@ -135,6 +141,7 @@ def main() -> None:
                 **({"refers_mode": args.refers_mode} if args.refers_mode else {}),
                 **({"rerank_mode": args.rerank_mode} if args.rerank_mode else {}),
                 **({"chuyen_tiep": True} if args.chuyen_tiep else {}),
+                **({"ngay_hom_nay": args.ngay_hom_nay} if args.ngay_hom_nay else {}),
             )
             dt = time.perf_counter() - t0
             hit = result.get("cache_hit")

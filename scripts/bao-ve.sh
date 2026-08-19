@@ -14,6 +14,22 @@
 # phát hiện được. Gõ tay năm biến trước hội đồng là chỗ dễ sai nhất.
 
 set -uo pipefail
+
+# Ngày cấp cho lời nhắc. Lời nhắc nhắc tới "thời điểm câu hỏi" ở nhiều chỗ nhưng
+# không chỗ nào nói đó là ngày nào, nên mô hình suy từ tri thức huấn luyện và
+# viết "sắp có hiệu lực" cho mốc đã qua gần hai năm.
+#
+# CỐ Ý ghi cứng chứ KHÔNG lấy $(date): ngày nằm trong lời nhắc nên nó nằm trong
+# khóa bộ nhớ đệm. Lấy ngày hệ thống thì hâm cache hôm nay, hôm sau demo là
+# trượt sạch — phải gọi mô hình trực tiếp, cần mạng và hạn ngạch.
+# Đổi ngày ở đây thì PHẢI hâm lại cache (xem cuối tệp này).
+NGAY_LOI_NHAC="19/08/2026"
+
+# Đặt cho CẢ HAI cổng: đây là sửa lỗi ở khâu sinh, không phải một trong ba cơ
+# chế đang đối chiếu. Chỉ đặt một cổng là thêm biến khác biệt thứ tư, làm bẩn
+# phép so trước/sau.
+export UI_NGAY_HOM_NAY="$NGAY_LOI_NHAC"
+
 GOC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$GOC" || exit 1
 
@@ -105,6 +121,7 @@ if [ "$SO_VB" -lt 30 ]; then
   exit 1
 fi
 xanh "✓ Dữ liệu đủ — $SO_VB văn bản · $SO_DC quan hệ dẫn chiếu"
+mo   "  ngày cấp cho lời nhắc: $NGAY_LOI_NHAC"
 [ "$SO_DC" -lt 1 ] && vang "  ⚠ Chưa có quan hệ dẫn chiếu — cổng 8001 sẽ không khác cổng 8000."
 
 # ── 3. Dọn cổng cũ ──────────────────────────────────────────────────────────
@@ -115,12 +132,14 @@ LOG0="$(mktemp -t demo8000)"; LOG1="$(mktemp -t demo8001)"
 
 # TRƯỚC cải tiến — tắt hết, dùng đúng tham số mặc định của báo cáo
 env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= \
+    UI_NGAY_HOM_NAY="$NGAY_LOI_NHAC" \
     SF_DENSE_POOL_MIN=50 SF_RARITY_ALPHA=1.5 DEMO_MODE=live \
     "$PY" -m uvicorn ui.server:app --port 8000 >"$LOG0" 2>&1 &
 PID0=$!
 
 # SAU cải tiến — ĐỦ NĂM biến. Thiếu một cái là demo sai.
 env UI_REFERS_MODE=khoan UI_RERANK_MODE=trong-norm UI_CHUYEN_TIEP=1 \
+    UI_NGAY_HOM_NAY="$NGAY_LOI_NHAC" \
     SF_DENSE_POOL_MIN=100 SF_RARITY_ALPHA=0 DEMO_MODE=live \
     "$PY" -m uvicorn ui.server:app --port 8001 >"$LOG1" 2>&1 &
 PID1=$!

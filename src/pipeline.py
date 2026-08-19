@@ -254,11 +254,14 @@ def run_pipeline(
     budget_mode: str | None = None,
     chuyen_tiep: bool = False,
     rerank_mode: str | None = None,
+    ngay_hom_nay: str | None = None,
 ) -> PipelineResult:
     """Chạy toàn bộ pipeline RAG cho một câu hỏi pháp lý tiếng Việt.
 
     Args:
         question: Câu hỏi tiếng Việt của người dùng.
+        ngay_hom_nay: "DD/MM/YYYY" cấp cho lời nhắc để mô hình khỏi đoán
+            ngày hiện tại. None (mặc định) giữ nguyên lời nhắc đã dùng để đo.
         neo4j_driver: Driver Neo4j (tự khởi tạo nếu None).
         qdrant_client: Qdrant client (tự khởi tạo nếu None).
         anthropic_client: Anthropic client (tự khởi tạo nếu None).
@@ -369,7 +372,8 @@ def run_pipeline(
         # --- TASK-13b: Answer Generation ---
         logger.info("run_pipeline: generate_answer")
         result = generate_answer(
-            question, context, anthropic_client, cache_dir=llm_cache_dir, mode=resolved_mode
+            question, context, anthropic_client, cache_dir=llm_cache_dir,
+            mode=resolved_mode, ngay_hom_nay=ngay_hom_nay,
         )
 
         # --- Verifier agent (tầng multi-agent, tùy chọn) ---

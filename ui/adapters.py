@@ -400,6 +400,12 @@ class LiveAdapter(BaseAdapter):
         self.rerank_mode = (os.getenv("UI_RERANK_MODE") or "").strip() or None
         # Phát hiện quy định đã thay đổi + nạp điều khoản chuyển tiếp.
         self.chuyen_tiep = (os.getenv("UI_CHUYEN_TIEP") or "").strip().lower() in ("1", "true", "yes")
+        # Ngày hiện tại cấp cho lời nhắc, dạng "DD/MM/YYYY". Không cấp thì mô
+        # hình suy ngày từ tri thức huấn luyện và viết "sắp có hiệu lực" cho mốc
+        # đã qua. Dùng GIÁ TRỊ CỐ ĐỊNH chứ không phải date.today(): ngày nằm
+        # trong lời nhắc nên nó nằm trong khóa cache — lấy ngày hệ thống thì
+        # hâm cache hôm nay, hôm sau demo là trượt sạch.
+        self.ngay_hom_nay = (os.getenv("UI_NGAY_HOM_NAY") or "").strip() or None
 
         # `clients` chỉ để test tiêm client giả — chạy thật luôn đi qua
         # `_build_clients` để đúng đường code của `src/`.
@@ -455,6 +461,8 @@ class LiveAdapter(BaseAdapter):
             kw["rerank_mode"] = self.rerank_mode
         if self.chuyen_tiep:
             kw["chuyen_tiep"] = True
+        if self.ngay_hom_nay:
+            kw["ngay_hom_nay"] = self.ngay_hom_nay
         return kw
 
     def _du_lieu_cau_hoi(self, question: str, params: dict) -> dict:

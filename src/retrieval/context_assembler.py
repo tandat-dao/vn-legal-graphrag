@@ -303,7 +303,8 @@ _MODE_BLOCKS = {
 }
 
 
-def build_messages(question: str, context: str, mode: str = "general") -> tuple[str, str]:
+def build_messages(question: str, context: str, mode: str = "general",
+                   ngay_hom_nay: str | None = None) -> tuple[str, str]:
     """Tạo (system_prompt, user_prompt) để gọi LLM với Anthropic prompt caching.
 
     Tách static rules (system) khỏi dynamic context + question (user) giúp:
@@ -315,6 +316,12 @@ def build_messages(question: str, context: str, mode: str = "general") -> tuple[
         context: Context string từ assemble_context().
         mode: "general" (gọn, mặc định) hoặc "irac" (tư vấn chi tiết theo IRAC).
               Giá trị ngoài VALID_RESPONSE_MODES fallback về "general".
+        ngay_hom_nay: ngày hiện tại dạng "DD/MM/YYYY". Lời nhắc nhắc tới "thời
+              điểm câu hỏi" ở nhiều chỗ nhưng KHÔNG chỗ nào nói thời điểm đó là
+              khi nào, nên mô hình phải suy ra từ tri thức huấn luyện và viết
+              "sắp có hiệu lực" cho mốc đã qua. Truyền ngày vào để nó khỏi đoán.
+              None (mặc định) = KHÔNG chèn — giữ nguyên lời nhắc đã dùng để đo,
+              nên mọi mẻ đánh giá cũ tái lập được từng byte.
 
     Returns:
         (system_prompt, user_prompt): system chứa CORE rules + block theo mode;
@@ -337,8 +344,15 @@ Câu trả lời của bạn PHẢI gồm đúng 3 section sau, theo thứ tự,
 - "Ngoài phạm vi corpus — [lý do ngắn]" — nếu áp dụng PHẠM VI CORPUS guard ở trên]
 """ if INCLUDE_SCHEMA_B else ""
 
-    system_prompt = f"""Bạn là trợ lý pháp lý chuyên về pháp luật Việt Nam. Chỉ sử dụng thông tin trong CONTEXT (sẽ cung cấp trong tin nhắn người dùng) để trả lời câu hỏi. Không được suy đoán hay bịa đặt thông tin ngoài context.
+    khoi_ngay = "" if not ngay_hom_nay else f"""
+THỜI ĐIỂM HIỆN TẠI: hôm nay là ngày {ngay_hom_nay}.
+- Mọi chỗ bên dưới nói "thời điểm câu hỏi" đều là ngày này, TRỪ KHI câu hỏi nêu rõ một mốc khác.
+- So ngày hiệu lực trong CONTEXT với ngày này để chọn thì cho đúng: mốc TRƯỚC ngày này là "đã có hiệu lực" / "đã hết hiệu lực"; chỉ mốc SAU ngày này mới được viết "sắp có hiệu lực" hay "sẽ thay thế".
+- TUYỆT ĐỐI không suy đoán ngày hiện tại từ tri thức có sẵn của bạn.
+"""
 
+    system_prompt = f"""Bạn là trợ lý pháp lý chuyên về pháp luật Việt Nam. Chỉ sử dụng thông tin trong CONTEXT (sẽ cung cấp trong tin nhắn người dùng) để trả lời câu hỏi. Không được suy đoán hay bịa đặt thông tin ngoài context.
+{khoi_ngay}
 NGUYÊN TẮC TRẢ LỜI ĐÚNG TRỌNG TÂM (ƯU TIÊN CAO NHẤT — ĐỌC TRƯỚC MỌI QUY TẮC KHÁC):
 - Trả lời ĐÚNG điều câu hỏi hỏi, không hơn. Câu mở đầu nên là đáp án trực tiếp cho câu hỏi.
 - Các quy tắc "BẮT BUỘC..." bên dưới CHỈ áp dụng khi nội dung đó LIÊN QUAN TRỰC TIẾP đến câu hỏi — KHÔNG phải mệnh lệnh nhồi nhét mọi thông tin có trong CONTEXT.
