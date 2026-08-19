@@ -155,17 +155,45 @@ for p in $(pgrep -f "uvicorn ui.server:app"); do
 done
 [ "$KT_SAI" = 1 ] && { do_ "Dừng lại — cấu hình hai cổng không đúng."; exit 1; }
 
+# ── 6. Hâm nóng: chạy trước một câu ở MỖI cổng ──────────────────────────────
+# Mô hình nhúng và cross-encoder chỉ được nạp ở lần hỏi ĐẦU TIÊN của tiến
+# trình (~50 giây cho cross-encoder). Không hâm ở đây thì câu hỏi đầu tiên
+# TRƯỚC HỘI ĐỒNG chính là câu chậm nhất buổi. Câu dùng để hâm đã có sẵn trong
+# bộ nhớ đệm nên không gọi mô hình sinh, không tốn tiền, không cần mạng.
+ham() {   # $1 = cổng
+  curl -sN -m 300 -X POST "http://127.0.0.1:$1/api/ask" \
+       -H 'Content-Type: application/json' \
+       --data-binary '{"question":"Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?"}' \
+       2>/dev/null | grep -c '"step": *"done"'
+}
+printf "  hâm nóng cổng 8001 (nạp cross-encoder, 60–120 giây)"
+H1="$(ham 8001)"; printf "\n"
+[ "${H1:-0}" -ge 1 ] && xanh "✓ Cổng 8001 đã hâm — câu đầu tiên sẽ chạy với tốc độ ổn định" \
+                     || vang "  ⚠ Hâm cổng 8001 không xong; câu hỏi đầu tiên sẽ chậm hơn bình thường."
+printf "  hâm nóng cổng 8000"
+H0="$(ham 8000)"; printf "\n"
+[ "${H0:-0}" -ge 1 ] && xanh "✓ Cổng 8000 đã hâm" \
+                     || vang "  ⚠ Hâm cổng 8000 không xong."
+
 echo
 xanh "════════════════════════════════════════════════════════════"
 xanh "  SẴN SÀNG"
 xanh "════════════════════════════════════════════════════════════"
-echo "    http://127.0.0.1:8000   ←  TRƯỚC cải tiến"
-echo "    http://127.0.0.1:8001   ←  SAU cải tiến (đủ ba cơ chế)"
+echo "    http://127.0.0.1:8001   ←  SAU cải tiến — CỔNG TRÌNH BÀY CHÍNH"
+echo "    http://127.0.0.1:8000   ←  TRƯỚC cải tiến (chỉ để đối chiếu khi cần)"
 echo
-mo   "    Câu đối chiếu nên dùng: A4 — 'Hồi trước nghe nói ở TP.HCM một hộ được"
-mo   "    tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250?…'"
-mo   "    8001 hiện thêm KHỐI CẢNH BÁO quy định đã thay đổi mà 8000 không có"
+mo   "    Ba câu nên trình bày, theo thứ tự:"
+mo   "     1. Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số"
+mo   "        cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?"
+mo   "     2. Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét vuông đất ở,"
+mo   "        sao giờ nghe nói chỉ còn 250? Người ta đổi quy định hồi nào vậy?"
+mo   "     3. Đăng ký lại khai sinh mà không còn bản sao giấy khai sinh cũ thì"
+mo   "        cần giấy tờ gì?"
 echo
+mo   "    Câu 2 là câu đối chiếu rõ nhất: 8001 hiện thêm KHỐI CẢNH BÁO"
+mo   "    'quy định đã thay đổi' mà 8000 không có."
+echo
+mo   "    Mỗi câu trên cổng 8001 mất 13–22 giây (cross-encoder chạy trên CPU)."
 mo   "    Dừng: Ctrl-C"
 echo
 
