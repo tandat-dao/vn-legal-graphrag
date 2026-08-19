@@ -1,145 +1,343 @@
-{
-  "ten": "Tập chuẩn lĩnh vực lao động",
-  "ngay_soan": "2026-08-19",
-  "quy_uoc": "Chuỗi dẫn chiếu (docs/GT_V4_QUY_UOC.md): đáp án gồm điều khoản trả lời trực tiếp cộng điều khoản mà nó dẫn chiếu tường minh và không đọc thì không áp dụng được.",
-  "canh_bao": "Do trợ lý máy soạn bằng cách đọc thẳng văn bản trong data/raw, KHÔNG chạy hệ trong lúc soạn. Toàn bộ review.da_duyet=false — cần người rà trước khi dùng làm số chính thức.",
-  "questions": [
-    {
-      "id": "LD01",
-      "question": "Tôi làm ở công ty được 6 năm rồi xin nghỉ việc. Trợ cấp thôi việc của tôi được tính như thế nào?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap3", "difficulty": "medium",
-      "ground_truth_answer": "Mỗi năm làm việc được trợ cấp một nửa tháng tiền lương (Điều 46 Khoản 1). Thời gian tính là tổng thời gian làm việc thực tế trừ thời gian đã tham gia bảo hiểm thất nghiệp (Khoản 2). Tiền lương tính là bình quân 06 tháng liền kề trước khi thôi việc (Khoản 3). Nghị định 145/2020 Điều 8 quy định chi tiết.",
-      "ground_truth_citations": [
-        {"dieu": "46", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "46", "khoan": "2", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "46", "khoan": "3", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "8", "khoan": "3", "diem": null, "van_ban": "nghi-dinh-145-2020-nd-cp", "loai": "dieu"}
-      ],
-      "notes": "Đa tầng: Bộ luật -> Nghị định hướng dẫn.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD02",
-      "question": "Trường hợp nào thì người sử dụng lao động phải trả trợ cấp thôi việc?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap3", "difficulty": "hard",
-      "ground_truth_answer": "Khi hợp đồng chấm dứt theo các khoản 1, 2, 3, 4, 6, 7, 9 và 10 Điều 34, với người đã làm việc thường xuyên từ đủ 12 tháng trở lên; trừ trường hợp đủ điều kiện hưởng lương hưu và trường hợp tại điểm e khoản 1 Điều 36.",
-      "ground_truth_citations": [
-        {"dieu": "46", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "34", "khoan": null, "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "notes": "CHUỖI DẪN CHIẾU: Điều 46 Khoản 1 xác định phạm vi bằng cách dẫn sang Điều 34. Không đọc Điều 34 thì không biết trường hợp nào được trợ cấp.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD03",
-      "question": "Tôi muốn nghỉ việc thì phải báo trước cho công ty bao nhiêu ngày?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap1", "difficulty": "easy",
-      "ground_truth_answer": "Ít nhất 45 ngày với hợp đồng không xác định thời hạn; 30 ngày với hợp đồng xác định thời hạn từ 12 đến 36 tháng; 03 ngày làm việc với hợp đồng dưới 12 tháng.",
-      "ground_truth_citations": [
-        {"dieu": "35", "khoan": "1", "diem": "a", "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "35", "khoan": "1", "diem": "b", "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "35", "khoan": "1", "diem": "c", "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "notes": "Tra cứu trực tiếp, một văn bản một điều.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD04",
-      "question": "Có trường hợp nào tôi được nghỉ việc ngay mà không cần báo trước không?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap1", "difficulty": "medium",
-      "ground_truth_answer": "Có. Khoản 2 Điều 35 liệt kê các trường hợp được đơn phương chấm dứt hợp đồng không cần báo trước, ví dụ không được bố trí đúng công việc, địa điểm hoặc điều kiện làm việc đã thỏa thuận.",
-      "ground_truth_citations": [
-        {"dieu": "35", "khoan": "2", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD05",
-      "question": "Trợ cấp mất việc làm khác trợ cấp thôi việc như thế nào?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap1", "difficulty": "medium",
-      "ground_truth_answer": "Trợ cấp mất việc làm áp dụng khi mất việc theo khoản 11 Điều 34, mỗi năm làm việc trả 01 tháng tiền lương và ít nhất bằng 02 tháng tiền lương (Điều 47). Trợ cấp thôi việc áp dụng cho các trường hợp chấm dứt khác và chỉ nửa tháng tiền lương mỗi năm (Điều 46).",
-      "ground_truth_citations": [
-        {"dieu": "47", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "46", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD06",
-      "question": "Thời gian làm việc để tính trợ cấp mất việc làm được xác định ra sao?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap3", "difficulty": "medium",
-      "ground_truth_answer": "Tổng thời gian làm việc thực tế trừ đi thời gian đã tham gia bảo hiểm thất nghiệp và thời gian đã được chi trả trợ cấp thôi việc, trợ cấp mất việc làm (Điều 47 Khoản 2), chi tiết ở Nghị định 145/2020 Điều 8 Khoản 3.",
-      "ground_truth_citations": [
-        {"dieu": "47", "khoan": "2", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"},
-        {"dieu": "8", "khoan": "3", "diem": null, "van_ban": "nghi-dinh-145-2020-nd-cp", "loai": "dieu"}
-      ],
-      "notes": "Đa tầng: Bộ luật -> Nghị định.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD07",
-      "question": "Tiền lương dùng để tính trợ cấp thôi việc là lương tháng nào?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap1", "difficulty": "easy",
-      "ground_truth_answer": "Tiền lương bình quân của 06 tháng liền kề theo hợp đồng lao động trước khi người lao động thôi việc.",
-      "ground_truth_citations": [
-        {"dieu": "46", "khoan": "3", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD08",
-      "question": "Người sử dụng lao động không phải trả trợ cấp thôi việc trong trường hợp nào?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap3", "difficulty": "hard",
-      "ground_truth_answer": "Khi người lao động đủ điều kiện hưởng lương hưu, hoặc tự ý bỏ việc không có lý do chính đáng từ 05 ngày làm việc liên tục trở lên.",
-      "ground_truth_citations": [
-        {"dieu": "8", "khoan": "1", "diem": "a", "van_ban": "nghi-dinh-145-2020-nd-cp", "loai": "dieu"},
-        {"dieu": "8", "khoan": "1", "diem": "b", "van_ban": "nghi-dinh-145-2020-nd-cp", "loai": "dieu"},
-        {"dieu": "46", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "notes": "Ngoại lệ nằm ở nghị định hướng dẫn chứ không ở bộ luật.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD09",
-      "question": "Hồi trước tôi nghỉ việc năm 2018 thì trợ cấp thôi việc tính theo quy định nào, có khác bây giờ không?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap4", "difficulty": "hard",
-      "ground_truth_answer": "Năm 2018 áp dụng Bộ luật Lao động 2012 Điều 48 (có hiệu lực 01/5/2013 đến 01/01/2021). Quy định hiện hành là Bộ luật Lao động 2019 Điều 46. Mức trợ cấp đều là nửa tháng tiền lương mỗi năm, nhưng danh mục trường hợp được hưởng khác nhau: bản 2012 dẫn Điều 36, bản 2019 dẫn Điều 34.",
-      "ground_truth_citations": [
-        {"dieu": "48", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2012", "loai": "dieu"},
-        {"dieu": "46", "khoan": "1", "diem": null, "van_ban": "bo-luat-lao-dong-2019", "loai": "dieu"}
-      ],
-      "notes": "Đa phiên bản: hệ phải nhận ra mốc 2018 thuộc bản 2012 và nêu được cả bản hiện hành.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD10",
-      "question": "Công ty tôi đóng ở Đồng Nai thì mức lương tối thiểu áp dụng là bao nhiêu?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "gap2", "difficulty": "hard",
-      "ground_truth_answer": "Mức lương tối thiểu theo vùng quy định tại Điều 3 Nghị định 293/2025. Địa bàn thuộc vùng nào áp dụng mức của vùng đó; danh mục địa bàn từng vùng ở Phụ lục kèm theo (Điều 3 Khoản 2, Khoản 3 Điểm a).",
-      "ground_truth_citations": [
-        {"dieu": "3", "khoan": "1", "diem": null, "van_ban": "nghi-dinh-293-2025-nd-cp", "loai": "dieu"},
-        {"dieu": "3", "khoan": "3", "diem": "a", "van_ban": "nghi-dinh-293-2025-nd-cp", "loai": "dieu"}
-      ],
-      "notes": "ĐÁP ÁN NẰM TRONG BẢNG BIỂU — đã biết khâu sinh chưa đọc được bảng. Giữ lại để đo đúng hạn chế này.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD11",
-      "question": "Mức đóng bảo hiểm xã hội bắt buộc của người lao động là bao nhiêu phần trăm lương?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "negative", "difficulty": "medium",
-      "ground_truth_answer": "Ngoài phạm vi: thuộc pháp luật bảo hiểm xã hội, không có trong kho.",
-      "ground_truth_citations": [],
-      "notes": "ÂM — nghe như lao động nhưng thuộc Luật Bảo hiểm xã hội.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
-    },
-    {
-      "id": "LD12",
-      "question": "Tôi bị tai nạn lao động thì được hưởng chế độ gì?",
-      "theme": "lao-dong", "jurisdiction": "toan-quoc", "gap_type": "negative", "difficulty": "medium",
-      "ground_truth_answer": "Ngoài phạm vi: thuộc Luật An toàn, vệ sinh lao động, không có trong kho.",
-      "ground_truth_citations": [],
-      "notes": "ÂM — đúng lĩnh vực lao động nhưng văn bản điều chỉnh không có trong kho.",
-      "review": {"nguoi_soan": "claude", "da_duyet": false}
+[
+  {
+    "id": "LD01",
+    "question": "Tôi làm ở công ty được 6 năm rồi xin nghỉ việc. Trợ cấp thôi việc của tôi được tính như thế nào?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "medium",
+    "ground_truth_answer": "Mỗi năm làm việc được trợ cấp một nửa tháng tiền lương (Điều 46 Khoản 1). Thời gian tính là tổng thời gian làm việc thực tế trừ thời gian đã tham gia bảo hiểm thất nghiệp (Khoản 2). Tiền lương tính là bình quân 06 tháng liền kề trước khi thôi việc (Khoản 3). Nghị định 145/2020 Điều 8 quy định chi tiết.",
+    "ground_truth_citations": [
+      {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "46",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "46",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "8",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "nghi-dinh-145-2020-nd-cp",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Đa tầng: Bộ luật -> Nghị định hướng dẫn.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
     }
-  ]
-}
+  },
+  {
+    "id": "LD02",
+    "question": "Trường hợp nào thì người sử dụng lao động phải trả trợ cấp thôi việc?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Khi hợp đồng chấm dứt theo các khoản 1, 2, 3, 4, 6, 7, 9 và 10 Điều 34, với người đã làm việc thường xuyên từ đủ 12 tháng trở lên; trừ trường hợp đủ điều kiện hưởng lương hưu và trường hợp tại điểm e khoản 1 Điều 36.",
+    "ground_truth_citations": [
+      {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "34",
+        "khoan": null,
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "CHUỖI DẪN CHIẾU: Điều 46 Khoản 1 xác định phạm vi bằng cách dẫn sang Điều 34. Không đọc Điều 34 thì không biết trường hợp nào được trợ cấp.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD03",
+    "question": "Tôi muốn nghỉ việc thì phải báo trước cho công ty bao nhiêu ngày?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "difficulty": "easy",
+    "ground_truth_answer": "Ít nhất 45 ngày với hợp đồng không xác định thời hạn; 30 ngày với hợp đồng xác định thời hạn từ 12 đến 36 tháng; 03 ngày làm việc với hợp đồng dưới 12 tháng.",
+    "ground_truth_citations": [
+      {
+        "dieu": "35",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "35",
+        "khoan": "1",
+        "diem": "b",
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "35",
+        "khoan": "1",
+        "diem": "c",
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Tra cứu trực tiếp, một văn bản một điều.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD04",
+    "question": "Có trường hợp nào tôi được nghỉ việc ngay mà không cần báo trước không?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "difficulty": "medium",
+    "ground_truth_answer": "Có. Khoản 2 Điều 35 liệt kê các trường hợp được đơn phương chấm dứt hợp đồng không cần báo trước, ví dụ không được bố trí đúng công việc, địa điểm hoặc điều kiện làm việc đã thỏa thuận.",
+    "ground_truth_citations": [
+      {
+        "dieu": "35",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD05",
+    "question": "Trợ cấp mất việc làm khác trợ cấp thôi việc như thế nào?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "difficulty": "medium",
+    "ground_truth_answer": "Trợ cấp mất việc làm áp dụng khi mất việc theo khoản 11 Điều 34, mỗi năm làm việc trả 01 tháng tiền lương và ít nhất bằng 02 tháng tiền lương (Điều 47). Trợ cấp thôi việc áp dụng cho các trường hợp chấm dứt khác và chỉ nửa tháng tiền lương mỗi năm (Điều 46).",
+    "ground_truth_citations": [
+      {
+        "dieu": "47",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD06",
+    "question": "Thời gian làm việc để tính trợ cấp mất việc làm được xác định ra sao?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "medium",
+    "ground_truth_answer": "Tổng thời gian làm việc thực tế trừ đi thời gian đã tham gia bảo hiểm thất nghiệp và thời gian đã được chi trả trợ cấp thôi việc, trợ cấp mất việc làm (Điều 47 Khoản 2), chi tiết ở Nghị định 145/2020 Điều 8 Khoản 3.",
+    "ground_truth_citations": [
+      {
+        "dieu": "47",
+        "khoan": "2",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "8",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "nghi-dinh-145-2020-nd-cp",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Đa tầng: Bộ luật -> Nghị định.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD07",
+    "question": "Tiền lương dùng để tính trợ cấp thôi việc là lương tháng nào?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap1",
+    "difficulty": "easy",
+    "ground_truth_answer": "Tiền lương bình quân của 06 tháng liền kề theo hợp đồng lao động trước khi người lao động thôi việc.",
+    "ground_truth_citations": [
+      {
+        "dieu": "46",
+        "khoan": "3",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD08",
+    "question": "Người sử dụng lao động không phải trả trợ cấp thôi việc trong trường hợp nào?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap3",
+    "difficulty": "hard",
+    "ground_truth_answer": "Khi người lao động đủ điều kiện hưởng lương hưu, hoặc tự ý bỏ việc không có lý do chính đáng từ 05 ngày làm việc liên tục trở lên.",
+    "ground_truth_citations": [
+      {
+        "dieu": "8",
+        "khoan": "1",
+        "diem": "a",
+        "van_ban": "nghi-dinh-145-2020-nd-cp",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "8",
+        "khoan": "1",
+        "diem": "b",
+        "van_ban": "nghi-dinh-145-2020-nd-cp",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Ngoại lệ nằm ở nghị định hướng dẫn chứ không ở bộ luật.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD09",
+    "question": "Hồi trước tôi nghỉ việc năm 2018 thì trợ cấp thôi việc tính theo quy định nào, có khác bây giờ không?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap4",
+    "difficulty": "hard",
+    "ground_truth_answer": "Năm 2018 áp dụng Bộ luật Lao động 2012 Điều 48 (có hiệu lực 01/5/2013 đến 01/01/2021). Quy định hiện hành là Bộ luật Lao động 2019 Điều 46. Mức trợ cấp đều là nửa tháng tiền lương mỗi năm, nhưng danh mục trường hợp được hưởng khác nhau: bản 2012 dẫn Điều 36, bản 2019 dẫn Điều 34.",
+    "ground_truth_citations": [
+      {
+        "dieu": "48",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2012",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "46",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "bo-luat-lao-dong-2019",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "Đa phiên bản: hệ phải nhận ra mốc 2018 thuộc bản 2012 và nêu được cả bản hiện hành.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD10",
+    "question": "Công ty tôi đóng ở Đồng Nai thì mức lương tối thiểu áp dụng là bao nhiêu?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "gap2",
+    "difficulty": "hard",
+    "ground_truth_answer": "Mức lương tối thiểu theo vùng quy định tại Điều 3 Nghị định 293/2025. Địa bàn thuộc vùng nào áp dụng mức của vùng đó; danh mục địa bàn từng vùng ở Phụ lục kèm theo (Điều 3 Khoản 2, Khoản 3 Điểm a).",
+    "ground_truth_citations": [
+      {
+        "dieu": "3",
+        "khoan": "1",
+        "diem": null,
+        "van_ban": "nghi-dinh-293-2025-nd-cp",
+        "loai": "dieu"
+      },
+      {
+        "dieu": "3",
+        "khoan": "3",
+        "diem": "a",
+        "van_ban": "nghi-dinh-293-2025-nd-cp",
+        "loai": "dieu"
+      }
+    ],
+    "notes": "ĐÁP ÁN NẰM TRONG BẢNG BIỂU — đã biết khâu sinh chưa đọc được bảng. Giữ lại để đo đúng hạn chế này.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD11",
+    "question": "Mức đóng bảo hiểm xã hội bắt buộc của người lao động là bao nhiêu phần trăm lương?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "difficulty": "medium",
+    "ground_truth_answer": "Ngoài phạm vi: thuộc pháp luật bảo hiểm xã hội, không có trong kho.",
+    "ground_truth_citations": [],
+    "notes": "ÂM — nghe như lao động nhưng thuộc Luật Bảo hiểm xã hội.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  },
+  {
+    "id": "LD12",
+    "question": "Tôi bị tai nạn lao động thì được hưởng chế độ gì?",
+    "theme": "lao-dong",
+    "jurisdiction": "toan-quoc",
+    "gap_type": "negative",
+    "difficulty": "medium",
+    "ground_truth_answer": "Ngoài phạm vi: thuộc Luật An toàn, vệ sinh lao động, không có trong kho.",
+    "ground_truth_citations": [],
+    "notes": "ÂM — đúng lĩnh vực lao động nhưng văn bản điều chỉnh không có trong kho.",
+    "review": {
+      "nguoi_soan": "claude",
+      "da_duyet": false
+    }
+  }
+]
