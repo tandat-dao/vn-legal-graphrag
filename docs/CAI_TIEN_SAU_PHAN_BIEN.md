@@ -285,8 +285,14 @@ tin cậy. Tập chuẩn do nhóm soạn theo cùng quy ước chú giải, **c�
 đã rà và duyệt toàn bộ 12 câu**, và 22/22 trích dẫn đáp án đã được kiểm tồn tại
 thật trong đồ thị.
 
-**Không phá vỡ phần cũ:** 13 câu demo của lĩnh vực đất đai cho kết quả khớp hoàn
-toàn với trước khi nạp; ba câu ngoài phạm vi vẫn từ chối đúng.
+**Không phá vỡ phần cũ.** Bằng chứng là phép kiểm thoái lui ở bảng trên — 123
+câu, 0 câu lệch. Ba câu demo ngoài phạm vi cũng vẫn từ chối đúng sau khi nạp.
+
+*Một phép kiểm yếu cần nói rõ:* ngay sau khi nạp có đối chiếu 13 câu demo đất
+đai và thấy **số lượng** trích dẫn không đổi, nhưng phép kiểm đó không so nội
+dung. Đo lại ngày 19/08 cho thấy một số câu **có** đổi trích dẫn dù số lượng giữ
+nguyên. Kết luận "không phá vỡ phần cũ" vì vậy dựa vào phép kiểm thoái lui 123
+câu, không dựa vào phép đối chiếu 13 câu đó.
 
 ---
 
@@ -348,6 +354,13 @@ env UI_REFERS_MODE=khoan ./scripts/chay-demo.sh live 8001     # sau cải tiến
 Phải đặt biến môi trường tường minh ở **cả hai lệnh**. Nếu bỏ trống ở lệnh đầu,
 biến sẽ được kế thừa sang tiến trình thứ hai và cả hai cổng đều chạy bản mới.
 Mười lăm câu demo đã được nạp sẵn kết quả cho cả hai cấu hình.
+
+> **Chỉ dùng A3 để đối chiếu trước/sau.** Đo ngày 19/08: bảy trên mười lăm câu
+> cho trích dẫn khác nhau giữa hai bản, nhưng chỉ A3 cho khác biệt sạch và giải
+> thích được trong một câu. Sáu câu còn lại đổi theo hướng khó biện giải nhanh —
+> có câu bản mới bỏ bớt nghị định hướng dẫn, có câu thêm văn bản của tỉnh khác,
+> có câu chỉ khác ở cách hiển thị nhãn phụ lục. Đừng ứng biến sang câu khác khi
+> đang trình bày.
 
 **Bốn điều cần nêu rõ khi trình bày:**
 
