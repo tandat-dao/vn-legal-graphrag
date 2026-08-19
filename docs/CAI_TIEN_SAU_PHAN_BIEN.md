@@ -5,8 +5,9 @@
 
 > Báo cáo chốt **chín thực thể, mười quan hệ**, kho **32 văn bản, ba lĩnh vực**.
 > Đợt này thêm **quan hệ thứ mười một**, mở kho lên **36 văn bản, bốn lĩnh vực**,
-> và thêm **một hàng vào Bảng 4.13**. Mọi phép đo vẫn chạy trên đúng kho 32 văn
-> bản của báo cáo.
+> và thêm **một hàng vào Bảng 4.13**. Việc mở rộng kho đã được kiểm chứng là
+> **không làm thay đổi kết quả của ba lĩnh vực cũ** (§3.6), nên số liệu ở §3.1
+> so sánh được với báo cáo.
 
 ---
 
@@ -160,15 +161,53 @@ tại chỗ. Với hệ thống xử lý dữ liệu công dân, đây là giá 
 > **−0,022**, được báo cáo phân tích ở mục 4.7.6. Ưu thế giữ được ở **bốn trên
 > năm** cấu hình.
 
-### 3.6. Lĩnh vực mới: 3 giờ 10 phút, không sửa logic truy hồi
+### 3.6. Lĩnh vực mới: đo được, không chỉ minh chứng
 
 Kho tăng từ 32 lên **36 văn bản**, từ 4 549 lên **7 208 điều khoản**, từ ba lên
-**bốn lĩnh vực**. Hai quan hệ *hướng dẫn thi hành* và **1 447 quan hệ dẫn chiếu**
-được tạo tự động. Bộ trích xuất viết cho lĩnh vực đất đai chạy trên văn bản lao
-động mà không phải sửa dòng nào.
+**bốn lĩnh vực**, trong 3 giờ 10 phút máy chạy. Hai quan hệ *hướng dẫn thi hành*
+và **1 447 quan hệ dẫn chiếu** được tạo tự động. Bộ trích xuất viết cho lĩnh vực
+đất đai chạy trên văn bản lao động mà không phải sửa dòng nào.
 
-Mười ba câu demo cũ cho kết quả khớp hoàn toàn với trước khi nạp; ba câu ngoài
-phạm vi vẫn từ chối đúng.
+**Mở rộng kho có làm giảm chất lượng ba lĩnh vực cũ không?** Chạy lại đúng 123
+câu đó trên kho 36 văn bản rồi so từng câu với kết quả trên kho 32:
+
+| cấu hình | kho 32 | kho 36 | số câu lệch |
+|---|---|---|---|
+| trước cải tiến | 0,737 | 0,737 | 0 |
+| + lần theo dẫn chiếu | 0,753 | 0,753 | 0 |
+| + cross-encoder | 0,800 | 0,800 | 0 |
+| + mở rộng vùng tìm kiếm | 0,853 | 0,853 | 0 |
+
+**Không câu nào thay đổi.** Thêm một lĩnh vực và bốn văn bản không đánh đổi chất
+lượng của ba lĩnh vực cũ.
+
+**Hệ hoạt động tốt đến đâu trên lĩnh vực mới?** Soạn 12 câu chuẩn cho lao động
+theo cùng quy ước chú giải, đọc thẳng văn bản luật và không chạy hệ trong lúc
+soạn; 10 câu có đáp án nên chấm được:
+
+| | trước cải tiến | sau cải tiến | mức tăng |
+|---|---|---|---|
+| ba lĩnh vực cũ (123 câu) | 0,737 | 0,853 | +0,116 |
+| **lĩnh vực lao động (10 câu)** | **0,700** | **0,850** | **+0,150** · 3 thắng / 0 thua |
+
+Hệ đạt trên lĩnh vực chưa từng được xây dựng cho **đúng mức nó đạt trên ba lĩnh
+vực gốc**. Câu LD02 — điều khoản trả lời xác định phạm vi bằng cách dẫn sang
+Điều 34 — tăng từ 0,50 lên **1,00**, tức cơ chế dẫn chiếu hoạt động đúng thiết
+kế trên văn bản chưa từng thấy.
+
+**Một câu không cải thiện, và nguyên nhân đáng chú ý.** Câu hỏi về thời hạn báo
+trước khi nghỉ việc giữ mức 0,00: hệ lấy **Bộ luật Lao động 2012 Điều 37** thay
+vì **Bộ luật Lao động 2019 Điều 35**. Bản 2012 đã hết hiệu lực từ 01/01/2021
+nhưng vẫn thắng ở bước tìm kiếm ngữ nghĩa vì hai bộ luật cùng chủ đề và cách
+diễn đạt gần giống nhau. Đây đúng là thách thức đa phiên bản, xuất hiện lại
+trong chính lĩnh vực mới.
+
+**Giới hạn của phép đo này:** 10 câu là mẫu nhỏ, và tập chuẩn do trợ lý máy soạn
+từ chính kho văn bản nên cần người rà trước khi dùng làm số chính thức. Toàn bộ
+12 câu đang mang cờ chưa duyệt.
+
+**Không phá vỡ phần cũ:** 13 câu demo của lĩnh vực đất đai cho kết quả khớp hoàn
+toàn với trước khi nạp; ba câu ngoài phạm vi vẫn từ chối đúng.
 
 ---
 
@@ -195,7 +234,8 @@ chỉnh làm khâu sinh kém đi (0,402 so với 0,511), đồng thời làm b�
 năng phê phán (99,7% hậu thuẫn). Hai lần đo độc lập cho cùng một hiện tượng.
 
 **Khả năng dùng cho lĩnh vực mới không đồng đều giữa các khâu.** Khâu truy hồi
-dùng được ngay mà không sửa dòng nào. Nhưng khâu sinh phải khai báo thêm: prompt
+dùng được ngay mà không sửa dòng nào, và đạt 0,850 trên lĩnh vực mới so với
+0,853 trên ba lĩnh vực gốc. Nhưng khâu sinh phải khai báo thêm: prompt
 ghi cố định "lao động" thuộc nhóm ngoài phạm vi, nên hệ từ chối trả lời dù ngữ
 cảnh đã có đủ căn cứ. Phát biểu chính xác là *"khâu truy hồi không cần sửa, khâu
 sinh cần khai báo phạm vi lĩnh vực mới"*.

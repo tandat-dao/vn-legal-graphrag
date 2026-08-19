@@ -92,6 +92,36 @@ def main() -> int:
         else:
             print("   ✓ %-18s %s" % (ten, gia_tri))
 
+    # ---- Lớp 1b: số của lĩnh vực lao động và kiểm thoái lui ----
+    ld = Path("data/evaluation/lao_dong_baophu.json")
+    kho36 = Path("data/evaluation/v2_chot_kho36.json")
+    if ld.exists():
+        e = json.load(open(ld, encoding="utf-8"))
+        k2 = [x for x in e[0] if x not in ("id", "gap_type")]
+        for ten, gt in (("lao động mốc", sum(r[k2[0]]["khoan"] for r in e) / len(e)),
+                        ("lao động cuối", sum(r[k2[-1]]["khoan"] for r in e) / len(e))):
+            v = _so_vn(gt)
+            if v not in doc:
+                loi.append("thiếu số %s = %s" % (ten, v))
+            else:
+                print("   ✓ %-18s %s" % (ten, v))
+    else:
+        canh_bao.append("chưa có lao_dong_baophu.json — bỏ qua kiểm lĩnh vực lao động")
+    if kho36.exists():
+        f = json.load(open(kho36, encoding="utf-8"))
+        g36 = {r["id"]: r for r in f}
+        g32 = {r["id"]: r for r in json.load(open(SO_CHOT, encoding="utf-8"))}
+        kk = [x for x in f[0] if x not in ("id", "gap_type")]
+        lech = sum(1 for i in set(g32) & set(g36) for x in kk
+                   if abs(g32[i][x]["khoan"] - g36[i][x]["khoan"]) > 1e-9)
+        if lech:
+            loi.append("KIỂM THOÁI LUI: %d ô lệch giữa kho 32 và kho 36 — "
+                       "tài liệu đang khẳng định 0" % lech)
+        else:
+            print("   ✓ kiểm thoái lui    0 ô lệch giữa kho 32 và kho 36")
+    else:
+        canh_bao.append("chưa có v2_chot_kho36.json — bỏ qua kiểm thoái lui")
+
     # ---- Lớp 2: số trích từ báo cáo ----
     print("\n── Lớp 2: tài liệu vs baocao.pdf")
     bc = _text_bao_cao()
