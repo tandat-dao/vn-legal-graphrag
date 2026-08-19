@@ -138,6 +138,14 @@ def thu_thap_chuyen_tiep(norm_ids: list[str], neo4j_driver) -> tuple[list[dict],
     return cap, comp_ids
 
 
+def _ngay_vn(iso: str | None) -> str:
+    """YYYY-MM-DD -> DD/MM/YYYY. Người đọc là công dân, không phải máy."""
+    if not iso or len(iso) != 10:
+        return iso or ""
+    n, t, ng = iso.split("-")
+    return f"{ng}/{t}/{n}"
+
+
 def mo_ta_thay_doi(cap: list[dict], co_dieu_khoan_chuyen_tiep: bool) -> str:
     """Câu mô tả thay đổi — chỉ nêu điều QUAN SÁT ĐƯỢC, không phán vụ việc.
 
@@ -149,10 +157,10 @@ def mo_ta_thay_doi(cap: list[dict], co_dieu_khoan_chuyen_tiep: bool) -> str:
     c = cap[0]
     s = (
         f"Quy định về nội dung này đã thay đổi: {c['cu']} hết hiệu lực từ "
-        f"{c['cu_den']}"
+        f"{_ngay_vn(c['cu_den'])}"
     )
     if c.get("moi"):
-        s += f", được thay thế bởi {c['moi']} (hiệu lực từ {c['moi_tu']})"
+        s += f", được thay thế bởi {c['moi']} (hiệu lực từ {_ngay_vn(c['moi_tu'])})"
     s += ". Nội dung ở từng thời điểm được nêu bên dưới."
     if len(cap) > 1:
         s += f" (Trong phạm vi câu hỏi còn {len(cap) - 1} văn bản khác đã được thay thế.)"

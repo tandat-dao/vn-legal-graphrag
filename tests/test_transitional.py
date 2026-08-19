@@ -50,7 +50,7 @@ def test_mo_ta_neu_du_ca_hai_van_ban_va_moc_thoi_gian():
     s = mo_ta_thay_doi(_cap_mau(), False)
     assert "quyet-dinh-18-2016-qd-ubnd-tp-hcm" in s
     assert "quyet-dinh-69-2024-qd-ubnd-tp-hcm" in s
-    assert "2024-09-30" in s
+    assert "30/09/2024" in s  # ngày hiển thị cho người đọc, không phải ISO
 
 
 def test_khong_dung_chu_hoi_to():
@@ -84,7 +84,7 @@ def test_thieu_ban_ke_nhiem_van_mo_ta_duoc():
     cap = [{"cu": "x", "cu_tu": "2016-01-01", "cu_den": "2024-09-30",
             "moi": None, "moi_tu": None}]
     s = mo_ta_thay_doi(cap, False)
-    assert "x" in s and "2024-09-30" in s
+    assert "x" in s and "30/09/2024" in s
     assert "None" not in s
 
 
