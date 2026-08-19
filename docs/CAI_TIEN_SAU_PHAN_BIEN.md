@@ -6,6 +6,13 @@
 **Chỉ số:** độ bao phủ điều khoản — hệ có lấy được đúng điều khoản chứa đáp án
 vào ngữ cảnh hay không. Đo tất định, không phụ thuộc mô hình sinh.
 
+> **Quan hệ với báo cáo.** Báo cáo chốt bản thể luận **chín thực thể, mười quan
+> hệ**, kho **32 văn bản thuộc ba lĩnh vực**. Đợt cải tiến này bổ sung **quan hệ
+> thứ mười một** (dẫn chiếu điều khoản, §3.1) và mở kho lên **36 văn bản, bốn
+> lĩnh vực** (§7). Mọi phép đo ở §2 vẫn thực hiện trên **đúng kho 32 văn bản của
+> báo cáo** để so sánh được với số liệu đã công bố; lĩnh vực lao động chỉ dùng
+> chứng minh tính tổng quát hoá, không đưa vào bộ đánh giá.
+
 ---
 
 ## 1. GÓP Ý CỦA CÔ VÀ VIỆC ĐÃ LÀM
@@ -35,10 +42,10 @@ Theo từng thách thức:
 
 | thách thức | mức tăng |
 |---|---|
-| Đa lĩnh vực (Gap 1) | **+0,216** |
-| Đa tầng văn bản (Gap 3) | **+0,153** |
-| Đa địa phương (Gap 2) | +0,069 |
-| Đa phiên bản (Gap 4) | +0,019 |
+| Đa lĩnh vực | **+0,216** |
+| Đa tầng văn bản | **+0,153** |
+| Đa địa phương | +0,069 |
+| Đa phiên bản | +0,019 |
 
 ### Vì sao chỉ 26 câu thắng trên 123 câu
 
@@ -67,7 +74,7 @@ sang đó mới hiểu.
 
 **Cách làm.** Đọc toàn bộ kho văn bản, nhận diện mọi câu dẫn chiếu bằng biểu
 thức chính quy, rồi phân giải xem nó trỏ đến điều khoản cụ thể nào. Kết quả tạo
-ra **3919 quan hệ mới** trên kho 3 lĩnh vực dùng để đo (32 văn bản), và **5366** sau khi thêm lĩnh vực lao động (§7) — loại quan hệ thứ 11 của lược đồ.
+ra **3919 quan hệ mới** trên kho 3 lĩnh vực dùng để đo (32 văn bản), và **5366** sau khi thêm lĩnh vực lao động (§7) — **quan hệ thứ mười một**, bổ sung so với mười quan hệ đã công bố trong báo cáo.
 
 Ba trường hợp phải xử lý riêng:
 
@@ -91,9 +98,10 @@ giống nhau dù chỉ một cái trả lời đúng câu hỏi.
 **Cross-encoder** đọc *đồng thời* câu hỏi và điều khoản rồi chấm điểm mức liên
 quan. Chính xác hơn nhiều, nhưng chậm nên không dùng để quét cả kho được.
 
-**Điểm đáng chú ý.** Cơ chế này **đã từng bị bác bỏ** trong quá trình làm khóa
-luận (quyết định D-20): khi để nó tham gia *chọn văn bản*, nó kéo lên những đoạn
-trùng từ ngữ nhưng sai văn bản, làm kết quả tệ đi.
+**Điểm đáng chú ý.** Cơ chế này **đã từng bị thử và bác bỏ** trong quá trình làm
+khóa luận (ghi trong nhật ký quyết định của nhóm, không đưa vào báo cáo vì là kết
+quả âm): khi để nó tham gia *chọn văn bản*, nó kéo lên những đoạn trùng từ ngữ
+nhưng sai văn bản, làm kết quả tệ đi.
 
 Lần này đặt nó ở vị trí khác: **chỉ xếp lại thứ tự bên trong từng văn bản đã
 được chọn**, không cho nó động đến việc chọn văn bản nào. Cùng một mô hình,
@@ -193,7 +201,7 @@ vi điều chỉnh", có câu **"theo khoản 2 Điều 196"**. Cơ chế lần 
 Đo cụ thể: bản cũ lấy 19 đơn vị nội dung, bản mới lấy 22 — **thêm 3, không mất
 cái nào**, và một trong ba chính là Điều 196 Khoản 2.
 
-**Đây đúng là bản chất của Gap 3 (đa tầng văn bản):** mối nối giữa luật và quyết
+**Đây đúng là bản chất của thách thức đa tầng văn bản:** mối nối giữa luật và quyết
 định cấp tỉnh nằm ở **một câu dẫn chiếu**, chỗ mà tìm kiếm theo ngữ nghĩa không
 với tới vì nó không giống câu hỏi về mặt từ ngữ. Phải có quan hệ trong đồ thị
 mới lần ra được.
@@ -304,7 +312,7 @@ gồm điều khoản trả lời trực tiếp **cộng những điều khoản
 minh** — vì không đọc phần được dẫn chiếu thì không biết điều khoản chính áp
 dụng trong trường hợp nào.
 
-**Bổ sung nhóm câu demo cho Gap 1.** Toàn bộ 13 câu demo cũ đều thuộc lĩnh vực
+**Bổ sung nhóm câu demo cho thách thức đa lĩnh vực.** Toàn bộ 13 câu demo cũ đều thuộc lĩnh vực
 đất đai, nên **không câu nào chứng minh được khả năng đa lĩnh vực**. Đã thêm hai
 câu chạy qua kho hộ tịch:
 
@@ -348,7 +356,8 @@ Câu **A3** cho khác biệt rõ nhất và nên dùng làm ví dụ chính.
 ## 10. HAI ĐIỀU CẦN NÊU RÕ KHI TRÌNH BÀY
 
 **Phân biệt hai phép so sánh.** Kết quả chính của khóa luận là **hệ GraphRAG so
-với RAG thuần**: 67 thắng / 32 thua / 24 hoà, chênh lệch +0,187. Kết quả của đợt
+với RAG thuần** — theo Bảng 4.4 của báo cáo: chênh lệch **+0,187**, khoảng tin cậy
+95% **[0,108; 0,264]**, Wilcoxon **p = 0,00003**, thắng/thua/hoà **67/32/24**. Kết quả của đợt
 cải tiến là **bản mới so với chính hệ đã có**: 26 thắng / 4 thua. Hai con số đo
 hai thứ khác nhau, đừng để bị nhầm là cùng một bảng.
 
