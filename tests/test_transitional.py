@@ -151,3 +151,42 @@ def test_khong_co_yeu_to_thoi_gian_thi_giu_nguyen():
     from src.pipeline import ap_dung_lop_thoi_gian
     plan = {"temporal_intent": {"has_temporal_context": False}, "temporal": "giu-nguyen"}
     assert ap_dung_lop_thoi_gian(plan, "câu hỏi thường")["temporal"] == "giu-nguyen"
+
+
+# ---------------------------------------------------------------------------
+# Tính tất định: Giai đoạn 2 trả cùng tập văn bản với thứ tự khác nhau giữa
+# hai lần chạy (Cypher không có ORDER BY). Điều khoản chuyển tiếp nạp vào ngữ
+# cảnh KHÔNG được phụ thuộc thứ tự đó, nếu không cùng một câu hỏi sẽ cho ngữ
+# cảnh khác nhau — mất tính tái lập và trượt bộ nhớ đệm lúc trình bày.
+# ---------------------------------------------------------------------------
+
+class _PhienGia:
+    def __init__(self, driver): self._d = driver
+    def __enter__(self): return self
+    def __exit__(self, *a): return False
+    def run(self, cypher, **kw):
+        if "valid_to" in cypher:                 # _CYPHER_HET_HIEU_LUC
+            return [{
+                "cu": "cu-2016", "cu_tier": 4, "cu_tu": "2016-01-01",
+                "cu_den": "2024-09-30", "moi": "moi-2024", "moi_tu": "2024-09-30",
+            }]
+        # _CYPHER_CHUYEN_TIEP — mỗi văn bản có đúng một điều khoản chuyển tiếp
+        nid = kw["norm_id"]
+        return [{"id": f"{nid}::ct", "label": "Điều 9. Điều khoản chuyển tiếp"}]
+
+
+class _DriverGia:
+    def session(self): return _PhienGia(self)
+
+
+def test_thu_thap_chuyen_tiep_khong_phu_thuoc_thu_tu_dau_vao():
+    from src.retrieval.transitional import thu_thap_chuyen_tiep
+
+    xuoi = ["cu-2016", "moi-2024", "nghi-dinh-a", "nghi-dinh-b", "thong-tu-c"]
+    nguoc = list(reversed(xuoi))
+    _, ids_xuoi = thu_thap_chuyen_tiep(xuoi, _DriverGia())
+    _, ids_nguoc = thu_thap_chuyen_tiep(nguoc, _DriverGia())
+
+    assert ids_xuoi == ids_nguoc, "đổi thứ tự đầu vào đã làm đổi ngữ cảnh"
+    # Bản kế nhiệm vẫn phải đứng đầu — nó sát vấn đề nhất
+    assert ids_xuoi[0] == "moi-2024::ct"

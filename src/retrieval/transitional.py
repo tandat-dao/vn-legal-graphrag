@@ -52,6 +52,7 @@ WHERE moi.id <> cu.id
   AND moi.valid_from >= cu.valid_from
 RETURN cu.id AS cu, cu.tier AS cu_tier, cu.valid_from AS cu_tu,
        cu.valid_to AS cu_den, moi.id AS moi, moi.valid_from AS moi_tu
+ORDER BY cu, moi
 """
 
 
@@ -78,6 +79,12 @@ def tim_cap_thay_the(norm_ids: list[str], neo4j_driver) -> list[dict]:
     gắn cảnh báo. Quan trọng: cảnh báo chỉ được nổ khi thật sự có thay đổi, nếu
     nổ ở mọi câu thì nó thành lời rào đón vô nghĩa.
     """
+    # ORDER BY trong truy vấn là BẮT BUỘC, không phải để cho đẹp: thứ tự hàng
+    # trả về quyết định thứ tự chèn vào `gom`, rồi quyết định thứ tự điều khoản
+    # chuyển tiếp được nạp, rồi quyết định ngữ cảnh gửi cho bộ sinh. Neo4j không
+    # bảo đảm thứ tự khi thiếu ORDER BY, nên bỏ nó đi thì cùng một câu hỏi có thể
+    # cho ngữ cảnh khác nhau giữa hai lần chạy — mất tính tái lập, và lúc trình
+    # bày thì trượt bộ nhớ đệm.
     if not norm_ids or neo4j_driver is None:
         return []
     gom: dict[str, dict] = {}
@@ -130,7 +137,12 @@ def thu_thap_chuyen_tiep(norm_ids: list[str], neo4j_driver) -> tuple[list[dict],
     """
     cap = tim_cap_thay_the(norm_ids, neo4j_driver)
     uu_tien = [c["moi"] for c in cap if c.get("moi")]
-    thu_tu = uu_tien + [n for n in norm_ids if n not in uu_tien]
+    # Phần đuôi phải SẮP THEO TÊN, không giữ nguyên thứ tự `norm_ids`: Giai đoạn 2
+    # duyệt đồ thị bằng Cypher không có ORDER BY nên trả về cùng tập văn bản với
+    # thứ tự khác nhau giữa hai lần chạy. Giữ nguyên thứ tự đó thì điều khoản
+    # chuyển tiếp nào lọt vào ngân sách cũng đổi theo, kéo cả ngữ cảnh đổi theo.
+    # Sắp ở đây thay vì sửa Giai đoạn 2 để KHÔNG đụng vào đường truy hồi đã đo.
+    thu_tu = uu_tien + sorted(n for n in norm_ids if n not in uu_tien)
 
     comp_ids: list[str] = []
     for norm_id in thu_tu:
