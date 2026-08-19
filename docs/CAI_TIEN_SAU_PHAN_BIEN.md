@@ -331,7 +331,13 @@ sinh cần khai báo phạm vi lĩnh vực mới"*.
 
 ## 5. TRÌNH BÀY VÀ DEMO
 
-**Ví dụ chính — câu A4.** *"Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét
+> Mục này mô tả **hai kịch bản khác nhau**. Phần ngay dưới là kịch bản **mở hai
+> cổng đối chiếu trước/sau**. Phần *"Ba câu trình bày trên cổng 8001"* là kịch
+> bản **chỉ mở một cổng** — đây là kịch bản đã chọn cho ngày bảo vệ. Thứ tự câu
+> ở hai kịch bản khác nhau vì mục đích khác nhau: đối chiếu cần câu có khác biệt
+> giải thích được trong một câu, trình bày một cổng cần phủ đủ bốn thách thức.
+
+**Ví dụ chính (kịch bản đối chiếu) — câu A4.** *"Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét
 vuông đất ở, sao giờ nghe nói chỉ còn 250? Người ta đổi quy định hồi nào vậy?"*
 
 Câu này tự nó hỏi về một **sự thay đổi quy định**, nên tính năng mới trả lời
@@ -342,12 +348,22 @@ câu trả lời:
 > 30/09/2024, được thay thế bởi Quyết định 69/2024 (hiệu lực từ 30/09/2024).*
 
 Bản trước cải tiến vẫn trả lời đúng nội dung nhưng **không có khối cảnh báo
-này**, và trích dẫn Quyết định 18/2016 lặp hai lần. Bản sau bỏ trùng lặp.
+này**.
 
-Đây là ví dụ **sạch**: không mất số liệu nào, không thêm văn bản lạc đề, khác
-biệt nhìn thấy ngay trên màn hình.
+**Phải nói rõ chiều ngược lại.** Bản trước dùng ba trích dẫn, bản sau chỉ hai:
+bản trước có thêm một lưu ý phân biệt mức 250 m² của quy định cũ (áp cho khu quy
+hoạch phát triển đô thị) với mức 250 m² của quy định mới (áp cho khu vực nông
+thôn). Lưu ý đó **đúng và hữu ích**, và bản sau bỏ mất. Vậy phép đổi ở đây là
+được khối cảnh báo tất định, mất một lưu ý phân biệt — không phải thắng sạch.
 
-**Ví dụ dự phòng — câu A3.** *"Hạn mức giao đất ở cho cá nhân do cơ quan nào quy
+**Một hạn chế nữa của câu này.** Bản sau viết *"sắp có hiệu lực"* cho mốc
+30/09/2024 vốn đã qua. Lời nhắc không cấp ngày hiện tại cho mô hình sinh, nên nó
+suy ra thì tương lai từ tri thức huấn luyện. Khối cảnh báo phía trên — sinh bằng
+luật tất định từ đồ thị — ghi đúng *"hết hiệu lực từ 30/09/2024"*. Chênh lệch
+giữa hai khối nhìn thấy được trên màn hình, nên chủ động nói ra: **đây chính là
+lý do cảnh báo không để mô hình tự phát biểu.**
+
+**Ví dụ dự phòng (kịch bản đối chiếu) — câu A3.** *"Hạn mức giao đất ở cho cá nhân do cơ quan nào quy
 định, và con số cụ thể hiện nay tại TP.HCM…"* Bản trước dẫn **Luật Đất đai 2013
 Điều 103 Khoản 4** — luật đã hết hiệu lực, và điều đó nói về *"đất có vườn, ao"*,
 không liên quan hạn mức. Bản sau dẫn **Luật Đất đai 2024 Điều 195, 196** — đúng
@@ -392,7 +408,47 @@ hình thật không**, rồi mở trình duyệt.
 Mười lăm câu demo đã nạp sẵn kết quả cho đúng hai cấu hình này. Nếu tự chạy tay
 và đổi bất kỳ biến nào thì cache trượt, mỗi câu mất khoảng 50 giây.
 
-> **Chỉ dùng A3 để đối chiếu trước/sau.** Đo ngày 19/08: bảy trên mười lăm câu
+Kịch bản còn **chạy trước một câu ở mỗi cổng** rồi mới báo sẵn sàng. Mô hình nhúng
+và cross-encoder chỉ nạp ở lần hỏi đầu tiên của tiến trình, nên nếu không hâm thì
+câu hỏi đầu tiên trước hội đồng đúng là câu chậm nhất buổi. Từ lúc gõ lệnh tới
+lúc sẵn sàng: khoảng 50 giây.
+
+### Ba câu trình bày trên cổng 8001
+
+Nếu chỉ trình bày một cổng thì dùng 8001 và ba câu dưới đây — ba câu này phủ cả
+bốn thách thức, và mỗi câu mất 15–25 giây.
+
+| # | câu | cho thấy điều gì | tỉ lệ đúng trước → sau |
+|---|---|---|---|
+| 1 | *Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?* | đa tầng văn bản: Luật trao quyền → Quyết định tỉnh ra số | 0,286 → **0,750** |
+| 2 | *Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250?…* | đa phiên bản + khối cảnh báo | 0,667 → **0,800** |
+| 3 | *Đăng ký lại khai sinh mà không còn bản sao giấy khai sinh cũ thì cần giấy tờ gì?* | đa lĩnh vực (hệ tự sang hộ tịch) + lần theo dẫn chiếu | không có trong tập chuẩn |
+
+Câu 3 là ví dụ rõ nhất của quan hệ dẫn chiếu: Thông tư 04/2020 Điều 9 Khoản 3 mở
+đầu bằng *"trường hợp không có giấy tờ quy định tại khoản 1 và khoản 2 Điều này"*.
+Bản trước dẫn Khoản 3 chung chung; bản sau dẫn đúng **Điểm a** và kéo thêm Nghị
+định 123/2015 Điều 26 Khoản 1 điểm c. Đã đối chiếu với văn bản gốc: đúng cả bốn
+trích dẫn.
+
+**Câu cần tránh, đã đo ngày 19/08:**
+
+*Câu B1* (*"…theo quy định cũ (Quyết định 18/2016) và quy định hiện hành (Quyết
+định 69/2024) khác nhau như thế nào?"*) — hệ trả lời *"Tôi không có thông tin về
+Quyết định 69/2024"* dù câu hỏi nêu đích danh. Lỗi này có ở **cả hai cổng**,
+không do đợt cải tiến.
+
+*Hai câu bẫy ngoài phạm vi* (lệ phí trước bạ, thuế thu nhập cá nhân) — mất 70–76
+giây vì kéo về nhiều văn bản nên cross-encoder chạy nhiều lượt. Kết quả vẫn đúng
+là từ chối trả lời; nếu dùng thì nói trước là sẽ lâu.
+
+**Một lỗi tính tất định đã sửa ngày 19/08.** Truy vấn duyệt đồ thị ở Giai đoạn 2
+không có `ORDER BY`, nên Neo4j trả cùng tập văn bản với thứ tự khác nhau giữa hai
+lần chạy; phần nạp điều khoản chuyển tiếp ăn theo thứ tự đó nên cùng một câu hỏi
+lúc cho 24 khối ngữ cảnh, lúc 25. Hệ quả: khởi động lại máy có thể rơi vào biến
+thể chưa nạp sẵn kết quả. Đã sửa **bên trong phần chuyển tiếp**, không đụng vào
+đường truy hồi đã dùng để đo — kiểm lại 15/15 câu không đổi trích dẫn nào.
+
+> **Nếu mở hai cổng thì chỉ dùng A3 để đối chiếu.** Đo ngày 19/08: bảy trên mười lăm câu
 > cho trích dẫn khác nhau giữa hai bản, nhưng chỉ A3 cho khác biệt sạch và giải
 > thích được trong một câu. Sáu câu còn lại đổi theo hướng khó biện giải nhanh —
 > có câu bản mới bỏ bớt nghị định hướng dẫn, có câu thêm văn bản của tỉnh khác,
