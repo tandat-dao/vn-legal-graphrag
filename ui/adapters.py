@@ -102,6 +102,10 @@ def su_kien_ket_qua(result: dict, seq_bat_dau: int, t: float) -> list[TraceEvent
         "citations": citations,
         "citation_links": link_citations(citations, blocks),
         "response_mode": result.get("response_mode"),
+        # Cảnh báo quy định đã thay đổi — pipeline CỐ Ý để ngoài prompt (tránh
+        # rò nhãn nội bộ vào câu trả lời), nên phải truyền riêng ra tầng hiển
+        # thị. Thiếu dòng này thì tính năng chạy nhưng người xem không thấy gì.
+        "canh_bao_thay_doi": result.get("canh_bao_thay_doi") or "",
     })
     _them("verify", "result", {"verifier": result.get("verifier")})
     _them("done", "done", {

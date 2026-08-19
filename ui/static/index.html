@@ -1108,6 +1108,19 @@ function renderCauTraLoi(d) {
     html = html.replace(/\[([^\][]*Văn bản[^\][]*)\]/g, (_, noi) => chipCitation(noi, links));
   }
 
+  // Khối cảnh báo quy định đã thay đổi. Pipeline CỐ Ý để nó ngoài prompt (tránh
+  // rò nhãn nội bộ vào câu trả lời), nên tầng hiển thị phải tự dựng. Đặt TRƯỚC
+  // câu trả lời vì nó đổi cách người đọc hiểu các con số bên dưới.
+  const cb = (d.canh_bao_thay_doi || "").trim();
+  const khoiCanhBao = cb
+    ? `<div class="mb-4 rounded-lg border-l-4 border-[#D97706] bg-[#FFFBEB] px-4 py-3">
+         <div class="text-xs font-semibold uppercase tracking-wide text-[#92400E] mb-1">Quy định đã thay đổi</div>
+         <div class="text-sm text-[#78350F] leading-relaxed">${
+           esc(cb).replace(/[a-z0-9]+(?:-[a-z0-9]+){2,}/g, (m) => esc(tenVB(m)))
+         }</div>
+       </div>`
+    : "";
+
   const than = HIEN_NGUYEN_VAN_LLM
     ? `<div class="text-xs text-[var(--text-muted)] mb-1">Chuỗi LLM trả về, chưa qua lớp hiển thị tên và chưa render markdown:</div>
        <pre class="text-xs whitespace-pre-wrap bg-[var(--gray-50)] border border-[var(--border-card)] rounded-lg p-3 max-h-[60vh] overflow-auto scroll-mong">${esc(d.answer || "")}</pre>`
@@ -1122,6 +1135,7 @@ function renderCauTraLoi(d) {
         ${HIEN_NGUYEN_VAN_LLM ? "← Về bản hiển thị" : "Nguyên văn LLM"}
       </button>
     </div>
+    ${khoiCanhBao}
     ${than}
     <div class="mt-3 pt-3 border-t border-[var(--border-card)]">
       <div class="text-xs text-[var(--text-muted)] mb-1.5">${links.length} trích dẫn ·
