@@ -448,9 +448,10 @@ lúc cho 24 khối ngữ cảnh, lúc 25. Hệ quả: khởi động lại máy 
 thể chưa nạp sẵn kết quả. Đã sửa **bên trong phần chuyển tiếp**, không đụng vào
 đường truy hồi đã dùng để đo — kiểm lại 15/15 câu không đổi trích dẫn nào.
 
-> **Nếu mở hai cổng thì chỉ dùng A3 để đối chiếu.** Đo ngày 19/08: bảy trên mười lăm câu
-> cho trích dẫn khác nhau giữa hai bản, nhưng chỉ A3 cho khác biệt sạch và giải
-> thích được trong một câu. Sáu câu còn lại đổi theo hướng khó biện giải nhanh —
+> **Nếu mở hai cổng thì chỉ dùng A3 để đối chiếu.** Đo lại ngày 19/08 sau khi sửa
+> lỗi tính tất định: **mười trên mười lăm** câu cho trích dẫn khác nhau giữa hai
+> bản (câu 2, 3, 4, 5, 6, 8, 9, 10, 14, 15), nhưng chỉ A3 cho khác biệt sạch và
+> giải thích được trong một câu. Chín câu còn lại đổi theo hướng khó biện giải nhanh —
 > có câu bản mới bỏ bớt nghị định hướng dẫn, có câu thêm văn bản của tỉnh khác,
 > có câu chỉ khác ở cách hiển thị nhãn phụ lục. Đừng ứng biến sang câu khác khi
 > đang trình bày.
