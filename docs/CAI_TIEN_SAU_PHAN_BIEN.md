@@ -391,6 +391,16 @@ Nai khi muốn trình diễn tính năng này; dùng câu A4 hoặc câu về TP
 cd ~/Documents/University/2526_Sem2/Thesis/vn-legal-graphrag && ./scripts/bao-ve.sh
 ```
 
+Mặc định **chỉ mở cổng 8001** — cổng trình bày. Thêm `--doi-chieu` để mở kèm cổng
+8000. Mở một cổng nhanh hơn thật: hai tiến trình cùng nạp mô hình thì tranh CPU,
+đo thấy mỗi câu chậm thêm 5–8 giây.
+
+Kiểm lại bất cứ lúc nào bằng `python scripts/nghiem_thu_demo.py` — bản nghiệm thu
+kiểm sáu điều, mỗi điều là một thứ đã hỏng thật: cấu hình cổng, câu chạy không
+lỗi, mọi câu trúng bộ nhớ đệm, không còn lỗi thì, mọi trích dẫn tra được nguyên
+văn, và ba câu trình bày đúng số trích dẫn đã đo. Lưu ý: **đừng hỏi câu nào trong
+lúc nó chạy** — máy chủ chỉ nhận một câu tại một thời điểm nên bạn sẽ bị chặn.
+
 Kịch bản tự làm hết: khởi động container, chờ Neo4j nhận truy vấn, kiểm dữ liệu
 đủ hay không, mở hai cổng với đúng cấu hình, **tự kiểm lại hai cổng có khác cấu
 hình thật không**, rồi mở trình duyệt.

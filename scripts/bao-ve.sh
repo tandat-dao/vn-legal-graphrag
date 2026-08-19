@@ -3,17 +3,33 @@
 #
 #     ./scripts/bao-ve.sh
 #
-# Dựng Docker, chờ CSDL, mở HAI cổng đối chiếu với ĐÚNG cấu hình, rồi mở trình
-# duyệt. Không cần nhớ biến môi trường nào.
+# Dựng Docker, chờ CSDL, mở cổng trình bày với ĐÚNG cấu hình, hâm nóng, rồi mở
+# trình duyệt. Không cần nhớ biến môi trường nào.
 #
-#     cổng 8000  →  TRƯỚC cải tiến
-#     cổng 8001  →  SAU cải tiến (đủ ba cơ chế + cảnh báo quy định đã thay đổi)
+#     ./scripts/bao-ve.sh               chỉ mở cổng 8001 — bản trình bày
+#     ./scripts/bao-ve.sh --doi-chieu   mở thêm cổng 8000 — bản trước cải tiến
 #
 # Vì sao gói vào đây: bản sau cải tiến cần NĂM biến môi trường đặt đúng. Thiếu
 # một biến là demo chỉ thể hiện một phần mức cải tiến, mà nhìn giao diện KHÔNG
 # phát hiện được. Gõ tay năm biến trước hội đồng là chỗ dễ sai nhất.
 
 set -uo pipefail
+
+# Mặc định CHỈ mở cổng trình bày. Mở thêm cổng đối chiếu bằng --doi-chieu.
+# Một cổng nhanh hơn thật: hai tiến trình cùng nạp mô hình thì tranh CPU, đã đo
+# thấy câu hỏi chậm thêm 5–8 giây mỗi câu.
+DOI_CHIEU=0
+for tham_so in "$@"; do
+  case "$tham_so" in
+    --doi-chieu) DOI_CHIEU=1 ;;
+    -h|--help)
+      echo "Dùng: $0 [--doi-chieu]"
+      echo "  (không tham số)  chỉ mở cổng 8001 — bản sau cải tiến, dùng để trình bày"
+      echo "  --doi-chieu      mở thêm cổng 8000 — bản trước cải tiến, để so sánh"
+      exit 0 ;;
+    *) printf '\033[31m%s\033[0m\n' "✗ Tham số lạ: $tham_so (xem $0 --help)"; exit 1 ;;
+  esac
+done
 
 # Ngày cấp cho lời nhắc. Lời nhắc nhắc tới "thời điểm câu hỏi" ở nhiều chỗ nhưng
 # không chỗ nào nói đó là ngày nào, nên mô hình suy từ tri thức huấn luyện và
@@ -133,11 +149,15 @@ pkill -f "uvicorn ui.server:app" >/dev/null 2>&1 && { mo "  dọn server cũ…"
 # ── 4. Hai cổng, hai cấu hình ───────────────────────────────────────────────
 LOG0="$(mktemp -t demo8000)"; LOG1="$(mktemp -t demo8001)"
 
-# TRƯỚC cải tiến — tắt hết, dùng đúng tham số mặc định của báo cáo
-env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= UI_NGAY_HOM_NAY= \
-    SF_DENSE_POOL_MIN=50 SF_RARITY_ALPHA=1.5 DEMO_MODE=live \
-    "$PY" -m uvicorn ui.server:app --port 8000 >"$LOG0" 2>&1 &
-PID0=$!
+# TRƯỚC cải tiến — tắt hết, dùng đúng tham số mặc định của báo cáo. Chỉ mở khi
+# có --doi-chieu; cổng này không dùng để trình bày.
+PID0=""
+if [ "$DOI_CHIEU" = 1 ]; then
+  env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= UI_NGAY_HOM_NAY= \
+      SF_DENSE_POOL_MIN=50 SF_RARITY_ALPHA=1.5 DEMO_MODE=live \
+      "$PY" -m uvicorn ui.server:app --port 8000 >"$LOG0" 2>&1 &
+  PID0=$!
+fi
 
 # SAU cải tiến — ĐỦ NĂM biến. Thiếu một cái là demo sai.
 env UI_REFERS_MODE=khoan UI_RERANK_MODE=trong-norm UI_CHUYEN_TIEP=1 \
@@ -146,16 +166,19 @@ env UI_REFERS_MODE=khoan UI_RERANK_MODE=trong-norm UI_CHUYEN_TIEP=1 \
     "$PY" -m uvicorn ui.server:app --port 8001 >"$LOG1" 2>&1 &
 PID1=$!
 
-don_dep() { kill "$PID0" "$PID1" 2>/dev/null; }
+don_dep() { kill $PID0 "$PID1" 2>/dev/null; }
 trap don_dep EXIT INT TERM
 
 echo
 printf "  nạp mô hình nhúng (40–90 giây)"
 SAN0=0; SAN1=0
+[ "$DOI_CHIEU" = 1 ] || SAN0=1          # không mở thì coi như xong
 for _ in $(seq 1 90); do
-  kill -0 "$PID0" 2>/dev/null || { echo; do_ "✗ Cổng 8000 tắt giữa chừng:"; tail -15 "$LOG0"; exit 1; }
+  if [ "$DOI_CHIEU" = 1 ]; then
+    kill -0 "$PID0" 2>/dev/null || { echo; do_ "✗ Cổng 8000 tắt giữa chừng:"; tail -15 "$LOG0"; exit 1; }
+    curl -sf -m 2 http://127.0.0.1:8000/api/mode >/dev/null 2>&1 && SAN0=1
+  fi
   kill -0 "$PID1" 2>/dev/null || { echo; do_ "✗ Cổng 8001 tắt giữa chừng:"; tail -15 "$LOG1"; exit 1; }
-  curl -sf -m 2 http://127.0.0.1:8000/api/mode >/dev/null 2>&1 && SAN0=1
   curl -sf -m 2 http://127.0.0.1:8001/api/mode >/dev/null 2>&1 && SAN1=1
   [ "$SAN0" = 1 ] && [ "$SAN1" = 1 ] && break
   printf "."; sleep 2
@@ -174,7 +197,7 @@ for p in $(pgrep -f "uvicorn ui.server:app"); do
     *) do_ "✗ Cổng $cong có cấu hình SAI (UI_RERANK_MODE khớp=$moi)"; KT_SAI=1 ;;
   esac
 done
-[ "$KT_SAI" = 1 ] && { do_ "Dừng lại — cấu hình hai cổng không đúng."; exit 1; }
+[ "$KT_SAI" = 1 ] && { do_ "Dừng lại — cấu hình cổng không đúng."; exit 1; }
 
 # ── 6. Hâm nóng: chạy trước một câu ở MỖI cổng ──────────────────────────────
 # Mô hình nhúng và cross-encoder chỉ được nạp ở lần hỏi ĐẦU TIÊN của tiến
@@ -191,17 +214,23 @@ printf "  hâm nóng cổng 8001 (nạp cross-encoder, 60–120 giây)"
 H1="$(ham 8001)"; printf "\n"
 [ "${H1:-0}" -ge 1 ] && xanh "✓ Cổng 8001 đã hâm — câu đầu tiên sẽ chạy với tốc độ ổn định" \
                      || vang "  ⚠ Hâm cổng 8001 không xong; câu hỏi đầu tiên sẽ chậm hơn bình thường."
-printf "  hâm nóng cổng 8000"
-H0="$(ham 8000)"; printf "\n"
-[ "${H0:-0}" -ge 1 ] && xanh "✓ Cổng 8000 đã hâm" \
-                     || vang "  ⚠ Hâm cổng 8000 không xong."
+if [ "$DOI_CHIEU" = 1 ]; then
+  printf "  hâm nóng cổng 8000"
+  H0="$(ham 8000)"; printf "\n"
+  [ "${H0:-0}" -ge 1 ] && xanh "✓ Cổng 8000 đã hâm" \
+                       || vang "  ⚠ Hâm cổng 8000 không xong."
+fi
 
 echo
 xanh "════════════════════════════════════════════════════════════"
 xanh "  SẴN SÀNG"
 xanh "════════════════════════════════════════════════════════════"
-echo "    http://127.0.0.1:8001   ←  SAU cải tiến — CỔNG TRÌNH BÀY CHÍNH"
-echo "    http://127.0.0.1:8000   ←  TRƯỚC cải tiến (chỉ để đối chiếu khi cần)"
+echo "    http://127.0.0.1:8001   ←  SAU cải tiến — CỔNG TRÌNH BÀY"
+if [ "$DOI_CHIEU" = 1 ]; then
+  echo "    http://127.0.0.1:8000   ←  TRƯỚC cải tiến (để đối chiếu)"
+else
+  mo   "    (cổng 8000 không mở. Cần đối chiếu trước/sau thì chạy lại với --doi-chieu)"
+fi
 echo
 mo   "    Ba câu nên trình bày, theo thứ tự:"
 mo   "     1. Hạn mức giao đất ở cho cá nhân do cơ quan nào quy định, và con số"
@@ -211,17 +240,21 @@ mo   "        sao giờ nghe nói chỉ còn 250? Người ta đổi quy định
 mo   "     3. Đăng ký lại khai sinh mà không còn bản sao giấy khai sinh cũ thì"
 mo   "        cần giấy tờ gì?"
 echo
-mo   "    Câu 2 là câu đối chiếu rõ nhất: 8001 hiện thêm KHỐI CẢNH BÁO"
-mo   "    'quy định đã thay đổi' mà 8000 không có."
+if [ "$DOI_CHIEU" = 1 ]; then
+  mo "    Câu 2 là câu đối chiếu rõ nhất: 8001 hiện thêm KHỐI CẢNH BÁO"
+  mo "    'quy định đã thay đổi' mà 8000 không có."
+  vang "    LƯU Ý khi đối chiếu: ngoài ba cơ chế, cổng 8001 còn được cấp ngày"
+  vang "    hiện tại cho lời nhắc. Cổng 8000 sẽ viết 'sắp có hiệu lực' cho mốc"
+  vang "    đã qua — đó là công của việc cấp ngày, KHÔNG phải của ba cơ chế."
+fi
 echo
 mo   "    Mỗi câu trên cổng 8001 mất 13–22 giây (cross-encoder chạy trên CPU)."
 mo   "    Dừng: Ctrl-C"
 echo
 
 command -v open >/dev/null && {
-  open "http://127.0.0.1:8000/?t=$(date +%s)" 2>/dev/null
-  sleep 1
+  [ "$DOI_CHIEU" = 1 ] && { open "http://127.0.0.1:8000/?t=$(date +%s)" 2>/dev/null; sleep 1; }
   open "http://127.0.0.1:8001/?t=$(date +%s)" 2>/dev/null
 }
 
-wait "$PID0" "$PID1"
+wait $PID0 "$PID1"

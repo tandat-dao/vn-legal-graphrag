@@ -42,6 +42,28 @@ def cau_hoi_demo() -> list[str]:
             if d.strip() and not d.startswith("#")]
 
 
+def cho_ranh(cong: int, giay: float = 30.0) -> None:
+    """Đợi máy chủ nhả khoá trước khi hỏi câu tiếp.
+
+    Máy chủ chỉ chạy MỘT câu một lúc; khoá được nhả trong khối `finally` của
+    luồng sự kiện, tức là hơi TRỄ so với lúc byte cuối tới nơi. Người trình bày
+    bấm câu sau cách vài giây nên không bao giờ chạm vào cửa sổ đó, nhưng bản
+    kiểm này bắn liên tiếp thì chạm — và vì câu bị từ chối trả lời TỨC THÌ,
+    một lần trượt sẽ kéo mọi câu còn lại trượt theo trong cùng một cửa sổ.
+    Đó là cách bản kiểm từng báo 9 lỗi giả.
+    """
+    import time
+    het = time.time() + giay
+    while time.time() < het:
+        try:
+            with urllib.request.urlopen(f"http://127.0.0.1:{cong}/api/mode", timeout=5) as r:
+                if not json.loads(r.read()).get("dang_ban"):
+                    return
+        except Exception:                      # máy chủ chưa sẵn sàng — thử lại
+            pass
+        time.sleep(0.5)
+
+
 def hoi(cong: int, q: str) -> dict:
     req = urllib.request.Request(
         f"http://127.0.0.1:{cong}/api/ask",
@@ -108,8 +130,13 @@ def main() -> int:
     for cong, can in mong_doi.items():
         moi = cau_hinh(cong)
         if not moi:
-            loi.append(f"cổng {cong} không chạy")
-            print(f"   ✗ cổng {cong} không chạy")
+            # Cổng 8000 chỉ mở khi chạy `bao-ve.sh --doi-chieu`. Không mở là
+            # bình thường; thiếu cổng TRÌNH BÀY mới là lỗi.
+            if cong == 8000:
+                print("   · cổng 8000 không mở (bình thường — chỉ mở khi --doi-chieu)")
+            else:
+                loi.append(f"cổng {cong} không chạy")
+                print(f"   ✗ cổng {cong} không chạy")
             continue
         sai = [k for k, v in can.items() if moi.get(k, "") != v]
         if sai:
@@ -130,8 +157,12 @@ def main() -> int:
     print(f"\n── 2–6. {len(ds)} câu demo trên cổng 8001")
     tong_cit = tra_duoc = 0
     for i, q in enumerate(ds, 1):
+        cho_ranh(8001)
         r = hoi(8001, q)
         van_de = []
+        if "đang xử lý câu hỏi trước" in r["loi"]:
+            cho_ranh(8001)                     # vẫn dính → đợi hẳn rồi thử lại
+            r = hoi(8001, q)
         if r["loi"]:
             van_de.append(f"LỖI: {r['loi'][:40]}")
         if r["cache_hit"] is not True:
