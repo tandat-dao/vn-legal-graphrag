@@ -146,6 +146,10 @@ def main() -> int:
         (r"thắng trên mọi cấu hình(?!\")", "Bảng 4.13 có một hàng ÂM (−0,022)"),
         (r"cái nạng|câm với|đi đúng dây|pha loãng|món hời|quá tay",
          "lối nói ví von — phải diễn đạt trực tiếp"),
+        # Bộ chấm 88.1% CHÍNH LÀ mô hình sinh (Bảng 3.6) và cho điểm CAO NHẤT.
+        # Đó đúng chiều thiên lệch tự đề cao, KHÔNG phải bằng chứng bác bỏ.
+        (r"không được số liệu ủng hộ|chiều ngược với dự đoán|chấm chặt nhất",
+         "diễn giải NGƯỢC về thiên lệch tự đề cao — xem §3.4"),
     ]
     for mau, vi_sao in cam:
         for m in re.finditer(mau, doc):
@@ -159,6 +163,7 @@ def main() -> int:
     bat_buoc = [
         ("−0,022", "phải nêu hàng âm của Bảng 4.13"),
         ("bốn trên năm", "phải nói rõ ưu thế giữ ở 4/5 cấu hình"),
+        ("79,0%", "phải nêu cận dưới thận trọng của tỉ lệ hậu thuẫn"),
         ("da_duyet", None),  # bỏ qua, chỉ minh hoạ
     ]
     for chuoi, vi_sao in bat_buoc:

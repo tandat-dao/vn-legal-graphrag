@@ -13,13 +13,13 @@
 
 ## 1. VẤN ĐỀ TRƯỚC CẢI TIẾN
 
-**Tìm đúng văn bản nhưng chỉ sai điều khoản.** Norm Recall đã đạt 0,829, tức hệ
-hầu như luôn tìm đúng *văn bản*. Nhưng Luật Đất đai có gần 300 điều; tìm đúng
-luật mà chỉ sai điều thì câu trả lời vẫn sai. Tỉ lệ lấy đúng điều khoản chỉ
-**0,737**.
+**Tìm đúng điều nhưng sai khoản.** Đo trên cùng một thang: hệ lấy đúng **Điều**
+chứa đáp án ở mức 0,806, nhưng lấy đúng **Khoản** chỉ **0,737**. Một điều luật
+có thể gồm hàng chục khoản quy định những trường hợp khác nhau, nên chỉ vào đúng
+điều mà sai khoản thì người dùng vẫn nhận câu trả lời sai.
 
 **Không trả lời được ba nhóm câu.** Câu có mốc thời gian quá khứ, câu không nêu
-tỉnh, và mọi thủ tục hộ tịch nằm ngoài sáu thủ tục được lập chỉ mục. Với ba nhóm
+tỉnh, và các thủ tục hộ tịch nằm ngoài sáu thủ tục được lập chỉ mục (đã kiểm ba ca: giám hộ, khai tử, cải chính). Với ba nhóm
 này hệ trả về rỗng, tức là hỏng hoàn toàn chứ không phải trả lời kém.
 
 **Không phát hiện được quy định đã thay đổi.** Hệ trả lời theo văn bản hiện
@@ -132,17 +132,33 @@ nhóm câu nay đều trả lời được.
 Khâu này tự động hoá được, và chất lượng định tuyến không phụ thuộc vào cách
 diễn đạt của người viết tóm tắt.
 
-### 3.4. Bộ chấm độc lập: điểm ổn định trong khoảng 79–88%
+### 3.4. Bộ chấm độc lập: xác nhận cảnh báo của chính báo cáo
+
+Mô hình sinh câu trả lời là Gemini 2.5 Pro, và bộ chấm của báo cáo **cũng chính
+là Gemini 2.5 Pro** (Bảng 3.6). Báo cáo đã tự nêu rủi ro ở mục 4.4.1: điểm có
+thể lệch theo hướng dễ dãi với đầu ra của chính mô hình, *"con số thực tế nhiều
+khả năng thấp hơn 88,1%"*.
+
+Chấm lại cùng bộ kết quả bằng hai bộ chấm khác:
 
 | bộ chấm | quan hệ với mô hình sinh | tỉ lệ hậu thuẫn |
 |---|---|---|
-| Gemini 2.5 Pro *(số của báo cáo, Bảng 4.7)* | **trùng** | **88,1%** |
-| Qwen3-4B-Instruct | khác nhà phát triển | 83,7% |
+| Gemini 2.5 Pro *(số của báo cáo, Bảng 4.7)* | **chính là mô hình sinh** | **88,1%** |
+| Qwen3-4B-Instruct | khác nhà phát triển, khác kiến trúc | 83,7% |
 | Gemini 2.5 Flash | cùng nhà, khác mô hình | 79,0% |
 
-Bộ chấm gần mô hình sinh nhất lại chấm chặt nhất. Đây là chiều ngược với dự đoán
-của hiện tượng thiên lệch tự đề cao, nên lo ngại nêu ở mục 4.4.1 của báo cáo
-không được số liệu ủng hộ.
+**Số liệu xác nhận dự đoán của báo cáo, không bác bỏ nó.** Bộ chấm chính là mô
+hình sinh cho điểm **cao nhất**; hai bộ chấm không phải nó đều cho điểm **thấp
+hơn**, kém 4,4 và 9,1 điểm phần trăm. Đây đúng chiều mà hiện tượng thiên lệch tự
+đề cao dự đoán.
+
+Giá trị của phép đo mới nằm ở chỗ **định lượng được mức lệch** và cho thấy điểm
+không sụp đổ: kể cả với bộ chấm hoàn toàn độc lập, tỉ lệ vẫn ở mức 79–84%. Khi
+trình bày nên nêu **79,0%** làm cận dưới thận trọng thay vì chỉ nêu 88,1%.
+
+**Phát hiện phụ.** Bản Qwen3-4B đã tinh chỉnh cho 99,7% — gần như không phê phán
+gì. Nó được dạy sinh câu trả lời có trích dẫn, không được dạy đánh giá trích
+dẫn. Bộ chấm cần độc lập cả về tác vụ huấn luyện, không chỉ về nhà phát triển.
 
 ### 3.5. Mô hình sinh: thêm hàng thứ năm vào Bảng 4.13
 
@@ -283,6 +299,11 @@ cải thiện được một nửa, mức tăng trung bình +0,317"*.
 phải toàn bộ.
 
 Lấy đúng điều khoản nhiều hơn không đồng nghĩa với câu trả lời tốt hơn.
+
+Tỉ lệ hậu thuẫn 88,1% trong báo cáo do **chính mô hình sinh** chấm. Hai bộ chấm
+độc lập cho 83,7% và 79,0%. Nên nêu **79,0% làm cận dưới thận trọng** và nói rõ
+điều này trước, vì báo cáo đã tự cảnh báo ở mục 4.4.1 và hội đồng có thể hỏi
+tới.
 
 **Hai dạng câu cần tránh khi demo:** câu có đáp án nằm trong bảng biểu (khâu sinh
 chưa nhận bảng làm căn cứ) và câu về điều kiện nhận con nuôi (hệ lấy nhầm điều
