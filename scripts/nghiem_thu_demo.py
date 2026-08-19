@@ -117,11 +117,13 @@ def main() -> int:
             print(f"   ✗ cổng {cong} sai: {sai}")
         else:
             print(f"   ✓ cổng {cong} đúng {len(can)} biến")
-        if not moi.get("UI_NGAY_HOM_NAY"):
-            loi.append(f"cổng {cong} chưa cấp ngày cho lời nhắc")
-            print(f"   ✗ cổng {cong} thiếu UI_NGAY_HOM_NAY")
-        else:
-            print(f"   ✓ cổng {cong} ngày lời nhắc = {moi['UI_NGAY_HOM_NAY']}")
+        # Ngày CHỈ đặt cho cổng trình bày. Cổng 8000 giữ lời nhắc cũ để bộ
+        # nhớ đệm sẵn có của nó vẫn trúng.
+        if cong == 8001 and not moi.get("UI_NGAY_HOM_NAY"):
+            loi.append("cổng 8001 chưa cấp ngày cho lời nhắc")
+            print("   ✗ cổng 8001 thiếu UI_NGAY_HOM_NAY")
+        elif cong == 8001:
+            print(f"   ✓ cổng 8001 ngày lời nhắc = {moi['UI_NGAY_HOM_NAY']}")
 
     # ── 2..6 trên cổng trình bày
     ds = cau_hoi_demo()

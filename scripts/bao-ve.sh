@@ -25,10 +25,13 @@ set -uo pipefail
 # Đổi ngày ở đây thì PHẢI hâm lại cache (xem cuối tệp này).
 NGAY_LOI_NHAC="19/08/2026"
 
-# Đặt cho CẢ HAI cổng: đây là sửa lỗi ở khâu sinh, không phải một trong ba cơ
-# chế đang đối chiếu. Chỉ đặt một cổng là thêm biến khác biệt thứ tư, làm bẩn
-# phép so trước/sau.
-export UI_NGAY_HOM_NAY="$NGAY_LOI_NHAC"
+# CHỈ đặt cho cổng 8001 — cổng trình bày. Cổng 8000 giữ nguyên lời nhắc cũ nên
+# bộ nhớ đệm sẵn có của nó vẫn trúng; hâm lại 8000 tốn 15 lượt sinh cho một cổng
+# không dùng tới.
+#
+# HỆ QUẢ PHẢI BIẾT: nếu mở hai cổng để đối chiếu thì ngày là khác biệt THỨ TƯ,
+# ngoài ba cơ chế. Cổng 8000 sẽ viết "sắp có hiệu lực" cho mốc đã qua, cổng 8001
+# thì không. Đừng tính chỗ đó vào công của ba cơ chế.
 
 GOC="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$GOC" || exit 1
@@ -121,7 +124,7 @@ if [ "$SO_VB" -lt 30 ]; then
   exit 1
 fi
 xanh "✓ Dữ liệu đủ — $SO_VB văn bản · $SO_DC quan hệ dẫn chiếu"
-mo   "  ngày cấp cho lời nhắc: $NGAY_LOI_NHAC"
+mo   "  ngày cấp cho lời nhắc (chỉ cổng 8001): $NGAY_LOI_NHAC"
 [ "$SO_DC" -lt 1 ] && vang "  ⚠ Chưa có quan hệ dẫn chiếu — cổng 8001 sẽ không khác cổng 8000."
 
 # ── 3. Dọn cổng cũ ──────────────────────────────────────────────────────────
@@ -131,8 +134,7 @@ pkill -f "uvicorn ui.server:app" >/dev/null 2>&1 && { mo "  dọn server cũ…"
 LOG0="$(mktemp -t demo8000)"; LOG1="$(mktemp -t demo8001)"
 
 # TRƯỚC cải tiến — tắt hết, dùng đúng tham số mặc định của báo cáo
-env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= \
-    UI_NGAY_HOM_NAY="$NGAY_LOI_NHAC" \
+env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= UI_NGAY_HOM_NAY= \
     SF_DENSE_POOL_MIN=50 SF_RARITY_ALPHA=1.5 DEMO_MODE=live \
     "$PY" -m uvicorn ui.server:app --port 8000 >"$LOG0" 2>&1 &
 PID0=$!

@@ -182,14 +182,26 @@ def _build_gemini_client(api_key: str | None):
     Mặc định false → Developer API (generativelanguage) bằng api_key.
     """
     from google import genai
+    from google.genai import types
+
+    # THỜI HẠN CHỜ LÀ BẮT BUỘC. Mặc định của google-genai là chờ vô hạn: đã gặp
+    # thật một lượt gọi treo 32 phút, CPU 0%, không lỗi, không trả về. Giữa buổi
+    # bảo vệ thì giao diện đứng im vĩnh viễn — và vì mỗi lần chỉ chạy một câu,
+    # nó khoá luôn mọi câu sau. Hết hạn thì thành lỗi nhìn thấy được, và mode
+    # có dự phòng còn chuyển được sang nhà cung cấp khác.
+    # Đơn vị là mili-giây. 180 giây: gemini-2.5-pro sinh câu trả lời dài mất
+    # 40–60 giây nên ngưỡng này chỉ cắn khi thật sự treo.
+    han_cho_ms = int(os.getenv("GEMINI_TIMEOUT_MS", "180000"))
+    tuy_chon = types.HttpOptions(timeout=han_cho_ms)
 
     if os.getenv("GEMINI_USE_VERTEX", "false").lower() == "true":
         return genai.Client(
             vertexai=True,
             project=os.getenv("GEMINI_VERTEX_PROJECT"),
             location=os.getenv("GEMINI_VERTEX_LOCATION", "us-central1"),
+            http_options=tuy_chon,
         )
-    return genai.Client(api_key=api_key)
+    return genai.Client(api_key=api_key, http_options=tuy_chon)
 
 
 def _gemini_complete(gemini_client, *, model, system_text, user_text,

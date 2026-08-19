@@ -475,8 +475,13 @@ khóa cache: lấy `date` thì hâm cache hôm nay, hôm sau demo là trượt s
 gọi mô hình trực tiếp. Giá trị đặt một chỗ duy nhất trong `scripts/bao-ve.sh`, và
 `precache_demo` đọc **cùng biến môi trường** nên hai bên không thể lệch nhau.
 
-Đặt cho **cả hai cổng**: đây là sửa lỗi ở khâu sinh, không phải một trong ba cơ
-chế đang đối chiếu. Chỉ đặt một cổng là thêm biến khác biệt thứ tư vào phép so.
+Chỉ đặt cho **cổng 8001** — cổng trình bày. Cổng 8000 giữ nguyên lời nhắc cũ nên
+bộ nhớ đệm sẵn có của nó vẫn trúng.
+
+> **Hệ quả phải nói rõ nếu mở hai cổng để đối chiếu:** ngày là khác biệt **thứ
+> tư**, ngoài ba cơ chế. Cổng 8000 sẽ viết *"sắp có hiệu lực"* cho mốc đã qua,
+> cổng 8001 thì không. Chỗ khác biệt đó là công của việc cấp ngày, **không phải**
+> công của ba cơ chế truy hồi.
 
 **Một lỗi tính tất định đã sửa ngày 19/08.** Truy vấn duyệt đồ thị ở Giai đoạn 2
 không có `ORDER BY`, nên Neo4j trả cùng tập văn bản với thứ tự khác nhau giữa hai
