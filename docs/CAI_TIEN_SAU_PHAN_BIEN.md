@@ -346,28 +346,28 @@ mất đơn vị nào**.
 
 **Chạy đối chiếu trên hai cổng:**
 
-**Cổng 8000 — bản trước cải tiến:**
+**Ngày bảo vệ chỉ ba bước:** mở máy → mở Docker Desktop → gõ một lệnh.
 
 ```bash
-env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= SF_DENSE_POOL_MIN=50 SF_RARITY_ALPHA=1.5 ./scripts/chay-demo.sh live 8000
+cd ~/Documents/University/2526_Sem2/Thesis/vn-legal-graphrag && ./scripts/bao-ve.sh
 ```
 
-**Cổng 8001 — bản sau cải tiến, đủ ba cơ chế:**
+Kịch bản tự làm hết: khởi động container, chờ Neo4j nhận truy vấn, kiểm dữ liệu
+đủ hay không, mở hai cổng với đúng cấu hình, **tự kiểm lại hai cổng có khác cấu
+hình thật không**, rồi mở trình duyệt.
 
-```bash
-env UI_REFERS_MODE=khoan UI_RERANK_MODE=trong-norm UI_CHUYEN_TIEP=1 SF_DENSE_POOL_MIN=100 SF_RARITY_ALPHA=0 ./scripts/chay-demo.sh live 8001
-```
+| cổng | bản | cấu hình |
+|---|---|---|
+| 8000 | trước cải tiến | tắt cả ba cơ chế, tham số mặc định của báo cáo |
+| 8001 | sau cải tiến | đủ ba cơ chế + cảnh báo quy định đã thay đổi |
 
-> **Phải đặt đủ năm biến, không được thiếu cái nào.** Ba cơ chế đóng góp
-> +0,016 · +0,047 · +0,053; bật lẻ một cái chỉ thể hiện một phần mức cải tiến.
-> Hai biến `SF_*` được đọc lúc nạp module nên **phải đặt trước khi khởi động
-> server**, không đặt được từ giao diện.
->
-> Cũng phải đặt tường minh ở **cả hai lệnh**. Bỏ trống ở lệnh đầu thì biến được
-> kế thừa sang tiến trình sau và cả hai cổng cùng chạy bản mới.
+> Cấu hình sau cải tiến cần **năm biến môi trường** đặt đúng. Thiếu một biến thì
+> demo chỉ thể hiện một phần mức cải tiến mà **nhìn giao diện không phát hiện
+> được** — vì vậy chúng được gói trong kịch bản thay vì gõ tay. Hai biến `SF_*`
+> phải đặt trước khi khởi động server vì chúng được đọc lúc nạp module.
 
-Mười lăm câu demo đã được nạp sẵn kết quả cho **đúng hai cấu hình này**. Đổi bất
-kỳ biến nào là cache trượt và mỗi câu chạy tươi khoảng 50 giây.
+Mười lăm câu demo đã nạp sẵn kết quả cho đúng hai cấu hình này. Nếu tự chạy tay
+và đổi bất kỳ biến nào thì cache trượt, mỗi câu mất khoảng 50 giây.
 
 > **Chỉ dùng A3 để đối chiếu trước/sau.** Đo ngày 19/08: bảy trên mười lăm câu
 > cho trích dẫn khác nhau giữa hai bản, nhưng chỉ A3 cho khác biệt sạch và giải
