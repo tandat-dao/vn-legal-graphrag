@@ -41,7 +41,10 @@ VALID_TO_SENTINEL = "9999-12-31"
 # `#### Điểm a.` / `##### Tiết N.`
 _HEADING_RE = re.compile(r"^(#{2,5})\s+(.*?)\s*$")
 _DIEU_RE = re.compile(r"^Điều\s+([^.\s]+)\.?", re.IGNORECASE)
-_PHU_LUC_RE = re.compile(r"^Phụ\s*lục\s*([^.\s\-]*)", re.IGNORECASE)
+_PHU_LUC_RE = re.compile(r"^Phụ\s*lục\s*([^.]*)", re.IGNORECASE)
+# Giữ TRỌN đường dẫn sau "Phụ lục" (VD "I - Phần III - Mục I"), không cắt ở
+# dấu gạch: một văn bản có thể có nhiều mục cùng số Phụ lục I, cắt ngắn thì
+# ba mục khác nhau đều thành "I" và tra cứu luôn rơi vào mục đầu tiên.
 _KHOAN_RE = re.compile(r"^Khoản\s+([^.\s]+)\.?", re.IGNORECASE)
 _DIEM_RE = re.compile(r"^Điểm\s+([^.\s]+)\.?", re.IGNORECASE)
 _TIET_RE = re.compile(r"^Tiết\s+([^.\s]+)\.?", re.IGNORECASE)
@@ -403,7 +406,23 @@ def _find_muc(norm: NormMeta, dieu: str) -> dict | None:
         return None
     if _norm_key(so) == PHU_LUC_DEFAULT:
         return phu_luc[0]
-    return _find_child(phu_luc, "phu_luc", so)
+    node = _find_child(phu_luc, "phu_luc", so)
+    if node is not None:
+        return node
+    # Hai chiều lệch nhau đều phải tra được:
+    #  - trích dẫn ngắn hơn tiêu đề ("I" ↔ "I - Phần III - Mục I") → khớp phần đầu;
+    #  - trích dẫn dài hơn vì kèm một mẩu tiêu đề ("I - Phần III - Mục I. Trình tự")
+    #    → lấy mục có số hiệu DÀI NHẤT là phần đầu của trích dẫn, nếu lấy mục ngắn
+    #    nhất thì "Mục VII" sẽ rơi nhầm vào "Mục VI".
+    target = _norm_key(so)
+    for n in phu_luc:
+        if n.get("so") and _norm_key(n["so"]).startswith(target):
+            return n
+    ung_vien = [n for n in phu_luc
+                if n.get("so") and target.startswith(_norm_key(n["so"]))]
+    if ung_vien:
+        return max(ung_vien, key=lambda n: len(_norm_key(n["so"])))
+    return None
 
 
 def get_component_text(

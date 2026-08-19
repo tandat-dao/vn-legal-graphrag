@@ -206,3 +206,65 @@ def test_norm_graph_bo_canh_treo():
         assert e["source"] in ids and e["target"] in ids
     # amended_by_norms của Luật ĐĐ 2024 trỏ tới nhiều luật ngoài corpus
     assert graph["bo_qua"]
+
+
+# ---------------------------------------------------------------------------
+# Phụ lục nhiều mục cùng số — tra theo đường dẫn đầy đủ
+# ---------------------------------------------------------------------------
+
+MD_PHU_LUC_NHIEU_MUC = """---
+id: "nghi-dinh-thu-2025"
+title: "Nghị định thử"
+tier: 2
+theme: "dat-dai"
+jurisdiction: "toan-quoc"
+implements: null
+valid_from: "2025-01-01"
+valid_to: null
+source_url: "https://vbpl.vn/thu"
+summary: null
+---
+
+## Phụ lục I - Phần III - Mục I. Trình tự giao đất
+
+### Khoản 6.
+
+Nội dung mục I của phần III.
+
+## Phụ lục I - Phần V - Nội dung C - Mục VI. Trình tự đăng ký biến động
+
+### Khoản 1.
+
+Nội dung mục VI.
+
+## Phụ lục I - Phần V - Nội dung C - Mục VII. Trình tự cấp đổi
+
+### Khoản 1.
+
+Nội dung mục VII.
+"""
+
+
+def test_phu_luc_nhieu_muc_cung_so(tmp_path):
+    """Ba mục cùng thuộc Phụ lục I phải tra ra ĐÚNG mục, không dồn về mục đầu."""
+    (tmp_path / "nghi-dinh-thu-2025.md").write_text(
+        MD_PHU_LUC_NHIEU_MUC, encoding="utf-8")
+
+    def tra(dieu, khoan=None):
+        return get_component_text("nghi-dinh-thu-2025", dieu, khoan, raw_dir=tmp_path)
+
+    # Đường dẫn đầy đủ, đúng dạng bộ sinh trả về
+    assert "Nội dung mục I của phần III" in tra("I - Phần III - Mục I", "6")
+
+    # Trích dẫn kèm một mẩu tiêu đề + số Khoản có dấu chấm cuối
+    assert "Nội dung mục I của phần III" in tra("I - Phần III - Mục I. Trình tự", "6.")
+
+    # Mục VII KHÔNG được rơi nhầm vào Mục VI dù "Mục VI" là phần đầu của "Mục VII"
+    assert "Nội dung mục VII" in tra("I - Phần V - Nội dung C - Mục VII. Trình tự")
+    assert "Nội dung mục VI." in tra("I - Phần V - Nội dung C - Mục VI. Trình tự")
+
+    # Chỉ nêu số Phụ lục → lấy mục đầu tiên, không trả None
+    assert tra("I").startswith("Phụ lục I - Phần III - Mục I.")
+
+    # Không có thật → None
+    assert tra("II - Phần I") is None
