@@ -383,10 +383,19 @@ class LiveAdapter(BaseAdapter):
         self.top_k = top_k
         self.max_tokens = max_tokens
         self.verify_tier = verify_tier
-        # Bao đóng dẫn chiếu `[:REFERS_TO]`. Mặc định TẮT để giữ đúng hành vi đã
-        # đo trong báo cáo; đặt UI_REFERS_MODE=khoan khi muốn demo cơ chế này.
-        # Cần đồ thị đã có cạnh REFERS_TO (chạy src.ingestion.reference_builder).
+        # ---- Cấu hình SAU CẢI TIẾN (mặc định TẮT hết) ----
+        # Ba cơ chế phải bật CÙNG NHAU mới ra đúng mức +0,116 đã đo. Bật lẻ một
+        # cái chỉ ra một phần: dẫn chiếu +0,016, cross-encoder +0,047, mở vùng
+        # tìm kiếm +0,053. Xem docs/CAI_TIEN_SAU_PHAN_BIEN.md §3.1.
+        #
+        # Hai hằng số pool/độ hiếm nằm trong semantic_filter và đọc biến môi
+        # trường SF_DENSE_POOL_MIN / SF_RARITY_ALPHA lúc nạp module, nên phải
+        # đặt TRƯỚC khi khởi động server chứ không đặt được ở đây.
         self.refers_mode = (os.getenv("UI_REFERS_MODE") or "").strip() or None
+        # Cross-encoder xếp lại trong từng văn bản — đóng góp lớn nhất.
+        self.rerank_mode = (os.getenv("UI_RERANK_MODE") or "").strip() or None
+        # Phát hiện quy định đã thay đổi + nạp điều khoản chuyển tiếp.
+        self.chuyen_tiep = (os.getenv("UI_CHUYEN_TIEP") or "").strip().lower() in ("1", "true", "yes")
 
         # `clients` chỉ để test tiêm client giả — chạy thật luôn đi qua
         # `_build_clients` để đúng đường code của `src/`.
@@ -438,6 +447,10 @@ class LiveAdapter(BaseAdapter):
             kw["max_tokens"] = self.max_tokens
         if self.refers_mode:
             kw["refers_mode"] = self.refers_mode
+        if self.rerank_mode:
+            kw["rerank_mode"] = self.rerank_mode
+        if self.chuyen_tiep:
+            kw["chuyen_tiep"] = True
         return kw
 
     def _du_lieu_cau_hoi(self, question: str, params: dict) -> dict:

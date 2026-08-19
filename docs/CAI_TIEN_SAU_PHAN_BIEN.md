@@ -346,14 +346,28 @@ mất đơn vị nào**.
 
 **Chạy đối chiếu trên hai cổng:**
 
+**Cổng 8000 — bản trước cải tiến:**
+
 ```bash
-env UI_REFERS_MODE= ./scripts/chay-demo.sh live 8000          # trước cải tiến
-env UI_REFERS_MODE=khoan ./scripts/chay-demo.sh live 8001     # sau cải tiến
+env UI_REFERS_MODE= UI_RERANK_MODE= UI_CHUYEN_TIEP= SF_DENSE_POOL_MIN=50 SF_RARITY_ALPHA=1.5 ./scripts/chay-demo.sh live 8000
 ```
 
-Phải đặt biến môi trường tường minh ở **cả hai lệnh**. Nếu bỏ trống ở lệnh đầu,
-biến sẽ được kế thừa sang tiến trình thứ hai và cả hai cổng đều chạy bản mới.
-Mười lăm câu demo đã được nạp sẵn kết quả cho cả hai cấu hình.
+**Cổng 8001 — bản sau cải tiến, đủ ba cơ chế:**
+
+```bash
+env UI_REFERS_MODE=khoan UI_RERANK_MODE=trong-norm UI_CHUYEN_TIEP=1 SF_DENSE_POOL_MIN=100 SF_RARITY_ALPHA=0 ./scripts/chay-demo.sh live 8001
+```
+
+> **Phải đặt đủ năm biến, không được thiếu cái nào.** Ba cơ chế đóng góp
+> +0,016 · +0,047 · +0,053; bật lẻ một cái chỉ thể hiện một phần mức cải tiến.
+> Hai biến `SF_*` được đọc lúc nạp module nên **phải đặt trước khi khởi động
+> server**, không đặt được từ giao diện.
+>
+> Cũng phải đặt tường minh ở **cả hai lệnh**. Bỏ trống ở lệnh đầu thì biến được
+> kế thừa sang tiến trình sau và cả hai cổng cùng chạy bản mới.
+
+Mười lăm câu demo đã được nạp sẵn kết quả cho **đúng hai cấu hình này**. Đổi bất
+kỳ biến nào là cache trượt và mỗi câu chạy tươi khoảng 50 giây.
 
 > **Chỉ dùng A3 để đối chiếu trước/sau.** Đo ngày 19/08: bảy trên mười lăm câu
 > cho trích dẫn khác nhau giữa hai bản, nhưng chỉ A3 cho khác biệt sạch và giải

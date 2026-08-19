@@ -87,6 +87,13 @@ def main() -> None:
     parser.add_argument("--refers-mode", choices=["khoan", "all", "rrf"],
                         default=os.getenv("UI_REFERS_MODE") or None,
                         help="PHẢI khớp UI_REFERS_MODE lúc demo.")
+    # Cả ba cơ chế đều đổi ngữ cảnh -> đổi khoá cache. Thiếu một cái là trượt.
+    parser.add_argument("--rerank-mode", choices=["trong-norm"],
+                        default=os.getenv("UI_RERANK_MODE") or None,
+                        help="PHẢI khớp UI_RERANK_MODE lúc demo.")
+    parser.add_argument("--chuyen-tiep", action="store_true",
+                        default=(os.getenv("UI_CHUYEN_TIEP") or "").lower() in ("1", "true", "yes"),
+                        help="PHẢI khớp UI_CHUYEN_TIEP lúc demo.")
     args = parser.parse_args()
 
     questions = list(args.question)
@@ -108,7 +115,10 @@ def main() -> None:
     cache_dir = Path(args.cache_dir)
     print(f"🔁 Pre-cache {len(questions)} câu → {cache_dir}")
     print(f"   jurisdiction={args.jurisdiction} mode={args.mode} "
-          f"llm_mode={args.llm_mode} refers_mode={args.refers_mode}")
+          f"llm_mode={args.llm_mode} refers={args.refers_mode} "
+          f"rerank={args.rerank_mode} chuyen_tiep={args.chuyen_tiep}")
+    print(f"   pool={os.getenv('SF_DENSE_POOL_MIN', '50')} "
+          f"rarity_alpha={os.getenv('SF_RARITY_ALPHA', '1.5')}")
     print("   ⚠️  Lúc demo PHẢI đặt đúng LLM_MODE và UI_REFERS_MODE như trên, "
           "khác đi là trượt cache.\n")
 
@@ -123,6 +133,8 @@ def main() -> None:
                 response_mode=None if args.mode == "auto" else args.mode,
                 llm_mode=args.llm_mode,
                 **({"refers_mode": args.refers_mode} if args.refers_mode else {}),
+                **({"rerank_mode": args.rerank_mode} if args.rerank_mode else {}),
+                **({"chuyen_tiep": True} if args.chuyen_tiep else {}),
             )
             dt = time.perf_counter() - t0
             hit = result.get("cache_hit")
