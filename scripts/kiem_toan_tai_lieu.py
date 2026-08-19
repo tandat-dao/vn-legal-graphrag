@@ -150,6 +150,11 @@ def main() -> int:
         # Đó đúng chiều thiên lệch tự đề cao, KHÔNG phải bằng chứng bác bỏ.
         (r"không được số liệu ủng hộ|chiều ngược với dự đoán|chấm chặt nhất",
          "diễn giải NGƯỢC về thiên lệch tự đề cao — xem §3.4"),
+        # Nhóm 'câu không nêu tỉnh' KHÔNG trả về rỗng — nó loại mất văn bản cấp
+        # tỉnh. Gộp ba nhóm thành một kiểu hỏng là sai.
+        (r"[Vv]ới ba nhóm\s*\n?này hệ trả về rỗng|ba nhóm câu.{0,40}trả về rỗng",
+         "ba nhóm hỏng theo HAI kiểu khác nhau — xem §1"),
+        (r"120/121", "con số đúng là 118/121 (đã kiểm lại bằng so ghép cặp)"),
     ]
     for mau, vi_sao in cam:
         for m in re.finditer(mau, doc):

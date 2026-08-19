@@ -18,9 +18,17 @@ chứa đáp án ở mức 0,806, nhưng lấy đúng **Khoản** chỉ **0,737*
 có thể gồm hàng chục khoản quy định những trường hợp khác nhau, nên chỉ vào đúng
 điều mà sai khoản thì người dùng vẫn nhận câu trả lời sai.
 
-**Không trả lời được ba nhóm câu.** Câu có mốc thời gian quá khứ, câu không nêu
-tỉnh, và các thủ tục hộ tịch nằm ngoài sáu thủ tục được lập chỉ mục (đã kiểm ba ca: giám hộ, khai tử, cải chính). Với ba nhóm
-này hệ trả về rỗng, tức là hỏng hoàn toàn chứ không phải trả lời kém.
+**Ba nhóm câu bị bộ lọc làm hỏng, theo hai kiểu khác nhau.**
+
+*Trả về rỗng hoàn toàn:* câu có mốc thời gian quá khứ (mốc lọc hiệu lực lấy nhầm
+năm xảy ra sự việc nên loại sạch văn bản mới), và các thủ tục hộ tịch nằm ngoài
+sáu thủ tục được lập chỉ mục (đã kiểm ba ca: giám hộ, khai tử, cải chính). Hai
+nhóm này hệ không tìm được văn bản nào, tức hỏng hoàn toàn chứ không phải trả
+lời kém.
+
+*Loại mất văn bản chứa đáp án:* câu không nêu tỉnh bị gán cứng "toàn quốc" nên
+văn bản cấp tỉnh bị lọc ra, trong khi nhiều câu về lệ phí và hạn mức có đáp án
+nằm đúng ở cấp tỉnh. Nhóm này vẫn có ngữ cảnh, nhưng thiếu đúng phần cần.
 
 **Không phát hiện được quy định đã thay đổi.** Hệ trả lời theo văn bản hiện
 hành, không cảnh báo cho người nộp hồ sơ từ trước.
@@ -172,14 +180,14 @@ Mốc lọc hiệu lực lấy nhầm năm xảy ra sự việc; câu không nê
 "toàn quốc"; thủ tục ngoài danh mục làm bộ lập kế hoạch bỏ trống lĩnh vực. Cả ba
 nhóm câu nay đều trả lời được.
 
-### 3.3. Tóm tắt do máy sinh: 0 câu thua, 120/121 câu cho kết quả y hệt
+### 3.3. Tóm tắt do máy sinh: 0 câu thua, 118/121 câu cho kết quả y hệt
 
 Khâu này tự động hoá được, và chất lượng định tuyến không phụ thuộc vào cách
 diễn đạt của người viết tóm tắt.
 
-*Đo ở đợt trước trên 121 câu, trước khi gộp công việc hai thành viên. Kết luận
-định tính (tự động hoá được, không phụ thuộc người viết) không đổi, nhưng con số
-tuyệt đối chưa đo lại trên cấu hình hiện tại.*
+*So ghép cặp trên 121 câu, bốn cấu hình truy hồi: 118 câu cho kết quả y hệt,
+3 câu tóm tắt máy **tốt hơn**, 0 câu tệ hơn. Đo ở đợt trước, chưa chạy lại trên
+cấu hình hiện tại; kết luận định tính không đổi.*
 
 ### 3.4. Bộ chấm độc lập: xác nhận cảnh báo của chính báo cáo
 
@@ -290,10 +298,12 @@ quả dương. Kết luận "kỹ thuật X không hiệu quả" nhiều khi th�
 đặt sai chỗ".
 
 **Lấy đúng điều khoản nhiều hơn không tự động làm câu trả lời tốt hơn.** Tỉ lệ
-lấy đúng tăng +0,116 nhưng F1 của khâu sinh không thay đổi: hệ trích trung bình
-2,71 điều khoản trong khi đáp án chuẩn chỉ cần 1,57. Đo được phần còn có thể cải
-thiện: nếu chọn lọc trích dẫn tối ưu, F1 đạt **0,742**, lớn hơn toàn bộ mức cải
-thiện của đợt này. Khâu hạn chế nhất đã chuyển từ truy hồi sang chọn trích dẫn.
+lấy đúng tăng +0,116 nhưng F1 của khâu sinh không thay đổi. Nguyên nhân: hệ trích
+trung bình **2,71** điều khoản trong khi đáp án chuẩn chỉ cần **1,57** *(đo trên
+tập kiểm thử mới, 28 câu)*. Nếu chọn lọc trích dẫn tối ưu, F1 đạt **0,742** so
+với 0,571 hiện tại *(đo trên mẫu 55 câu của tập v2)* — phần cải thiện tiềm năng
+này lớn hơn toàn bộ mức cải thiện của đợt này. Khâu hạn chế nhất đã chuyển từ
+truy hồi sang chọn trích dẫn.
 
 **Mô hình sinh càng yếu thì đồ thị càng có giá trị.** Mô hình 4 tỉ tham số hưởng
 lợi hơn gấp đôi so với mô hình thương mại nếu tính theo tỉ lệ. Mô hình nhỏ không
