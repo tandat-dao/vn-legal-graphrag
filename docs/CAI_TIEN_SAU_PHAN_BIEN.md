@@ -42,14 +42,23 @@ công việc hai thành viên (`v2_chot_sau_gop.json`).
 | + Xếp lại bằng cross-encoder | 0,800 | +0,063 | 17 / 5 |
 | + Mở rộng vùng tìm kiếm | **0,853** | **+0,116** | **26 / 4** |
 
-Theo bốn thách thức của báo cáo:
+Bảng trên cắt mức tăng **theo cơ chế** — mỗi hàng bật thêm một cơ chế so với
+hàng trên, tính trên cả 123 câu. Bảng dưới cắt **đúng mức tăng đó** theo **loại
+câu hỏi**: cùng một cấu hình cuối, cùng một mốc, chỉ chia 123 câu thành bốn nhóm
+rồi tính riêng.
 
-| thách thức | mức tăng |
-|---|---|
-| Đa lĩnh vực | **+0,216** |
-| Đa tầng văn bản | **+0,153** |
-| Đa địa phương | +0,069 |
-| Đa phiên bản | +0,019 |
+| thách thức | số câu | mức tăng trong nhóm | đóng góp vào tổng |
+|---|---|---|---|
+| Đa lĩnh vực | 32 | **+0,216** | +0,056 |
+| Đa tầng văn bản | 30 | **+0,153** | +0,037 |
+| Đa địa phương | 31 | +0,069 | +0,017 |
+| Đa phiên bản | 30 | +0,019 | +0,005 |
+| **cộng có trọng số** | **123** | | **+0,116** |
+
+> **Đọc bảng cho đúng.** Cột "mức tăng trong nhóm" **không cộng thẳng lại được**.
+> Đa lĩnh vực +0,216 nghe rất lớn nhưng chỉ trên 32 câu, nên đóng góp vào tổng
+> chỉ +0,056. Phải nhân với tỉ lệ số câu mới ra +0,116 — đúng bằng tổng của bảng
+> cắt theo cơ chế. Hai bảng là hai lát cắt của **cùng một con số**.
 
 ### Vì sao chỉ 26 câu thắng trên 123 câu
 
