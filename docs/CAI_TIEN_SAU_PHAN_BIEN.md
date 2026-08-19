@@ -331,20 +331,43 @@ sinh cần khai báo phạm vi lĩnh vực mới"*.
 
 ## 5. TRÌNH BÀY VÀ DEMO
 
-**Ví dụ chính.** Câu hỏi: *"Hạn mức giao đất ở cho cá nhân do cơ quan nào quy
-định, và con số cụ thể hiện nay tại TP.HCM được quy định ở văn bản nào?"*
+**Ví dụ chính — câu A4.** *"Hồi trước nghe nói ở TP.HCM một hộ được tới 300 mét
+vuông đất ở, sao giờ nghe nói chỉ còn 250? Người ta đổi quy định hồi nào vậy?"*
 
-Bản trước cải tiến dẫn **Luật Đất đai 2013 Điều 103 Khoản 4**, nội dung thật là
-*"xác định diện tích đất ở đối với trường hợp có vườn, ao"* — vừa hết hiệu lực
-vừa sai chủ đề, nhưng về từ ngữ lại rất giống câu hỏi. Bản sau cải tiến dẫn
-**Luật Đất đai 2024 Điều 196 Khoản 2**.
+Câu này tự nó hỏi về một **sự thay đổi quy định**, nên tính năng mới trả lời
+đúng thứ người hỏi cần. Bản sau cải tiến hiện thêm **khối cảnh báo** ngay trước
+câu trả lời:
 
-Nguyên nhân chữa được: Quyết định 69/2024 của TP.HCM, ngay Điều 1, có câu *"theo
-khoản 2 Điều 196"*. Cơ chế lần theo dẫn chiếu đi theo quan hệ đó về đúng điều
-luật gốc. Đo cụ thể: ngữ cảnh tăng từ 19 lên 22 đơn vị, tức **thêm 3 và không
-mất đơn vị nào**.
+> *Quy định về nội dung này đã thay đổi: Quyết định 18/2016 hết hiệu lực từ
+> 30/09/2024, được thay thế bởi Quyết định 69/2024 (hiệu lực từ 30/09/2024).*
 
-**Chạy đối chiếu trên hai cổng:**
+Bản trước cải tiến vẫn trả lời đúng nội dung nhưng **không có khối cảnh báo
+này**, và trích dẫn Quyết định 18/2016 lặp hai lần. Bản sau bỏ trùng lặp.
+
+Đây là ví dụ **sạch**: không mất số liệu nào, không thêm văn bản lạc đề, khác
+biệt nhìn thấy ngay trên màn hình.
+
+**Ví dụ dự phòng — câu A3.** *"Hạn mức giao đất ở cho cá nhân do cơ quan nào quy
+định, và con số cụ thể hiện nay tại TP.HCM…"* Bản trước dẫn **Luật Đất đai 2013
+Điều 103 Khoản 4** — luật đã hết hiệu lực, và điều đó nói về *"đất có vườn, ao"*,
+không liên quan hạn mức. Bản sau dẫn **Luật Đất đai 2024 Điều 195, 196** — đúng
+điều trao thẩm quyền cho UBND tỉnh. Nguyên nhân chữa được: Quyết định 69/2024
+ngay Điều 1 có câu *"theo khoản 2 Điều 196"*, cơ chế lần theo dẫn chiếu đi theo
+quan hệ đó.
+
+> **A3 có một điểm trừ nhìn thấy được.** Bản sau nêu thiếu mức **200 m²** cho
+> thị trấn các huyện, trong khi bản trước nêu đủ ba mức. Đã kiểm: điều khoản đó
+> **có trong ngữ cảnh** ở cả hai bản, nên đây là bộ sinh bỏ sót khi phải xử lý
+> nhiều ngữ cảnh hơn, không phải lỗi truy hồi. Nếu dùng A3 thì nên chủ động nói
+> ra trước khi bị hỏi.
+
+### Hạn chế của cảnh báo thay đổi
+
+Cơ chế phát hiện thay đổi hiện dựa trên việc **tập văn bản ứng viên có chứa văn
+bản đã hết hiệu lực hay không**, chứ chưa xét văn bản đó có liên quan tới nội
+dung câu hỏi không. Vì vậy có câu nhận cảnh báo **lạc đề** — ví dụ câu hỏi hạn
+mức ở Đồng Nai lại nhận cảnh báo về Luật Đất đai 2013. Tránh các câu hỏi về Đồng
+Nai khi muốn trình diễn tính năng này; dùng câu A4 hoặc câu về TP.HCM.
 
 **Ngày bảo vệ chỉ ba bước:** mở máy → mở Docker Desktop → gõ một lệnh.
 

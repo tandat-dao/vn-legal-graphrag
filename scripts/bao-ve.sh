@@ -162,9 +162,9 @@ xanh "════════════════════════�
 echo "    http://127.0.0.1:8000   ←  TRƯỚC cải tiến"
 echo "    http://127.0.0.1:8001   ←  SAU cải tiến (đủ ba cơ chế)"
 echo
-mo   "    Câu đối chiếu nên dùng: A3 — 'Hạn mức giao đất ở cho cá nhân do cơ"
-mo   "    quan nào quy định, và con số cụ thể hiện nay tại TP.HCM…'"
-mo   "    8000 dẫn Luật Đất đai 2013 (sai) · 8001 dẫn Luật Đất đai 2024 Điều 196"
+mo   "    Câu đối chiếu nên dùng: A4 — 'Hồi trước nghe nói ở TP.HCM một hộ được"
+mo   "    tới 300 mét vuông đất ở, sao giờ nghe nói chỉ còn 250?…'"
+mo   "    8001 hiện thêm KHỐI CẢNH BÁO quy định đã thay đổi mà 8000 không có"
 echo
 mo   "    Dừng: Ctrl-C"
 echo
