@@ -121,6 +121,51 @@ Cùng mức tăng đó, chia theo loại câu hỏi:
 cải thiện. Trên 49 câu còn lại: **cải thiện được 26 câu (53%), mức tăng trung
 bình +0,317**.
 
+**Kiểm định ý nghĩa thống kê** (cùng phương pháp Bảng 4.4 của báo cáo — bootstrap
+ghép cặp 10 000 lần, seed 42, và Wilcoxon signed-rank):
+
+| đại lượng | giá trị |
+|---|---|
+| chênh lệch trung bình Δ | **+0,116** |
+| khoảng tin cậy 95% | **[+0,064; +0,171]** |
+| Wilcoxon signed-rank (p) | **0,000069** |
+| thắng / thua / hoà | 26 / 4 / 93 |
+
+Khoảng tin cậy không chứa 0, nên mức tăng không phải dao động ngẫu nhiên.
+
+### Mức tăng có phải chỉ vì nạp thêm ngữ cảnh?
+
+Đây là câu hỏi phải tự đặt ra: nếu cấu hình mới đơn giản là đưa nhiều chữ hơn
+vào ngữ cảnh thì bao phủ tăng là đương nhiên, và không nói lên gì về cơ chế.
+
+| bước | đơn vị vào ngữ cảnh | thêm bao nhiêu | mức tăng |
+|---|---|---|---|
+| trước cải tiến | 16,9 | — | — |
+| + lần theo dẫn chiếu | 20,2 | +3,3 | +0,016 |
+| + cross-encoder | **20,2** | **+0,0** | **+0,047** |
+| + mở rộng vùng tìm kiếm | 20,5 | +0,3 | +0,053 |
+
+**Đóng góp lớn nhất đến từ bước không thêm một đơn vị nào.** Cross-encoder chỉ
+xếp lại thứ tự các đơn vị đã chọn, nên +0,047 của nó hoàn toàn không thể giải
+thích bằng lượng ngữ cảnh.
+
+Với bước lần theo dẫn chiếu — bước duy nhất thực sự nạp thêm — đã chạy **nhánh
+đối chứng**: thêm **đúng bằng số đơn vị đó** nhưng chọn theo điểm xếp hạng thông
+thường thay vì theo quan hệ dẫn chiếu.
+
+| cách chọn đơn vị thêm vào | bao phủ | mức tăng |
+|---|---|---|
+| không thêm | 0,761 | — |
+| thêm theo điểm xếp hạng *(đối chứng)* | 0,775 | +0,014 |
+| **thêm theo quan hệ dẫn chiếu** | **0,797** | **+0,037** |
+
+Cùng lượng ngữ cảnh, chọn theo dẫn chiếu hơn chọn theo điểm xếp hạng **+0,023**.
+Phần chênh này là đóng góp của **cơ chế**, không phải của lượng chữ.
+
+> Nhánh đối chứng đo ở đợt trước trên 121 câu và dùng bộ lập kế hoạch khác, nên
+> con số tuyệt đối không so thẳng được với bảng ở trên; nó dùng để trả lời câu
+> hỏi "cơ chế hay lượng ngữ cảnh", không dùng làm số công bố.
+
 ### 3.2. Ba lỗi khiến hệ trả về rỗng — đã sửa
 
 Mốc lọc hiệu lực lấy nhầm năm xảy ra sự việc; câu không nêu tỉnh bị gán cứng
@@ -131,6 +176,10 @@ nhóm câu nay đều trả lời được.
 
 Khâu này tự động hoá được, và chất lượng định tuyến không phụ thuộc vào cách
 diễn đạt của người viết tóm tắt.
+
+*Đo ở đợt trước trên 121 câu, trước khi gộp công việc hai thành viên. Kết luận
+định tính (tự động hoá được, không phụ thuộc người viết) không đổi, nhưng con số
+tuyệt đối chưa đo lại trên cấu hình hiện tại.*
 
 ### 3.4. Bộ chấm độc lập: xác nhận cảnh báo của chính báo cáo
 
@@ -169,6 +218,10 @@ dẫn. Bộ chấm cần độc lập cả về tác vụ huấn luyện, không
 | Cục bộ 4B gốc, hai ví dụ mẫu | 0,239 | 0,511 | +0,272 |
 | Cục bộ 4B đã tinh chỉnh, không ví dụ mẫu | 0,301 | 0,402 | +0,101 |
 | Cục bộ 4B gốc, không ví dụ mẫu | 0,154 | 0,131 | **−0,022** |
+
+*Bốn hàng lấy nguyên từ Bảng 4.13 của báo cáo. Hàng 30B do **[B] đo**, nhóm chưa
+đo lại độc lập. Toàn bảng tính trên trung bình 137 câu, đúng cơ sở của Bảng 4.13
+— khác cơ sở ghép cặp 123 câu ở §3.1, nên hai bảng không so thẳng với nhau.*
 
 Mô hình cục bộ đạt **0,583** so với Gemini 0,617, kém 0,034 nhưng chạy được ngay
 tại chỗ. Với hệ thống xử lý dữ liệu công dân, đây là giá trị thực tế.
