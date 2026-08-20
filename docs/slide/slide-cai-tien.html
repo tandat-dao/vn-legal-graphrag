@@ -167,10 +167,27 @@
   .huong-dan{ max-width:1280px; margin:0 auto 6px; font-size:13px; color:#5A6B85; line-height:1.6 }
   .huong-dan b{ color:#1E3050 }
 </style>
-
+<style>
+  /* thêm cho đợt vẽ lại: ô có hình, số chốt, chip thống kê */
+  .o{ background:var(--the-nhat); border-radius:1cqi; padding:1.6cqi 1.8cqi;
+      display:flex; flex-direction:column; gap:.9cqi }
+  .o.xanh{ background:var(--xanh-lot) } .o.toi{ background:var(--muc) } .o.do{ background:var(--do-lot) }
+  .o-ten{ font-size:1.3cqi; font-weight:700; line-height:1.25 }
+  .o.toi .o-ten{ color:#fff }
+  .o-hinh{ flex:1; display:flex; align-items:center; justify-content:center }
+  .o-hinh svg{ width:100%; height:auto; display:block }
+  .o-chan{ font-size:1.02cqi; color:var(--muc-nhat); line-height:1.42 }
+  .o.toi .o-chan{ color:#A9BAD2 } .o.xanh .o-chan{ color:#2C4A72 }
+  .o-chan b{ color:var(--muc); font-weight:700 } .o.toi .o-chan b{ color:#fff }
+  .chip{ background:var(--xanh-lot); border-radius:.8cqi; padding:1.2cqi 1.4cqi }
+  .chip-so{ font-size:2cqi; font-weight:800; color:var(--xanh); letter-spacing:-.02em;
+            font-variant-numeric:tabular-nums; line-height:1 }
+  .chip-ten{ font-size:.98cqi; color:#2C4A72; margin-top:.5cqi }
+  .so-to{ font-size:6.4cqi; font-weight:800; color:var(--xanh); line-height:.9; letter-spacing:-.04em }
+</style>
 <div class="bo">
 
-  <p class="huong-dan"><b>7 slide chèn sau slide 15 (“Kiểm chứng khi đổi mô hình sinh”), trước “Kết luận”.</b>
+  <p class="huong-dan"><b>8 slide chèn sau slide 15 (“Kiểm chứng khi đổi mô hình sinh”), trước “Kết luận”.</b>
      In ra PDF: Ctrl/Cmd-P → khổ ngang, lề 0, bật “Background graphics” → mỗi slide một trang 16:9.</p>
 
   <!-- ══════════ 1. PHÂN ĐOẠN ══════════ -->
@@ -181,50 +198,86 @@
        và một lĩnh vực pháp luật chưa từng có trong kho</p>
   </section>
 
+
   <!-- ══════════ 2. VẤN ĐỀ CÒN LẠI ══════════ -->
   <section class="slide">
     <h2>Vấn đề còn lại sau báo cáo</h2>
     <div class="ke-tieu-de"></div>
     <div class="than">
-      <div class="luoi c2" style="gap:2.4cqi; margin-bottom:2.6cqi">
+      <div class="luoi c3" style="gap:1.5cqi; flex:1">
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.4cqi">Đúng Điều nhưng sai Khoản</div>
-          <div class="hang-thanh">
-            <div class="ten-thanh">Lấy đúng <b>Điều</b></div>
-            <div class="thanh-nen"><div class="thanh" style="width:80.6%; background:var(--xanh-sang)"></div></div>
-            <div class="so-thanh">0,806</div>
+        <div class="o">
+          <div class="o-ten">Đúng Điều, sai Khoản</div>
+          <div class="o-hinh">
+            <svg viewBox="0 0 300 168" role="img" aria-label="Hệ lấy đúng Điều nhưng chọn sai Khoản bên trong">
+              <rect x="8" y="8" width="284" height="152" rx="8" fill="#fff" stroke="#CBD3DF"/>
+              <text x="24" y="34" fill="#1E3050" font-size="15" font-weight="800" font-family="Be Vietnam Pro, sans-serif">Điều 138</text>
+              <rect x="196" y="20" width="80" height="20" rx="10" fill="#DFF0E0"/>
+              <text x="236" y="34.5" text-anchor="middle" fill="#2E7D32" font-size="11.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">đúng</text>
+              <g font-size="13" font-family="Be Vietnam Pro, sans-serif">
+                <rect x="24" y="52" width="252" height="20" rx="4" fill="#EDEFF3"/><text x="34" y="66" fill="#8892A4">Khoản 1</text>
+                <rect x="24" y="76" width="252" height="20" rx="4" fill="#FBEAE8" stroke="#E0A9A2"/><text x="34" y="90" fill="#C0392B" font-weight="700">Khoản 2</text>
+                <text x="266" y="90" text-anchor="end" fill="#C0392B" font-size="11.5" font-weight="700">hệ chọn</text>
+                <rect x="24" y="100" width="252" height="20" rx="4" fill="#EDEFF3"/><text x="34" y="114" fill="#8892A4">Khoản 3</text>
+                <rect x="24" y="124" width="252" height="20" rx="4" fill="#D8E7F8" stroke="#8FBBEA"/><text x="34" y="138" fill="#1554A5" font-weight="700">Khoản 5</text>
+                <text x="266" y="138" text-anchor="end" fill="#1554A5" font-size="11.5" font-weight="700">đáp án</text>
+              </g>
+            </svg>
           </div>
-          <div class="hang-thanh">
-            <div class="ten-thanh">Lấy đúng <b>Khoản</b></div>
-            <div class="thanh-nen"><div class="thanh" style="width:73.7%"></div></div>
-            <div class="so-thanh">0,737</div>
+          <div style="display:flex; gap:1.4cqi">
+            <div><div class="so-vua" style="font-size:2.1cqi; color:var(--muc-nhat)">0,806</div>
+                 <div class="chu-thich" style="font-size:.95cqi">đúng Điều</div></div>
+            <div><div class="so-vua" style="font-size:2.1cqi; color:var(--do)">0,737</div>
+                 <div class="chu-thich" style="font-size:.95cqi">đúng Khoản</div></div>
           </div>
-          <p class="noi" style="margin-top:1.5cqi">
-            Một điều luật có thể gồm hàng chục khoản quy định những trường hợp khác nhau.
-            Chỉ vào đúng điều mà sai khoản thì người dân vẫn nhận câu trả lời sai.
-          </p>
+          <div class="o-chan">Một điều luật có hàng chục khoản cho những trường hợp khác nhau —
+            <b>sai khoản là sai câu trả lời</b>.</div>
         </div>
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.4cqi">Ba nhóm câu bị bộ lọc làm hỏng</div>
-          <div class="the-do gach-do" style="border-radius:0 1cqi 1cqi 0; margin-bottom:1.4cqi">
-            <div class="tieu" style="font-size:1.28cqi">Trả về rỗng hoàn toàn</div>
-            <div class="noi">Câu có mốc thời gian quá khứ · thủ tục hộ tịch ngoài sáu thủ tục
-              được lập chỉ mục (giám hộ, khai tử, cải chính)</div>
+        <div class="o">
+          <div class="o-ten">Bộ lọc loại nhầm</div>
+          <div class="o-hinh">
+            <svg viewBox="0 0 300 168" role="img" aria-label="Ba nhóm câu bị bộ lọc loại nhầm">
+              <g font-family="Be Vietnam Pro, sans-serif">
+                <rect x="6" y="14" width="288" height="34" rx="7" fill="#FBEAE8"/>
+                <text x="20" y="30" fill="#C0392B" font-size="12.5" font-weight="700">Mốc thời gian quá khứ</text>
+                <text x="20" y="43" fill="#A8564C" font-size="11">lọc hiệu lực lấy nhầm năm → rỗng</text>
+                <rect x="6" y="54" width="288" height="34" rx="7" fill="#FBEAE8"/>
+                <text x="20" y="70" fill="#C0392B" font-size="12.5" font-weight="700">Thủ tục ngoài sáu thủ tục</text>
+                <text x="20" y="83" fill="#A8564C" font-size="11">giám hộ · khai tử · cải chính → rỗng</text>
+                <rect x="6" y="94" width="288" height="34" rx="7" fill="#EDEFF3"/>
+                <text x="20" y="110" fill="#1E3050" font-size="12.5" font-weight="700">Câu không nêu tỉnh</text>
+                <text x="20" y="123" fill="#5A6B85" font-size="11">gán cứng toàn quốc → mất văn bản tỉnh</text>
+                <rect x="6" y="136" width="288" height="26" rx="7" fill="#1E3050"/>
+                <text x="150" y="153" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">hai kiểu hỏng khác nhau</text>
+              </g>
+            </svg>
           </div>
-          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0">
-            <div class="tieu" style="font-size:1.28cqi">Mất đúng văn bản chứa đáp án</div>
-            <div class="noi">Câu không nêu tỉnh bị gán cứng <code>toan-quoc</code>,
-              nên văn bản cấp tỉnh bị lọc ra — trong khi lệ phí và hạn mức nằm đúng ở cấp tỉnh</div>
-          </div>
+          <div class="o-chan">Hai nhóm đầu <b>không tìm được văn bản nào</b>; nhóm thứ ba
+            có ngữ cảnh nhưng thiếu đúng phần cần.</div>
         </div>
 
-      </div>
+        <div class="o">
+          <div class="o-ten">Không thấy quy định đã đổi</div>
+          <div class="o-hinh">
+            <svg viewBox="0 0 300 168" role="img" aria-label="Hệ chỉ trả lời theo văn bản hiện hành, không cảnh báo">
+              <g font-family="Be Vietnam Pro, sans-serif">
+                <rect x="8" y="18" width="284" height="26" rx="6" fill="#EDEFF3" stroke="#D5DBE4" stroke-dasharray="4 3"/>
+                <text x="150" y="35" text-anchor="middle" fill="#96A1B4" font-size="12">(không có cảnh báo)</text>
+                <rect x="8" y="56" width="284" height="100" rx="7" fill="#fff" stroke="#CBD3DF"/>
+                <text x="24" y="80" fill="#1E3050" font-size="12.5" font-weight="700">Hạn mức là 250 m²/cá nhân</text>
+                <rect x="24" y="92" width="230" height="7" rx="3.5" fill="#E4E8EE"/>
+                <rect x="24" y="105" width="196" height="7" rx="3.5" fill="#E4E8EE"/>
+                <rect x="24" y="118" width="214" height="7" rx="3.5" fill="#E4E8EE"/>
+                <rect x="24" y="134" width="150" height="14" rx="4" fill="#D8E7F8"/>
+                <text x="30" y="145" fill="#1554A5" font-size="10.5" font-weight="700">QĐ 69/2024</text>
+              </g>
+            </svg>
+          </div>
+          <div class="o-chan">Người đã nộp hồ sơ trước ngày đổi <b>không được báo</b>
+            rằng quy định áp cho mình có thể khác.</div>
+        </div>
 
-      <div class="bang-chot">
-        Hệ trả lời theo văn bản hiện hành, <b>không cảnh báo</b> cho người đã nộp hồ sơ từ trước —
-        và kiến trúc <b>chưa được thử trên lĩnh vực nào ngoài ba lĩnh vực gốc</b>
       </div>
     </div>
   </section>
@@ -360,58 +413,32 @@
     </div>
   </section>
 
+
   <!-- ══════════ 4. KẾT QUẢ TRUY HỒI ══════════ -->
   <section class="slide">
     <h2>Kết quả truy hồi: 0,737 → 0,853</h2>
     <div class="ke-tieu-de"></div>
     <div class="than">
-      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+      <div class="luoi c2" style="gap:3cqi; flex:1; align-items:stretch">
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Cộng dồn từng bước · 123 câu</div>
-          <table>
-            <thead><tr><th>Bước</th><th>Bao phủ</th><th>Mức tăng</th><th>T / B</th></tr></thead>
-            <tbody>
-              <tr><td>Trước cải tiến</td><td>0,737</td><td class="mo">—</td><td class="mo">—</td></tr>
-              <tr><td>+ lần theo dẫn chiếu</td><td>0,753</td><td class="duong">+0,016</td><td class="mo">9 / 3</td></tr>
-              <tr><td>+ cross-encoder</td><td>0,800</td><td class="duong">+0,063</td><td class="mo">17 / 5</td></tr>
-              <tr class="chot"><td>+ mở rộng vùng tìm kiếm</td><td>0,853</td><td>+0,116</td><td>26 / 4</td></tr>
-            </tbody>
-          </table>
-
-          <div class="luoi c3" style="margin-top:2.4cqi; gap:1.1cqi">
-            <div class="the-xanh" style="padding:1.5cqi">
-              <div class="so-vua" style="color:var(--xanh); font-size:2.3cqi">+0,116</div>
-              <div class="chu-thich" style="color:#2C4A72">chênh lệch ghép cặp</div>
-            </div>
-            <div class="the-xanh" style="padding:1.5cqi">
-              <div class="so-vua" style="color:var(--xanh); font-size:1.9cqi">0,064–0,171</div>
-              <div class="chu-thich" style="color:#2C4A72">khoảng tin cậy 95%</div>
-            </div>
-            <div class="the-xanh" style="padding:1.5cqi">
-              <div class="so-vua" style="color:var(--xanh); font-size:1.9cqi">p = 0,00007</div>
-              <div class="chu-thich" style="color:#2C4A72">kiểm định Wilcoxon</div>
-            </div>
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:.8cqi">Cộng dồn từng bước · 123 câu</div>
+          <div class="o-hinh" style="flex:0"><svg viewBox="-16 0 528 272" role="img" aria-label="Bao phủ tăng dần qua bốn bước"><line x1="30" y1="246" x2="500" y2="246" stroke="#D5DBE4"/><line x1="30" y1="206.8" x2="500" y2="206.8" stroke="#E7EBF1" stroke-dasharray="3 4"/><text x="24" y="210.8" text-anchor="end" fill="#A6B0C0" font-size="11" font-family="Be Vietnam Pro, sans-serif">0,75</text><line x1="30" y1="141.5" x2="500" y2="141.5" stroke="#E7EBF1" stroke-dasharray="3 4"/><text x="24" y="145.5" text-anchor="end" fill="#A6B0C0" font-size="11" font-family="Be Vietnam Pro, sans-serif">0,80</text><line x1="30" y1="76.1" x2="500" y2="76.1" stroke="#E7EBF1" stroke-dasharray="3 4"/><text x="24" y="80.1" text-anchor="end" fill="#A6B0C0" font-size="11" font-family="Be Vietnam Pro, sans-serif">0,85</text><polyline points="62,223.8 200,202.9 338,141.5 462,72.2" fill="none" stroke="#1554A5" stroke-width="3" stroke-linejoin="round"/><circle cx="62" cy="223.8" r="5.5" fill="#fff" stroke="#1554A5" stroke-width="2.8"/><text x="62" y="206.8" text-anchor="middle" fill="#1E3050" font-size="15" font-weight="700" font-family="Be Vietnam Pro, sans-serif">0,737</text><text x="62" y="266" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-family="Be Vietnam Pro, sans-serif">trước cải tiến</text><circle cx="200" cy="202.9" r="5.5" fill="#fff" stroke="#1554A5" stroke-width="2.8"/><text x="200" y="185.9" text-anchor="middle" fill="#1E3050" font-size="15" font-weight="700" font-family="Be Vietnam Pro, sans-serif">0,753</text><text x="200" y="266" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-family="Be Vietnam Pro, sans-serif">+ dẫn chiếu</text><circle cx="338" cy="141.5" r="5.5" fill="#fff" stroke="#1554A5" stroke-width="2.8"/><text x="338" y="124.5" text-anchor="middle" fill="#1E3050" font-size="15" font-weight="700" font-family="Be Vietnam Pro, sans-serif">0,800</text><text x="338" y="266" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-family="Be Vietnam Pro, sans-serif">+ cross-encoder</text><circle cx="462" cy="72.2" r="8" fill="#1554A5" stroke="#1554A5" stroke-width="2.8"/><text x="462" y="55.2" text-anchor="middle" fill="#1E3050" font-size="19" font-weight="800" font-family="Be Vietnam Pro, sans-serif">0,853</text><text x="462" y="266" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-family="Be Vietnam Pro, sans-serif">+ mở rộng</text></svg></div>
+          <div class="luoi c3" style="margin-top:auto; gap:1cqi">
+            <div class="chip"><div class="chip-so">+0,116</div><div class="chip-ten">chênh lệch ghép cặp</div></div>
+            <div class="chip"><div class="chip-so" style="font-size:1.6cqi">0,064–0,171</div><div class="chip-ten">khoảng tin cậy 95%</div></div>
+            <div class="chip"><div class="chip-so" style="font-size:1.6cqi">p = 0,00007</div><div class="chip-ten">kiểm định Wilcoxon</div></div>
           </div>
         </div>
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Chia theo bốn nhóm thách thức</div>
-          <table>
-            <thead><tr><th>Thách thức</th><th>Số câu</th><th>Tăng trong nhóm</th><th>Góp vào tổng</th></tr></thead>
-            <tbody>
-              <tr><td>Đa lĩnh vực</td><td class="mo">32</td><td class="duong">+0,216</td><td class="mo">+0,056</td></tr>
-              <tr><td>Đa tầng văn bản</td><td class="mo">30</td><td class="duong">+0,153</td><td class="mo">+0,037</td></tr>
-              <tr><td>Đa địa phương</td><td class="mo">31</td><td>+0,069</td><td class="mo">+0,017</td></tr>
-              <tr><td>Đa phiên bản</td><td class="mo">30</td><td>+0,019</td><td class="mo">+0,005</td></tr>
-              <tr class="tong"><td>Tổng</td><td class="mo">123</td><td></td><td class="duong">+0,116</td></tr>
-            </tbody>
-          </table>
-
-          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0; margin-top:2.4cqi">
-            <div class="noi"><b>Vì sao mức tăng toàn hệ nhỏ hơn mức tăng thật của cơ chế:</b>
-              74 trên 123 câu (60%) đã lấy đúng hoàn toàn từ trước, không còn chỗ cải thiện.
-              Trên 49 câu còn lại, cải thiện được <b>26 câu</b>, mức tăng trung bình <b>+0,317</b>.</div>
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:1.2cqi">Mức tăng trong từng nhóm thách thức</div>
+          <div class="o-hinh" style="flex:0"><svg viewBox="0 0 500 128" role="img" aria-label="Mức tăng trong từng nhóm thách thức"><text x="0" y="27" fill="#1E3050" font-size="13" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Đa lĩnh vực</text><text x="132" y="27" fill="#5A6B85" font-size="11.5" font-family="Be Vietnam Pro, sans-serif">32 câu</text><rect x="180" y="16" width="245.5" height="15" rx="4" fill="#1554A5"/><text x="433.5" y="28" fill="#1554A5" font-size="13" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,216</text><text x="0" y="54" fill="#1E3050" font-size="13" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Đa tầng văn bản</text><text x="132" y="54" fill="#5A6B85" font-size="11.5" font-family="Be Vietnam Pro, sans-serif">30 câu</text><rect x="180" y="43" width="173.9" height="15" rx="4" fill="#1554A5"/><text x="361.9" y="55" fill="#1554A5" font-size="13" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,153</text><text x="0" y="81" fill="#1E3050" font-size="13" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Đa địa phương</text><text x="132" y="81" fill="#5A6B85" font-size="11.5" font-family="Be Vietnam Pro, sans-serif">31 câu</text><rect x="180" y="70" width="78.4" height="15" rx="4" fill="#AEB7C6"/><text x="266.4" y="82" fill="#5A6B85" font-size="13" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,069</text><text x="0" y="108" fill="#1E3050" font-size="13" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Đa phiên bản</text><text x="132" y="108" fill="#5A6B85" font-size="11.5" font-family="Be Vietnam Pro, sans-serif">30 câu</text><rect x="180" y="97" width="21.6" height="15" rx="4" fill="#AEB7C6"/><text x="209.6" y="109" fill="#5A6B85" font-size="13" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,019</text></svg></div>
+          <div class="the-toi" style="margin-top:auto">
+            <div class="noi" style="font-size:1.2cqi; color:#DCE7F5">
+              <b style="color:#8FC4F5">74 trên 123 câu (60%)</b> đã lấy đúng hoàn toàn từ trước —
+              không còn chỗ cải thiện. Trên 49 câu còn lại, cải thiện được
+              <b style="color:#8FC4F5">26 câu</b>, mức tăng trung bình <b style="color:#8FC4F5">+0,317</b>.</div>
           </div>
         </div>
 
@@ -419,67 +446,55 @@
     </div>
   </section>
 
-  <!-- ══════════ 5. NHÁNH ĐỐI CHỨNG ══════════ -->
+  <!-- ══════════ 5. CƠ CHẾ HAY NGỮ CẢNH ══════════ -->
   <section class="slide">
     <h2>Cơ chế, hay chỉ là thêm ngữ cảnh?</h2>
     <div class="ke-tieu-de"></div>
-    <p class="dan">Nếu cấu hình mới đơn giản là đưa nhiều chữ hơn vào ngữ cảnh thì bao phủ tăng là
-      đương nhiên, và không nói lên gì về cơ chế. Đây là câu hỏi phải tự đặt ra và tự trả lời bằng số.</p>
     <div class="than">
-      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Lượng ngữ cảnh so với mức tăng</div>
-          <table>
-            <thead><tr><th>Bước</th><th>Đơn vị vào ngữ cảnh</th><th>Thêm</th><th>Mức tăng</th></tr></thead>
-            <tbody>
-              <tr><td>Trước cải tiến</td><td class="mo">16,9</td><td class="mo">—</td><td class="mo">—</td></tr>
-              <tr><td>+ lần theo dẫn chiếu</td><td class="mo">20,2</td><td class="mo">+3,3</td><td>+0,016</td></tr>
-              <tr class="chot"><td>+ cross-encoder</td><td>20,2</td><td>+0,0</td><td>+0,047</td></tr>
-              <tr><td>+ mở rộng vùng tìm kiếm</td><td class="mo">20,5</td><td class="mo">+0,3</td><td>+0,053</td></tr>
-            </tbody>
-          </table>
-          <div class="the-toi" style="margin-top:2cqi">
-            <div class="noi" style="color:#DCE7F5; font-size:1.24cqi">
-              Đóng góp lớn nhất đến từ bước <b style="color:#8FC4F5">không thêm một đơn vị nào</b>.
-              Cross-encoder chỉ xếp lại thứ tự các đơn vị đã chọn, nên +0,047 của nó
-              không thể giải thích bằng lượng ngữ cảnh.</div>
-          </div>
-        </div>
+      <div class="o" style="padding:1.5cqi 2cqi; margin-bottom:1.5cqi"><svg viewBox="0 -4 820 166" role="img" aria-label="Đơn vị thêm vào ngữ cảnh so với mức tăng bao phủ, theo từng bước"><text x="0" y="16" fill="#5A6B85" font-size="13" font-weight="700" letter-spacing="1.2" font-family="Be Vietnam Pro, sans-serif">ĐƠN VỊ THÊM VÀO NGỮ CẢNH</text><rect x="8" y="40.0" width="104" height="96.0" rx="5" fill="#1554A5"/><text x="60" y="31.0" text-anchor="middle" fill="#1554A5" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">+3,3</text><text x="60" y="156" text-anchor="middle" fill="#1E3050" font-size="12.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">dẫn chiếu</text><rect x="126" y="136.0" width="104" height="3.0" rx="5" fill="#AEB7C6"/><text x="178" y="127.0" text-anchor="middle" fill="#5A6B85" font-size="17" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,0</text><text x="178" y="156" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-weight="400" font-family="Be Vietnam Pro, sans-serif">cross-encoder</text><rect x="244" y="127.3" width="104" height="8.7" rx="5" fill="#AEB7C6"/><text x="296" y="118.3" text-anchor="middle" fill="#5A6B85" font-size="17" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,3</text><text x="296" y="156" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-weight="400" font-family="Be Vietnam Pro, sans-serif">mở rộng</text><line x1="0" y1="136" x2="364" y2="136" stroke="#D5DBE4"/><line x1="410" y1="8" x2="410" y2="156" stroke="#D5DBE4"/><text x="446" y="16" fill="#5A6B85" font-size="13" font-weight="700" letter-spacing="1.2" font-family="Be Vietnam Pro, sans-serif">MỨC TĂNG BAO PHỦ</text><rect x="454" y="107.0" width="104" height="29.0" rx="5" fill="#AEB7C6"/><text x="506" y="98.0" text-anchor="middle" fill="#5A6B85" font-size="17" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,016</text><text x="506" y="156" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-weight="400" font-family="Be Vietnam Pro, sans-serif">dẫn chiếu</text><rect x="572" y="50.9" width="104" height="85.1" rx="5" fill="#AEB7C6"/><text x="624" y="41.9" text-anchor="middle" fill="#5A6B85" font-size="17" font-weight="700" font-family="Be Vietnam Pro, sans-serif">+0,047</text><text x="624" y="156" text-anchor="middle" fill="#5A6B85" font-size="12.5" font-weight="400" font-family="Be Vietnam Pro, sans-serif">cross-encoder</text><rect x="690" y="40.0" width="104" height="96.0" rx="5" fill="#1554A5"/><text x="742" y="31.0" text-anchor="middle" fill="#1554A5" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">+0,053</text><text x="742" y="156" text-anchor="middle" fill="#1E3050" font-size="12.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">mở rộng</text><line x1="446" y1="136" x2="810" y2="136" stroke="#D5DBE4"/></svg></div>
 
+      <div class="the-toi" style="padding:1.4cqi 2cqi; margin-bottom:1.8cqi">
+        <div class="noi" style="font-size:1.3cqi; color:#DCE7F5">Bước đóng góp
+          <b style="color:#8FC4F5">lớn nhất</b> là bước <b style="color:#8FC4F5">không thêm một đơn vị nào</b> —
+          cross-encoder chỉ xếp lại thứ tự các đơn vị đã chọn.</div>
+      </div>
+
+      <div class="luoi c2" style="gap:2.6cqi; flex:1; align-items:start">
         <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Nhánh đối chứng cho bước thật sự nạp thêm</div>
-          <p class="noi" style="margin-bottom:1.6cqi">Thêm <b>đúng bằng số đơn vị đó</b>,
-            nhưng chọn theo điểm xếp hạng thông thường thay vì theo quan hệ dẫn chiếu.</p>
+          <div class="nhan" style="margin-bottom:1.2cqi">Nhánh đối chứng cho bước thật sự nạp thêm —
+            thêm đúng bằng số đơn vị đó, nhưng chọn theo điểm xếp hạng</div>
           <div class="hang-thanh">
-            <div class="ten-thanh">Không thêm</div>
+            <div class="ten-thanh" style="width:40%">Không thêm</div>
             <div class="thanh-nen"><div class="thanh-goc" style="width:76.1%"></div></div>
-            <div class="so-thanh">0,761</div>
+            <div class="so-thanh" style="width:12%">0,761</div>
           </div>
           <div class="hang-thanh">
-            <div class="ten-thanh">Theo điểm xếp hạng<br><span style="font-weight:400; color:var(--muc-nhat); font-size:.94cqi">đối chứng</span></div>
+            <div class="ten-thanh" style="width:40%">Theo điểm xếp hạng
+              <span style="font-weight:400; color:var(--muc-nhat)">· đối chứng</span></div>
             <div class="thanh-nen"><div class="thanh-goc" style="width:76.1%"></div><div class="thanh-them" style="width:1.4%; background:var(--xanh-sang)"></div></div>
-            <div class="so-thanh">0,775</div>
+            <div class="so-thanh" style="width:12%">0,775</div>
           </div>
           <div class="hang-thanh">
-            <div class="ten-thanh"><b>Theo quan hệ dẫn chiếu</b></div>
+            <div class="ten-thanh" style="width:40%"><b>Theo quan hệ dẫn chiếu</b></div>
             <div class="thanh-nen"><div class="thanh-goc" style="width:76.1%"></div><div class="thanh-them" style="width:3.6%; background:var(--xanh)"></div></div>
-            <div class="so-thanh" style="color:var(--xanh)">0,797</div>
+            <div class="so-thanh" style="width:12%; color:var(--xanh)">0,797</div>
           </div>
-          <div style="display:flex; gap:1.4cqi; margin-top:.4cqi; font-size:.95cqi; color:var(--muc-nhat)">
+          <div style="display:flex; gap:1.4cqi; font-size:.95cqi; color:var(--muc-nhat)">
             <span style="display:flex; align-items:center; gap:.5cqi">
               <span style="width:1.1cqi; height:.8cqi; background:#A9B7CB; border-radius:.2cqi"></span>mức nền chung</span>
             <span style="display:flex; align-items:center; gap:.5cqi">
               <span style="width:1.1cqi; height:.8cqi; background:var(--xanh); border-radius:.2cqi"></span>phần tăng thêm</span>
           </div>
-          <div class="the-xanh" style="margin-top:1.8cqi">
-            <div class="noi" style="font-size:1.24cqi">Cùng lượng ngữ cảnh, chọn theo dẫn chiếu
-              hơn chọn theo điểm xếp hạng <b style="color:var(--xanh)">+0,023</b>.
-              Phần chênh này là đóng góp của <b>cơ chế</b>, không phải của lượng chữ.</div>
-          </div>
         </div>
 
+        <div class="the-xanh">
+          <div class="noi" style="font-size:1.3cqi">Cùng lượng ngữ cảnh, chọn theo dẫn chiếu hơn chọn
+            theo điểm xếp hạng <b style="color:var(--xanh)">+0,023</b>.<br><br>
+            Phần chênh này là đóng góp của <b>cơ chế</b>, không phải của lượng chữ.</div>
+        </div>
       </div>
+
     </div>
   </section>
 
@@ -487,131 +502,132 @@
   <section class="slide">
     <h2>Tổng quát hóa sang lĩnh vực mới</h2>
     <div class="ke-tieu-de"></div>
-    <p class="dan" style="margin-bottom:2.1cqi">Thêm pháp luật <b>lao động</b> vào kho — lĩnh vực
-      chưa từng được xây dựng cho. Bộ trích xuất viết cho lĩnh vực đất đai chạy trên văn bản lao động
-      mà không phải sửa dòng nào.</p>
+    <p class="dan" style="margin-bottom:2.2cqi">Thêm pháp luật <b>lao động</b> — lĩnh vực chưa từng được
+      xây dựng cho. Bộ trích xuất viết cho đất đai chạy trên văn bản lao động mà không phải sửa dòng nào.</p>
     <div class="than">
 
-      <div class="luoi c4" style="margin-bottom:2.1cqi">
-        <div class="the"><div class="so-vua">32 → 36</div><div class="chu-thich">văn bản</div></div>
-        <div class="the"><div class="so-vua">3 → 4</div><div class="chu-thich">lĩnh vực</div></div>
-        <div class="the"><div class="so-vua" style="font-size:2.3cqi">4.549 → 7.208</div><div class="chu-thich">điều khoản</div></div>
-        <div class="the"><div class="so-vua">1.447</div><div class="chu-thich">quan hệ dẫn chiếu tạo tự động</div></div>
+      <div class="luoi c4" style="margin-bottom:2.4cqi">
+        <div class="the" style="padding:1.6cqi 1.8cqi"><div class="so-vua" style="font-size:2.4cqi">32 → 36</div><div class="chu-thich">văn bản</div></div>
+        <div class="the" style="padding:1.6cqi 1.8cqi"><div class="so-vua" style="font-size:2.4cqi">3 → 4</div><div class="chu-thich">lĩnh vực</div></div>
+        <div class="the" style="padding:1.6cqi 1.8cqi"><div class="so-vua" style="font-size:2.4cqi">4.549 → 7.208</div><div class="chu-thich">điều khoản</div></div>
+        <div class="the" style="padding:1.6cqi 1.8cqi"><div class="so-vua" style="font-size:2.4cqi">1.447</div><div class="chu-thich">quan hệ dẫn chiếu tạo tự động</div></div>
       </div>
 
-      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+      <div class="luoi c2" style="gap:3cqi; flex:1">
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Có làm hỏng ba lĩnh vực cũ không?</div>
-          <table>
-            <thead><tr><th>Cấu hình</th><th>Kho 32</th><th>Kho 36</th><th>Câu lệch</th></tr></thead>
-            <tbody>
-              <tr><td>Trước cải tiến</td><td class="mo">0,737</td><td class="mo">0,737</td><td class="duong">0</td></tr>
-              <tr><td>+ lần theo dẫn chiếu</td><td class="mo">0,753</td><td class="mo">0,753</td><td class="duong">0</td></tr>
-              <tr><td>+ cross-encoder</td><td class="mo">0,800</td><td class="mo">0,800</td><td class="duong">0</td></tr>
-              <tr class="tong"><td>+ mở rộng vùng tìm kiếm</td><td>0,853</td><td>0,853</td><td class="duong">0</td></tr>
-            </tbody>
-          </table>
-          <p class="noi" style="margin-top:1.2cqi">Chạy lại đúng 123 câu đó trên kho 36 văn bản
-            rồi so từng câu: <b>không câu nào thay đổi</b>.</p>
+        <div class="o" style="justify-content:center; align-items:center; text-align:center">
+          <div class="nhan">Có làm hỏng ba lĩnh vực cũ không?</div>
+          <div class="so-to">0</div>
+          <div class="o-ten" style="font-size:1.4cqi">câu lệch</div>
+          <div class="o-chan" style="max-width:82%">Chạy lại đúng <b>123 câu</b> trên kho 36 văn bản,
+            so từng câu với kho 32, ở <b>cả bốn cấu hình</b> truy hồi.</div>
         </div>
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Hệ đạt tới đâu trên lĩnh vực chưa từng thấy?</div>
-          <table>
-            <thead><tr><th></th><th>Trước</th><th>Sau</th><th>Mức tăng</th></tr></thead>
-            <tbody>
-              <tr><td>Ba lĩnh vực gốc <span class="mo">· 123 câu</span></td>
-                  <td class="mo">0,737</td><td>0,853</td><td class="duong">+0,116</td></tr>
-              <tr class="chot"><td>Lao động <span style="font-weight:400">· 10 câu</span></td>
-                  <td>0,700</td><td>0,850</td><td>+0,150</td></tr>
-            </tbody>
-          </table>
-          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0; margin-top:1.5cqi">
-            <div class="noi">Câu <b>LD02</b> — điều khoản trả lời xác định phạm vi bằng cách dẫn sang
-              Điều 34 — tăng từ 0,50 lên <b>1,00</b>: cơ chế dẫn chiếu hoạt động đúng thiết kế
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:1.4cqi">Hệ đạt tới đâu trên lĩnh vực chưa từng thấy?</div>
+          <div class="hang-thanh">
+            <div class="ten-thanh" style="width:40%">Ba lĩnh vực gốc
+              <span style="font-weight:400; color:var(--muc-nhat)">· 123 câu</span></div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:73.7%"></div><div class="thanh-them" style="width:11.6%; background:var(--xanh)"></div></div>
+            <div class="so-thanh" style="width:12%">0,853</div>
+          </div>
+          <div class="hang-thanh">
+            <div class="ten-thanh" style="width:40%"><b>Lao động</b>
+              <span style="font-weight:400; color:var(--muc-nhat)">· 10 câu</span></div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:70%"></div><div class="thanh-them" style="width:15%; background:var(--xanh)"></div></div>
+            <div class="so-thanh" style="width:12%; color:var(--xanh)">0,850</div>
+          </div>
+          <div style="display:flex; gap:1.4cqi; margin:.2cqi 0 1.6cqi; font-size:.95cqi; color:var(--muc-nhat)">
+            <span style="display:flex; align-items:center; gap:.5cqi">
+              <span style="width:1.1cqi; height:.8cqi; background:#A9B7CB; border-radius:.2cqi"></span>trước cải tiến</span>
+            <span style="display:flex; align-items:center; gap:.5cqi">
+              <span style="width:1.1cqi; height:.8cqi; background:var(--xanh); border-radius:.2cqi"></span>phần tăng thêm</span>
+          </div>
+          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0">
+            <div class="noi" style="font-size:1.1cqi">Câu <b>LD02</b> — điều khoản trả lời xác định phạm vi
+              bằng cách dẫn sang Điều 34 — tăng <b>0,50 → 1,00</b>. Cơ chế dẫn chiếu hoạt động đúng thiết kế
               trên văn bản chưa từng thấy.</div>
           </div>
-          <p class="noi" style="margin-top:1.2cqi; font-size:1.04cqi">
-            <b>Giới hạn:</b> 10 câu là mẫu nhỏ so với 123 câu của ba lĩnh vực gốc, nên 0,850
-            đọc như một chỉ báo. Tập chuẩn do nhóm soạn, cả hai thành viên đã rà toàn bộ.</p>
+          <p class="noi" style="margin-top:auto; font-size:1cqi">
+            <b>Giới hạn:</b> 10 câu là mẫu nhỏ so với 123 câu, nên 0,850 đọc như một chỉ báo.
+            Tập chuẩn do nhóm soạn, cả hai thành viên đã rà toàn bộ.</p>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- ══════════ 7. KIỂM CHỨNG & GIỚI HẠN ══════════ -->
+  <!-- ══════════ 7. KIỂM CHỨNG ĐỘC LẬP ══════════ -->
   <section class="slide">
-    <h2>Kiểm chứng độc lập và giới hạn còn lại</h2>
+    <h2>Kiểm chứng độc lập</h2>
     <div class="ke-tieu-de"></div>
     <div class="than">
-      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+      <div class="luoi c2" style="gap:3cqi; flex:1">
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Bộ chấm độc lập · 295 trích dẫn</div>
-          <table>
-            <thead><tr><th>Bộ chấm</th><th>Quan hệ với mô hình sinh</th><th>Hậu thuẫn</th></tr></thead>
-            <tbody>
-              <tr><td>Gemini 2.5 Pro <span class="mo">· số của báo cáo</span></td>
-                  <td class="mo" style="font-size:1.1cqi">chính là mô hình sinh</td><td><b>88,1%</b></td></tr>
-              <tr><td>Qwen3-4B-Instruct</td>
-                  <td class="mo" style="font-size:1.1cqi">khác nhà, khác kiến trúc</td><td>83,7%</td></tr>
-              <tr><td>Gemini 2.5 Flash</td>
-                  <td class="mo" style="font-size:1.1cqi">cùng nhà, khác mô hình</td><td>79,0%</td></tr>
-            </tbody>
-          </table>
-          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0; margin-top:1.6cqi">
-            <div class="noi">Bộ chấm <b>chính là mô hình sinh</b> cho điểm cao nhất; hai bộ chấm
-              không phải nó đều thấp hơn. Số liệu <b>xác nhận</b> cảnh báo mà chính báo cáo đã nêu
-              ở mục 4.4.1 — nên trình bày <b>79,0%</b> làm cận dưới thận trọng.</div>
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:1.4cqi">Chấm lại 295 trích dẫn bằng hai bộ chấm khác</div>
+          <div class="o-hinh" style="flex:0"><svg viewBox="0 0 490 192" role="img" aria-label="Tỉ lệ hậu thuẫn theo ba bộ chấm"><text x="0" y="26" fill="#1E3050" font-size="15" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Gemini 2.5 Pro</text><text x="0" y="43" fill="#C0392B" font-size="12" font-family="Be Vietnam Pro, sans-serif">chính là mô hình sinh</text><rect x="180" y="16" width="236" height="22" rx="5" fill="#E4E8EE"/><rect x="180" y="16" width="194.2" height="22" rx="5" fill="#C0392B"/><text x="426" y="33" fill="#C0392B" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">88,1%</text><text x="0" y="80" fill="#1E3050" font-size="15" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Qwen3-4B-Instruct</text><text x="0" y="97" fill="#5A6B85" font-size="12" font-family="Be Vietnam Pro, sans-serif">khác nhà, khác kiến trúc</text><rect x="180" y="70" width="236" height="22" rx="5" fill="#E4E8EE"/><rect x="180" y="70" width="147.0" height="22" rx="5" fill="#1554A5"/><text x="426" y="87" fill="#1E3050" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">83,7%</text><text x="0" y="134" fill="#1E3050" font-size="15" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Gemini 2.5 Flash</text><text x="0" y="151" fill="#5A6B85" font-size="12" font-family="Be Vietnam Pro, sans-serif">cùng nhà, khác mô hình</text><rect x="180" y="124" width="236" height="22" rx="5" fill="#E4E8EE"/><rect x="180" y="124" width="96.5" height="22" rx="5" fill="#1554A5"/><text x="426" y="141" fill="#1E3050" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">79,0%</text><text x="180" y="182" fill="#5A6B85" font-size="11.5" font-family="Be Vietnam Pro, sans-serif">trục bắt đầu từ 70% để thấy rõ mức chênh</text></svg></div>
+          <div class="the-do gach-do" style="border-radius:0 1cqi 1cqi 0; margin-top:auto">
+            <div class="noi" style="font-size:1.16cqi">Bộ chấm <b style="color:var(--do)">chính là mô hình sinh</b>
+              cho điểm cao nhất; hai bộ chấm độc lập đều thấp hơn. Số liệu <b>xác nhận</b> cảnh báo mà
+              báo cáo đã tự nêu ở mục 4.4.1 — nên trình bày <b style="color:var(--do)">79,0%</b>
+              làm cận dưới thận trọng.</div>
           </div>
-
-          <div class="nhan" style="margin:2.2cqi 0 1.1cqi">Hàng thứ năm của Bảng 4.13</div>
-          <table>
-            <thead><tr><th>Mô hình sinh</th><th>Naive RAG</th><th>GraphRAG</th><th>Chênh lệch</th></tr></thead>
-            <tbody>
-              <tr><td>Gemini 2.5 Pro</td><td class="mo">0,435</td><td>0,617</td><td class="duong">+0,182</td></tr>
-              <tr class="chot"><td>Cục bộ 30B, hai ví dụ mẫu</td><td>0,317</td><td>0,583</td><td>+0,266</td></tr>
-            </tbody>
-          </table>
-          <p class="noi" style="margin-top:1.1cqi; font-size:1.06cqi">Mô hình chạy ngay tại chỗ đạt
-            0,583 so với Gemini 0,617 — kém 0,034. Với hệ xử lý dữ liệu công dân, đây là giá trị thực tế.</p>
         </div>
 
-        <div>
-          <div class="nhan" style="margin-bottom:1.3cqi">Nút thắt đã dịch chỗ</div>
-          <div class="the-toi" style="margin-bottom:1.6cqi">
-            <div class="tieu" style="color:#fff">Lấy đúng điều khoản nhiều hơn không tự động
-              làm câu trả lời tốt hơn</div>
-            <div class="noi">Bao phủ tăng +0,116 nhưng F1 của khâu sinh không thay đổi.</div>
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:1.4cqi">Hàng thứ năm của Bảng 4.13 · mô hình chạy tại chỗ</div>
+          <div class="o-hinh" style="flex:0"><svg viewBox="0 0 490 142" role="img" aria-label="Mô hình cục bộ 30B so với Gemini 2.5 Pro"><text x="180" y="12" fill="#5A6B85" font-size="11.5" font-weight="700" letter-spacing="1" font-family="Be Vietnam Pro, sans-serif">NAIVE RAG</text><text x="310" y="12" fill="#1554A5" font-size="11.5" font-weight="700" letter-spacing="1" font-family="Be Vietnam Pro, sans-serif">GRAPHRAG</text><text x="0" y="48" fill="#1E3050" font-size="15" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Gemini 2.5 Pro</text><rect x="180" y="26" width="102.7" height="18" rx="4.5" fill="#AEB7C6"/><text x="290.7" y="40" fill="#5A6B85" font-size="13" font-family="Be Vietnam Pro, sans-serif">0,435</text><rect x="180" y="50" width="145.6" height="18" rx="4.5" fill="#1554A5"/><text x="333.6" y="64" fill="#1554A5" font-size="13" font-weight="700" font-family="Be Vietnam Pro, sans-serif">0,617</text><text x="0" y="110" fill="#1E3050" font-size="15" font-weight="600" font-family="Be Vietnam Pro, sans-serif">Cục bộ 30B</text><rect x="180" y="88" width="74.8" height="18" rx="4.5" fill="#AEB7C6"/><text x="262.8" y="102" fill="#5A6B85" font-size="13" font-family="Be Vietnam Pro, sans-serif">0,317</text><rect x="180" y="112" width="137.6" height="18" rx="4.5" fill="#1554A5"/><text x="325.6" y="126" fill="#1554A5" font-size="13" font-weight="700" font-family="Be Vietnam Pro, sans-serif">0,583</text></svg></div>
+          <div class="luoi c2" style="gap:1.2cqi; margin-top:1.6cqi">
+            <div class="chip"><div class="chip-so">+0,266</div><div class="chip-ten">chênh lệch của mô hình 30B</div></div>
+            <div class="chip"><div class="chip-so">−0,034</div><div class="chip-ten">kém Gemini 2.5 Pro</div></div>
           </div>
-
-          <div class="luoi c2" style="gap:1.2cqi; margin-bottom:1.6cqi">
-            <div class="the-do">
-              <div class="so-vua" style="color:var(--do)">2,71</div>
-              <div class="chu-thich">điều khoản hệ trích trung bình</div>
-            </div>
-            <div class="the-xanh">
-              <div class="so-vua" style="color:var(--xanh)">1,57</div>
-              <div class="chu-thich" style="color:#2C4A72">điều khoản đáp án chuẩn cần</div>
-            </div>
+          <div class="the-toi" style="margin-top:auto">
+            <div class="noi" style="font-size:1.16cqi; color:#DCE7F5">Mô hình chạy <b style="color:#8FC4F5">ngay tại chỗ</b>,
+              không gửi dữ liệu ra ngoài. Với hệ xử lý dữ liệu công dân, đây là giá trị thực tế.</div>
           </div>
+        </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 8. NÚT THẮT ĐÃ DỊCH CHỖ ══════════ -->
+  <section class="slide">
+    <h2>Nút thắt đã dịch chỗ</h2>
+    <div class="ke-tieu-de"></div>
+    <p class="dan" style="margin-bottom:2.4cqi">Bao phủ tăng <b>+0,116</b> nhưng F1 của khâu sinh
+      <b>không thay đổi</b>. Lấy đúng điều khoản nhiều hơn không tự động làm câu trả lời tốt hơn.</p>
+    <div class="than">
+      <div class="luoi c2" style="gap:3cqi; flex:1">
+
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:1.4cqi">Bộ sinh trích theo lượng ngữ cảnh nhận được</div>
+          <div class="o-hinh" style="flex:0; justify-content:flex-start"><svg viewBox="0 0 280 100" role="img" aria-label="Hệ trích 2,71 điều khoản trong khi đáp án chuẩn cần 1,57"><text x="0" y="16" fill="#1E3050" font-size="12.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Hệ trích</text><rect x="96" y="4" width="28" height="18" rx="4" fill="#C0392B"/><rect x="130" y="4" width="28" height="18" rx="4" fill="#C0392B"/><rect x="164" y="4" width="28" height="18" rx="4" fill="#C0392B" opacity=".38"/><text x="212" y="18" fill="#C0392B" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">2,71</text><text x="0" y="54" fill="#1E3050" font-size="12.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Đáp án cần</text><rect x="96" y="42" width="28" height="18" rx="4" fill="#1554A5"/><rect x="130" y="42" width="28" height="18" rx="4" fill="#1554A5" opacity=".38"/><text x="212" y="56" fill="#1554A5" font-size="17" font-weight="800" font-family="Be Vietnam Pro, sans-serif">1,57</text><rect x="96" y="72" width="136" height="20" rx="10" fill="#FBEAE8"/><text x="164" y="86" text-anchor="middle" fill="#C0392B" font-size="11.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">thừa 1,14 trích dẫn</text></svg></div>
+          <div class="o-chan" style="font-size:1.16cqi; margin-top:1.4cqi; line-height:1.55">
+            Hệ trích trung bình <b>2,71</b> điều khoản trong khi đáp án chuẩn chỉ cần <b>1,57</b>.
+            Mỗi trích dẫn thừa kéo F1 xuống, nên ngữ cảnh tốt hơn không tự chuyển thành câu trả lời tốt hơn.</div>
+          <p class="noi" style="margin-top:auto; font-size:1cqi">Đo trên tập kiểm thử mới, 28 câu.</p>
+        </div>
+
+        <div style="display:flex; flex-direction:column">
+          <div class="nhan" style="margin-bottom:1.4cqi">Còn bao nhiêu dư địa nếu chọn lọc trích dẫn tối ưu</div>
           <div class="hang-thanh">
-            <div class="ten-thanh" style="width:42%">F1 khâu sinh hiện tại</div>
+            <div class="ten-thanh" style="width:40%">F1 khâu sinh hiện tại</div>
             <div class="thanh-nen"><div class="thanh-goc" style="width:57.1%"></div></div>
-            <div class="so-thanh" style="width:13%">0,571</div>
+            <div class="so-thanh" style="width:12%">0,571</div>
           </div>
           <div class="hang-thanh">
-            <div class="ten-thanh" style="width:42%"><b>Nếu chọn lọc trích dẫn tối ưu</b></div>
+            <div class="ten-thanh" style="width:40%"><b>Nếu chọn lọc tối ưu</b></div>
             <div class="thanh-nen"><div class="thanh-goc" style="width:57.1%"></div><div class="thanh-them" style="width:17.1%; background:var(--xanh)"></div></div>
-            <div class="so-thanh" style="width:13%; color:var(--xanh)">0,742</div>
+            <div class="so-thanh" style="width:12%; color:var(--xanh)">0,742</div>
           </div>
-
-          <div class="bang-chot" style="margin-top:1.8cqi; font-size:1.3cqi">
-            Phần cải thiện tiềm năng này <b>lớn hơn toàn bộ mức cải thiện của đợt này</b>.
-            Khâu hạn chế nhất đã chuyển từ <b>truy hồi</b> sang <b>chọn trích dẫn</b>.
+          <div class="chip" style="margin-top:1.6cqi">
+            <div class="chip-so">+0,171</div>
+            <div class="chip-ten">dư địa còn lại — <b>lớn hơn toàn bộ mức cải thiện của đợt này (+0,116)</b></div>
+          </div>
+          <div class="bang-chot" style="margin-top:auto">
+            Khâu hạn chế nhất đã chuyển từ <b>truy hồi</b> sang <b>chọn trích dẫn</b>
           </div>
         </div>
 
