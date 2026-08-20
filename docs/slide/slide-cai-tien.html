@@ -18,6 +18,8 @@
     --do-lot:     #FBEAE8;
     --vien:       #C9CFDA;
     --ke:         #9AA6B8;
+    --vang:       #B45309;
+    --vang-lot:   #FDF2E3;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0 }
@@ -145,6 +147,23 @@
     .huong-dan{ display:none }
   }
 
+  /* ── ô cơ chế: hình chiếm phần lớn, chữ chỉ một dòng ── */
+  .o-cc{ background:var(--the-nhat); border-radius:1cqi; padding:1.5cqi 1.7cqi;
+         display:flex; flex-direction:column; gap:1cqi }
+  .o-cc.toi{ background:var(--muc) }
+  .o-cc-dau{ display:flex; align-items:baseline; justify-content:space-between; gap:1cqi }
+  .o-cc-ten{ font-size:1.42cqi; font-weight:700; line-height:1.2 }
+  .o-cc.toi .o-cc-ten{ color:#fff }
+  .o-cc-so{ font-size:1.68cqi; font-weight:800; color:var(--xanh); white-space:nowrap;
+            font-variant-numeric:tabular-nums }
+  .o-cc.toi .o-cc-so{ color:#8FC4F5 }
+  .o-cc-hinh{ flex:1; display:flex; align-items:center; justify-content:center }
+  .o-cc-hinh svg{ width:100%; height:auto; display:block }
+  .o-cc-chan{ font-size:1.04cqi; color:var(--muc-nhat); line-height:1.4 }
+  .o-cc.toi .o-cc-chan{ color:#A9BAD2 }
+  .o-cc-chan b{ color:var(--muc); font-weight:700 }
+  .o-cc.toi .o-cc-chan b{ color:#fff }
+
   .huong-dan{ max-width:1280px; margin:0 auto 6px; font-size:13px; color:#5A6B85; line-height:1.6 }
   .huong-dan b{ color:#1E3050 }
 </style>
@@ -215,48 +234,126 @@
     <h2>Bốn cơ chế mới</h2>
     <div class="ke-tieu-de"></div>
     <div class="than">
-      <div class="luoi c2" style="gap:1.7cqi">
+      <div class="luoi c2" style="gap:1.5cqi; flex:1">
 
-        <div class="the-toi">
-          <div class="nhan" style="color:#8FC4F5">Quan hệ thứ mười một</div>
-          <div class="tieu" style="margin-top:.9cqi; color:#fff">Lần theo dẫn chiếu giữa các điều khoản</div>
-          <div class="noi">Văn bản luật thường trỏ sang nhau: <i>“theo khoản 2 Điều 196”</i>.
-            Câu trỏ không chứa nội dung, chỉ chứa địa chỉ — tìm kiếm theo độ giống từ ngữ
-            không thể lần ra.</div>
-          <div style="display:flex; gap:2.4cqi; margin-top:1.5cqi">
-            <div><div class="so-vua" style="color:#8FC4F5">3.919</div>
-                 <div class="chu-thich">quan hệ trên kho đánh giá</div></div>
-            <div><div class="so-vua" style="color:#8FC4F5">5.366</div>
-                 <div class="chu-thich">sau khi thêm lao động</div></div>
+        <!-- 1 · lần theo dẫn chiếu -->
+        <div class="o-cc toi">
+          <div class="o-cc-dau">
+            <div class="o-cc-ten">Lần theo dẫn chiếu</div>
+            <div class="o-cc-so">5.366 quan hệ</div>
           </div>
-        </div>
-
-        <div class="the-xanh">
-          <div class="nhan" style="color:#2C4A72">Đặt lại vị trí, không đổi mô hình</div>
-          <div class="tieu" style="margin-top:.9cqi">Cross-encoder xếp lại trong từng văn bản</div>
-          <div class="noi">Từng bị bác bỏ khi cho tham gia <i>chọn văn bản</i> — nó kéo lên
-            những đoạn trùng từ ngữ nhưng sai văn bản. Lần này chỉ xếp lại thứ tự
-            <b>bên trong văn bản đã chọn</b>.</div>
-          <div style="margin-top:1.5cqi">
-            <div class="so-vua" style="color:var(--xanh)">âm → +0,047</div>
-            <div class="chu-thich">cùng mô hình, khác vị trí trong đường xử lý</div>
+          <div class="o-cc-hinh">
+            <svg viewBox="0 0 460 108" role="img"
+                 aria-label="Khoản 3 dẫn ngược về Khoản 1 và Khoản 2 của cùng một Điều">
+              <defs>
+                <marker id="mui-sang" viewBox="0 0 8 8" refX="7" refY="4"
+                        markerWidth="5" markerHeight="5" orient="auto">
+                  <path d="M0 0 L8 4 L0 8 z" fill="#8FC4F5"/>
+                </marker>
+              </defs>
+              <!-- hai khoản được kéo về -->
+              <rect x="8"   y="62" width="118" height="34" rx="7" fill="none" stroke="#8FC4F5" stroke-width="1.6" stroke-dasharray="4 3"/>
+              <text x="67"  y="84" text-anchor="middle" fill="#8FC4F5" font-size="15" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Khoản 1</text>
+              <rect x="140" y="62" width="118" height="34" rx="7" fill="none" stroke="#8FC4F5" stroke-width="1.6" stroke-dasharray="4 3"/>
+              <text x="199" y="84" text-anchor="middle" fill="#8FC4F5" font-size="15" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Khoản 2</text>
+              <!-- khoản khớp câu hỏi -->
+              <rect x="290" y="62" width="160" height="34" rx="7" fill="#8FC4F5"/>
+              <text x="370" y="84" text-anchor="middle" fill="#12233D" font-size="15" font-weight="800" font-family="Be Vietnam Pro, sans-serif">Khoản 3</text>
+              <text x="370" y="52" text-anchor="middle" fill="#7E93B2" font-size="11.5" font-family="Be Vietnam Pro, sans-serif">khớp câu hỏi</text>
+              <!-- hai cung dẫn ngược -->
+              <path d="M292 70 C 250 34, 110 34, 68 58" fill="none" stroke="#8FC4F5" stroke-width="1.8" marker-end="url(#mui-sang)"/>
+              <path d="M296 74 C 268 46, 232 44, 200 58" fill="none" stroke="#8FC4F5" stroke-width="1.8" marker-end="url(#mui-sang)"/>
+              <text x="182" y="22" text-anchor="middle" fill="#C2CEE0" font-size="12.5" font-style="italic" font-family="Be Vietnam Pro, sans-serif">“…quy định tại khoản 1 và khoản 2 Điều này”</text>
+            </svg>
           </div>
+          <div class="o-cc-chan">Câu trỏ chỉ chứa địa chỉ, không chứa nội dung —
+            tìm theo độ giống từ ngữ <b>không thể lần ra</b>.</div>
         </div>
 
-        <div class="the">
-          <div class="nhan">Tham số truy hồi</div>
-          <div class="tieu" style="margin-top:.9cqi">Mở rộng vùng tìm kiếm</div>
-          <div class="noi">Nâng số ứng viên lấy ra ở bước tìm kiếm ngữ nghĩa
-            và bỏ hệ số chấm theo độ hiếm khái niệm</div>
-          <div class="so-vua" style="color:var(--xanh); margin-top:1.4cqi">+0,053</div>
+        <!-- 2 · cross-encoder -->
+        <div class="o-cc">
+          <div class="o-cc-dau">
+            <div class="o-cc-ten">Cross-encoder xếp lại trong từng văn bản</div>
+            <div class="o-cc-so">+0,047</div>
+          </div>
+          <div class="o-cc-hinh">
+            <svg viewBox="0 0 460 108" role="img"
+                 aria-label="Điều khoản chứa đáp án từ hạng bốn lên hạng một trong cùng một văn bản">
+              <defs>
+                <marker id="mui-toi" viewBox="0 0 8 8" refX="7" refY="4"
+                        markerWidth="5" markerHeight="5" orient="auto">
+                  <path d="M0 0 L8 4 L0 8 z" fill="#1554A5"/>
+                </marker>
+              </defs>
+              <text x="10"  y="12" fill="#5A6B85" font-size="10.5" font-weight="700" letter-spacing="1.2" font-family="Be Vietnam Pro, sans-serif">TRƯỚC</text>
+              <text x="300" y="12" fill="#5A6B85" font-size="10.5" font-weight="700" letter-spacing="1.2" font-family="Be Vietnam Pro, sans-serif">SAU</text>
+              <g font-size="13" font-family="Be Vietnam Pro, sans-serif">
+                <rect x="10" y="20" width="150" height="18" rx="4" fill="#D7DCE4"/><text x="20" y="33" fill="#5A6B85">Điều 12</text>
+                <rect x="10" y="42" width="150" height="18" rx="4" fill="#D7DCE4"/><text x="20" y="55" fill="#5A6B85">Điều 7</text>
+                <rect x="10" y="64" width="150" height="18" rx="4" fill="#D7DCE4"/><text x="20" y="77" fill="#5A6B85">Điều 15</text>
+                <rect x="10" y="86" width="150" height="18" rx="4" fill="#1554A5"/><text x="20" y="99" fill="#fff" font-weight="700">Điều 9 · Khoản 3</text>
+
+                <rect x="300" y="20" width="150" height="18" rx="4" fill="#1554A5"/><text x="310" y="33" fill="#fff" font-weight="700">Điều 9 · Khoản 3</text>
+                <rect x="300" y="42" width="150" height="18" rx="4" fill="#D7DCE4"/><text x="310" y="55" fill="#5A6B85">Điều 12</text>
+                <rect x="300" y="64" width="150" height="18" rx="4" fill="#D7DCE4"/><text x="310" y="77" fill="#5A6B85">Điều 7</text>
+                <rect x="300" y="86" width="150" height="18" rx="4" fill="#D7DCE4"/><text x="310" y="99" fill="#5A6B85">Điều 15</text>
+              </g>
+              <path d="M168 95 C 220 95, 232 29, 292 29" fill="none" stroke="#1554A5" stroke-width="2" marker-end="url(#mui-toi)"/>
+              <text x="230" y="62" text-anchor="middle" fill="#5A6B85" font-size="11" font-family="Be Vietnam Pro, sans-serif">đáp án lên đầu</text>
+            </svg>
+          </div>
+          <div class="o-cc-chan">Chỉ đổi thứ tự <b>bên trong văn bản đã chọn</b> —
+            thứ tự giữa các văn bản giữ nguyên.</div>
         </div>
 
-        <div class="the">
-          <div class="nhan">Luật tất định trên đồ thị</div>
-          <div class="tieu" style="margin-top:.9cqi">Phát hiện quy định đã thay đổi</div>
-          <div class="noi">Khi tập ứng viên có văn bản đã hết hiệu lực: tìm văn bản thay thế,
-            nạp thêm điều khoản chuyển tiếp, sinh cảnh báo trước câu trả lời.
-            Hệ <b>không tự kết luận</b> người dùng thuộc quy định cũ hay mới.</div>
+        <!-- 3 · mở rộng vùng tìm kiếm -->
+        <div class="o-cc">
+          <div class="o-cc-dau">
+            <div class="o-cc-ten">Mở rộng vùng tìm kiếm</div>
+            <div class="o-cc-so">+0,053</div>
+          </div>
+          <div class="o-cc-hinh">
+            <svg viewBox="0 0 500 104" role="img"
+                 aria-label="Số ứng viên lấy ra tăng từ năm mươi lên một trăm">
+              <text x="10" y="34" fill="#5A6B85" font-size="12.5" font-family="Be Vietnam Pro, sans-serif">Trước</text>
+                <g fill="#AEB7C6"><circle cx="58" cy="30" r="2.9"/><circle cx="66" cy="30" r="2.9"/><circle cx="74" cy="30" r="2.9"/><circle cx="82" cy="30" r="2.9"/><circle cx="90" cy="30" r="2.9"/><circle cx="98" cy="30" r="2.9"/><circle cx="106" cy="30" r="2.9"/><circle cx="114" cy="30" r="2.9"/><circle cx="122" cy="30" r="2.9"/><circle cx="130" cy="30" r="2.9"/><circle cx="138" cy="30" r="2.9"/><circle cx="146" cy="30" r="2.9"/><circle cx="154" cy="30" r="2.9"/><circle cx="162" cy="30" r="2.9"/><circle cx="170" cy="30" r="2.9"/><circle cx="178" cy="30" r="2.9"/><circle cx="186" cy="30" r="2.9"/><circle cx="194" cy="30" r="2.9"/><circle cx="202" cy="30" r="2.9"/><circle cx="210" cy="30" r="2.9"/><circle cx="218" cy="30" r="2.9"/><circle cx="226" cy="30" r="2.9"/><circle cx="234" cy="30" r="2.9"/><circle cx="242" cy="30" r="2.9"/><circle cx="250" cy="30" r="2.9"/><circle cx="258" cy="30" r="2.9"/><circle cx="266" cy="30" r="2.9"/><circle cx="274" cy="30" r="2.9"/><circle cx="282" cy="30" r="2.9"/><circle cx="290" cy="30" r="2.9"/><circle cx="298" cy="30" r="2.9"/><circle cx="306" cy="30" r="2.9"/><circle cx="314" cy="30" r="2.9"/><circle cx="322" cy="30" r="2.9"/><circle cx="330" cy="30" r="2.9"/><circle cx="338" cy="30" r="2.9"/><circle cx="346" cy="30" r="2.9"/><circle cx="354" cy="30" r="2.9"/><circle cx="362" cy="30" r="2.9"/><circle cx="370" cy="30" r="2.9"/><circle cx="378" cy="30" r="2.9"/><circle cx="386" cy="30" r="2.9"/><circle cx="394" cy="30" r="2.9"/><circle cx="402" cy="30" r="2.9"/><circle cx="410" cy="30" r="2.9"/><circle cx="418" cy="30" r="2.9"/><circle cx="426" cy="30" r="2.9"/><circle cx="434" cy="30" r="2.9"/><circle cx="442" cy="30" r="2.9"/><circle cx="450" cy="30" r="2.9"/></g>
+              <text x="462" y="35" fill="#5A6B85" font-size="14" font-weight="700" font-family="Be Vietnam Pro, sans-serif">50</text>
+
+              <text x="10" y="83" fill="#1E3050" font-size="12.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Sau</text>
+                <g fill="#AEB7C6"><circle cx="58" cy="72" r="2.9"/><circle cx="66" cy="72" r="2.9"/><circle cx="74" cy="72" r="2.9"/><circle cx="82" cy="72" r="2.9"/><circle cx="90" cy="72" r="2.9"/><circle cx="98" cy="72" r="2.9"/><circle cx="106" cy="72" r="2.9"/><circle cx="114" cy="72" r="2.9"/><circle cx="122" cy="72" r="2.9"/><circle cx="130" cy="72" r="2.9"/><circle cx="138" cy="72" r="2.9"/><circle cx="146" cy="72" r="2.9"/><circle cx="154" cy="72" r="2.9"/><circle cx="162" cy="72" r="2.9"/><circle cx="170" cy="72" r="2.9"/><circle cx="178" cy="72" r="2.9"/><circle cx="186" cy="72" r="2.9"/><circle cx="194" cy="72" r="2.9"/><circle cx="202" cy="72" r="2.9"/><circle cx="210" cy="72" r="2.9"/><circle cx="218" cy="72" r="2.9"/><circle cx="226" cy="72" r="2.9"/><circle cx="234" cy="72" r="2.9"/><circle cx="242" cy="72" r="2.9"/><circle cx="250" cy="72" r="2.9"/><circle cx="258" cy="72" r="2.9"/><circle cx="266" cy="72" r="2.9"/><circle cx="274" cy="72" r="2.9"/><circle cx="282" cy="72" r="2.9"/><circle cx="290" cy="72" r="2.9"/><circle cx="298" cy="72" r="2.9"/><circle cx="306" cy="72" r="2.9"/><circle cx="314" cy="72" r="2.9"/><circle cx="322" cy="72" r="2.9"/><circle cx="330" cy="72" r="2.9"/><circle cx="338" cy="72" r="2.9"/><circle cx="346" cy="72" r="2.9"/><circle cx="354" cy="72" r="2.9"/><circle cx="362" cy="72" r="2.9"/><circle cx="370" cy="72" r="2.9"/><circle cx="378" cy="72" r="2.9"/><circle cx="386" cy="72" r="2.9"/><circle cx="394" cy="72" r="2.9"/><circle cx="402" cy="72" r="2.9"/><circle cx="410" cy="72" r="2.9"/><circle cx="418" cy="72" r="2.9"/><circle cx="426" cy="72" r="2.9"/><circle cx="434" cy="72" r="2.9"/><circle cx="442" cy="72" r="2.9"/><circle cx="450" cy="72" r="2.9"/></g>
+                <g fill="#1554A5"><circle cx="58" cy="88" r="2.9"/><circle cx="66" cy="88" r="2.9"/><circle cx="74" cy="88" r="2.9"/><circle cx="82" cy="88" r="2.9"/><circle cx="90" cy="88" r="2.9"/><circle cx="98" cy="88" r="2.9"/><circle cx="106" cy="88" r="2.9"/><circle cx="114" cy="88" r="2.9"/><circle cx="122" cy="88" r="2.9"/><circle cx="130" cy="88" r="2.9"/><circle cx="138" cy="88" r="2.9"/><circle cx="146" cy="88" r="2.9"/><circle cx="154" cy="88" r="2.9"/><circle cx="162" cy="88" r="2.9"/><circle cx="170" cy="88" r="2.9"/><circle cx="178" cy="88" r="2.9"/><circle cx="186" cy="88" r="2.9"/><circle cx="194" cy="88" r="2.9"/><circle cx="202" cy="88" r="2.9"/><circle cx="210" cy="88" r="2.9"/><circle cx="218" cy="88" r="2.9"/><circle cx="226" cy="88" r="2.9"/><circle cx="234" cy="88" r="2.9"/><circle cx="242" cy="88" r="2.9"/><circle cx="250" cy="88" r="2.9"/><circle cx="258" cy="88" r="2.9"/><circle cx="266" cy="88" r="2.9"/><circle cx="274" cy="88" r="2.9"/><circle cx="282" cy="88" r="2.9"/><circle cx="290" cy="88" r="2.9"/><circle cx="298" cy="88" r="2.9"/><circle cx="306" cy="88" r="2.9"/><circle cx="314" cy="88" r="2.9"/><circle cx="322" cy="88" r="2.9"/><circle cx="330" cy="88" r="2.9"/><circle cx="338" cy="88" r="2.9"/><circle cx="346" cy="88" r="2.9"/><circle cx="354" cy="88" r="2.9"/><circle cx="362" cy="88" r="2.9"/><circle cx="370" cy="88" r="2.9"/><circle cx="378" cy="88" r="2.9"/><circle cx="386" cy="88" r="2.9"/><circle cx="394" cy="88" r="2.9"/><circle cx="402" cy="88" r="2.9"/><circle cx="410" cy="88" r="2.9"/><circle cx="418" cy="88" r="2.9"/><circle cx="426" cy="88" r="2.9"/><circle cx="434" cy="88" r="2.9"/><circle cx="442" cy="88" r="2.9"/><circle cx="450" cy="88" r="2.9"/></g>
+              <text x="462" y="85" fill="#1554A5" font-size="14" font-weight="800" font-family="Be Vietnam Pro, sans-serif">100</text>
+            </svg>
+          </div>
+          <div class="o-cc-chan">Gấp đôi số ứng viên lấy ra ở bước tìm ngữ nghĩa,
+            và <b>bỏ hệ số chấm theo độ hiếm khái niệm</b>.</div>
+        </div>
+
+        <!-- 4 · phát hiện quy định đã thay đổi -->
+        <div class="o-cc">
+          <div class="o-cc-dau">
+            <div class="o-cc-ten">Phát hiện quy định đã thay đổi</div>
+            <div class="o-cc-so" style="color:var(--vang)">tất định</div>
+          </div>
+          <div class="o-cc-hinh">
+            <svg viewBox="0 0 460 114" role="img"
+                 aria-label="Quyết định cũ hết hiệu lực, quyết định mới thế chỗ, hệ sinh cảnh báo">
+              <rect x="8" y="4" width="444" height="26" rx="6" fill="#FDF2E3" stroke="#E8C79A"/>
+              <circle cx="26" cy="17" r="6.5" fill="#B45309"/>
+              <text x="26" y="21.5" text-anchor="middle" fill="#fff" font-size="10" font-weight="800" font-family="Be Vietnam Pro, sans-serif">!</text>
+              <text x="42" y="21.5" fill="#8A4708" font-size="12.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">Quy định về nội dung này đã thay đổi</text>
+
+              <text x="8" y="56" fill="#5A6B85" font-size="12" font-family="Be Vietnam Pro, sans-serif">QĐ 18/2016</text>
+              <rect x="88" y="46" width="196" height="13" rx="6.5" fill="#AEB7C6"/>
+              <text x="8" y="86" fill="#1E3050" font-size="12" font-weight="700" font-family="Be Vietnam Pro, sans-serif">QĐ 69/2024</text>
+              <rect x="284" y="76" width="168" height="13" rx="6.5" fill="#1554A5"/>
+
+              <line x1="284" y1="38" x2="284" y2="98" stroke="#C0392B" stroke-width="1.6" stroke-dasharray="4 3"/>
+              <text x="284" y="106" text-anchor="middle" fill="#C0392B" font-size="11.5" font-weight="700" font-family="Be Vietnam Pro, sans-serif">30/09/2024</text>
+            </svg>
+          </div>
+          <div class="o-cc-chan">Suy từ đồ thị, <b>không do mô hình phát biểu</b>.
+            Hệ không tự kết luận người dùng thuộc quy định nào.</div>
         </div>
 
       </div>
