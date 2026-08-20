@@ -1,0 +1,525 @@
+<title>Slide cải tiến sau phản biện</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  :root{
+    --nen:        #F2F4F8;
+    --muc:        #1E3050;
+    --muc-nhat:   #5A6B85;
+    --xanh:       #1554A5;
+    --xanh-sang:  #1B7FD9;
+    --xanh-lot:   #D8E7F8;
+    --xanh-lot-2: #EDF3FC;
+    --the:        #E3E6EB;
+    --the-nhat:   #EBEDF1;
+    --do:         #C0392B;
+    --do-lot:     #FBEAE8;
+    --vien:       #C9CFDA;
+    --ke:         #9AA6B8;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0 }
+
+  body{
+    background:#DFE3EA;
+    color:var(--muc);
+    font-family:"Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:28px 16px 60px;
+  }
+
+  .bo{ display:flex; flex-direction:column; align-items:center; gap:26px; }
+
+  /* Mỗi slide là một khung 16:9 tự co giãn. Mọi cỡ chữ tính theo cqi
+     (1cqi = 1% chiều ngang slide) nên tỉ lệ giữ nguyên ở mọi kích thước
+     màn hình và khi in ra PDF. */
+  .slide{
+    container-type:inline-size;
+    width:100%;
+    max-width:1280px;
+    aspect-ratio:16/9;
+    background:var(--nen);
+    position:relative;
+    overflow:hidden;
+    padding:4.6cqi 5.2cqi;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 2px 18px rgba(30,48,80,.16);
+  }
+
+  h2{
+    font-size:3.55cqi; font-weight:800; letter-spacing:-.015em;
+    line-height:1.12; text-wrap:balance; color:var(--muc);
+  }
+  .ke-tieu-de{ height:.28cqi; background:var(--ke); width:52%; margin:1.5cqi 0 3.1cqi; }
+  .dan{ font-size:1.42cqi; color:var(--muc-nhat); line-height:1.55; max-width:88%; margin-bottom:2.6cqi; }
+  .nhan{ font-size:1.02cqi; font-weight:700; letter-spacing:.11em; text-transform:uppercase; color:var(--muc-nhat); }
+
+  .than{ flex:1; display:flex; flex-direction:column; min-height:0; }
+
+  /* ── thẻ ────────────────────────────────────────────── */
+  .the{ background:var(--the); border-radius:1cqi; padding:2cqi 2.2cqi; }
+  .the-nhat{ background:var(--the-nhat); border-radius:1cqi; padding:2cqi 2.2cqi; }
+  .the-xanh{ background:var(--xanh-lot); border-radius:1cqi; padding:2cqi 2.2cqi; }
+  .the-toi{ background:var(--muc); color:#fff; border-radius:1cqi; padding:2cqi 2.2cqi; }
+  .the-do{ background:var(--do-lot); border-radius:1cqi; padding:2cqi 2.2cqi; }
+
+  .luoi{ display:grid; gap:1.5cqi; }
+  .c2{ grid-template-columns:repeat(2,1fr) }
+  .c3{ grid-template-columns:repeat(3,1fr) }
+  .c4{ grid-template-columns:repeat(4,1fr) }
+
+  /* ── số lớn ─────────────────────────────────────────── */
+  .so{ font-size:4.4cqi; font-weight:800; letter-spacing:-.03em; line-height:1;
+       font-variant-numeric:tabular-nums; }
+  .so-vua{ font-size:2.9cqi; font-weight:800; letter-spacing:-.025em; line-height:1;
+           font-variant-numeric:tabular-nums; }
+  .chu-thich{ font-size:1.08cqi; color:var(--muc-nhat); line-height:1.45; margin-top:.75cqi; }
+  .the-toi .chu-thich{ color:#B9C6DA }
+
+  /* ── bảng ───────────────────────────────────────────── */
+  table{ width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+  th{ font-size:1.06cqi; font-weight:700; color:var(--muc-nhat); text-align:right;
+      padding:0 1.1cqi 1.05cqi; letter-spacing:.02em; }
+  th:first-child{ text-align:left }
+  td{ font-size:1.32cqi; padding:1.05cqi 1.1cqi; text-align:right;
+      border-top:1px solid var(--vien); }
+  td:first-child{ text-align:left; font-weight:500 }
+  tr.chot td{ font-weight:800; color:var(--xanh); border-top:.22cqi solid var(--muc); }
+  tr.tong td{ font-weight:700; }
+  .am{ color:var(--do); font-weight:700 }
+  .duong{ color:var(--xanh); font-weight:700 }
+  .mo{ color:var(--muc-nhat) }
+
+  code, .ma{ font-family:"JetBrains Mono", ui-monospace, monospace; font-size:.92em;
+             background:var(--xanh-lot-2); padding:.15em .5em; border-radius:.35cqi; }
+
+  /* ── các mảnh nhỏ ───────────────────────────────────── */
+  .gach{ border-left:.42cqi solid var(--xanh); padding-left:1.6cqi }
+  .gach-do{ border-left:.42cqi solid var(--do); padding-left:1.6cqi }
+  .tieu{ font-size:1.5cqi; font-weight:700; line-height:1.3; margin-bottom:.6cqi }
+  .noi{ font-size:1.16cqi; color:var(--muc-nhat); line-height:1.55 }
+  .the-toi .noi{ color:#C2CEE0 }
+  .the-xanh .noi{ color:#2C4A72 }
+
+  .bang-chot{ margin-top:auto; background:var(--muc); color:#fff; border-radius:1cqi;
+              padding:1.8cqi 2.2cqi; font-size:1.42cqi; font-weight:600; line-height:1.5 }
+  .bang-chot b{ color:#8FC4F5; font-weight:800 }
+
+  ul{ list-style:none }
+  li{ font-size:1.2cqi; line-height:1.5; padding-left:1.5cqi; position:relative; margin-bottom:.85cqi;
+      color:var(--muc-nhat) }
+  li::before{ content:""; position:absolute; left:0; top:.62cqi; width:.55cqi; height:.55cqi;
+              border-radius:50%; background:var(--xanh-sang) }
+  li b{ color:var(--muc); font-weight:700 }
+
+  /* ── slide phân đoạn ────────────────────────────────── */
+  .phan-doan{ background:var(--xanh); align-items:center; justify-content:center; text-align:center;
+              padding:0 }
+  .phan-doan .nhan{ color:#9EC8F2; margin-bottom:2cqi }
+  .phan-doan h2{ color:#fff; font-size:6cqi; letter-spacing:-.03em }
+  .phan-doan p{ color:#C5DDF6; font-size:1.6cqi; margin-top:2.4cqi; max-width:62%; line-height:1.6 }
+
+  /* ── thanh so sánh ──────────────────────────────────── */
+  .thanh-nen{ height:1.5cqi; background:#DDE3EC; border-radius:.75cqi; overflow:hidden; flex:1;
+              display:flex }
+  .thanh{ height:100%; border-radius:.75cqi; background:var(--xanh) }
+  /* nền chung + phần tăng thêm, để mắt đọc được mức chênh nhỏ */
+  .thanh-goc{ height:100%; background:#A9B7CB; border-radius:.75cqi 0 0 .75cqi }
+  .thanh-them{ height:100%; border-radius:0 .75cqi .75cqi 0 }
+  .hang-thanh{ display:flex; align-items:center; gap:1.2cqi; margin-bottom:1.05cqi }
+  .ten-thanh{ width:30%; font-size:1.14cqi; font-weight:600 }
+  .so-thanh{ width:11%; text-align:right; font-size:1.24cqi; font-weight:700;
+             font-variant-numeric:tabular-nums }
+
+  /* ── in ra PDF: mỗi slide một trang 16:9 ────────────── */
+  @page{ size:338.7mm 190.5mm; margin:0 }
+  @media print{
+    body{ background:#fff; padding:0 }
+    .bo{ gap:0 }
+    .slide{ max-width:none; width:338.7mm; height:190.5mm; aspect-ratio:auto;
+            box-shadow:none; break-after:page; }
+    .slide:last-child{ break-after:auto }
+    .huong-dan{ display:none }
+  }
+
+  .huong-dan{ max-width:1280px; margin:0 auto 6px; font-size:13px; color:#5A6B85; line-height:1.6 }
+  .huong-dan b{ color:#1E3050 }
+</style>
+
+<div class="bo">
+
+  <p class="huong-dan"><b>7 slide chèn sau slide 15 (“Kiểm chứng khi đổi mô hình sinh”), trước “Kết luận”.</b>
+     In ra PDF: Ctrl/Cmd-P → khổ ngang, lề 0, bật “Background graphics” → mỗi slide một trang 16:9.</p>
+
+  <!-- ══════════ 1. PHÂN ĐOẠN ══════════ -->
+  <section class="slide phan-doan">
+    <div class="nhan">Phần bổ sung</div>
+    <h2>Cải tiến sau phản biện</h2>
+    <p>Bốn cơ chế mới ở khâu truy hồi, ba nghiên cứu kiểm chứng,
+       và một lĩnh vực pháp luật chưa từng có trong kho</p>
+  </section>
+
+  <!-- ══════════ 2. VẤN ĐỀ CÒN LẠI ══════════ -->
+  <section class="slide">
+    <h2>Vấn đề còn lại sau báo cáo</h2>
+    <div class="ke-tieu-de"></div>
+    <div class="than">
+      <div class="luoi c2" style="gap:2.4cqi; margin-bottom:2.6cqi">
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.4cqi">Đúng Điều nhưng sai Khoản</div>
+          <div class="hang-thanh">
+            <div class="ten-thanh">Lấy đúng <b>Điều</b></div>
+            <div class="thanh-nen"><div class="thanh" style="width:80.6%; background:var(--xanh-sang)"></div></div>
+            <div class="so-thanh">0,806</div>
+          </div>
+          <div class="hang-thanh">
+            <div class="ten-thanh">Lấy đúng <b>Khoản</b></div>
+            <div class="thanh-nen"><div class="thanh" style="width:73.7%"></div></div>
+            <div class="so-thanh">0,737</div>
+          </div>
+          <p class="noi" style="margin-top:1.5cqi">
+            Một điều luật có thể gồm hàng chục khoản quy định những trường hợp khác nhau.
+            Chỉ vào đúng điều mà sai khoản thì người dân vẫn nhận câu trả lời sai.
+          </p>
+        </div>
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.4cqi">Ba nhóm câu bị bộ lọc làm hỏng</div>
+          <div class="the-do gach-do" style="border-radius:0 1cqi 1cqi 0; margin-bottom:1.4cqi">
+            <div class="tieu" style="font-size:1.28cqi">Trả về rỗng hoàn toàn</div>
+            <div class="noi">Câu có mốc thời gian quá khứ · thủ tục hộ tịch ngoài sáu thủ tục
+              được lập chỉ mục (giám hộ, khai tử, cải chính)</div>
+          </div>
+          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0">
+            <div class="tieu" style="font-size:1.28cqi">Mất đúng văn bản chứa đáp án</div>
+            <div class="noi">Câu không nêu tỉnh bị gán cứng <code>toan-quoc</code>,
+              nên văn bản cấp tỉnh bị lọc ra — trong khi lệ phí và hạn mức nằm đúng ở cấp tỉnh</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bang-chot">
+        Hệ trả lời theo văn bản hiện hành, <b>không cảnh báo</b> cho người đã nộp hồ sơ từ trước —
+        và kiến trúc <b>chưa được thử trên lĩnh vực nào ngoài ba lĩnh vực gốc</b>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3. BỐN CƠ CHẾ MỚI ══════════ -->
+  <section class="slide">
+    <h2>Bốn cơ chế mới</h2>
+    <div class="ke-tieu-de"></div>
+    <div class="than">
+      <div class="luoi c2" style="gap:1.7cqi">
+
+        <div class="the-toi">
+          <div class="nhan" style="color:#8FC4F5">Quan hệ thứ mười một</div>
+          <div class="tieu" style="margin-top:.9cqi; color:#fff">Lần theo dẫn chiếu giữa các điều khoản</div>
+          <div class="noi">Văn bản luật thường trỏ sang nhau: <i>“theo khoản 2 Điều 196”</i>.
+            Câu trỏ không chứa nội dung, chỉ chứa địa chỉ — tìm kiếm theo độ giống từ ngữ
+            không thể lần ra.</div>
+          <div style="display:flex; gap:2.4cqi; margin-top:1.5cqi">
+            <div><div class="so-vua" style="color:#8FC4F5">3.919</div>
+                 <div class="chu-thich">quan hệ trên kho đánh giá</div></div>
+            <div><div class="so-vua" style="color:#8FC4F5">5.366</div>
+                 <div class="chu-thich">sau khi thêm lao động</div></div>
+          </div>
+        </div>
+
+        <div class="the-xanh">
+          <div class="nhan" style="color:#2C4A72">Đặt lại vị trí, không đổi mô hình</div>
+          <div class="tieu" style="margin-top:.9cqi">Cross-encoder xếp lại trong từng văn bản</div>
+          <div class="noi">Từng bị bác bỏ khi cho tham gia <i>chọn văn bản</i> — nó kéo lên
+            những đoạn trùng từ ngữ nhưng sai văn bản. Lần này chỉ xếp lại thứ tự
+            <b>bên trong văn bản đã chọn</b>.</div>
+          <div style="margin-top:1.5cqi">
+            <div class="so-vua" style="color:var(--xanh)">âm → +0,047</div>
+            <div class="chu-thich">cùng mô hình, khác vị trí trong đường xử lý</div>
+          </div>
+        </div>
+
+        <div class="the">
+          <div class="nhan">Tham số truy hồi</div>
+          <div class="tieu" style="margin-top:.9cqi">Mở rộng vùng tìm kiếm</div>
+          <div class="noi">Nâng số ứng viên lấy ra ở bước tìm kiếm ngữ nghĩa
+            và bỏ hệ số chấm theo độ hiếm khái niệm</div>
+          <div class="so-vua" style="color:var(--xanh); margin-top:1.4cqi">+0,053</div>
+        </div>
+
+        <div class="the">
+          <div class="nhan">Luật tất định trên đồ thị</div>
+          <div class="tieu" style="margin-top:.9cqi">Phát hiện quy định đã thay đổi</div>
+          <div class="noi">Khi tập ứng viên có văn bản đã hết hiệu lực: tìm văn bản thay thế,
+            nạp thêm điều khoản chuyển tiếp, sinh cảnh báo trước câu trả lời.
+            Hệ <b>không tự kết luận</b> người dùng thuộc quy định cũ hay mới.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 4. KẾT QUẢ TRUY HỒI ══════════ -->
+  <section class="slide">
+    <h2>Kết quả truy hồi: 0,737 → 0,853</h2>
+    <div class="ke-tieu-de"></div>
+    <div class="than">
+      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Cộng dồn từng bước · 123 câu</div>
+          <table>
+            <thead><tr><th>Bước</th><th>Bao phủ</th><th>Mức tăng</th><th>T / B</th></tr></thead>
+            <tbody>
+              <tr><td>Trước cải tiến</td><td>0,737</td><td class="mo">—</td><td class="mo">—</td></tr>
+              <tr><td>+ lần theo dẫn chiếu</td><td>0,753</td><td class="duong">+0,016</td><td class="mo">9 / 3</td></tr>
+              <tr><td>+ cross-encoder</td><td>0,800</td><td class="duong">+0,063</td><td class="mo">17 / 5</td></tr>
+              <tr class="chot"><td>+ mở rộng vùng tìm kiếm</td><td>0,853</td><td>+0,116</td><td>26 / 4</td></tr>
+            </tbody>
+          </table>
+
+          <div class="luoi c3" style="margin-top:2.4cqi; gap:1.1cqi">
+            <div class="the-xanh" style="padding:1.5cqi">
+              <div class="so-vua" style="color:var(--xanh); font-size:2.3cqi">+0,116</div>
+              <div class="chu-thich" style="color:#2C4A72">chênh lệch ghép cặp</div>
+            </div>
+            <div class="the-xanh" style="padding:1.5cqi">
+              <div class="so-vua" style="color:var(--xanh); font-size:1.9cqi">0,064–0,171</div>
+              <div class="chu-thich" style="color:#2C4A72">khoảng tin cậy 95%</div>
+            </div>
+            <div class="the-xanh" style="padding:1.5cqi">
+              <div class="so-vua" style="color:var(--xanh); font-size:1.9cqi">p = 0,00007</div>
+              <div class="chu-thich" style="color:#2C4A72">kiểm định Wilcoxon</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Chia theo bốn nhóm thách thức</div>
+          <table>
+            <thead><tr><th>Thách thức</th><th>Số câu</th><th>Tăng trong nhóm</th><th>Góp vào tổng</th></tr></thead>
+            <tbody>
+              <tr><td>Đa lĩnh vực</td><td class="mo">32</td><td class="duong">+0,216</td><td class="mo">+0,056</td></tr>
+              <tr><td>Đa tầng văn bản</td><td class="mo">30</td><td class="duong">+0,153</td><td class="mo">+0,037</td></tr>
+              <tr><td>Đa địa phương</td><td class="mo">31</td><td>+0,069</td><td class="mo">+0,017</td></tr>
+              <tr><td>Đa phiên bản</td><td class="mo">30</td><td>+0,019</td><td class="mo">+0,005</td></tr>
+              <tr class="tong"><td>Tổng</td><td class="mo">123</td><td></td><td class="duong">+0,116</td></tr>
+            </tbody>
+          </table>
+
+          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0; margin-top:2.4cqi">
+            <div class="noi"><b>Vì sao mức tăng toàn hệ nhỏ hơn mức tăng thật của cơ chế:</b>
+              74 trên 123 câu (60%) đã lấy đúng hoàn toàn từ trước, không còn chỗ cải thiện.
+              Trên 49 câu còn lại, cải thiện được <b>26 câu</b>, mức tăng trung bình <b>+0,317</b>.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 5. NHÁNH ĐỐI CHỨNG ══════════ -->
+  <section class="slide">
+    <h2>Cơ chế, hay chỉ là thêm ngữ cảnh?</h2>
+    <div class="ke-tieu-de"></div>
+    <p class="dan">Nếu cấu hình mới đơn giản là đưa nhiều chữ hơn vào ngữ cảnh thì bao phủ tăng là
+      đương nhiên, và không nói lên gì về cơ chế. Đây là câu hỏi phải tự đặt ra và tự trả lời bằng số.</p>
+    <div class="than">
+      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Lượng ngữ cảnh so với mức tăng</div>
+          <table>
+            <thead><tr><th>Bước</th><th>Đơn vị vào ngữ cảnh</th><th>Thêm</th><th>Mức tăng</th></tr></thead>
+            <tbody>
+              <tr><td>Trước cải tiến</td><td class="mo">16,9</td><td class="mo">—</td><td class="mo">—</td></tr>
+              <tr><td>+ lần theo dẫn chiếu</td><td class="mo">20,2</td><td class="mo">+3,3</td><td>+0,016</td></tr>
+              <tr class="chot"><td>+ cross-encoder</td><td>20,2</td><td>+0,0</td><td>+0,047</td></tr>
+              <tr><td>+ mở rộng vùng tìm kiếm</td><td class="mo">20,5</td><td class="mo">+0,3</td><td>+0,053</td></tr>
+            </tbody>
+          </table>
+          <div class="the-toi" style="margin-top:2cqi">
+            <div class="noi" style="color:#DCE7F5; font-size:1.24cqi">
+              Đóng góp lớn nhất đến từ bước <b style="color:#8FC4F5">không thêm một đơn vị nào</b>.
+              Cross-encoder chỉ xếp lại thứ tự các đơn vị đã chọn, nên +0,047 của nó
+              không thể giải thích bằng lượng ngữ cảnh.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Nhánh đối chứng cho bước thật sự nạp thêm</div>
+          <p class="noi" style="margin-bottom:1.6cqi">Thêm <b>đúng bằng số đơn vị đó</b>,
+            nhưng chọn theo điểm xếp hạng thông thường thay vì theo quan hệ dẫn chiếu.</p>
+          <div class="hang-thanh">
+            <div class="ten-thanh">Không thêm</div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:76.1%"></div></div>
+            <div class="so-thanh">0,761</div>
+          </div>
+          <div class="hang-thanh">
+            <div class="ten-thanh">Theo điểm xếp hạng<br><span style="font-weight:400; color:var(--muc-nhat); font-size:.94cqi">đối chứng</span></div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:76.1%"></div><div class="thanh-them" style="width:1.4%; background:var(--xanh-sang)"></div></div>
+            <div class="so-thanh">0,775</div>
+          </div>
+          <div class="hang-thanh">
+            <div class="ten-thanh"><b>Theo quan hệ dẫn chiếu</b></div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:76.1%"></div><div class="thanh-them" style="width:3.6%; background:var(--xanh)"></div></div>
+            <div class="so-thanh" style="color:var(--xanh)">0,797</div>
+          </div>
+          <div style="display:flex; gap:1.4cqi; margin-top:.4cqi; font-size:.95cqi; color:var(--muc-nhat)">
+            <span style="display:flex; align-items:center; gap:.5cqi">
+              <span style="width:1.1cqi; height:.8cqi; background:#A9B7CB; border-radius:.2cqi"></span>mức nền chung</span>
+            <span style="display:flex; align-items:center; gap:.5cqi">
+              <span style="width:1.1cqi; height:.8cqi; background:var(--xanh); border-radius:.2cqi"></span>phần tăng thêm</span>
+          </div>
+          <div class="the-xanh" style="margin-top:1.8cqi">
+            <div class="noi" style="font-size:1.24cqi">Cùng lượng ngữ cảnh, chọn theo dẫn chiếu
+              hơn chọn theo điểm xếp hạng <b style="color:var(--xanh)">+0,023</b>.
+              Phần chênh này là đóng góp của <b>cơ chế</b>, không phải của lượng chữ.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 6. TỔNG QUÁT HÓA ══════════ -->
+  <section class="slide">
+    <h2>Tổng quát hóa sang lĩnh vực mới</h2>
+    <div class="ke-tieu-de"></div>
+    <p class="dan" style="margin-bottom:2.1cqi">Thêm pháp luật <b>lao động</b> vào kho — lĩnh vực
+      chưa từng được xây dựng cho. Bộ trích xuất viết cho lĩnh vực đất đai chạy trên văn bản lao động
+      mà không phải sửa dòng nào.</p>
+    <div class="than">
+
+      <div class="luoi c4" style="margin-bottom:2.1cqi">
+        <div class="the"><div class="so-vua">32 → 36</div><div class="chu-thich">văn bản</div></div>
+        <div class="the"><div class="so-vua">3 → 4</div><div class="chu-thich">lĩnh vực</div></div>
+        <div class="the"><div class="so-vua" style="font-size:2.3cqi">4.549 → 7.208</div><div class="chu-thich">điều khoản</div></div>
+        <div class="the"><div class="so-vua">1.447</div><div class="chu-thich">quan hệ dẫn chiếu tạo tự động</div></div>
+      </div>
+
+      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Có làm hỏng ba lĩnh vực cũ không?</div>
+          <table>
+            <thead><tr><th>Cấu hình</th><th>Kho 32</th><th>Kho 36</th><th>Câu lệch</th></tr></thead>
+            <tbody>
+              <tr><td>Trước cải tiến</td><td class="mo">0,737</td><td class="mo">0,737</td><td class="duong">0</td></tr>
+              <tr><td>+ lần theo dẫn chiếu</td><td class="mo">0,753</td><td class="mo">0,753</td><td class="duong">0</td></tr>
+              <tr><td>+ cross-encoder</td><td class="mo">0,800</td><td class="mo">0,800</td><td class="duong">0</td></tr>
+              <tr class="tong"><td>+ mở rộng vùng tìm kiếm</td><td>0,853</td><td>0,853</td><td class="duong">0</td></tr>
+            </tbody>
+          </table>
+          <p class="noi" style="margin-top:1.2cqi">Chạy lại đúng 123 câu đó trên kho 36 văn bản
+            rồi so từng câu: <b>không câu nào thay đổi</b>.</p>
+        </div>
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Hệ đạt tới đâu trên lĩnh vực chưa từng thấy?</div>
+          <table>
+            <thead><tr><th></th><th>Trước</th><th>Sau</th><th>Mức tăng</th></tr></thead>
+            <tbody>
+              <tr><td>Ba lĩnh vực gốc <span class="mo">· 123 câu</span></td>
+                  <td class="mo">0,737</td><td>0,853</td><td class="duong">+0,116</td></tr>
+              <tr class="chot"><td>Lao động <span style="font-weight:400">· 10 câu</span></td>
+                  <td>0,700</td><td>0,850</td><td>+0,150</td></tr>
+            </tbody>
+          </table>
+          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0; margin-top:1.5cqi">
+            <div class="noi">Câu <b>LD02</b> — điều khoản trả lời xác định phạm vi bằng cách dẫn sang
+              Điều 34 — tăng từ 0,50 lên <b>1,00</b>: cơ chế dẫn chiếu hoạt động đúng thiết kế
+              trên văn bản chưa từng thấy.</div>
+          </div>
+          <p class="noi" style="margin-top:1.2cqi; font-size:1.04cqi">
+            <b>Giới hạn:</b> 10 câu là mẫu nhỏ so với 123 câu của ba lĩnh vực gốc, nên 0,850
+            đọc như một chỉ báo. Tập chuẩn do nhóm soạn, cả hai thành viên đã rà toàn bộ.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 7. KIỂM CHỨNG & GIỚI HẠN ══════════ -->
+  <section class="slide">
+    <h2>Kiểm chứng độc lập và giới hạn còn lại</h2>
+    <div class="ke-tieu-de"></div>
+    <div class="than">
+      <div class="luoi c2" style="gap:3.4cqi; align-items:start">
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Bộ chấm độc lập · 295 trích dẫn</div>
+          <table>
+            <thead><tr><th>Bộ chấm</th><th>Quan hệ với mô hình sinh</th><th>Hậu thuẫn</th></tr></thead>
+            <tbody>
+              <tr><td>Gemini 2.5 Pro <span class="mo">· số của báo cáo</span></td>
+                  <td class="mo" style="font-size:1.1cqi">chính là mô hình sinh</td><td><b>88,1%</b></td></tr>
+              <tr><td>Qwen3-4B-Instruct</td>
+                  <td class="mo" style="font-size:1.1cqi">khác nhà, khác kiến trúc</td><td>83,7%</td></tr>
+              <tr><td>Gemini 2.5 Flash</td>
+                  <td class="mo" style="font-size:1.1cqi">cùng nhà, khác mô hình</td><td>79,0%</td></tr>
+            </tbody>
+          </table>
+          <div class="the-nhat gach" style="border-radius:0 1cqi 1cqi 0; margin-top:1.6cqi">
+            <div class="noi">Bộ chấm <b>chính là mô hình sinh</b> cho điểm cao nhất; hai bộ chấm
+              không phải nó đều thấp hơn. Số liệu <b>xác nhận</b> cảnh báo mà chính báo cáo đã nêu
+              ở mục 4.4.1 — nên trình bày <b>79,0%</b> làm cận dưới thận trọng.</div>
+          </div>
+
+          <div class="nhan" style="margin:2.2cqi 0 1.1cqi">Hàng thứ năm của Bảng 4.13</div>
+          <table>
+            <thead><tr><th>Mô hình sinh</th><th>Naive RAG</th><th>GraphRAG</th><th>Chênh lệch</th></tr></thead>
+            <tbody>
+              <tr><td>Gemini 2.5 Pro</td><td class="mo">0,435</td><td>0,617</td><td class="duong">+0,182</td></tr>
+              <tr class="chot"><td>Cục bộ 30B, hai ví dụ mẫu</td><td>0,317</td><td>0,583</td><td>+0,266</td></tr>
+            </tbody>
+          </table>
+          <p class="noi" style="margin-top:1.1cqi; font-size:1.06cqi">Mô hình chạy ngay tại chỗ đạt
+            0,583 so với Gemini 0,617 — kém 0,034. Với hệ xử lý dữ liệu công dân, đây là giá trị thực tế.</p>
+        </div>
+
+        <div>
+          <div class="nhan" style="margin-bottom:1.3cqi">Nút thắt đã dịch chỗ</div>
+          <div class="the-toi" style="margin-bottom:1.6cqi">
+            <div class="tieu" style="color:#fff">Lấy đúng điều khoản nhiều hơn không tự động
+              làm câu trả lời tốt hơn</div>
+            <div class="noi">Bao phủ tăng +0,116 nhưng F1 của khâu sinh không thay đổi.</div>
+          </div>
+
+          <div class="luoi c2" style="gap:1.2cqi; margin-bottom:1.6cqi">
+            <div class="the-do">
+              <div class="so-vua" style="color:var(--do)">2,71</div>
+              <div class="chu-thich">điều khoản hệ trích trung bình</div>
+            </div>
+            <div class="the-xanh">
+              <div class="so-vua" style="color:var(--xanh)">1,57</div>
+              <div class="chu-thich" style="color:#2C4A72">điều khoản đáp án chuẩn cần</div>
+            </div>
+          </div>
+
+          <div class="hang-thanh">
+            <div class="ten-thanh" style="width:42%">F1 khâu sinh hiện tại</div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:57.1%"></div></div>
+            <div class="so-thanh" style="width:13%">0,571</div>
+          </div>
+          <div class="hang-thanh">
+            <div class="ten-thanh" style="width:42%"><b>Nếu chọn lọc trích dẫn tối ưu</b></div>
+            <div class="thanh-nen"><div class="thanh-goc" style="width:57.1%"></div><div class="thanh-them" style="width:17.1%; background:var(--xanh)"></div></div>
+            <div class="so-thanh" style="width:13%; color:var(--xanh)">0,742</div>
+          </div>
+
+          <div class="bang-chot" style="margin-top:1.8cqi; font-size:1.3cqi">
+            Phần cải thiện tiềm năng này <b>lớn hơn toàn bộ mức cải thiện của đợt này</b>.
+            Khâu hạn chế nhất đã chuyển từ <b>truy hồi</b> sang <b>chọn trích dẫn</b>.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
